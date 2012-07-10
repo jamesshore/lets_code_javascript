@@ -15,6 +15,7 @@ User Stories:
 
 Engineering Tasks:
 - static code analysis (Lint)
+  - Bring in all options
 - continuous integration
 - server-side testing
 - client-side testing
