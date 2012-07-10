@@ -1,0 +1,20 @@
+WeeWikiPaint
+
+Minimum Marketing Features:
+* marketing home page
+- collaborative painting page (very basic)
+- wiki-fy the pages
+- more complex painting?
+- more collaborative features?
+
+User Stories:
+* "hello world" server
+- "hello world" client (one browser)
+- support multiple browsers
+- marketing copy
+
+Engineering Tasks:
+* automated build
+- continuous integration
+- server-side testing
+- client-side testing
