@@ -23,7 +23,7 @@
 		console.log("   a. Walk over to integration box.");
 		console.log("   b. 'git pull'");
 		console.log("   c. 'jake'");
-		console.log("   d. If jake fails, stop! Try again after fixing the issue.")
+		console.log("   d. If jake fails, stop! Try again after fixing the issue.");
 		console.log("3. 'git checkout integration'");
 		console.log("4. 'git merge master --no-ff --log'");
 		console.log("5. 'git checkout master'");
