@@ -18,8 +18,7 @@ Engineering Tasks:
 - client-side testing
 
 To Do on current task:
-
+- make lint fail when tests fail
 
 Future ideas:
 - Abstract test framework? (Swap out a different framework to make sure abstraction works)
-- Add LICENSE.TXT
