@@ -14,9 +14,14 @@ User Stories:
 - marketing copy
 
 Engineering Tasks:
-* continuous integration
-- server-side testing
+* server-side testing
 - client-side testing
 
 To Do on current task:
-- make build fail when Lint fails
+- make lint fail when tests fail
+
+Future ideas:
+- Abstract test framework? (Swap out a different framework to make sure abstraction works)
+
+Notes:
+- NodeUnit doesn't work properly on windows, it seems...
