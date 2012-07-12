@@ -1,12 +1,14 @@
 <component name="ProjectDictionaryState">
   <dictionary name="jshore">
     <words>
+      <w>async</w>
       <w>eqeqeq</w>
       <w>forin</w>
       <w>immed</w>
       <w>latedef</w>
       <w>newcap</w>
       <w>noarg</w>
+      <w>nodeunit</w>
       <w>noempty</w>
       <w>nonew</w>
       <w>undef</w>
