@@ -22,3 +22,6 @@ To Do on current task:
 
 Future ideas:
 - Abstract test framework? (Swap out a different framework to make sure abstraction works)
+
+Notes:
+- NodeUnit doesn't work properly on windows, it seems...
