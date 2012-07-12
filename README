@@ -11,11 +11,9 @@ being developed in the series.
 
 WeeWikiPaint
 
-To build on Windows:
+To build:
 - Install node.js
 - Install Git
 - Clone repository
+- Run './jake.sh' (Unix/Mac) or 'jake.bat' (Windows)
 
-To build:
-- Assumes presence of Node.js
-- Run ./jake.sh to build
