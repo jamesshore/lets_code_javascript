@@ -1,5 +1,11 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
+// This is a simple spike of Node's HTTP module. The goal was to show
+// how to serve a very simple HTML page using Node.
+// It's not robust and it reflects a very basic understanding of node; use it
+// as a starting point, not a production-quality example.
+
+
 var http = require("http");
 
 var server = http.createServer();
