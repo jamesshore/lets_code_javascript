@@ -17,6 +17,8 @@ Engineering Tasks:
 - Create a very simple HTTP server
 
 To Do on current task:
+- Spike HTTP server with Node
+- Test-drive server
 
 Future ideas:
 - Abstract test framework? (Swap out a different framework to make sure abstraction works)
