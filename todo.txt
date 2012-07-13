@@ -1,6 +1,6 @@
 WeeWikiPaint
 
-Minimum Marketing Features:
+Minimum Marketable Features:
 * marketing home page
 - collaborative painting page (very basic)
 - wiki-fy the pages
