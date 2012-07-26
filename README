@@ -12,8 +12,8 @@ being developed in the series.
 WeeWikiPaint
 
 To build:
-- Install node.js
-- Install Git
+- Install Node.js [v0.6.17]
+- Install Git [v1.7.7.5]
 - Clone repository
 - Run './jake.sh' (Unix/Mac) or 'jake.bat' (Windows)
 
