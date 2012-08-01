@@ -4,7 +4,7 @@
 // how to serve a very simple HTML page using Node.
 // It's not robust and it reflects a very basic understanding of node; use it
 // as a starting point, not a production-quality example.
-
+"use strict";
 
 var http = require("http");
 
