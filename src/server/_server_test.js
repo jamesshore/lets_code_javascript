@@ -16,7 +16,6 @@ exports.tearDown = function(done) {
 };
 
 //TODO: handle case where stop() is called before start()
-//TODO: test-drive stop() callback
 
 exports.test_serverReturnsHelloWorld = function(test) {
 	var request = http.get("http://localhost:8080");
@@ -41,4 +40,10 @@ exports.test_serverRunsCallbackWhenStopCompletes = function(test) {
 		test.done();
 	});
 	server.start(); //TODO: this is kludgy
+};
+
+exports.test_stopCalledTwiceInARow = function(test) {
+	server.stop();
+	server.stop();
+	server.start();
 };
