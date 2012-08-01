@@ -10,6 +10,9 @@ exports.tearDown = function(done) {
 	});
 };
 
+//TODO: handle case where stop() is called before start()
+//TODO: test-drive stop() callback
+
 exports.testServerRespondsToGetRequests = function(test) {
 	server.start();
 	http.get("http://localhost:8080", function(response) {
