@@ -1,28 +1,18 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 "use strict";
 
-exports.start = function() {
-	var http = require("http");
+var http = require("http");
+var server;
 
-	var server = http.createServer();
+exports.start = function() {
+	server = http.createServer();
 
 	server.on("request", function(request, response) {
-		console.log("Received request");
-
-		var body = "<html><head><title>Node HTTP Spike</title></head>" +
-				"<body><p>This is a spike of Node's HTTP server.</p></body></html>";
-
-		// The following two approaches are equivalent:
-		// The verbose way...
-	//	response.statusCode = 200;
-	//	response.write(body);
-	//	response.end();
-
-		// The concise way...
-		response.end(body);
 	});
 
 	server.listen(8080);
+};
 
-	console.log("Server started");
+exports.stop = function(callback) {
+	server.close(callback);
 };
