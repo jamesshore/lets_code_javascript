@@ -19,6 +19,7 @@ Engineering Tasks:
 To Do on current task:
 - Spike HTTP server with Node
 - Test-drive server
+- Modify build script to enforce Node version
 
 Future ideas:
 - Abstract test framework? (Swap out a different framework to make sure abstraction works)
