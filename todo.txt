@@ -1,6 +1,6 @@
 WeeWikiPaint
 
-Minimum Marketing Features:
+Minimum Marketable Features:
 * marketing home page
 - collaborative painting page (very basic)
 - wiki-fy the pages
@@ -14,14 +14,15 @@ User Stories:
 - marketing copy
 
 Engineering Tasks:
-* server-side testing
-- client-side testing
+* Create a very simple HTTP server
 
 To Do on current task:
-- make lint fail when tests fail
+- Modify build script to enforce Node version
+- Integrate
 
 Future ideas:
+- Create 'fail fast' assertion code
 - Abstract test framework? (Swap out a different framework to make sure abstraction works)
 
 Notes:
-- NodeUnit doesn't work properly on windows, it seems...
+- NodeUnit default reporter has minor display issue on Windows
