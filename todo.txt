@@ -14,11 +14,10 @@ User Stories:
 - marketing copy
 
 Engineering Tasks:
-* Create a very simple HTTP server
+* Serve a file
 
 To Do on current task:
-- Modify build script to enforce Node version
-- Integrate
+-
 
 Future ideas:
 - Create 'fail fast' assertion code
