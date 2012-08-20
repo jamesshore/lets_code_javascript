@@ -12,7 +12,7 @@ being developed in the series.
 WeeWikiPaint
 
 To build:
-- Install Node.js [v0.8.4]
+- Install Node.js [v0.8.6]
 - Install Git [v1.7.7.5]
 - Clone repository
 - Run './jake.sh' (Unix/Mac) or 'jake.bat' (Windows)
