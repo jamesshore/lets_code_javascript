@@ -8,13 +8,15 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* "hello world" server
-- "hello world" client (one browser)
-- support multiple browsers
-- marketing copy
+* Serve a one-file homepage
+- Serve 404 errors for everything else
+- Marketing copy
+- Publish to Internet
 
 Engineering Tasks:
-* Serve a file
+* Spike serving a file
+- TDD file serving
+- design work?
 
 To Do on current task:
 -
