@@ -8,7 +8,6 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* Do we want a custom 404 page
 - Marketing copy
 - Publish to Internet
 
