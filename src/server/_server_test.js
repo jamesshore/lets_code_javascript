@@ -12,7 +12,7 @@
 	exports.tearDown = function(done) {
 		if (fs.existsSync(TEST_FILE)) {
 			fs.unlinkSync(TEST_FILE);
-			assert.ok(!fs.existsSync(TEST_FILE), "could not deleted test file: [" + TEST_FILE + "]");
+			assert.ok(!fs.existsSync(TEST_FILE), "could not delete test file: [" + TEST_FILE + "]");
 		}
 		done();
 	};
