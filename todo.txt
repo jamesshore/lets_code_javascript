@@ -8,21 +8,19 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* "hello world" server
-- "hello world" client (one browser)
-- support multiple browsers
-- marketing copy
+- Marketing copy
+- Publish to Internet
 
 Engineering Tasks:
-* Create a very simple HTTP server
+- 
 
 To Do on current task:
-- Modify build script to enforce Node version
-- Integrate
 
 Future ideas:
 - Create 'fail fast' assertion code
 - Abstract test framework? (Swap out a different framework to make sure abstraction works)
+- Static checking of function parameters (rather than writing tests)
+- Handle errors properly in server.js
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
