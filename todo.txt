@@ -8,8 +8,8 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* Serve a one-file homepage
-- Serve 404 errors for everything else
+* Serve 404 errors for everything else
+- Do we want a custom 404 page?
 - Marketing copy
 - Publish to Internet
 
@@ -19,7 +19,6 @@ Engineering Tasks:
 - design work?
 
 To Do on current task:
--
 
 Future ideas:
 - Create 'fail fast' assertion code
