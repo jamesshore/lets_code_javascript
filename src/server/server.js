@@ -12,7 +12,7 @@ exports.start = function(htmlFileToServe, portNumber) {
 	server.on("request", function(request, response) {
 		if (request.url === "/" || request.url === "/index.html") {
 			fs.readFile(htmlFileToServe, function (err, data) {
-				if (err) throw err;     //TODO: fix me
+				if (err) throw err;
 				response.end(data);
 			});
 		}
