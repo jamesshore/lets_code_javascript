@@ -24,25 +24,33 @@
 	};
 
 	exports.test_canGetHomePage = function(test) {
-		httpGet("http://localhost:8080", function(response, receivedData) {
+		httpGet("http://localhost:5000", function(response, receivedData) {
 			var foundHomePage = receivedData.indexOf("WeeWikiPaint home page") !== -1;
 			test.ok(foundHomePage, "home page should have contained test marker");
 			test.done();
 		});
 	};
 
+	// TODO: Factor out common server name
 	exports.test_canGet404Page = function(test) {
-		httpGet("http://localhost:8080/nonexistant.html", function(response, receivedData) {
+		httpGet("http://localhost:5000/nonexistant.html", function(response, receivedData) {
 			var foundHomePage = receivedData.indexOf("WeeWikiPaint 404 page") !== -1;
 			test.ok(foundHomePage, "404 page should have contained test marker");
 			test.done();
 		});	};
 
 	function runServer(callback) {
-		child = child_process.spawn("node", ["src/server/weewikipaint", "8080"]);
+		child = child_process.spawn("foreman", ["start"]);
 		child.stdout.setEncoding("utf8");
 		child.stdout.on("data", function(chunk) {
-			if (chunk.trim() === "Server started") callback();
+			console.log("stdout: " + chunk);
+			if (chunk.trim().indexOf("Server started") !== -1) callback();
+		});
+		child.stderr.on("data", function(chunk) {
+			console.log("stderr: " + chunk);
+		});
+		child.on("exit", function(code, signal) {
+			console.log("child process died");
 		});
 	}
 
