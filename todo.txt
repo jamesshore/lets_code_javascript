@@ -8,15 +8,12 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-- Marketing copy
+> Marketing copy
 * Publish to Internet
 
 Engineering Tasks:
-- Write end-to-end integration test
-- Write server launch code
 
 To Do on current task:
-- Put homepage.html in a good directory
 
 Future ideas:
 - Create 'fail fast' assertion code
