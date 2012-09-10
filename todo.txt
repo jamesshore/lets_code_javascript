@@ -8,11 +8,10 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-- Marketing copy
-- Publish to Internet
+> Marketing copy
+* Publish to Internet
 
 Engineering Tasks:
-- 
 
 To Do on current task:
 
@@ -21,6 +20,8 @@ Future ideas:
 - Abstract test framework? (Swap out a different framework to make sure abstraction works)
 - Static checking of function parameters (rather than writing tests)
 - Handle errors properly in server.js
+- server.stop() waits for open connections to close (e.g., Firefox keeps open connection).
+  Make it forcibly close?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

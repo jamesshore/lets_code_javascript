@@ -6,7 +6,7 @@
 	var fs = require("fs");
 	var server;
 
-	exports.start = function(homePageToServe, notFoundPageToServe, portNumber) {
+	exports.start = function(homePageToServe, notFoundPageToServe, portNumber, callback) {
 		if(!portNumber) throw "port number is required";
 
 		server = http.createServer();
@@ -20,7 +20,7 @@
 				serveFile(response, notFoundPageToServe);
 			}
 		});
-		server.listen(portNumber);
+		server.listen(portNumber, callback);
 	};
 
 	exports.stop = function(callback) {
