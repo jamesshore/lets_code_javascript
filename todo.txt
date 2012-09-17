@@ -22,6 +22,7 @@ Future ideas:
 - Handle errors properly in server.js
 - server.stop() waits for open connections to close (e.g., Firefox keeps open connection).
   Make it forcibly close?
+- Remove Node version duplication between package.json and Jakefile.js
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
