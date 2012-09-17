@@ -12,6 +12,7 @@ User Stories:
 * Publish to Internet
 
 Engineering Tasks:
+- Fix DNS
 
 To Do on current task:
 
@@ -23,6 +24,7 @@ Future ideas:
 - server.stop() waits for open connections to close (e.g., Firefox keeps open connection).
   Make it forcibly close?
 - Remove Node version duplication between package.json and Jakefile.js
+- Fix httpGet duplication
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
