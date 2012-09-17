@@ -15,6 +15,8 @@
 	};
 
 	exports.tearDown = function(done) {
+		if (!child) return;
+
 		child.on("exit", function(code, signal) {
 			done();
 		});
@@ -39,23 +41,39 @@
 
 	function runServer(callback) {
 		var commandLine = parseProcFile();
-		child = child_process.spawn(commandLine.command, commandLine.options);
+		child = child_process.spawn(commandLine[0], commandLine.slice(1));
 		child.stdout.setEncoding("utf8");
 		child.stdout.on("data", function(chunk) {
+			console.log("stdout: " + chunk);
 			if (chunk.trim().indexOf("Server started") !== -1) callback();
+		});
+		child.stderr.on("data", function(chunk) {
+			console.log("stderr: " + chunk);
+		});
+		child.on("exit", function(code, signal) {
+			console.log("child process died");
 		});
 	}
 
 	function parseProcFile() {
-		var fileData = fs.readFileSync("Procfile", "utf8");
-		var matches = procFile.match(/^web:\s*((\S)+(\s+))+$/);
+		var procFile = fs.readFileSync("Procfile", "utf8");
+		var matches = procFile.trim().match(/^web:(.*)$/);     // matches 'web: foo bar baz'
 
-		console.log("Matches: " + matches);
+		if (matches === null) throw "Could not parse ProcFile";
+		var commandLine = matches[1];
 
-
-
-
-		return ["node", "src/server/weewikipaint.js", "5000"];
+		var args = commandLine.split(" ");
+		console.log("Before: " + args);
+		args = args.filter(function(element) {
+			return (element.trim() !== "");
+		});
+		args = args.map(function(element) {
+			if (element === "$PORT") return "5000";
+			else return element;
+		});
+		console.log("After: " + args);
+		console.log(args);
+		return args;
 	}
 
 	function httpGet(url, callback) {
