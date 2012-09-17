@@ -43,6 +43,13 @@
 		});
 	}, {async: true});
 
+	desc("Deploy to Heroku");
+	task("deploy", ["default"], function() {
+		console.log("1. Make sure 'git status' is clean.");
+		console.log("2. 'git push heroku master'");
+		console.log("3. 'jake test'");
+	});
+
 //	desc("Ensure correct version of Node is present. Use 'strict=true' to require exact match");
 	task("nodeVersion", [], function() {
 		function failWithQualifier(qualifier) {

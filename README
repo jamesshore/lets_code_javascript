@@ -14,6 +14,7 @@ WeeWikiPaint
 To build:
 - Install Node.js [v0.8.6]
 - Install Git [v1.7.7.5]
+- (Optional: for deployment only) Install Heroku Toolbelt [https://toolbelt.heroku.com/]
 - Clone repository
 - Run './jake.sh' (Unix/Mac) or 'jake.bat' (Windows)
 
