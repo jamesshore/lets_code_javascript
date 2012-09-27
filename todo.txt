@@ -17,6 +17,9 @@ Engineering Tasks:
 - Integrate into HTML page
 
 To Do on current task:
+- Get Testacular running manually with one browser
+- multiple browsers
+- automation
 
 Future ideas:
 - Create 'fail fast' assertion code
