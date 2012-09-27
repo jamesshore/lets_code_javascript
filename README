@@ -11,10 +11,13 @@ being developed in the series.
 
 WeeWikiPaint
 
-To build:
+Before building for the first time:
 - Install Node.js [v0.8.6]
 - Install Git [v1.7.7.5]
 - (Optional: for deployment only) Install Heroku Toolbelt [https://toolbelt.heroku.com/]
-- Clone repository
+- Download code from Github (or clone repository)
+- Run 'npm rebuild'
+
+To build:
 - Run './jake.sh' (Unix/Mac) or 'jake.bat' (Windows)
 
