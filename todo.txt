@@ -1,18 +1,20 @@
 WeeWikiPaint
 
 Minimum Marketable Features:
-* marketing home page
-- collaborative painting page (very basic)
+* single-user painting on home page
+- collaborative painting
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
 
 User Stories:
-> Marketing copy
-* Publish to Internet
+* Create empty drawing area
+- Draw one line
 
 Engineering Tasks:
-- Fix DNS
+* Set up client-side testing
+- Test drawing tool (Raphael?)
+- Integrate into HTML page
 
 To Do on current task:
 
