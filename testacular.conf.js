@@ -10,7 +10,9 @@ basePath = '.';
 files = [
 	MOCHA,
 	MOCHA_ADAPTER,
-	"node_modules/chai/chai.js",
+//	"node_modules/chai/chai.js",
+//	"node_modules/should/lib/should.js",
+	"node_modules/expect/expect.js",
 	"src/client/_*_test.js"
 ];
 
@@ -23,7 +25,7 @@ exclude = [
 
 // test results reporter to use
 // possible values: dots || progress
-reporter = 'progress';
+reporter = 'dots';
 
 
 // web server port
