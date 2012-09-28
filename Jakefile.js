@@ -4,7 +4,7 @@
 (function() {
 	"use strict";
 
-	var NODE_VERSION = "v0.8.11";
+	var NODE_VERSION = "v0.8.10";
 	var GENERATED_DIR = "generated";
 	var TEMP_TESTFILE_DIR = GENERATED_DIR + "/test";
 
