@@ -12,7 +12,8 @@ files = [
 	MOCHA_ADAPTER,
 //	"node_modules/chai/chai.js",
 //	"node_modules/should/lib/should.js",
-	"node_modules/expect/expect.js",
+//	"node_modules/expect/expect.js",
+	"node_modules/expect.js/expect.js",
 	"src/client/_*_test.js"
 ];
 
