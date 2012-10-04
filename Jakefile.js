@@ -50,8 +50,8 @@
 
 	desc("Test client code");
 	task("testClient", function() {
-		console.log("CLIENT CODE HERE!");
-	});
+		sh("node node_modules/.bin/testacular run", "Client tests failed", complete);
+	}, {async: true});
 
 	desc("Deploy to Heroku");
 	task("deploy", ["default"], function() {
@@ -117,7 +117,7 @@
 		return [major, minor, bugfix];
 	}
 
-	function sh(command, callback) {
+	function sh(command, errorMessage, callback) {
 		console.log("> " + command);
 
 		var stdout = "";
@@ -125,8 +125,10 @@
 		process.on("stdout", function(chunk) {
 			stdout += chunk;
 		});
+		process.on("error", function() {
+			fail(errorMessage);
+		});
 		process.on("cmdEnd", function() {
-			console.log();
 			callback(stdout);
 		});
 		process.run();
