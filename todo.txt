@@ -12,12 +12,10 @@ User Stories:
 - Draw one line
 
 Engineering Tasks:
-* Set up client-side testing
-- Test drawing tool (Raphael?)
+* Test drawing tool (Raphael?)
 - Integrate into HTML page
 
 To Do on current task:
-- Unify our test file location configuration (it's currently split between Jakefile & testacular.conf.js)
 
 Future ideas:
 - Create 'fail fast' assertion code
