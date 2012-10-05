@@ -17,8 +17,6 @@ Engineering Tasks:
 
 To Do on current task:
 - AT START OF NEXT EPISODE: Mention clean up of browser test code
-	- check that every browser has same number of assertions
-	- show all browsers that are expected to run (with friendlier error message)
 	- support 'strict' mode (or perhaps 'loose' mode)
 		- if 'loose', change ci instructions
 
@@ -33,6 +31,7 @@ Future ideas:
 - Fix httpGet duplication
 - Automated npm rebuild (Remove node_modules .bin directory from repository (and add to .gitignore) and 'npm rebuild' in jake.sh / jake.bat if .bin directory not found. Also add to CI script?)
 - Ensure that every browser has same of number of tests running
+- Automatically start Testacular (or provide friendlier error message when it isn't running?)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
