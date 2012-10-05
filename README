@@ -19,11 +19,11 @@ Before building for the first time:
 - Compile npm dependencies: 'npm rebuild'
 
 To build:
-- Run './jake.sh' (Unix/Mac) or 'jake.bat' (Windows)
+- Run './jake.sh loose=true' (Unix/Mac) or 'jake.bat loose=true' (Windows)
 - Note: not all episodes' source code is in buildable state. The integration
   branch builds clean on Mac and Windows, and is assumed to work on Linux:
   - Change to integration branch: 'git checkout integration'
-  - Build: './jake.sh' or 'jake.bat'
+  - Build: './jake.sh loose=true' or 'jake.bat loose=true'
   - Change back to development branch when you're done: 'git checkout master'
 
 Before deploying for first time:

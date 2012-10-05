@@ -17,8 +17,6 @@ Engineering Tasks:
 
 To Do on current task:
 - AT START OF NEXT EPISODE: Mention clean up of browser test code
-	- support 'strict' mode (or perhaps 'loose' mode)
-		- if 'loose', change ci instructions
 
 Future ideas:
 - Create 'fail fast' assertion code

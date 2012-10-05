@@ -4,6 +4,8 @@
 (function() {
 	"use strict";
 
+	if (!process.env.loose) console.log("For more forgiving test settings, use 'loose=true'");
+
 	var lint = require("./build/lint/lint_runner.js");
 	var nodeunit = require("nodeunit").reporters["default"];
 
@@ -66,7 +68,7 @@
 			SUPPORTED_BROWSERS.forEach(function(browser) {
 				browserMissing = checkIfBrowserTested(browser, output) || browserMissing;
 			});
-			if (browserMissing && process.env.strict) fail("Did not test all supported browsers");
+			if (browserMissing && !process.env.loose) fail("Did not test all supported browsers");
 			if (output.indexOf("TOTAL: 0 SUCCESS") !== -1) fail("Client tests did not run!");
 		});
 	}, {async: true});
@@ -84,7 +86,7 @@
 		console.log("3. 'jake test'");
 	});
 
-//	desc("Ensure correct version of Node is present. Use 'strict=true' to require exact match");
+//	desc("Ensure correct version of Node is present.
 	task("nodeVersion", [], function() {
 		function failWithQualifier(qualifier) {
 			fail("Incorrect node version. Expected " + qualifier +
@@ -96,7 +98,7 @@
 		var expected = parseNodeVersion("expected Node version", expectedString);
 		var actual = parseNodeVersion("Node version", actualString);
 
-		if (process.env.strict) {
+		if (!process.env.loose) {
 			if (actual[0] !== expected[0] || actual[1] !== expected[1] || actual[2] !== expected[2]) {
 				failWithQualifier("exactly");
 			}
