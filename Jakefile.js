@@ -62,17 +62,24 @@
 	desc("Test client code");
 	task("testClient", function() {
 		sh("node node_modules/.bin/testacular run", "Client tests failed", function(output) {
+			var browserTestsFailed = false;
 			SUPPORTED_BROWSERS.forEach(function(browser) {
-				assertBrowserIsTested(browser, output);
+				var testsRun = assertBrowserIsTested(browser, output);
+				if (testsRun === 0) browserTestsFailed = true;
 			});
 			if (output.indexOf("TOTAL: 0 SUCCESS") !== -1) fail("Client tests did not run!");
+			if (browserTestsFailed) fail("Did not test all supported browsers");
 		});
 	}, {async: true});
 
 	function assertBrowserIsTested(browser, output) {
 		var searchString = browser + ": Executed";
 		var found = output.indexOf(searchString) !== -1;
-		if (!found) fail(browser + " was not tested!");
+		if (!found) {
+			console.log(browser + " was not tested!");
+			return 0;
+		}
+		return 1;
 	}
 
 	desc("Deploy to Heroku");

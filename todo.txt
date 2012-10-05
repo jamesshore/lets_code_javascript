@@ -16,6 +16,11 @@ Engineering Tasks:
 - Integrate into HTML page
 
 To Do on current task:
+- AT START OF NEXT EPISODE: Mention clean up of browser test code
+	- check that every browser has same number of assertions
+	- show all browsers that are expected to run (with friendlier error message)
+	- support 'strict' mode (or perhaps 'loose' mode)
+		- if 'loose', change ci instructions
 
 Future ideas:
 - Create 'fail fast' assertion code
