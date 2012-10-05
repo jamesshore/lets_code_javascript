@@ -29,6 +29,7 @@ Future ideas:
 - Remove Node version duplication between package.json and Jakefile.js
 - Fix httpGet duplication
 - Automated npm rebuild (Remove node_modules .bin directory from repository (and add to .gitignore) and 'npm rebuild' in jake.sh / jake.bat if .bin directory not found. Also add to CI script?)
+- Ensure that every browser has same of number of tests running
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

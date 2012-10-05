@@ -3,18 +3,15 @@
 
 
 // base path, that will be used to resolve files and exclude
-basePath = '.';
+basePath = '..';
 
 
 // list of files / patterns to load in the browser
 files = [
 	MOCHA,
 	MOCHA_ADAPTER,
-//	"node_modules/chai/chai.js",
-//	"node_modules/should/lib/should.js",
-//	"node_modules/expect/expect.js",
 	"node_modules/expect.js/expect.js",
-	"src/client/_*_test.js"
+	"src/client/*.js"
 ];
 
 
