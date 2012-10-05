@@ -19,8 +19,10 @@ Before building for the first time:
 - Compile npm dependencies: 'npm rebuild'
 
 To build:
+- Run './jake.sh testacular' (Unix/Mac) or 'jake.bat testacular' (Windows)
+- Navigate at least one browser to http://localhost:8080
 - Run './jake.sh loose=true' (Unix/Mac) or 'jake.bat loose=true' (Windows)
-- Note: not all episodes' source code is in buildable state. The integration
+**Note: not all episodes' source code is in buildable state. The integration
   branch builds clean on Mac and Windows, and is assumed to work on Linux:
   - Change to integration branch: 'git checkout integration'
   - Build: './jake.sh loose=true' or 'jake.bat loose=true'
