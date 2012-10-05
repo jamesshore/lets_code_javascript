@@ -30,6 +30,11 @@
 	desc("Build and test");
 	task("default", ["lint", "test"]);
 
+	desc("Start Testacular server for testing");
+	task("testacular", function() {
+		sh("node node_modules/.bin/testacular start build/testacular.conf.js", "Could not start Testacular server", complete);
+	}, {async: true});
+
 	desc("Lint everything");
 	task("lint", ["lintNode", "lintClient"]);
 
@@ -60,6 +65,7 @@
 			SUPPORTED_BROWSERS.forEach(function(browser) {
 				assertBrowserIsTested(browser, output);
 			});
+			if (output.indexOf("TOTAL: 0 SUCCESS") !== -1) fail("Client tests did not run!");
 		});
 	}, {async: true});
 

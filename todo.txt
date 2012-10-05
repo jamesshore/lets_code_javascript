@@ -17,7 +17,6 @@ Engineering Tasks:
 - Integrate into HTML page
 
 To Do on current task:
-- Move testacular.conf.js to a better location
 - Unify our test file location configuration (it's currently split between Jakefile & testacular.conf.js)
 
 Future ideas:
