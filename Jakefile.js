@@ -8,6 +8,15 @@
 	var nodeunit = require("nodeunit").reporters["default"];
 
 	var NODE_VERSION = "v0.8.10";
+	var SUPPORTED_BROWSERS = [
+		"IE 8.0",
+		"IE 9.0",
+		"Firefox 15.0",
+		"Chrome 22.0",
+		"Safari 6.0",
+		"Safari 5.1"  // iOS
+	];
+
 	var GENERATED_DIR = "generated";
 	var TEMP_TESTFILE_DIR = GENERATED_DIR + "/test";
 
@@ -48,12 +57,16 @@
 	desc("Test client code");
 	task("testClient", function() {
 		sh("node node_modules/.bin/testacular run", "Client tests failed", function(output) {
-			assertBrowserIsTested("IE 8.0", output);
+			SUPPORTED_BROWSERS.forEach(function(browser) {
+				assertBrowserIsTested(browser, output);
+			});
 		});
 	}, {async: true});
 
-	function assertBrowserIsTested(browserName, output) {
-		fail(browserName + " was not tested!");
+	function assertBrowserIsTested(browser, output) {
+		var searchString = browser + ": Executed";
+		var found = output.indexOf(searchString) !== -1;
+		if (!found) fail(browser + " was not tested!");
 	}
 
 	desc("Deploy to Heroku");
