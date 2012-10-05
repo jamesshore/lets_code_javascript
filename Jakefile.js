@@ -63,12 +63,12 @@
 
 	desc("Test client code");
 	task("testClient", function() {
-		sh("node node_modules/.bin/testacular run", "Client tests failed (run server with 'testacular')", function(output) {
+		sh("node node_modules/.bin/testacular run", "Client tests failed (to start server, run 'jake testacular')", function(output) {
 			var browserMissing = false;
 			SUPPORTED_BROWSERS.forEach(function(browser) {
 				browserMissing = checkIfBrowserTested(browser, output) || browserMissing;
 			});
-			if (browserMissing && !process.env.loose) fail("Did not test all supported browsers");
+			if (browserMissing && !process.env.loose) fail("Did not test all supported browsers (use 'loose=true' to suppress error)");
 			if (output.indexOf("TOTAL: 0 SUCCESS") !== -1) fail("Client tests did not run!");
 		});
 	}, {async: true});
@@ -128,7 +128,7 @@
 		console.log("1. Save recording.");
 		console.log("2. Double-check sound and framing.");
 		console.log("3. Commit source code.");
-		console.log("4. Check Windows compatibility")
+		console.log("4. Check Windows compatibility");
 		console.log("5. Tag episode: 'git tag -a episodeXX -m \"End of episode XX\"'");
 	});
 
