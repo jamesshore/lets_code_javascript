@@ -129,6 +129,9 @@
 		console.log("2. Double-check sound and framing.");
 		console.log("3. Commit source code.");
 		console.log("4. Check Windows compatibility");
+		console.log("   a. Switch to Windows VM");
+		console.log("   b. 'git pull'");
+		console.log("   c. 'jake'");
 		console.log("5. Tag episode: 'git tag -a episodeXX -m \"End of episode XX\"'");
 	});
 
