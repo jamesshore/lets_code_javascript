@@ -61,12 +61,12 @@
 
 	desc("Test client code");
 	task("testClient", function() {
-		sh("node node_modules/.bin/testacular run", "Client tests failed", function(output) {
+		sh("node node_modules/.bin/testacular run", "Client tests failed (run server with 'testacular')", function(output) {
 			var browserMissing = false;
 			SUPPORTED_BROWSERS.forEach(function(browser) {
 				browserMissing = checkIfBrowserTested(browser, output) || browserMissing;
 			});
-			if (browserMissing) fail("Did not test all supported browsers");
+			if (browserMissing && process.env.strict) fail("Did not test all supported browsers");
 			if (output.indexOf("TOTAL: 0 SUCCESS") !== -1) fail("Client tests did not run!");
 		});
 	}, {async: true});
