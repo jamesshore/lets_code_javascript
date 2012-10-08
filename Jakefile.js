@@ -35,7 +35,7 @@
 
 	desc("Start Testacular server for testing");
 	task("testacular", function() {
-		testacular("start build/testacular.conf.js", "Could not start Testacular server", complete);
+		testacular(["start", "build/testacular.conf.js"], "Could not start Testacular server", complete);
 	}, {async: true});
 
 	desc("Lint everything");
@@ -64,7 +64,7 @@
 
 	desc("Test client code");
 	task("testClient", function() {
-		testacular("run", "Client tests failed (to start server, run 'jake testacular')", function(output) {
+		testacular(["run"], "Client tests failed (to start server, run 'jake testacular')", function(output) {
 			var browserMissing = false;
 			SUPPORTED_BROWSERS.forEach(function(browser) {
 				browserMissing = checkIfBrowserTested(browser, output) || browserMissing;
@@ -147,28 +147,77 @@
 		return [major, minor, bugfix];
 	}
 
-	function testacular(options, errorMessage, callback) {
+	function testacular(args, errorMessage, callback) {
 		var testacularCli = "node_modules/testacular/bin/testacular";
-		testacularCli = path.normalize(testacularCli);                  // fix path for Windows
-		sh("node " + testacularCli + " " + options, errorMessage, callback);
+//		testacularCli = path.normalize(testacularCli);                  // fix path for Windows
+//		sh("node " + testacularCli + " " + options, errorMessage, callback);
+		node(testacularCli, args, errorMessage, callback);
 	}
 
-	function sh(command, errorMessage, callback) {
-		console.log("> " + command);
+	function node(module, args, errorMessage, callback) {
+		var child_process = require("child_process");
 
+		args.unshift(module);
+		var child = child_process.spawn("node", args, { stdio: "pipe" });
 		var stdout = "";
-		var process = jake.createExec(command, {printStdout:true, printStderr: true});
-		process.on("stdout", function(chunk) {
+
+		child.stdout.setEncoding("utf8");
+		child.stdout.on("data", function(chunk) {
 			stdout += chunk;
+			process.stdout.write(chunk);
 		});
-		process.on("error", function() {
-			fail(errorMessage);
+		child.on("exit", function(exitCode) {
+			if (exitCode !== 0) fail(errorMessage);
 		});
-		process.on("cmdEnd", function() {
+		child.on("close", function() {
 			callback(stdout);
 		});
-		process.run();
 	}
+
+//		console.log("> node " + module + " " + args);
+//
+//		var stdout = "";
+//		var stderr = "";
+//		var child = require("child_process").fork(module, args);
+////		child.stdout.setEncoding("utf8");
+//		child.stdout.on("data", function(chunk) {
+//			console.log("STDERR");
+//			stdout += chunk;
+//			process.stdout.write(chunk);
+//		});
+////		child.stderr.setEncoding("utf8");
+//		child.stderr.on("data", function(chunk) {
+//			console.log("STDERR");
+//			stderr += chunk;
+//			process.stderr.write(chunk);
+//		});
+//		child.on("exit", function(exitCode) {
+//			console.log("EXIT");
+//			if (exitCode !== 0) fail(errorMessage);
+//		});
+//		child.on("close", function() {        // stdio streams have been closed; this can happen after exit
+//			console.log("CLOSE");
+//			callback(stdout, stderr);
+//		});
+////		child.run();
+//	}
+//
+//	function sh(command, errorMessage, callback) {
+//		console.log("> " + command);
+//
+//		var stdout = "";
+//		var process = jake.createExec(command, {printStdout:true, printStderr: true});
+//		process.on("stdout", function(chunk) {
+//			stdout += chunk;
+//		});
+//		process.on("error", function() {
+//			fail(errorMessage);
+//		});
+//		process.on("cmdEnd", function() {
+//			callback(stdout);
+//		});
+//		process.run();
+//	}
 
 	function nodeFiles() {
 		var javascriptFiles = new jake.FileList();
