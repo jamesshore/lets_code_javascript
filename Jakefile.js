@@ -21,6 +21,7 @@
 
 	var GENERATED_DIR = "generated";
 	var TEMP_TESTFILE_DIR = GENERATED_DIR + "/test";
+	var TESTACULAR_COMMAND = "node node_modules/testacular/bin/testacular";
 
 	directory(TEMP_TESTFILE_DIR);
 
@@ -34,7 +35,7 @@
 
 	desc("Start Testacular server for testing");
 	task("testacular", function() {
-		sh("node node_modules/.bin/testacular start build/testacular.conf.js", "Could not start Testacular server", complete);
+		sh(TESTACULAR_COMMAND + " build/testacular.conf.js", "Could not start Testacular server", complete);
 	}, {async: true});
 
 	desc("Lint everything");
@@ -63,7 +64,7 @@
 
 	desc("Test client code");
 	task("testClient", function() {
-		sh("node node_modules/.bin/testacular run", "Client tests failed (to start server, run 'jake testacular')", function(output) {
+		sh(TESTACULAR_COMMAND + " run", "Client tests failed (to start server, run 'jake testacular')", function(output) {
 			var browserMissing = false;
 			SUPPORTED_BROWSERS.forEach(function(browser) {
 				browserMissing = checkIfBrowserTested(browser, output) || browserMissing;

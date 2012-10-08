@@ -16,8 +16,11 @@ Engineering Tasks:
 - Integrate into HTML page
 
 To Do on current task:
-- AT START OF NEXT EPISODE: Mention clean up of browser test code
-- Integrate (Mention Jake's Windows exclude() bug workaround in nodeTestFiles() )
+- AT START OF NEXT EPISODE:
+  - Mention clean up of browser test code
+  - Mention Windows fixes:
+    - Jake exclude() bug workaround in nodeTestFiles()
+    - Change to Node command line (also, extracted constant)
 
 Future ideas:
 - Create 'fail fast' assertion code
