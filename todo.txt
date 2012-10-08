@@ -17,7 +17,7 @@ Engineering Tasks:
 
 To Do on current task:
 - AT START OF NEXT EPISODE: Mention clean up of browser test code
-- Integrate
+- Integrate (Mention Jake's Windows exclude() bug workaround in nodeTestFiles() )
 
 Future ideas:
 - Create 'fail fast' assertion code
