@@ -87,7 +87,7 @@
 		console.log("3. 'jake test'");
 	});
 
-//	desc("Ensure correct version of Node is present.
+//	desc("Ensure correct version of Node is present.");
 	task("nodeVersion", [], function() {
 		function failWithQualifier(qualifier) {
 			fail("Incorrect node version. Expected " + qualifier +
@@ -148,76 +148,40 @@
 	}
 
 	function testacular(args, errorMessage, callback) {
-		var testacularCli = "node_modules/testacular/bin/testacular";
-//		testacularCli = path.normalize(testacularCli);                  // fix path for Windows
-//		sh("node " + testacularCli + " " + options, errorMessage, callback);
-		node(testacularCli, args, errorMessage, callback);
+		args.unshift("node_modules/testacular/bin/testacular");
+		sh("node", args, errorMessage, callback);
 	}
 
-	function node(module, args, errorMessage, callback) {
-		var child_process = require("child_process");
+	function sh(command, args, errorMessage, callback) {
+		console.log("> " + command + " " + args.join(" "));
 
-		args.unshift(module);
-		var child = child_process.spawn("node", args, { stdio: "pipe" });
+		// Not using jake.createExec as it did not handle output correctly on Windows as of v0.3.7
+		var child = require("child_process").spawn(command, args, { stdio: "pipe" });
+
+		// redirect stdout
 		var stdout = "";
-
 		child.stdout.setEncoding("utf8");
 		child.stdout.on("data", function(chunk) {
 			stdout += chunk;
 			process.stdout.write(chunk);
 		});
+
+		// redirect stderr
+		var stderr = "";
+		child.stderr.setEncoding("utf8");
+		child.stderr.on("data", function(chunk) {
+			stderr += chunk;
+			process.stderr.write(chunk);
+		});
+
+		// handle process exit
 		child.on("exit", function(exitCode) {
 			if (exitCode !== 0) fail(errorMessage);
 		});
-		child.on("close", function() {
-			callback(stdout);
+		child.on("close", function() {      // 'close' event can happen after 'exit' event
+			callback(stdout, stderr);
 		});
 	}
-
-//		console.log("> node " + module + " " + args);
-//
-//		var stdout = "";
-//		var stderr = "";
-//		var child = require("child_process").fork(module, args);
-////		child.stdout.setEncoding("utf8");
-//		child.stdout.on("data", function(chunk) {
-//			console.log("STDERR");
-//			stdout += chunk;
-//			process.stdout.write(chunk);
-//		});
-////		child.stderr.setEncoding("utf8");
-//		child.stderr.on("data", function(chunk) {
-//			console.log("STDERR");
-//			stderr += chunk;
-//			process.stderr.write(chunk);
-//		});
-//		child.on("exit", function(exitCode) {
-//			console.log("EXIT");
-//			if (exitCode !== 0) fail(errorMessage);
-//		});
-//		child.on("close", function() {        // stdio streams have been closed; this can happen after exit
-//			console.log("CLOSE");
-//			callback(stdout, stderr);
-//		});
-////		child.run();
-//	}
-//
-//	function sh(command, errorMessage, callback) {
-//		console.log("> " + command);
-//
-//		var stdout = "";
-//		var process = jake.createExec(command, {printStdout:true, printStderr: true});
-//		process.on("stdout", function(chunk) {
-//			stdout += chunk;
-//		});
-//		process.on("error", function() {
-//			fail(errorMessage);
-//		});
-//		process.on("cmdEnd", function() {
-//			callback(stdout);
-//		});
-//		process.run();
-//	}
 
 	function nodeFiles() {
 		var javascriptFiles = new jake.FileList();
