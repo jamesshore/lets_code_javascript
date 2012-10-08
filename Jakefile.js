@@ -8,6 +8,7 @@
 
 	var lint = require("./build/lint/lint_runner.js");
 	var nodeunit = require("nodeunit").reporters["default"];
+	var path = require("path");
 
 	var NODE_VERSION = "v0.8.10";
 	var SUPPORTED_BROWSERS = [
@@ -21,7 +22,6 @@
 
 	var GENERATED_DIR = "generated";
 	var TEMP_TESTFILE_DIR = GENERATED_DIR + "/test";
-	var TESTACULAR_COMMAND = "node node_modules/testacular/bin/testacular";
 
 	directory(TEMP_TESTFILE_DIR);
 
@@ -35,7 +35,7 @@
 
 	desc("Start Testacular server for testing");
 	task("testacular", function() {
-		sh(TESTACULAR_COMMAND + " build/testacular.conf.js", "Could not start Testacular server", complete);
+		testacular("start build/testacular.conf.js", "Could not start Testacular server", complete);
 	}, {async: true});
 
 	desc("Lint everything");
@@ -64,7 +64,7 @@
 
 	desc("Test client code");
 	task("testClient", function() {
-		sh(TESTACULAR_COMMAND + " run", "Client tests failed (to start server, run 'jake testacular')", function(output) {
+		testacular("run", "Client tests failed (to start server, run 'jake testacular')", function(output) {
 			var browserMissing = false;
 			SUPPORTED_BROWSERS.forEach(function(browser) {
 				browserMissing = checkIfBrowserTested(browser, output) || browserMissing;
@@ -145,6 +145,12 @@
 		var minor = parseInt(versionInfo[2], 10);
 		var bugfix = parseInt(versionInfo[3], 10);
 		return [major, minor, bugfix];
+	}
+
+	function testacular(options, errorMessage, callback) {
+		var testacularCli = "node_modules/testacular/bin/testacular";
+		testacularCli = path.normalize(testacularCli);                  // fix path for Windows
+		sh("node " + testacularCli + " " + options, errorMessage, callback);
 	}
 
 	function sh(command, errorMessage, callback) {

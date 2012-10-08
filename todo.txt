@@ -20,7 +20,7 @@ To Do on current task:
   - Mention clean up of browser test code
   - Mention Windows fixes:
     - Jake exclude() bug workaround in nodeTestFiles()
-    - Change to Node command line (also, extracted constant)
+    - New testacular() method with path.normalize()
 
 Future ideas:
 - Create 'fail fast' assertion code
