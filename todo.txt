@@ -22,8 +22,11 @@ To Do on current task:
   - Mention Windows fixes:
     - Jake exclude() bug workaround in nodeTestFiles()
     - New testacular() method with path.normalize()
-    - Testacular errors do not output on 'run' terminal -- need to figure that out
-      - Defect in Jake?
+    - Testacular errors do not output on 'run' terminal
+      - Seems to be Testacular defect: opened issue at https://github.com/vojtajina/testacular/issues/91
+      - Workaround (both require 'loose=true' option):
+        - View output of 'jake testacular' command window instead of 'jake' command window
+        - Change 'pipe' to 'inherit' in Jakefile (line 159) & remove stream capture (lines 163-167 & 171-175)
 
 Future ideas:
 - Create 'fail fast' assertion code

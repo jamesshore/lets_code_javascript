@@ -155,7 +155,7 @@
 	function sh(command, args, errorMessage, callback) {
 		console.log("> " + command + " " + args.join(" "));
 
-		// Not using jake.createExec as it did not handle output correctly on Windows as of v0.3.7
+		// Not using jake.createExec as it adds extra line-feeds into output as of v0.3.7
 		var child = require("child_process").spawn(command, args, { stdio: "pipe" });
 
 		// redirect stdout
