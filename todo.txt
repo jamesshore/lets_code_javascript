@@ -21,6 +21,8 @@ To Do on current task:
   - Mention Windows fixes:
     - Jake exclude() bug workaround in nodeTestFiles()
     - New testacular() method with path.normalize()
+    - Testacular errors do not output on 'run' terminal -- need to figure that out
+      - Defect in Jake?
 
 Future ideas:
 - Create 'fail fast' assertion code
