@@ -28,6 +28,7 @@ To Do on current task:
         - View output of 'jake testacular' command window instead of 'jake' command window
         - Change 'pipe' to 'inherit' in Jakefile (line 159) & remove stream capture (lines 163-167 & 171-175)
     - 'npm' improvements:
+      - removed .bin/ folders from repository and added to .gitignore (to prevent 'npm rebuild' errors)
       - Updated integration checklist to 'npm rebuild' and check for files needing ignoring
 
 Future ideas:
