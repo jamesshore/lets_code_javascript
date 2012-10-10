@@ -17,7 +17,6 @@ Before building for the first time:
 - Clone source repository: 'git clone https://github.com/jamesshore/lets_code_javascript.git'
 - All commands must run from root of repository: 'cd lets_code_javascript'
 - Compile npm dependencies: 'npm rebuild'
-  * Note: 'npm rebuild' will display errors on Windows, but it still works correctly.
 
 To build:
 - Run './jake.sh testacular' (Unix/Mac) or 'jake.bat testacular' (Windows)

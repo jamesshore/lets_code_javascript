@@ -28,8 +28,9 @@ To Do on current task:
         - View output of 'jake testacular' command window instead of 'jake' command window
         - Change 'pipe' to 'inherit' in Jakefile (line 159) & remove stream capture (lines 163-167 & 171-175)
     - 'npm' improvements:
-      - removed .bin/ folders from repository and added to .gitignore (to prevent 'npm rebuild' errors)
+      - removed .bin/ folders from repository and added to .gitignore
       - Updated integration checklist to 'npm rebuild' and check for files needing ignoring
+      - Forced Testacular's socket.io to use master branch from git repo (to fix 'npm rebuild' errors)
 
 Future ideas:
 - Create 'fail fast' assertion code
