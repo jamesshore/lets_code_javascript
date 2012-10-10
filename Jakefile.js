@@ -117,8 +117,10 @@
 		console.log("2. Build on the integration box.");
 		console.log("   a. Walk over to integration box.");
 		console.log("   b. 'git pull'");
-		console.log("   c. 'jake'");
-		console.log("   d. If jake fails, stop! Try again after fixing the issue.");
+		console.log("   c. 'npm rebuild'");
+		console.log("   d. Check status for files that need to be .gitignore'd");
+		console.log("   e. 'jake'");
+		console.log("   f. If jake fails, stop! Try again after fixing the issue.");
 		console.log("3. 'git checkout integration'");
 		console.log("4. 'git merge master --no-ff --log'");
 		console.log("5. 'git checkout master'");
@@ -132,7 +134,9 @@
 		console.log("4. Check Windows compatibility");
 		console.log("   a. Switch to Windows VM");
 		console.log("   b. 'git pull'");
-		console.log("   c. 'jake'");
+		console.log("   c. 'npm rebuild'");
+		console.log("   d. Check status for files that need to be .gitignore'd");
+		console.log("   e. 'jake'");
 		console.log("5. Tag episode: 'git tag -a episodeXX -m \"End of episode XX\"'");
 	});
 
