@@ -16,9 +16,12 @@ Engineering Tasks:
 - Integrate into HTML page
 
 To Do on current task:
+- Integrate on Windows
 - AT START OF NEXT EPISODE:
   - Mention clean up of browser test code, including loose=true option
-  - Mention upgrade of iOS Simulator (it now reports running Safari 6.0)
+  - Mention browser upgrades
+    - Firefox 15 -> 16
+    - iOS Safari 5.1 -> 6.0
   - Mention Windows fixes:
     - Jake exclude() bug workaround in nodeTestFiles()
     - New testacular() method with path.normalize()
