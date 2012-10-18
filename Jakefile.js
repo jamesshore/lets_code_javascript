@@ -16,8 +16,8 @@
 		"IE 9.0",
 		"Firefox 16.0",
 		"Chrome 22.0",
-		"Safari 6.0",
-		"Safari 5.1"  // iOS
+		"Mac Safari 6.0",
+		"iOS Safari 6.0"
 	];
 
 	var GENERATED_DIR = "generated";
