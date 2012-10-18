@@ -18,14 +18,13 @@ Engineering Tasks:
 To Do on current task:
 - PRIOR TO NEXT EPISODE:
   - Integrate on Windows
-  - Upgrade Testacular to 0.4.0 (and correct SocketIO if necessary)
-  - Try to correct Safari detection problem by editing Testacular code (util.js browserFullNameToShort())
-      - Testacular issue: https://github.com/vojtajina/testacular/issues/121
 - AT START OF NEXT EPISODE:
   - Mention clean up of browser test code, including loose=true option
-  - Mention Testacular improvements
+  - Mention Testacular improvements:
     - Upgrade to 0.4.0
-  - Mention browser upgrades
+    - Upgraded socket.io in order to resolve Window's npm rebuild issues
+    - Modified util.js browserFullNameToShort() to report browser OS so we could check for Safari running on iOS
+  - Mention browser upgrades:
     - Firefox 15 -> 16
     - iOS Safari 5.1 -> 6.0
   - Mention Windows fixes:
