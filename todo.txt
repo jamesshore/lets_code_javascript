@@ -23,6 +23,8 @@ To Do on current task:
       - Testacular issue: https://github.com/vojtajina/testacular/issues/121
 - AT START OF NEXT EPISODE:
   - Mention clean up of browser test code, including loose=true option
+  - Mention Testacular improvements
+    - Upgrade to 0.4.0
   - Mention browser upgrades
     - Firefox 15 -> 16
     - iOS Safari 5.1 -> 6.0
