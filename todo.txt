@@ -16,7 +16,11 @@ Engineering Tasks:
 - Integrate into HTML page
 
 To Do on current task:
-- Integrate on Windows
+- PRIOR TO NEXT EPISODE:
+  - Integrate on Windows
+  - Upgrade Testacular to 0.4.0 (and correct SocketIO if necessary)
+  - Try to correct Safari detection problem by editing Testacular code (util.js browserFullNameToShort())
+      - Testacular issue: https://github.com/vojtajina/testacular/issues/121
 - AT START OF NEXT EPISODE:
   - Mention clean up of browser test code, including loose=true option
   - Mention browser upgrades
