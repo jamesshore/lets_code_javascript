@@ -17,11 +17,6 @@ Engineering Tasks:
 
 To Do on current task:
 - IN NEXT EPISODE:
-  - Fix Testacular script for Windows (see 'deleteme' branch -- then delete it)
-    - Testacular errors do not output on 'run' terminal
-      - Seems to be Testacular defect: opened issue at https://github.com/vojtajina/testacular/issues/91
-    - Run Testacular directly
-    - Capture output stream
   - Integrate on Windows
     - Start Testacular on WWP-Integration
     - Use 'ipconfig' to determine IP address (eg 192.168.1.130)

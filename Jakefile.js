@@ -83,6 +83,8 @@
 			});
 			if (browserMissing && !process.env.loose) fail("Did not test all supported browsers (use 'loose=true' to suppress error)");
 			if (output.indexOf("TOTAL: 0 SUCCESS") !== -1) fail("Client tests did not run!");
+
+			complete();
 		});
 	}, {async: true});
 
