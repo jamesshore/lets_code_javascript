@@ -22,6 +22,7 @@ To Do on current task:
 * Make test look at Testacular DOM
 - Insert elements into Testacular DOM
 - Assert element exists
+- Modify Lint settings for client global variables
 
 Future ideas:
 - Create 'fail fast' assertion code
