@@ -19,9 +19,7 @@ Engineering Tasks:
 * Basic DOM test
 
 To Do on current task:
-* Make test look at Testacular DOM
-- Insert elements into Testacular DOM
-- Assert element exists
+- Get onload() working in IE? Or maybe not worry about onload()?
 - Modify Lint settings for client global variables
 
 Future ideas:
