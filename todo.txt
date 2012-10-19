@@ -16,9 +16,7 @@ Engineering Tasks:
 - Integrate into HTML page
 
 To Do on current task:
-- PRIOR TO NEXT EPISODE:
-  - Integrate on Windows
-- AT START OF NEXT EPISODE:
+- IN NEXT EPISODE:
   - Mention clean up of browser test code, including loose=true option
   - Mention Testacular improvements:
     - Upgrade to 0.4.0
@@ -30,15 +28,20 @@ To Do on current task:
   - Mention Windows fixes:
     - Jake exclude() bug workaround in nodeTestFiles()
     - New testacular() method with path.normalize()
-    - Testacular errors do not output on 'run' terminal
-      - Seems to be Testacular defect: opened issue at https://github.com/vojtajina/testacular/issues/91
-      - Workaround (both require 'loose=true' option):
-        - View output of 'jake testacular' command window instead of 'jake' command window
-        - Change 'pipe' to 'inherit' in Jakefile (line 159) & remove stream capture (lines 163-167 & 171-175)
     - 'npm' improvements:
       - removed .bin/ folders from repository and added to .gitignore
       - Updated integration checklist to 'npm rebuild' and check for files needing ignoring
       - Forced Testacular's socket.io to use master branch from git repo (to fix 'npm rebuild' errors)
+  - Fix Testacular script for Windows (see 'deleteme' branch -- then delete it)
+    - Testacular errors do not output on 'run' terminal
+      - Seems to be Testacular defect: opened issue at https://github.com/vojtajina/testacular/issues/91
+    - Run Testacular directly
+    - Capture output stream
+  - Integrate on Windows
+    - Start Testacular on WWP-Integration
+    - Use 'ipconfig' to determine IP address (eg 192.168.1.130)
+    - Connect browsers to WWP-Integration (eg 192.168.1.130:8080)
+    - Run jake
 
 Future ideas:
 - Create 'fail fast' assertion code
