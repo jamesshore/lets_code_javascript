@@ -19,8 +19,8 @@ Engineering Tasks:
 * Basic DOM test
 
 To Do on current task:
-- Make test look at Testacular DOM
-* Insert elements into Testacular DOM
+* Make test look at Testacular DOM
+- Insert elements into Testacular DOM
 - Assert element exists
 
 Future ideas:

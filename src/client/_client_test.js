@@ -7,9 +7,10 @@
 	describe("Nothing", function () {
 
 		it("should run", function () {
-
-
-			dump(document.body);
+			var div = document.createElement("div");
+			div.setAttribute("id", "tdjs");
+			document.body.appendChild(div);
+			dump("breakpoint here");
 		});
 
 	});
