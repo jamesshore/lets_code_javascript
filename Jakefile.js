@@ -201,10 +201,9 @@
 
 	function nodeFiles() {
 		var javascriptFiles = new jake.FileList();
-		javascriptFiles.include("**/*.js");
-		javascriptFiles.exclude("node_modules");
-		javascriptFiles.exclude("testacular.conf.js");
-		javascriptFiles.exclude("src/client/**");
+		javascriptFiles.include("*.js");
+		javascriptFiles.include("src/server/**/*.js");
+		javascriptFiles.include("src/_smoke_test.js");
 		return javascriptFiles.toArray();
 	}
 
