@@ -35,7 +35,8 @@
 
 	desc("Start Testacular server for testing");
 	task("testacular", function() {
-		testacular(["start", "build/testacular.conf.js"], "Could not start Testacular server", complete);
+		sh("node", ["node_modules/testacular/bin/testacular", "start", "build/testacular.conf.js"],
+			"Could not start Testacular server", complete);
 	}, {async: true});
 
 	desc("Lint everything");
@@ -105,7 +106,7 @@
 	task("nodeVersion", [], function() {
 		function failWithQualifier(qualifier) {
 			fail("Incorrect node version. Expected " + qualifier +
-					" [" + expectedString + "], but was [" + actualString + "].");
+				" [" + expectedString + "], but was [" + actualString + "].");
 		}
 
 		var expectedString = NODE_VERSION;
@@ -163,11 +164,6 @@
 		var minor = parseInt(versionInfo[2], 10);
 		var bugfix = parseInt(versionInfo[3], 10);
 		return [major, minor, bugfix];
-	}
-
-	function testacular(args, errorMessage, callback) {
-		args.unshift("node_modules/testacular/bin/testacular");
-		sh("node", args, errorMessage, callback);
 	}
 
 	function sh(command, args, errorMessage, callback) {
