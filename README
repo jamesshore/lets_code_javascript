@@ -2,7 +2,7 @@ Let's Code: Test-Driven Javascript
 
 "Let's Code: Test-Driven Javascript" is a screencast series focusing on
 rigorous, professional web development. For more information, visit
-http://letscodejavascript.com
+http://letscodejavascript.com .
 
 This repository contains the source code for WeeWikiPaint, the application
 being developed in the series.
@@ -11,10 +11,31 @@ being developed in the series.
 
 WeeWikiPaint
 
+Before building for the first time:
+- Install Node.js [http://nodejs.org/download/]
+- Install Git [http://git-scm.com/downloads]
+- Clone source repository: 'git clone https://github.com/jamesshore/lets_code_javascript.git'
+- All commands must run from root of repository: 'cd lets_code_javascript'
+- Compile npm dependencies: 'npm rebuild'
+
 To build:
-- Install Node.js [v0.8.6]
-- Install Git [v1.7.7.5]
-- (Optional: for deployment only) Install Heroku Toolbelt [https://toolbelt.heroku.com/]
-- Clone repository
-- Run './jake.sh' (Unix/Mac) or 'jake.bat' (Windows)
+- Run './jake.sh testacular' (Unix/Mac) or 'jake.bat testacular' (Windows)
+- Navigate at least one browser to http://localhost:8080
+- Run './jake.sh loose=true' (Unix/Mac) or 'jake.bat loose=true' (Windows)
+**Note: not all episodes' source code is in buildable state. The integration
+  branch builds clean on Mac and Windows, and is assumed to work on Linux:
+  - Change to integration branch: 'git checkout integration'
+  - Build: './jake.sh loose=true' or 'jake.bat loose=true'
+  - Change back to development branch when you're done: 'git checkout master'
+
+Before deploying for first time:
+- Make sure code is in Git repository (clone GitHub repo, or 'git init' yours)
+- Install Heroku Toolbelt [https://toolbelt.heroku.com/]
+- Sign up for Heroku account
+- Run 'heroku create <app_name>' (requires git repository and Heroku account)
+- Note: some URLs are hard-coded to weewikipaint.herokuapp.com; you'll need
+  to change them to refer to <app_name>. 
+
+To deploy:
+- Run './jake.sh deploy' (Unix/Mac) or 'jake.bat deploy' (Windows)
 

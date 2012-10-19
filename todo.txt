@@ -1,20 +1,27 @@
 WeeWikiPaint
 
 Minimum Marketable Features:
-* marketing home page
-- collaborative painting page (very basic)
+* single-user painting on home page
+- collaborative painting
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
 
 User Stories:
-> Marketing copy
-* Publish to Internet
+* Create empty drawing area
+- Draw one line
 
 Engineering Tasks:
-- Fix DNS
+* Test drawing tool (Raphael?)
+- Integrate into HTML page
 
 To Do on current task:
+- IN NEXT EPISODE:
+  - Integrate on Windows
+    - Start Testacular on WWP-Integration
+    - Use 'ipconfig' to determine IP address (eg 192.168.1.130)
+    - Connect browsers to WWP-Integration (eg 192.168.1.130:8080)
+    - Run jake
 
 Future ideas:
 - Create 'fail fast' assertion code
@@ -25,6 +32,12 @@ Future ideas:
   Make it forcibly close?
 - Remove Node version duplication between package.json and Jakefile.js
 - Fix httpGet duplication
+- Automated npm rebuild ('npm rebuild' in jake.sh / jake.bat if .bin directory not found.)
+- Ensure that every browser has same of number of tests running
+- Automatically start Testacular (or provide friendlier error message when it isn't running?)
+- Automate CI script
+- Resolve npm 'extraneous' warning (due to package.json not reflecting what's in node_modules)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
+- Testacular output cannot be parsed on Windows (issue: https://github.com/vojtajina/testacular/issues/91)

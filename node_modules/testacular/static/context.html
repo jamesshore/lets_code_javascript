@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!--
+This is the execution context.
+Loaded within the iframe.
+Realoaded before every execution run.
+-->
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+  <!-- The scripts need to be at the end of body, so that some test running frameworks
+       (Angular Scenario, for example) need the body to be loaded so that it can insert its magic
+       into it. If it is before body, then it fails to find the body and crashes and burns in an epic
+       manner. -->
+  <script type="text/javascript">
+    window.__testacular__ = window.parent.testacular;
+
+    // This causes memory leak in Chrome (17.0.963.66)
+    window.onerror = function() {
+      return window.__testacular__.error.apply(window.__testacular__, arguments);
+    };
+  </script>
+  <!-- Dynamically replaced with <script> tags -->
+  %SCRIPTS%
+  <script type="text/javascript">
+    window.__testacular__.loaded();
+  </script>
+</body>
+</html>

@@ -3,7 +3,9 @@
     <words>
       <w>async</w>
       <w>eqeqeq</w>
+      <w>firefox</w>
       <w>forin</w>
+      <w>gitignore</w>
       <w>immed</w>
       <w>jshint</w>
       <w>latedef</w>
@@ -12,6 +14,7 @@
       <w>nodeunit</w>
       <w>noempty</w>
       <w>nonew</w>
+      <w>testacular</w>
       <w>undef</w>
     </words>
   </dictionary>
