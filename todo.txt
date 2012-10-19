@@ -9,14 +9,18 @@ Minimum Marketable Features:
 
 User Stories:
 * Create empty drawing area
-- Draw one line
+- Draw one line (pre-defined)
+- Draw a line in response to user mouse
+- Draw a line in response to iOS touch
+- Draw multiple lines / follow the drag
+- Minify and deploy
 
 Engineering Tasks:
-* Test drawing tool (Raphael?)
-- Integrate into HTML page
+* Basic DOM test
 
 To Do on current task:
-
+- Make Jake success more obvious
+- Make test look at Testacular DOM
 
 Future ideas:
 - Create 'fail fast' assertion code
