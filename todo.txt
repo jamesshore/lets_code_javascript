@@ -17,21 +17,6 @@ Engineering Tasks:
 
 To Do on current task:
 - IN NEXT EPISODE:
-  - Mention clean up of browser test code, including loose=true option
-  - Mention Testacular improvements:
-    - Upgrade to 0.4.0
-    - Upgraded socket.io in order to resolve Window's npm rebuild issues
-    - Modified util.js browserFullNameToShort() to report browser OS so we could check for Safari running on iOS
-  - Mention browser upgrades:
-    - Firefox 15 -> 16
-    - iOS Safari 5.1 -> 6.0
-  - Mention Windows fixes:
-    - Jake exclude() bug workaround in nodeTestFiles()
-    - New testacular() method with path.normalize()
-    - 'npm' improvements:
-      - removed .bin/ folders from repository and added to .gitignore
-      - Updated integration checklist to 'npm rebuild' and check for files needing ignoring
-      - Forced Testacular's socket.io to use master branch from git repo (to fix 'npm rebuild' errors)
   - Fix Testacular script for Windows (see 'deleteme' branch -- then delete it)
     - Testacular errors do not output on 'run' terminal
       - Seems to be Testacular defect: opened issue at https://github.com/vojtajina/testacular/issues/91

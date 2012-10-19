@@ -48,7 +48,7 @@
 
 	task("lintClient", function() {
 		var passed = lint.validateFileList(clientFiles(), browserLintOptions(), {});
-		if (!passed ) fail("Lint failed");
+		if (!passed) fail("Lint failed");
 	});
 
 	desc("Test everything");
@@ -64,7 +64,19 @@
 
 	desc("Test client code");
 	task("testClient", function() {
-		testacular(["run"], "Client tests failed (to start server, run 'jake testacular')", function(output) {
+		var config = {};
+
+		var output = "";
+		var oldStdout = process.stdout.write;
+		process.stdout.write = function(data) {
+			output += data;
+			oldStdout.apply(this, arguments);
+		};
+
+		require("testacular/lib/runner").run(config, function(exitCode) {
+			process.stdout.write = oldStdout;
+
+			if (exitCode) fail("Client tests failed (to start server, run 'jake testacular')");
 			var browserMissing = false;
 			SUPPORTED_BROWSERS.forEach(function(browser) {
 				browserMissing = checkIfBrowserTested(browser, output) || browserMissing;
@@ -224,20 +236,20 @@
 
 	function globalLintOptions() {
 		var options = {
-			bitwise:true,
-			curly:false,
-			eqeqeq:true,
-			forin:true,
-			immed:true,
-			latedef:true,
-			newcap:true,
-			noarg:true,
-			noempty:true,
-			nonew:true,
-			regexp:true,
-			undef:true,
-			strict:true,
-			trailing:true
+			bitwise: true,
+			curly: false,
+			eqeqeq: true,
+			forin: true,
+			immed: true,
+			latedef: true,
+			newcap: true,
+			noarg: true,
+			noempty: true,
+			nonew: true,
+			regexp: true,
+			undef: true,
+			strict: true,
+			trailing: true
 		};
 		return options;
 	}
