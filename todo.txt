@@ -20,8 +20,7 @@ Engineering Tasks:
 - Smoke test to ensure that our magic div is in our actual home page
 
 To Do on current task:
-- Figure out exactly what Raphael is doing on IE 8
-
+- Respect dimensions of enclosing div
 - Modify Lint settings for client global variables
 
 Future ideas:
