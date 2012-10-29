@@ -1,16 +1,15 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global dump, wwp:true*/
+/*global dump, Raphael, wwp:true*/
 
 wwp = {};
 
 (function() {
 	"use strict";
 
-  wwp.initializeDrawingArea = function() {
-//		var div = document.createElement("div");
-//		div.setAttribute("id", "tdjs");
-//		div.setAttribute("foo", "bar");
-//		document.body.appendChild(div);
+	var raphael = Raphael;
+
+	wwp.initializeDrawingArea = function(drawingAreaId) {
+		var paper = raphael(drawingAreaId);
 	};
 
 }());

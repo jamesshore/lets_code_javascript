@@ -9,15 +9,14 @@
 		it("should be initialized in predefined div", function() {
 			// create div that's assumed to be in our home page
 			var div = document.createElement("div");
-			div.setAttribute("id", "foo");
+			div.setAttribute("id", "wwp-drawingArea");
 			document.body.appendChild(div);
 
 			// initialize it (production code)
-			wwp.initializeDrawingArea();
+			wwp.initializeDrawingArea("wwp-drawingArea");
 
 			// verify it was initialized correctly
-			var extractedDiv = document.getElementById("foo");
-			expect(extractedDiv).to.be.ok();
+			var extractedDiv = document.getElementById("wwp-drawingArea");
 		});
 
 	});
