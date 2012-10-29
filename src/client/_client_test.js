@@ -17,7 +17,15 @@
 
 			// verify it was initialized correctly
 			var tagName = $(div).children()[0].tagName;
-			expect(tagName).to.equal("svg");
+			if (tagName === "svg") {
+				// We're in a browser that supports SVG
+				expect(tagName).to.equal("svg");
+			}
+			else {
+				// We're in IE 8
+				// IE 8: <div id="canvas"><div><span /><rvml:shape /><rvml:shape />
+				expect(tagName).to.equal("DIV");
+			}
 		});
 
 	});
