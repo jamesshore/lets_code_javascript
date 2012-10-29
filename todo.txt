@@ -20,8 +20,9 @@ Engineering Tasks:
 - Smoke test to ensure that our magic div is in our actual home page
 
 To Do on current task:
-- Install Raphael
-- Assert that it's been used to initialize our div
+- Make test check different things for IE 8 and everyone else
+- Figure out exactly what Raphael is doing on IE 8
+
 - Modify Lint settings for client global variables
 
 Future ideas:
