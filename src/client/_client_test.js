@@ -33,19 +33,16 @@
 
 		it("should have the same dimensions as its enclosing div", function() {
 			// create div that's assumed to be in our home page
-			var div = $("#wwp-drawingArea");
-			expect(div.length).to.equal(0);
+			var testHtml = "<div style='height: 200px; width: 400px'>hi</div>";
+			$(document.body).append(testHtml);
 
-//			var testHtml = "<div style='height: 200; width: 400; border: solid red 2px'>hi</div>";
-//			$(document.body).append(testHtml);
-//			dump("hi");
+			// initialize it (production code)
+			var paper = wwp.initializeDrawingArea("wwp-drawingArea");
+			expect(paper.width).to.equal(400);
+			expect(paper.height).to.equal(200);
 
-//			var div = document.createElement("div");
-//			div.setAttribute("id", "wwp-drawingArea");
-//			document.body.appendChild(div);
-//
-//			// initialize it (production code)
-//			wwp.initializeDrawingArea("wwp-drawingArea");
+
+			// verify that it has the appropriate size
 //
 //			// verify it was initialized correctly
 //			var tagName = $(div).children()[0].tagName.toLowerCase();

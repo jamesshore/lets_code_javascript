@@ -21,6 +21,7 @@ Engineering Tasks:
 
 To Do on current task:
 - Respect dimensions of enclosing div
+- Figure out how to get dimensions of Raphael paper
 - Factor out common elements in our client tests
 - Modify Lint settings for client global variables
 
