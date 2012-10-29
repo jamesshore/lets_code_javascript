@@ -21,6 +21,7 @@ Engineering Tasks:
 
 To Do on current task:
 - Respect dimensions of enclosing div
+- Factor out common elements in our client tests
 - Modify Lint settings for client global variables
 
 Future ideas:
