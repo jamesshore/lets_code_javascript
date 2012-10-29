@@ -16,10 +16,10 @@ User Stories:
 - Minify and deploy
 
 Engineering Tasks:
-* Basic DOM test
+* Create drawing area
 
 To Do on current task:
-- Get onload() working in IE? Or maybe not worry about onload()?
+- TDD drawing area
 - Modify Lint settings for client global variables
 
 Future ideas:
