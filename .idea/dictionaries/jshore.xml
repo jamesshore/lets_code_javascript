@@ -9,6 +9,7 @@
       <w>immed</w>
       <w>jshint</w>
       <w>latedef</w>
+      <w>minify</w>
       <w>newcap</w>
       <w>noarg</w>
       <w>nodeunit</w>
