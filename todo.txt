@@ -15,8 +15,7 @@ User Stories:
 - Minify and deploy
 
 Engineering Tasks:
-- Modify our home page for manual testing
-- Spike drawing a line and review it manually
+* Spike drawing a line and review it manually
 - Redo line-drawing code test-driven
 - Smoke test to ensure that our magic div is in our actual home page
 
