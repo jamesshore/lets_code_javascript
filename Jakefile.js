@@ -15,7 +15,7 @@
 		"IE 8.0",
 		"IE 9.0",
 		"Firefox 16.0",
-		"Chrome 22.0",
+		"Chrome 23.0",
 		"Mac Safari 6.0",
 		"iOS Safari 6.0"
 	];
@@ -31,7 +31,9 @@
 	});
 
 	desc("Build and test");
-	task("default", ["lint", "test"]);
+	task("default", ["lint", "test"], function() {
+		console.log("\n\nOK");
+	});
 
 	desc("Start Testacular server for testing");
 	task("testacular", function() {
@@ -199,10 +201,9 @@
 
 	function nodeFiles() {
 		var javascriptFiles = new jake.FileList();
-		javascriptFiles.include("**/*.js");
-		javascriptFiles.exclude("node_modules");
-		javascriptFiles.exclude("testacular.conf.js");
-		javascriptFiles.exclude("src/client/**");
+		javascriptFiles.include("*.js");
+		javascriptFiles.include("src/server/**/*.js");
+		javascriptFiles.include("src/_smoke_test.js");
 		return javascriptFiles.toArray();
 	}
 

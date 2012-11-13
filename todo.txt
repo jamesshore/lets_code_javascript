@@ -8,20 +8,18 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* Create empty drawing area
-- Draw one line
+* Draw a line in response to user mouse
+- Draw a line in response to iOS touch
+- Draw multiple lines / follow the drag
+- Minify and deploy
 
 Engineering Tasks:
-* Test drawing tool (Raphael?)
-- Integrate into HTML page
+- Smoke test to ensure that our magic div is in our actual home page
 
 To Do on current task:
-- IN NEXT EPISODE:
-  - Integrate on Windows
-    - Start Testacular on WWP-Integration
-    - Use 'ipconfig' to determine IP address (eg 192.168.1.130)
-    - Connect browsers to WWP-Integration (eg 192.168.1.130:8080)
-    - Run jake
+- Factor out common initialization code?
+- Convert 'client' to be proper object rather than global singleton?
+- Modify Lint settings for client global variables
 
 Future ideas:
 - Create 'fail fast' assertion code
@@ -40,4 +38,3 @@ Future ideas:
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
-- Testacular output cannot be parsed on Windows (issue: https://github.com/vojtajina/testacular/issues/91)

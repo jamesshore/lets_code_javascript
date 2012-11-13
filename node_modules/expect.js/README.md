@@ -108,6 +108,9 @@ expect([1,2,3]).to.have.length(3);
 
 ```js
 expect([]).to.be.empty();
+expect({}).to.be.empty();
+expect({ length: 0, duck: 'typing' }).to.be.empty();
+expect({ my: 'object' }).to.not.be.empty();
 expect([1,2,3]).to.not.be.empty();
 ```
 
@@ -128,10 +131,14 @@ expect({ a: 'b', c: 'd' }).to.only.have.keys(['a', 'c']);
 expect({ a: 'b', c: 'd' }).to.not.only.have.key('a');
 ```
 
-**throwException**: asserts that the `Function` throws or not when called
+**throwException**/**throwError**: asserts that the `Function` throws or not when called
 
 ```js
-expect(fn).to.throwException();
+expect(fn).to.throwError(); // synonym of throwException
+expect(fn).to.throwException(function (e) { // get the exception object
+  expect(e).to.be.a(SyntaxError);
+});
+expect(fn).to.throwException(/matches the exception message/);
 expect(fn2).to.not.throwException();
 ```
 
@@ -153,6 +160,13 @@ expect(5).to.be.greaterThan(3);
 ```js
 expect(0).to.be.below(3);
 expect(1).to.be.lessThan(3);
+```
+
+**fail**: explicitly forces failure.
+
+```js
+expect().fail()
+expect().fail("Custom failure message")
 ```
 
 ## Using with a test framework
