@@ -54,8 +54,12 @@
 			paper.forEach(function(element) {
 				elements.push(element);
 			});
+
 			expect(elements.length).to.equal(1);
-//			dump(elements[0]);
+			var element = elements[0];
+			var path = element.node.attributes.d.value;
+
+			expect(path).to.equal("M20,30L30,300");
 		});
 
 	});
