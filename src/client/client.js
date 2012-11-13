@@ -6,12 +6,15 @@ wwp = {};
 (function() {
 	"use strict";
 
+		var paper;
+
 		wwp.initializeDrawingArea = function(drawingAreaElement) {
-			var paper = new Raphael(drawingAreaElement);
-
-			paper.path("M20,30L200,20");
-
+			paper = new Raphael(drawingAreaElement);
 			return paper;
+		};
+
+		wwp.drawLine = function(startX, startY, endX, endY) {
+			paper.path("M1,1L2,2");
 		};
 
 }());
