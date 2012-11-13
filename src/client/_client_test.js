@@ -20,16 +20,16 @@
 			wwp.initializeDrawingArea(drawingArea[0]);
 
 			// verify it was initialized correctly
-//			expect().fail("Browser does not support Raphael");
 			var tagName = $(drawingArea).children()[0].tagName.toLowerCase();
-			if(Raphael.type === "svg") {
+			if(Raphael.type === "SVG") {
 				expect(tagName).to.equal("svg");
 			}
-			else if (Raphael.type === "vml") {
+			else if (Raphael.type === "VML") {
 				expect(tagName).to.equal("div");
 			}
-//			else {
-//			}
+			else {
+				throw new Error("Raphael doesn't support this browser");
+			}
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {

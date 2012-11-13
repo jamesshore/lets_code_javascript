@@ -8,21 +8,16 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* Create empty drawing area
-- Draw one line (pre-defined)
+* Draw one line (pre-defined)
 - Draw a line in response to user mouse
 - Draw a line in response to iOS touch
 - Draw multiple lines / follow the drag
 - Minify and deploy
 
 Engineering Tasks:
-* Create drawing area using Raphael
 - Smoke test to ensure that our magic div is in our actual home page
 
 To Do on current task:
-- Modify "should be initialized" test to use Raphael.type or Raphael.vml + Raphael.svg
-  - Thanks to Vlad Gurdiga http://www.letscodejavascript.com/v1/comments/tdjs45.html
-- Fix expect().fail()
 - Modify Lint settings for client global variables
 
 Future ideas:
