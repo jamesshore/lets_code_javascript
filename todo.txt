@@ -20,10 +20,9 @@ Engineering Tasks:
 - Smoke test to ensure that our magic div is in our actual home page
 
 To Do on current task:
-- Factor out common elements in our client tests
 - Modify "should be initialized" test to use Raphael.type or Raphael.vml + Raphael.svg
   - Thanks to Vlad Gurdiga http://www.letscodejavascript.com/v1/comments/tdjs45.html
-- Eliminate cleanup by not adding element to document?
+- Fix expect().fail()
 - Modify Lint settings for client global variables
 
 Future ideas:

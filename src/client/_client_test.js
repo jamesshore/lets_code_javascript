@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global describe, it, expect, dump, $, wwp, afterEach*/
+/*global describe, it, expect, dump, $, wwp, afterEach, Raphael*/
 
 (function() {
 	"use strict";
@@ -20,15 +20,16 @@
 			wwp.initializeDrawingArea(drawingArea[0]);
 
 			// verify it was initialized correctly
+//			expect().fail("Browser does not support Raphael");
 			var tagName = $(drawingArea).children()[0].tagName.toLowerCase();
-			if (tagName === "svg") {
-				// We're in a browser that supports SVG
+			if(Raphael.type === "svg") {
 				expect(tagName).to.equal("svg");
 			}
-			else {
-				// Check for IE 8
+			else if (Raphael.type === "vml") {
 				expect(tagName).to.equal("div");
 			}
+//			else {
+//			}
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
