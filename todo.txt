@@ -20,8 +20,6 @@ Engineering Tasks:
 - Smoke test to ensure that our magic div is in our actual home page
 
 To Do on current task:
-- Respect dimensions of enclosing div
-- Figure out how to get dimensions of Raphael paper
 - Factor out common elements in our client tests
 - Modify "should be initialized" test to use Raphael.type or Raphael.vml + Raphael.svg
   - Thanks to Vlad Gurdiga http://www.letscodejavascript.com/v1/comments/tdjs45.html

@@ -6,8 +6,8 @@ wwp = {};
 (function() {
 	"use strict";
 
-		wwp.initializeDrawingArea = function(drawingAreaId) {
-			var paper = new Raphael(drawingAreaId);
+		wwp.initializeDrawingArea = function(drawingAreaElement) {
+			var paper = new Raphael(drawingAreaElement);
 			return paper;
 		};
 

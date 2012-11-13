@@ -6,21 +6,21 @@
 
 	describe("Drawing area", function() {
 
+		var drawingArea;
+
 		afterEach(function() {
-			$("#wwp-drawingArea").remove();
+			drawingArea.remove();
 		});
 
 		it("should be initialized with Raphael", function() {
-			// create div that's assumed to be in our home page
-			var div = document.createElement("div");
-			div.setAttribute("id", "wwp-drawingArea");
-			document.body.appendChild(div);
+			drawingArea = $("<div></div>");
+			$(document.body).append(drawingArea);
 
 			// initialize it (production code)
-			wwp.initializeDrawingArea("wwp-drawingArea");
+			wwp.initializeDrawingArea(drawingArea[0]);
 
 			// verify it was initialized correctly
-			var tagName = $(div).children()[0].tagName.toLowerCase();
+			var tagName = $(drawingArea).children()[0].tagName.toLowerCase();
 			if (tagName === "svg") {
 				// We're in a browser that supports SVG
 				expect(tagName).to.equal("svg");
@@ -32,28 +32,13 @@
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
-			// create div that's assumed to be in our home page
-			var testHtml = "<div style='height: 200px; width: 400px'>hi</div>";
-			$(document.body).append(testHtml);
+			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
+			$(document.body).append(drawingArea);
 
-			// initialize it (production code)
-			var paper = wwp.initializeDrawingArea("wwp-drawingArea");
-			expect(paper.width).to.equal(400);
-			expect(paper.height).to.equal(200);
+			var paper = wwp.initializeDrawingArea(drawingArea[0]);
 
-
-			// verify that it has the appropriate size
-//
-//			// verify it was initialized correctly
-//			var tagName = $(div).children()[0].tagName.toLowerCase();
-//			if (tagName === "svg") {
-//				// We're in a browser that supports SVG
-//				expect(tagName).to.equal("svg");
-//			}
-//			else {
-//				// Check for IE 8
-//				expect(tagName).to.equal("div");
-//			}
+			expect(paper.height).to.equal(300);
+			expect(paper.width).to.equal(600);
 		});
 
 	});

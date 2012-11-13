@@ -15,7 +15,7 @@
 		"IE 8.0",
 		"IE 9.0",
 		"Firefox 16.0",
-		"Chrome 22.0",
+		"Chrome 23.0",
 		"Mac Safari 6.0",
 		"iOS Safari 6.0"
 	];
