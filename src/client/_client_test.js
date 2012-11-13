@@ -57,10 +57,30 @@
 
 			expect(elements.length).to.equal(1);
 			var element = elements[0];
-			var path = element.node.attributes.d.value;
+			var path = pathFor(element);
+
+
 
 			expect(path).to.equal("M20,30L30,300");
 		});
+
+		function pathFor(element) {
+			var path = element.node.attributes.d.value;
+			if (path.indexOf(",") !== -1) {
+				// We're in Firefox, Safari, Chrome, which uses format
+				// M20,30L30,300
+				return path;
+			}
+			else {
+				// We're in IE9, which uses format
+				// M 20 30 L 30 300
+				var ie9Path = /M (\d+) (\d+) L (\d+) (\d+)/;
+				var ie9 = path.match(ie9Path);
+
+				return "M" + ie9[1] + "," + ie9[2] + "L" + ie9[3] + "," + ie9[4];
+			}
+			return path;
+		}
 
 	});
 }());
