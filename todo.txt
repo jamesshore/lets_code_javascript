@@ -8,8 +8,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* Draw one line (pre-defined)
-- Draw a line in response to user mouse
+* Draw a line in response to user mouse
 - Draw a line in response to iOS touch
 - Draw multiple lines / follow the drag
 - Minify and deploy
@@ -18,7 +17,6 @@ Engineering Tasks:
 - Smoke test to ensure that our magic div is in our actual home page
 
 To Do on current task:
-* Get Raphael path testing working on IE 8
 - Factor out common initialization code?
 - Convert 'client' to be proper object rather than global singleton?
 - Modify Lint settings for client global variables
