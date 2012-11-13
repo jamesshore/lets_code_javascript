@@ -15,8 +15,6 @@ User Stories:
 - Minify and deploy
 
 Engineering Tasks:
-* Redo line-drawing code test-driven
-- Clean up path()
 - Smoke test to ensure that our magic div is in our actual home page
 
 To Do on current task:
