@@ -64,6 +64,9 @@
 		});
 
 		function pathFor(element) {
+			// Use 'Element.getBBox()' here instead of low-level DOM inspection?
+			// (thanks to Vlad Gurdiga for the suggestion - http://www.letscodejavascript.com/v1/comments/tdjs49.html)
+			
 			if (Raphael.vml) return vmlPathFor(element);
 			else if (Raphael.svg) return svgPathFor(element);
 			else throw new Error("Unknown Raphael type");
