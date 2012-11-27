@@ -14,13 +14,10 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-* Spike mouse following code
-- Re-do code test-driven
+* Re-do code test-driven
 
 To Do on current task:
-- Make clicks draw a line where we click
-- Follow the mouse pointer
-- Handle dragging
+- Figure out how to simulate mouse events
 
 - Factor out common initialization code?
 - Convert 'client' to be proper object rather than global singleton?

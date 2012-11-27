@@ -9,17 +9,35 @@ wwp = {};
 		var paper;
 
 		wwp.initializeDrawingArea = function(drawingAreaElement) {
+			var prevX = null;
+			var prevY = null;
+
+			var jqArea = $(drawingAreaElement);
+
+			var isDragging = false;
+
 			paper = new Raphael(drawingAreaElement);
-			console.log("init");
-			$(drawingAreaElement).click(function(event) {
-				// TODO in test: account for padding, border, margin
-				var divPageX = $(drawingAreaElement).offset().left;
-				var divPageY = $(drawingAreaElement).offset().top;
+
+			// TODO in test: if mouse clicked when outside of element, or let go outside of element,
+			// then the 'isDragging' state could get stuck
+			$(document).mousedown(function(event) {
+				isDragging = true;
+			});
+			$(document).mouseup(function(event) {
+				isDragging = false;
+			});
+
+			jqArea.mousemove(function(event) {
+				// TODO in test: account for padding, border, margin (manual tests too)
+				var divPageX = jqArea.offset().left;
+				var divPageY = jqArea.offset().top;
 
 				var relativeX = event.pageX - divPageX;
 				var relativeY = event.pageY - divPageY;
-				console.log(event);
-				wwp.drawLine(0, 0, relativeX, relativeY);
+
+				if (prevX !== null && isDragging) wwp.drawLine(prevX, prevY, relativeX, relativeY);
+				prevX = relativeX;
+				prevY = relativeY;
 			});
 			return paper;
 		};
