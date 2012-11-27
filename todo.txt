@@ -11,10 +11,11 @@ User Stories:
 * Draw a line in response to user mouse
 - Draw a line in response to iOS touch
 - Draw multiple lines / follow the drag
-- Minify and deploy
+- Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-- Smoke test to ensure that our magic div is in our actual home page
+* Spike mouse following code
+- Re-do code test-driven
 
 To Do on current task:
 - Factor out common initialization code?
