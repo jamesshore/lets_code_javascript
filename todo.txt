@@ -19,9 +19,8 @@ Engineering Tasks:
 To Do on current task:
 - Figure out how to simulate mouse events
 
-- Factor out common initialization code?
-- Convert 'client' to be proper object rather than global singleton?
 - Modify Lint settings for client global variables
+- Convert 'client' to be proper object rather than global singleton?
 
 Future ideas:
 - Create 'fail fast' assertion code

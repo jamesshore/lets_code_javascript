@@ -9,36 +9,38 @@ wwp = {};
 		var paper;
 
 		wwp.initializeDrawingArea = function(drawingAreaElement) {
-			var prevX = null;
-			var prevY = null;
-
-			var jqArea = $(drawingAreaElement);
-
-			var isDragging = false;
-
 			paper = new Raphael(drawingAreaElement);
 
-			// TODO in test: if mouse clicked when outside of element, or let go outside of element,
-			// then the 'isDragging' state could get stuck
-			$(document).mousedown(function(event) {
-				isDragging = true;
-			});
-			$(document).mouseup(function(event) {
-				isDragging = false;
-			});
 
-			jqArea.mousemove(function(event) {
-				// TODO in test: account for padding, border, margin (manual tests too)
-				var divPageX = jqArea.offset().left;
-				var divPageY = jqArea.offset().top;
-
-				var relativeX = event.pageX - divPageX;
-				var relativeY = event.pageY - divPageY;
-
-				if (prevX !== null && isDragging) wwp.drawLine(prevX, prevY, relativeX, relativeY);
-				prevX = relativeX;
-				prevY = relativeY;
-			});
+//			var prevX = null;
+//			var prevY = null;
+//
+//			var jqArea = $(drawingAreaElement);
+//
+//			var isDragging = false;
+//
+//
+//			// TODO in test: if mouse clicked when outside of element, or let go outside of element,
+//			// then the 'isDragging' state could get stuck
+//			$(document).mousedown(function(event) {
+//				isDragging = true;
+//			});
+//			$(document).mouseup(function(event) {
+//				isDragging = false;
+//			});
+//
+//			jqArea.mousemove(function(event) {
+//				// TODO in test: account for padding, border, margin (manual tests too)
+//				var divPageX = jqArea.offset().left;
+//				var divPageY = jqArea.offset().top;
+//
+//				var relativeX = event.pageX - divPageX;
+//				var relativeY = event.pageY - divPageY;
+//
+//				if (prevX !== null && isDragging) wwp.drawLine(prevX, prevY, relativeX, relativeY);
+//				prevX = relativeX;
+//				prevY = relativeY;
+//			});
 			return paper;
 		};
 
