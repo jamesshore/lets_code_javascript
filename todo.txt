@@ -18,6 +18,10 @@ Engineering Tasks:
 - Re-do code test-driven
 
 To Do on current task:
+- Make clicks draw a line where we click
+- Follow the mouse pointer
+- Handle dragging
+
 - Factor out common initialization code?
 - Convert 'client' to be proper object rather than global singleton?
 - Modify Lint settings for client global variables
