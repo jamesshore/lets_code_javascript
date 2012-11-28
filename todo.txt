@@ -18,9 +18,15 @@ Engineering Tasks:
 
 To Do on current task:
 - Figure out how to simulate mouse events
+- click
+- get click handling to line up properly on page
+- line segments
+- drag and drop
 
+- Delete irrelevant tests?
 - Modify Lint settings for client global variables
 - Convert 'client' to be proper object rather than global singleton?
+- Delete Raphael internals code? (pathForVml() & pathForSvg() )
 
 Future ideas:
 - Create 'fail fast' assertion code

@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael*/
+/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael*/
 
 (function() {
 	"use strict";
@@ -31,6 +31,21 @@
 			expect(pathFor(elements[0])).to.equal("M20,30L30,300");
 		});
 
+		it("respond to the mouse", function() {
+			// click inside drawing area
+			// verify a line was drawn from 0,0 to click location
+			var eventData = new jQuery.Event();
+			eventData.pageX = 20;
+			eventData.pageY = 30;
+			eventData.type = "click";
+
+			drawingArea.trigger(eventData);
+
+			var elements = drawingElements(paper);
+			expect(elements.length).to.equal(1);
+			expect(pathFor(elements[0])).to.equal("M0,0L20,30");
+		});
+
 		function drawingElements(paper) {
 			var result = [];
 			paper.forEach(function(element) {
@@ -42,10 +57,14 @@
 		function pathFor(element) {
 			// Use 'Element.getBBox()' here instead of low-level DOM inspection?
 			// (thanks to Vlad Gurdiga for the suggestion - http://www.letscodejavascript.com/v1/comments/tdjs49.html)
-			
-			if (Raphael.vml) return vmlPathFor(element);
-			else if (Raphael.svg) return svgPathFor(element);
-			else throw new Error("Unknown Raphael type");
+
+			var box = element.getBBox();
+			return "M" + box.x + "," + box.y + "L" + box.x2 + "," + box.y2;
+
+			// Superceded by getBBox()?
+//			if (Raphael.vml) return vmlPathFor(element);
+//			else if (Raphael.svg) return svgPathFor(element);
+//			else throw new Error("Unknown Raphael type");
 		}
 
 		function svgPathFor(element) {

@@ -11,6 +11,9 @@ wwp = {};
 		wwp.initializeDrawingArea = function(drawingAreaElement) {
 			paper = new Raphael(drawingAreaElement);
 
+			$(drawingAreaElement).click(function(event) {
+				wwp.drawLine(0, 0, event.pageX, event.pageY);
+			});
 
 //			var prevX = null;
 //			var prevY = null;
