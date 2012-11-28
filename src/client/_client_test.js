@@ -41,10 +41,16 @@
 
 			drawingArea.trigger(eventData);
 
+			var topLeftOfDrawingArea = drawingArea.offset();
+			var expectedX = 20 - topLeftOfDrawingArea.left;
+			var expectedY = 30 - topLeftOfDrawingArea.top;
+
 			var elements = drawingElements(paper);
 			expect(elements.length).to.equal(1);
-			expect(pathFor(elements[0])).to.equal("M0,0L20,30");
+			expect(pathFor(elements[0])).to.equal("M0,0L" + expectedX + "," + expectedY);
 		});
+
+		// TODO: test accounting for margin, border, padding
 
 		function drawingElements(paper) {
 			var result = [];

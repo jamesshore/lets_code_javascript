@@ -15,11 +15,10 @@ User Stories:
 
 Engineering Tasks:
 * Re-do code test-driven
+- Integrate
 
 To Do on current task:
-- Figure out how to simulate mouse events
-- click
-- get click handling to line up properly on page
+- click tracking needs to account for margin, border, and padding
 - line segments
 - drag and drop
 

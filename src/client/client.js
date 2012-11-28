@@ -11,8 +11,10 @@ wwp = {};
 		wwp.initializeDrawingArea = function(drawingAreaElement) {
 			paper = new Raphael(drawingAreaElement);
 
-			$(drawingAreaElement).click(function(event) {
-				wwp.drawLine(0, 0, event.pageX, event.pageY);
+			var drawingArea = $(drawingAreaElement);
+			drawingArea.click(function(event) {
+				var topLeft = drawingArea.offset();
+				wwp.drawLine(0, 0, event.pageX - topLeft.left, event.pageY - topLeft.top);
 			});
 
 //			var prevX = null;
