@@ -20,7 +20,7 @@ Engineering Tasks:
 To Do on current task:
 - click tracking needs to account for margin, border, and padding
 - line segments
-- drag and drop
+- drag
 
 - Delete irrelevant tests?
 - Modify Lint settings for client global variables
