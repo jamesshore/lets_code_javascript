@@ -9,13 +9,22 @@ wwp = {};
 		var paper;
 
 		wwp.initializeDrawingArea = function(drawingAreaElement) {
+			var startX = null;
+			var startY = null;
+
 			paper = new Raphael(drawingAreaElement);
 
 			var drawingArea = $(drawingAreaElement);
 			drawingArea.click(function(event) {
-				var topLeft = drawingArea.offset();
+				var pageOffset = drawingArea.offset();
 
-				wwp.drawLine(0, 0, event.pageX - topLeft.left, event.pageY - topLeft.top);
+				var endX = event.pageX - pageOffset.left;
+				var endY = event.pageY - pageOffset.top;
+
+				if (startX !== null) wwp.drawLine(startX, startY, endX, endY);
+
+				startX = endX;
+				startY = endY;
 			});
 
 //			var prevX = null;
