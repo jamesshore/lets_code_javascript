@@ -19,7 +19,10 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-- Make assertions easier to write and read
+* Make assertions easier to write and read
+- test one click (no paths)
+- test one path
+- test multiple paths
 - drag
 
 - Delete irrelevant tests?
