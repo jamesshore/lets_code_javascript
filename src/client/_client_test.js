@@ -33,52 +33,58 @@
 			expect(pathFor(elements[0])).to.equal("M20,30L30,300");
 		});
 
-		it("considers border when calculating mouse target", function() {
-			drawingArea = $("<div style='height: 300px; width: 600px; border-width: 13px'>hi</div>");
-			$(document.body).append(drawingArea);
-			paper = wwp.initializeDrawingArea(drawingArea[0]);
-
+		function clickMouse(pageX, pageY) {
 			var eventData = new jQuery.Event();
-			eventData.pageX = 20;
-			eventData.pageY = 30;
+			eventData.pageX = pageX;
+			eventData.pageY = pageY;
 			eventData.type = "click";
-
 			drawingArea.trigger(eventData);
+		}
 
+		function relativePosition(drawingArea, pageX, pageY) {
 			var topLeftOfDrawingArea = drawingArea.offset();
-			var borderWidth = 13;
-			var expectedX = 20 - topLeftOfDrawingArea.left - borderWidth;
-			var expectedY = 30 - topLeftOfDrawingArea.top - borderWidth;
+			var x = pageX - topLeftOfDrawingArea.left;
+			var y = pageY - topLeftOfDrawingArea.top;
+			return {x: x, y: y};
+		}
 
-//			var elements = drawingElements(paper);
-//			expect(elements.length).to.equal(1);
-//			expect(pathFor(elements[0])).to.equal("M0,0L" + expectedX + "," + expectedY);
-		});
-
-		// TODO: test that em is converted px
-
-		it("respond to the mouse", function() {
+		it("draws line segments in response to clicks", function() {
 			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
 			$(document.body).append(drawingArea);
 			paper = wwp.initializeDrawingArea(drawingArea[0]);
 
-			var eventData = new jQuery.Event();
-			eventData.pageX = 20;
-			eventData.pageY = 30;
-			eventData.type = "click";
+			clickMouse(20, 30);
 
-			drawingArea.trigger(eventData);
-
-			var topLeftOfDrawingArea = drawingArea.offset();
-			var expectedX = 20 - topLeftOfDrawingArea.left;
-			var expectedY = 30 - topLeftOfDrawingArea.top;
+			var position = relativePosition(drawingArea, 20, 30);
 
 			var elements = drawingElements(paper);
 			expect(elements.length).to.equal(1);
-			expect(pathFor(elements[0])).to.equal("M0,0L" + expectedX + "," + expectedY);
+			expect(pathFor(elements[0])).to.equal("M0,0L" + position.x + "," + position.y);
 		});
 
-		// TODO: test accounting for margin, border, padding
+//		it("considers border when calculating mouse target", function() {
+//			drawingArea = $("<div style='height: 300px; width: 600px; border-width: 13px'>hi</div>");
+//			$(document.body).append(drawingArea);
+//			paper = wwp.initializeDrawingArea(drawingArea[0]);
+//
+//			var eventData = new jQuery.Event();
+//			eventData.pageX = 20;
+//			eventData.pageY = 30;
+//			eventData.type = "click";
+//
+//			drawingArea.trigger(eventData);
+//
+//			var topLeftOfDrawingArea = drawingArea.offset();
+//			var borderWidth = 13;
+//			var expectedX = 20 - topLeftOfDrawingArea.left - borderWidth;
+//			var expectedY = 30 - topLeftOfDrawingArea.top - borderWidth;
+//
+//			var elements = drawingElements(paper);
+//			expect(elements.length).to.equal(1);
+//			expect(pathFor(elements[0])).to.equal("M0,0L" + expectedX + "," + expectedY);
+//		});
+
+		// TODO: test that em is converted px
 
 		function drawingElements(paper) {
 			var result = [];
