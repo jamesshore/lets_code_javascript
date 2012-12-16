@@ -33,21 +33,6 @@
 			expect(pathFor(elements[0])).to.equal("M20,30L30,300");
 		});
 
-		function clickMouse(pageX, pageY) {
-			var eventData = new jQuery.Event();
-			eventData.pageX = pageX;
-			eventData.pageY = pageY;
-			eventData.type = "click";
-			drawingArea.trigger(eventData);
-		}
-
-		function relativePosition(drawingArea, pageX, pageY) {
-			var topLeftOfDrawingArea = drawingArea.offset();
-			var x = pageX - topLeftOfDrawingArea.left;
-			var y = pageY - topLeftOfDrawingArea.top;
-			return {x: x, y: y};
-		}
-
 		it("draws line segments in response to clicks", function() {
 			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
 			$(document.body).append(drawingArea);
@@ -55,19 +40,17 @@
 
 			clickMouse(20, 30);
 			clickMouse(50, 60);
-			clickMouse(40, 20);
+//			clickMouse(40, 20);
 
-			var start = relativePosition(drawingArea, 20, 30);
-			var end = relativePosition(drawingArea, 50, 60);
-
-			var elements = drawingElements(paper);
-
-//			paperPaths.shouldEqual([20, 30], [50, 60], [40, 20]);
-
-			expect(elements.length).to.equal(2);
-			expect(pathFor(elements[0])).to.equal("M" + start.x + "," + start.y + "L" + end.x + "," + end.y);
-			expect(pathFor(elements[1])).to.equal("M" + start.x + "," + start.y + "L" + end.x + "," + end.y);
+			expect(paperPaths(paper)).to.eql([20, 30, 50, 60]);
 		});
+
+		function paperPaths(paper) {
+			var elements = drawingElements(paper);
+			var box = elements[0].getBBox();
+
+			return [ box.x, box.y, box.x2, box.y2 ];
+		}
 
 //		it("considers border when calculating mouse target", function() {
 //			drawingArea = $("<div style='height: 300px; width: 600px; border-width: 13px'>hi</div>");
@@ -92,6 +75,18 @@
 //		});
 
 		// TODO: test that em is converted px
+
+		function clickMouse(relativeX, relativeY) {
+			var topLeftOfDrawingArea = drawingArea.offset();
+			var pageX = relativeX + topLeftOfDrawingArea.left;
+			var pageY = relativeY + topLeftOfDrawingArea.top;
+
+			var eventData = new jQuery.Event();
+			eventData.pageX = pageX;
+			eventData.pageY = pageY;
+			eventData.type = "click";
+			drawingArea.trigger(eventData);
+		}
 
 		function drawingElements(paper) {
 			var result = [];
