@@ -19,7 +19,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-- line segments
+- Make assertions easier to write and read
 - drag
 
 - Delete irrelevant tests?

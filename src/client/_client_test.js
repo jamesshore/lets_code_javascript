@@ -55,13 +55,18 @@
 
 			clickMouse(20, 30);
 			clickMouse(50, 60);
+			clickMouse(40, 20);
 
 			var start = relativePosition(drawingArea, 20, 30);
 			var end = relativePosition(drawingArea, 50, 60);
 
 			var elements = drawingElements(paper);
-			expect(elements.length).to.equal(1);
+
+//			paperPaths.shouldEqual([20, 30], [50, 60], [40, 20]);
+
+			expect(elements.length).to.equal(2);
 			expect(pathFor(elements[0])).to.equal("M" + start.x + "," + start.y + "L" + end.x + "," + end.y);
+			expect(pathFor(elements[1])).to.equal("M" + start.x + "," + start.y + "L" + end.x + "," + end.y);
 		});
 
 //		it("considers border when calculating mouse target", function() {
