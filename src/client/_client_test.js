@@ -28,9 +28,7 @@
 			paper = wwp.initializeDrawingArea(drawingArea[0]);
 
 			wwp.drawLine(20, 30, 30, 300);
-			var elements = drawingElements(paper);
-			expect(elements.length).to.equal(1);
-			expect(pathFor(elements[0])).to.equal("M20,30L30,300");
+			expect(paperPaths(paper)).to.eql([ [20, 30, 30, 300] ]);
 		});
 
 		it("draws line segments in response to clicks", function() {
@@ -40,16 +38,17 @@
 
 			clickMouse(20, 30);
 			clickMouse(50, 60);
-//			clickMouse(40, 20);
+			clickMouse(40, 20);
 
-			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60] ]);//, [50, 60, 40, 20] ]);
+			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60], [50, 60, 40, 20] ]);
 		});
 
 		function paperPaths(paper) {
+			// Note: Paths are normalized with left side first in all cases
 			var box;
 			var result = [];
 			for (var i = 0; i < drawingElements(paper).length; i++) {
-				box = drawingElements(paper)[i].getBBox();
+				box = pathFor(drawingElements(paper)[i]);
 				result.push([ box.x, box.y, box.x2, box.y2 ]);
 				dump(JSON.stringify(box));
 			}
@@ -104,13 +103,13 @@
 			// Use 'Element.getBBox()' here instead of low-level DOM inspection?
 			// (thanks to Vlad Gurdiga for the suggestion - http://www.letscodejavascript.com/v1/comments/tdjs49.html)
 
-			var box = element.getBBox();
-			return "M" + box.x + "," + box.y + "L" + box.x2 + "," + box.y2;
+//			var box = element.getBBox();
+//			return "M" + box.x + "," + box.y + "L" + box.x2 + "," + box.y2;
 
 			// Superceded by getBBox()?
-//			if (Raphael.vml) return vmlPathFor(element);
-//			else if (Raphael.svg) return svgPathFor(element);
-//			else throw new Error("Unknown Raphael type");
+			if (Raphael.vml) return vmlPathFor(element);
+			else if (Raphael.svg) return svgPathFor(element);
+			else throw new Error("Unknown Raphael type");
 		}
 
 		function svgPathFor(element) {
@@ -143,7 +142,12 @@
 			var endX = ie8[3] / VML_MAGIC_NUMBER;
 			var endY = ie8[4] / VML_MAGIC_NUMBER;
 
-			return "M" + startX + "," + startY + "L" + endX + "," + endY;
+			return {
+				x: startX,
+				y: startY,
+				x2: endX,
+				y2: endY
+			};
 		}
 
 	});
