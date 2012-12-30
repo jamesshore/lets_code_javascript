@@ -22,15 +22,6 @@
 			expect(paper.width).to.equal(600);
 		});
 
-		it("should draw a line", function() {
-			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
-			$(document.body).append(drawingArea);
-			paper = wwp.initializeDrawingArea(drawingArea[0]);
-
-			wwp.drawLine(20, 30, 30, 300);
-			expect(paperPaths(paper)).to.eql([ [20, 30, 30, 300] ]);
-		});
-
 		it("draws a line in response to mouse drag", function() {
 			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
 			$(document.body).append(drawingArea);

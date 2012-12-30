@@ -18,6 +18,7 @@ Engineering Tasks:
   - start drag outside drawing area
   - stop drag outside drawing area
 - click tracking needs to account for margin, border, and padding
+  - figure out how to factor out common setup code
 - Integrate
 
 To Do on current task:
