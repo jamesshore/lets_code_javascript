@@ -39,12 +39,12 @@ wwp = {};
 		paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
 	}
 
-	function relativeOffset(element, absoluteX, absoluteY) {
+	function relativeOffset(element, pageX, pageY) {
 		var pageOffset = element.offset();
 
 		return {
-			x: absoluteX - pageOffset.left,
-			y: absoluteY - pageOffset.top
+			x: pageX - pageOffset.left,
+			y: pageY - pageOffset.top
 		};
 	}
 
