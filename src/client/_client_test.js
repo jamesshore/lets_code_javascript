@@ -50,7 +50,6 @@
 			for (var i = 0; i < drawingElements(paper).length; i++) {
 				box = pathFor(drawingElements(paper)[i]);
 				result.push([ box.x, box.y, box.x2, box.y2 ]);
-				dump(JSON.stringify(box));
 			}
 			return result;
 		}
@@ -100,13 +99,6 @@
 		}
 
 		function pathFor(element) {
-			// Use 'Element.getBBox()' here instead of low-level DOM inspection?
-			// (thanks to Vlad Gurdiga for the suggestion - http://www.letscodejavascript.com/v1/comments/tdjs49.html)
-
-//			var box = element.getBBox();
-//			return "M" + box.x + "," + box.y + "L" + box.x2 + "," + box.y2;
-
-			// Superceded by getBBox()?
 			if (Raphael.vml) return vmlPathFor(element);
 			else if (Raphael.svg) return svgPathFor(element);
 			else throw new Error("Unknown Raphael type");
@@ -116,16 +108,28 @@
 			var path = element.node.attributes.d.value;
 			if (path.indexOf(",") !== -1) {
 				// We're in Firefox, Safari, Chrome, which uses format "M20,30L30,300"
-				return path;
+				var modernPathRegex = /M(\d+),(\d+)L(\d+),(\d+)/;
+				var modern = path.match(modernPathRegex);
+
+				return {
+					x: modern[1],
+					y: modern[2],
+					x2: modern[3],
+					y2: modern[4]
+				};
 			}
 			else {
 				// We're in IE9, which uses format "M 20 30 L 30 300"
 				var ie9PathRegex = /M (\d+) (\d+) L (\d+) (\d+)/;
 				var ie9 = path.match(ie9PathRegex);
 
-				return "M" + ie9[1] + "," + ie9[2] + "L" + ie9[3] + "," + ie9[4];
+				return {
+					x: ie9[1],
+					y: ie9[2],
+					x2: ie9[3],
+					y2: ie9[4]
+				};
 			}
-			return path;
 		}
 
 		function vmlPathFor(element) {
