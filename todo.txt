@@ -21,10 +21,10 @@ Engineering Tasks:
 To Do on current task:
 * Get basic drag to work
 - Factor out duplication in mouse event test code
-- test one click (no paths)
-- test one path
-- test multiple paths
-- drag
+- test all cases:
+	- test one click (no paths)
+	- test one path
+	- test multiple paths
 
 - Delete irrelevant tests?
 - Modify Lint settings for client global variables

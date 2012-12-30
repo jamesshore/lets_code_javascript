@@ -36,15 +36,18 @@
 			$(document.body).append(drawingArea);
 			paper = wwp.initializeDrawingArea(drawingArea[0]);
 
-			mouseDown(20, 30);
+//			mouseDown(20, 30);
+			mouseMove(20, 30);
 			mouseMove(50, 60);
-			mouseUp(50, 60);
+//			mouseUp(50, 60);
+
+			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60] ]);
 
 //			clickMouse(20, 30);
 //			clickMouse(50, 60);
 //			clickMouse(40, 20);
 //
-			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60], [50, 60, 40, 20] ]);
+//			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60], [50, 60, 40, 20] ]);
 		});
 
 //		it("considers border when calculating mouse target", function() {

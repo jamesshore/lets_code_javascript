@@ -15,7 +15,7 @@ wwp = {};
 			paper = new Raphael(drawingAreaElement);
 
 			var drawingArea = $(drawingAreaElement);
-			drawingArea.click(function(event) {
+			drawingArea.mousemove(function(event) {
 				var pageOffset = drawingArea.offset();
 
 				var endX = event.pageX - pageOffset.left;
