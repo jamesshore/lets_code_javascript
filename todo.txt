@@ -13,18 +13,15 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-* Clean up code
 - Take care of special cases in our mouse event handling
   - start drag outside drawing area
   - stop drag outside drawing area
+- Modify Lint settings for client global variables
 - click tracking needs to account for margin, border, and padding
   - figure out how to factor out common setup code
 - Integrate
 
 To Do on current task:
-* Finish factoring out duplication in mouse event test code
-- Modify Lint settings for client global variables
-- Convert 'client' to be proper object rather than global singleton?
 
 Future ideas:
 - Create 'fail fast' assertion code
@@ -40,6 +37,7 @@ Future ideas:
 - Automatically start Testacular (or provide friendlier error message when it isn't running?)
 - Automate CI script
 - Resolve npm 'extraneous' warning (due to package.json not reflecting what's in node_modules)
+- Convert 'client' to be proper object rather than global singleton?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
