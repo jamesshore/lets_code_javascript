@@ -33,6 +33,17 @@
 			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60] ]);
 		});
 
+		it("does not draw line segment in response to mouseup event", function() {
+			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
+			$(document.body).append(drawingArea);
+			paper = wwp.initializeDrawingArea(drawingArea[0]);
+
+			mouseDown(20, 30);
+			mouseUp(50, 60);
+
+			expect(paperPaths(paper)).to.eql([]);
+		});
+
 		it("does not draw line segments when mouse is not down", function() {
 			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
 			$(document.body).append(drawingArea);
@@ -88,17 +99,6 @@
 			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60], [30, 25, 10, 15] ]);
 		});
 
-		it("does not draw line segment in response to mouseup event", function() {
-			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
-			$(document.body).append(drawingArea);
-			paper = wwp.initializeDrawingArea(drawingArea[0]);
-
-			mouseDown(20, 30);
-			mouseUp(50, 60);
-
-			expect(paperPaths(paper)).to.eql([]);
-		});
-
 //		it("considers border when calculating mouse target", function() {
 //			drawingArea = $("<div style='height: 300px; width: 600px; border-width: 13px'>hi</div>");
 //			$(document.body).append(drawingArea);
@@ -122,18 +122,6 @@
 //		});
 
 		// TODO: test that em is converted px
-
-		function clickMouse(relativeX, relativeY) {
-			var topLeftOfDrawingArea = drawingArea.offset();
-			var pageX = relativeX + topLeftOfDrawingArea.left;
-			var pageY = relativeY + topLeftOfDrawingArea.top;
-
-			var eventData = new jQuery.Event();
-			eventData.pageX = pageX;
-			eventData.pageY = pageY;
-			eventData.type = "click";
-			drawingArea.trigger(eventData);
-		}
 
 		function mouseDown(relativeX, relativeY) {
 			var topLeftOfDrawingArea = drawingArea.offset();
@@ -172,20 +160,9 @@
 		}
 
 		function paperPaths(paper) {
-			// Note: Paths are normalized with left side first in all cases
-			var box;
-			var result = [];
-			for (var i = 0; i < drawingElements(paper).length; i++) {
-				box = pathFor(drawingElements(paper)[i]);
-				result.push([ box.x, box.y, box.x2, box.y2 ]);
-			}
-			return result;
-		}
-
-		function drawingElements(paper) {
 			var result = [];
 			paper.forEach(function(element) {
-				result.push(element);
+				result.push(pathFor(element));
 			});
 			return result;
 		}
@@ -208,12 +185,12 @@
 				pathRegex = /M (\d+) (\d+) L (\d+) (\d+)/;
 			}
 			var pathComponents = path.match(pathRegex);
-			return {
-				x: pathComponents[1],
-				y: pathComponents[2],
-				x2: pathComponents[3],
-				y2: pathComponents[4]
-			};
+			return [
+				pathComponents[1],
+				pathComponents[2],
+				pathComponents[3],
+				pathComponents[4]
+			];
 		}
 
 		function vmlPathFor(element) {
@@ -230,12 +207,12 @@
 			var endX = ie8[3] / VML_MAGIC_NUMBER;
 			var endY = ie8[4] / VML_MAGIC_NUMBER;
 
-			return {
-				x: startX,
-				y: startY,
-				x2: endX,
-				y2: endY
-			};
+			return [
+				startX,
+				startY,
+				endX,
+				endY
+			];
 		}
 
 	});
