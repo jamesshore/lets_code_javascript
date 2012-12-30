@@ -22,13 +22,9 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-- Factor out duplication in mouse event test code
-- eliminate setup duplication in mouse event test code
-
-- Delete irrelevant tests?
+- Finish factoring out duplication in mouse event test code
 - Modify Lint settings for client global variables
 - Convert 'client' to be proper object rather than global singleton?
-- Delete Raphael internals code? (pathForVml() & pathForSvg() )
 
 Future ideas:
 - Create 'fail fast' assertion code
