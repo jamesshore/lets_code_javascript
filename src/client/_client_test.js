@@ -123,46 +123,34 @@
 
 		// TODO: test that em is converted px
 
+		function mouseDown(relativeX, relativeY) {
+			sendMouseEvent("mousedown", relativeX, relativeY);
+		}
+
+		function mouseMove(relativeX, relativeY) {
+			sendMouseEvent("mousemove", relativeX, relativeY);
+		}
+
+		function mouseUp(relativeX, relativeY) {
+			sendMouseEvent("mouseup", relativeX, relativeY);
+		}
+
+		function sendMouseEvent(event, relativeX, relativeY) {
+			var page = pageOffset(drawingArea, relativeX, relativeY);
+
+			var eventData = new jQuery.Event();
+			eventData.pageX = page.x;
+			eventData.pageY = page.y;
+			eventData.type = event;
+			drawingArea.trigger(eventData);
+		}
+
 		function pageOffset(drawingArea, relativeX, relativeY) {
 			var topLeftOfDrawingArea = drawingArea.offset();
 			return {
 				x: relativeX + topLeftOfDrawingArea.left,
 				y: relativeY + topLeftOfDrawingArea.top
 			};
-		}
-
-		function mouseDown(relativeX, relativeY) {
-			var page = pageOffset(drawingArea, relativeX, relativeY);
-
-			var eventData = new jQuery.Event();
-			eventData.pageX = page.x;
-			eventData.pageY = page.y;
-			eventData.type = "mousedown";
-			drawingArea.trigger(eventData);
-		}
-
-		function mouseMove(relativeX, relativeY) {
-			var topLeftOfDrawingArea = drawingArea.offset();
-			var pageX = relativeX + topLeftOfDrawingArea.left;
-			var pageY = relativeY + topLeftOfDrawingArea.top;
-
-			var eventData = new jQuery.Event();
-			eventData.pageX = pageX;
-			eventData.pageY = pageY;
-			eventData.type = "mousemove";
-			drawingArea.trigger(eventData);
-		}
-
-		function mouseUp(relativeX, relativeY) {
-			var topLeftOfDrawingArea = drawingArea.offset();
-			var pageX = relativeX + topLeftOfDrawingArea.left;
-			var pageY = relativeY + topLeftOfDrawingArea.top;
-
-			var eventData = new jQuery.Event();
-			eventData.pageX = pageX;
-			eventData.pageY = pageY;
-			eventData.type = "mouseup";
-			drawingArea.trigger(eventData);
 		}
 
 		function paperPaths(paper) {

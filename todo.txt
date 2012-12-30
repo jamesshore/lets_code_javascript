@@ -13,7 +13,7 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-- Clean up code
+* Clean up code
 - Take care of special cases in our mouse event handling
   - start drag outside drawing area
   - stop drag outside drawing area
@@ -22,7 +22,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-- Finish factoring out duplication in mouse event test code
+* Finish factoring out duplication in mouse event test code
 - Modify Lint settings for client global variables
 - Convert 'client' to be proper object rather than global singleton?
 
