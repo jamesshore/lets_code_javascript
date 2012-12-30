@@ -6,34 +6,38 @@ wwp = {};
 (function() {
 	"use strict";
 
-		var paper;
+	var paper;
 
-		wwp.initializeDrawingArea = function(drawingAreaElement) {
-			var start = null;
+	wwp.initializeDrawingArea = function(drawingAreaElement) {
+		paper = new Raphael(drawingAreaElement);
+		handleDragEvents(drawingAreaElement);
+		return paper;
+	};
 
-			paper = new Raphael(drawingAreaElement);
+	function handleDragEvents(drawingAreaElement) {
+		var drawingArea = $(drawingAreaElement);
+		var start = null;
 
-			$(document).mousedown(function(event) {
-				start = relativeOffset(drawingArea, event.pageX, event.pageY);
-			});
-			$(document).mouseup(function(event) {
-				start = null;
-			});
+		$(document).mousedown(function(event) {
+			start = relativeOffset(drawingArea, event.pageX, event.pageY);
+		});
 
-			var drawingArea = $(drawingAreaElement);
-			drawingArea.mousemove(function(event) {
-				if (start === null) return;
+		drawingArea.mousemove(function(event) {
+			if (start === null) return;
 
-				var end = relativeOffset(drawingArea, event.pageX, event.pageY);
-				wwp.drawLine(start.x, start.y, end.x, end.y);
-				start = end;
-			});
-			return paper;
-		};
+			var end = relativeOffset(drawingArea, event.pageX, event.pageY);
+			wwp.drawLine(start.x, start.y, end.x, end.y);
+			start = end;
+		});
 
-		wwp.drawLine = function(startX, startY, endX, endY) {
-			paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
-		};
+		$(document).mouseup(function(event) {
+			start = null;
+		});
+	}
+
+	wwp.drawLine = function(startX, startY, endX, endY) {
+		paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
+	};
 
 	function relativeOffset(element, absoluteX, absoluteY) {
 		var pageOffset = element.offset();
