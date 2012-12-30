@@ -14,8 +14,7 @@ User Stories:
 
 Engineering Tasks:
 - Take care of special cases in our mouse event handling
-  - start drag outside drawing area
-  - stop drag outside drawing area
+  - stop drag when it moves outside drawing area
 - Modify Lint settings for client global variables
 - click tracking needs to account for margin, border, and padding
   - figure out how to factor out common setup code
