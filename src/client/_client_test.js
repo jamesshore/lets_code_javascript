@@ -31,7 +31,18 @@
 			expect(paperPaths(paper)).to.eql([ [20, 30, 30, 300] ]);
 		});
 
-		it("it does not draw line segments when mouse is not down", function() {
+		it("draws a line in response to mouse drag", function() {
+			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
+			$(document.body).append(drawingArea);
+			paper = wwp.initializeDrawingArea(drawingArea[0]);
+
+			mouseDown(20, 30);
+			mouseMove(50, 60);
+
+			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60] ]);
+		});
+
+		it("does not draw line segments when mouse is not down", function() {
 			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
 			$(document.body).append(drawingArea);
 			paper = wwp.initializeDrawingArea(drawingArea[0]);
@@ -42,13 +53,12 @@
 			expect(paperPaths(paper)).to.eql([]);
 		});
 
-		it("it stops drawing line segments when mouse is up", function() {
+		it("stops drawing line segments when mouse is up", function() {
 			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
 			$(document.body).append(drawingArea);
 			paper = wwp.initializeDrawingArea(drawingArea[0]);
 
 			mouseDown(20, 30);
-			mouseMove(20, 30);    // TODO: don't need first move event -- down event should be enough
 			mouseMove(50, 60);
 			mouseUp(50, 60);
 			mouseMove(10, 15);

@@ -19,7 +19,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-* Get basic drag to work
+- Take care of special cases in our mouse event handling
 - Factor out duplication in mouse event test code
 - test all cases:
 	- test one click (no paths)

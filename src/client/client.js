@@ -17,6 +17,11 @@ wwp = {};
 
 			$(document).mousedown(function(event) {
 				isDragging = true;
+				// TODO: eliminate offset calculation
+				var pageOffset = drawingArea.offset();
+
+				startX = event.pageX - pageOffset.left;
+				startY = event.pageY - pageOffset.top;
 			});
 			$(document).mouseup(function(event) {
 				isDragging = false;
