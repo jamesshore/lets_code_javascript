@@ -25,6 +25,7 @@ To Do on current task:
 	- test one click (no paths)
 	- test one path
 	- test multiple paths
+- eliminate setup duplication in mouse event test code
 
 - Delete irrelevant tests?
 - Modify Lint settings for client global variables
