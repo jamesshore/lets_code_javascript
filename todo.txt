@@ -10,23 +10,17 @@ Minimum Marketable Features:
 User Stories:
 * Draw a line in response to user mouse
 - Draw a line in response to iOS touch
-- Draw multiple lines / follow the drag
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-* Re-do code test-driven
 - Clean up code
+- Take care of special cases in our mouse event handling
+  - start drag outside drawing area
+  - stop drag outside drawing area
 - click tracking needs to account for margin, border, and padding
 - Integrate
 
 To Do on current task:
-- test all cases:
-	- test one click (no paths)
-	- test one path
-	- test multiple paths
-- Take care of special cases in our mouse event handling
-  - start drag outside drawing area
-  - stop drag outside drawing area
 - Factor out duplication in mouse event test code
 - eliminate setup duplication in mouse event test code
 
