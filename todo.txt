@@ -14,13 +14,18 @@ User Stories:
 
 Engineering Tasks:
 * Take care of special cases in our mouse event handling
-  - stop drag when it moves outside drawing area
 - Integrate
 - Modify Lint settings for client global variables
 - click tracking needs to account for margin, border, and padding
   - figure out how to factor out common setup code
 
 To Do on current task:
+- Stop drag when it moves outside drawing area
+  - mouseleave event? (Jos Flores, http://www.letscodejavascript.com/v3/comments/live/52#tabs)
+- Consider Alan Plum's ideas (http://www.letscodejavascript.com/v3/comments/live/52#tabs)
+  - look at e.which on mousemove event to see if mouse is down rather than tracking mousedown/mouseup
+  - Check for 'sticky dragging' when mouse leaves browser entirely
+- Exploratory test and refine mouse behavior
 
 Future ideas:
 - Create 'fail fast' assertion code
