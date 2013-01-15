@@ -14,8 +14,8 @@
 	var SUPPORTED_BROWSERS = [
 		"IE 8.0",
 		"IE 9.0",
-		"Firefox 17.0",
-		"Chrome 23.0",
+		"Firefox 18.0",
+		"Chrome 24.0",
 		"Mac Safari 6.0",
 		"iOS Safari 6.0"
 	];
