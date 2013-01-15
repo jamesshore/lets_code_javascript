@@ -99,6 +99,20 @@
 			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60] ]);
 		});
 
+//		it("stops drawing when mouse leaves drawing area", function() {
+//			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
+//			$(document.body).append(drawingArea);
+//			paper = wwp.initializeDrawingArea(drawingArea[0]);
+//
+//			mouseDown(20, 30);
+//			mouseMove(50, 60);
+//			mouseMove(700, 70);
+//			mouseMove(90, 40);
+//			mouseUp(700, 70);
+//
+//			expect(paperPaths(paper)).to.eql([ [20, 30, 50, 60] ]);
+//		});
+
 		it("does not start drawing if drag is started outside drawing area", function() {
 			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
 			$(document.body).append(drawingArea);
@@ -172,13 +186,13 @@
 		}
 
 		function sendMouseEvent(event, relativeX, relativeY) {
-			var page = pageOffset(drawingArea, relativeX, relativeY);
+			var page = pageOffset($(document), relativeX, relativeY);
 
 			var eventData = new jQuery.Event();
 			eventData.pageX = page.x;
 			eventData.pageY = page.y;
 			eventData.type = event;
-			drawingArea.trigger(eventData);
+			$(document).trigger(eventData);
 		}
 
 		function pageOffset(drawingArea, relativeX, relativeY) {

@@ -25,6 +25,7 @@ To Do on current task:
 - Consider Alan Plum's ideas (http://www.letscodejavascript.com/v3/comments/live/52#tabs)
   - look at e.which on mousemove event to see if mouse is down rather than tracking mousedown/mouseup
   - Check for 'sticky dragging' when mouse leaves browser entirely
+- Don't select text if drag started within drawing area
 - Exploratory test and refine mouse behavior
 
 Future ideas:
