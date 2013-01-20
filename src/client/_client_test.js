@@ -12,15 +12,15 @@
 		afterEach(function() {
 			drawingArea.remove();
 		});
-//
-//		it("should have the same dimensions as its enclosing div", function() {
-//			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
-//			$(document.body).append(drawingArea);
-//			paper = wwp.initializeDrawingArea(drawingArea[0]);
-//
-//			expect(paper.height).to.equal(300);
-//			expect(paper.width).to.equal(600);
-//		});
+
+		it("should have the same dimensions as its enclosing div", function() {
+			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
+			$(document.body).append(drawingArea);
+			paper = wwp.initializeDrawingArea(drawingArea[0]);
+
+			expect(paper.height).to.equal(300);
+			expect(paper.width).to.equal(600);
+		});
 
 		describe("line drawing", function() {
 
@@ -30,71 +30,71 @@
 				paper = wwp.initializeDrawingArea(drawingArea[0]);
 			});
 
-//			it("draws a line in response to mouse drag", function() {
-//				mouseDown(20, 30);
-//				mouseMove(50, 60);
-//				mouseUp(50, 60);
-//
-//				expect(lineSegments()).to.eql([
-//					[20, 30, 50, 60]
-//				]);
-//			});
-//
-//			it("draws multiple line segments when mouse is dragged multiple places", function() {
-//				mouseDown(20, 30);
-//				mouseMove(50, 60);
-//				mouseMove(40, 20);
-//				mouseMove(10, 15);
-//				mouseUp(10, 15);
-//
-//				expect(lineSegments()).to.eql([
-//					[20, 30, 50, 60],
-//					[50, 60, 40, 20],
-//					[40, 20, 10, 15]
-//				]);
-//			});
-//
-//			it("draws multiple line segments when there are multiple drags", function() {
-//				mouseDown(20, 30);
-//				mouseMove(50, 60);
-//				mouseUp(50, 60);
-//
-//				mouseMove(40, 20);
-//
-//				mouseDown(30, 25);
-//				mouseMove(10, 15);
-//				mouseUp(10, 15);
-//
-//				expect(lineSegments()).to.eql([
-//					[20, 30, 50, 60],
-//					[30, 25, 10, 15]
-//				]);
-//			});
-//
-//			it("does not draw line segment when mouse button is released", function() {
-//				mouseDown(20, 30);
-//				mouseUp(50, 60);
-//
-//				expect(lineSegments()).to.eql([]);
-//			});
-//
-//			it("does not draw line segments when mouse button is not down", function() {
-//				mouseMove(20, 30);
-//				mouseMove(50, 60);
-//
-//				expect(lineSegments()).to.eql([]);
-//			});
-//
-//			it("stops drawing line segments after mouse button is released", function() {
-//				mouseDown(20, 30);
-//				mouseMove(50, 60);
-//				mouseUp(50, 60);
-//				mouseMove(10, 15);
-//
-//				expect(lineSegments()).to.eql([
-//					[20, 30, 50, 60]
-//				]);
-//			});
+			it("draws a line in response to mouse drag", function() {
+				mouseDown(20, 30);
+				mouseMove(50, 60);
+				mouseUp(50, 60);
+
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60]
+				]);
+			});
+
+			it("draws multiple line segments when mouse is dragged multiple places", function() {
+				mouseDown(20, 30);
+				mouseMove(50, 60);
+				mouseMove(40, 20);
+				mouseMove(10, 15);
+				mouseUp(10, 15);
+
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60],
+					[50, 60, 40, 20],
+					[40, 20, 10, 15]
+				]);
+			});
+
+			it("draws multiple line segments when there are multiple drags", function() {
+				mouseDown(20, 30);
+				mouseMove(50, 60);
+				mouseUp(50, 60);
+
+				mouseMove(40, 20);
+
+				mouseDown(30, 25);
+				mouseMove(10, 15);
+				mouseUp(10, 15);
+
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60],
+					[30, 25, 10, 15]
+				]);
+			});
+
+			it("does not draw line segment when mouse button is released", function() {
+				mouseDown(20, 30);
+				mouseUp(50, 60);
+
+				expect(lineSegments()).to.eql([]);
+			});
+
+			it("does not draw line segments when mouse button is not down", function() {
+				mouseMove(20, 30);
+				mouseMove(50, 60);
+
+				expect(lineSegments()).to.eql([]);
+			});
+
+			it("stops drawing line segments after mouse button is released", function() {
+				mouseDown(20, 30);
+				mouseMove(50, 60);
+				mouseUp(50, 60);
+				mouseMove(10, 15);
+
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60]
+				]);
+			});
 
 			it("stops drawing when mouse leaves drawing area", function() {
 				// TODO: This test passes but when done manually, the code doesn't work
@@ -110,40 +110,40 @@
 				]);
 			});
 
-//			it("does not start drawing if drag is started outside drawing area", function() {
-//				mouseDown(601, 150);
-//				mouseMove(50, 60);
-//				mouseUp(50, 60);
-//
-//				mouseDown(-1, 150);
-//				mouseMove(50, 60);
-//				mouseUp(50, 60);
-//
-//				mouseDown(120, 301);
-//				mouseMove(50, 60);
-//				mouseUp(50, 60);
-//
-//				mouseDown(-1, 301);
-//				mouseMove(50, 60);
-//				mouseUp(50, 60);
-//
-//				expect(lineSegments()).to.eql([]);
-//			});
-//
-//			it("does start drawing if drag is initiated exactly at edge of drawing area", function() {
-//				mouseDown(600, 300);
-//				mouseMove(50, 60);
-//				mouseUp(50, 60);
-//
-//				mouseDown(0, 0);
-//				mouseMove(50, 60);
-//				mouseUp(50, 60);
-//
-//				expect(lineSegments()).to.eql([
-//					[600, 300, 50, 60],
-//					[0, 0, 50, 60]
-//				]);
-//			});
+			it("does not start drawing if drag is started outside drawing area", function() {
+				mouseDown(601, 150);
+				mouseMove(50, 60);
+				mouseUp(50, 60);
+
+				mouseDown(-1, 150);
+				mouseMove(50, 60);
+				mouseUp(50, 60);
+
+				mouseDown(120, 301);
+				mouseMove(50, 60);
+				mouseUp(50, 60);
+
+				mouseDown(-1, 301);
+				mouseMove(50, 60);
+				mouseUp(50, 60);
+
+				expect(lineSegments()).to.eql([]);
+			});
+
+			it("does start drawing if drag is initiated exactly at edge of drawing area", function() {
+				mouseDown(600, 300);
+				mouseMove(50, 60);
+				mouseUp(50, 60);
+
+				mouseDown(0, 0);
+				mouseMove(50, 60);
+				mouseUp(50, 60);
+
+				expect(lineSegments()).to.eql([
+					[600, 300, 50, 60],
+					[0, 0, 50, 60]
+				]);
+			});
 
 		});
 
