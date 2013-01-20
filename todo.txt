@@ -18,6 +18,7 @@ Engineering Tasks:
 - Modify Lint settings for client global variables
 - click tracking needs to account for margin, border, and padding
   - figure out how to factor out common setup code
+  - test that em is converted px
 
 To Do on current task:
 - Stop drag when it moves outside drawing area
