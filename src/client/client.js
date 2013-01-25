@@ -20,9 +20,7 @@ wwp = {};
 
 		drawingArea.mousedown(function(event) {
 			var offset = relativeOffset(drawingArea, event.pageX, event.pageY);
-			if (isWithinDrawingArea(offset)) {
-				start = offset;
-			}
+			start = offset;
 		});
 
 		drawingArea.mousemove(function(event) {
@@ -40,10 +38,6 @@ wwp = {};
 		drawingArea.mouseup(function(event) {
 			start = null;
 		});
-	}
-
-	function isWithinDrawingArea(offset) {
-		return offset.x >= 0 && offset.x <= paper.width && offset.y >= 0 && offset.y <= paper.height;
 	}
 
 	function drawLine(startX, startY, endX, endY) {
