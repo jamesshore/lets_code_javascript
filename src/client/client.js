@@ -18,27 +18,26 @@ wwp = {};
 		var drawingArea = $(drawingAreaElement);
 		var start = null;
 
-		$(document).mousedown(function(event) {
+		drawingArea.mousedown(function(event) {
 			var offset = relativeOffset(drawingArea, event.pageX, event.pageY);
 			if (isWithinDrawingArea(offset)) {
 				start = offset;
 			}
 		});
 
-		$(document).mousemove(function(event) {
+		drawingArea.mousemove(function(event) {
 			if (start === null) return;
 
 			var end = relativeOffset(drawingArea, event.pageX, event.pageY);
-			if (isWithinDrawingArea(end)) {
-				drawLine(start.x, start.y, end.x, end.y);
-				start = end;
-			}
-			else {
-				start = null;
-			}
+			drawLine(start.x, start.y, end.x, end.y);
+			start = end;
 		});
 
-		$(document).mouseup(function(event) {
+		drawingArea.mouseleave(function(event) {
+			start = null;
+		});
+
+		drawingArea.mouseup(function(event) {
 			start = null;
 		});
 	}

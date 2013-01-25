@@ -11,7 +11,6 @@
 
 		afterEach(function() {
 			drawingArea.remove();
-			$(document).unbind();
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
@@ -79,7 +78,7 @@
 				expect(lineSegments()).to.eql([]);
 			});
 
-			it("does not draw line segments when mouse button is not down", function() {
+			it("does not draw line segments when mouse button has never been pushed", function() {
 				mouseMove(20, 30);
 				mouseMove(50, 60);
 
@@ -98,10 +97,9 @@
 			});
 
 			it("stops drawing when mouse leaves drawing area", function() {
-				// TODO: This test passes but when done manually, the code doesn't work
-
 				mouseDown(20, 30);
 				mouseMove(50, 60);
+				mouseLeave(700, 70);
 				mouseMove(700, 70, $(document));
 				mouseMove(90, 40);
 				mouseUp(90, 40);
@@ -112,19 +110,19 @@
 			});
 
 			it("does not start drawing if drag is started outside drawing area", function() {
-				mouseDown(601, 150);
+				mouseDown(601, 150, $(document));
 				mouseMove(50, 60);
 				mouseUp(50, 60);
 
-				mouseDown(-1, 150);
+				mouseDown(-1, 150, $(document));
 				mouseMove(50, 60);
 				mouseUp(50, 60);
 
-				mouseDown(120, 301);
+				mouseDown(120, 301, $(document));
 				mouseMove(50, 60);
 				mouseUp(50, 60);
 
-				mouseDown(-1, 301);
+				mouseDown(-1, 301, $(document));
 				mouseMove(50, 60);
 				mouseUp(50, 60);
 
@@ -150,16 +148,20 @@
 
 
 
-		function mouseDown(relativeX, relativeY) {
-			sendMouseEvent("mousedown", relativeX, relativeY);
+		function mouseDown(relativeX, relativeY, optionalElement) {
+			sendMouseEvent("mousedown", relativeX, relativeY, optionalElement);
 		}
 
 		function mouseMove(relativeX, relativeY, optionalElement) {
 			sendMouseEvent("mousemove", relativeX, relativeY, optionalElement);
 		}
 
-		function mouseUp(relativeX, relativeY) {
-			sendMouseEvent("mouseup", relativeX, relativeY);
+		function mouseLeave(relativeX, relativeY, optionalElement) {
+			sendMouseEvent("mouseleave", relativeX, relativeY, optionalElement);
+		}
+
+		function mouseUp(relativeX, relativeY, optionalElement) {
+			sendMouseEvent("mouseup", relativeX, relativeY, optionalElement);
 		}
 
 		function sendMouseEvent(event, relativeX, relativeY, optionalJqElement) {
