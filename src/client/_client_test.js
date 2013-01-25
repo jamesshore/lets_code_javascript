@@ -144,6 +144,20 @@
 				]);
 			});
 
+			it("does not allow text to be selected outside drawing area when drag starts within drawing area", function() {
+//				mouseDown(20, 30);
+//				mouseMove(50, 60);
+//				mouseLeave(700, 70);
+//				mouseMove(700, 70, $(document));
+//				mouseMove(90, 40);
+//				mouseUp(90, 40);
+
+				drawingArea.mousedown(function(event) {
+					expect(event.isDefaultPrevented()).to.be(true);
+				});
+				mouseDown(20, 30);
+			});
+
 		});
 
 

@@ -19,6 +19,7 @@ wwp = {};
 		var start = null;
 
 		drawingArea.mousedown(function(event) {
+			event.preventDefault();
 			var offset = relativeOffset(drawingArea, event.pageX, event.pageY);
 			start = offset;
 		});
