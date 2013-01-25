@@ -30,7 +30,6 @@ wwp = {};
 
 			var end = relativeOffset(drawingArea, event.pageX, event.pageY);
 			if (isWithinDrawingArea(end)) {
-				dump("drawLine: " + JSON.stringify(start) + " -> " + JSON.stringify(end));
 				drawLine(start.x, start.y, end.x, end.y);
 				start = end;
 			}

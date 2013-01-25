@@ -11,6 +11,7 @@
 
 		afterEach(function() {
 			drawingArea.remove();
+			$(document).unbind();
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
