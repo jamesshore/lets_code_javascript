@@ -21,13 +21,6 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
-- Stop drag when it moves outside drawing area
-  - mouseleave event? (Jos Flores, http://www.letscodejavascript.com/v3/comments/live/52#tabs)
-- Consider Alan Plum's ideas (http://www.letscodejavascript.com/v3/comments/live/52#tabs)
-  - look at e.which on mousemove event to see if mouse is down rather than tracking mousedown/mouseup
-  - Check for 'sticky dragging' when mouse leaves browser entirely
-- Don't select text if drag started within drawing area
-- Exploratory test and refine mouse behavior
 
 Future ideas:
 - Create 'fail fast' assertion code

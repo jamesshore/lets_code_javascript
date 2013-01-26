@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global dump, Raphael, $, wwp:true*/
+/*global dump, Raphael, $, wwp:true, Event*/
 
 wwp = {};
 
@@ -22,6 +22,11 @@ wwp = {};
 			event.preventDefault();
 			var offset = relativeOffset(drawingArea, event.pageX, event.pageY);
 			start = offset;
+		});
+
+		drawingArea.on("selectstart", function(event) {
+			// This event handler is needed so IE 8 doesn't select text when you drag outside drawing area
+			event.preventDefault();
 		});
 
 		drawingArea.mousemove(function(event) {
