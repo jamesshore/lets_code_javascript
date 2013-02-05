@@ -21,6 +21,7 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
+- Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 
 Future ideas:
 - Create 'fail fast' assertion code
