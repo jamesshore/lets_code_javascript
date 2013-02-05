@@ -10,16 +10,18 @@ Minimum Marketable Features:
 User Stories:
 * Draw a line in response to user mouse
 - Draw a line in response to iOS touch
-- Draw multiple lines / follow the drag
-- Minify and deploy
+- Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-- Smoke test to ensure that our magic div is in our actual home page
+* Take care of special cases in our mouse event handling
+- Integrate
+- Modify Lint settings for client global variables
+- click tracking needs to account for margin, border, and padding
+  - figure out how to factor out common setup code
+  - test that em is converted px
 
 To Do on current task:
-- Factor out common initialization code?
-- Convert 'client' to be proper object rather than global singleton?
-- Modify Lint settings for client global variables
+- Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 
 Future ideas:
 - Create 'fail fast' assertion code
@@ -35,6 +37,7 @@ Future ideas:
 - Automatically start Testacular (or provide friendlier error message when it isn't running?)
 - Automate CI script
 - Resolve npm 'extraneous' warning (due to package.json not reflecting what's in node_modules)
+- Convert 'client' to be proper object rather than global singleton?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
