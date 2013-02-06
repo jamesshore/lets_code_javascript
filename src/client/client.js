@@ -7,9 +7,11 @@ wwp = {};
 	"use strict";
 
 	var paper;
+	var $info;
 
 	wwp.initializeDrawingArea = function(drawingAreaElement) {
 		paper = new Raphael(drawingAreaElement);
+		$info = $("#info");
 		handleDragEvents(drawingAreaElement);
 		return paper;
 	};
@@ -44,7 +46,50 @@ wwp = {};
 		drawingArea.mouseup(function(event) {
 			start = null;
 		});
+
+
+
+
+		drawingArea.on("touchstart", function(event) {
+			info("touchstart", event)
+
+			event.preventDefault();
+			var offset = relativeOffset(drawingArea, event.pageX, event.pageY);
+			start = offset;
+		});
+
+		drawingArea[0].addEventListener("touchmove", function(event) {
+			info("touchmove", event)
+			if (start === null) return;
+
+			var end = relativeOffset(drawingArea, event.pageX, event.pageY);
+			drawLine(start.x, start.y, end.x, end.y);
+			start = end;
+		});
+
+		drawingArea.on("touchend", function(event) {
+			info("touchend", event)
+			start = null;
+		});
+
+		drawingArea.on("touchcancel", function(event) {
+			info("touchcancel", event)
+			start = null;
+		});
 	}
+
+	function info(eventName, event) {
+		var text = "<p>" + eventName + "</p><ul>";
+		for (var name in event) {
+			text += "<li>" + name + ": " + event[name] + "</li>"
+		}
+		text += "</ul>";
+
+		$info.html(text);
+	}
+
+
+
 
 	function drawLine(startX, startY, endX, endY) {
 		paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
