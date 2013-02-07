@@ -217,7 +217,7 @@
 
 	function clientFiles() {
 		var javascriptFiles = new jake.FileList();
-		javascriptFiles.include("src/client/**/*.js");
+		javascriptFiles.include("src/client/*.js");
 		return javascriptFiles.toArray();
 	}
 
