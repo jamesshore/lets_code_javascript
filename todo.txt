@@ -8,20 +8,18 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* Draw a line in response to user mouse
-- Draw a line in response to iOS touch
+* Draw a line in response to iOS touch
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-* Take care of special cases in our mouse event handling
-- Integrate
-- Modify Lint settings for client global variables
 - click tracking needs to account for margin, border, and padding
   - figure out how to factor out common setup code
   - test that em is converted px
 
 To Do on current task:
+- Mention Davide Alberto Molin's "watch" code, E2 comments (http://www.letscodejavascript.com/v3/comments/live/7#comment-790555605)
 - Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
+
 
 Future ideas:
 - Create 'fail fast' assertion code
