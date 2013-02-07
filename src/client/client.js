@@ -58,9 +58,11 @@ wwp = {};
 			start = offset;
 		});
 
-		drawingArea[0].addEventListener("touchmove", function(event) {
-			info("touchmove", event)
+		drawingArea.on("touchmove", function(event) {
+			info("touchmove", event.originalEvent)
 			if (start === null) return;
+
+			event = event.originalEvent;
 
 			var end = relativeOffset(drawingArea, event.pageX, event.pageY);
 			drawLine(start.x, start.y, end.x, end.y);
