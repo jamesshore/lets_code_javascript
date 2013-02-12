@@ -159,6 +159,8 @@
 		describe("touch events", function() {
 
 			it("draw lines in response to touch events", function() {
+				if (!browserSupportsTouchEvents()) return;
+
 				touchStart(10, 40);
 				touchMove(5, 20);
 				touchEnd(5, 20);
@@ -200,6 +202,10 @@
 			eventData.type = event;
 			eventData.originalEvent = touchEvent;
 			jqElement.trigger(eventData);
+		}
+
+		function browserSupportsTouchEvents() {
+			return (typeof Touch !== "undefined");
 		}
 
 
