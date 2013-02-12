@@ -5,7 +5,6 @@
 	"use strict";
 
 	describe("Drawing area", function() {
-
 		var drawingArea;
 		var paper;
 
@@ -156,37 +155,35 @@
 			});
 		});
 
-		describe("touch events", function() {
+		if (browserSupportsTouchEvents()) {
+			describe("touch events", function() {
 
-			it("draw lines in response to touch events", function() {
-				if (!browserSupportsTouchEvents()) return;
+				it("draw lines in response to touch events", function() {
+					touchStart(10, 40);
+					touchMove(5, 20);
+					touchEnd(5, 20);
 
-				touchStart(10, 40);
-				touchMove(5, 20);
-				touchEnd(5, 20);
+					expect(lineSegments()).to.eql([
+						[10, 40, 5, 20]
+					]);
+				});
 
-				expect(lineSegments()).to.eql([
-					[10, 40, 5, 20]
-				]);
+				it("stop drawing lines when touch is cancelled", function() {
+					touchStart(10, 40);
+					touchMove(5, 20);
+					touchCancel(5, 20);
+
+					expect(lineSegments()).to.eql([
+						[10, 40, 5, 20]
+					]);
+				});
+
+				// TODO: handle the case where touch is cancelled
+				// TODO: handle case of multiple touches
+				// TODO: make sure we prevent default (to stop scrolling)
+
 			});
-
-			it("stop drawing lines when touch is cancelled", function() {
-				if (!browserSupportsTouchEvents()) return;
-
-				touchStart(10, 40);
-				touchMove(5, 20);
-				touchCancel(5, 20);
-
-				expect(lineSegments()).to.eql([
-					[10, 40, 5, 20]
-				]);
-			});
-
-			// TODO: handle the case where touch is cancelled
-			// TODO: handle case of multiple touches
-			// TODO: make sure we prevent default (to stop scrolling)
-
-		});
+		}
 
 		function touchStart(relativeX, relativeY, optionalElement) {
 			sendTouchEvent("touchstart", relativeX, relativeY, optionalElement);
