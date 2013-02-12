@@ -22,8 +22,8 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
-- BEFORE RECORDING: version checking breaks when using "-pre" (Thx Daniel Auger, http://www.letscodejavascript.com/v3/comments/live/16#comment-795147187)
-- Mention updates to Davide Molin's 'watch' script
+- Version checking breaks when using "-pre" (Thx Daniel Auger, http://www.letscodejavascript.com/v3/comments/live/16#comment-795147187)
+- Mention updates to Davide Molin's 'watch' script (http://www.letscodejavascript.com/v3/comments/live/7#comment-796394789)
 - Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 
 Future ideas:
