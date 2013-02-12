@@ -46,7 +46,7 @@ wwp = {};
 		});
 
 		drawingArea.on("touchstart", function(event) {
-//			event.preventDefault();
+			event.preventDefault();
 
 			var originalEvent = event.originalEvent;
 			var offset = relativeOffset(drawingArea, originalEvent.pageX, originalEvent.pageY);

@@ -178,6 +178,15 @@
 					]);
 				});
 
+				it("does not scroll or zoom the page when user is drawing with finger", function() {
+					drawingArea.on("touchstart", function(event) {
+						expect(event.isDefaultPrevented()).to.be(true);
+					});
+					touchStart(10, 40);
+					touchMove(5, 20);
+					touchEnd(5, 20);
+				});
+
 				// TODO: handle the case where touch is cancelled
 				// TODO: handle case of multiple touches
 				// TODO: make sure we prevent default (to stop scrolling)
