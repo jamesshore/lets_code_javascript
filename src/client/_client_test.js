@@ -187,10 +187,17 @@
 					touchEnd(5, 20);
 				});
 
-				// TODO: handle the case where touch is cancelled
-				// TODO: handle case of multiple touches
-				// TODO: make sure we prevent default (to stop scrolling)
+				it("stops drawing when multiple touches occur", function() {
+					touchStart(10, 40);
+					touchMove(5, 20);
+					multipleTouchStart(5, 20, 6, 60);
+					multipleTouchMove(1, 10, 7, 70);
+					multipleTouchEnd(1, 10, 7, 70);
 
+					expect(lineSegments()).to.eql([
+						[10, 40, 5, 20]
+					]);
+				});
 			});
 		}
 
@@ -210,6 +217,18 @@
 			sendTouchEvent("touchcancel", relativeX, relativeY, optionalElement);
 		}
 
+		function multipleTouchStart(relative1X, relative1Y, relative2X, relative2Y, optionalElement) {
+			sendMultipleTouchEvent("touchstart", relative1X, relative1Y, relative2X, relative2Y, optionalElement);
+		}
+
+		function multipleTouchMove(relative1X, relative1Y, relative2X, relative2Y, optionalElement) {
+			sendMultipleTouchEvent("touchmove", relative1X, relative1Y, relative2X, relative2Y, optionalElement);
+		}
+
+		function multipleTouchEnd(relative1X, relative1Y, relative2X, relative2Y, optionalElement) {
+			sendMultipleTouchEvent("touchend", relative1X, relative1Y, relative2X, relative2Y, optionalElement);
+		}
+
 		function sendTouchEvent(event, relativeX, relativeY, optionalJqElement) {
 			var jqElement = optionalJqElement || drawingArea;
 
@@ -225,6 +244,34 @@
 				0, 0,             // screenX/Y
 				page.x, page.y,   // clientX/Y
 				false, false, false, false    // meta keys (shift etc.)
+			);
+
+			var eventData = new jQuery.Event("event");
+			eventData.type = event;
+			eventData.originalEvent = touchEvent;
+			jqElement.trigger(eventData);
+		}
+
+		function sendMultipleTouchEvent(event, relative1X, relative2X, relative1Y, relative2Y, optionalJqElement) {
+			var jqElement = optionalJqElement || drawingArea;
+
+			var touch1 = pageOffset(drawingArea, relative1X, relative1Y);
+			var touch2 = pageOffset(drawingArea, relative2X, relative2Y);
+
+			// TODO: construct touch list
+//			var touchList = ...
+
+			var touchEvent = document.createEvent("TouchEvent");
+			touchEvent.initTouchEvent(
+				event,            // event type
+				true,             // canBubble
+				true,             // cancelable
+				window,           // DOM window
+				null,             // detail (not sure what this is)
+				0, 0,             // screenX/Y
+				touch1.x, touch1.y,   // clientX/Y
+				false, false, false, false    // meta keys (shift etc.),
+//				touchList, touchList, touchList
 			);
 
 			var eventData = new jQuery.Event("event");
