@@ -113,6 +113,7 @@
 
 		var expectedString = NODE_VERSION;
 		var actualString = process.version;
+
 		var expected = parseNodeVersion("expected Node version", expectedString);
 		var actual = parseNodeVersion("Node version", actualString);
 
@@ -158,7 +159,7 @@
 	});
 
 	function parseNodeVersion(description, versionString) {
-		var versionMatcher = /^v(\d+)\.(\d+)\.(\d+)$/;    // v[major].[minor].[bugfix]
+		var versionMatcher = /^v(\d+)\.(\d+)\.(\d+)(\-|$)/;    // v[major].[minor].[bugfix]
 		var versionInfo = versionString.match(versionMatcher);
 		if (versionInfo === null) fail("Could not parse " + description + " (was '" + versionString + "')");
 
