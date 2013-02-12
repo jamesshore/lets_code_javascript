@@ -12,7 +12,6 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-- Spike touch events
 - test-driven basic touch events
 - consider special cases
 
@@ -22,8 +21,11 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
-- Mention updates to Davide Molin's 'watch' script (http://www.letscodejavascript.com/v3/comments/live/7#comment-796394789)
-- Version checking breaks when using "-pre" (Thx Daniel Auger, http://www.letscodejavascript.com/v3/comments/live/16#comment-795147187)
+- Make touch event tests work on all browsers (stub them out?)
+- Get first basic touch event test to pass
+- Continue with other touch event behaviors
+
+- Is our client test doing too much--do we need to factor a new module or class?
 - Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 
 Future ideas:

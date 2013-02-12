@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael*/
+/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael, TouchEvent*/
 
 (function() {
 	"use strict";
@@ -9,27 +9,22 @@
 		var drawingArea;
 		var paper;
 
+		beforeEach(function() {
+			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
+			$(document.body).append(drawingArea);
+			paper = wwp.initializeDrawingArea(drawingArea[0]);
+		});
+
 		afterEach(function() {
 			drawingArea.remove();
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
-			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
-			$(document.body).append(drawingArea);
-			paper = wwp.initializeDrawingArea(drawingArea[0]);
-
 			expect(paper.height).to.equal(300);
 			expect(paper.width).to.equal(600);
 		});
 
-		describe("line drawing", function() {
-
-			beforeEach(function() {
-				drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
-				$(document.body).append(drawingArea);
-				paper = wwp.initializeDrawingArea(drawingArea[0]);
-			});
-
+		describe("mouse events", function() {
 			it("draws a line in response to mouse drag", function() {
 				mouseDown(20, 30);
 				mouseMove(50, 60);
@@ -161,6 +156,51 @@
 			});
 		});
 
+		describe("touch events", function() {
+
+			it("draw lines in response to touch events", function() {
+				touchStart(10, 40);
+				touchMove(5, 20);
+				touchEnd(5, 20);
+
+				expect(lineSegments()).to.eql([
+					[10, 40, 5, 20]
+				]);
+			});
+
+			// TODO: handle the case where touch is cancelled
+			// TODO: handle case of multiple touches
+			// TODO: make sure we prevent default (to stop scrolling)
+
+		});
+
+		function touchStart(relativeX, relativeY, optionalElement) {
+			sendTouchEvent("touchstart", relativeX, relativeY, optionalElement);
+		}
+
+		function touchMove(relativeX, relativeY, optionalElement) {
+			sendTouchEvent("touchmove", relativeX, relativeY, optionalElement);
+		}
+
+		function touchEnd(relativeX, relativeY, optionalElement) {
+			sendTouchEvent("touchend", relativeX, relativeY, optionalElement);
+		}
+
+		function sendTouchEvent(event, relativeX, relativeY, optionalJqElement) {
+			var jqElement = optionalJqElement || drawingArea;
+
+			var page = pageOffset(drawingArea, relativeX, relativeY);
+
+			var touchEvent = document.createEvent("TouchEvent");
+			touchEvent.initTouchEvent(event, true, true);
+
+			var eventData = new jQuery.Event("event");
+			eventData.pageX = page.x;
+			eventData.pageY = page.y;
+			eventData.type = event;
+			eventData.originalEvent = touchEvent;
+			jqElement.trigger(eventData);
+		}
 
 
 		function mouseDown(relativeX, relativeY, optionalElement) {
