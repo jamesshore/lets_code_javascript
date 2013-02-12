@@ -170,6 +170,18 @@
 				]);
 			});
 
+			it("stop drawing lines when touch is cancelled", function() {
+				if (!browserSupportsTouchEvents()) return;
+
+				touchStart(10, 40);
+				touchMove(5, 20);
+				touchCancel(5, 20);
+
+				expect(lineSegments()).to.eql([
+					[10, 40, 5, 20]
+				]);
+			});
+
 			// TODO: handle the case where touch is cancelled
 			// TODO: handle case of multiple touches
 			// TODO: make sure we prevent default (to stop scrolling)
@@ -188,17 +200,28 @@
 			sendTouchEvent("touchend", relativeX, relativeY, optionalElement);
 		}
 
+		function touchCancel(relativeX, relativeY, optionalElement) {
+			sendTouchEvent("touchcancel", relativeX, relativeY, optionalElement);
+		}
+
 		function sendTouchEvent(event, relativeX, relativeY, optionalJqElement) {
 			var jqElement = optionalJqElement || drawingArea;
 
 			var page = pageOffset(drawingArea, relativeX, relativeY);
 
 			var touchEvent = document.createEvent("TouchEvent");
-			touchEvent.initTouchEvent(event, true, true);
+			touchEvent.initTouchEvent(
+				event,            // event type
+				true,             // canBubble
+				true,             // cancelable
+				window,           // DOM window
+				null,             // detail (not sure what this is)
+				0, 0,             // screenX/Y
+				page.x, page.y,   // clientX/Y
+				false, false, false, false    // meta keys (shift etc.)
+			);
 
 			var eventData = new jQuery.Event("event");
-			eventData.pageX = page.x;
-			eventData.pageY = page.y;
 			eventData.type = event;
 			eventData.originalEvent = touchEvent;
 			jqElement.trigger(eventData);
