@@ -1,8 +1,11 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael, TouchEvent*/
+/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael, TouchEvent, mocha */
 
 (function() {
 	"use strict";
+
+//	mocha.setup({ignoreLeaks: true});
+//	mocha.setup({globals: ['wwp']});
 
 	describe("Drawing area", function() {
 		var drawingArea;
