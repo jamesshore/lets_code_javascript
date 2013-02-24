@@ -18,6 +18,7 @@
 
 		afterEach(function() {
 			drawingArea.remove();
+			wwp.drawingAreaHasBeenRemovedFromDom(drawingArea[0]);
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
@@ -170,10 +171,22 @@
 					]);
 				});
 
+				it("stops drawing lines when touch ends", function() {
+					touchStart(10, 40);
+					touchMove(5, 20);
+					touchEnd(5, 20);
+					touchMove(50, 60);
+
+					expect(lineSegments()).to.eql([
+						[10, 40, 5, 20]
+					]);
+				});
+
 				it("stop drawing lines when touch is cancelled", function() {
 					touchStart(10, 40);
 					touchMove(5, 20);
 					touchCancel(5, 20);
+					touchMove(50, 60);
 
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
