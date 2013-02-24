@@ -49,12 +49,15 @@ wwp = {};
 			event.preventDefault();
 			var originalEvent = event.originalEvent;
 
-			if (originalEvent.touches && originalEvent.touches.length !== 1) {
+			if (originalEvent.touches.length !== 1) {
 				start = null;
 				return;
 			}
 
-			var offset = relativeOffset(drawingArea, originalEvent.pageX, originalEvent.pageY);
+			var pageX = originalEvent.touches[0].pageX;
+			var pageY = originalEvent.touches[0].pageY;
+
+			var offset = relativeOffset(drawingArea, pageX, pageY);
 			start = offset;
 		});
 
@@ -62,7 +65,11 @@ wwp = {};
 			if (start === null) return;
 
 			var originalEvent = event.originalEvent;
-			var end = relativeOffset(drawingArea, originalEvent.pageX, originalEvent.pageY);
+
+			var pageX = originalEvent.touches[0].pageX;
+			var pageY = originalEvent.touches[0].pageY;
+
+			var end = relativeOffset(drawingArea, pageX, pageY);
 			drawLine(start.x, start.y, end.x, end.y);
 			start = end;
 		});
