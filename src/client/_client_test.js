@@ -4,8 +4,7 @@
 (function() {
 	"use strict";
 
-//	mocha.setup({ignoreLeaks: true});
-//	mocha.setup({globals: ['wwp']});
+	mocha.setup({ignoreLeaks: true});
 
 	describe("Drawing area", function() {
 		var drawingArea;
