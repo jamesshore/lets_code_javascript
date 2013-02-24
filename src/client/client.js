@@ -47,8 +47,13 @@ wwp = {};
 
 		drawingArea.on("touchstart", function(event) {
 			event.preventDefault();
-
 			var originalEvent = event.originalEvent;
+
+			if (originalEvent.touches && originalEvent.touches.length !== 1) {
+				start = null;
+				return;
+			}
+
 			var offset = relativeOffset(drawingArea, originalEvent.pageX, originalEvent.pageY);
 			start = offset;
 		});

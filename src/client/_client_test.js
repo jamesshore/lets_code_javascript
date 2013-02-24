@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael, TouchEvent, mocha */
+/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael, TouchEvent, mocha, TouchList, Touch */
 
 (function() {
 	"use strict";
@@ -254,14 +254,16 @@
 			jqElement.trigger(eventData);
 		}
 
-		function sendMultipleTouchEvent(event, relative1X, relative2X, relative1Y, relative2Y, optionalJqElement) {
+		function sendMultipleTouchEvent(event, relative1X, relative1Y, relative2X, relative2Y, optionalJqElement) {
 			var jqElement = optionalJqElement || drawingArea;
 
 			var touch1 = pageOffset(drawingArea, relative1X, relative1Y);
 			var touch2 = pageOffset(drawingArea, relative2X, relative2Y);
 
-			// TODO: construct touch list
-//			var touchList = ...
+			var touchA = createTouch(jqElement, touch1);
+			var touchB = createTouch(jqElement, touch2);
+
+			var touchList = new TouchList(touchA, touchB);
 
 			var touchEvent = document.createEvent("TouchEvent");
 			touchEvent.initTouchEvent(
@@ -272,14 +274,26 @@
 				null,             // detail (not sure what this is)
 				0, 0,             // screenX/Y
 				touch1.x, touch1.y,   // clientX/Y
-				false, false, false, false    // meta keys (shift etc.),
-//				touchList, touchList, touchList
+				false, false, false, false,    // meta keys (shift etc.),
+				touchList, touchList, touchList     // all touches, target touches, changed touches
 			);
 
 			var eventData = new jQuery.Event("event");
 			eventData.type = event;
 			eventData.originalEvent = touchEvent;
 			jqElement.trigger(eventData);
+		}
+
+		function createTouch(jqElement, pageOffset) {
+			var target = jqElement[0];
+			var identifier = 0;
+			var pageX = pageOffset.x;
+			var pageY = pageOffset.y;
+			var screenX = 0;
+			var screenY = 0;
+
+			var touch = new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
+			return touch;
 		}
 
 		function browserSupportsTouchEvents() {
