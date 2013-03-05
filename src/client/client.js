@@ -6,44 +6,94 @@ wwp = {};
 (function() {
 	"use strict";
 
-	var paper;
+	var paper = null;
+	var start = null;
 
 	wwp.initializeDrawingArea = function(drawingAreaElement) {
+		if (paper !== null) throw new Error("Client.js is not re-entrant");
+
 		paper = new Raphael(drawingAreaElement);
 		handleDragEvents(drawingAreaElement);
 		return paper;
 	};
 
+	wwp.drawingAreaHasBeenRemovedFromDom = function() {
+		paper = null;
+	};
+
 	function handleDragEvents(drawingAreaElement) {
 		var drawingArea = $(drawingAreaElement);
-		var start = null;
-
-		drawingArea.mousedown(function(event) {
-			event.preventDefault();
-			var offset = relativeOffset(drawingArea, event.pageX, event.pageY);
-			start = offset;
-		});
 
 		drawingArea.on("selectstart", function(event) {
 			// This event handler is needed so IE 8 doesn't select text when you drag outside drawing area
 			event.preventDefault();
 		});
 
-		drawingArea.mousemove(function(event) {
-			if (start === null) return;
+		drawingArea.mousedown(function(event) {
+			event.preventDefault();
+			startDrag(drawingArea, event.pageX, event.pageY);
+		});
 
-			var end = relativeOffset(drawingArea, event.pageX, event.pageY);
-			drawLine(start.x, start.y, end.x, end.y);
-			start = end;
+		drawingArea.mousemove(function(event) {
+			continueDrag(drawingArea, event.pageX, event.pageY);
 		});
 
 		drawingArea.mouseleave(function(event) {
-			start = null;
+			endDrag();
 		});
 
 		drawingArea.mouseup(function(event) {
-			start = null;
+			endDrag();
 		});
+
+		drawingArea.on("touchstart", function(event) {
+			event.preventDefault();
+			var originalEvent = event.originalEvent;
+
+			if (originalEvent.touches.length !== 1) {
+				start = null;
+				return;
+			}
+
+			var pageX = originalEvent.touches[0].pageX;
+			var pageY = originalEvent.touches[0].pageY;
+
+			startDrag(drawingArea, pageX, pageY);
+		});
+
+		drawingArea.on("touchmove", function(event) {
+			var originalEvent = event.originalEvent;
+
+			var pageX = originalEvent.touches[0].pageX;
+			var pageY = originalEvent.touches[0].pageY;
+
+			continueDrag(drawingArea, pageX, pageY);
+		});
+
+		drawingArea.on("touchend", function(event) {
+			endDrag();
+		});
+
+		drawingArea.on("touchcancel", function(event) {
+			endDrag();
+		});
+	}
+
+	function startDrag(drawingArea, pageX, pageY) {
+		var offset = relativeOffset(drawingArea, pageX, pageY);
+		start = offset;
+	}
+
+	function continueDrag(drawingArea, pageX, pageY) {
+		if (start === null) return;
+
+		var end = relativeOffset(drawingArea, pageX, pageY);
+		drawLine(start.x, start.y, end.x, end.y);
+		start = end;
+	}
+
+	function endDrag() {
+		start = null;
 	}
 
 	function drawLine(startX, startY, endX, endY) {

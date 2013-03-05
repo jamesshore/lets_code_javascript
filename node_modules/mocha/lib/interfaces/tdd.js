@@ -77,7 +77,7 @@ module.exports = function(suite){
     context.suite = function(title, fn){
       var suite = Suite.create(suites[0], title);
       suites.unshift(suite);
-      fn();
+      fn.call(suite);
       suites.shift();
       return suite;
     };
@@ -110,6 +110,14 @@ module.exports = function(suite){
     context.test.only = function(title, fn){
       var test = context.test(title, fn);
       mocha.grep(test.fullTitle());
+    };
+
+    /**
+     * Pending test case.
+     */
+
+    context.test.skip = function(title){
+      context.test(title);
     };
   });
 };

@@ -38,7 +38,8 @@
 			var foundHomePage = receivedData.indexOf("WeeWikiPaint 404 page") !== -1;
 			test.ok(foundHomePage, "404 page should have contained test marker");
 			test.done();
-		});	};
+		});
+	};
 
 	function runServer(callback) {
 		var commandLine = parseProcFile();

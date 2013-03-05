@@ -1,35 +1,32 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael*/
+/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael, TouchEvent, mocha, TouchList, Touch */
 
 (function() {
 	"use strict";
 
-	describe("Drawing area", function() {
+	mocha.setup({ignoreLeaks: true});
 
+	describe("Drawing area", function() {
 		var drawingArea;
 		var paper;
 
-		afterEach(function() {
-			drawingArea.remove();
-		});
-
-		it("should have the same dimensions as its enclosing div", function() {
+		beforeEach(function() {
 			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
 			$(document.body).append(drawingArea);
 			paper = wwp.initializeDrawingArea(drawingArea[0]);
+		});
 
+		afterEach(function() {
+			drawingArea.remove();
+			wwp.drawingAreaHasBeenRemovedFromDom(drawingArea[0]);
+		});
+
+		it("should have the same dimensions as its enclosing div", function() {
 			expect(paper.height).to.equal(300);
 			expect(paper.width).to.equal(600);
 		});
 
-		describe("line drawing", function() {
-
-			beforeEach(function() {
-				drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
-				$(document.body).append(drawingArea);
-				paper = wwp.initializeDrawingArea(drawingArea[0]);
-			});
-
+		describe("mouse events", function() {
 			it("draws a line in response to mouse drag", function() {
 				mouseDown(20, 30);
 				mouseMove(50, 60);
@@ -161,6 +158,147 @@
 			});
 		});
 
+		if (browserSupportsTouchEvents()) {
+			describe("touch events", function() {
+
+				it("draw lines in response to touch events", function() {
+					touchStart(10, 40);
+					touchMove(5, 20);
+					touchEnd(5, 20);
+
+					expect(lineSegments()).to.eql([
+						[10, 40, 5, 20]
+					]);
+				});
+
+				it("stops drawing lines when touch ends", function() {
+					touchStart(10, 40);
+					touchMove(5, 20);
+					touchEnd(5, 20);
+					touchMove(50, 60);
+
+					expect(lineSegments()).to.eql([
+						[10, 40, 5, 20]
+					]);
+				});
+
+				it("stop drawing lines when touch is cancelled", function() {
+					touchStart(10, 40);
+					touchMove(5, 20);
+					touchCancel(5, 20);
+					touchMove(50, 60);
+
+					expect(lineSegments()).to.eql([
+						[10, 40, 5, 20]
+					]);
+				});
+
+				it("does not scroll or zoom the page when user is drawing with finger", function() {
+					drawingArea.on("touchstart", function(event) {
+						expect(event.isDefaultPrevented()).to.be(true);
+					});
+					touchStart(10, 40);
+					touchMove(5, 20);
+					touchEnd(5, 20);
+				});
+
+				it("stops drawing when multiple touches occur", function() {
+					touchStart(10, 40);
+					touchMove(5, 20);
+					multipleTouchStart(5, 20, 6, 60);
+					multipleTouchMove(1, 10, 7, 70);
+					multipleTouchEnd(1, 10, 7, 70);
+
+					expect(lineSegments()).to.eql([
+						[10, 40, 5, 20]
+					]);
+				});
+			});
+		}
+
+		function touchStart(relativeX, relativeY, optionalElement) {
+			sendSingleTouchEvent("touchstart", relativeX, relativeY, optionalElement);
+		}
+
+		function touchMove(relativeX, relativeY, optionalElement) {
+			sendSingleTouchEvent("touchmove", relativeX, relativeY, optionalElement);
+		}
+
+		function touchEnd(relativeX, relativeY, optionalElement) {
+			sendSingleTouchEvent("touchend", relativeX, relativeY, optionalElement);
+		}
+
+		function touchCancel(relativeX, relativeY, optionalElement) {
+			sendSingleTouchEvent("touchcancel", relativeX, relativeY, optionalElement);
+		}
+
+		function multipleTouchStart(relative1X, relative1Y, relative2X, relative2Y, optionalElement) {
+			sendMultiTouchEvent("touchstart", relative1X, relative1Y, relative2X, relative2Y, optionalElement);
+		}
+
+		function multipleTouchMove(relative1X, relative1Y, relative2X, relative2Y, optionalElement) {
+			sendMultiTouchEvent("touchmove", relative1X, relative1Y, relative2X, relative2Y, optionalElement);
+		}
+
+		function multipleTouchEnd(relative1X, relative1Y, relative2X, relative2Y, optionalElement) {
+			sendMultiTouchEvent("touchend", relative1X, relative1Y, relative2X, relative2Y, optionalElement);
+		}
+
+		function sendSingleTouchEvent(event, relativeX, relativeY, optionalJqElement) {
+			var jqElement = optionalJqElement || drawingArea;
+
+			var touch = createTouch(jqElement, pageOffset(drawingArea, relativeX, relativeY));
+			sendTouchEvent(event, new TouchList(touch), jqElement);
+		}
+
+		function sendMultiTouchEvent(event, relative1X, relative1Y, relative2X, relative2Y, optionalJqElement) {
+			var jqElement = optionalJqElement || drawingArea;
+
+			var touch1 = createTouch(jqElement, pageOffset(drawingArea, relative1X, relative1Y));
+			var touch2 = createTouch(jqElement, pageOffset(drawingArea, relative2X, relative2Y));
+			sendTouchEvent(event, createTouchList(touch1, touch2), jqElement);
+		}
+
+		function sendTouchEvent(event, touchList, jqElement) {
+			var touchEvent = document.createEvent("TouchEvent");
+			touchEvent.initTouchEvent(
+				event, // event type
+				true, // canBubble
+				true, // cancelable
+				window, // DOM window
+				null, // detail (not sure what this is)
+				0, 0, // screenX/Y
+				0, 0, // clientX/Y
+				false, false, false, false, // meta keys (shift etc.)
+				touchList, touchList, touchList
+			);
+
+			var eventData = new jQuery.Event("event");
+			eventData.type = event;
+			eventData.originalEvent = touchEvent;
+			jqElement.trigger(eventData);
+		}
+
+		function createTouchList(touchA, touchB) {
+			if (touchB === null) return new TouchList(touchA);
+			else return new TouchList(touchA, touchB);
+		}
+
+		function createTouch(jqElement, pageOffset) {
+			var target = jqElement[0];
+			var identifier = 0;
+			var pageX = pageOffset.x;
+			var pageY = pageOffset.y;
+			var screenX = 0;
+			var screenY = 0;
+
+			var touch = new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
+			return touch;
+		}
+
+		function browserSupportsTouchEvents() {
+			return (typeof Touch !== "undefined");
+		}
 
 
 		function mouseDown(relativeX, relativeY, optionalElement) {

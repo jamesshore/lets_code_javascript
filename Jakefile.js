@@ -14,8 +14,8 @@
 	var SUPPORTED_BROWSERS = [
 		"IE 8.0",
 		"IE 9.0",
-		"Firefox 18.0",
-		"Chrome 24.0",
+		"Firefox 19.0",
+		"Chrome 25.0",
 		"Mac Safari 6.0",
 		"iOS Safari 6.0"
 	];
@@ -100,7 +100,10 @@
 	desc("Deploy to Heroku");
 	task("deploy", ["default"], function() {
 		console.log("1. Make sure 'git status' is clean.");
-		console.log("2. 'git push heroku master'");
+
+		// Correction: Use "git push heroku integration:master" to deploy from integration branch.
+		// Thanks to Jüri A, http://www.letscodejavascript.com/v3/comments/live/32#comment-798947003 .
+		console.log("2. 'git push heroku master' (or integration:master)");
 		console.log("3. 'jake test'");
 	});
 
@@ -113,6 +116,7 @@
 
 		var expectedString = NODE_VERSION;
 		var actualString = process.version;
+
 		var expected = parseNodeVersion("expected Node version", expectedString);
 		var actual = parseNodeVersion("Node version", actualString);
 
@@ -158,7 +162,7 @@
 	});
 
 	function parseNodeVersion(description, versionString) {
-		var versionMatcher = /^v(\d+)\.(\d+)\.(\d+)$/;    // v[major].[minor].[bugfix]
+		var versionMatcher = /^v(\d+)\.(\d+)\.(\d+)(\-|$)/;    // v[major].[minor].[bugfix]
 		var versionInfo = versionString.match(versionMatcher);
 		if (versionInfo === null) fail("Could not parse " + description + " (was '" + versionString + "')");
 
@@ -217,7 +221,7 @@
 
 	function clientFiles() {
 		var javascriptFiles = new jake.FileList();
-		javascriptFiles.include("src/client/**/*.js");
+		javascriptFiles.include("src/client/*.js");
 		return javascriptFiles.toArray();
 	}
 
@@ -240,7 +244,7 @@
 			eqeqeq: true,
 			forin: true,
 			immed: true,
-			latedef: true,
+			latedef: false,
 			newcap: true,
 			noarg: true,
 			noempty: true,
