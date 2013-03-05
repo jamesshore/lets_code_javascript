@@ -20,6 +20,10 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
+- BEFORE NEXT EPISODE:
+  - Consider reflectorapp.com
+  - Mention http://www.letscodejavascript.com/v3/comments/live/2#comment-819666265
+
 - Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 - Factor out common code between touch events and mouse events
 - Is our client test doing too much--do we need to factor a new module or class?
