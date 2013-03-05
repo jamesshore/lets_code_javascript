@@ -6,8 +6,12 @@ window.wwp = window.wwp || {};
 (function() {
 	"use strict";
 
-	wwp.relativeOffset = function(element, pageX, pageY) {
-		var pageOffset = element.offset();
+	var DomElement = wwp.DomElement = function(jqueryElement) {
+		this.element = jqueryElement;
+	};
+
+	DomElement.prototype.relativeOffset = function(pageX, pageY) {
+		var pageOffset = this.element.offset();
 
 		return {
 			x: pageX - pageOffset.left,
@@ -15,8 +19,8 @@ window.wwp = window.wwp || {};
 		};
 	};
 
-	wwp.pageOffset = function(drawingArea, relativeX, relativeY) {
-		var topLeftOfDrawingArea = drawingArea.offset();
+	DomElement.prototype.pageOffset = function(relativeX, relativeY) {
+		var topLeftOfDrawingArea = this.element.offset();
 		return {
 			x: relativeX + topLeftOfDrawingArea.left,
 			y: relativeY + topLeftOfDrawingArea.top

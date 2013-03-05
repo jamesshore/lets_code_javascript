@@ -8,10 +8,12 @@ window.wwp = window.wwp || {};
 
 	var paper = null;
 	var start = null;
+	var domElement;
 
 	wwp.initializeDrawingArea = function(drawingAreaElement) {
 		if (paper !== null) throw new Error("Client.js is not re-entrant");
 
+		domElement = new wwp.DomElement($(drawingAreaElement));
 		paper = new Raphael(drawingAreaElement);
 		handleDragEvents(drawingAreaElement);
 		return paper;
@@ -101,7 +103,7 @@ window.wwp = window.wwp || {};
 	}
 
 	function relativeOffset(element, pageX, pageY) {
-		return wwp.relativeOffset(element, pageX, pageY);
+		return domElement.relativeOffset(pageX, pageY);
 	}
 
 }());

@@ -330,7 +330,8 @@
 		}
 
 		function pageOffset(drawingArea, relativeX, relativeY) {
-			return wwp.pageOffset(drawingArea, relativeX, relativeY);
+			var foo = new wwp.DomElement(drawingArea);
+			return foo.pageOffset(relativeX, relativeY);
 		}
 
 		function lineSegments() {
