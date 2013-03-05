@@ -33,11 +33,11 @@ window.wwp = window.wwp || {};
 
 		drawingArea.mousedown(function(event) {
 			event.preventDefault();
-			startDrag(drawingArea, event.pageX, event.pageY);
+			startDrag(event.pageX, event.pageY);
 		});
 
 		drawingArea.mousemove(function(event) {
-			continueDrag(drawingArea, event.pageX, event.pageY);
+			continueDrag(event.pageX, event.pageY);
 		});
 
 		drawingArea.mouseleave(function(event) {
@@ -60,7 +60,7 @@ window.wwp = window.wwp || {};
 			var pageX = originalEvent.touches[0].pageX;
 			var pageY = originalEvent.touches[0].pageY;
 
-			startDrag(drawingArea, pageX, pageY);
+			startDrag(pageX, pageY);
 		});
 
 		drawingArea.on("touchmove", function(event) {
@@ -69,7 +69,7 @@ window.wwp = window.wwp || {};
 			var pageX = originalEvent.touches[0].pageX;
 			var pageY = originalEvent.touches[0].pageY;
 
-			continueDrag(drawingArea, pageX, pageY);
+			continueDrag(pageX, pageY);
 		});
 
 		drawingArea.on("touchend", function(event) {
@@ -81,15 +81,15 @@ window.wwp = window.wwp || {};
 		});
 	}
 
-	function startDrag(drawingArea, pageX, pageY) {
-		var offset = relativeOffset(drawingArea, pageX, pageY);
+	function startDrag(pageX, pageY) {
+		var offset = domElement.relativeOffset(pageX, pageY);
 		start = offset;
 	}
 
-	function continueDrag(drawingArea, pageX, pageY) {
+	function continueDrag(pageX, pageY) {
 		if (start === null) return;
 
-		var end = relativeOffset(drawingArea, pageX, pageY);
+		var end = domElement.relativeOffset(pageX, pageY);
 		drawLine(start.x, start.y, end.x, end.y);
 		start = end;
 	}
@@ -100,10 +100,6 @@ window.wwp = window.wwp || {};
 
 	function drawLine(startX, startY, endX, endY) {
 		paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
-	}
-
-	function relativeOffset(element, pageX, pageY) {
-		return domElement.relativeOffset(pageX, pageY);
 	}
 
 }());

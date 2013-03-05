@@ -8,10 +8,12 @@
 
 	describe("Drawing area", function() {
 		var drawingArea;
+		var domElement;
 		var paper;
 
 		beforeEach(function() {
 			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
+			domElement = new wwp.DomElement(drawingArea);
 			$(document.body).append(drawingArea);
 			paper = wwp.initializeDrawingArea(drawingArea[0]);
 		});
@@ -247,15 +249,15 @@
 		function sendSingleTouchEvent(event, relativeX, relativeY, optionalJqElement) {
 			var jqElement = optionalJqElement || drawingArea;
 
-			var touch = createTouch(jqElement, pageOffset(drawingArea, relativeX, relativeY));
+			var touch = createTouch(jqElement, domElement.pageOffset(relativeX, relativeY));
 			sendTouchEvent(event, new TouchList(touch), jqElement);
 		}
 
 		function sendMultiTouchEvent(event, relative1X, relative1Y, relative2X, relative2Y, optionalJqElement) {
 			var jqElement = optionalJqElement || drawingArea;
 
-			var touch1 = createTouch(jqElement, pageOffset(drawingArea, relative1X, relative1Y));
-			var touch2 = createTouch(jqElement, pageOffset(drawingArea, relative2X, relative2Y));
+			var touch1 = createTouch(jqElement, domElement.pageOffset(relative1X, relative1Y));
+			var touch2 = createTouch(jqElement, domElement.pageOffset(relative2X, relative2Y));
 			sendTouchEvent(event, createTouchList(touch1, touch2), jqElement);
 		}
 
@@ -320,18 +322,12 @@
 		function sendMouseEvent(event, relativeX, relativeY, optionalJqElement) {
 			var jqElement = optionalJqElement || drawingArea;
 
-			var page = pageOffset(drawingArea, relativeX, relativeY);
-
+			var page = domElement.pageOffset(relativeX, relativeY);
 			var eventData = new jQuery.Event();
 			eventData.pageX = page.x;
 			eventData.pageY = page.y;
 			eventData.type = event;
 			jqElement.trigger(eventData);
-		}
-
-		function pageOffset(drawingArea, relativeX, relativeY) {
-			var foo = new wwp.DomElement(drawingArea);
-			return foo.pageOffset(relativeX, relativeY);
 		}
 
 		function lineSegments() {
