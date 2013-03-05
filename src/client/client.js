@@ -1,7 +1,7 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global dump, Raphael, $, wwp:true, Event*/
 
-wwp = {};
+window.wwp = window.wwp || {};
 
 (function() {
 	"use strict";
@@ -101,12 +101,7 @@ wwp = {};
 	}
 
 	function relativeOffset(element, pageX, pageY) {
-		var pageOffset = element.offset();
-
-		return {
-			x: pageX - pageOffset.left,
-			y: pageY - pageOffset.top
-		};
+		return wwp.relativeOffset(element, pageX, pageY);
 	}
 
 }());

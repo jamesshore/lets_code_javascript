@@ -330,11 +330,7 @@
 		}
 
 		function pageOffset(drawingArea, relativeX, relativeY) {
-			var topLeftOfDrawingArea = drawingArea.offset();
-			return {
-				x: relativeX + topLeftOfDrawingArea.left,
-				y: relativeY + topLeftOfDrawingArea.top
-			};
+			return wwp.pageOffset(drawingArea, relativeX, relativeY);
 		}
 
 		function lineSegments() {

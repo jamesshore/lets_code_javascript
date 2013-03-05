@@ -19,7 +19,9 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
-- Abstract JQuery into its own module or class; use that as springboard for higher-level abstractions for our code
+- Create DOM Element abstraction
+  - Turn it into an object
+  - Move all uses of JQuery into this abstraction so it is isolated in one place
 
 - Factor out common code between touch events and mouse events
 - Is our client test doing too much--do we need to factor a new module or class?
