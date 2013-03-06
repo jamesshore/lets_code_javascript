@@ -31,24 +31,24 @@ window.wwp = window.wwp || {};
 			event.preventDefault();
 		});
 
-		drawingArea.mousedown(function(event) {
+		domElement.onMouseDown(function(event) {
 			event.preventDefault();
 			startDrag(event.pageX, event.pageY);
 		});
 
-		drawingArea.mousemove(function(event) {
+		domElement.onMouseMove(function(event) {
 			continueDrag(event.pageX, event.pageY);
 		});
 
-		drawingArea.mouseleave(function(event) {
+		domElement.onMouseLeave(function(event) {
 			endDrag();
 		});
 
-		drawingArea.mouseup(function(event) {
+		domElement.onMouseUp(function(event) {
 			endDrag();
 		});
 
-		drawingArea.on("touchstart", function(event) {
+		domElement.onTouchStart(function(event) {
 			event.preventDefault();
 			var originalEvent = event.originalEvent;
 
@@ -63,7 +63,7 @@ window.wwp = window.wwp || {};
 			startDrag(pageX, pageY);
 		});
 
-		drawingArea.on("touchmove", function(event) {
+		domElement.onTouchMove(function(event) {
 			var originalEvent = event.originalEvent;
 
 			var pageX = originalEvent.touches[0].pageX;
@@ -72,11 +72,11 @@ window.wwp = window.wwp || {};
 			continueDrag(pageX, pageY);
 		});
 
-		drawingArea.on("touchend", function(event) {
+		domElement.onTouchEnd(function(event) {
 			endDrag();
 		});
 
-		drawingArea.on("touchcancel", function(event) {
+		domElement.onTouchCancel(function(event) {
 			endDrag();
 		});
 	}

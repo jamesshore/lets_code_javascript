@@ -19,11 +19,14 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
-- Create DOM Element abstraction
-  - Create the DOM Element instance at the top of _client_test.js
-  - Take over more functions from client.js and _client_test.js
-  - Move all uses of JQuery into this abstraction so it is isolated in one place
-  - DomElement constructor should expect raw DOM element, not JQuery element
+- Should DomElement's event handlers provide relativeX and relativeY rather than pageX and pageY?
+
+- Create the DOM Element instance at the top of _client_test.js
+- Take over more functions from client.js and _client_test.js
+- Move all uses of JQuery into this abstraction so it is isolated in one place
+- DomElement constructor should expect raw DOM element, not JQuery element
+
+
 
 - Factor out common code between touch events and mouse events
 - Is our client test doing too much--do we need to factor a new module or class?
