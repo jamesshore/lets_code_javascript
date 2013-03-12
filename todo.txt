@@ -12,6 +12,9 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
+- BEFORE NEXT EPISODE:
+  Danny Jones reports that WWP doesn't work on IE10 when using touchpad.
+
 - Simplifying and improving the code
   - Modify Lint settings for client global variables (off-camera)
 - click tracking needs to account for margin, border, and padding
