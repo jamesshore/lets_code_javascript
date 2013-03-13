@@ -316,7 +316,7 @@
 		}
 
 		function mouseUp(relativeX, relativeY, optionalElement) {
-			sendMouseEvent("mouseup", relativeX, relativeY, optionalElement);
+			domElement.mouseUp(relativeX, relativeY);
 		}
 
 		function sendMouseEvent(event, relativeX, relativeY, optionalJqElement) {

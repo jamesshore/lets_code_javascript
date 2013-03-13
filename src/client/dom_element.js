@@ -10,6 +10,22 @@ window.wwp = window.wwp || {};
 		this.element = jqueryElement;
 	};
 
+	DomElement.prototype.mouseUp = function(relativeX, relativeY) {
+		sendMouseEvent(this, "mouseup", relativeX, relativeY);
+	};
+
+	function sendMouseEvent(self, event, relativeX, relativeY) {
+		var jqElement = self.element;
+
+		var page = self.pageOffset(relativeX, relativeY);
+		var eventData = new jQuery.Event();
+		eventData.pageX = page.x;
+		eventData.pageY = page.y;
+		eventData.type = event;
+		jqElement.trigger(eventData);
+	}
+
+
 	DomElement.prototype.onSelectStart_ie8Only = function(callback) {
 		this.element.on("selectstart", callback);
 	};
@@ -31,13 +47,6 @@ window.wwp = window.wwp || {};
 		this.element.mouseup(mouseEventHandlerFn(this, callback));
 	};
 
-	function mouseEventHandlerFn(self, callback) {
-		return function(event) {
-			var offset = self.relativeOffset(event.pageX, event.pageY);
-			callback(offset, event);
-		};
-	}
-
 	DomElement.prototype.onSingleTouchStart = function(callback) {
 		this.element.on("touchstart", oneTouchEventHandlerFn(this, callback));
 	};
@@ -53,19 +62,6 @@ window.wwp = window.wwp || {};
 	DomElement.prototype.onSingleTouchCancel = function(callback) {
 		this.element.on("touchcancel", oneTouchEventHandlerFn(this, callback));
 	};
-
-	function oneTouchEventHandlerFn(self, callback) {
-		return function(event) {
-			var originalEvent = event.originalEvent;
-			if (originalEvent.touches.length !== 1) return;
-
-			var pageX = originalEvent.touches[0].pageX;
-			var pageY = originalEvent.touches[0].pageY;
-
-			var offset = self.relativeOffset(pageX, pageY);
-			callback(offset, event);
-		};
-	}
 
 	DomElement.prototype.onMultiTouchStart = function(callback) {
 		var self = this;
@@ -91,5 +87,25 @@ window.wwp = window.wwp || {};
 			y: relativeY + topLeftOfDrawingArea.top
 		};
 	};
+
+	function mouseEventHandlerFn(self, callback) {
+		return function(event) {
+			var offset = self.relativeOffset(event.pageX, event.pageY);
+			callback(offset, event);
+		};
+	}
+
+	function oneTouchEventHandlerFn(self, callback) {
+		return function(event) {
+			var originalEvent = event.originalEvent;
+			if (originalEvent.touches.length !== 1) return;
+
+			var pageX = originalEvent.touches[0].pageX;
+			var pageY = originalEvent.touches[0].pageY;
+			var offset = self.relativeOffset(pageX, pageY);
+
+			callback(offset, event);
+		};
+	}
 
 }());
