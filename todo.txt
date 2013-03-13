@@ -20,10 +20,8 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
-- Continue to eliminate event handler duplication in client.js and move it into dom_element.js
-- Refactor relativeOffset lookup in dom_element.js? One for mouse and one for touch?
+- Finish moving event creation functions into _client_test.js
 
-- Take over more functions from client.js and _client_test.js
 - Move all uses of JQuery into this abstraction so it is isolated in one place
 - DomElement constructor should expect raw DOM element, not JQuery element
 

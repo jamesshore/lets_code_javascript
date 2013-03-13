@@ -99,7 +99,7 @@
 				mouseDown(20, 30);
 				mouseMove(50, 60);
 				mouseLeave(700, 70);
-				mouseMove(700, 70, $(document));
+				mouseMove(700, 70, $(document.body));
 				mouseMove(90, 40);
 				mouseUp(90, 40);
 
@@ -308,14 +308,18 @@
 		}
 
 		function mouseMove(relativeX, relativeY, optionalElement) {
-			sendMouseEvent("mousemove", relativeX, relativeY, optionalElement);
+			if (optionalElement) {
+				var foo = new wwp.DomElement(optionalElement);
+				foo.mouseMove(relativeX, relativeY);
+			}
+			else domElement.mouseMove(relativeX, relativeY);
 		}
 
-		function mouseLeave(relativeX, relativeY, optionalElement) {
-			sendMouseEvent("mouseleave", relativeX, relativeY, optionalElement);
+		function mouseLeave(relativeX, relativeY) {
+			domElement.mouseLeave(relativeX, relativeY);
 		}
 
-		function mouseUp(relativeX, relativeY, optionalElement) {
+		function mouseUp(relativeX, relativeY) {
 			domElement.mouseUp(relativeX, relativeY);
 		}
 
