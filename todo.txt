@@ -21,6 +21,7 @@ Engineering Tasks:
 
 To Do on current task:
 - Continue to eliminate event handler duplication in client.js and move it into dom_element.js
+- Refactor relativeOffset lookup in dom_element.js? One for mouse and one for touch?
 
 - Take over more functions from client.js and _client_test.js
 - Move all uses of JQuery into this abstraction so it is isolated in one place

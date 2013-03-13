@@ -34,10 +34,13 @@ window.wwp = window.wwp || {};
 		this.element.mouseup(callback);
 	};
 
-	DomElement.prototype.onTouchStart = function(callback) {
+	DomElement.prototype.onOneTouchStart = function(callback) {
 		var self = this;
 		this.element.on("touchstart", function(event) {
 			var originalEvent = event.originalEvent;
+			if (originalEvent.touches.length !== 1) return;
+
+
 			var pageX = originalEvent.touches[0].pageX;
 			var pageY = originalEvent.touches[0].pageY;
 
@@ -46,8 +49,26 @@ window.wwp = window.wwp || {};
 		});
 	};
 
+	DomElement.prototype.onMultiTouchStart = function(callback) {
+		var self = this;
+		this.element.on("touchstart", function(event) {
+			var originalEvent = event.originalEvent;
+			if (originalEvent.touches.length !== 1) callback();
+		});
+	};
+
 	DomElement.prototype.onTouchMove = function(callback) {
-		this.element.on("touchmove", callback);
+		var self = this;
+		this.element.on("touchmove", function(event) {
+			var originalEvent = event.originalEvent;
+
+			var pageX = originalEvent.touches[0].pageX;
+			var pageY = originalEvent.touches[0].pageY;
+
+			var offset = self.relativeOffset(pageX, pageY);
+
+			callback(offset, event);
+		});
 	};
 
 	DomElement.prototype.onTouchEnd = function(callback) {

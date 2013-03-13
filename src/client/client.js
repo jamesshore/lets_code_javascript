@@ -25,7 +25,21 @@ window.wwp = window.wwp || {};
 
 	function handleDragEvents(drawingAreaElement) {
 		var drawingArea = $(drawingAreaElement);
+		preventDefaults(drawingArea);
 
+		domElement.onMouseDown(startDrag);
+		domElement.onMouseMove(continueDrag);
+		domElement.onMouseLeave(endDrag);
+		domElement.onMouseUp(endDrag);
+
+		domElement.onOneTouchStart(startDrag);
+		domElement.onTouchMove(continueDrag);
+		domElement.onMultiTouchStart(endDrag);
+		domElement.onTouchEnd(endDrag);
+		domElement.onTouchCancel(endDrag);
+	}
+
+	function preventDefaults(drawingArea) {
 		drawingArea.on("selectstart", function(event) {
 			// This event handler is needed so IE 8 doesn't select text when you drag outside drawing area
 			event.preventDefault();
@@ -33,37 +47,13 @@ window.wwp = window.wwp || {};
 
 		domElement.onMouseDown(function(relativeOffset, event) {
 			event.preventDefault();
-			startDrag(relativeOffset);
+//			startDrag(relativeOffset);
 		});
 
-		domElement.onMouseMove(continueDrag);
-		domElement.onMouseLeave(endDrag);
-		domElement.onMouseUp(endDrag);
-
-		domElement.onTouchStart(function(relativeOffset, event) {
+		domElement.onOneTouchStart(function(relativeOffset, event) {
 			event.preventDefault();
-
-			var originalEvent = event.originalEvent;
-			if (originalEvent.touches.length !== 1) {
-				start = null;
-				return;
-			}
-
 			startDrag(relativeOffset);
 		});
-
-		domElement.onTouchMove(function(event) {
-			var originalEvent = event.originalEvent;
-
-			var pageX = originalEvent.touches[0].pageX;
-			var pageY = originalEvent.touches[0].pageY;
-
-			var offset = domElement.relativeOffset(pageX, pageY);
-			continueDrag(offset);
-		});
-
-		domElement.onTouchEnd(endDrag);
-		domElement.onTouchCancel(endDrag);
 	}
 
 	function startDrag(offset) {
