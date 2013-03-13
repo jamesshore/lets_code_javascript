@@ -33,9 +33,10 @@ window.wwp = window.wwp || {};
 
 		domElement.onOneTouchStart(startDrag);
 		domElement.onOneTouchMove(continueDrag);
+		domElement.onOneTouchEnd(endDrag);
+		domElement.onOneTouchCancel(endDrag);
+
 		domElement.onMultiTouchStart(endDrag);
-		domElement.onTouchEnd(endDrag);
-		domElement.onTouchCancel(endDrag);
 	}
 
 	function preventDefaults() {
