@@ -11,11 +11,19 @@ window.wwp = window.wwp || {};
 	};
 
 	DomElement.prototype.onMouseDown = function(callback) {
-		this.element.mousedown(callback);
+		var self = this;
+		this.element.mousedown(function(event) {
+			var offset = self.relativeOffset(event.pageX, event.pageY);
+			callback(offset, event);
+		});
 	};
 
 	DomElement.prototype.onMouseMove = function(callback) {
-		this.element.mousemove(callback);
+		var self = this;
+		this.element.mousemove(function(event) {
+			var offset = self.relativeOffset(event.pageX, event.pageY);
+			callback(offset);
+		});
 	};
 
 	DomElement.prototype.onMouseLeave = function(callback) {
@@ -27,7 +35,15 @@ window.wwp = window.wwp || {};
 	};
 
 	DomElement.prototype.onTouchStart = function(callback) {
-		this.element.on("touchstart", callback);
+		var self = this;
+		this.element.on("touchstart", function(event) {
+			var originalEvent = event.originalEvent;
+			var pageX = originalEvent.touches[0].pageX;
+			var pageY = originalEvent.touches[0].pageY;
+
+			var offset = self.relativeOffset(pageX, pageY);
+			callback(offset, event);
+		});
 	};
 
 	DomElement.prototype.onTouchMove = function(callback) {

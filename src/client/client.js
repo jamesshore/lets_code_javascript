@@ -31,36 +31,25 @@ window.wwp = window.wwp || {};
 			event.preventDefault();
 		});
 
-		domElement.onMouseDown(function(event) {
+		domElement.onMouseDown(function(relativeOffset, event) {
 			event.preventDefault();
-			startDrag(event.pageX, event.pageY);
+			startDrag(relativeOffset);
 		});
 
-		domElement.onMouseMove(function(event) {
-			continueDrag(event.pageX, event.pageY);
-		});
+		domElement.onMouseMove(continueDrag);
+		domElement.onMouseLeave(endDrag);
+		domElement.onMouseUp(endDrag);
 
-		domElement.onMouseLeave(function(event) {
-			endDrag();
-		});
-
-		domElement.onMouseUp(function(event) {
-			endDrag();
-		});
-
-		domElement.onTouchStart(function(event) {
+		domElement.onTouchStart(function(relativeOffset, event) {
 			event.preventDefault();
+
 			var originalEvent = event.originalEvent;
-
 			if (originalEvent.touches.length !== 1) {
 				start = null;
 				return;
 			}
 
-			var pageX = originalEvent.touches[0].pageX;
-			var pageY = originalEvent.touches[0].pageY;
-
-			startDrag(pageX, pageY);
+			startDrag(relativeOffset);
 		});
 
 		domElement.onTouchMove(function(event) {
@@ -69,27 +58,22 @@ window.wwp = window.wwp || {};
 			var pageX = originalEvent.touches[0].pageX;
 			var pageY = originalEvent.touches[0].pageY;
 
-			continueDrag(pageX, pageY);
+			var offset = domElement.relativeOffset(pageX, pageY);
+			continueDrag(offset);
 		});
 
-		domElement.onTouchEnd(function(event) {
-			endDrag();
-		});
-
-		domElement.onTouchCancel(function(event) {
-			endDrag();
-		});
+		domElement.onTouchEnd(endDrag);
+		domElement.onTouchCancel(endDrag);
 	}
 
-	function startDrag(pageX, pageY) {
-		var offset = domElement.relativeOffset(pageX, pageY);
+	function startDrag(offset) {
 		start = offset;
 	}
 
-	function continueDrag(pageX, pageY) {
+	function continueDrag(relativeOffset) {
 		if (start === null) return;
 
-		var end = domElement.relativeOffset(pageX, pageY);
+		var end = relativeOffset;
 		drawLine(start.x, start.y, end.x, end.y);
 		start = end;
 	}

@@ -3,6 +3,7 @@ WeeWikiPaint
 Minimum Marketable Features:
 * single-user painting on home page
 - collaborative painting
+- support more browsers (Android, IE10?)
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
@@ -12,9 +13,6 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-- BEFORE NEXT EPISODE:
-  Danny Jones reports that WWP doesn't work on IE10 when using touchpad.
-
 - Simplifying and improving the code
   - Modify Lint settings for client global variables (off-camera)
 - click tracking needs to account for margin, border, and padding
@@ -22,9 +20,8 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
-- Should DomElement's event handlers provide relativeX and relativeY rather than pageX and pageY?
+- Continue to eliminate event handler duplication in client.js and move it into dom_element.js
 
-- Create the DOM Element instance at the top of _client_test.js
 - Take over more functions from client.js and _client_test.js
 - Move all uses of JQuery into this abstraction so it is isolated in one place
 - DomElement constructor should expect raw DOM element, not JQuery element
