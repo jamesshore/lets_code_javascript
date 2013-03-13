@@ -10,6 +10,10 @@ window.wwp = window.wwp || {};
 		this.element = jqueryElement;
 	};
 
+	DomElement.prototype.mouseLeave = function(relativeX, relativeY) {
+		sendMouseEvent(this, "mouseleave", relativeX, relativeY);
+	};
+
 	DomElement.prototype.mouseUp = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mouseup", relativeX, relativeY);
 	};
