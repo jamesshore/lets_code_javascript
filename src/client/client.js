@@ -12,8 +12,8 @@ window.wwp = window.wwp || {};
 
 	wwp.initializeDrawingArea = function(drawingAreaElement) {
 		if (paper !== null) throw new Error("Client.js is not re-entrant");
-
 		domElement = new wwp.DomElement($(drawingAreaElement));
+
 		paper = new Raphael(drawingAreaElement);
 		handleDragEvents(drawingAreaElement);
 		return paper;
@@ -24,8 +24,7 @@ window.wwp = window.wwp || {};
 	};
 
 	function handleDragEvents(drawingAreaElement) {
-		var drawingArea = $(drawingAreaElement);
-		preventDefaults(drawingArea);
+		preventDefaults();
 
 		domElement.onMouseDown(startDrag);
 		domElement.onMouseMove(continueDrag);
@@ -33,26 +32,24 @@ window.wwp = window.wwp || {};
 		domElement.onMouseUp(endDrag);
 
 		domElement.onOneTouchStart(startDrag);
-		domElement.onTouchMove(continueDrag);
+		domElement.onOneTouchMove(continueDrag);
 		domElement.onMultiTouchStart(endDrag);
 		domElement.onTouchEnd(endDrag);
 		domElement.onTouchCancel(endDrag);
 	}
 
-	function preventDefaults(drawingArea) {
-		drawingArea.on("selectstart", function(event) {
+	function preventDefaults() {
+		domElement.onSelectStart_ie8Only(function(event) {
 			// This event handler is needed so IE 8 doesn't select text when you drag outside drawing area
 			event.preventDefault();
 		});
 
 		domElement.onMouseDown(function(relativeOffset, event) {
 			event.preventDefault();
-//			startDrag(relativeOffset);
 		});
 
 		domElement.onOneTouchStart(function(relativeOffset, event) {
 			event.preventDefault();
-			startDrag(relativeOffset);
 		});
 	}
 

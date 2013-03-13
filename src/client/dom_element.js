@@ -10,64 +10,60 @@ window.wwp = window.wwp || {};
 		this.element = jqueryElement;
 	};
 
+	DomElement.prototype.onSelectStart_ie8Only = function(callback) {
+		this.element.on("selectstart", callback);
+	};
+
 	DomElement.prototype.onMouseDown = function(callback) {
-		var self = this;
-		this.element.mousedown(function(event) {
-			var offset = self.relativeOffset(event.pageX, event.pageY);
-			callback(offset, event);
-		});
+		this.element.mousedown(mouseEventHandlerFn(this, callback));
 	};
 
 	DomElement.prototype.onMouseMove = function(callback) {
 		var self = this;
-		this.element.mousemove(function(event) {
-			var offset = self.relativeOffset(event.pageX, event.pageY);
-			callback(offset);
-		});
+		this.element.mousemove(mouseEventHandlerFn(this, callback));
 	};
 
 	DomElement.prototype.onMouseLeave = function(callback) {
-		this.element.mouseleave(callback);
+		this.element.mouseleave(mouseEventHandlerFn(this, callback));
 	};
 
 	DomElement.prototype.onMouseUp = function(callback) {
-		this.element.mouseup(callback);
+		this.element.mouseup(mouseEventHandlerFn(this, callback));
 	};
 
+	function mouseEventHandlerFn(self, callback) {
+		return function(event) {
+			var offset = self.relativeOffset(event.pageX, event.pageY);
+			callback(offset, event);
+		};
+	}
+
 	DomElement.prototype.onOneTouchStart = function(callback) {
-		var self = this;
-		this.element.on("touchstart", function(event) {
+		this.element.on("touchstart", oneTouchEventHandlerFn(this, callback));
+	};
+
+	DomElement.prototype.onOneTouchMove = function(callback) {
+		this.element.on("touchmove", oneTouchEventHandlerFn(this, callback));
+	};
+
+	function oneTouchEventHandlerFn(self, callback) {
+		return function(event) {
 			var originalEvent = event.originalEvent;
 			if (originalEvent.touches.length !== 1) return;
-
 
 			var pageX = originalEvent.touches[0].pageX;
 			var pageY = originalEvent.touches[0].pageY;
 
 			var offset = self.relativeOffset(pageX, pageY);
 			callback(offset, event);
-		});
-	};
+		};
+	}
 
 	DomElement.prototype.onMultiTouchStart = function(callback) {
 		var self = this;
 		this.element.on("touchstart", function(event) {
 			var originalEvent = event.originalEvent;
 			if (originalEvent.touches.length !== 1) callback();
-		});
-	};
-
-	DomElement.prototype.onTouchMove = function(callback) {
-		var self = this;
-		this.element.on("touchmove", function(event) {
-			var originalEvent = event.originalEvent;
-
-			var pageX = originalEvent.touches[0].pageX;
-			var pageY = originalEvent.touches[0].pageY;
-
-			var offset = self.relativeOffset(pageX, pageY);
-
-			callback(offset, event);
 		});
 	};
 
