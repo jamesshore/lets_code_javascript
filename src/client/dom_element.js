@@ -38,19 +38,19 @@ window.wwp = window.wwp || {};
 		};
 	}
 
-	DomElement.prototype.onOneTouchStart = function(callback) {
+	DomElement.prototype.onSingleTouchStart = function(callback) {
 		this.element.on("touchstart", oneTouchEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onOneTouchMove = function(callback) {
+	DomElement.prototype.onSingleTouchMove = function(callback) {
 		this.element.on("touchmove", oneTouchEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onOneTouchEnd = function(callback) {
+	DomElement.prototype.onSingleTouchEnd = function(callback) {
 		this.element.on("touchend", oneTouchEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onOneTouchCancel = function(callback) {
+	DomElement.prototype.onSingleTouchCancel = function(callback) {
 		this.element.on("touchcancel", oneTouchEventHandlerFn(this, callback));
 	};
 

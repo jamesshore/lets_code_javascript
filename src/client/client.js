@@ -31,10 +31,10 @@ window.wwp = window.wwp || {};
 		domElement.onMouseLeave(endDrag);
 		domElement.onMouseUp(endDrag);
 
-		domElement.onOneTouchStart(startDrag);
-		domElement.onOneTouchMove(continueDrag);
-		domElement.onOneTouchEnd(endDrag);
-		domElement.onOneTouchCancel(endDrag);
+		domElement.onSingleTouchStart(startDrag);
+		domElement.onSingleTouchMove(continueDrag);
+		domElement.onSingleTouchEnd(endDrag);
+		domElement.onSingleTouchCancel(endDrag);
 
 		domElement.onMultiTouchStart(endDrag);
 	}
@@ -49,7 +49,7 @@ window.wwp = window.wwp || {};
 			event.preventDefault();
 		});
 
-		domElement.onOneTouchStart(function(relativeOffset, event) {
+		domElement.onSingleTouchStart(function(relativeOffset, event) {
 			event.preventDefault();
 		});
 	}
