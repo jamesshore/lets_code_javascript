@@ -20,7 +20,8 @@ Engineering Tasks:
   - test that em is converted px
 
 To Do on current task:
-- Finish moving event creation functions into _client_test.js
+- Finish moving multitouch event creation functions into _client_test.js
+- Test dom_element.js
 
 - Move all uses of JQuery into this abstraction so it is isolated in one place
 - DomElement constructor should expect raw DOM element, not JQuery element

@@ -151,32 +151,29 @@
 			describe("touch events", function() {
 
 				it("draw lines in response to touch events", function() {
-					touchStart(10, 40);
-					touchMove(5, 20);
-					touchEnd(5, 20);
-
+					drawingArea.touchStart(10, 40);
+					drawingArea.touchMove(5, 20);
+					drawingArea.touchEnd(5, 20);
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
 					]);
 				});
 
 				it("stops drawing lines when touch ends", function() {
-					touchStart(10, 40);
-					touchMove(5, 20);
-					touchEnd(5, 20);
-					touchMove(50, 60);
-
+					drawingArea.touchStart(10, 40);
+					drawingArea.touchMove(5, 20);
+					drawingArea.touchEnd(5, 20);
+					drawingArea.touchMove(50, 60);
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
 					]);
 				});
 
 				it("stop drawing lines when touch is cancelled", function() {
-					touchStart(10, 40);
-					touchMove(5, 20);
-					touchCancel(5, 20);
-					touchMove(50, 60);
-
+					drawingArea.touchStart(10, 40);
+					drawingArea.touchMove(5, 20);
+					drawingArea.touchCancel(5, 20);
+					drawingArea.touchMove(50, 60);
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
 					]);
@@ -186,14 +183,14 @@
 					oldDrawingArea.on("touchstart", function(event) {
 						expect(event.isDefaultPrevented()).to.be(true);
 					});
-					touchStart(10, 40);
-					touchMove(5, 20);
-					touchEnd(5, 20);
+					drawingArea.touchStart(10, 40);
+					drawingArea.touchMove(5, 20);
+					drawingArea.touchEnd(5, 20);
 				});
 
 				it("stops drawing when multiple touches occur", function() {
-					touchStart(10, 40);
-					touchMove(5, 20);
+					drawingArea.touchStart(10, 40);
+					drawingArea.touchMove(5, 20);
 					multipleTouchStart(5, 20, 6, 60);
 					multipleTouchMove(1, 10, 7, 70);
 					multipleTouchEnd(1, 10, 7, 70);
@@ -203,22 +200,6 @@
 					]);
 				});
 			});
-		}
-
-		function touchStart(relativeX, relativeY) {
-			sendSingleTouchEvent("touchstart", relativeX, relativeY);
-		}
-
-		function touchMove(relativeX, relativeY) {
-			sendSingleTouchEvent("touchmove", relativeX, relativeY);
-		}
-
-		function touchEnd(relativeX, relativeY) {
-			sendSingleTouchEvent("touchend", relativeX, relativeY);
-		}
-
-		function touchCancel(relativeX, relativeY) {
-			sendSingleTouchEvent("touchcancel", relativeX, relativeY);
 		}
 
 		function multipleTouchStart(relative1X, relative1Y, relative2X, relative2Y) {

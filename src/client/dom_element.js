@@ -1,5 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global wwp:true, $, jQuery */
+/*global wwp:true, $, jQuery, TouchList, Touch */
 
 window.wwp = window.wwp || {};
 
@@ -29,6 +29,62 @@ window.wwp = window.wwp || {};
 	DomElement.prototype.mouseUp = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mouseup", relativeX, relativeY);
 	};
+
+
+	DomElement.prototype.touchStart = function(relativeX, relativeY) {
+		sendSingleTouchEvent(this, "touchstart", relativeX, relativeY);
+	};
+
+	DomElement.prototype.touchMove = function(relativeX, relativeY) {
+		sendSingleTouchEvent(this, "touchmove", relativeX, relativeY);
+	};
+
+	DomElement.prototype.touchEnd = function(relativeX, relativeY) {
+		sendSingleTouchEvent(this, "touchend", relativeX, relativeY);
+	};
+
+	DomElement.prototype.touchCancel = function(relativeX, relativeY) {
+		sendSingleTouchEvent(this, "touchcancel", relativeX, relativeY);
+	};
+
+	function sendSingleTouchEvent(self, event, relativeX, relativeY) {
+		var touch = createTouch(self, self.pageOffset(relativeX, relativeY));
+		sendTouchEvent(self, event, new TouchList(touch));
+	}
+
+	function sendTouchEvent(self, event, touchList) {
+		var touchEvent = document.createEvent("TouchEvent");
+		touchEvent.initTouchEvent(
+			event, // event type
+			true, // canBubble
+			true, // cancelable
+			window, // DOM window
+			null, // detail (not sure what this is)
+			0, 0, // screenX/Y
+			0, 0, // clientX/Y
+			false, false, false, false, // meta keys (shift etc.)
+			touchList, touchList, touchList
+		);
+
+		var eventData = new jQuery.Event("event");
+		eventData.type = event;
+		eventData.originalEvent = touchEvent;
+		self.element.trigger(eventData);
+	}
+
+	function createTouch(self, pageOffset) {
+		var target = self.element[0];
+		var identifier = 0;
+		var pageX = pageOffset.x;
+		var pageY = pageOffset.y;
+		var screenX = 0;
+		var screenY = 0;
+
+		var touch = new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
+		return touch;
+	}
+
+
 
 	function sendMouseEvent(self, event, relativeX, relativeY) {
 		var jqElement = self.element;
