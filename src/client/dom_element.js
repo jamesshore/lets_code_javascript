@@ -10,121 +10,53 @@ window.wwp = window.wwp || {};
 		this.element = jqueryElement;
 	};
 
-	DomElement.prototype.selectStart = function(relativeX, relativeY) {
+	DomElement.prototype.doSelectStart = function(relativeX, relativeY) {
 		sendMouseEvent(this, "selectstart", relativeX, relativeY);
 	};
 
-	DomElement.prototype.mouseDown = function(relativeX, relativeY) {
+	DomElement.prototype.doMouseDown = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mousedown", relativeX, relativeY);
 	};
 
-	DomElement.prototype.mouseMove = function(relativeX, relativeY) {
+	DomElement.prototype.doMouseMove = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mousemove", relativeX, relativeY);
 	};
 
-	DomElement.prototype.mouseLeave = function(relativeX, relativeY) {
+	DomElement.prototype.doMouseLeave = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mouseleave", relativeX, relativeY);
 	};
 
-	DomElement.prototype.mouseUp = function(relativeX, relativeY) {
+	DomElement.prototype.doMouseUp = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mouseup", relativeX, relativeY);
 	};
 
-
-	DomElement.prototype.touchStart = function(relativeX, relativeY) {
+	DomElement.prototype.doSingleTouchStart = function(relativeX, relativeY) {
 		sendSingleTouchEvent(this, "touchstart", relativeX, relativeY);
 	};
 
-	DomElement.prototype.touchMove = function(relativeX, relativeY) {
+	DomElement.prototype.doSingleTouchMove = function(relativeX, relativeY) {
 		sendSingleTouchEvent(this, "touchmove", relativeX, relativeY);
 	};
 
-	DomElement.prototype.touchEnd = function(relativeX, relativeY) {
+	DomElement.prototype.doSingleTouchEnd = function(relativeX, relativeY) {
 		sendSingleTouchEvent(this, "touchend", relativeX, relativeY);
 	};
 
-	DomElement.prototype.touchCancel = function(relativeX, relativeY) {
+	DomElement.prototype.doSingleTouchCancel = function(relativeX, relativeY) {
 		sendSingleTouchEvent(this, "touchcancel", relativeX, relativeY);
 	};
 
-
-	DomElement.prototype.multipleTouchStart = function(relative1X, relative1Y, relative2X, relative2Y) {
+	DomElement.prototype.doMultiTouchStart = function(relative1X, relative1Y, relative2X, relative2Y) {
 		sendMultiTouchEvent(this, "touchstart", relative1X, relative1Y, relative2X, relative2Y);
 	};
 
-	DomElement.prototype.multipleTouchMove = function(relative1X, relative1Y, relative2X, relative2Y) {
+	DomElement.prototype.doMultiTouchMove = function(relative1X, relative1Y, relative2X, relative2Y) {
 		sendMultiTouchEvent(this, "touchmove", relative1X, relative1Y, relative2X, relative2Y);
 	};
 
-	DomElement.prototype.multipleTouchEnd = function(relative1X, relative1Y, relative2X, relative2Y) {
+	DomElement.prototype.doMultiTouchEnd = function(relative1X, relative1Y, relative2X, relative2Y) {
 		sendMultiTouchEvent(this, "touchend", relative1X, relative1Y, relative2X, relative2Y);
 	};
-
-
-
-	function sendMultiTouchEvent(self, event, relative1X, relative1Y, relative2X, relative2Y) {
-		var touch1 = createTouch(self, self.pageOffset(relative1X, relative1Y));
-		var touch2 = createTouch(self, self.pageOffset(relative2X, relative2Y));
-		sendTouchEvent(self, event, createTouchList(touch1, touch2));
-	}
-
-
-	function createTouchList(touchA, touchB) {
-		if (touchB === null) return new TouchList(touchA);
-		else return new TouchList(touchA, touchB);
-	}
-
-
-
-	function sendMouseEvent(self, event, relativeX, relativeY) {
-		var jqElement = self.element;
-
-		var page = self.pageOffset(relativeX, relativeY);
-		var eventData = new jQuery.Event();
-		eventData.pageX = page.x;
-		eventData.pageY = page.y;
-		eventData.type = event;
-		jqElement.trigger(eventData);
-	}
-
-	function sendSingleTouchEvent(self, event, relativeX, relativeY) {
-		var touch = createTouch(self, self.pageOffset(relativeX, relativeY));
-		sendTouchEvent(self, event, new TouchList(touch));
-	}
-
-	function sendTouchEvent(self, event, touchList) {
-		var touchEvent = document.createEvent("TouchEvent");
-		touchEvent.initTouchEvent(
-			event, // event type
-			true, // canBubble
-			true, // cancelable
-			window, // DOM window
-			null, // detail (not sure what this is)
-			0, 0, // screenX/Y
-			0, 0, // clientX/Y
-			false, false, false, false, // meta keys (shift etc.)
-			touchList, touchList, touchList
-		);
-
-		var eventData = new jQuery.Event("event");
-		eventData.type = event;
-		eventData.originalEvent = touchEvent;
-		self.element.trigger(eventData);
-	}
-
-	function createTouch(self, pageOffset) {
-		var target = self.element[0];
-		var identifier = 0;
-		var pageX = pageOffset.x;
-		var pageY = pageOffset.y;
-		var screenX = 0;
-		var screenY = 0;
-
-		var touch = new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
-		return touch;
-	}
-
-
 
 	DomElement.prototype.onSelectStart_ie8Only = function(callback) {
 		this.element.on("selectstart", callback);
@@ -206,6 +138,61 @@ window.wwp = window.wwp || {};
 
 			callback(offset, event);
 		};
+	}
+
+	function sendMouseEvent(self, event, relativeX, relativeY) {
+		var jqElement = self.element;
+
+		var page = self.pageOffset(relativeX, relativeY);
+		var eventData = new jQuery.Event();
+		eventData.pageX = page.x;
+		eventData.pageY = page.y;
+		eventData.type = event;
+		jqElement.trigger(eventData);
+	}
+
+	function sendSingleTouchEvent(self, event, relativeX, relativeY) {
+		var touch = createTouch(self, relativeX, relativeY);
+		sendTouchEvent(self, event, new TouchList(touch));
+	}
+
+	function sendMultiTouchEvent(self, event, relative1X, relative1Y, relative2X, relative2Y) {
+		var touch1 = createTouch(self, relative1X, relative1Y);
+		var touch2 = createTouch(self, relative2X, relative2Y);
+		sendTouchEvent(self, event, new TouchList(touch1, touch2));
+	}
+
+	function sendTouchEvent(self, event, touchList) {
+		var touchEvent = document.createEvent("TouchEvent");
+		touchEvent.initTouchEvent(
+			event, // event type
+			true, // canBubble
+			true, // cancelable
+			window, // DOM window
+			null, // detail (not sure what this is)
+			0, 0, // screenX/Y
+			0, 0, // clientX/Y
+			false, false, false, false, // meta keys (shift etc.)
+			touchList, touchList, touchList
+		);
+
+		var eventData = new jQuery.Event("event");
+		eventData.type = event;
+		eventData.originalEvent = touchEvent;
+		self.element.trigger(eventData);
+	}
+
+	function createTouch(self, relativeX, relativeY) {
+		var pageOffset = self.pageOffset(relativeX, relativeY);
+
+		var target = self.element[0];
+		var identifier = 0;
+		var pageX = pageOffset.x;
+		var pageY = pageOffset.y;
+		var screenX = 0;
+		var screenY = 0;
+
+		return new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
 	}
 
 }());
