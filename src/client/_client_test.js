@@ -203,67 +203,15 @@
 		}
 
 		function multipleTouchStart(relative1X, relative1Y, relative2X, relative2Y) {
-			sendMultiTouchEvent("touchstart", relative1X, relative1Y, relative2X, relative2Y);
+			drawingArea.multipleTouchStart(relative1X, relative1Y, relative2X, relative2Y);
 		}
 
 		function multipleTouchMove(relative1X, relative1Y, relative2X, relative2Y) {
-			sendMultiTouchEvent("touchmove", relative1X, relative1Y, relative2X, relative2Y);
+			drawingArea.multipleTouchMove(relative1X, relative1Y, relative2X, relative2Y);
 		}
 
 		function multipleTouchEnd(relative1X, relative1Y, relative2X, relative2Y) {
-			sendMultiTouchEvent("touchend", relative1X, relative1Y, relative2X, relative2Y);
-		}
-
-		function sendSingleTouchEvent(event, relativeX, relativeY) {
-			var jqElement = oldDrawingArea;
-
-			var touch = createTouch(jqElement, drawingArea.pageOffset(relativeX, relativeY));
-			sendTouchEvent(event, new TouchList(touch), jqElement);
-		}
-
-		function sendMultiTouchEvent(event, relative1X, relative1Y, relative2X, relative2Y) {
-			var jqElement = oldDrawingArea;
-
-			var touch1 = createTouch(jqElement, drawingArea.pageOffset(relative1X, relative1Y));
-			var touch2 = createTouch(jqElement, drawingArea.pageOffset(relative2X, relative2Y));
-			sendTouchEvent(event, createTouchList(touch1, touch2), jqElement);
-		}
-
-		function sendTouchEvent(event, touchList, jqElement) {
-			var touchEvent = document.createEvent("TouchEvent");
-			touchEvent.initTouchEvent(
-				event, // event type
-				true, // canBubble
-				true, // cancelable
-				window, // DOM window
-				null, // detail (not sure what this is)
-				0, 0, // screenX/Y
-				0, 0, // clientX/Y
-				false, false, false, false, // meta keys (shift etc.)
-				touchList, touchList, touchList
-			);
-
-			var eventData = new jQuery.Event("event");
-			eventData.type = event;
-			eventData.originalEvent = touchEvent;
-			jqElement.trigger(eventData);
-		}
-
-		function createTouchList(touchA, touchB) {
-			if (touchB === null) return new TouchList(touchA);
-			else return new TouchList(touchA, touchB);
-		}
-
-		function createTouch(jqElement, pageOffset) {
-			var target = jqElement[0];
-			var identifier = 0;
-			var pageX = pageOffset.x;
-			var pageY = pageOffset.y;
-			var screenX = 0;
-			var screenY = 0;
-
-			var touch = new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
-			return touch;
+			drawingArea.multipleTouchEnd(relative1X, relative1Y, relative2X, relative2Y);
 		}
 
 		function browserSupportsTouchEvents() {

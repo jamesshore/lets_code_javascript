@@ -47,6 +47,46 @@ window.wwp = window.wwp || {};
 		sendSingleTouchEvent(this, "touchcancel", relativeX, relativeY);
 	};
 
+
+	DomElement.prototype.multipleTouchStart = function(relative1X, relative1Y, relative2X, relative2Y) {
+		sendMultiTouchEvent(this, "touchstart", relative1X, relative1Y, relative2X, relative2Y);
+	};
+
+	DomElement.prototype.multipleTouchMove = function(relative1X, relative1Y, relative2X, relative2Y) {
+		sendMultiTouchEvent(this, "touchmove", relative1X, relative1Y, relative2X, relative2Y);
+	};
+
+	DomElement.prototype.multipleTouchEnd = function(relative1X, relative1Y, relative2X, relative2Y) {
+		sendMultiTouchEvent(this, "touchend", relative1X, relative1Y, relative2X, relative2Y);
+	};
+
+
+
+	function sendMultiTouchEvent(self, event, relative1X, relative1Y, relative2X, relative2Y) {
+		var touch1 = createTouch(self, self.pageOffset(relative1X, relative1Y));
+		var touch2 = createTouch(self, self.pageOffset(relative2X, relative2Y));
+		sendTouchEvent(self, event, createTouchList(touch1, touch2));
+	}
+
+
+	function createTouchList(touchA, touchB) {
+		if (touchB === null) return new TouchList(touchA);
+		else return new TouchList(touchA, touchB);
+	}
+
+
+
+	function sendMouseEvent(self, event, relativeX, relativeY) {
+		var jqElement = self.element;
+
+		var page = self.pageOffset(relativeX, relativeY);
+		var eventData = new jQuery.Event();
+		eventData.pageX = page.x;
+		eventData.pageY = page.y;
+		eventData.type = event;
+		jqElement.trigger(eventData);
+	}
+
 	function sendSingleTouchEvent(self, event, relativeX, relativeY) {
 		var touch = createTouch(self, self.pageOffset(relativeX, relativeY));
 		sendTouchEvent(self, event, new TouchList(touch));
@@ -84,18 +124,6 @@ window.wwp = window.wwp || {};
 		return touch;
 	}
 
-
-
-	function sendMouseEvent(self, event, relativeX, relativeY) {
-		var jqElement = self.element;
-
-		var page = self.pageOffset(relativeX, relativeY);
-		var eventData = new jQuery.Event();
-		eventData.pageX = page.x;
-		eventData.pageY = page.y;
-		eventData.type = event;
-		jqElement.trigger(eventData);
-	}
 
 
 	DomElement.prototype.onSelectStart_ie8Only = function(callback) {
