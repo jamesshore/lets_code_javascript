@@ -40,7 +40,7 @@ window.wwp = window.wwp || {};
 	}
 
 	function preventDefaults() {
-		domElement.onSelectStart_ie8Only(function(event) {
+		domElement.onSelectStart_ie8Only(function(relativeOffset, event) {
 			// This event handler is needed so IE 8 doesn't select text when you drag outside drawing area
 			event.preventDefault();
 		});

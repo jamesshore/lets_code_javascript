@@ -131,7 +131,7 @@
 			});
 
 			it("does not allow text to be selected outside drawing area when drag starts within drawing area", function() {
-				oldDrawingArea.mousedown(function(event) {
+				drawingArea.onMouseDown(function(offset, event) {
 					expect(event.isDefaultPrevented()).to.be(true);
 				});
 				drawingArea.doMouseDown(20, 30);
@@ -140,7 +140,7 @@
 			});
 
 			it("does not allow text to be selected outside drawing area even -- INCLUDING IE 8", function() {
-				oldDrawingArea.on("selectstart", function(event) {
+				drawingArea.onSelectStart_ie8Only(function(offset, event) {
 					expect(event.isDefaultPrevented()).to.be(true);
 				});
 				drawingArea.doSelectStart(20, 30);
@@ -180,7 +180,7 @@
 				});
 
 				it("does not scroll or zoom the page when user is drawing with finger", function() {
-					oldDrawingArea.on("touchstart", function(event) {
+					drawingArea.onSingleTouchStart(function(offset, event) {
 						expect(event.isDefaultPrevented()).to.be(true);
 					});
 					drawingArea.doSingleTouchStart(10, 40);
@@ -191,27 +191,14 @@
 				it("stops drawing when multiple touches occur", function() {
 					drawingArea.doSingleTouchStart(10, 40);
 					drawingArea.doSingleTouchMove(5, 20);
-					multipleTouchStart(5, 20, 6, 60);
-					multipleTouchMove(1, 10, 7, 70);
-					multipleTouchEnd(1, 10, 7, 70);
-
+					drawingArea.doMultiTouchStart(5, 20, 6, 60);
+					drawingArea.doMultiTouchMove(1, 10, 7, 70);
+					drawingArea.doMultiTouchEnd(1, 10, 7, 70);
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
 					]);
 				});
 			});
-		}
-
-		function multipleTouchStart(relative1X, relative1Y, relative2X, relative2Y) {
-			drawingArea.doMultiTouchStart(relative1X, relative1Y, relative2X, relative2Y);
-		}
-
-		function multipleTouchMove(relative1X, relative1Y, relative2X, relative2Y) {
-			drawingArea.doMultiTouchMove(relative1X, relative1Y, relative2X, relative2Y);
-		}
-
-		function multipleTouchEnd(relative1X, relative1Y, relative2X, relative2Y) {
-			drawingArea.doMultiTouchEnd(relative1X, relative1Y, relative2X, relative2Y);
 		}
 
 		function browserSupportsTouchEvents() {

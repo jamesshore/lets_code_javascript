@@ -14,17 +14,17 @@ User Stories:
 
 Engineering Tasks:
 - Simplifying and improving the code
+  - Create Raphaël abstraction
   - Modify Lint settings for client global variables (off-camera)
 - click tracking needs to account for margin, border, and padding
   - figure out how to factor out common setup code
   - test that em is converted px
 
 To Do on current task:
-- Finish moving multitouch event creation functions into _client_test.js
-- Test dom_element.js
-
+- Finish getting rid of oldDrawingArea in _client_test.js
 - Move all uses of JQuery into this abstraction so it is isolated in one place
 - DomElement constructor should expect raw DOM element, not JQuery element
+- Test dom_element.js
 
 
 

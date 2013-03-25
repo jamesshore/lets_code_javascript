@@ -59,7 +59,7 @@ window.wwp = window.wwp || {};
 	};
 
 	DomElement.prototype.onSelectStart_ie8Only = function(callback) {
-		this.element.on("selectstart", callback);
+		this.element.on("selectstart", mouseEventHandlerFn(this, callback));
 	};
 
 	DomElement.prototype.onMouseDown = function(callback) {
