@@ -6,106 +6,110 @@ window.wwp = window.wwp || {};
 (function() {
 	"use strict";
 
-	var DomElement = wwp.DomElement = function(jqueryElement) {
-		this.element = jqueryElement;
+	var HtmlElement = wwp.HtmlElement = function(jqueryElement) {
+		this._element = jqueryElement;
 	};
 
-	DomElement.fromHtml = function(html) {
-		return new wwp.DomElement($(html));
+	HtmlElement.fromHtml = function(html) {
+		return new wwp.HtmlElement($(html));
 	};
 
-	DomElement.prototype.append = function(elementToAppend) {
-		this.element.append(elementToAppend.element);
+	HtmlElement.prototype.append = function(elementToAppend) {
+		this._element.append(elementToAppend._element);
 	};
 
-	DomElement.prototype.doSelectStart = function(relativeX, relativeY) {
+	HtmlElement.prototype.remove = function() {
+		this._element.remove();
+	};
+
+	HtmlElement.prototype.doSelectStart = function(relativeX, relativeY) {
 		sendMouseEvent(this, "selectstart", relativeX, relativeY);
 	};
 
-	DomElement.prototype.doMouseDown = function(relativeX, relativeY) {
+	HtmlElement.prototype.doMouseDown = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mousedown", relativeX, relativeY);
 	};
 
-	DomElement.prototype.doMouseMove = function(relativeX, relativeY) {
+	HtmlElement.prototype.doMouseMove = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mousemove", relativeX, relativeY);
 	};
 
-	DomElement.prototype.doMouseLeave = function(relativeX, relativeY) {
+	HtmlElement.prototype.doMouseLeave = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mouseleave", relativeX, relativeY);
 	};
 
-	DomElement.prototype.doMouseUp = function(relativeX, relativeY) {
+	HtmlElement.prototype.doMouseUp = function(relativeX, relativeY) {
 		sendMouseEvent(this, "mouseup", relativeX, relativeY);
 	};
 
-	DomElement.prototype.doSingleTouchStart = function(relativeX, relativeY) {
+	HtmlElement.prototype.doSingleTouchStart = function(relativeX, relativeY) {
 		sendSingleTouchEvent(this, "touchstart", relativeX, relativeY);
 	};
 
-	DomElement.prototype.doSingleTouchMove = function(relativeX, relativeY) {
+	HtmlElement.prototype.doSingleTouchMove = function(relativeX, relativeY) {
 		sendSingleTouchEvent(this, "touchmove", relativeX, relativeY);
 	};
 
-	DomElement.prototype.doSingleTouchEnd = function(relativeX, relativeY) {
+	HtmlElement.prototype.doSingleTouchEnd = function(relativeX, relativeY) {
 		sendSingleTouchEvent(this, "touchend", relativeX, relativeY);
 	};
 
-	DomElement.prototype.doSingleTouchCancel = function(relativeX, relativeY) {
+	HtmlElement.prototype.doSingleTouchCancel = function(relativeX, relativeY) {
 		sendSingleTouchEvent(this, "touchcancel", relativeX, relativeY);
 	};
 
-	DomElement.prototype.doMultiTouchStart = function(relative1X, relative1Y, relative2X, relative2Y) {
+	HtmlElement.prototype.doMultiTouchStart = function(relative1X, relative1Y, relative2X, relative2Y) {
 		sendMultiTouchEvent(this, "touchstart", relative1X, relative1Y, relative2X, relative2Y);
 	};
 
-	DomElement.prototype.doMultiTouchMove = function(relative1X, relative1Y, relative2X, relative2Y) {
+	HtmlElement.prototype.doMultiTouchMove = function(relative1X, relative1Y, relative2X, relative2Y) {
 		sendMultiTouchEvent(this, "touchmove", relative1X, relative1Y, relative2X, relative2Y);
 	};
 
-	DomElement.prototype.doMultiTouchEnd = function(relative1X, relative1Y, relative2X, relative2Y) {
+	HtmlElement.prototype.doMultiTouchEnd = function(relative1X, relative1Y, relative2X, relative2Y) {
 		sendMultiTouchEvent(this, "touchend", relative1X, relative1Y, relative2X, relative2Y);
 	};
 
-	DomElement.prototype.onSelectStart_ie8Only = function(callback) {
-		this.element.on("selectstart", mouseEventHandlerFn(this, callback));
+	HtmlElement.prototype.onSelectStart_ie8Only = function(callback) {
+		this._element.on("selectstart", mouseEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onMouseDown = function(callback) {
-		this.element.mousedown(mouseEventHandlerFn(this, callback));
+	HtmlElement.prototype.onMouseDown = function(callback) {
+		this._element.mousedown(mouseEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onMouseMove = function(callback) {
+	HtmlElement.prototype.onMouseMove = function(callback) {
 		var self = this;
-		this.element.mousemove(mouseEventHandlerFn(this, callback));
+		this._element.mousemove(mouseEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onMouseLeave = function(callback) {
-		this.element.mouseleave(mouseEventHandlerFn(this, callback));
+	HtmlElement.prototype.onMouseLeave = function(callback) {
+		this._element.mouseleave(mouseEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onMouseUp = function(callback) {
-		this.element.mouseup(mouseEventHandlerFn(this, callback));
+	HtmlElement.prototype.onMouseUp = function(callback) {
+		this._element.mouseup(mouseEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onSingleTouchStart = function(callback) {
-		this.element.on("touchstart", oneTouchEventHandlerFn(this, callback));
+	HtmlElement.prototype.onSingleTouchStart = function(callback) {
+		this._element.on("touchstart", oneTouchEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onSingleTouchMove = function(callback) {
-		this.element.on("touchmove", oneTouchEventHandlerFn(this, callback));
+	HtmlElement.prototype.onSingleTouchMove = function(callback) {
+		this._element.on("touchmove", oneTouchEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onSingleTouchEnd = function(callback) {
-		this.element.on("touchend", oneTouchEventHandlerFn(this, callback));
+	HtmlElement.prototype.onSingleTouchEnd = function(callback) {
+		this._element.on("touchend", oneTouchEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onSingleTouchCancel = function(callback) {
-		this.element.on("touchcancel", oneTouchEventHandlerFn(this, callback));
+	HtmlElement.prototype.onSingleTouchCancel = function(callback) {
+		this._element.on("touchcancel", oneTouchEventHandlerFn(this, callback));
 	};
 
-	DomElement.prototype.onMultiTouchStart = function(callback) {
+	HtmlElement.prototype.onMultiTouchStart = function(callback) {
 		var self = this;
-		this.element.on("touchstart", function(event) {
+		this._element.on("touchstart", function(event) {
 			var originalEvent = event.originalEvent;
 			if (originalEvent.touches.length !== 1) callback();
 		});
@@ -132,7 +136,7 @@ window.wwp = window.wwp || {};
 	}
 
 	function sendMouseEvent(self, event, relativeX, relativeY) {
-		var jqElement = self.element;
+		var jqElement = self._element;
 
 		var page = pageOffset(self, relativeX, relativeY);
 		var eventData = new jQuery.Event();
@@ -170,13 +174,13 @@ window.wwp = window.wwp || {};
 		var eventData = new jQuery.Event("event");
 		eventData.type = event;
 		eventData.originalEvent = touchEvent;
-		self.element.trigger(eventData);
+		self._element.trigger(eventData);
 	}
 
 	function createTouch(self, relativeX, relativeY) {
 		var offset = pageOffset(self, relativeX, relativeY);
 
-		var target = self.element[0];
+		var target = self._element[0];
 		var identifier = 0;
 		var pageX = offset.x;
 		var pageY = offset.y;
@@ -187,7 +191,7 @@ window.wwp = window.wwp || {};
 	}
 
 	function relativeOffset(self, pageX, pageY) {
-		var pageOffset = self.element.offset();
+		var pageOffset = self._element.offset();
 
 		return {
 			x: pageX - pageOffset.left,
@@ -196,7 +200,7 @@ window.wwp = window.wwp || {};
 	}
 
 	function pageOffset(self, relativeX, relativeY) {
-		var topLeftOfDrawingArea = self.element.offset();
+		var topLeftOfDrawingArea = self._element.offset();
 		return {
 			x: relativeX + topLeftOfDrawingArea.left,
 			y: relativeY + topLeftOfDrawingArea.top

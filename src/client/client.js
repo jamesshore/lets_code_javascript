@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global dump, Raphael, $, wwp:true, Event*/
+/*global dump, Raphael, wwp:true, Event*/
 
 window.wwp = window.wwp || {};
 
@@ -10,11 +10,11 @@ window.wwp = window.wwp || {};
 	var start = null;
 	var drawingArea;
 
-	wwp.initializeDrawingArea = function(domElement) {
+	wwp.initializeDrawingArea = function(htmlElement) {
 		if (paper !== null) throw new Error("Client.js is not re-entrant");
-		drawingArea = domElement;
+		drawingArea = htmlElement;
 
-		paper = new Raphael(drawingArea.element[0]);
+		paper = new Raphael(drawingArea._element[0]);
 		handleDragEvents();
 		return paper;
 	};

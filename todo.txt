@@ -17,19 +17,13 @@ User Stories:
 
 Engineering Tasks:
 * Simplify and improve the code
-  * Create DomElement abstraction
   - Introduce modules
     - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
   - Create Raphaël abstraction
   - Modify Lint settings for client global variables (off-camera)
 
 To Do on current task:
-* Finish getting rid of oldDrawingArea in _client_test.js
-- Make DomElement.element private
-- Move all uses of JQuery into this abstraction so it is isolated in one place
-- DomElement constructor should expect raw DOM element, not JQuery element
-- Rename DomElement to HtmlElement
-
+-
 
 
 - Factor out common code between touch events and mouse events

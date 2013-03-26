@@ -7,23 +7,21 @@
 	mocha.setup({ignoreLeaks: true});
 
 	describe("Drawing area", function() {
-		var oldDrawingArea;
 		var drawingArea;
 		var documentBody;
 		var paper;
 
 		beforeEach(function() {
-			drawingArea = wwp.DomElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
-			oldDrawingArea = drawingArea.element;
+			drawingArea = wwp.HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 
-			documentBody = new wwp.DomElement($(document.body));
-			$(document.body).append(oldDrawingArea);
+			documentBody = new wwp.HtmlElement($(document.body));
+			documentBody.append(drawingArea);
 			paper = wwp.initializeDrawingArea(drawingArea);
 		});
 
 		afterEach(function() {
-			oldDrawingArea.remove();
-			wwp.drawingAreaHasBeenRemovedFromDom(oldDrawingArea[0]);
+			drawingArea.remove();
+			wwp.drawingAreaHasBeenRemovedFromDom();
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
@@ -36,6 +34,7 @@
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseUp(50, 60);
+
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60]
 				]);
@@ -47,6 +46,7 @@
 				drawingArea.doMouseMove(40, 20);
 				drawingArea.doMouseMove(10, 15);
 				drawingArea.doMouseUp(10, 15);
+
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60],
 					[50, 60, 40, 20],
@@ -58,10 +58,13 @@
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseUp(50, 60);
+
 				drawingArea.doMouseMove(40, 20);
+
 				drawingArea.doMouseDown(30, 25);
 				drawingArea.doMouseMove(10, 15);
 				drawingArea.doMouseUp(10, 15);
+
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60],
 					[30, 25, 10, 15]
@@ -71,12 +74,14 @@
 			it("does not draw line segment when mouse button is released", function() {
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseUp(50, 60);
+
 				expect(lineSegments()).to.eql([]);
 			});
 
 			it("does not draw line segments when mouse button has never been pushed", function() {
 				drawingArea.doMouseMove(20, 30);
 				drawingArea.doMouseMove(50, 60);
+
 				expect(lineSegments()).to.eql([]);
 			});
 
@@ -84,7 +89,9 @@
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseUp(50, 60);
+
 				drawingArea.doMouseMove(10, 15);
+
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60]
 				]);
@@ -94,9 +101,11 @@
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseLeave(700, 70);
+
 				documentBody.doMouseMove(700, 70);
 				drawingArea.doMouseMove(90, 40);
 				drawingArea.doMouseUp(90, 40);
+
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60]
 				]);
@@ -106,15 +115,19 @@
 				documentBody.doMouseDown(601, 150);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseUp(50, 60);
+
 				documentBody.doMouseDown(-1, 150);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseUp(50, 60);
+
 				documentBody.doMouseDown(120, 301);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseUp(50, 60);
+
 				documentBody.doMouseDown(-1, 301);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseUp(50, 60);
+
 				expect(lineSegments()).to.eql([]);
 			});
 
@@ -122,9 +135,11 @@
 				drawingArea.doMouseDown(600, 300);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseUp(50, 60);
+
 				drawingArea.doMouseDown(0, 0);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseUp(50, 60);
+
 				expect(lineSegments()).to.eql([
 					[600, 300, 50, 60],
 					[0, 0, 50, 60]
@@ -135,6 +150,7 @@
 				drawingArea.onMouseDown(function(offset, event) {
 					expect(event.isDefaultPrevented()).to.be(true);
 				});
+
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(90, 40);
 				drawingArea.doMouseUp(90, 40);
@@ -144,6 +160,7 @@
 				drawingArea.onSelectStart_ie8Only(function(offset, event) {
 					expect(event.isDefaultPrevented()).to.be(true);
 				});
+
 				drawingArea.doSelectStart(20, 30);
 			});
 		});
@@ -155,6 +172,7 @@
 					drawingArea.doSingleTouchStart(10, 40);
 					drawingArea.doSingleTouchMove(5, 20);
 					drawingArea.doSingleTouchEnd(5, 20);
+
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
 					]);
@@ -164,7 +182,9 @@
 					drawingArea.doSingleTouchStart(10, 40);
 					drawingArea.doSingleTouchMove(5, 20);
 					drawingArea.doSingleTouchEnd(5, 20);
+
 					drawingArea.doSingleTouchMove(50, 60);
+
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
 					]);
@@ -174,7 +194,9 @@
 					drawingArea.doSingleTouchStart(10, 40);
 					drawingArea.doSingleTouchMove(5, 20);
 					drawingArea.doSingleTouchCancel(5, 20);
+
 					drawingArea.doSingleTouchMove(50, 60);
+
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
 					]);
@@ -184,6 +206,7 @@
 					drawingArea.onSingleTouchStart(function(offset, event) {
 						expect(event.isDefaultPrevented()).to.be(true);
 					});
+
 					drawingArea.doSingleTouchStart(10, 40);
 					drawingArea.doSingleTouchMove(5, 20);
 					drawingArea.doSingleTouchEnd(5, 20);
@@ -192,9 +215,11 @@
 				it("stops drawing when multiple touches occur", function() {
 					drawingArea.doSingleTouchStart(10, 40);
 					drawingArea.doSingleTouchMove(5, 20);
+
 					drawingArea.doMultiTouchStart(5, 20, 6, 60);
 					drawingArea.doMultiTouchMove(1, 10, 7, 70);
 					drawingArea.doMultiTouchEnd(1, 10, 7, 70);
+
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
 					]);
