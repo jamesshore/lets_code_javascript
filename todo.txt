@@ -10,17 +10,18 @@ Minimum Marketable Features:
 
 User Stories:
 * Draw a line in response to iOS touch
+- click tracking needs to account for margin, border, and padding
+  - figure out how to factor out common setup code
+  - test that em is converted px
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
 * Simplify and improve the code
   * Create DomElement abstraction
   - Introduce modules
+    - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
   - Create Raphaël abstraction
   - Modify Lint settings for client global variables (off-camera)
-- click tracking needs to account for margin, border, and padding
-  - figure out how to factor out common setup code
-  - test that em is converted px
 
 To Do on current task:
 * Finish testing dom_element.js - focusing on getting mouse events under test

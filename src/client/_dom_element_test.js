@@ -21,10 +21,12 @@
 		});
 
 		it("handles touch events", function() {
-//				testEvent(domElement.onSingleTouchStart, domElement.doSingleTouchStart);
-//				testEvent(domElement.onSingleTouchMove, domElement.doSingleTouchMove);
-//				testEvent(domElement.onSingleTouchEnd, domElement.doSingleTouchEnd);
-//				testEvent(domElement.onSingleTouchCancel, domElement.doSingleTouchEnd);
+			if (!browserSupportsTouchEvents()) return;
+
+			testEvent(domElement.onSingleTouchStart, domElement.doSingleTouchStart);
+			testEvent(domElement.onSingleTouchMove, domElement.doSingleTouchMove);
+			testEvent(domElement.onSingleTouchEnd, domElement.doSingleTouchEnd);
+			testEvent(domElement.onSingleTouchCancel, domElement.doSingleTouchCancel);
 		});
 
 		function testEvent(eventSender, eventHandler) {
@@ -34,6 +36,10 @@
 			});
 			eventHandler.call(domElement, 42, 13);
 			expect(eventOffset).to.eql({ x: 42, y: 13});
+		}
+
+		function browserSupportsTouchEvents() {
+			return (typeof Touch !== "undefined");
 		}
 
 
