@@ -8,14 +8,14 @@ window.wwp = window.wwp || {};
 
 	var paper = null;
 	var start = null;
-	var domElement;
+	var drawingArea;
 
-	wwp.initializeDrawingArea = function(drawingAreaElement) {
+	wwp.initializeDrawingArea = function(domElement) {
 		if (paper !== null) throw new Error("Client.js is not re-entrant");
-		domElement = new wwp.DomElement($(drawingAreaElement));
+		drawingArea = domElement;
 
-		paper = new Raphael(drawingAreaElement);
-		handleDragEvents(drawingAreaElement);
+		paper = new Raphael(drawingArea.element[0]);
+		handleDragEvents();
 		return paper;
 	};
 
@@ -23,33 +23,33 @@ window.wwp = window.wwp || {};
 		paper = null;
 	};
 
-	function handleDragEvents(drawingAreaElement) {
+	function handleDragEvents() {
 		preventDefaults();
 
-		domElement.onMouseDown(startDrag);
-		domElement.onMouseMove(continueDrag);
-		domElement.onMouseLeave(endDrag);
-		domElement.onMouseUp(endDrag);
+		drawingArea.onMouseDown(startDrag);
+		drawingArea.onMouseMove(continueDrag);
+		drawingArea.onMouseLeave(endDrag);
+		drawingArea.onMouseUp(endDrag);
 
-		domElement.onSingleTouchStart(startDrag);
-		domElement.onSingleTouchMove(continueDrag);
-		domElement.onSingleTouchEnd(endDrag);
-		domElement.onSingleTouchCancel(endDrag);
+		drawingArea.onSingleTouchStart(startDrag);
+		drawingArea.onSingleTouchMove(continueDrag);
+		drawingArea.onSingleTouchEnd(endDrag);
+		drawingArea.onSingleTouchCancel(endDrag);
 
-		domElement.onMultiTouchStart(endDrag);
+		drawingArea.onMultiTouchStart(endDrag);
 	}
 
 	function preventDefaults() {
-		domElement.onSelectStart_ie8Only(function(relativeOffset, event) {
+		drawingArea.onSelectStart_ie8Only(function(relativeOffset, event) {
 			// This event handler is needed so IE 8 doesn't select text when you drag outside drawing area
 			event.preventDefault();
 		});
 
-		domElement.onMouseDown(function(relativeOffset, event) {
+		drawingArea.onMouseDown(function(relativeOffset, event) {
 			event.preventDefault();
 		});
 
-		domElement.onSingleTouchStart(function(relativeOffset, event) {
+		drawingArea.onSingleTouchStart(function(relativeOffset, event) {
 			event.preventDefault();
 		});
 	}

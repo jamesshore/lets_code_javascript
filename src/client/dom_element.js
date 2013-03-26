@@ -10,6 +10,10 @@ window.wwp = window.wwp || {};
 		this.element = jqueryElement;
 	};
 
+	DomElement.fromHtml = function(html) {
+		return new wwp.DomElement($(html));
+	};
+
 	DomElement.prototype.doSelectStart = function(relativeX, relativeY) {
 		sendMouseEvent(this, "selectstart", relativeX, relativeY);
 	};

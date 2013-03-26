@@ -13,11 +13,12 @@
 		var paper;
 
 		beforeEach(function() {
-			oldDrawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
-			drawingArea = new wwp.DomElement(oldDrawingArea);
+			drawingArea = wwp.DomElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
+			oldDrawingArea = drawingArea.element;
+
 			documentBody = new wwp.DomElement($(document.body));
 			$(document.body).append(oldDrawingArea);
-			paper = wwp.initializeDrawingArea(oldDrawingArea[0]);
+			paper = wwp.initializeDrawingArea(drawingArea);
 		});
 
 		afterEach(function() {

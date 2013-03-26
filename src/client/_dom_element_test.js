@@ -9,7 +9,7 @@
 		var domElement;
 
 		beforeEach(function() {
-			domElement = new wwp.DomElement($("<div></div>"));
+			domElement = wwp.DomElement.fromHtml("<div></div>");
 		});
 
 		it("handles mouse events", function() {

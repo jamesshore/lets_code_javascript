@@ -25,6 +25,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Finish getting rid of oldDrawingArea in _client_test.js
+- Make DomElement.element private
 - Move all uses of JQuery into this abstraction so it is isolated in one place
 - DomElement constructor should expect raw DOM element, not JQuery element
 
