@@ -14,6 +14,10 @@ window.wwp = window.wwp || {};
 		return new wwp.DomElement($(html));
 	};
 
+	DomElement.prototype.append = function(elementToAppend) {
+		this.element.append(elementToAppend.element);
+	};
+
 	DomElement.prototype.doSelectStart = function(relativeX, relativeY) {
 		sendMouseEvent(this, "selectstart", relativeX, relativeY);
 	};

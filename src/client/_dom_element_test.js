@@ -1,5 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global describe, it, expect, beforeEach, wwp, $ */
+/*global describe, it, expect, beforeEach, wwp, $, dump */
 
 (function() {
 	"use strict";
@@ -27,6 +27,11 @@
 			testEvent(domElement.onSingleTouchMove, domElement.doSingleTouchMove);
 			testEvent(domElement.onSingleTouchEnd, domElement.doSingleTouchEnd);
 			testEvent(domElement.onSingleTouchCancel, domElement.doSingleTouchCancel);
+		});
+
+		it("appends elements", function() {
+			domElement.append(wwp.DomElement.fromHtml("<div></div>"));
+			expect(domElement.element.children().length).to.equal(1);
 		});
 
 		function testEvent(eventSender, eventHandler) {
