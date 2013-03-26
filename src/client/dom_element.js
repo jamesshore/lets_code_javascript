@@ -103,26 +103,9 @@ window.wwp = window.wwp || {};
 		});
 	};
 
-	DomElement.prototype.relativeOffset = function(pageX, pageY) {
-		var pageOffset = this.element.offset();
-
-		return {
-			x: pageX - pageOffset.left,
-			y: pageY - pageOffset.top
-		};
-	};
-
-	DomElement.prototype.pageOffset = function(relativeX, relativeY) {
-		var topLeftOfDrawingArea = this.element.offset();
-		return {
-			x: relativeX + topLeftOfDrawingArea.left,
-			y: relativeY + topLeftOfDrawingArea.top
-		};
-	};
-
 	function mouseEventHandlerFn(self, callback) {
 		return function(event) {
-			var offset = self.relativeOffset(event.pageX, event.pageY);
+			var offset = relativeOffset(self, event.pageX, event.pageY);
 			callback(offset, event);
 		};
 	}
@@ -134,7 +117,7 @@ window.wwp = window.wwp || {};
 
 			var pageX = originalEvent.touches[0].pageX;
 			var pageY = originalEvent.touches[0].pageY;
-			var offset = self.relativeOffset(pageX, pageY);
+			var offset = relativeOffset(self, pageX, pageY);
 
 			callback(offset, event);
 		};
@@ -143,7 +126,7 @@ window.wwp = window.wwp || {};
 	function sendMouseEvent(self, event, relativeX, relativeY) {
 		var jqElement = self.element;
 
-		var page = self.pageOffset(relativeX, relativeY);
+		var page = pageOffset(self, relativeX, relativeY);
 		var eventData = new jQuery.Event();
 		eventData.pageX = page.x;
 		eventData.pageY = page.y;
@@ -183,16 +166,33 @@ window.wwp = window.wwp || {};
 	}
 
 	function createTouch(self, relativeX, relativeY) {
-		var pageOffset = self.pageOffset(relativeX, relativeY);
+		var offset = pageOffset(self, relativeX, relativeY);
 
 		var target = self.element[0];
 		var identifier = 0;
-		var pageX = pageOffset.x;
-		var pageY = pageOffset.y;
+		var pageX = offset.x;
+		var pageY = offset.y;
 		var screenX = 0;
 		var screenY = 0;
 
 		return new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
+	}
+
+	function relativeOffset(self, pageX, pageY) {
+		var pageOffset = self.element.offset();
+
+		return {
+			x: pageX - pageOffset.left,
+			y: pageY - pageOffset.top
+		};
+	}
+
+	function pageOffset(self, relativeX, relativeY) {
+		var topLeftOfDrawingArea = self.element.offset();
+		return {
+			x: relativeX + topLeftOfDrawingArea.left,
+			y: relativeY + topLeftOfDrawingArea.top
+		};
 	}
 
 }());

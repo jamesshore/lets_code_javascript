@@ -24,9 +24,7 @@ Engineering Tasks:
   - Modify Lint settings for client global variables (off-camera)
 
 To Do on current task:
-* Finish testing dom_element.js - focusing on getting mouse events under test
-- Test dom_element positioning
-- Finish getting rid of oldDrawingArea in _client_test.js
+* Finish getting rid of oldDrawingArea in _client_test.js
 - Move all uses of JQuery into this abstraction so it is isolated in one place
 - DomElement constructor should expect raw DOM element, not JQuery element
 
