@@ -23,7 +23,7 @@ Engineering Tasks:
   - Modify Lint settings for client global variables (off-camera)
 
 To Do on current task:
--
+- BEFORE RECORDING: Add tests for multi-touch events (explain at beginning of next chapter)
 
 
 - Factor out common code between touch events and mouse events
