@@ -1,5 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global describe, it, expect, beforeEach, wwp, $, dump */
+/*global $ */
 
 (function() {
 	"use strict";

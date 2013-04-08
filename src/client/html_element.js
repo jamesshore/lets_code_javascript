@@ -1,5 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global wwp:true, $, jQuery, TouchList, Touch */
+/*global $, jQuery, TouchList, Touch */
 
 window.wwp = window.wwp || {};
 

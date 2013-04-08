@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global dump, Raphael, wwp:true, Event*/
+/*global Raphael */
 
 window.wwp = window.wwp || {};
 
