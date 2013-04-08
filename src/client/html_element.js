@@ -62,14 +62,6 @@ window.wwp = window.wwp || {};
 		sendMultiTouchEvent(this, "touchstart", relative1X, relative1Y, relative2X, relative2Y);
 	};
 
-	HtmlElement.prototype.doMultiTouchMove = function(relative1X, relative1Y, relative2X, relative2Y) {
-		sendMultiTouchEvent(this, "touchmove", relative1X, relative1Y, relative2X, relative2Y);
-	};
-
-	HtmlElement.prototype.doMultiTouchEnd = function(relative1X, relative1Y, relative2X, relative2Y) {
-		sendMultiTouchEvent(this, "touchend", relative1X, relative1Y, relative2X, relative2Y);
-	};
-
 	HtmlElement.prototype.onSelectStart_ie8Only = function(callback) {
 		this._element.on("selectstart", mouseEventHandlerFn(this, callback));
 	};

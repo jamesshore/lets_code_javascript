@@ -217,8 +217,8 @@
 					drawingArea.doSingleTouchMove(5, 20);
 
 					drawingArea.doMultiTouchStart(5, 20, 6, 60);
-					drawingArea.doMultiTouchMove(1, 10, 7, 70);
-					drawingArea.doMultiTouchEnd(1, 10, 7, 70);
+					drawingArea.doSingleTouchMove(1, 10, 7, 70);
+					drawingArea.doSingleTouchEnd(1, 10, 7, 70);
 
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]

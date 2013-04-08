@@ -20,7 +20,7 @@
 			testEvent(htmlElement.onMouseUp, htmlElement.doMouseUp);
 		});
 
-		it("handles touch events", function() {
+		it("handles single-touch events", function() {
 			if (!browserSupportsTouchEvents()) return;
 
 			testEvent(htmlElement.onSingleTouchStart, htmlElement.doSingleTouchStart);
@@ -29,12 +29,24 @@
 			testEvent(htmlElement.onSingleTouchCancel, htmlElement.doSingleTouchCancel);
 		});
 
+		it("handles multi-touch events", function() {
+			if (!browserSupportsTouchEvents()) return;
+
+			var eventTriggered = false;
+			htmlElement.onMultiTouchStart(function() {
+				eventTriggered = true;
+			});
+
+			htmlElement.doMultiTouchStart(1, 2, 3, 4);
+			expect(eventTriggered).to.be(true);
+		});
+
 		it("appends elements", function() {
 			htmlElement.append(wwp.HtmlElement.fromHtml("<div></div>"));
 			expect(htmlElement._element.children().length).to.equal(1);
 		});
 
-		it("remove elements", function() {
+		it("removes elements", function() {
 			var elementToAppend = wwp.HtmlElement.fromHtml("<div></div>");
 			htmlElement.append(elementToAppend);
 			elementToAppend.remove();
