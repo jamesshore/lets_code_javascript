@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global jQuery, describe, it, expect, dump, $, wwp, beforeEach, afterEach, Raphael, TouchEvent, mocha, TouchList, Touch */
+/*global Raphael, mocha, Touch, $ */
 
 (function() {
 	"use strict";
@@ -8,17 +8,20 @@
 
 	describe("Drawing area", function() {
 		var drawingArea;
+		var documentBody;
 		var paper;
 
 		beforeEach(function() {
-			drawingArea = $("<div style='height: 300px; width: 600px'>hi</div>");
-			$(document.body).append(drawingArea);
-			paper = wwp.initializeDrawingArea(drawingArea[0]);
+			drawingArea = wwp.HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
+
+			documentBody = new wwp.HtmlElement($(document.body));
+			documentBody.append(drawingArea);
+			paper = wwp.initializeDrawingArea(drawingArea);
 		});
 
 		afterEach(function() {
 			drawingArea.remove();
-			wwp.drawingAreaHasBeenRemovedFromDom(drawingArea[0]);
+			wwp.drawingAreaHasBeenRemovedFromDom();
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
@@ -28,9 +31,9 @@
 
 		describe("mouse events", function() {
 			it("draws a line in response to mouse drag", function() {
-				mouseDown(20, 30);
-				mouseMove(50, 60);
-				mouseUp(50, 60);
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseUp(50, 60);
 
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60]
@@ -38,11 +41,11 @@
 			});
 
 			it("draws multiple line segments when mouse is dragged multiple places", function() {
-				mouseDown(20, 30);
-				mouseMove(50, 60);
-				mouseMove(40, 20);
-				mouseMove(10, 15);
-				mouseUp(10, 15);
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseMove(40, 20);
+				drawingArea.doMouseMove(10, 15);
+				drawingArea.doMouseUp(10, 15);
 
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60],
@@ -52,15 +55,15 @@
 			});
 
 			it("draws multiple line segments when there are multiple drags", function() {
-				mouseDown(20, 30);
-				mouseMove(50, 60);
-				mouseUp(50, 60);
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseUp(50, 60);
 
-				mouseMove(40, 20);
+				drawingArea.doMouseMove(40, 20);
 
-				mouseDown(30, 25);
-				mouseMove(10, 15);
-				mouseUp(10, 15);
+				drawingArea.doMouseDown(30, 25);
+				drawingArea.doMouseMove(10, 15);
+				drawingArea.doMouseUp(10, 15);
 
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60],
@@ -69,24 +72,25 @@
 			});
 
 			it("does not draw line segment when mouse button is released", function() {
-				mouseDown(20, 30);
-				mouseUp(50, 60);
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseUp(50, 60);
 
 				expect(lineSegments()).to.eql([]);
 			});
 
 			it("does not draw line segments when mouse button has never been pushed", function() {
-				mouseMove(20, 30);
-				mouseMove(50, 60);
+				drawingArea.doMouseMove(20, 30);
+				drawingArea.doMouseMove(50, 60);
 
 				expect(lineSegments()).to.eql([]);
 			});
 
 			it("stops drawing line segments after mouse button is released", function() {
-				mouseDown(20, 30);
-				mouseMove(50, 60);
-				mouseUp(50, 60);
-				mouseMove(10, 15);
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseUp(50, 60);
+
+				drawingArea.doMouseMove(10, 15);
 
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60]
@@ -94,12 +98,13 @@
 			});
 
 			it("stops drawing when mouse leaves drawing area", function() {
-				mouseDown(20, 30);
-				mouseMove(50, 60);
-				mouseLeave(700, 70);
-				mouseMove(700, 70, $(document));
-				mouseMove(90, 40);
-				mouseUp(90, 40);
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseLeave(700, 70);
+
+				documentBody.doMouseMove(700, 70);
+				drawingArea.doMouseMove(90, 40);
+				drawingArea.doMouseUp(90, 40);
 
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60]
@@ -107,33 +112,33 @@
 			});
 
 			it("does not start drawing if drag is started outside drawing area", function() {
-				mouseDown(601, 150, $(document));
-				mouseMove(50, 60);
-				mouseUp(50, 60);
+				documentBody.doMouseDown(601, 150);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseUp(50, 60);
 
-				mouseDown(-1, 150, $(document));
-				mouseMove(50, 60);
-				mouseUp(50, 60);
+				documentBody.doMouseDown(-1, 150);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseUp(50, 60);
 
-				mouseDown(120, 301, $(document));
-				mouseMove(50, 60);
-				mouseUp(50, 60);
+				documentBody.doMouseDown(120, 301);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseUp(50, 60);
 
-				mouseDown(-1, 301, $(document));
-				mouseMove(50, 60);
-				mouseUp(50, 60);
+				documentBody.doMouseDown(-1, 301);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseUp(50, 60);
 
 				expect(lineSegments()).to.eql([]);
 			});
 
 			it("does start drawing if drag is initiated exactly at edge of drawing area", function() {
-				mouseDown(600, 300);
-				mouseMove(50, 60);
-				mouseUp(50, 60);
+				drawingArea.doMouseDown(600, 300);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseUp(50, 60);
 
-				mouseDown(0, 0);
-				mouseMove(50, 60);
-				mouseUp(50, 60);
+				drawingArea.doMouseDown(0, 0);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseUp(50, 60);
 
 				expect(lineSegments()).to.eql([
 					[600, 300, 50, 60],
@@ -142,19 +147,21 @@
 			});
 
 			it("does not allow text to be selected outside drawing area when drag starts within drawing area", function() {
-				drawingArea.mousedown(function(event) {
+				drawingArea.onMouseDown(function(offset, event) {
 					expect(event.isDefaultPrevented()).to.be(true);
 				});
-				mouseDown(20, 30);
-				mouseMove(90, 40);
-				mouseUp(90, 40);
+
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(90, 40);
+				drawingArea.doMouseUp(90, 40);
 			});
 
 			it("does not allow text to be selected outside drawing area even -- INCLUDING IE 8", function() {
-				drawingArea.on("selectstart", function(event) {
+				drawingArea.onSelectStart_ie8Only(function(offset, event) {
 					expect(event.isDefaultPrevented()).to.be(true);
 				});
-				sendMouseEvent("selectstart", 20, 30);
+
+				drawingArea.doSelectStart(20, 30);
 			});
 		});
 
@@ -162,9 +169,9 @@
 			describe("touch events", function() {
 
 				it("draw lines in response to touch events", function() {
-					touchStart(10, 40);
-					touchMove(5, 20);
-					touchEnd(5, 20);
+					drawingArea.doSingleTouchStart(10, 40);
+					drawingArea.doSingleTouchMove(5, 20);
+					drawingArea.doSingleTouchEnd(5, 20);
 
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
@@ -172,10 +179,11 @@
 				});
 
 				it("stops drawing lines when touch ends", function() {
-					touchStart(10, 40);
-					touchMove(5, 20);
-					touchEnd(5, 20);
-					touchMove(50, 60);
+					drawingArea.doSingleTouchStart(10, 40);
+					drawingArea.doSingleTouchMove(5, 20);
+					drawingArea.doSingleTouchEnd(5, 20);
+
+					drawingArea.doSingleTouchMove(50, 60);
 
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
@@ -183,10 +191,11 @@
 				});
 
 				it("stop drawing lines when touch is cancelled", function() {
-					touchStart(10, 40);
-					touchMove(5, 20);
-					touchCancel(5, 20);
-					touchMove(50, 60);
+					drawingArea.doSingleTouchStart(10, 40);
+					drawingArea.doSingleTouchMove(5, 20);
+					drawingArea.doSingleTouchCancel(5, 20);
+
+					drawingArea.doSingleTouchMove(50, 60);
 
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
@@ -194,20 +203,22 @@
 				});
 
 				it("does not scroll or zoom the page when user is drawing with finger", function() {
-					drawingArea.on("touchstart", function(event) {
+					drawingArea.onSingleTouchStart(function(offset, event) {
 						expect(event.isDefaultPrevented()).to.be(true);
 					});
-					touchStart(10, 40);
-					touchMove(5, 20);
-					touchEnd(5, 20);
+
+					drawingArea.doSingleTouchStart(10, 40);
+					drawingArea.doSingleTouchMove(5, 20);
+					drawingArea.doSingleTouchEnd(5, 20);
 				});
 
 				it("stops drawing when multiple touches occur", function() {
-					touchStart(10, 40);
-					touchMove(5, 20);
-					multipleTouchStart(5, 20, 6, 60);
-					multipleTouchMove(1, 10, 7, 70);
-					multipleTouchEnd(1, 10, 7, 70);
+					drawingArea.doSingleTouchStart(10, 40);
+					drawingArea.doSingleTouchMove(5, 20);
+
+					drawingArea.doMultiTouchStart(5, 20, 6, 60);
+					drawingArea.doSingleTouchMove(1, 10, 7, 70);
+					drawingArea.doSingleTouchEnd(1, 10, 7, 70);
 
 					expect(lineSegments()).to.eql([
 						[10, 40, 5, 20]
@@ -216,125 +227,8 @@
 			});
 		}
 
-		function touchStart(relativeX, relativeY, optionalElement) {
-			sendSingleTouchEvent("touchstart", relativeX, relativeY, optionalElement);
-		}
-
-		function touchMove(relativeX, relativeY, optionalElement) {
-			sendSingleTouchEvent("touchmove", relativeX, relativeY, optionalElement);
-		}
-
-		function touchEnd(relativeX, relativeY, optionalElement) {
-			sendSingleTouchEvent("touchend", relativeX, relativeY, optionalElement);
-		}
-
-		function touchCancel(relativeX, relativeY, optionalElement) {
-			sendSingleTouchEvent("touchcancel", relativeX, relativeY, optionalElement);
-		}
-
-		function multipleTouchStart(relative1X, relative1Y, relative2X, relative2Y, optionalElement) {
-			sendMultiTouchEvent("touchstart", relative1X, relative1Y, relative2X, relative2Y, optionalElement);
-		}
-
-		function multipleTouchMove(relative1X, relative1Y, relative2X, relative2Y, optionalElement) {
-			sendMultiTouchEvent("touchmove", relative1X, relative1Y, relative2X, relative2Y, optionalElement);
-		}
-
-		function multipleTouchEnd(relative1X, relative1Y, relative2X, relative2Y, optionalElement) {
-			sendMultiTouchEvent("touchend", relative1X, relative1Y, relative2X, relative2Y, optionalElement);
-		}
-
-		function sendSingleTouchEvent(event, relativeX, relativeY, optionalJqElement) {
-			var jqElement = optionalJqElement || drawingArea;
-
-			var touch = createTouch(jqElement, pageOffset(drawingArea, relativeX, relativeY));
-			sendTouchEvent(event, new TouchList(touch), jqElement);
-		}
-
-		function sendMultiTouchEvent(event, relative1X, relative1Y, relative2X, relative2Y, optionalJqElement) {
-			var jqElement = optionalJqElement || drawingArea;
-
-			var touch1 = createTouch(jqElement, pageOffset(drawingArea, relative1X, relative1Y));
-			var touch2 = createTouch(jqElement, pageOffset(drawingArea, relative2X, relative2Y));
-			sendTouchEvent(event, createTouchList(touch1, touch2), jqElement);
-		}
-
-		function sendTouchEvent(event, touchList, jqElement) {
-			var touchEvent = document.createEvent("TouchEvent");
-			touchEvent.initTouchEvent(
-				event, // event type
-				true, // canBubble
-				true, // cancelable
-				window, // DOM window
-				null, // detail (not sure what this is)
-				0, 0, // screenX/Y
-				0, 0, // clientX/Y
-				false, false, false, false, // meta keys (shift etc.)
-				touchList, touchList, touchList
-			);
-
-			var eventData = new jQuery.Event("event");
-			eventData.type = event;
-			eventData.originalEvent = touchEvent;
-			jqElement.trigger(eventData);
-		}
-
-		function createTouchList(touchA, touchB) {
-			if (touchB === null) return new TouchList(touchA);
-			else return new TouchList(touchA, touchB);
-		}
-
-		function createTouch(jqElement, pageOffset) {
-			var target = jqElement[0];
-			var identifier = 0;
-			var pageX = pageOffset.x;
-			var pageY = pageOffset.y;
-			var screenX = 0;
-			var screenY = 0;
-
-			var touch = new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
-			return touch;
-		}
-
 		function browserSupportsTouchEvents() {
 			return (typeof Touch !== "undefined");
-		}
-
-
-		function mouseDown(relativeX, relativeY, optionalElement) {
-			sendMouseEvent("mousedown", relativeX, relativeY, optionalElement);
-		}
-
-		function mouseMove(relativeX, relativeY, optionalElement) {
-			sendMouseEvent("mousemove", relativeX, relativeY, optionalElement);
-		}
-
-		function mouseLeave(relativeX, relativeY, optionalElement) {
-			sendMouseEvent("mouseleave", relativeX, relativeY, optionalElement);
-		}
-
-		function mouseUp(relativeX, relativeY, optionalElement) {
-			sendMouseEvent("mouseup", relativeX, relativeY, optionalElement);
-		}
-
-		function sendMouseEvent(event, relativeX, relativeY, optionalJqElement) {
-			var jqElement = optionalJqElement || drawingArea;
-
-			var page = pageOffset(drawingArea, relativeX, relativeY);
-
-			var eventData = new jQuery.Event();
-			eventData.pageX = page.x;
-			eventData.pageY = page.y;
-			eventData.type = event;
-			jqElement.trigger(eventData);
-		}
-
-		function pageOffset(drawingArea, relativeX, relativeY) {
-			var topLeftOfDrawingArea = drawingArea.offset();
-			return {
-				x: relativeX + topLeftOfDrawingArea.left,
-				y: relativeY + topLeftOfDrawingArea.top
-			};
 		}
 
 		function lineSegments() {

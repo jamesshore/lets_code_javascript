@@ -1,19 +1,21 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global dump, Raphael, $, wwp:true, Event*/
+/*global Raphael */
 
-wwp = {};
+window.wwp = window.wwp || {};
 
 (function() {
 	"use strict";
 
 	var paper = null;
 	var start = null;
+	var drawingArea;
 
-	wwp.initializeDrawingArea = function(drawingAreaElement) {
+	wwp.initializeDrawingArea = function(htmlElement) {
 		if (paper !== null) throw new Error("Client.js is not re-entrant");
+		drawingArea = htmlElement;
 
-		paper = new Raphael(drawingAreaElement);
-		handleDragEvents(drawingAreaElement);
+		paper = new Raphael(drawingArea._element[0]);
+		handleDragEvents();
 		return paper;
 	};
 
@@ -21,73 +23,45 @@ wwp = {};
 		paper = null;
 	};
 
-	function handleDragEvents(drawingAreaElement) {
-		var drawingArea = $(drawingAreaElement);
+	function handleDragEvents() {
+		preventDefaults();
 
-		drawingArea.on("selectstart", function(event) {
+		drawingArea.onMouseDown(startDrag);
+		drawingArea.onMouseMove(continueDrag);
+		drawingArea.onMouseLeave(endDrag);
+		drawingArea.onMouseUp(endDrag);
+
+		drawingArea.onSingleTouchStart(startDrag);
+		drawingArea.onSingleTouchMove(continueDrag);
+		drawingArea.onSingleTouchEnd(endDrag);
+		drawingArea.onSingleTouchCancel(endDrag);
+
+		drawingArea.onMultiTouchStart(endDrag);
+	}
+
+	function preventDefaults() {
+		drawingArea.onSelectStart_ie8Only(function(relativeOffset, event) {
 			// This event handler is needed so IE 8 doesn't select text when you drag outside drawing area
 			event.preventDefault();
 		});
 
-		drawingArea.mousedown(function(event) {
+		drawingArea.onMouseDown(function(relativeOffset, event) {
 			event.preventDefault();
-			startDrag(drawingArea, event.pageX, event.pageY);
 		});
 
-		drawingArea.mousemove(function(event) {
-			continueDrag(drawingArea, event.pageX, event.pageY);
-		});
-
-		drawingArea.mouseleave(function(event) {
-			endDrag();
-		});
-
-		drawingArea.mouseup(function(event) {
-			endDrag();
-		});
-
-		drawingArea.on("touchstart", function(event) {
+		drawingArea.onSingleTouchStart(function(relativeOffset, event) {
 			event.preventDefault();
-			var originalEvent = event.originalEvent;
-
-			if (originalEvent.touches.length !== 1) {
-				start = null;
-				return;
-			}
-
-			var pageX = originalEvent.touches[0].pageX;
-			var pageY = originalEvent.touches[0].pageY;
-
-			startDrag(drawingArea, pageX, pageY);
-		});
-
-		drawingArea.on("touchmove", function(event) {
-			var originalEvent = event.originalEvent;
-
-			var pageX = originalEvent.touches[0].pageX;
-			var pageY = originalEvent.touches[0].pageY;
-
-			continueDrag(drawingArea, pageX, pageY);
-		});
-
-		drawingArea.on("touchend", function(event) {
-			endDrag();
-		});
-
-		drawingArea.on("touchcancel", function(event) {
-			endDrag();
 		});
 	}
 
-	function startDrag(drawingArea, pageX, pageY) {
-		var offset = relativeOffset(drawingArea, pageX, pageY);
+	function startDrag(offset) {
 		start = offset;
 	}
 
-	function continueDrag(drawingArea, pageX, pageY) {
+	function continueDrag(relativeOffset) {
 		if (start === null) return;
 
-		var end = relativeOffset(drawingArea, pageX, pageY);
+		var end = relativeOffset;
 		drawLine(start.x, start.y, end.x, end.y);
 		start = end;
 	}
@@ -98,15 +72,6 @@ wwp = {};
 
 	function drawLine(startX, startY, endX, endY) {
 		paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
-	}
-
-	function relativeOffset(element, pageX, pageY) {
-		var pageOffset = element.offset();
-
-		return {
-			x: pageX - pageOffset.left,
-			y: pageY - pageOffset.top
-		};
 	}
 
 }());

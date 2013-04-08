@@ -1,6 +1,6 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-
 /*global desc, task, jake, fail, complete, directory*/
+
 (function() {
 	"use strict";
 
@@ -14,8 +14,8 @@
 	var SUPPORTED_BROWSERS = [
 		"IE 8.0",
 		"IE 9.0",
-		"Firefox 19.0",
-		"Chrome 25.0",
+		"Firefox 20.0",
+		"Chrome 26.0",
 		"Mac Safari 6.0",
 		"iOS Safari 6.0"
 	];
@@ -50,7 +50,7 @@
 	});
 
 	task("lintClient", function() {
-		var passed = lint.validateFileList(clientFiles(), browserLintOptions(), {});
+		var passed = lint.validateFileList(clientFiles(), clientLintOptions(), clientGlobals());
 		if (!passed) fail("Lint failed");
 	});
 
@@ -231,14 +231,14 @@
 		return options;
 	}
 
-	function browserLintOptions() {
+	function clientLintOptions() {
 		var options = globalLintOptions();
 		options.browser = true;
 		return options;
 	}
 
 	function globalLintOptions() {
-		var options = {
+		return {
 			bitwise: true,
 			curly: false,
 			eqeqeq: true,
@@ -254,7 +254,19 @@
 			strict: true,
 			trailing: true
 		};
-		return options;
+	}
+
+	function clientGlobals() {
+		return {
+			wwp: true,
+
+			describe: false,
+			it: false,
+			expect: false,
+			dump: false,
+			beforeEach: false,
+			afterEach: false
+		};
 	}
 
 }());

@@ -3,28 +3,33 @@ WeeWikiPaint
 Minimum Marketable Features:
 * single-user painting on home page
 - collaborative painting
+- support more browsers (Android, IE10?)
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
 
 User Stories:
 * Draw a line in response to iOS touch
-- Deploy (including smoke test to ensure that div is in home page)
-
-Engineering Tasks:
-- Integrate
-
-- Modify Lint settings for client global variables (off-camera)
 - click tracking needs to account for margin, border, and padding
   - figure out how to factor out common setup code
   - test that em is converted px
+- Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
+- Deploy (including smoke test to ensure that div is in home page)
+
+Engineering Tasks:
+* Simplify and improve the code
+  - Create Raphaël abstraction
+- Get web page working again
+  - Update smoke test to include client-side code
+- Introduce modules
+  - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- BEFORE NEXT EPISODE:
-  - Consider reflectorapp.com
-  - Mention http://www.letscodejavascript.com/v3/comments/live/2#comment-819666265
-
-- Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
+- BEFORE/AT BEGINNING OF RECORDING: (explain at beginning of next chapter)
+  - Add tests for multi-touch events
+  - Modify Lint settings for client global variables (off-camera)
+  - Integrate
+  - Discuss Testacular name change (to Karma: https://github.com/karma-runner/karma/issues/376 )
 - Factor out common code between touch events and mouse events
 - Is our client test doing too much--do we need to factor a new module or class?
 
