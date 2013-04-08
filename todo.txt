@@ -13,23 +13,25 @@ User Stories:
 - click tracking needs to account for margin, border, and padding
   - figure out how to factor out common setup code
   - test that em is converted px
+- Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
 * Simplify and improve the code
-  - Introduce modules
-    - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
   - Create Raphaël abstraction
-  - Modify Lint settings for client global variables (off-camera)
+- Get web page working again
+  - Update smoke test to include client-side code
+- Introduce modules
+  - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
 - BEFORE/AT BEGINNING OF RECORDING: (explain at beginning of next chapter)
   - Add tests for multi-touch events
+  - Modify Lint settings for client global variables (off-camera)
   - Integrate
   - Discuss Testacular name change (to Karma: https://github.com/karma-runner/karma/issues/376 )
 - Factor out common code between touch events and mouse events
 - Is our client test doing too much--do we need to factor a new module or class?
-- Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 
 Future ideas:
 - Create 'fail fast' assertion code
