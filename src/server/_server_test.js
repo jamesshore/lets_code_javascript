@@ -7,46 +7,55 @@
 	var fs = require("fs");
 	var assert = require("assert");
 
-	var TEST_CONTENT_DIR = "generated/test";
-	var TEST_HOME_PAGE = TEST_CONTENT_DIR + "/index.html";
-	var TEST_404_PAGE = "test404.html";
+	var CONTENT_DIR = "generated/test";
+
+	var HOME_PAGE = "index.html";
+	var NOT_FOUND_PAGE = "test404.html";
+
+	var HOME_PAGE_DATA = "This is home page file";
+	var NOT_FOUND_DATA = "This is 404 page file";
 
 	var PORT = 5020;
 	var BASE_URL = "http://localhost:" + PORT;
 
-	exports.tearDown = function(done) {
-		cleanUpFile(TEST_HOME_PAGE);
-		cleanUpFile(TEST_CONTENT_DIR + "/" + TEST_404_PAGE);
+	exports.setUp = function(done) {
+		fs.writeFileSync(CONTENT_DIR + "/" + HOME_PAGE, HOME_PAGE_DATA);
+		fs.writeFileSync(CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA);
+
 		done();
 	};
 
-	exports.test_servesHomePageFromFile = function(test) {
-		var expectedData = "This is home page file";
-		fs.writeFileSync(TEST_HOME_PAGE, expectedData);
-
-		httpGet(BASE_URL, function(response, responseData) {
-			test.equals(200, response.statusCode, "status code");
-			test.equals(expectedData, responseData, "response text");
-			test.done();
-		});
+	exports.tearDown = function(done) {
+		cleanUpFile(CONTENT_DIR + "/" + HOME_PAGE);
+		cleanUpFile(CONTENT_DIR + "/" + NOT_FOUND_PAGE);
+		done();
 	};
 
-	exports.test_returns404FromFileForEverythingExceptHomePage = function(test) {
-		var expectedData = "This is 404 page file";
-		fs.writeFileSync(TEST_CONTENT_DIR + "/" + TEST_404_PAGE, expectedData);
-
-		httpGet(BASE_URL + "/bargle", function(response, responseData) {
-			test.equals(404, response.statusCode, "status code");
-			test.equals(expectedData, responseData, "404 text");
-			test.done();
-		});
-	};
-
-	exports.test_returnsHomePageWhenAskedForIndex = function(test) {
-		fs.writeFileSync(TEST_HOME_PAGE, "foo");
-
+	exports.test_servesFilesFromDirectory = function(test) {
 		httpGet(BASE_URL + "/index.html", function(response, responseData) {
 			test.equals(200, response.statusCode, "status code");
+			test.equals(HOME_PAGE_DATA, responseData, "response text");
+			test.done();
+		});
+	};
+
+	exports.test_supportsMultipleFiles = function(test) {
+		//TODO
+		test.done();
+	};
+
+	exports.test_servesIndexDotHtmlWhenAskedForHomePage = function(test) {
+		httpGet(BASE_URL, function(response, responseData) {
+			test.equals(200, response.statusCode, "status code");
+			test.equals(HOME_PAGE_DATA, responseData, "response text");
+			test.done();
+		});
+	};
+
+	exports.test_returns404WhenFileDoesNotExist = function(test) {
+		httpGet(BASE_URL + "/bargle", function(response, responseData) {
+			test.equals(404, response.statusCode, "status code");
+			test.equals(NOT_FOUND_DATA, responseData, "404 text");
 			test.done();
 		});
 	};
@@ -60,20 +69,20 @@
 
 	exports.test_requires404PageParameter = function(test) {
 		test.throws(function() {
-			server.start(TEST_CONTENT_DIR);
+			server.start(CONTENT_DIR);
 		});
 		test.done();
 	};
 
 	exports.test_requiresPortParameter = function(test) {
 		test.throws(function() {
-			server.start(TEST_CONTENT_DIR, TEST_404_PAGE);
+			server.start(CONTENT_DIR, NOT_FOUND_PAGE);
 		});
 		test.done();
 	};
 
 	exports.test_runsCallbackWhenStopCompletes = function(test) {
-		server.start(TEST_CONTENT_DIR, TEST_404_PAGE, PORT);
+		server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT);
 		server.stop(function() {
 			test.done();
 		});
@@ -87,7 +96,7 @@
 	};
 
 	function httpGet(url, callback) {
-		server.start(TEST_CONTENT_DIR, TEST_404_PAGE, PORT, function() {
+		server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {
 			http.get(url, function(response) {
 				var receivedData = "";
 				response.setEncoding("utf8");
