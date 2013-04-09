@@ -44,7 +44,6 @@
 
 	exports.test_returnsHomePageWhenAskedForIndex = function(test) {
 		var testDir = "generated/test";
-		fs.writeFileSync(TEST_CONTENT_DIR + "/" + TEST_404_PAGE, "404 page");
 		fs.writeFileSync(TEST_HOME_PAGE, "foo");
 
 		httpGet(BASE_URL + "/index.html", function(response, responseData) {
