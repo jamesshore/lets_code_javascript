@@ -10,29 +10,27 @@
 	exports.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
 		if(!portNumber) throw "port number is required";
 
+		var fileServer = new nodeStatic.Server(contentDir);
+
 		server = http.createServer();
 		server.on("request", function(request, response) {
 			if (request.url === "/" || request.url === "/index.html") {
-				serveFile(contentDir + "/index.html", 200, request, response);
+				serveFile("index.html", 200, request, response);
 			}
 			else {
 				serveFile(notFoundPageToServe, 404, request, response);
 			}
 		});
 		server.listen(portNumber, callback);
+
+		// fileServer.serveFile(filepath, statusCode, headers, request, response);
+		function serveFile(file, statusCode, request, response) {
+			fileServer.serveFile(file, statusCode, null, request, response);
+		}
 	};
 
 	exports.stop = function(callback) {
 		server.close(callback);
 	};
-
-	// fileServer.serveFile(filepath, statusCode, headers, request, response);
-	function serveFile(file, statusCode, request, response) {
-		response.statusCode = statusCode;
-		fs.readFile(file, function (err, data) {
-			if (err) throw err;
-			response.end(data);
-		});
-	}
 
 }());

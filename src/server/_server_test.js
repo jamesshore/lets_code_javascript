@@ -9,14 +9,14 @@
 
 	var TEST_CONTENT_DIR = "generated/test";
 	var TEST_HOME_PAGE = TEST_CONTENT_DIR + "/index.html";
-	var TEST_404_PAGE = TEST_CONTENT_DIR + "/test404.html";
+	var TEST_404_PAGE = "test404.html";
 
 	var PORT = 5020;
 	var BASE_URL = "http://localhost:" + PORT;
 
 	exports.tearDown = function(done) {
 		cleanUpFile(TEST_HOME_PAGE);
-		cleanUpFile(TEST_404_PAGE);
+		cleanUpFile(TEST_CONTENT_DIR + "/" + TEST_404_PAGE);
 		done();
 	};
 
@@ -33,7 +33,7 @@
 
 	exports.test_returns404FromFileForEverythingExceptHomePage = function(test) {
 		var expectedData = "This is 404 page file";
-		fs.writeFileSync(TEST_404_PAGE, expectedData);
+		fs.writeFileSync(TEST_CONTENT_DIR + "/" + TEST_404_PAGE, expectedData);
 
 		httpGet(BASE_URL + "/bargle", function(response, responseData) {
 			test.equals(404, response.statusCode, "status code");
@@ -44,8 +44,10 @@
 
 	exports.test_returnsHomePageWhenAskedForIndex = function(test) {
 		var testDir = "generated/test";
+		fs.writeFileSync(TEST_CONTENT_DIR + "/" + TEST_404_PAGE, "404 page");
 		fs.writeFileSync(TEST_HOME_PAGE, "foo");
 
+		console.log("HI");
 		httpGet(BASE_URL + "/index.html", function(response, responseData) {
 			test.equals(200, response.statusCode, "status code");
 			test.done();
@@ -89,16 +91,24 @@
 
 	function httpGet(url, callback) {
 		server.start(TEST_CONTENT_DIR, TEST_404_PAGE, PORT, function() {
-			var request = http.get(url);
-			request.on("response", function(response) {
+			console.log("BYE");
+			http.get(url, function(response) {
+				console.log("BYE3");
 				var receivedData = "";
 				response.setEncoding("utf8");
 
 				response.on("data", function(chunk) {
+					console.log("BYE4");
 					receivedData += chunk;
 				});
+				response.on("error", function(err) {
+					console.log("ERROR", err);
+				});
 				response.on("end", function() {
+					console.log(receivedData);
+					console.log("BYE5");
 					server.stop(function() {
+						console.log("BYE6");
 						callback(response, receivedData);
 					});
 				});
