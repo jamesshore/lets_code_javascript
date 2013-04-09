@@ -9,45 +9,52 @@
 
 	var CONTENT_DIR = "generated/test";
 
-	var HOME_PAGE = "index.html";
+	var INDEX_PAGE = "index.html";
+	var OTHER_PAGE = "other.html";
 	var NOT_FOUND_PAGE = "test404.html";
 
-	var HOME_PAGE_DATA = "This is home page file";
+	var INDEX_PAGE_DATA = "This is index page file";
+	var OTHER_PAGE_DATA = "This is another page";
 	var NOT_FOUND_DATA = "This is 404 page file";
 
 	var PORT = 5020;
 	var BASE_URL = "http://localhost:" + PORT;
 
 	exports.setUp = function(done) {
-		fs.writeFileSync(CONTENT_DIR + "/" + HOME_PAGE, HOME_PAGE_DATA);
+		fs.writeFileSync(CONTENT_DIR + "/" + INDEX_PAGE, INDEX_PAGE_DATA);
+		fs.writeFileSync(CONTENT_DIR + "/" + OTHER_PAGE, OTHER_PAGE_DATA);
 		fs.writeFileSync(CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA);
 
 		done();
 	};
 
 	exports.tearDown = function(done) {
-		cleanUpFile(CONTENT_DIR + "/" + HOME_PAGE);
+		cleanUpFile(CONTENT_DIR + "/" + INDEX_PAGE);
+		cleanUpFile(CONTENT_DIR + "/" + OTHER_PAGE);
 		cleanUpFile(CONTENT_DIR + "/" + NOT_FOUND_PAGE);
 		done();
 	};
 
 	exports.test_servesFilesFromDirectory = function(test) {
-		httpGet(BASE_URL + "/index.html", function(response, responseData) {
+		httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
 			test.equals(200, response.statusCode, "status code");
-			test.equals(HOME_PAGE_DATA, responseData, "response text");
+			test.equals(INDEX_PAGE_DATA, responseData, "response text");
 			test.done();
 		});
 	};
 
 	exports.test_supportsMultipleFiles = function(test) {
-		//TODO
-		test.done();
+		httpGet(BASE_URL + "/" + OTHER_PAGE, function(response, responseData) {
+			test.equals(200, response.statusCode, "status code");
+			test.equals(OTHER_PAGE_DATA, responseData, "response text");
+			test.done();
+		});
 	};
 
 	exports.test_servesIndexDotHtmlWhenAskedForHomePage = function(test) {
 		httpGet(BASE_URL, function(response, responseData) {
 			test.equals(200, response.statusCode, "status code");
-			test.equals(HOME_PAGE_DATA, responseData, "response text");
+			test.equals(INDEX_PAGE_DATA, responseData, "response text");
 			test.done();
 		});
 	};
