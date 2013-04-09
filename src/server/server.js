@@ -13,12 +13,10 @@
 		server = http.createServer();
 		server.on("request", function(request, response) {
 			if (request.url === "/" || request.url === "/index.html") {
-				response.statusCode = 200;
-				serveFile(response, homePageToServe);
+				serveFile(homePageToServe, 200, request, response);
 			}
 			else {
-				response.statusCode = 404;
-				serveFile(response, notFoundPageToServe);
+				serveFile(notFoundPageToServe, 404, request, response);
 			}
 		});
 		server.listen(portNumber, callback);
@@ -28,7 +26,9 @@
 		server.close(callback);
 	};
 
-	function serveFile(response, file) {
+	// fileServer.serveFile(filepath, statusCode, headers, request, response);
+	function serveFile(file, statusCode, request, response) {
+		response.statusCode = statusCode;
 		fs.readFile(file, function (err, data) {
 			if (err) throw err;
 			response.end(data);
