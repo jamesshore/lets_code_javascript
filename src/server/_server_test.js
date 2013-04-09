@@ -7,8 +7,9 @@
 	var fs = require("fs");
 	var assert = require("assert");
 
-	var TEST_HOME_PAGE = "generated/test/testHome.html";
-	var TEST_404_PAGE = "generated/test/test404.html";
+	var TEST_CONTENT_DIR = "generated/test";
+	var TEST_HOME_PAGE = TEST_CONTENT_DIR + "/index.html";
+	var TEST_404_PAGE = TEST_CONTENT_DIR + "/test404.html";
 
 	var PORT = 5020;
 	var BASE_URL = "http://localhost:" + PORT;
@@ -60,20 +61,20 @@
 
 	exports.test_requires404PageParameter = function(test) {
 		test.throws(function() {
-			server.start(TEST_HOME_PAGE);
+			server.start(TEST_CONTENT_DIR);
 		});
 		test.done();
 	};
 
 	exports.test_requiresPortParameter = function(test) {
 		test.throws(function() {
-			server.start(TEST_HOME_PAGE, TEST_404_PAGE);
+			server.start(TEST_CONTENT_DIR, TEST_404_PAGE);
 		});
 		test.done();
 	};
 
 	exports.test_runsCallbackWhenStopCompletes = function(test) {
-		server.start(TEST_HOME_PAGE, TEST_404_PAGE, PORT);
+		server.start(TEST_CONTENT_DIR, TEST_404_PAGE, PORT);
 		server.stop(function() {
 			test.done();
 		});
@@ -87,7 +88,7 @@
 	};
 
 	function httpGet(url, callback) {
-		server.start(TEST_HOME_PAGE, TEST_404_PAGE, PORT, function() {
+		server.start(TEST_CONTENT_DIR, TEST_404_PAGE, PORT, function() {
 			var request = http.get(url);
 			request.on("response", function(response) {
 				var receivedData = "";

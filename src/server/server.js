@@ -7,13 +7,13 @@
 	var nodeStatic = require("node-static");
 	var server;
 
-	exports.start = function(homePageToServe, notFoundPageToServe, portNumber, callback) {
+	exports.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
 		if(!portNumber) throw "port number is required";
 
 		server = http.createServer();
 		server.on("request", function(request, response) {
 			if (request.url === "/" || request.url === "/index.html") {
-				serveFile(homePageToServe, 200, request, response);
+				serveFile(contentDir + "/index.html", 200, request, response);
 			}
 			else {
 				serveFile(notFoundPageToServe, 404, request, response);
