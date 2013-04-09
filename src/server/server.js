@@ -4,6 +4,7 @@
 
 	var http = require("http");
 	var fs = require("fs");
+	var nodeStatic = require("node-static");
 	var server;
 
 	exports.start = function(homePageToServe, notFoundPageToServe, portNumber, callback) {

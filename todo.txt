@@ -23,7 +23,7 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-
+- Integrate node-static
 
 Future ideas:
 - Create 'fail fast' assertion code
