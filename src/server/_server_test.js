@@ -43,7 +43,6 @@
 	};
 
 	exports.test_returnsHomePageWhenAskedForIndex = function(test) {
-		var testDir = "generated/test";
 		fs.writeFileSync(TEST_HOME_PAGE, "foo");
 
 		httpGet(BASE_URL + "/index.html", function(response, responseData) {

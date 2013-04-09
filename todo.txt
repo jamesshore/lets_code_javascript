@@ -25,6 +25,7 @@ Engineering Tasks:
 To Do on current task:
 - Replace node-static, submit our change as a patch, or come up with some better of dealing with node-static's caching
   - Migrate to 'send'
+  - Uninstall node-static
 
 Future ideas:
 - Create 'fail fast' assertion code
