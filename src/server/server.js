@@ -14,19 +14,14 @@
 
 		server = http.createServer();
 		server.on("request", function(request, response) {
-			if (request.url === "/" || request.url === "/index.html") {
-				serveFile("index.html", 200, request, response);
-			}
-			else {
-				serveFile(notFoundPageToServe, 404, request, response);
-			}
+			fileServer.serve(request, response, function(err) {
+				if (err) {
+					if (err.status === 404) fileServer.serveFile(notFoundPageToServe, 404, {}, request, response);
+					else throw err;
+				}
+			});
 		});
 		server.listen(portNumber, callback);
-
-		// fileServer.serveFile(filepath, statusCode, headers, request, response);
-		function serveFile(file, statusCode, request, response) {
-			fileServer.serveFile(file, statusCode, null, request, response);
-		}
 	};
 
 	exports.stop = function(callback) {
