@@ -17,21 +17,12 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-* Simplify and improve the code
-  - Create Raphaël abstraction
-- Get web page working again
-  - Update smoke test to include client-side code
+* Update smoke test to include client-side code
+  - Fix HTML so it runs our drawing code correctly
 - Introduce modules
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- BEFORE/AT BEGINNING OF RECORDING: (explain at beginning of next chapter)
-  - Add tests for multi-touch events
-  - Modify Lint settings for client global variables (off-camera)
-  - Integrate
-  - Discuss Testacular name change (to Karma: https://github.com/karma-runner/karma/issues/376 )
-- Factor out common code between touch events and mouse events
-- Is our client test doing too much--do we need to factor a new module or class?
 
 Future ideas:
 - Create 'fail fast' assertion code
