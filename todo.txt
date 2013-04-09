@@ -24,6 +24,7 @@ Engineering Tasks:
 
 To Do on current task:
 - Integrate node-static
+- Replace node-static, submit our change as a patch, or come up with some better of dealing with node-static's caching
 
 Future ideas:
 - Create 'fail fast' assertion code

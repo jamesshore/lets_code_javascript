@@ -47,7 +47,6 @@
 		fs.writeFileSync(TEST_CONTENT_DIR + "/" + TEST_404_PAGE, "404 page");
 		fs.writeFileSync(TEST_HOME_PAGE, "foo");
 
-		console.log("HI");
 		httpGet(BASE_URL + "/index.html", function(response, responseData) {
 			test.equals(200, response.statusCode, "status code");
 			test.done();
@@ -91,24 +90,18 @@
 
 	function httpGet(url, callback) {
 		server.start(TEST_CONTENT_DIR, TEST_404_PAGE, PORT, function() {
-			console.log("BYE");
 			http.get(url, function(response) {
-				console.log("BYE3");
 				var receivedData = "";
 				response.setEncoding("utf8");
 
 				response.on("data", function(chunk) {
-					console.log("BYE4");
 					receivedData += chunk;
 				});
 				response.on("error", function(err) {
 					console.log("ERROR", err);
 				});
 				response.on("end", function() {
-					console.log(receivedData);
-					console.log("BYE5");
 					server.stop(function() {
-						console.log("BYE6");
 						callback(response, receivedData);
 					});
 				});
