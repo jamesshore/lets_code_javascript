@@ -3,3 +3,5 @@
 generated/
 node_modules/testacular/node_modules/socket.io/node_modules/ws/build
 .bin
+build/phantomjs/phantomjs
+build/phantomjs/phantomjs.exe

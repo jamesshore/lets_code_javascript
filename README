@@ -13,6 +13,7 @@ WeeWikiPaint
 
 Before building for the first time:
 - Install Node.js [http://nodejs.org/download/]
+- Download PhantomJS [http://phantomjs.org/download.html] and copy binary to 'build/phantomjs' directory
 - Install Git [http://git-scm.com/downloads]
 - Clone source repository: 'git clone https://github.com/jamesshore/lets_code_javascript.git'
 - All commands must run from root of repository: 'cd lets_code_javascript'

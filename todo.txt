@@ -1,6 +1,7 @@
 WeeWikiPaint
 
 Minimum Marketable Features:
++ marketing home page
 * single-user painting on home page
 - collaborative painting
 - support more browsers (Android, IE10?)
@@ -23,6 +24,7 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
+-
 
 Future ideas:
 - Create 'fail fast' assertion code
