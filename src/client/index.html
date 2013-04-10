@@ -150,6 +150,7 @@
     <script src="vendor/jquery-1.8.2.js" type="text/javascript"></script>
     <script src="vendor/raphael-2.1.0.js" type="text/javascript"></script>
     <script src="client.js" type="text/javascript"></script>
+    <script src="html_element.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -175,7 +176,7 @@
 
 <script type="text/javascript">
     $(function() {
-        wwp.initializeDrawingArea($("#drawingArea")[0]);
+        wwp.initializeDrawingArea(new wwp.HtmlElement($("#drawingArea")));
     });
 </script>
 
