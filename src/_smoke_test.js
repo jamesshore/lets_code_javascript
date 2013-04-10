@@ -9,19 +9,19 @@
 	var http = require("http");
 	var fs = require("fs");
 	var procfile = require("procfile");
-	var child;
+	var serverProcess;
 
 	exports.setUp = function(done) {
 		runServer(done);
 	};
 
 	exports.tearDown = function(done) {
-		if (!child) return;
+		if (!serverProcess) return;
 
-		child.on("exit", function(code, signal) {
+		serverProcess.on("exit", function(code, signal) {
 			done();
 		});
-		child.kill();
+		serverProcess.kill();
 	};
 
 	exports.test_canGetHomePage = function(test) {
@@ -41,11 +41,20 @@
 		});
 	};
 
+	exports.test_userCanDrawOnPage = function(test) {
+		var phantomJsProcess = child_process.spawn("build/phantomjs/phantomjs", ["spikes/phantomjs/hello.js"], { stdio: "inherit" });
+		phantomJsProcess.on("exit", function(code) {
+			console.log("PhantomJS exited with code: " + code);
+			test.equals(code, 0, "PhantomJS test failures");
+			test.done();
+		});
+	}
+
 	function runServer(callback) {
 		var commandLine = parseProcFile();
-		child = child_process.spawn(commandLine.command, commandLine.options);
-		child.stdout.setEncoding("utf8");
-		child.stdout.on("data", function(chunk) {
+		serverProcess = child_process.spawn(commandLine.command, commandLine.options);
+		serverProcess.stdout.setEncoding("utf8");
+		serverProcess.stdout.on("data", function(chunk) {
 			if (chunk.trim().indexOf("Server started") !== -1) callback();
 		});
 	}
