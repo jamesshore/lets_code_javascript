@@ -7,7 +7,7 @@
 	if (!process.env.loose) console.log("For more forgiving test settings, use 'loose=true'");
 
 	var lint = require("./build/lint/lint_runner.js");
-	var nodeunit = require("nodeunit").reporters["default"];
+	var nodeunit = require("./build/nodeunit/nodeunit_runner.js");
 	var path = require("path");
 
 	var NODE_VERSION = "v0.8.23";
@@ -59,10 +59,7 @@
 
 	desc("Test server code");
 	task("testNode", ["nodeVersion", TEMP_TESTFILE_DIR], function() {
-		nodeunit.run(nodeTestFiles(), null, function(failures) {
-			if (failures) fail("Tests failed");
-			complete();
-		});
+		nodeunit.runTests(nodeTestFiles(), complete, fail);
 	}, {async: true});
 
 	desc("Test client code");
