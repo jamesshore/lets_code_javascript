@@ -11,8 +11,7 @@
 
 		beforeEach(function() {
 			div = wwp.HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
-			var documentBody = new wwp.HtmlElement($(document.body));
-			documentBody.append(div);
+			div.appendSelfToBody();
 			svgCanvas = new wwp.SvgCanvas(div);
 		});
 

@@ -12,10 +12,9 @@
 		var svgCanvas;
 
 		beforeEach(function() {
-			drawingArea = wwp.HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
-
 			documentBody = new wwp.HtmlElement($(document.body));
-			documentBody.append(drawingArea);
+			drawingArea = wwp.HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
+			drawingArea.appendSelfToBody();
 			svgCanvas = wwp.initializeDrawingArea(drawingArea);
 		});
 
