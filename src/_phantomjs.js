@@ -21,6 +21,9 @@
 		drawingArea.doMouseMove(50, 60);
 		drawingArea.doMouseUp(50, 60);
 
+		var svgCanvas = new wwp.SvgCanvas(drawingArea);
+		console.log(JSON.stringify(svgCanvas.lineSegments()));
+
 		function isDefined(obj) {
 			return typeof(obj) !== "undefined";
 		}
