@@ -10,7 +10,7 @@
 	var nodeunit = require("nodeunit").reporters["default"];
 	var path = require("path");
 
-	var NODE_VERSION = "v0.8.10";
+	var NODE_VERSION = "v0.8.23";
 	var SUPPORTED_BROWSERS = [
 		"IE 8.0",
 		"IE 9.0",
