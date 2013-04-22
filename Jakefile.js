@@ -6,8 +6,9 @@
 
 	if (!process.env.loose) console.log("For more forgiving test settings, use 'loose=true'");
 
-	var lint = require("./build/lint/lint_runner.js");
-	var nodeunit = require("./build/nodeunit/nodeunit_runner.js");
+	var lint = require("./build/util/lint_runner.js");
+	var nodeunit = require("./build/util/nodeunit_runner.js");
+	var testacular = require("./build/util/testacular_runner.js");
 	var path = require("path");
 
 	var NODE_VERSION = "v0.8.23";
@@ -37,8 +38,7 @@
 
 	desc("Start Testacular server for testing");
 	task("testacular", function() {
-		sh("node", ["node_modules/testacular/bin/testacular", "start", "build/testacular.conf.js"],
-			"Could not start Testacular server", complete);
+		testacular.serve("build/testacular.conf.js", complete, fail);
 	}, {async: true});
 
 	desc("Lint everything");
@@ -64,35 +64,8 @@
 
 	desc("Test client code");
 	task("testClient", function() {
-		var config = {};
-
-		var output = "";
-		var oldStdout = process.stdout.write;
-		process.stdout.write = function(data) {
-			output += data;
-			oldStdout.apply(this, arguments);
-		};
-
-		require("testacular/lib/runner").run(config, function(exitCode) {
-			process.stdout.write = oldStdout;
-
-			if (exitCode) fail("Client tests failed (to start server, run 'jake testacular')");
-			var browserMissing = false;
-			SUPPORTED_BROWSERS.forEach(function(browser) {
-				browserMissing = checkIfBrowserTested(browser, output) || browserMissing;
-			});
-			if (browserMissing && !process.env.loose) fail("Did not test all supported browsers (use 'loose=true' to suppress error)");
-			if (output.indexOf("TOTAL: 0 SUCCESS") !== -1) fail("Client tests did not run!");
-
-			complete();
-		});
+		testacular.runTests(SUPPORTED_BROWSERS, complete, fail);
 	}, {async: true});
-
-	function checkIfBrowserTested(browser, output) {
-		var missing = output.indexOf(browser + ": Executed") === -1;
-		if (missing) console.log(browser + " was not tested!");
-		return missing;
-	}
 
 	desc("Deploy to Heroku");
 	task("deploy", ["default"], function() {
@@ -167,37 +140,6 @@
 		var minor = parseInt(versionInfo[2], 10);
 		var bugfix = parseInt(versionInfo[3], 10);
 		return [major, minor, bugfix];
-	}
-
-	function sh(command, args, errorMessage, callback) {
-		console.log("> " + command + " " + args.join(" "));
-
-		// Not using jake.createExec as it adds extra line-feeds into output as of v0.3.7
-		var child = require("child_process").spawn(command, args, { stdio: "pipe" });
-
-		// redirect stdout
-		var stdout = "";
-		child.stdout.setEncoding("utf8");
-		child.stdout.on("data", function(chunk) {
-			stdout += chunk;
-			process.stdout.write(chunk);
-		});
-
-		// redirect stderr
-		var stderr = "";
-		child.stderr.setEncoding("utf8");
-		child.stderr.on("data", function(chunk) {
-			stderr += chunk;
-			process.stderr.write(chunk);
-		});
-
-		// handle process exit
-		child.on("exit", function(exitCode) {
-			if (exitCode !== 0) fail(errorMessage);
-		});
-		child.on("close", function() {      // 'close' event can happen after 'exit' event
-			callback(stdout, stderr);
-		});
 	}
 
 	function nodeFiles() {

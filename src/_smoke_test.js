@@ -48,7 +48,7 @@
 			test.equals(code, 0, "PhantomJS test failures");
 			test.done();
 		});
-	}
+	};
 
 	function runServer(callback) {
 		var commandLine = parseProcFile();
