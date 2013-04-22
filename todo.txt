@@ -24,8 +24,6 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- AT START OF EPISODE:
-  - Upgraded Node.js to 0.8.23
 * Integrate PhantomJS into our smoke test
 - Factor out our Raphael line-segment test code
 - Modify smoke test to draw a line and assert that the line is present
