@@ -16,7 +16,7 @@ window.wwp = window.wwp || {};
 
 		svgCanvas = new wwp.SvgCanvas(drawingArea);
 		handleDragEvents();
-		return svgCanvas._paper;
+		return svgCanvas;
 	};
 
 	wwp.drawingAreaHasBeenRemovedFromDom = function() {
