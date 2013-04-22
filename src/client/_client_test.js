@@ -10,7 +10,6 @@
 		var drawingArea;
 		var documentBody;
 		var svgCanvas;
-		var paper;
 
 		beforeEach(function() {
 			drawingArea = wwp.HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
@@ -18,7 +17,6 @@
 			documentBody = new wwp.HtmlElement($(document.body));
 			documentBody.append(drawingArea);
 			svgCanvas = wwp.initializeDrawingArea(drawingArea);
-			paper = svgCanvas._paper;
 		});
 
 		afterEach(function() {
@@ -27,8 +25,8 @@
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
-			expect(paper.height).to.equal(300);
-			expect(paper.width).to.equal(600);
+			expect(svgCanvas.height()).to.equal(300);
+			expect(svgCanvas.width()).to.equal(600);
 		});
 
 		describe("mouse events", function() {
