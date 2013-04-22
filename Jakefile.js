@@ -56,7 +56,7 @@
 	});
 
 	desc("Test everything");
-	task("test", ["testServer", "testClient"]);
+	task("test", ["testServer", "testClient", "testSmoke"]);
 
 	desc("Test server code");
 	task("testServer", ["nodeVersion", TEMP_TESTFILE_DIR], function() {
@@ -66,6 +66,11 @@
 	desc("Test client code");
 	task("testClient", function() {
 		testacular.runTests(SUPPORTED_BROWSERS, complete, fail);
+	}, {async: true});
+
+	desc("End-to-end smoke tests");
+	task("testSmoke", function() {
+		nodeunit.runTests(smokeTestFiles(), complete, fail);
 	}, {async: true});
 
 	desc("Deploy to Heroku");
@@ -115,6 +120,12 @@
 	function serverTestFiles() {
 		var testFiles = new jake.FileList();
 		testFiles.include("src/server/**/_*_test.js");
+		testFiles = testFiles.toArray();
+		return testFiles;
+	}
+
+	function smokeTestFiles() {
+		var testFiles = new jake.FileList();
 		testFiles.include("src/_*_test.js");
 		testFiles = testFiles.toArray();
 		return testFiles;
@@ -123,6 +134,7 @@
 	function nodeLintFiles() {
 		var javascriptFiles = new jake.FileList();
 		javascriptFiles.include("*.js");
+		javascriptFiles.include("build/util/*.js");
 		javascriptFiles.include("src/server/**/*.js");
 		javascriptFiles.include("src/*.js");
 		return javascriptFiles.toArray();

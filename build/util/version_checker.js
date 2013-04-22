@@ -8,8 +8,8 @@
 				" [" + expectedString + "], but was [" + actualString + "].");
 		}
 
-		var expected = parseNodeVersion("expected Node version", expectedString);
-		var actual = parseNodeVersion("Node version", actualString);
+		var expected = parseNodeVersion("expected Node version", expectedString, fail);
+		var actual = parseNodeVersion("Node version", actualString, fail);
 
 		if (!process.env.loose) {
 			if (actual[0] !== expected[0] || actual[1] !== expected[1] || actual[2] !== expected[2]) {
@@ -23,7 +23,7 @@
 		}
 	};
 
-	function parseNodeVersion(description, versionString) {
+	function parseNodeVersion(description, versionString, fail) {
 		var versionMatcher = /^v(\d+)\.(\d+)\.(\d+)(\-|$)/;    // v[major].[minor].[bugfix]
 		var versionInfo = versionString.match(versionMatcher);
 		if (versionInfo === null) fail("Could not parse " + description + " (was '" + versionString + "')");
