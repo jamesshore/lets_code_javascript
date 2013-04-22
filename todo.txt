@@ -25,7 +25,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Factor out our Raphael line-segment test code
-  - Fix breaking encapsulation with htmlElement._element[0]
   - Deal with need to append to $(document.body)
 - Modify smoke test to draw a line and assert that the line is present
 - Update our build to make everything automatic

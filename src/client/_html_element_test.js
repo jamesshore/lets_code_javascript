@@ -46,6 +46,15 @@
 			expect(htmlElement._element.children().length).to.equal(1);
 		});
 
+		it("appends to body", function() {
+			var body = new wwp.HtmlElement($(document.body));
+			var childrenBeforeAppend = body._element.children().length;
+
+			htmlElement.appendSelfToBody();
+			var childrenAfterAppend = body._element.children().length;
+			expect(childrenBeforeAppend + 1).to.equal(childrenAfterAppend);
+		});
+
 		it("removes elements", function() {
 			var elementToAppend = wwp.HtmlElement.fromHtml("<div></div>");
 			htmlElement.append(elementToAppend);

@@ -18,6 +18,10 @@ window.wwp = window.wwp || {};
 		this._element.append(elementToAppend._element);
 	};
 
+	HtmlElement.prototype.appendSelfToBody = function() {
+		$(document.body).append(this._element);
+	};
+
 	HtmlElement.prototype.remove = function() {
 		this._element.remove();
 	};
