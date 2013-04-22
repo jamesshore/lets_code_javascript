@@ -17,7 +17,6 @@
 
 		page.evaluate(inBrowser);
 
-		page.render("wwp.png");
 		phantom.exit(0);
 	});
 
