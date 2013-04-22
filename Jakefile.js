@@ -46,21 +46,21 @@
 	task("lint", ["lintNode", "lintClient"]);
 
 	task("lintNode", ["nodeVersion"], function() {
-		var passed = lint.validateFileList(nodeFiles(), nodeLintOptions(), {});
+		var passed = lint.validateFileList(nodeLintFiles(), nodeLintOptions(), {});
 		if (!passed) fail("Lint failed");
 	});
 
 	task("lintClient", function() {
-		var passed = lint.validateFileList(clientFiles(), clientLintOptions(), clientGlobals());
+		var passed = lint.validateFileList(clientLintFiles(), clientLintOptions(), clientGlobals());
 		if (!passed) fail("Lint failed");
 	});
 
 	desc("Test everything");
-	task("test", ["testNode", "testClient"]);
+	task("test", ["testServer", "testClient"]);
 
 	desc("Test server code");
-	task("testNode", ["nodeVersion", TEMP_TESTFILE_DIR], function() {
-		nodeunit.runTests(nodeTestFiles(), complete, fail);
+	task("testServer", ["nodeVersion", TEMP_TESTFILE_DIR], function() {
+		nodeunit.runTests(serverTestFiles(), complete, fail);
 	}, {async: true});
 
 	desc("Test client code");
@@ -80,7 +80,7 @@
 
 //	desc("Ensure correct version of Node is present.");
 	task("nodeVersion", [], function() {
-		versionChecker.check("Node", !process.env.loose, NODE_VERSION, process.version, fail)
+		versionChecker.check("Node", !process.env.loose, NODE_VERSION, process.version, fail);
 	});
 
 	desc("Integration checklist");
@@ -112,15 +112,7 @@
 		console.log("5. Tag episode: 'git tag -a episodeXX -m \"End of episode XX\"'");
 	});
 
-	function nodeFiles() {
-		var javascriptFiles = new jake.FileList();
-		javascriptFiles.include("*.js");
-		javascriptFiles.include("src/server/**/*.js");
-		javascriptFiles.include("src/_smoke_test.js");
-		return javascriptFiles.toArray();
-	}
-
-	function nodeTestFiles() {
+	function serverTestFiles() {
 		var testFiles = new jake.FileList();
 		testFiles.include("src/server/**/_*_test.js");
 		testFiles.include("src/_*_test.js");
@@ -128,25 +120,33 @@
 		return testFiles;
 	}
 
-	function clientFiles() {
+	function nodeLintFiles() {
+		var javascriptFiles = new jake.FileList();
+		javascriptFiles.include("*.js");
+		javascriptFiles.include("src/server/**/*.js");
+		javascriptFiles.include("src/*.js");
+		return javascriptFiles.toArray();
+	}
+
+	function clientLintFiles() {
 		var javascriptFiles = new jake.FileList();
 		javascriptFiles.include("src/client/*.js");
 		return javascriptFiles.toArray();
 	}
 
 	function nodeLintOptions() {
-		var options = globalLintOptions();
+		var options = sharedLintOptions();
 		options.node = true;
 		return options;
 	}
 
 	function clientLintOptions() {
-		var options = globalLintOptions();
+		var options = sharedLintOptions();
 		options.browser = true;
 		return options;
 	}
 
-	function globalLintOptions() {
+	function sharedLintOptions() {
 		return {
 			bitwise: true,
 			curly: false,
