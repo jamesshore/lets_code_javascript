@@ -22,6 +22,10 @@ window.wwp = window.wwp || {};
 		this._element.remove();
 	};
 
+	HtmlElement.prototype.toDomElement = function() {
+		return this._element[0];
+	};
+
 	HtmlElement.prototype.doSelectStart = function(relativeX, relativeY) {
 		sendMouseEvent(this, "selectstart", relativeX, relativeY);
 	};

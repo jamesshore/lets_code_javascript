@@ -53,6 +53,11 @@
 			expect(htmlElement._element.children().length).to.equal(0);
 		});
 
+		it("converts to DOM element", function() {
+			var domElement = htmlElement.toDomElement();
+			expect(domElement.tagName).to.equal("DIV");
+		});
+
 		function testEvent(eventSender, eventHandler) {
 			var eventOffset = null;
 			eventSender.call(htmlElement, function(offset) {
