@@ -42,7 +42,7 @@
 	};
 
 	exports.test_userCanDrawOnPage = function(test) {
-		var phantomJsProcess = child_process.spawn("node_modules/.bin/phantomjs", ["spikes/phantomjs/hello.js"], { stdio: "inherit" });
+		var phantomJsProcess = child_process.spawn("node_modules/.bin/phantomjs", ["src/_phantomjs.js"], { stdio: "inherit" });
 		phantomJsProcess.on("exit", function(code) {
 			console.log("PhantomJS exited with code: " + code);
 			test.equals(code, 0, "PhantomJS test failures");
