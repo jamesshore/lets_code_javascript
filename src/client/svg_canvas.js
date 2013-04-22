@@ -14,6 +14,14 @@ window.wwp = window.wwp || {};
 		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
 	};
 
+	SvgCanvas.prototype.height = function() {
+		return this._paper.height;
+	};
+
+	SvgCanvas.prototype.width = function() {
+		return this._paper.width;
+	};
+	
 	SvgCanvas.prototype.lineSegments = function() {
 		var result = [];
 		this._paper.forEach(function(element) {

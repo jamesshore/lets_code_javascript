@@ -10,7 +10,7 @@
 		var svgCanvas;
 
 		beforeEach(function() {
-			div = wwp.HtmlElement.fromHtml("<div></div>");
+			div = wwp.HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			var documentBody = new wwp.HtmlElement($(document.body));
 			documentBody.append(div);
 			svgCanvas = new wwp.SvgCanvas(div);
@@ -19,6 +19,11 @@
 		afterEach(function() {
 			div.remove();
 			wwp.drawingAreaHasBeenRemovedFromDom();
+		});
+
+		it("returns height and width", function() {
+			expect(svgCanvas.height()).to.equal(300);
+			expect(svgCanvas.width()).to.equal(600);
 		});
 
 		it("returns zero line segments", function() {
