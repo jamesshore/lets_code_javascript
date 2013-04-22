@@ -9,6 +9,7 @@
 	var lint = require("./build/util/lint_runner.js");
 	var nodeunit = require("./build/util/nodeunit_runner.js");
 	var testacular = require("./build/util/testacular_runner.js");
+	var versionChecker = require("./build/util/version_checker.js");
 	var path = require("path");
 
 	var NODE_VERSION = "v0.8.23";
@@ -79,27 +80,7 @@
 
 //	desc("Ensure correct version of Node is present.");
 	task("nodeVersion", [], function() {
-		function failWithQualifier(qualifier) {
-			fail("Incorrect node version. Expected " + qualifier +
-				" [" + expectedString + "], but was [" + actualString + "].");
-		}
-
-		var expectedString = NODE_VERSION;
-		var actualString = process.version;
-
-		var expected = parseNodeVersion("expected Node version", expectedString);
-		var actual = parseNodeVersion("Node version", actualString);
-
-		if (!process.env.loose) {
-			if (actual[0] !== expected[0] || actual[1] !== expected[1] || actual[2] !== expected[2]) {
-				failWithQualifier("exactly");
-			}
-		}
-		else {
-			if (actual[0] < expected[0]) failWithQualifier("at least");
-			if (actual[0] === expected[0] && actual[1] < expected[1]) failWithQualifier("at least");
-			if (actual[0] === expected[0] && actual[1] === expected[1] && actual[2] < expected[2]) failWithQualifier("at least");
-		}
+		versionChecker.check("Node", !process.env.loose, NODE_VERSION, process.version, fail)
 	});
 
 	desc("Integration checklist");
@@ -130,17 +111,6 @@
 		console.log("   e. 'jake'");
 		console.log("5. Tag episode: 'git tag -a episodeXX -m \"End of episode XX\"'");
 	});
-
-	function parseNodeVersion(description, versionString) {
-		var versionMatcher = /^v(\d+)\.(\d+)\.(\d+)(\-|$)/;    // v[major].[minor].[bugfix]
-		var versionInfo = versionString.match(versionMatcher);
-		if (versionInfo === null) fail("Could not parse " + description + " (was '" + versionString + "')");
-
-		var major = parseInt(versionInfo[1], 10);
-		var minor = parseInt(versionInfo[2], 10);
-		var bugfix = parseInt(versionInfo[3], 10);
-		return [major, minor, bugfix];
-	}
 
 	function nodeFiles() {
 		var javascriptFiles = new jake.FileList();
