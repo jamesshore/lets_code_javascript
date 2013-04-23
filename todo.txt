@@ -18,14 +18,10 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-* Update smoke test to include client-side code
-  - Fix HTML so it runs our drawing code correctly
 - Introduce modules
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- Modify smoke test to draw a line and assert that the line is present
-- Refactor and final polish
 
 Future ideas:
 - Create 'fail fast' assertion code

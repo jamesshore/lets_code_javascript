@@ -11,21 +11,37 @@
 	};
 
 	page.open("http://localhost:5000", function(success) {
-		page.evaluate(inBrowser);
-		phantom.exit(0);
+		try {
+			var error = page.evaluate(inBrowser);
+			if (error) {
+				console.log(error);
+				phantom.exit(1);
+			}
+			else {
+				phantom.exit(0);
+			}
+		}
+		catch(err) {
+			console.log("Exception in PhantomJS code");
+			phantom.exit(1);
+		}
 	});
 
 	function inBrowser() {
-		var drawingArea = new wwp.HtmlElement($("#drawingArea"));
-		drawingArea.doMouseDown(10, 20);
-		drawingArea.doMouseMove(50, 60);
-		drawingArea.doMouseUp(50, 60);
+		try {
+			var drawingArea = new wwp.HtmlElement($("#drawingArea"));
+			drawingArea.doMouseDown(10, 20);
+			drawingArea.doMouseMove(50, 60);
+			drawingArea.doMouseUp(50, 60);
 
-		var svgCanvas = new wwp.SvgCanvas(drawingArea);
-		console.log(JSON.stringify(svgCanvas.lineSegments()));
+			var actual = JSON.stringify(wwp.drawingAreaCanvas.lineSegments());
+			var expected = JSON.stringify([[ "10", "20", "50", "60" ]]);
 
-		function isDefined(obj) {
-			return typeof(obj) !== "undefined";
+			if (actual !== expected) return "lines drawn expected " + expected + " but was " + actual;
+			else return null;
+		}
+		catch(err) {
+			return "Exception in PhantomJS browser code";
 		}
 	}
 
