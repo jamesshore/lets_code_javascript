@@ -22,6 +22,10 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
+- BEFORE RECORDING:
+  - update npm modules
+  - upgrade to Node.js 0.10?
+  - integrate
 
 Future ideas:
 - Create 'fail fast' assertion code
