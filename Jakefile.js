@@ -12,7 +12,6 @@
 	var versionChecker = require("./build/util/version_checker.js");
 	var path = require("path");
 
-	var NODE_VERSION = "v0.8.23";
 	var SUPPORTED_BROWSERS = [
 		"IE 8.0 (Windows)",
 		"IE 9.0 (Windows)",
@@ -85,7 +84,8 @@
 
 //	desc("Ensure correct version of Node is present.");
 	task("nodeVersion", [], function() {
-		versionChecker.check("Node", !process.env.loose, NODE_VERSION, process.version, fail);
+		var deployedVersion = "v" + require("./package.json").engines.node;
+		versionChecker.check("Node", !process.env.loose, deployedVersion, process.version, fail);
 	});
 
 	desc("Integration checklist");
