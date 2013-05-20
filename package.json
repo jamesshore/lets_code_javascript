@@ -2,7 +2,7 @@
   "name": "weewikipaint",
   "version": "0.0.1",
   "engines": {
-    "node": "0.10.7",
-    "npm": "1.2.21"
+    "node": "0.10.6",
+    "npm": "1.2.18"
   }
 }
