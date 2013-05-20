@@ -23,7 +23,7 @@ Engineering Tasks:
 
 To Do on current task:
 - BEFORE RECORDING:
-  - update npm modules (jshint 2.0.0 is out)
+  - Updated npm modules (and added them to package.json using --save)
   - upgrade to Node.js 0.10?
   - integrate
   - Mention Vlad Gurdiga's frame-based approach to front-end smoke tests: http://www.letscodejavascript.com/v3/comments/live/94#comment-883086789

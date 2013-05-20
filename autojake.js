@@ -1,3 +1,5 @@
+#!/usr/local/bin/node
+
 // Automatically runs Jake when files change.
 //
 // Thanks to Davide Alberto Molin for contributing this code.
