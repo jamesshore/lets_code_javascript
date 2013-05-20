@@ -8,18 +8,17 @@
 
 	var lint = require("./build/util/lint_runner.js");
 	var nodeunit = require("./build/util/nodeunit_runner.js");
-	var testacular = require("./build/util/testacular_runner.js");
+	var karma = require("./build/util/karma_runner.js");
 	var versionChecker = require("./build/util/version_checker.js");
 	var path = require("path");
 
-	var NODE_VERSION = "v0.8.23";
 	var SUPPORTED_BROWSERS = [
-		"IE 8.0",
-		"IE 9.0",
-		"Firefox 20.0",
-		"Chrome 26.0",
-		"Mac Safari 6.0",
-		"iOS Safari 6.0"
+		"IE 8.0 (Windows)",
+		"IE 9.0 (Windows)",
+		"Firefox 20.0 (Mac)",
+		"Chrome 26.0 (Mac)",
+		"Safari 6.0 (Mac)",
+		"Safari 6.0 (iOS)"
 	];
 
 	var GENERATED_DIR = "generated";
@@ -37,9 +36,9 @@
 		console.log("\n\nOK");
 	});
 
-	desc("Start Testacular server for testing");
-	task("testacular", function() {
-		testacular.serve("build/testacular.conf.js", complete, fail);
+	desc("Start Karma server for testing");
+	task("karma", function() {
+		karma.serve("build/karma.conf.js", complete, fail);
 	}, {async: true});
 
 	desc("Lint everything");
@@ -65,7 +64,7 @@
 
 	desc("Test client code");
 	task("testClient", function() {
-		testacular.runTests(SUPPORTED_BROWSERS, complete, fail);
+		karma.runTests(SUPPORTED_BROWSERS, complete, fail);
 	}, {async: true});
 
 	desc("End-to-end smoke tests");
@@ -85,7 +84,8 @@
 
 //	desc("Ensure correct version of Node is present.");
 	task("nodeVersion", [], function() {
-		versionChecker.check("Node", !process.env.loose, NODE_VERSION, process.version, fail);
+		var deployedVersion = "v" + require("./package.json").engines.node;
+		versionChecker.check("Node", !process.env.loose, deployedVersion, process.version, fail);
 	});
 
 	desc("Integration checklist");
