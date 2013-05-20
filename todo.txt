@@ -1,7 +1,8 @@
 WeeWikiPaint
 
 Minimum Marketable Features:
-* single-user painting on home page
++ marketing home page (episodes 1-32)
+* single-user painting on home page (episodes 33+)
 - collaborative painting
 - support more browsers (Android, IE10?)
 - wiki-fy the pages
@@ -17,12 +18,16 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-* Update smoke test to include client-side code
-  - Fix HTML so it runs our drawing code correctly
 - Introduce modules
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
+- BEFORE RECORDING:
+  - update npm modules (jshint 2.0.0 is out)
+  - upgrade to Node.js 0.10?
+  - integrate
+  - Mention Vlad Gurdiga's frame-based approach to front-end smoke tests: http://www.letscodejavascript.com/v3/comments/live/94#comment-883086789
+  - Michal Svoboda's suggestion of returning an array rather than asserting in the test: http://www.letscodejavascript.com/v3/comments/live/101#comment-889773949
 
 Future ideas:
 - Create 'fail fast' assertion code

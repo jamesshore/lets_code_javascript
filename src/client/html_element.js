@@ -18,8 +18,16 @@ window.wwp = window.wwp || {};
 		this._element.append(elementToAppend._element);
 	};
 
+	HtmlElement.prototype.appendSelfToBody = function() {
+		$(document.body).append(this._element);
+	};
+
 	HtmlElement.prototype.remove = function() {
 		this._element.remove();
+	};
+
+	HtmlElement.prototype.toDomElement = function() {
+		return this._element[0];
 	};
 
 	HtmlElement.prototype.doSelectStart = function(relativeX, relativeY) {

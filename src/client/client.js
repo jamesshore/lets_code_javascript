@@ -6,21 +6,21 @@ window.wwp = window.wwp || {};
 (function() {
 	"use strict";
 
-	var paper = null;
+	var svgCanvas = null;
 	var start = null;
 	var drawingArea;
 
 	wwp.initializeDrawingArea = function(htmlElement) {
-		if (paper !== null) throw new Error("Client.js is not re-entrant");
+		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
 
-		paper = new Raphael(drawingArea._element[0]);
+		svgCanvas = new wwp.SvgCanvas(drawingArea);
 		handleDragEvents();
-		return paper;
+		return svgCanvas;
 	};
 
 	wwp.drawingAreaHasBeenRemovedFromDom = function() {
-		paper = null;
+		svgCanvas = null;
 	};
 
 	function handleDragEvents() {
@@ -62,16 +62,12 @@ window.wwp = window.wwp || {};
 		if (start === null) return;
 
 		var end = relativeOffset;
-		drawLine(start.x, start.y, end.x, end.y);
+		svgCanvas.drawLine(start.x, start.y, end.x, end.y);
 		start = end;
 	}
 
 	function endDrag() {
 		start = null;
-	}
-
-	function drawLine(startX, startY, endX, endY) {
-		paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
 	}
 
 }());

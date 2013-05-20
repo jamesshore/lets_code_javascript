@@ -46,11 +46,25 @@
 			expect(htmlElement._element.children().length).to.equal(1);
 		});
 
+		it("appends to body", function() {
+			var body = new wwp.HtmlElement($(document.body));
+			var childrenBeforeAppend = body._element.children().length;
+
+			htmlElement.appendSelfToBody();
+			var childrenAfterAppend = body._element.children().length;
+			expect(childrenBeforeAppend + 1).to.equal(childrenAfterAppend);
+		});
+
 		it("removes elements", function() {
 			var elementToAppend = wwp.HtmlElement.fromHtml("<div></div>");
 			htmlElement.append(elementToAppend);
 			elementToAppend.remove();
 			expect(htmlElement._element.children().length).to.equal(0);
+		});
+
+		it("converts to DOM element", function() {
+			var domElement = htmlElement.toDomElement();
+			expect(domElement.tagName).to.equal("DIV");
 		});
 
 		function testEvent(eventSender, eventHandler) {
