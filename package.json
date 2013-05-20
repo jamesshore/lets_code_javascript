@@ -12,6 +12,7 @@
     "jshint": "~2.0.1",
     "mocha": "~1.9.0",
     "nodeunit": "~0.8.0",
-    "phantomjs": "~1.9.0-4"
+    "phantomjs": "~1.9.0-4",
+    "procfile": "~0.1.1"
   }
 }
