@@ -23,7 +23,12 @@ Engineering Tasks:
 
 To Do on current task:
 - Integrate it into our automated build
+  - Figure out how to build all the code (HTML, vendor files, etc.)
+  - What about deployment? (Punt?)
+  - Improve the file list code -- shouldn't be so manual
 - Incrementally migrate our code from wwp global to browserify's require() calls
+- Issue with little lines appearing when we draw??
+
 
 Future ideas:
 - Create 'fail fast' assertion code

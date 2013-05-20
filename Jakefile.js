@@ -78,8 +78,14 @@
 
 	desc("Browserify");
 	task("browserify", [BUILD_DIR], function() {
-		var b = browserify();
-		b.add('./src/client/client.js');
+		console.log("Bundling client files with Browserify...");
+		var b = browserify([
+			"./src/client/client.js",
+			"./src/client/svg_canvas.js",
+			"./src/client/html_element.js"
+//			"./src/client/vendor/jquery-1.8.2.js",
+//			"./src/client/vendor/raphael-2.1.0.js"
+		]);
 		b.bundle().pipe(fs.createWriteStream(BUILD_DIR + "/bundle.js"));
 	});
 
