@@ -8,6 +8,7 @@
   "dependencies": {
     "expect.js": "~0.2.0",
     "gaze": "~0.3.4",
-    "jake": "~0.5.15"
+    "jake": "~0.5.15",
+    "jshint": "~2.0.1"
   }
 }
