@@ -22,7 +22,6 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- Install browserify
 - Integrate it into our automated build
 - Incrementally migrate our code from wwp global to browserify's require() calls
 
