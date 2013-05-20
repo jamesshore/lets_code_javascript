@@ -1,4 +1,4 @@
-// Testacular configuration
+// Karma configuration
 // Generated on Thu Sep 27 2012 16:15:00 GMT-0700 (PDT)
 
 
