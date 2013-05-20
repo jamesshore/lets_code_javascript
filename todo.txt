@@ -22,13 +22,9 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- BEFORE RECORDING:
-  - Updated npm modules
-  - Modified ./jake.sh and ./jake.bat to automatically run `npm rebuild` (and updated readme)
-  - Upgraded Node.js 0.8.23 --> 0.10.6 and improved version checking logic (0.10.7 not supported by Heroku yet)
-  - Integrated
-  - Mention Vlad Gurdiga's frame-based approach to front-end smoke tests: http://www.letscodejavascript.com/v3/comments/live/94#comment-883086789
-  - Michal Svoboda's suggestion of returning an array rather than asserting in the test: http://www.letscodejavascript.com/v3/comments/live/101#comment-889773949
+- Install browserify
+- Integrate it into our automated build
+- Incrementally migrate our code from wwp global to browserify's require() calls
 
 Future ideas:
 - Create 'fail fast' assertion code
