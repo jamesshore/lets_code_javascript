@@ -24,6 +24,7 @@ Engineering Tasks:
 To Do on current task:
 - BEFORE RECORDING:
   - Updated npm modules (and added them to package.json using --save)
+  - Modified ./jake.sh and ./jake.bat to automatically run `npm rebuild`
   - upgrade to Node.js 0.10?
   - Automatically run 'npm rebuild' from shell scripts (and update readme)
   - integrate
