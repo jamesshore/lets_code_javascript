@@ -80,6 +80,9 @@
 
 	desc("Bundle and build code");
 	task("build", [BUILD_CLIENT_DIR], function() {
+//		jake.rmRf(BUILD_DIR + "/*");
+		jake.cpR("./src/client/*.html", BUILD_CLIENT_DIR);
+
 		console.log("Bundling client files with Browserify...");
 		var b = browserify([
 			"./src/client/client.js",

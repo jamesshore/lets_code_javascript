@@ -23,12 +23,13 @@ Engineering Tasks:
 
 To Do on current task:
 - Integrate it into our automated build
-  - Improve failure messages in smoke test
-  - Figure out how to build all the code (HTML, vendor files, etc.)
+  - Figure out how to copy a bunch of files over in our build
+  - Delete contents of build/ directory every time we build
   - Improve the file list code -- shouldn't be so manual
-  - Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
+- Figure out how to bundle vendor files
 - Incrementally migrate our code from wwp global to browserify's require() calls
 - What about deployment? (Punt?)
+- Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
 
 
 Future ideas:
