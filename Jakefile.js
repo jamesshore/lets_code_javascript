@@ -7,6 +7,8 @@
 	if (!process.env.loose) console.log("For more forgiving test settings, use 'loose=true'");
 
 	var fs = require("fs");
+	var shell = require("shelljs");
+
 	var browserify = require("browserify");
 	var lint = require("./build/util/lint_runner.js");
 	var nodeunit = require("./build/util/nodeunit_runner.js");
@@ -80,8 +82,8 @@
 
 	desc("Bundle and build code");
 	task("build", [BUILD_CLIENT_DIR], function() {
-//		jake.rmRf(BUILD_DIR + "/*");
-		jake.cpR("./src/client/*.html", BUILD_CLIENT_DIR);
+		shell.rm("-rf", BUILD_CLIENT_DIR + "/*");
+		shell.cp("-R", "src/client/*.html", "src/client/vendor", BUILD_CLIENT_DIR);
 
 		console.log("Bundling client files with Browserify...");
 		var b = browserify([
