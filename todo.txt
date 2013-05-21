@@ -23,6 +23,8 @@ Engineering Tasks:
 
 To Do on current task:
 - Incrementally migrate our code from wwp global to browserify's require() calls
+- Get tests working with require()
+- Get index.html working with require()
 - Figure out how to bundle vendor files
 - What about deployment? (Punt?)
 - Duplication between weewikipaint.js CONTENT_DIR and our Jakefile

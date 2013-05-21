@@ -16,7 +16,7 @@ window.wwp = window.wwp || {};
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
 
-		svgCanvas = new wwp.SvgCanvas(drawingArea);
+		svgCanvas = new SvgCanvas(drawingArea);
 		handleDragEvents();
 		return svgCanvas;
 	};
