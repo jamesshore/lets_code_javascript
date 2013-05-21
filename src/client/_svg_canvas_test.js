@@ -4,6 +4,8 @@
 (function() {
 	"use strict";
 
+	var SvgCanvas = require("./svg_canvas.js");
+
 	describe("SvgCanvas", function() {
 
 		var div;
@@ -12,7 +14,7 @@
 		beforeEach(function() {
 			div = wwp.HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			div.appendSelfToBody();
-			svgCanvas = new wwp.SvgCanvas(div);
+			svgCanvas = new SvgCanvas(div);
 		});
 
 		afterEach(function() {
