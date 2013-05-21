@@ -6,6 +6,8 @@ window.wwp = window.wwp || {};
 (function() {
 	"use strict";
 
+	var SvgCanvas = require("./svg_canvas.js");
+
 	var svgCanvas = null;
 	var start = null;
 	var drawingArea;

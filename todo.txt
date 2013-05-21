@@ -27,6 +27,7 @@ To Do on current task:
 - What about deployment? (Punt?)
 - Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
 - Do we want to copy src/server/ files to build directory?
+- Fix Karma error messages using source maps
 
 
 Future ideas:
