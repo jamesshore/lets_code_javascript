@@ -51,7 +51,7 @@
 
 	function runServer(callback) {
 		var commandLine = parseProcFile();
-		serverProcess = child_process.spawn(commandLine.command, commandLine.options);
+		serverProcess = child_process.spawn(commandLine.command, commandLine.options, {stdio: ["pipe", "pipe", process.stderr]});
 		serverProcess.stdout.setEncoding("utf8");
 		serverProcess.stdout.on("data", function(chunk) {
 			if (chunk.trim().indexOf("Server started") !== -1) callback();
