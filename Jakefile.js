@@ -88,7 +88,10 @@
 		console.log("Bundling client files with Browserify...");
 		var b = browserify([
 			"./src/client/client.js",
-			"./src/client/html_element.js"
+			"./src/client/html_element.js",
+			"./src/client/_svg_canvas_test.js",
+			"./src/client/_client_test.js",
+			"./src/client/_html_element_test.js"
 //			"./src/client/vendor/jquery-1.8.2.js",
 //			"./src/client/vendor/raphael-2.1.0.js"
 		]);

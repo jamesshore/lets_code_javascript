@@ -22,7 +22,6 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- Incrementally migrate our code from wwp global to browserify's require() calls
 - Get tests working with require()
 - Get index.html working with require()
 - Figure out how to bundle vendor files
@@ -30,6 +29,8 @@ To Do on current task:
 - Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
 - Do we want to copy src/server/ files to build directory?
 - Fix Karma error messages using source maps
+- Unbundle tests from production code
+  - Deal with 'can't find describe()' error in smoke test
 
 
 Future ideas:
