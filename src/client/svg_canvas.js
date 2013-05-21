@@ -86,4 +86,6 @@ window.wwp = window.wwp || {};
 		];
 	}
 
+//	module.exports = SvgCanvas;
+
 }());

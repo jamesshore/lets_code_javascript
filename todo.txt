@@ -22,14 +22,11 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- Integrate it into our automated build
-  - Figure out how to copy a bunch of files over in our build
-  - Delete contents of build/ directory every time we build
-  - Improve the file list code -- shouldn't be so manual
-- Figure out how to bundle vendor files
 - Incrementally migrate our code from wwp global to browserify's require() calls
+- Figure out how to bundle vendor files
 - What about deployment? (Punt?)
 - Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
+- Do we want to copy src/server/ files to build directory?
 
 
 Future ideas:
