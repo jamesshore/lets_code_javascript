@@ -1,12 +1,10 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global $, jQuery, TouchList, Touch */
 
-window.wwp = window.wwp || {};
-
 (function() {
 	"use strict";
 
-	var HtmlElement = module.exports = wwp.HtmlElement = function(jqueryElement) {
+	var HtmlElement = module.exports = function(jqueryElement) {
 		this._element = jqueryElement;
 	};
 

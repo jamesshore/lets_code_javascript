@@ -220,8 +220,6 @@
 
 	function clientGlobals() {
 		return {
-			wwp: true,
-
 			// Browserify
 			require: false,
 			module: false,

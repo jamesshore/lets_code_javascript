@@ -1,8 +1,6 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global Raphael */
 
-window.wwp = window.wwp || {};
-
 (function() {
 	"use strict";
 
@@ -12,7 +10,7 @@ window.wwp = window.wwp || {};
 	var start = null;
 	var drawingArea;
 
-	exports.initializeDrawingArea = wwp.initializeDrawingArea = function(htmlElement) {
+	exports.initializeDrawingArea = function(htmlElement) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
 
@@ -21,7 +19,7 @@ window.wwp = window.wwp || {};
 		return svgCanvas;
 	};
 
-	exports.drawingAreaHasBeenRemovedFromDom = wwp.drawingAreaHasBeenRemovedFromDom = function() {
+	exports.drawingAreaHasBeenRemovedFromDom = function() {
 		svgCanvas = null;
 	};
 

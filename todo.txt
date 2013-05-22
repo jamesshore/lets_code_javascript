@@ -22,7 +22,6 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- Delete all references to wwp global
 - Fix Karma error messages using source maps
 - Figure out how to bundle vendor files
 
