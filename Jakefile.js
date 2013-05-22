@@ -66,7 +66,7 @@
 	task("test", ["testServer", "testClient", "testSmoke"]);
 
 	desc("Test server code");
-	task("testServer", ["nodeVersion", "build", TEMP_TESTFILE_DIR], function() {
+	task("testServer", ["nodeVersion", TEMP_TESTFILE_DIR], function() {
 		nodeunit.runTests(serverTestFiles(), complete, fail);
 	}, {async: true});
 
@@ -95,8 +95,12 @@
 //			"./src/client/vendor/jquery-1.8.2.js",
 //			"./src/client/vendor/raphael-2.1.0.js"
 		]);
-		b.bundle().pipe(fs.createWriteStream(BUILD_CLIENT_DIR + "/bundle.js"));
-	});
+		b.bundle({}, function(err, bundle) {
+			if (err) fail(err);
+			fs.writeFileSync(BUILD_CLIENT_DIR + "/bundle.js", bundle);
+			complete();
+		});
+	}, {async: true});
 
 	desc("Deploy to Heroku");
 	task("deploy", ["default"], function() {
