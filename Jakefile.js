@@ -94,7 +94,7 @@
 		]);
 		b.require("./src/client/client.js", {expose: "./client.js"} );
 		b.require("./src/client/html_element.js", {expose: "./html_element.js"} );
-		b.bundle({}, function(err, bundle) {
+		b.bundle({ debug: true }, function(err, bundle) {
 			if (err) fail(err);
 			fs.writeFileSync(BUILD_CLIENT_DIR + "/bundle.js", bundle);
 
@@ -103,7 +103,7 @@
 				"./src/client/_client_test.js",
 				"./src/client/_html_element_test.js"
 			]);
-			b.bundle({}, function(err, bundle) {
+			b.bundle({ debug: true }, function(err, bundle) {
 				if (err) fail(err);
 				fs.writeFileSync(BUILD_CLIENT_DIR + "/_test_bundle.js", bundle);
 				complete();

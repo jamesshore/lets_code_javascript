@@ -22,7 +22,8 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- Fix Karma error messages using source maps
+- Get require() working in Karma without using browserify (so error messages have sensible filenames and line nums)
+  - (or) Get source maps to work with Karma
 - Figure out how to bundle vendor files
 
 - Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
