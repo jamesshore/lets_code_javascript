@@ -13,7 +13,7 @@ files = [
 	"node_modules/expect.js/expect.js",
 	"generated/build/client/vendor/jquery-1.8.2.js",
 	"generated/build/client/vendor/raphael-2.1.0.js",
-	"generated/build/client/bundle.js"
+	"generated/build/client/_test_bundle.js"
 ];
 
 
