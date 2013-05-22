@@ -22,6 +22,8 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
+- AT START OF EPISODE:
+  - Is browserify asynchronous?!??
 - Get tests working with require()
   - Migrate HtmlElement and client tests to use require()
 - Get index.html working with require()
