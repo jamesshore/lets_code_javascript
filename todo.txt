@@ -22,15 +22,19 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- Get index.html working with require()
-- Figure out how to bundle vendor files
-- What about deployment? (Punt?)
-- Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
-- Do we want to copy src/server/ files to build directory?
-- Fix Karma error messages using source maps
+- Is browserify asynchronous?!??
+  ---> YES. And it *IS* documented. (Doh!)
 - Unbundle tests from production code
   - Deal with 'can't find describe()' error in smoke test
-- Is browserify asynchronous?!??
+- Get index.html working with require()
+- Get PhantomJS working with require()
+- Delete all references to wwp global
+- Fix Karma error messages using source maps
+- Figure out how to bundle vendor files
+
+- Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
+- Do we want to copy src/server/ files to build directory?
+- What about deployment? (Punt?)
 
 
 Future ideas:
