@@ -6,12 +6,12 @@ window.wwp = window.wwp || {};
 (function() {
 	"use strict";
 
-	var HtmlElement = wwp.HtmlElement = function(jqueryElement) {
+	var HtmlElement = module.exports = wwp.HtmlElement = function(jqueryElement) {
 		this._element = jqueryElement;
 	};
 
 	HtmlElement.fromHtml = function(html) {
-		return new wwp.HtmlElement($(html));
+		return new HtmlElement($(html));
 	};
 
 	HtmlElement.prototype.append = function(elementToAppend) {
