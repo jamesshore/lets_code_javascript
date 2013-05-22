@@ -22,8 +22,6 @@ Engineering Tasks:
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
 
 To Do on current task:
-- Get tests working with require()
-  - Migrate HtmlElement and client tests to use require()
 - Get index.html working with require()
 - Figure out how to bundle vendor files
 - What about deployment? (Punt?)

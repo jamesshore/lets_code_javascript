@@ -4,6 +4,7 @@
 (function() {
 	"use strict";
 
+	var client = require("./client.js");
 	var HtmlElement = require("./html_element.js");
 
 	mocha.setup({ignoreLeaks: true});
@@ -17,12 +18,12 @@
 			documentBody = new HtmlElement($(document.body));
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			drawingArea.appendSelfToBody();
-			svgCanvas = wwp.initializeDrawingArea(drawingArea);
+			svgCanvas = client.initializeDrawingArea(drawingArea);
 		});
 
 		afterEach(function() {
 			drawingArea.remove();
-			wwp.drawingAreaHasBeenRemovedFromDom();
+			client.drawingAreaHasBeenRemovedFromDom();
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {

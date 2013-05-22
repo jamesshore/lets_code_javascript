@@ -208,8 +208,9 @@
 			wwp: true,
 
 			// Browserify
-			module: false,
 			require: false,
+			module: false,
+			exports: false,
 
 			// Mocha / expect.js
 			describe: false,

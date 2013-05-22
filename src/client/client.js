@@ -12,7 +12,7 @@ window.wwp = window.wwp || {};
 	var start = null;
 	var drawingArea;
 
-	wwp.initializeDrawingArea = function(htmlElement) {
+	exports.initializeDrawingArea = wwp.initializeDrawingArea = function(htmlElement) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
 
@@ -21,7 +21,7 @@ window.wwp = window.wwp || {};
 		return svgCanvas;
 	};
 
-	wwp.drawingAreaHasBeenRemovedFromDom = function() {
+	exports.drawingAreaHasBeenRemovedFromDom = wwp.drawingAreaHasBeenRemovedFromDom = function() {
 		svgCanvas = null;
 	};
 

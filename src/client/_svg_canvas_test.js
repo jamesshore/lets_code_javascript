@@ -20,7 +20,6 @@
 
 		afterEach(function() {
 			div.remove();
-			wwp.drawingAreaHasBeenRemovedFromDom();
 		});
 
 		it("returns height and width", function() {
