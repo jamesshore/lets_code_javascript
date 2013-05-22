@@ -175,7 +175,10 @@
 
 <script type="text/javascript">
     $(function() {
-        wwp.drawingAreaCanvas = wwp.initializeDrawingArea(new wwp.HtmlElement($("#drawingArea")));
+        var client = require("./client.js");
+        var HtmlElement = require("./html_element.js");
+
+        wwp.drawingAreaCanvas = client.initializeDrawingArea(new HtmlElement($("#drawingArea")));
     });
 </script>
 

@@ -92,6 +92,8 @@
 //			"./src/client/vendor/jquery-1.8.2.js",
 //			"./src/client/vendor/raphael-2.1.0.js"
 		]);
+		b.require("./src/client/client.js", {expose: "./client.js"} );
+		b.require("./src/client/html_element.js", {expose: "./html_element.js"} );
 		b.bundle({}, function(err, bundle) {
 			if (err) fail(err);
 			fs.writeFileSync(BUILD_CLIENT_DIR + "/bundle.js", bundle);
