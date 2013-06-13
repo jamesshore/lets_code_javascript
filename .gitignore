@@ -2,6 +2,7 @@
 .DS_Store
 generated/
 .bin
+node_modules
 node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws/build
 node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws/builderror.log
 node_modules/phantomjs/lib/phantom

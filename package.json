@@ -4,5 +4,19 @@
   "engines": {
     "node": "0.10.6",
     "npm": "1.2.18"
+  },
+  "dependencies": {
+    "expect": "0.0.2",
+    "procfile": "~0.1.1",
+    "send": "~0.1.1",
+    "shelljs": "~0.1.4",
+    "gaze": "~0.3.4",
+    "jake": "~0.5.16",
+    "mocha": "~1.11.0",
+    "phantomjs": "~1.9.1-0",
+    "jshint": "~2.1.3",
+    "nodeunit": "~0.8.0",
+    "karma": "~0.8.5",
+    "browserify": "~2.18.1"
   }
 }
