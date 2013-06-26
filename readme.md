@@ -18,8 +18,8 @@ Before building for the first time:
 
 *Note:* If you update the repository (with `git pull` or similar), be sure to erase generated files with `git clean -fdx` afterwards. (Note that this will erase any changes you've made, so be sure to check in what you want to keep first.)
 
-To build:
----------
+To build and test:
+------------------
 
 1. Run `./jake.sh karma` (Unix/Mac) or `jake karma` (Windows)
 2. Navigate at least one browser to [http://localhost:8080]()
@@ -32,6 +32,20 @@ To build:
 3. Stop Karma, if it's running
 4. Build using the steps above
 5. To change back to the development branch, follow these steps again using `git checkout master`
+
+Before running locally for the first time:
+------------------------------------------
+
+1. Install [Heroku Toolbelt](https://toolbelt.heroku.com/)
+
+To run locally:
+---------------
+
+1. Build using the steps above
+2. Run `foreman start` (from root of repository)
+3. Navigate a browser to [http://localhost:5000]()
+
+*Note:* The master branch is not guaranteed to run successfully. For a known-good build, use the integration branch as described above.
 
 Before deploying for first time:
 --------------------------------
