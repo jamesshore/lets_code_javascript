@@ -28,7 +28,7 @@ To build and test:
 *Note:* The master branch is not guaranteed to build successfully. For a known-good build (tested on Mac and Windows, and assumed to work on Linux), use the integration branch:
 
 1. Change to the integration branch: `git checkout integration`
-2. Erase generated files: `git clean -fdx`
+2. Erase generated files: `git clean -fdx` (Note that this will erase *all* new files, so be sure to check in anything you want to keep.)
 3. Stop Karma, if it's running
 4. Build using the steps above
 5. To change back to the development branch, follow these steps again using `git checkout master`
