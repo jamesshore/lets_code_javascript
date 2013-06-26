@@ -26,6 +26,7 @@ Engineering Tasks:
   - Do we want to copy src/server/ files to build directory?
   - What about deployment? (Punt?)
   - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)?
+- Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
 
 To Do on current task:
 - Get a Karma preprocessor working for CommonJS modules
