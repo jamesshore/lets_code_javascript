@@ -4,6 +4,8 @@
 (function() {
 	"use strict";
 
+	dump("HI9");
+
 	var client = require("./client.js");
 	var HtmlElement = require("./html_element.js");
 

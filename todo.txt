@@ -29,9 +29,7 @@ Engineering Tasks:
 - Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
 
 To Do on current task:
-- Get a Karma preprocessor working for CommonJS modules
-  - Implement stub version of require, module, exports
-- Implement require() to load CommonJS modules in Karma
+- Implement require() to load CommonJS modules in Karma (and module & exports)
 - Upgrade to latest version of Karma (with new preprocessor support)?
 
 Future ideas:
