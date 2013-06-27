@@ -11,10 +11,13 @@
 
 	dump(JSON.stringify(window.__karma__.files));
 
+	window.__karma__.CJSModules = [];
 	window.__karma__.CJSRequire = function(dependency) {
+		var exports = window.__karma__.CJSModules[0].exports;
+		dump('MODULES: ' + exports);
 		dump('REQUIRED: ' + dependency);
-	}
-
+		return exports;
+	};
 
 //	window.require = function(filename) {
 //		dump("REQUIRE CALLED: " + filename);

@@ -4,7 +4,7 @@
 (function() {
 	"use strict";
 
-	dump("HI2");
+	dump("HI10");
 
 	var HtmlElement = require("./html_element.js");
 
