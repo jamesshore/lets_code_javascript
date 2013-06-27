@@ -31,6 +31,7 @@ Engineering Tasks:
 To Do on current task:
 - Implement require() to load CommonJS modules in Karma (and module & exports)
 - Upgrade to latest version of Karma (with new preprocessor support)?
+- Take out test bundle code and dependency (in build)
 
 Future ideas:
 - Create 'fail fast' assertion code
