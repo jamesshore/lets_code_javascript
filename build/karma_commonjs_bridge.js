@@ -18,10 +18,16 @@
 
 		var basepath = "/Users/jshore/Documents/Projects/weewikipaint/src/client";
 
-		// normalize
-		var dependencyRegex = /^\.\/(.*)$/;
-		var filePart = dependencyRegex.exec(dependency)[1];
-		var dependencyPath = basepath + "/" + filePart;
+		// normalize (this code sucks, fix me please!)
+		var dependencyPath;
+		if (dependency.charAt(0) === "/") {
+			dependencyPath = dependency;
+		}
+		else {
+			var dependencyRegex = /^\.\/(.*)$/;
+			var filePart = dependencyRegex.exec(dependency)[1];
+			var dependencyPath = basepath + "/" + filePart;
+		}
 
 		// find module
 		var moduleFn = window.__karma__.CJSModules[dependencyPath];
@@ -30,6 +36,7 @@
 		// run the module (if necessary)
 		var module = cachedModules[dependencyPath];
 		if (module === undefined) {
+			dump("EXECUTING: " + dependency);
 			module = { exports: {} };
 			moduleFn(require, module, module.exports);
 			cachedModules[dependencyPath] = module;
@@ -37,16 +44,9 @@
 		return module.exports;
 	};
 
-	require("./_html_element_test.js");
-	require("./_html_element_test.js");
-	require("./_html_element_test.js");
-	require("./_html_element_test.js");
-	require("./_html_element_test.js");
-	require("./html_element.js");
-
-//	Object.keys(window.__karma__.CJSModules).forEach(function(module) {
-//		dump("module: " + module);
-//	});
+	for (var modulePath in window.__karma__.CJSModules) {
+		require(modulePath);
+	};
 
 
 
