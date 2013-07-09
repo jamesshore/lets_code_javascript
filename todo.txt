@@ -29,10 +29,10 @@ Engineering Tasks:
 - Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
 
 To Do on current task:
-- Support more modules
 - Allow the modules to be declared in any order in karma.conf.js
-- Modify CJSRequire's path normalization to support all relative paths
 - Remove hard-coded dependency on base path in CJSRequire
+- Modify CJSRequire's path normalization to support all relative paths
+
 - Upgrade to latest version of Karma (with new preprocessor support)?
 - Take out test bundle code and dependency (in build)
 

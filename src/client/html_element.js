@@ -4,8 +4,6 @@
 (function() {
 	"use strict";
 
-	dump("HI13");
-
 	var HtmlElement = module.exports = function(jqueryElement) {
 		this._element = jqueryElement;
 	};

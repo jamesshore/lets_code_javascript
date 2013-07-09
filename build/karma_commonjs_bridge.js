@@ -9,7 +9,7 @@
 //		dump("file: " + file);
 //	});
 
-	dump(JSON.stringify(window.__karma__.files));
+//	dump(JSON.stringify(window.__karma__.files));
 
 	window.__karma__.CJSModules = {};
 	window.__karma__.CJSRequire = function(dependency) {
@@ -20,12 +20,7 @@
 		var filePart = dependencyRegex.exec(dependency)[1];
 		var dependencyPath = basepath + "/" + filePart;
 
-		dump("FILE PART: " + filePart);
-		dump("DEPENDENCY PATH: " + dependencyPath);
-
 		var exports = window.__karma__.CJSModules[dependencyPath].exports;
-		dump('MODULES: ' + exports);
-		dump('REQUIRED: ' + dependency);
 		return exports;
 	};
 
