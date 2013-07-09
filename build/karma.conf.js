@@ -13,14 +13,16 @@ files = [
 	"node_modules/expect.js/expect.js",
 	"build/karma_commonjs_bridge.js",
 
+	"generated/build/client/vendor/jquery-1.8.2.js",
+	"generated/build/client/vendor/raphael-2.1.0.js",
+
+
 //	"src/client/svg_canvas.js",
 	"src/client/html_element.js",
 	"src/client/_html_element_test.js"
 
 //	"src/client/**/*.js"
 
-//	"generated/build/client/vendor/jquery-1.8.2.js",
-//	"generated/build/client/vendor/raphael-2.1.0.js",
 //	"generated/build/client/_test_bundle.js"
 ];
 

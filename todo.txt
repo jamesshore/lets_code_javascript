@@ -18,7 +18,7 @@ User Stories:
 - Deploy (including smoke test to ensure that div is in home page)
 
 Engineering Tasks:
-- Get require(), modules, and exports working in Karma without using browserify
+* Get require(), modules, and exports working in Karma without using browserify
   (so error messages have sensible filenames and line nums)
 - Figure out how to bundle vendor files
 - Cleanup
@@ -29,7 +29,10 @@ Engineering Tasks:
 - Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
 
 To Do on current task:
-- Implement require() to load CommonJS modules in Karma (and module & exports)
+- Support more modules
+- Allow the modules to be declared in any order in karma.conf.js
+- Modify CJSRequire's path normalization to support all relative paths
+- Remove hard-coded dependency on base path in CJSRequire
 - Upgrade to latest version of Karma (with new preprocessor support)?
 - Take out test bundle code and dependency (in build)
 

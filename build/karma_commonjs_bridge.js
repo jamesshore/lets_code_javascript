@@ -11,9 +11,20 @@
 
 	dump(JSON.stringify(window.__karma__.files));
 
-	window.__karma__.CJSModules = [];
+	window.__karma__.CJSModules = {};
 	window.__karma__.CJSRequire = function(dependency) {
-		var exports = window.__karma__.CJSModules[0].exports;
+		var basepath = "/Users/jshore/Documents/Projects/weewikipaint/src/client";
+
+		var dependencyRegex = /^\.\/(.*)$/;
+		var filePart = dependencyRegex.exec(dependency)[1];
+
+		dump("FILE PART: " + filePart);
+
+		var dependencyPath = basepath + "/" + filePart;
+
+		dump("DEPENDENCY PATH: " + dependencyPath);
+
+		var exports = window.__karma__.CJSModules[dependencyPath].exports;
 		dump('MODULES: ' + exports);
 		dump('REQUIRED: ' + dependency);
 		return exports;
