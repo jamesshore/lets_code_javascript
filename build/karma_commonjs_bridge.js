@@ -11,6 +11,8 @@
 
 //	dump(JSON.stringify(window.__karma__.files));
 
+	var cachedModules = {};
+
 	var require = window.__karma__.CJSRequire = function(dependency) {
 		dump("REQUIRED: " + dependency);
 
@@ -25,13 +27,22 @@
 		var moduleFn = window.__karma__.CJSModules[dependencyPath];
 		if (moduleFn === undefined) throw new Error("Could not find module [" + dependency + "]");
 
-		// run the module
-		var module = { exports: {} };
-		moduleFn(require, module, module.exports);
+		// run the module (if necessary)
+		var module = cachedModules[dependencyPath];
+		if (module === undefined) {
+			module = { exports: {} };
+			moduleFn(require, module, module.exports);
+			cachedModules[dependencyPath] = module;
+		}
 		return module.exports;
 	};
 
 	require("./_html_element_test.js");
+	require("./_html_element_test.js");
+	require("./_html_element_test.js");
+	require("./_html_element_test.js");
+	require("./_html_element_test.js");
+	require("./html_element.js");
 
 //	Object.keys(window.__karma__.CJSModules).forEach(function(module) {
 //		dump("module: " + module);
