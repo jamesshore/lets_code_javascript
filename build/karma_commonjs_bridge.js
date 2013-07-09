@@ -20,8 +20,9 @@
 		var filePart = dependencyRegex.exec(dependency)[1];
 		var dependencyPath = basepath + "/" + filePart;
 
-		var exports = window.__karma__.CJSModules[dependencyPath].exports;
-		return exports;
+		var module = window.__karma__.CJSModules[dependencyPath];
+		if (module === undefined) throw new Error("Could not find module [" + dependency + "]");
+		return module.exports;
 	};
 
 //	window.require = function(filename) {
