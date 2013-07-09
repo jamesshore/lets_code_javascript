@@ -29,9 +29,12 @@ Engineering Tasks:
 - Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
 
 To Do on current task:
-- Allow the modules to be declared in any order in karma.conf.js
+* Allow the modules to be declared in any order in karma.conf.js
+	- Only execute each module once
+	- Remove hard-coded depedency on _html_element_test.js in commonjs_bridge
 - Remove hard-coded dependency on base path in CJSRequire
 - Modify CJSRequire's path normalization to support all relative paths
+- When module isn't found, error should point to require() statement in module, not to commonjs_bridge.
 
 - Upgrade to latest version of Karma (with new preprocessor support)?
 - Take out test bundle code and dependency (in build)

@@ -11,8 +11,9 @@
 
 //	dump(JSON.stringify(window.__karma__.files));
 
-	window.__karma__.CJSModules = {};
-	window.__karma__.CJSRequire = function(dependency) {
+	var require = window.__karma__.CJSRequire = function(dependency) {
+		dump("REQUIRED: " + dependency);
+
 		var basepath = "/Users/jshore/Documents/Projects/weewikipaint/src/client";
 
 		// normalize
@@ -20,10 +21,23 @@
 		var filePart = dependencyRegex.exec(dependency)[1];
 		var dependencyPath = basepath + "/" + filePart;
 
-		var module = window.__karma__.CJSModules[dependencyPath];
-		if (module === undefined) throw new Error("Could not find module [" + dependency + "]");
+		// find module
+		var moduleFn = window.__karma__.CJSModules[dependencyPath];
+		if (moduleFn === undefined) throw new Error("Could not find module [" + dependency + "]");
+
+		// run the module
+		var module = { exports: {} };
+		moduleFn(require, module, module.exports);
 		return module.exports;
 	};
+
+	require("./_html_element_test.js");
+
+//	Object.keys(window.__karma__.CJSModules).forEach(function(module) {
+//		dump("module: " + module);
+//	});
+
+
 
 //	window.require = function(filename) {
 //		dump("REQUIRE CALLED: " + filename);
