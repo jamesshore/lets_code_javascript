@@ -15,13 +15,12 @@
 	window.__karma__.CJSRequire = function(dependency) {
 		var basepath = "/Users/jshore/Documents/Projects/weewikipaint/src/client";
 
+		// normalize
 		var dependencyRegex = /^\.\/(.*)$/;
 		var filePart = dependencyRegex.exec(dependency)[1];
-
-		dump("FILE PART: " + filePart);
-
 		var dependencyPath = basepath + "/" + filePart;
 
+		dump("FILE PART: " + filePart);
 		dump("DEPENDENCY PATH: " + dependencyPath);
 
 		var exports = window.__karma__.CJSModules[dependencyPath].exports;

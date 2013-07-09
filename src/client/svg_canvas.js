@@ -4,6 +4,8 @@
 (function() {
 	"use strict";
 
+	dump("HI");
+
 	var SvgCanvas = module.exports = function(htmlElement) {
 		this._paper = new Raphael(htmlElement.toDomElement());
 	};

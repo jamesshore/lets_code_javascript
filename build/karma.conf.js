@@ -17,9 +17,12 @@ files = [
 	"generated/build/client/vendor/raphael-2.1.0.js",
 
 
-//	"src/client/svg_canvas.js",
+	"src/client/svg_canvas.js",
 	"src/client/html_element.js",
-	"src/client/_html_element_test.js"
+	"src/client/client.js",
+	"src/client/_html_element_test.js",
+	"src/client/_svg_canvas_test.js",
+	"src/client/_client_test.js"
 
 //	"src/client/**/*.js"
 

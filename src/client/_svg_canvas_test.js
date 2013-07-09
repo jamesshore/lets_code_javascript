@@ -4,6 +4,8 @@
 (function() {
 	"use strict";
 
+	dump("HI");
+
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
 
