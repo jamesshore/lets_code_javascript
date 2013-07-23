@@ -27,7 +27,7 @@
 
 		// find module
 		var moduleFn = window.__karma__.CJSModules[dependencyPath];
-		if (moduleFn === undefined) throw new Error("Could not find module [" + dependency + "]");
+		if (moduleFn === undefined) throw new Error("Could not find module '" + dependency + "' from '" + basepath + "'");
 
 		// run the module (if necessary)
 		var module = cachedModules[dependencyPath];
