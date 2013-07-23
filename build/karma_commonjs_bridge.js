@@ -15,7 +15,7 @@
 
 	function requireFn(basepath) {
 		return function(dependency) {
-			require(basepath, dependency);
+			return require(basepath, dependency);
 		};
 	};
 
