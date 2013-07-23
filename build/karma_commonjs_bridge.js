@@ -45,8 +45,8 @@
 	};
 
 	function normalizePath(basePath, relativePath) {
-		if (relativePath.charAt(0) === "/") return relativePath;
-		if (basePath.charAt(0) !== "/") throw new Error("basePath should start with '/', but was [" + basePath + "]");
+		if (isFullPath(relativePath)) return relativePath;
+		if (!isFullPath(basePath)) throw new Error("basePath should be full path, but was [" + basePath + "]");
 
 		var baseComponents = basePath.split("/");
 		var relativeComponents = relativePath.split("/");
@@ -60,6 +60,13 @@
 			else baseComponents.push(nextComponent);
 		}
 		return baseComponents.join("/");
+
+		function isFullPath(path) {
+			var unixFullPath = (path.charAt(0) === "/");
+			var windowsFullPath = (path.indexOf(":") !== -1);
+
+			return unixFullPath || windowsFullPath;
+		}
 	}
 
 
