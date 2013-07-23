@@ -29,9 +29,7 @@ Engineering Tasks:
 - Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
 
 To Do on current task:
-- Take out test bundle code and dependency (in build)
-- Upgrade to latest version of Karma (with new preprocessor support)?
-- When module isn't found, error should point to require() statement in module, not to commonjs_bridge.
+-
 
 Future ideas:
 - Create 'fail fast' assertion code
@@ -48,6 +46,7 @@ Future ideas:
 - Automate CI script
 - Resolve npm 'extraneous' warning (due to package.json not reflecting what's in node_modules)
 - Convert 'client' to be proper object rather than global singleton?
+- Upgrade to latest version of Karma (with new preprocessor support)?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

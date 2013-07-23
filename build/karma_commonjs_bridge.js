@@ -4,25 +4,9 @@
 (function() {
 	"use strict";
 
-
-//	Object.keys(window.__karma__.files).forEach(function(file) {
-//		dump("file: " + file);
-//	});
-
-//	dump(JSON.stringify(window.__karma__.files));
-
 	var cachedModules = {};
 
-	function requireFn(basepath) {
-		return function(dependency) {
-			return require(basepath, dependency);
-		};
-	};
-
 	var require = window.__karma__.CJSRequire = function(basepath, dependency) {
-		console.log("REQUIRED: " + dependency + " FROM: " + basepath);
-
-
 		var dependencyPath = normalizePath(basepath, dependency);
 
 		// find module
@@ -32,7 +16,6 @@
 		// run the module (if necessary)
 		var module = cachedModules[dependencyPath];
 		if (module === undefined) {
-			console.log("EXECUTING: " + dependency);
 			module = { exports: {} };
 			moduleFn(requireFn(basepath), module, module.exports);
 			cachedModules[dependencyPath] = module;
@@ -42,6 +25,12 @@
 
 	for (var modulePath in window.__karma__.CJSModules) {
 		require(modulePath, modulePath);
+	};
+
+	function requireFn(basepath) {
+		return function(dependency) {
+			return require(basepath, dependency);
+		};
 	};
 
 	function normalizePath(basePath, relativePath) {
@@ -68,14 +57,5 @@
 			return unixFullPath || windowsFullPath;
 		}
 	}
-
-
-//	window.require = function(filename) {
-//		dump("REQUIRE CALLED: " + filename);
-//	};
-
-//	var tests = Object.keys(window.__karma__.files).filter(function (file) {
-//	      return /Spec\.js$/.test(file);
-//	});
 
 }());
