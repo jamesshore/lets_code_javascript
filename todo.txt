@@ -29,12 +29,9 @@ Engineering Tasks:
 - Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
 
 To Do on current task:
-- Remove hard-coded dependency on base path in CJSRequire
-- Modify CJSRequire's path normalization to support all relative paths
-- When module isn't found, error should point to require() statement in module, not to commonjs_bridge.
-
-- Upgrade to latest version of Karma (with new preprocessor support)?
 - Take out test bundle code and dependency (in build)
+- Upgrade to latest version of Karma (with new preprocessor support)?
+- When module isn't found, error should point to require() statement in module, not to commonjs_bridge.
 
 Future ideas:
 - Create 'fail fast' assertion code

@@ -71,7 +71,7 @@
 	}, {async: true});
 
 	desc("Test client code");
-	task("testClient", ["build"], function() {
+	task("testClient", [], function() {
 		karma.runTests(SUPPORTED_BROWSERS, complete, fail);
 	}, {async: true});
 
