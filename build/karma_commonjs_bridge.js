@@ -6,7 +6,11 @@
 
 	var cachedModules = {};
 
-	var require = window.__karma__.CJSRequire = function(basepath, dependency) {
+	for (var modulePath in window.__karma__.CJSModules) {
+		require(modulePath, modulePath);
+	};
+
+	function require(basepath, dependency) {
 		var dependencyPath = normalizePath(basepath, dependency);
 
 		// find module
@@ -21,10 +25,6 @@
 			cachedModules[dependencyPath] = module;
 		}
 		return module.exports;
-	};
-
-	for (var modulePath in window.__karma__.CJSModules) {
-		require(modulePath, modulePath);
 	};
 
 	function requireFn(basepath) {
