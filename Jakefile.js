@@ -20,7 +20,7 @@
 		"IE 8.0 (Windows)",
 		"IE 9.0 (Windows)",
 		"Firefox 22.0 (Mac)",
-		"Chrome 27.0 (Mac)",
+		"Chrome 28.0 (Mac)",
 		"Safari 6.0 (Mac)",
 		"Safari 6.0 (iOS)"
 	];
