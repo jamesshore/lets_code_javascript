@@ -4,7 +4,7 @@
 (function() {
 	"use strict";
 
-	var client = require("./client.js");
+	var client = require("../../src/client/client.js");
 	var HtmlElement = require("./html_element.js");
 
 	mocha.setup({ignoreLeaks: true});

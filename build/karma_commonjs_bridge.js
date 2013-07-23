@@ -14,20 +14,9 @@
 	var cachedModules = {};
 
 	var require = window.__karma__.CJSRequire = function(dependency) {
-		dump("REQUIRED: " + dependency);
+		var basepath = "/Users/jshore/Documents/Projects/weewikipaint/src/client/html_element.js";
 
-		var basepath = "/Users/jshore/Documents/Projects/weewikipaint/src/client";
-
-		// normalize (this code sucks, fix me please!)
-		var dependencyPath;
-		if (dependency.charAt(0) === "/") {
-			dependencyPath = dependency;
-		}
-		else {
-			var dependencyRegex = /^\.\/(.*)$/;
-			var filePart = dependencyRegex.exec(dependency)[1];
-			var dependencyPath = basepath + "/" + filePart;
-		}
+		var dependencyPath = normalizePath(basepath, dependency);
 
 		// find module
 		var moduleFn = window.__karma__.CJSModules[dependencyPath];
@@ -36,7 +25,6 @@
 		// run the module (if necessary)
 		var module = cachedModules[dependencyPath];
 		if (module === undefined) {
-			dump("EXECUTING: " + dependency);
 			module = { exports: {} };
 			moduleFn(require, module, module.exports);
 			cachedModules[dependencyPath] = module;
@@ -48,6 +36,23 @@
 		require(modulePath);
 	};
 
+	function normalizePath(basePath, relativePath) {
+		if (relativePath.charAt(0) === "/") return relativePath;
+		if (basePath.charAt(0) !== "/") throw new Error("basePath should start with '/', but was [" + basePath + "]");
+
+		var baseComponents = basePath.split("/");
+		var relativeComponents = relativePath.split("/");
+
+		baseComponents.pop();     // remove file portion of basePath before starting
+		while (relativeComponents.length > 0) {
+			var nextComponent = relativeComponents.shift();
+
+			if (nextComponent === ".") continue;
+			else if (nextComponent === "..") baseComponents.pop();
+			else baseComponents.push(nextComponent);
+		}
+		return baseComponents.join("/");
+	}
 
 
 //	window.require = function(filename) {
