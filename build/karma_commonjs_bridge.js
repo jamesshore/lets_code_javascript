@@ -13,8 +13,15 @@
 
 	var cachedModules = {};
 
-	var require = window.__karma__.CJSRequire = function(dependency) {
-		var basepath = "/Users/jshore/Documents/Projects/weewikipaint/src/client/html_element.js";
+	function requireFn(basepath) {
+		return function(dependency) {
+			require(basepath, dependency);
+		};
+	};
+
+	var require = window.__karma__.CJSRequire = function(basepath, dependency) {
+		console.log("REQUIRED: " + dependency + " FROM: " + basepath);
+
 
 		var dependencyPath = normalizePath(basepath, dependency);
 
@@ -25,15 +32,16 @@
 		// run the module (if necessary)
 		var module = cachedModules[dependencyPath];
 		if (module === undefined) {
+			console.log("EXECUTING: " + dependency);
 			module = { exports: {} };
-			moduleFn(require, module, module.exports);
+			moduleFn(requireFn(basepath), module, module.exports);
 			cachedModules[dependencyPath] = module;
 		}
 		return module.exports;
 	};
 
 	for (var modulePath in window.__karma__.CJSModules) {
-		require(modulePath);
+		require(modulePath, modulePath);
 	};
 
 	function normalizePath(basePath, relativePath) {
