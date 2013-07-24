@@ -21,8 +21,6 @@ Engineering Tasks:
   (so error messages have sensible filenames and line nums)
 
 To Do on current task:
-- Remove 'generated' files from karma.conf.js
-- Refactor 'build' task in Jakefile (and remove unneeded test bundling)
 - Rename 'SUPPORTED_BROWSERS' in Jakefile
 - (punt) bundle vendor files (tried browserify-shim)
 - (punt) Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)?

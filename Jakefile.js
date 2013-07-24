@@ -86,31 +86,14 @@
 		shell.cp("-R", "src/client/*.html", "src/client/vendor", BUILD_CLIENT_DIR);
 
 		console.log("Bundling client files with Browserify...");
-		var b = browserify([
-			"./src/client/client.js",
-			"./src/client/html_element.js"
-//			"./src/client/vendor/jquery-1.8.2.js",
-//			"./src/client/vendor/raphael-2.1.0.js"
-		]);
+		var b = browserify();
 		b.require("./src/client/client.js", {expose: "./client.js"} );
 		b.require("./src/client/html_element.js", {expose: "./html_element.js"} );
 		b.bundle({ debug: true }, function(err, bundle) {
 			if (err) fail(err);
 			fs.writeFileSync(BUILD_CLIENT_DIR + "/bundle.js", bundle);
-
-			b = browserify([
-				"./src/client/_svg_canvas_test.js",
-				"./src/client/_client_test.js",
-				"./src/client/_html_element_test.js"
-			]);
-			b.bundle({ debug: true }, function(err, bundle) {
-				if (err) fail(err);
-				fs.writeFileSync(BUILD_CLIENT_DIR + "/_test_bundle.js", bundle);
-				complete();
-			});
+			complete();
 		});
-
-
 	}, {async: true});
 
 	desc("Deploy to Heroku");
