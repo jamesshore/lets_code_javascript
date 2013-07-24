@@ -12,9 +12,6 @@ files = [
 	MOCHA_ADAPTER,
 	"node_modules/expect.js/expect.js",
 
-	"generated/build/client/vendor/jquery-1.8.2.js",
-	"generated/build/client/vendor/raphael-2.1.0.js",
-
 	"src/client/**/*.js",
 	"build/karma_commonjs_bridge.js"
 ];

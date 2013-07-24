@@ -21,7 +21,6 @@ Engineering Tasks:
   (so error messages have sensible filenames and line nums)
 
 To Do on current task:
-- requireFn() parameter is wrong--should be dependencyPath, not basepath.
 - Remove 'generated' files from karma.conf.js
 - Refactor 'build' task in Jakefile (and remove unneeded test bundling)
 - Rename 'SUPPORTED_BROWSERS' in Jakefile
