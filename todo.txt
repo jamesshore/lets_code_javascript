@@ -12,7 +12,6 @@ Minimum Marketable Features:
 User Stories:
 * Draw a line in response to iOS touch
 - click tracking needs to account for margin, border, and padding
-  - figure out how to factor out common setup code
   - test that em is converted px
 - Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 - Deploy (including smoke test to ensure that div is in home page)
@@ -20,16 +19,19 @@ User Stories:
 Engineering Tasks:
 * Get require(), modules, and exports working in Karma without using browserify
   (so error messages have sensible filenames and line nums)
-- Figure out how to bundle vendor files
-- Cleanup
-  - Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
-  - Do we want to copy src/server/ files to build directory?
-  - What about deployment? (Punt?)
-  - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)?
-- Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
 
 To Do on current task:
--
+- requireFn() parameter is wrong--should be dependencyPath, not basepath.
+- Remove 'generated' files from karma.conf.js
+- Refactor 'build' task in Jakefile (and remove unneeded test bundling)
+- Rename 'SUPPORTED_BROWSERS' in Jakefile
+- (punt) bundle vendor files (tried browserify-shim)
+- (punt) Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)?
+- (punt) Duplication between weewikipaint.js CONTENT_DIR and our Jakefile
+- (punt) What about deployment?
+- (punt) Do we want to copy src/server/ files to build directory?
+- (off-camera) Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
+- Integrate
 
 Future ideas:
 - Create 'fail fast' assertion code
