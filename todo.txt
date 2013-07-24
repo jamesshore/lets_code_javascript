@@ -22,8 +22,6 @@ Engineering Tasks:
   (so error messages have sensible filenames and line nums)
 
 To Do on current task:
-- (off-camera) Fix issue with Jake not showing stdout/stderr of shell commands (e.g., `./jake karma`)
-- Fix karma.conf.js log level
 - Integrate
 
 Future ideas:
