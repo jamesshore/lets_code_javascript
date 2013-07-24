@@ -11,9 +11,9 @@ files = [
 	MOCHA,
 	MOCHA_ADAPTER,
 	"node_modules/expect.js/expect.js",
-	"src/client/vendor/jquery-1.8.2.js",
-	"src/client/vendor/raphael-2.1.0.js",
-	"src/client/*.js"
+
+	"src/client/**/*.js",
+	"build/karma_commonjs_bridge.js"
 ];
 
 
@@ -21,6 +21,11 @@ files = [
 exclude = [
 
 ];
+
+
+preprocessors = {
+	"src/client/*.js": "commonjs"
+};
 
 
 // test results reporter to use

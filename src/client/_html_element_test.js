@@ -4,12 +4,13 @@
 (function() {
 	"use strict";
 
+	var HtmlElement = require("./html_element.js");
 
 	describe("HtmlElement", function() {
 		var htmlElement;
 
 		beforeEach(function() {
-			htmlElement = wwp.HtmlElement.fromHtml("<div></div>");
+			htmlElement = HtmlElement.fromHtml("<div></div>");
 		});
 
 		it("handles mouse events", function() {
@@ -42,12 +43,12 @@
 		});
 
 		it("appends elements", function() {
-			htmlElement.append(wwp.HtmlElement.fromHtml("<div></div>"));
+			htmlElement.append(HtmlElement.fromHtml("<div></div>"));
 			expect(htmlElement._element.children().length).to.equal(1);
 		});
 
 		it("appends to body", function() {
-			var body = new wwp.HtmlElement($(document.body));
+			var body = new HtmlElement($(document.body));
 			var childrenBeforeAppend = body._element.children().length;
 
 			htmlElement.appendSelfToBody();
@@ -56,7 +57,7 @@
 		});
 
 		it("removes elements", function() {
-			var elementToAppend = wwp.HtmlElement.fromHtml("<div></div>");
+			var elementToAppend = HtmlElement.fromHtml("<div></div>");
 			htmlElement.append(elementToAppend);
 			elementToAppend.remove();
 			expect(htmlElement._element.children().length).to.equal(0);

@@ -12,23 +12,17 @@ Minimum Marketable Features:
 User Stories:
 * Draw a line in response to iOS touch
 - click tracking needs to account for margin, border, and padding
-  - figure out how to factor out common setup code
   - test that em is converted px
 - Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 - Deploy (including smoke test to ensure that div is in home page)
+  - Create a 'run' build target in our Jakefile
 
 Engineering Tasks:
-- Introduce modules
-  - Use Modernizr to eliminate duplicate browserSupportsTouchEvents() function (in _client_test.js & _dom_element_test.js)
+* Get require(), modules, and exports working in Karma without using browserify
+  (so error messages have sensible filenames and line nums)
 
 To Do on current task:
-- BEFORE RECORDING:
-  - Updated npm modules
-  - Modified ./jake.sh and ./jake.bat to automatically run `npm rebuild` (and updated readme)
-  - upgraded Node.js 0.8.23 --> 0.10.6 and improved version checking logic (0.10.7 not supported by Heroku yet)
-  - integrate
-  - Mention Vlad Gurdiga's frame-based approach to front-end smoke tests: http://www.letscodejavascript.com/v3/comments/live/94#comment-883086789
-  - Michal Svoboda's suggestion of returning an array rather than asserting in the test: http://www.letscodejavascript.com/v3/comments/live/101#comment-889773949
+- Integrate
 
 Future ideas:
 - Create 'fail fast' assertion code
@@ -45,6 +39,7 @@ Future ideas:
 - Automate CI script
 - Resolve npm 'extraneous' warning (due to package.json not reflecting what's in node_modules)
 - Convert 'client' to be proper object rather than global singleton?
+- Upgrade to latest version of Karma (with new preprocessor support)?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

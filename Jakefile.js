@@ -6,6 +6,10 @@
 
 	if (!process.env.loose) console.log("For more forgiving test settings, use 'loose=true'");
 
+	var fs = require("fs");
+	var shell = require("shelljs");
+
+	var browserify = require("browserify");
 	var lint = require("./build/util/lint_runner.js");
 	var nodeunit = require("./build/util/nodeunit_runner.js");
 	var karma = require("./build/util/karma_runner.js");
@@ -15,16 +19,20 @@
 	var SUPPORTED_BROWSERS = [
 		"IE 8.0 (Windows)",
 		"IE 9.0 (Windows)",
-		"Firefox 20.0 (Mac)",
-		"Chrome 26.0 (Mac)",
+		"Firefox 22.0 (Mac)",
+		"Chrome 28.0 (Mac)",
 		"Safari 6.0 (Mac)",
 		"Safari 6.0 (iOS)"
 	];
 
 	var GENERATED_DIR = "generated";
 	var TEMP_TESTFILE_DIR = GENERATED_DIR + "/test";
+	var BUILD_DIR = GENERATED_DIR + "/build";
+	var BUILD_CLIENT_DIR = BUILD_DIR + "/client";
 
 	directory(TEMP_TESTFILE_DIR);
+	directory(BUILD_DIR);
+	directory(BUILD_CLIENT_DIR);
 
 	desc("Delete all generated files");
 	task("clean", [], function() {
@@ -63,13 +71,29 @@
 	}, {async: true});
 
 	desc("Test client code");
-	task("testClient", function() {
+	task("testClient", [], function() {
 		karma.runTests(SUPPORTED_BROWSERS, complete, fail);
 	}, {async: true});
 
 	desc("End-to-end smoke tests");
-	task("testSmoke", function() {
+	task("testSmoke", ["build"], function() {
 		nodeunit.runTests(smokeTestFiles(), complete, fail);
+	}, {async: true});
+
+	desc("Bundle and build code");
+	task("build", [BUILD_CLIENT_DIR], function() {
+		shell.rm("-rf", BUILD_CLIENT_DIR + "/*");
+		shell.cp("-R", "src/client/*.html", "src/client/vendor", BUILD_CLIENT_DIR);
+
+		console.log("Bundling client files with Browserify...");
+		var b = browserify();
+		b.require("./src/client/client.js", {expose: "./client.js"} );
+		b.require("./src/client/html_element.js", {expose: "./html_element.js"} );
+		b.bundle({ debug: true }, function(err, bundle) {
+			if (err) fail(err);
+			fs.writeFileSync(BUILD_CLIENT_DIR + "/bundle.js", bundle);
+			complete();
+		});
 	}, {async: true});
 
 	desc("Deploy to Heroku");
@@ -179,8 +203,12 @@
 
 	function clientGlobals() {
 		return {
-			wwp: true,
+			// Browserify
+			require: false,
+			module: false,
+			exports: false,
 
+			// Mocha / expect.js
 			describe: false,
 			it: false,
 			expect: false,

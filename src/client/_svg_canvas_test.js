@@ -4,20 +4,22 @@
 (function() {
 	"use strict";
 
+	var SvgCanvas = require("./svg_canvas.js");
+	var HtmlElement = require("./html_element.js");
+
 	describe("SvgCanvas", function() {
 
 		var div;
 		var svgCanvas;
 
 		beforeEach(function() {
-			div = wwp.HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
+			div = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			div.appendSelfToBody();
-			svgCanvas = new wwp.SvgCanvas(div);
+			svgCanvas = new SvgCanvas(div);
 		});
 
 		afterEach(function() {
 			div.remove();
-			wwp.drawingAreaHasBeenRemovedFromDom();
 		});
 
 		it("returns height and width", function() {

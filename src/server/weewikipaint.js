@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var CONTENT_DIR = "src/client";
+	var CONTENT_DIR = "./generated/build/client";
 
 	var server = require("./server.js");
 	var port = process.argv[2];
