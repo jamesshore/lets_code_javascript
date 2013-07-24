@@ -16,7 +16,7 @@
 	var versionChecker = require("./build/util/version_checker.js");
 	var path = require("path");
 
-	var SUPPORTED_BROWSERS = [
+	var TESTED_BROWSERS = [
 		"IE 8.0 (Windows)",
 		"IE 9.0 (Windows)",
 		"Firefox 22.0 (Mac)",
@@ -72,7 +72,7 @@
 
 	desc("Test client code");
 	task("testClient", [], function() {
-		karma.runTests(SUPPORTED_BROWSERS, complete, fail);
+		karma.runTests(TESTED_BROWSERS, complete, fail);
 	}, {async: true});
 
 	desc("End-to-end smoke tests");
