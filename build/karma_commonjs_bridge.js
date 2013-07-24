@@ -10,19 +10,19 @@
 		require(modulePath, modulePath);
 	};
 
-	function require(basepath, dependency) {
-		var dependencyPath = normalizePath(basepath, dependency);
+	function require(requiringFile, dependency) {
+		dependency = normalizePath(requiringFile, dependency);
 
 		// find module
-		var moduleFn = window.__karma__.CJSModules[dependencyPath];
-		if (moduleFn === undefined) throw new Error("Could not find module '" + dependency + "' from '" + basepath + "'");
+		var moduleFn = window.__karma__.CJSModules[dependency];
+		if (moduleFn === undefined) throw new Error("Could not find module '" + dependency + "' from '" + requiringFile + "'");
 
 		// run the module (if necessary)
-		var module = cachedModules[dependencyPath];
+		var module = cachedModules[dependency];
 		if (module === undefined) {
 			module = { exports: {} };
-			moduleFn(requireFn(basepath), module, module.exports);
-			cachedModules[dependencyPath] = module;
+			moduleFn(requireFn(dependency), module, module.exports);
+			cachedModules[dependency] = module;
 		}
 		return module.exports;
 	};
