@@ -16,6 +16,7 @@ User Stories:
 - Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
 - Deploy (including smoke test to ensure that div is in home page)
   - Create a 'run' build target in our Jakefile
+    (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
 * Get require(), modules, and exports working in Karma without using browserify
