@@ -4,15 +4,18 @@
 (function() {
 	"use strict";
 
-	var jake = require("jake");
 	var child_process = require("child_process");
 	var http = require("http");
-	var fs = require("fs");
-	var procfile = require("procfile");
+
+	var runServer = require("./_run_server.js");
+
 	var serverProcess;
 
 	exports.setUp = function(done) {
-		runServer(done);
+		runServer(function(process) {
+			serverProcess = process;
+			done();
+		});
 	};
 
 	exports.tearDown = function(done) {
@@ -48,25 +51,6 @@
 			test.done();
 		});
 	};
-
-	function runServer(callback) {
-		var commandLine = parseProcFile();
-		serverProcess = child_process.spawn(commandLine.command, commandLine.options, {stdio: ["pipe", "pipe", process.stderr]});
-		serverProcess.stdout.setEncoding("utf8");
-		serverProcess.stdout.on("data", function(chunk) {
-			if (chunk.trim().indexOf("Server started") !== -1) callback();
-		});
-	}
-
-	function parseProcFile() {
-		var fileData = fs.readFileSync("Procfile", "utf8");
-		var webCommand = procfile.parse(fileData).web;
-		webCommand.options = webCommand.options.map(function(element) {
-			if (element === "$PORT") return "5000";
-			else return element;
-		});
-		return webCommand;
-	}
 
 	function httpGet(url, callback) {
 		var request = http.get(url);

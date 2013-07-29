@@ -2,7 +2,11 @@
 (function() {
 	"use strict";
 
-	exports.runServer = function(callback) {
+	var child_process = require("child_process");
+	var fs = require("fs");
+	var procfile = require("procfile");
+
+	module.exports = function(callback) {
 		var commandLine = parseProcFile();
 		var serverProcess = child_process.spawn(commandLine.command, commandLine.options, {stdio: ["pipe", "pipe", process.stderr]});
 		serverProcess.stdout.setEncoding("utf8");
