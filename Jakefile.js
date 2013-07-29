@@ -49,6 +49,11 @@
 		karma.serve("build/karma.conf.js", complete, fail);
 	}, {async: true});
 
+	desc("Start WeeWikiPaint server for manual testing");
+	task("run", ["build"], function() {
+		console.log("Now run `foreman start`");
+	});
+
 	desc("Lint everything");
 	task("lint", ["lintNode", "lintClient"]);
 

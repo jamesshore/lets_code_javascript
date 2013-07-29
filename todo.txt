@@ -10,20 +10,24 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* Draw a line in response to iOS touch
-- click tracking needs to account for margin, border, and padding
+* drawing should continue even if user leaves boundaries (just pick up again when they come back in)
+- 'clear screen' button
+- quality user-facing site design
+? click tracking needs to account for margin, border, and padding (if needed; fail fast if not)
   - test that em is converted px
-- Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
+- Site monitoring and logging
+- Performance
+- Scalability
 - Deploy (including smoke test to ensure that div is in home page)
-  - Create a 'run' build target in our Jakefile
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* Get require(), modules, and exports working in Karma without using browserify
-  (so error messages have sensible filenames and line nums)
+- Create a 'run' build target in our Jakefile
+- change client to not stop drawing when mouse leaves drawing area
+- handle the case where user lets go of mouse button outside drawing area
 
 To Do on current task:
-- Integrate
+*
 
 Future ideas:
 - Create 'fail fast' assertion code
@@ -34,9 +38,7 @@ Future ideas:
   Make it forcibly close?
 - Remove Node version duplication between package.json and Jakefile.js
 - Fix httpGet duplication
-- Automated npm rebuild ('npm rebuild' in jake.sh / jake.bat if .bin directory not found.)
 - Ensure that every browser has same of number of tests running
-- Automatically start Karma (or provide friendlier error message when it isn't running?)
 - Automate CI script
 - Resolve npm 'extraneous' warning (due to package.json not reflecting what's in node_modules)
 - Convert 'client' to be proper object rather than global singleton?
