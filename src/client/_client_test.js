@@ -26,11 +26,6 @@
 			client.drawingAreaHasBeenRemovedFromDom();
 		});
 
-		it("should have the same dimensions as its enclosing div", function() {
-			expect(svgCanvas.height()).to.equal(300);
-			expect(svgCanvas.width()).to.equal(600);
-		});
-
 		describe("mouse events", function() {
 			it("draws a line in response to mouse drag", function() {
 				drawingArea.doMouseDown(20, 30);

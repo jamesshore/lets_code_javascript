@@ -22,7 +22,7 @@
 			div.remove();
 		});
 
-		it("returns height and width", function() {
+		it("should have the same dimensions as its enclosing div", function() {
 			expect(svgCanvas.height()).to.equal(300);
 			expect(svgCanvas.width()).to.equal(600);
 		});

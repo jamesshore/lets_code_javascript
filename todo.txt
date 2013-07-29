@@ -26,7 +26,8 @@ Engineering Tasks:
 - handle the case where user lets go of mouse button outside drawing area
 
 To Do on current task:
--
+- Update README for our new Jakefile 'run' task
+- Can we remove dimension test in _client_test.js?
 
 Future ideas:
 - Create 'fail fast' assertion code
