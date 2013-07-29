@@ -27,9 +27,7 @@ Engineering Tasks:
 - handle the case where user lets go of mouse button outside drawing area
 
 To Do on current task:
-* Factor out code to start server
-- Get _smoke_test.js using _run_server.js
-- Get Jakefile using _run_server.js
+* Get Jakefile using _run_server.js
 
 Future ideas:
 - Create 'fail fast' assertion code

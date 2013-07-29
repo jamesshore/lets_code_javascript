@@ -14,6 +14,7 @@
 	var nodeunit = require("./build/util/nodeunit_runner.js");
 	var karma = require("./build/util/karma_runner.js");
 	var versionChecker = require("./build/util/version_checker.js");
+	var runServer = require("./src/_run_server.js");
 	var path = require("path");
 
 	var SUPPORTED_BROWSERS = [
@@ -51,8 +52,12 @@
 
 	desc("Start WeeWikiPaint server for manual testing");
 	task("run", ["build"], function() {
-		console.log("Now run `foreman start`");
-	});
+		runServer(function(callback) {
+			console.log("Server started");
+			// Don't do anything with the callback so the task never ends
+			// That way the user can use Ctrl-C to kill the server.
+		});
+	}, {async: true});
 
 	desc("Lint everything");
 	task("lint", ["lintNode", "lintClient"]);
