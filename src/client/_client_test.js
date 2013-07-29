@@ -94,7 +94,7 @@
 				]);
 			});
 
-			it("stops drawing when mouse leaves drawing area", function() {
+			it("continues drawing if mouse leaves drawing area and comes back in", function() {
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseLeave(700, 70);
@@ -104,7 +104,9 @@
 				drawingArea.doMouseUp(90, 40);
 
 				expect(lineSegments()).to.eql([
-					[20, 30, 50, 60]
+					[20, 30, 50, 60],
+					[50, 60, 700, 70],
+					[700, 70, 90, 40]
 				]);
 			});
 

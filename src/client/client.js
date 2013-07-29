@@ -1,18 +1,21 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global Raphael */
+/*global Raphael, $ */
 
 (function() {
 	"use strict";
 
 	var SvgCanvas = require("./svg_canvas.js");
+	var HtmlElement = require("./html_element.js");
 
 	var svgCanvas = null;
 	var start = null;
 	var drawingArea;
+	var documentBody;
 
 	exports.initializeDrawingArea = function(htmlElement) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
+		documentBody = new HtmlElement($(document.body));
 
 		svgCanvas = new SvgCanvas(drawingArea);
 		handleDragEvents();
