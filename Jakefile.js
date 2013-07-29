@@ -52,11 +52,7 @@
 
 	desc("Start WeeWikiPaint server for manual testing");
 	task("run", ["build"], function() {
-		runServer(function(callback) {
-			console.log("Server started");
-			// Don't do anything with the callback so the task never ends
-			// That way the user can use Ctrl-C to kill the server.
-		});
+		runServer.runInteractively();
 	}, {async: true});
 
 	desc("Lint everything");
