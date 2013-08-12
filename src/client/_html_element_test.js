@@ -43,8 +43,12 @@
 		});
 
 		it("converts page coordinates into relative element coordinates", function() {
-			htmlElement.appendSelfToBody();
-			expect(htmlElement.relativeOffset({x: 100, y: 100})).to.eql({x: 92, y: 92});
+			try {
+				htmlElement.appendSelfToBody();
+				expect(htmlElement.relativeOffset({x: 100, y: 100})).to.eql({x: 92, y: 92});
+			} finally {
+				htmlElement.remove();
+			}
 		});
 
 		it("appends elements", function() {
@@ -53,12 +57,16 @@
 		});
 
 		it("appends to body", function() {
-			var body = new HtmlElement($(document.body));
-			var childrenBeforeAppend = body._element.children().length;
+			try {
+				var body = new HtmlElement($(document.body));
+				var childrenBeforeAppend = body._element.children().length;
 
-			htmlElement.appendSelfToBody();
-			var childrenAfterAppend = body._element.children().length;
-			expect(childrenBeforeAppend + 1).to.equal(childrenAfterAppend);
+				htmlElement.appendSelfToBody();
+				var childrenAfterAppend = body._element.children().length;
+				expect(childrenBeforeAppend + 1).to.equal(childrenAfterAppend);
+			} finally {
+				htmlElement.remove();
+			}
 		});
 
 		it("removes elements", function() {
