@@ -11,7 +11,6 @@ Minimum Marketable Features:
 
 User Stories:
 * drawing should continue even if user leaves boundaries (just pick up again when they come back in)
-- should draw a single pixel when mouse is clicked (or screen is tapped)
 - 'clear screen' button
 - quality user-facing site design
 ? click tracking needs to account for margin, border, and padding (if needed; fail fast if not)
@@ -23,14 +22,17 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* change client to not stop drawing when mouse leaves drawing area
+* pass through pageOffset rather than relativeOffset in HtmlElement event handlers
+- change client to not stop drawing when mouse leaves drawing area
+  - uncomment test
 - handle the case where user lets go of mouse button outside drawing area
+- draw a single pixel when mouse is clicked (or screen is tapped)
 
 To Do on current task:
-- AT START OF EPISODE:
-  - Moved CJSModules to __cjsmodules__ (rather than __karma__); see https://github.com/karma-runner/karma/issues/552
-  - Fixed 'dependency' vs. 'dependencyPath' in karma_commonjs_bridge.js (former is needed for error reporting)
-  - Danny Jones, episode 122 comments
+- Finish cleaning up HtmlElement
+- Provide a method on HtmlElement to turn page offset into relative offset
+- Change HtmlElement to return page offsets rather than relative offsets
+
 - Create HtmlElement.documentBody?
 - Eliminate need for JQuery element on HtmlElement constructor?
 

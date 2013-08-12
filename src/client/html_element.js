@@ -28,25 +28,30 @@
 		return this._element[0];
 	};
 
-	HtmlElement.prototype.doSelectStart = function(relativeX, relativeY) {
-		sendMouseEvent(this, "selectstart", relativeX, relativeY);
-	};
+	HtmlElement.prototype.doSelectStart = doMouseEventFn("selectstart");
+	HtmlElement.prototype.doMouseDown = doMouseEventFn("mousedown");
+	HtmlElement.prototype.doMouseMove = doMouseEventFn("mousemove");
+	HtmlElement.prototype.doMouseLeave = doMouseEventFn("mouseleave");
+	HtmlElement.prototype.doMouseUp = doMouseEventFn("mouseup");
 
-	HtmlElement.prototype.doMouseDown = function(relativeX, relativeY) {
-		sendMouseEvent(this, "mousedown", relativeX, relativeY);
-	};
+	function doMouseEventFn(event) {
+		return function(relativeX, relativeY) {
+			sendMouseEvent(this, event, relativeX, relativeY);
+		};
+	}
 
-	HtmlElement.prototype.doMouseMove = function(relativeX, relativeY) {
-		sendMouseEvent(this, "mousemove", relativeX, relativeY);
-	};
+	function sendMouseEvent(self, event, relativeX, relativeY) {
+		var jqElement = self._element;
 
-	HtmlElement.prototype.doMouseLeave = function(relativeX, relativeY) {
-		sendMouseEvent(this, "mouseleave", relativeX, relativeY);
-	};
+		var page = pageOffset(self, relativeX, relativeY);
+		var eventData = new jQuery.Event();
+		eventData.pageX = page.x;
+		eventData.pageY = page.y;
+		eventData.type = event;
+		jqElement.trigger(eventData);
+	}
 
-	HtmlElement.prototype.doMouseUp = function(relativeX, relativeY) {
-		sendMouseEvent(this, "mouseup", relativeX, relativeY);
-	};
+
 
 	HtmlElement.prototype.doSingleTouchStart = function(relativeX, relativeY) {
 		sendSingleTouchEvent(this, "touchstart", relativeX, relativeY);
@@ -131,17 +136,6 @@
 
 			callback(offset, event);
 		};
-	}
-
-	function sendMouseEvent(self, event, relativeX, relativeY) {
-		var jqElement = self._element;
-
-		var page = pageOffset(self, relativeX, relativeY);
-		var eventData = new jQuery.Event();
-		eventData.pageX = page.x;
-		eventData.pageY = page.y;
-		eventData.type = event;
-		jqElement.trigger(eventData);
 	}
 
 	function sendSingleTouchEvent(self, event, relativeX, relativeY) {
