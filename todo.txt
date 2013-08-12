@@ -29,7 +29,6 @@ Engineering Tasks:
 - draw a single pixel when mouse is clicked (or screen is tapped)
 
 To Do on current task:
-- Finish cleaning up HtmlElement
 - Provide a method on HtmlElement to turn page offset into relative offset
 - Change HtmlElement to return page offsets rather than relative offsets
 
