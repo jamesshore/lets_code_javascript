@@ -52,22 +52,17 @@
 	}
 
 
+	HtmlElement.prototype.doSingleTouchStart = doSingleTouchEventFn("touchstart");
+	HtmlElement.prototype.doSingleTouchMove = doSingleTouchEventFn("touchmove");
+	HtmlElement.prototype.doSingleTouchEnd = doSingleTouchEventFn("touchend");
+	HtmlElement.prototype.doSingleTouchCancel = doSingleTouchEventFn("touchcancel");
 
-	HtmlElement.prototype.doSingleTouchStart = function(relativeX, relativeY) {
-		sendSingleTouchEvent(this, "touchstart", relativeX, relativeY);
-	};
 
-	HtmlElement.prototype.doSingleTouchMove = function(relativeX, relativeY) {
-		sendSingleTouchEvent(this, "touchmove", relativeX, relativeY);
-	};
-
-	HtmlElement.prototype.doSingleTouchEnd = function(relativeX, relativeY) {
-		sendSingleTouchEvent(this, "touchend", relativeX, relativeY);
-	};
-
-	HtmlElement.prototype.doSingleTouchCancel = function(relativeX, relativeY) {
-		sendSingleTouchEvent(this, "touchcancel", relativeX, relativeY);
-	};
+	function doSingleTouchEventFn(event) {
+		return function(relativeX, relativeY) {
+			sendSingleTouchEvent(this, event, relativeX, relativeY);
+		};
+	}
 
 	HtmlElement.prototype.doMultiTouchStart = function(relative1X, relative1Y, relative2X, relative2Y) {
 		sendMultiTouchEvent(this, "touchstart", relative1X, relative1Y, relative2X, relative2Y);
