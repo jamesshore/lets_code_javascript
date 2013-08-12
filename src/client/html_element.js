@@ -38,6 +38,10 @@
 
 	HtmlElement.prototype.doMultiTouchStart = doMultiTouchEventFn("touchstart");
 
+	HtmlElement.prototype.relativeOffset = function(pageOffset) {
+		return relativeOffset(this, pageOffset.x, pageOffset.y);
+	};
+
 	HtmlElement.prototype.append = function(elementToAppend) {
 		this._element.append(elementToAppend._element);
 	};

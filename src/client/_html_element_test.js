@@ -42,6 +42,11 @@
 			expect(eventTriggered).to.be(true);
 		});
 
+		it("converts page coordinates into relative element coordinates", function() {
+			htmlElement.appendSelfToBody();
+			expect(htmlElement.relativeOffset({x: 100, y: 100})).to.eql({x: 92, y: 92});
+		});
+
 		it("appends elements", function() {
 			htmlElement.append(HtmlElement.fromHtml("<div></div>"));
 			expect(htmlElement._element.children().length).to.equal(1);
