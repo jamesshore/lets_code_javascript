@@ -11,6 +11,7 @@ Minimum Marketable Features:
 
 User Stories:
 * drawing should continue even if user leaves boundaries (just pick up again when they come back in)
+- should draw a single pixel when mouse is clicked (or screen is tapped)
 - 'clear screen' button
 - quality user-facing site design
 ? click tracking needs to account for margin, border, and padding (if needed; fail fast if not)
@@ -29,7 +30,7 @@ To Do on current task:
 - BEFORE NEXT EPISODE:
   - Move CJSModules elsewhere (other than __karma__); see https://github.com/karma-runner/karma/issues/552
   - Fix 'dependency' vs. 'dependencyPath' in karma_commonjs_bridge.js (former is needed for error reporting)
-  - Try drawing while scrolling mousewheel
+  - Danny Jones, episode 122 comments
 - Create HtmlElement.documentBody?
 - Eliminate need for JQuery element on HtmlElement constructor?
 
