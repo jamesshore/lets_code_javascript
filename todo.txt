@@ -27,8 +27,8 @@ Engineering Tasks:
 - handle the case where user lets go of mouse button outside drawing area
 
 To Do on current task:
-- BEFORE NEXT EPISODE:
-  - Move CJSModules elsewhere (other than __karma__); see https://github.com/karma-runner/karma/issues/552
+- AT START OF EPISODE:
+  - Moved CJSModules elsewhere (other than __karma__); see https://github.com/karma-runner/karma/issues/552
   - Fix 'dependency' vs. 'dependencyPath' in karma_commonjs_bridge.js (former is needed for error reporting)
   - Danny Jones, episode 122 comments
 - Create HtmlElement.documentBody?

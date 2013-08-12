@@ -6,7 +6,7 @@
 
 	var cachedModules = {};
 
-	for (var modulePath in window.__karma__.CJSModules) {
+	for (var modulePath in window.__cjsmodules__) {
 		require(modulePath, modulePath);
 	};
 
@@ -14,7 +14,7 @@
 		dependency = normalizePath(requiringFile, dependency);
 
 		// find module
-		var moduleFn = window.__karma__.CJSModules[dependency];
+		var moduleFn = window.__cjsmodules__[dependency];
 		if (moduleFn === undefined) throw new Error("Could not find module '" + dependency + "' from '" + requiringFile + "'");
 
 		// run the module (if necessary)
