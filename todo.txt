@@ -28,8 +28,8 @@ Engineering Tasks:
 
 To Do on current task:
 - AT START OF EPISODE:
-  - Moved CJSModules elsewhere (other than __karma__); see https://github.com/karma-runner/karma/issues/552
-  - Fix 'dependency' vs. 'dependencyPath' in karma_commonjs_bridge.js (former is needed for error reporting)
+  - Moved CJSModules to __cjsmodules__ (rather than __karma__); see https://github.com/karma-runner/karma/issues/552
+  - Fixed 'dependency' vs. 'dependencyPath' in karma_commonjs_bridge.js (former is needed for error reporting)
   - Danny Jones, episode 122 comments
 - Create HtmlElement.documentBody?
 - Eliminate need for JQuery element on HtmlElement constructor?
