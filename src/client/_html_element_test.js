@@ -91,7 +91,7 @@
 		}
 
 		function browserSupportsTouchEvents() {
-			return (typeof Touch !== "undefined");
+			return (typeof Touch !== "undefined") && ('ontouchstart' in window);
 		}
 
 
