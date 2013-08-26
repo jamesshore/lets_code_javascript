@@ -22,8 +22,7 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* pass through pageOffset rather than relativeOffset in HtmlElement event handlers
-- change client to not stop drawing when mouse leaves drawing area
+* change client to not stop drawing when mouse leaves drawing area
   - uncomment test
 - Deal with duplication in touch event testing (use Modernizr?)
 - What is up with IE 8 failing when Chrome is not running?
@@ -31,10 +30,6 @@ Engineering Tasks:
 - draw a single pixel when mouse is clicked (or screen is tapped)
 
 To Do on current task:
-* Change HtmlElement to return page offsets rather than relative offsets
-  - Re-enable _client_test
-  - Fix smoke tests
-
 - Create HtmlElement.documentBody?
 - Eliminate need for JQuery element on HtmlElement constructor?
 

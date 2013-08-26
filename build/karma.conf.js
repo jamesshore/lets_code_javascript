@@ -19,7 +19,6 @@ files = [
 
 // list of files to exclude
 exclude = [
-	"src/client/_client_test.js"
 ];
 
 

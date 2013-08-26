@@ -57,14 +57,14 @@
 		});
 	}
 
-	function startDrag(offset) {
-		start = offset;
+	function startDrag(pageOffset) {
+		start = drawingArea.relativeOffset(pageOffset);
 	}
 
-	function continueDrag(relativeOffset) {
+	function continueDrag(pageOffset) {
 		if (start === null) return;
 
-		var end = relativeOffset;
+		var end = drawingArea.relativeOffset(pageOffset);
 		svgCanvas.drawLine(start.x, start.y, end.x, end.y);
 		start = end;
 	}
