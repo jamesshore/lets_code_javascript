@@ -23,7 +23,7 @@ User Stories:
 
 Engineering Tasks:
 * change client to not stop drawing when mouse leaves drawing area
-  - uncomment test
+  - Figure out why event handler is being triggered multiple times
 - Deal with duplication in touch event testing (use Modernizr?)
 - What is up with IE 8 failing when Chrome is not running?
 - handle the case where user lets go of mouse button outside drawing area
