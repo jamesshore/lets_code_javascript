@@ -31,8 +31,9 @@ Engineering Tasks:
 - draw a single pixel when mouse is clicked (or screen is tapped)
 
 To Do on current task:
-- AT START OF EPISODE:
-- Change HtmlElement to return page offsets rather than relative offsets
+* Change HtmlElement to return page offsets rather than relative offsets
+  - Re-enable _client_test
+  - Fix smoke tests
 
 - Create HtmlElement.documentBody?
 - Eliminate need for JQuery element on HtmlElement constructor?

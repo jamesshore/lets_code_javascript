@@ -106,8 +106,8 @@
 
 	function mouseEventHandlerFn(self, callback) {
 		return function(event) {
-			var offset = relativeOffset(self, event.pageX, event.pageY);
-			callback(offset, event);
+			var pageOffset = { x: event.pageX, y: event.pageY };
+			callback(pageOffset, event);
 		};
 	}
 
@@ -134,7 +134,7 @@
 
 			var pageX = originalEvent.touches[0].pageX;
 			var pageY = originalEvent.touches[0].pageY;
-			var offset = relativeOffset(self, pageX, pageY);
+			var offset = { x: pageX, y: pageY };
 
 			callback(offset, event);
 		};

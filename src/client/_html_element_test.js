@@ -13,7 +13,7 @@
 			htmlElement = HtmlElement.fromHtml("<div></div>");
 		});
 
-		it("handles mouse events", function() {
+		it("triggers mouse events relative to element and handles them relative to page", function() {
 			testEvent(htmlElement.onSelectStart_ie8Only, htmlElement.doSelectStart);
 			testEvent(htmlElement.onMouseDown, htmlElement.doMouseDown);
 			testEvent(htmlElement.onMouseMove, htmlElement.doMouseMove);
@@ -82,12 +82,19 @@
 		});
 
 		function testEvent(eventSender, eventHandler) {
-			var eventOffset = null;
-			eventSender.call(htmlElement, function(offset) {
-				eventOffset = offset;
-			});
-			eventHandler.call(htmlElement, 42, 13);
-			expect(eventOffset).to.eql({ x: 42, y: 13});
+			try {
+				htmlElement.appendSelfToBody();
+
+				var eventPageOffset = null;
+				eventSender.call(htmlElement, function(pageOffset) {
+					eventPageOffset = pageOffset;
+				});
+				eventHandler.call(htmlElement, 42, 13);
+				expect(htmlElement.relativeOffset(eventPageOffset)).to.eql({ x: 42, y: 13});
+			}
+			finally {
+				htmlElement.remove();
+			}
 		}
 
 		function browserSupportsTouchEvents() {
