@@ -54,7 +54,16 @@
 		it("converts page coordinates into relative element coordinates", function() {
 			try {
 				htmlElement.appendSelfToBody();
-				expect(htmlElement.relativeOffset({x: 100, y: 100})).to.eql({x: 92, y: 92});
+				expect(htmlElement.relativeOffset({x: 100, y: 150})).to.eql({x: 92, y: 142});
+			} finally {
+				htmlElement.remove();
+			}
+		});
+
+		it("converts relative coordinates into page coordinates", function() {
+			try {
+				htmlElement.appendSelfToBody();
+				expect(htmlElement.pageOffset({x: 100, y: 150})).to.eql({x: 108, y: 158});
 			} finally {
 				htmlElement.remove();
 			}

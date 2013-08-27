@@ -46,6 +46,10 @@
 		return relativeOffset(this, pageOffset.x, pageOffset.y);
 	};
 
+	HtmlElement.prototype.pageOffset = function(relativeOffset) {
+		return pageOffset(this, relativeOffset.x, relativeOffset.y);
+	};
+
 	HtmlElement.prototype.append = function(elementToAppend) {
 		this._element.append(elementToAppend._element);
 	};
