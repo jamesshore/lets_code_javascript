@@ -11,6 +11,7 @@ Minimum Marketable Features:
 
 User Stories:
 * drawing should continue even if user leaves boundaries (just pick up again when they come back in)
+- draw a single pixel when mouse is clicked (or screen is tapped)
 - 'clear screen' button
 - quality user-facing site design
 ? click tracking needs to account for margin, border, and padding (if needed; fail fast if not)
@@ -22,14 +23,10 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* make sure it works when user lets go of mouse button outside web page entirely (and also outside browser)
-- make sure it works when user does not let go of mouse button outside browser
-- draw a single pixel when mouse is clicked (or screen is tapped)
 - What is up with IE 8 failing when Chrome is not running?
 - Deal with duplication in touch event testing (use Modernizr?)
 
 To Do on current task:
-
 - Create HtmlElement.documentBody?
 - Eliminate need for JQuery element on HtmlElement constructor?
 

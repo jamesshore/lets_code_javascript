@@ -33,7 +33,6 @@
 
 		drawingArea.onMouseDown(startDrag);
 		documentBody.onMouseMove(continueDrag);
-		documentBody.onMouseUp(endDrag);
 		windowElement.onMouseUp(endDrag);
 
 		drawingArea.onSingleTouchStart(startDrag);
