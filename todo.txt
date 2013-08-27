@@ -22,14 +22,13 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* change client to not stop drawing when mouse leaves drawing area
-- handle the case where user lets go of mouse button outside drawing area
+* make sure it works when user lets go of mouse button outside web page entirely (and also outside browser)
 - draw a single pixel when mouse is clicked (or screen is tapped)
 - What is up with IE 8 failing when Chrome is not running?
 - Deal with duplication in touch event testing (use Modernizr?)
 
 To Do on current task:
-- Fix IE8 and IE9 breakage with mouse-leave test (uncomment)
+
 - Create HtmlElement.documentBody?
 - Eliminate need for JQuery element on HtmlElement constructor?
 
