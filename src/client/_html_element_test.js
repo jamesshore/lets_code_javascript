@@ -52,6 +52,18 @@
 			expect(eventPageOffset).to.eql({ x: 0, y: 0 });
 		});
 
+		it("allows touch events to be triggered without coordinates", function() {
+			if (!browserSupportsTouchEvents()) return;
+
+			var eventPageOffset;
+			htmlElement.onSingleTouchStart(function(pageOffset) {
+				eventPageOffset = pageOffset;
+			});
+
+			htmlElement.doSingleTouchStart();
+			expect(eventPageOffset).to.eql({ x: 0, y: 0 });
+		});
+
 		it("clears all events (useful for testing)", function() {
 			htmlElement.onMouseDown(function() {
 				throw new Error("event handler should have been removed");
