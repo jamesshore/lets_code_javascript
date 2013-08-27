@@ -11,11 +11,13 @@
 	var start = null;
 	var drawingArea;
 	var documentBody;
+	var windowElement;
 
 	exports.initializeDrawingArea = function(htmlElement) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
 		documentBody = new HtmlElement($(document.body));
+		windowElement = new HtmlElement($(window));
 
 		svgCanvas = new SvgCanvas(drawingArea);
 		handleDragEvents();
@@ -32,6 +34,7 @@
 		drawingArea.onMouseDown(startDrag);
 		documentBody.onMouseMove(continueDrag);
 		documentBody.onMouseUp(endDrag);
+		windowElement.onMouseUp(endDrag);
 
 		drawingArea.onSingleTouchStart(startDrag);
 		drawingArea.onSingleTouchMove(continueDrag);

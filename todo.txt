@@ -23,6 +23,7 @@ User Stories:
 
 Engineering Tasks:
 * make sure it works when user lets go of mouse button outside web page entirely (and also outside browser)
+- make sure it works when user does not let go of mouse button outside browser
 - draw a single pixel when mouse is clicked (or screen is tapped)
 - What is up with IE 8 failing when Chrome is not running?
 - Deal with duplication in touch event testing (use Modernizr?)

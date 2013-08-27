@@ -12,10 +12,12 @@
 	describe("Drawing area", function() {
 		var drawingArea;
 		var documentBody;
+		var windowElement;
 		var svgCanvas;
 
 		beforeEach(function() {
 			documentBody = new HtmlElement($(document.body));
+			windowElement = new HtmlElement($(window));
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			drawingArea.appendSelfToBody();
 			svgCanvas = client.initializeDrawingArea(drawingArea);
@@ -124,6 +126,22 @@
 
 				documentBody.doMouseMove(bodyRelative.x, bodyRelative.y);
 				documentBody.doMouseUp(bodyRelative.x, bodyRelative.y);
+				drawingArea.doMouseMove(90, 40);
+
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60],
+					[50, 60, 700, 70]
+				]);
+			});
+
+			it("stops drawing if mouse leaves window and mouse button is released", function() {
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseLeave(700, 70);
+
+				windowElement.doMouseLeave(0, 0);
+				windowElement.doMouseUp(0, 0);
+
 				drawingArea.doMouseMove(90, 40);
 
 				expect(lineSegments()).to.eql([
