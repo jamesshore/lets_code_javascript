@@ -75,7 +75,14 @@
 	function sendMouseEvent(self, event, relativeX, relativeY) {
 		var jqElement = self._element;
 
-		var page = pageOffset(self, relativeX, relativeY);
+		var page;
+		if (relativeX === undefined || relativeY === undefined) {
+			page = { x: 0, y: 0 };
+		}
+		else {
+			page = pageOffset(self, relativeX, relativeY);
+		}
+
 		var eventData = new jQuery.Event();
 		eventData.pageX = page.x;
 		eventData.pageY = page.y;

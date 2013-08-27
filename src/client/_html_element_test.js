@@ -42,6 +42,16 @@
 			expect(eventTriggered).to.be(true);
 		});
 
+		it("allows mouse events to be triggered without coordinates", function() {
+			var eventPageOffset;
+			htmlElement.onMouseDown(function(pageOffset) {
+				eventPageOffset = pageOffset;
+			});
+
+			htmlElement.doMouseDown();
+			expect(eventPageOffset).to.eql({ x: 0, y: 0 });
+		});
+
 		it("clears all events (useful for testing)", function() {
 			htmlElement.onMouseDown(function() {
 				throw new Error("event handler should have been removed");
