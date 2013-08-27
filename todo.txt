@@ -29,7 +29,8 @@ Engineering Tasks:
 - Deal with duplication in touch event testing (use Modernizr?)
 
 To Do on current task:
-- Incorporate JQuery off() method call into HtmlElement
+* Incorporate JQuery off() method call into HtmlElement
+  - Replace "expect(true).to.be(false)" with better assertion
 - Fix IE8 and IE9 breakage with mouse-leave test (uncomment)
 - Create HtmlElement.documentBody?
 - Eliminate need for JQuery element on HtmlElement constructor?

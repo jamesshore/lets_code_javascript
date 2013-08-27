@@ -42,6 +42,15 @@
 			expect(eventTriggered).to.be(true);
 		});
 
+		it("clears all events (useful for testing)", function() {
+			htmlElement.onMouseDown(function() {
+				throw new Error("event handler should have been removed");
+			});
+
+			htmlElement.removeAllEventHandlers();
+			htmlElement.doMouseDown(0, 0);
+		});
+
 		it("converts page coordinates into relative element coordinates", function() {
 			try {
 				htmlElement.appendSelfToBody();
