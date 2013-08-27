@@ -25,6 +25,7 @@ User Stories:
 Engineering Tasks:
 - What is up with IE 8 failing when Chrome is not running?
 - Deal with duplication in touch event testing (use Modernizr?)
+- Integrate
 
 To Do on current task:
 - Create HtmlElement.documentBody?
