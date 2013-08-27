@@ -24,7 +24,7 @@
 		afterEach(function() {
 			drawingArea.remove();
 			client.drawingAreaHasBeenRemovedFromDom();
-			$(document.body).off();
+			documentBody.removeAllEventHandlers();
 		});
 
 		describe("mouse events", function() {
@@ -95,21 +95,24 @@
 				]);
 			});
 
-//			it("continues drawing if mouse leaves drawing area and comes back in", function() {
-//				drawingArea.doMouseDown(20, 30);
-//				drawingArea.doMouseMove(50, 60);
-//				drawingArea.doMouseLeave(700, 70);
-//
-//				documentBody.doMouseMove(700, 70);
-//				drawingArea.doMouseMove(90, 40);
-//				drawingArea.doMouseUp(90, 40);
-//
-//				expect(lineSegments()).to.eql([
-//					[20, 30, 50, 60],
-//					[50, 60, 700, 70],
-//					[700, 70, 90, 40]
-//				]);
-//			});
+			it("continues drawing if mouse leaves drawing area and comes back in", function() {
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseLeave(700, 70);
+
+				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
+				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
+
+				documentBody.doMouseMove(bodyRelative.x, bodyRelative.y);
+				drawingArea.doMouseMove(90, 40);
+				drawingArea.doMouseUp(90, 40);
+
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60],
+					[50, 60, 700, 70],
+					[700, 70, 90, 40]
+				]);
+			});
 
 			it("does not start drawing if drag is started outside drawing area", function() {
 				documentBody.doMouseDown(601, 150);
