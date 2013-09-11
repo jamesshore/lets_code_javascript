@@ -32,8 +32,6 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-* Update karma.conf.js
-- Update/install karma-commonjs bridge
   - Delete build/karma_commonjs_bridge.js
 - Update our Karma runner
 - Update 'SUPPORTED_BROWSERS' (change name to something else?)

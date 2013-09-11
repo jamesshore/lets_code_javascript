@@ -9,11 +9,12 @@ module.exports = function(config) {
 
 
     // frameworks to use
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'commonjs'],
 
 
     // list of files / patterns to load in the browser
     files: [
+	    'node_modules/expect.js/expect.js',
       'src/client/**/*.js'
     ],
 
@@ -22,6 +23,11 @@ module.exports = function(config) {
     exclude: [
       
     ],
+
+	  // preprocesors
+	  preprocessors: {
+		  'src/client/*.js': ['commonjs']
+	  },
 
 
     // test results reporter to use
@@ -39,7 +45,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
 
     // enable / disable watching file and executing tests whenever any file changes
