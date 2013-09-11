@@ -23,31 +23,15 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* Final cleanup for drawing work
-- Integrate
-- Deal with duplication in touch event testing (use Modernizr?)
-- Update Karma 0.8.x --> 0.10.x
+* Update Karma 0.8.x --> 0.10.x
   - What is up with IE 8 failing when Chrome is not running?
   --> fails when *even number* of browsers running, with off-by-one error. (?!?!?)
-  - Update LL6
-  - Update Ch7
+- Deal with duplication in touch event testing (use Modernizr?)
+- drawing doesn't work in IE8
+  - double-check other browsers
 
 To Do on current task:
-
-Future ideas:
-- Create 'fail fast' assertion code
-- Abstract test framework? (Swap out a different framework to make sure abstraction works)
-- Static checking of function parameters (rather than writing tests)
-- Handle errors properly in server.js
-- server.stop() waits for open connections to close (e.g., Firefox keeps open connection).
-  Make it forcibly close?
-- Remove Node version duplication between package.json and Jakefile.js
-- Fix httpGet duplication
-- Ensure that every browser has same of number of tests running
-- Automate CI script
-- Resolve npm 'extraneous' warning (due to package.json not reflecting what's in node_modules)
-- Convert 'client' to be proper object rather than global singleton?
-- Upgrade to latest version of Karma (with new preprocessor support)?
+*
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
