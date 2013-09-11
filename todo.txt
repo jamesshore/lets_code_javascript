@@ -25,13 +25,18 @@ User Stories:
 Engineering Tasks:
 * Update Karma 0.8.x --> 0.10.x
   - What is up with IE 8 failing when Chrome is not running?
-  --> fails when *even number* of browsers running, with off-by-one error. (?!?!?)
+    - related to list of browsers interfering with metrics
+    --> fails when *even number* of browsers running, with off-by-one error. (?!?!?)
 - Deal with duplication in touch event testing (use Modernizr?)
 - drawing doesn't work in IE8
   - double-check other browsers
 
 To Do on current task:
-*
+* Install Karma 0.10
+- Uninstall unimportant modules
+- Update karma.conf.js
+- Update our Karma runner
+- Update/install karma-commonjs bridge
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
