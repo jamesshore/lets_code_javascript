@@ -1,5 +1,4 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global $ */
 
 (function() {
 	"use strict";
@@ -98,7 +97,7 @@
 
 		it("appends to body", function() {
 			try {
-				var body = new HtmlElement($(document.body));
+				var body = new HtmlElement(document.body);
 				var childrenBeforeAppend = body._element.children().length;
 
 				htmlElement.appendSelfToBody();

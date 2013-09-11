@@ -4,8 +4,8 @@
 (function() {
 	"use strict";
 
-	var HtmlElement = module.exports = function(jqueryElement) {
-		this._element = jqueryElement;
+	var HtmlElement = module.exports = function(domElement) {
+		this._element = $(domElement);
 	};
 
 	HtmlElement.fromHtml = function(html) {

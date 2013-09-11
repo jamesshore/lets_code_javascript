@@ -16,8 +16,8 @@
 	exports.initializeDrawingArea = function(htmlElement) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
-		documentBody = new HtmlElement($(document.body));
-		windowElement = new HtmlElement($(window));
+		documentBody = new HtmlElement(document.body);
+		windowElement = new HtmlElement(window);
 
 		svgCanvas = new SvgCanvas(drawingArea);
 		handleDragEvents();

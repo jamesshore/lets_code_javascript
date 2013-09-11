@@ -13,7 +13,7 @@
 		var svgCanvas;
 
 		beforeEach(function() {
-			div = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
+			div = HtmlElement.fromHtml("<div style='height: 900px; width: 200px'>hi</div>");
 			div.appendSelfToBody();
 			svgCanvas = new SvgCanvas(div);
 		});
@@ -23,8 +23,8 @@
 		});
 
 		it("should have the same dimensions as its enclosing div", function() {
-			expect(svgCanvas.height()).to.equal(300);
-			expect(svgCanvas.width()).to.equal(600);
+			expect(svgCanvas.height()).to.equal(900);
+			expect(svgCanvas.width()).to.equal(200);
 		});
 
 		it("returns zero line segments", function() {

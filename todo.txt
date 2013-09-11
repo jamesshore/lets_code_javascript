@@ -23,13 +23,16 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-- What is up with IE 8 failing when Chrome is not running?
-- Deal with duplication in touch event testing (use Modernizr?)
+* Final cleanup for drawing work
 - Integrate
+- Deal with duplication in touch event testing (use Modernizr?)
+- Update Karma 0.8.x --> 0.10.x
+  - What is up with IE 8 failing when Chrome is not running?
+  --> fails when *even number* of browsers running, with off-by-one error. (?!?!?)
+  - Update LL6
+  - Update Ch7
 
 To Do on current task:
-- Create HtmlElement.documentBody?
-- Eliminate need for JQuery element on HtmlElement constructor?
 
 Future ideas:
 - Create 'fail fast' assertion code

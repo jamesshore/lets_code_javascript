@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global Raphael, mocha, Touch, $ */
+/*global Raphael, mocha, Touch */
 
 (function() {
 	"use strict";
@@ -16,8 +16,8 @@
 		var svgCanvas;
 
 		beforeEach(function() {
-			documentBody = new HtmlElement($(document.body));
-			windowElement = new HtmlElement($(window));
+			documentBody = new HtmlElement(document.body);
+			windowElement = new HtmlElement(window);
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			drawingArea.appendSelfToBody();
 			svgCanvas = client.initializeDrawingArea(drawingArea);
