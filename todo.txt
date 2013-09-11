@@ -32,11 +32,11 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-* Install Karma 0.10
-- Uninstall unimportant modules
-- Update karma.conf.js
-- Update our Karma runner
+* Update karma.conf.js
 - Update/install karma-commonjs bridge
+  - Delete build/karma_commonjs_bridge.js
+- Update our Karma runner
+- Update 'SUPPORTED_BROWSERS' (change name to something else?)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
