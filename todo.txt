@@ -32,7 +32,7 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-- Update our Karma runner
+* Check into IE8 weirdnesses
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
