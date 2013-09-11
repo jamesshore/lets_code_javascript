@@ -8,7 +8,7 @@ http://letscodejavascript.com .
 This repository contains the source code for WeeWikiPaint, the application
 being developed in the series.
 
-Before building for the first time:
+Before building or running for the first time:
 -----------------------------------
 
 1. Install [Node.js](http://nodejs.org/download/)
@@ -33,17 +33,11 @@ To build and test:
 4. Build using the steps above
 5. To change back to the development branch, follow these steps again using `git checkout master`
 
-Before running locally for the first time:
-------------------------------------------
-
-1. Install [Heroku Toolbelt](https://toolbelt.heroku.com/)
-
 To run locally:
 ---------------
 
-1. Build using the steps above
-2. Run `foreman start` (from root of repository)
-3. Navigate a browser to http://localhost:5000
+1. Run `./jake.sh run` (Unix/Mac) or `jake run` (Windows)
+2. Navigate a browser to http://localhost:5000
 
 *Note:* The master branch is not guaranteed to run successfully. For a known-good build, use the integration branch as described above.
 

@@ -1,18 +1,23 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global Raphael */
+/*global Raphael, $ */
 
 (function() {
 	"use strict";
 
 	var SvgCanvas = require("./svg_canvas.js");
+	var HtmlElement = require("./html_element.js");
 
 	var svgCanvas = null;
 	var start = null;
 	var drawingArea;
+	var documentBody;
+	var windowElement;
 
 	exports.initializeDrawingArea = function(htmlElement) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
+		documentBody = new HtmlElement(document.body);
+		windowElement = new HtmlElement(window);
 
 		svgCanvas = new SvgCanvas(drawingArea);
 		handleDragEvents();
@@ -27,9 +32,8 @@
 		preventDefaults();
 
 		drawingArea.onMouseDown(startDrag);
-		drawingArea.onMouseMove(continueDrag);
-		drawingArea.onMouseLeave(endDrag);
-		drawingArea.onMouseUp(endDrag);
+		documentBody.onMouseMove(continueDrag);
+		windowElement.onMouseUp(endDrag);
 
 		drawingArea.onSingleTouchStart(startDrag);
 		drawingArea.onSingleTouchMove(continueDrag);
@@ -54,14 +58,14 @@
 		});
 	}
 
-	function startDrag(offset) {
-		start = offset;
+	function startDrag(pageOffset) {
+		start = drawingArea.relativeOffset(pageOffset);
 	}
 
-	function continueDrag(relativeOffset) {
+	function continueDrag(pageOffset) {
 		if (start === null) return;
 
-		var end = relativeOffset;
+		var end = drawingArea.relativeOffset(pageOffset);
 		svgCanvas.drawLine(start.x, start.y, end.x, end.y);
 		start = end;
 	}

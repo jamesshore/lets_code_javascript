@@ -4,12 +4,50 @@
 (function() {
 	"use strict";
 
-	var HtmlElement = module.exports = function(jqueryElement) {
-		this._element = jqueryElement;
+	var HtmlElement = module.exports = function(domElement) {
+		this._element = $(domElement);
 	};
 
 	HtmlElement.fromHtml = function(html) {
 		return new HtmlElement($(html));
+	};
+
+	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
+	HtmlElement.prototype.onMouseDown = onMouseEventFn("mousedown");
+	HtmlElement.prototype.onMouseMove = onMouseEventFn("mousemove");
+	HtmlElement.prototype.onMouseLeave = onMouseEventFn("mouseleave");
+	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
+
+	HtmlElement.prototype.doSelectStart = doMouseEventFn("selectstart");
+	HtmlElement.prototype.doMouseDown = doMouseEventFn("mousedown");
+	HtmlElement.prototype.doMouseMove = doMouseEventFn("mousemove");
+	HtmlElement.prototype.doMouseLeave = doMouseEventFn("mouseleave");
+	HtmlElement.prototype.doMouseUp = doMouseEventFn("mouseup");
+
+	HtmlElement.prototype.onSingleTouchStart = onSingleTouchEventFn("touchstart");
+	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
+	HtmlElement.prototype.onSingleTouchEnd = onSingleTouchEventFn("touchend");
+	HtmlElement.prototype.onSingleTouchCancel = onSingleTouchEventFn("touchcancel");
+
+	HtmlElement.prototype.doSingleTouchStart = doSingleTouchEventFn("touchstart");
+	HtmlElement.prototype.doSingleTouchMove = doSingleTouchEventFn("touchmove");
+	HtmlElement.prototype.doSingleTouchEnd = doSingleTouchEventFn("touchend");
+	HtmlElement.prototype.doSingleTouchCancel = doSingleTouchEventFn("touchcancel");
+
+	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
+
+	HtmlElement.prototype.doMultiTouchStart = doMultiTouchEventFn("touchstart");
+
+	HtmlElement.prototype.removeAllEventHandlers = function() {
+		this._element.off();
+	};
+
+	HtmlElement.prototype.relativeOffset = function(pageOffset) {
+		return relativeOffset(this, pageOffset.x, pageOffset.y);
+	};
+
+	HtmlElement.prototype.pageOffset = function(relativeOffset) {
+		return pageOffset(this, relativeOffset.x, relativeOffset.y);
 	};
 
 	HtmlElement.prototype.append = function(elementToAppend) {
@@ -28,95 +66,79 @@
 		return this._element[0];
 	};
 
-	HtmlElement.prototype.doSelectStart = function(relativeX, relativeY) {
-		sendMouseEvent(this, "selectstart", relativeX, relativeY);
-	};
+	function doMouseEventFn(event) {
+		return function(relativeX, relativeY) {
+			sendMouseEvent(this, event, relativeX, relativeY);
+		};
+	}
 
-	HtmlElement.prototype.doMouseDown = function(relativeX, relativeY) {
-		sendMouseEvent(this, "mousedown", relativeX, relativeY);
-	};
+	function sendMouseEvent(self, event, relativeX, relativeY) {
+		var jqElement = self._element;
 
-	HtmlElement.prototype.doMouseMove = function(relativeX, relativeY) {
-		sendMouseEvent(this, "mousemove", relativeX, relativeY);
-	};
+		var page;
+		if (relativeX === undefined || relativeY === undefined) {
+			page = { x: 0, y: 0 };
+		}
+		else {
+			page = pageOffset(self, relativeX, relativeY);
+		}
 
-	HtmlElement.prototype.doMouseLeave = function(relativeX, relativeY) {
-		sendMouseEvent(this, "mouseleave", relativeX, relativeY);
-	};
+		var eventData = new jQuery.Event();
+		eventData.pageX = page.x;
+		eventData.pageY = page.y;
+		eventData.type = event;
+		jqElement.trigger(eventData);
+	}
 
-	HtmlElement.prototype.doMouseUp = function(relativeX, relativeY) {
-		sendMouseEvent(this, "mouseup", relativeX, relativeY);
-	};
+	function doSingleTouchEventFn(event) {
+		return function(relativeX, relativeY) {
+			sendSingleTouchEvent(this, event, relativeX, relativeY);
+		};
+	}
 
-	HtmlElement.prototype.doSingleTouchStart = function(relativeX, relativeY) {
-		sendSingleTouchEvent(this, "touchstart", relativeX, relativeY);
-	};
+	function sendSingleTouchEvent(self, event, relativeX, relativeY) {
+		var touch = createTouch(self, relativeX, relativeY);
+		sendTouchEvent(self, event, new TouchList(touch));
+	}
 
-	HtmlElement.prototype.doSingleTouchMove = function(relativeX, relativeY) {
-		sendSingleTouchEvent(this, "touchmove", relativeX, relativeY);
-	};
+	function doMultiTouchEventFn(event) {
+		return function(relative1X, relative1Y, relative2X, relative2Y) {
+			sendMultiTouchEvent(this, event, relative1X, relative1Y, relative2X, relative2Y);
+		};
+	}
 
-	HtmlElement.prototype.doSingleTouchEnd = function(relativeX, relativeY) {
-		sendSingleTouchEvent(this, "touchend", relativeX, relativeY);
-	};
+	function sendMultiTouchEvent(self, event, relative1X, relative1Y, relative2X, relative2Y) {
+		var touch1 = createTouch(self, relative1X, relative1Y);
+		var touch2 = createTouch(self, relative2X, relative2Y);
+		sendTouchEvent(self, event, new TouchList(touch1, touch2));
+	}
 
-	HtmlElement.prototype.doSingleTouchCancel = function(relativeX, relativeY) {
-		sendSingleTouchEvent(this, "touchcancel", relativeX, relativeY);
-	};
-
-	HtmlElement.prototype.doMultiTouchStart = function(relative1X, relative1Y, relative2X, relative2Y) {
-		sendMultiTouchEvent(this, "touchstart", relative1X, relative1Y, relative2X, relative2Y);
-	};
-
-	HtmlElement.prototype.onSelectStart_ie8Only = function(callback) {
-		this._element.on("selectstart", mouseEventHandlerFn(this, callback));
-	};
-
-	HtmlElement.prototype.onMouseDown = function(callback) {
-		this._element.mousedown(mouseEventHandlerFn(this, callback));
-	};
-
-	HtmlElement.prototype.onMouseMove = function(callback) {
-		var self = this;
-		this._element.mousemove(mouseEventHandlerFn(this, callback));
-	};
-
-	HtmlElement.prototype.onMouseLeave = function(callback) {
-		this._element.mouseleave(mouseEventHandlerFn(this, callback));
-	};
-
-	HtmlElement.prototype.onMouseUp = function(callback) {
-		this._element.mouseup(mouseEventHandlerFn(this, callback));
-	};
-
-	HtmlElement.prototype.onSingleTouchStart = function(callback) {
-		this._element.on("touchstart", oneTouchEventHandlerFn(this, callback));
-	};
-
-	HtmlElement.prototype.onSingleTouchMove = function(callback) {
-		this._element.on("touchmove", oneTouchEventHandlerFn(this, callback));
-	};
-
-	HtmlElement.prototype.onSingleTouchEnd = function(callback) {
-		this._element.on("touchend", oneTouchEventHandlerFn(this, callback));
-	};
-
-	HtmlElement.prototype.onSingleTouchCancel = function(callback) {
-		this._element.on("touchcancel", oneTouchEventHandlerFn(this, callback));
-	};
-
-	HtmlElement.prototype.onMultiTouchStart = function(callback) {
-		var self = this;
-		this._element.on("touchstart", function(event) {
-			var originalEvent = event.originalEvent;
-			if (originalEvent.touches.length !== 1) callback();
-		});
-	};
+	function onMouseEventFn(event) {
+		return function(callback) {
+			this._element.on(event, mouseEventHandlerFn(this, callback));
+		};
+	}
 
 	function mouseEventHandlerFn(self, callback) {
 		return function(event) {
-			var offset = relativeOffset(self, event.pageX, event.pageY);
-			callback(offset, event);
+			var pageOffset = { x: event.pageX, y: event.pageY };
+			callback(pageOffset, event);
+		};
+	}
+
+	function onSingleTouchEventFn(event) {
+		return function(callback) {
+			this._element.on(event, oneTouchEventHandlerFn(this, callback));
+		};
+	}
+
+	function onMultiTouchEventFn(event) {
+		return function(callback) {
+			var self = this;
+			this._element.on(event, function(event) {
+				var originalEvent = event.originalEvent;
+				if (originalEvent.touches.length !== 1) callback();
+			});
 		};
 	}
 
@@ -127,32 +149,10 @@
 
 			var pageX = originalEvent.touches[0].pageX;
 			var pageY = originalEvent.touches[0].pageY;
-			var offset = relativeOffset(self, pageX, pageY);
+			var offset = { x: pageX, y: pageY };
 
 			callback(offset, event);
 		};
-	}
-
-	function sendMouseEvent(self, event, relativeX, relativeY) {
-		var jqElement = self._element;
-
-		var page = pageOffset(self, relativeX, relativeY);
-		var eventData = new jQuery.Event();
-		eventData.pageX = page.x;
-		eventData.pageY = page.y;
-		eventData.type = event;
-		jqElement.trigger(eventData);
-	}
-
-	function sendSingleTouchEvent(self, event, relativeX, relativeY) {
-		var touch = createTouch(self, relativeX, relativeY);
-		sendTouchEvent(self, event, new TouchList(touch));
-	}
-
-	function sendMultiTouchEvent(self, event, relative1X, relative1Y, relative2X, relative2Y) {
-		var touch1 = createTouch(self, relative1X, relative1Y);
-		var touch2 = createTouch(self, relative2X, relative2Y);
-		sendTouchEvent(self, event, new TouchList(touch1, touch2));
 	}
 
 	function sendTouchEvent(self, event, touchList) {

@@ -178,7 +178,7 @@
         var client = require("./client.js");
         var HtmlElement = require("./html_element.js");
 
-        client.drawingAreaCanvas = client.initializeDrawingArea(new HtmlElement($("#drawingArea")));
+        client.drawingAreaCanvas = client.initializeDrawingArea(new HtmlElement(document.getElementById("drawingArea")));
     });
 </script>
 

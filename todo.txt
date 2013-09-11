@@ -10,36 +10,28 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* Draw a line in response to iOS touch
-- click tracking needs to account for margin, border, and padding
+* drawing should continue even if user leaves boundaries (just pick up again when they come back in)
+- draw a single pixel when mouse is clicked (or screen is tapped)
+- 'clear screen' button
+- quality user-facing site design
+? click tracking needs to account for margin, border, and padding (if needed; fail fast if not)
   - test that em is converted px
-- Use mouseleave event to draw line to edge when mouse moving quickly? (Thx Danny Jones, E67)
+- Site monitoring and logging
+- Performance
+- Scalability
 - Deploy (including smoke test to ensure that div is in home page)
-  - Create a 'run' build target in our Jakefile
+    (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* Get require(), modules, and exports working in Karma without using browserify
-  (so error messages have sensible filenames and line nums)
+* Update Karma 0.8.x --> 0.10.x
+  - What is up with IE 8 failing when Chrome is not running?
+  --> fails when *even number* of browsers running, with off-by-one error. (?!?!?)
+- Deal with duplication in touch event testing (use Modernizr?)
+- drawing doesn't work in IE8
+  - double-check other browsers
 
 To Do on current task:
-- Integrate
-
-Future ideas:
-- Create 'fail fast' assertion code
-- Abstract test framework? (Swap out a different framework to make sure abstraction works)
-- Static checking of function parameters (rather than writing tests)
-- Handle errors properly in server.js
-- server.stop() waits for open connections to close (e.g., Firefox keeps open connection).
-  Make it forcibly close?
-- Remove Node version duplication between package.json and Jakefile.js
-- Fix httpGet duplication
-- Automated npm rebuild ('npm rebuild' in jake.sh / jake.bat if .bin directory not found.)
-- Ensure that every browser has same of number of tests running
-- Automatically start Karma (or provide friendlier error message when it isn't running?)
-- Automate CI script
-- Resolve npm 'extraneous' warning (due to package.json not reflecting what's in node_modules)
-- Convert 'client' to be proper object rather than global singleton?
-- Upgrade to latest version of Karma (with new preprocessor support)?
+*
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

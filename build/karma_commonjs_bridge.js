@@ -6,23 +6,23 @@
 
 	var cachedModules = {};
 
-	for (var modulePath in window.__karma__.CJSModules) {
+	for (var modulePath in window.__cjsmodules__) {
 		require(modulePath, modulePath);
 	};
 
 	function require(requiringFile, dependency) {
-		dependency = normalizePath(requiringFile, dependency);
+		var dependencyPath = normalizePath(requiringFile, dependency);
 
 		// find module
-		var moduleFn = window.__karma__.CJSModules[dependency];
+		var moduleFn = window.__cjsmodules__[dependencyPath];
 		if (moduleFn === undefined) throw new Error("Could not find module '" + dependency + "' from '" + requiringFile + "'");
 
 		// run the module (if necessary)
-		var module = cachedModules[dependency];
+		var module = cachedModules[dependencyPath];
 		if (module === undefined) {
 			module = { exports: {} };
-			moduleFn(requireFn(dependency), module, module.exports);
-			cachedModules[dependency] = module;
+			moduleFn(requireFn(dependencyPath), module, module.exports);
+			cachedModules[dependencyPath] = module;
 		}
 		return module.exports;
 	};

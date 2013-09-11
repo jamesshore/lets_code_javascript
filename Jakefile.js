@@ -14,13 +14,14 @@
 	var nodeunit = require("./build/util/nodeunit_runner.js");
 	var karma = require("./build/util/karma_runner.js");
 	var versionChecker = require("./build/util/version_checker.js");
+	var runServer = require("./src/_run_server.js");
 	var path = require("path");
 
 	var SUPPORTED_BROWSERS = [
 		"IE 8.0 (Windows)",
 		"IE 9.0 (Windows)",
-		"Firefox 22.0 (Mac)",
-		"Chrome 28.0 (Mac)",
+		"Firefox 23.0 (Mac)",
+		"Chrome 29.0 (Mac)",
 		"Safari 6.0 (Mac)",
 		"Safari 6.0 (iOS)"
 	];
@@ -47,6 +48,13 @@
 	desc("Start Karma server for testing");
 	task("karma", function() {
 		karma.serve("build/karma.conf.js", complete, fail);
+	}, {async: true});
+
+	desc("Start WeeWikiPaint server for manual testing");
+	task("run", ["build"], function() {
+		console.log("Running server. Press Ctrl-C to stop.");
+		runServer.runInteractively();
+		// We never call complete() because we want the task to hang until the user presses 'Ctrl-C'.
 	}, {async: true});
 
 	desc("Lint everything");

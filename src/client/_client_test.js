@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global Raphael, mocha, Touch, $ */
+/*global Raphael, mocha, Touch */
 
 (function() {
 	"use strict";
@@ -12,10 +12,12 @@
 	describe("Drawing area", function() {
 		var drawingArea;
 		var documentBody;
+		var windowElement;
 		var svgCanvas;
 
 		beforeEach(function() {
-			documentBody = new HtmlElement($(document.body));
+			documentBody = new HtmlElement(document.body);
+			windowElement = new HtmlElement(window);
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			drawingArea.appendSelfToBody();
 			svgCanvas = client.initializeDrawingArea(drawingArea);
@@ -24,11 +26,7 @@
 		afterEach(function() {
 			drawingArea.remove();
 			client.drawingAreaHasBeenRemovedFromDom();
-		});
-
-		it("should have the same dimensions as its enclosing div", function() {
-			expect(svgCanvas.height()).to.equal(300);
-			expect(svgCanvas.width()).to.equal(600);
+			documentBody.removeAllEventHandlers();
 		});
 
 		describe("mouse events", function() {
@@ -99,17 +97,60 @@
 				]);
 			});
 
-			it("stops drawing when mouse leaves drawing area", function() {
+			it("continues drawing if mouse leaves drawing area and comes back in", function() {
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseLeave(700, 70);
 
-				documentBody.doMouseMove(700, 70);
+				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
+				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
+
+				documentBody.doMouseMove(bodyRelative.x, bodyRelative.y);
 				drawingArea.doMouseMove(90, 40);
 				drawingArea.doMouseUp(90, 40);
 
 				expect(lineSegments()).to.eql([
-					[20, 30, 50, 60]
+					[20, 30, 50, 60],
+					[50, 60, 700, 70],
+					[700, 70, 90, 40]
+				]);
+			});
+
+			it("stops drawing if mouse leaves drawing area and mouse button is released", function() {
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseLeave(700, 70);
+
+				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
+				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
+
+				documentBody.doMouseMove(bodyRelative.x, bodyRelative.y);
+				documentBody.doMouseUp(bodyRelative.x, bodyRelative.y);
+				drawingArea.doMouseMove(90, 40);
+
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60],
+					[50, 60, 700, 70]
+				]);
+			});
+
+			it("stops drawing if mouse leaves window and mouse button is released", function() {
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseLeave(700, 70);
+
+				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
+				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
+				documentBody.doMouseMove(bodyRelative.x, bodyRelative.y);
+
+				windowElement.doMouseLeave();
+				windowElement.doMouseUp();
+
+				drawingArea.doMouseMove(90, 40);
+
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60],
+					[50, 60, 700, 70]
 				]);
 			});
 
@@ -230,7 +271,7 @@
 		}
 
 		function browserSupportsTouchEvents() {
-			return (typeof Touch !== "undefined");
+			return (typeof Touch !== "undefined") && ('ontouchstart' in window);
 		}
 
 		function lineSegments() {
