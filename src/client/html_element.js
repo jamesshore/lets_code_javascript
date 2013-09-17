@@ -189,7 +189,14 @@
 	}
 
 	function relativeOffset(self, pageX, pageY) {
+		console.log("X: " + pageX);
+		console.log("Y: " + pageY);
+
 		var pageOffset = self._element.offset();
+
+		console.log("pageOffset", pageOffset);
+		console.log("body", $(document.body).offset());
+		console.log("offsetTop", self._element.offsetTop);
 
 		return {
 			x: pageX - pageOffset.left,

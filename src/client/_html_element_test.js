@@ -72,7 +72,7 @@
 			htmlElement.doMouseDown(0, 0);
 		});
 
-		it("converts page coordinates into relative element coordinates", function() {
+		it.only("converts page coordinates into relative element coordinates", function() {
 			try {
 				htmlElement.appendSelfToBody();
 				expect(htmlElement.relativeOffset({x: 100, y: 150})).to.eql({x: 92, y: 142});

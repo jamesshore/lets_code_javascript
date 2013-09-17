@@ -222,7 +222,10 @@
 			expect: false,
 			dump: false,
 			beforeEach: false,
-			afterEach: false
+			afterEach: false,
+
+			// Browser
+			console: false
 		};
 	}
 
