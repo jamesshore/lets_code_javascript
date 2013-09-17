@@ -33,6 +33,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Check into IE8 weirdnesses
+- Turn down Karma log level
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
