@@ -1,4 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+/*global $ */
 
 (function() {
 	"use strict";
@@ -72,10 +73,19 @@
 			htmlElement.doMouseDown(0, 0);
 		});
 
-		it.only("converts page coordinates into relative element coordinates", function() {
+		it("converts page coordinates into relative element coordinates", function() {
 			try {
 				htmlElement.appendSelfToBody();
-				expect(htmlElement.relativeOffset({x: 100, y: 150})).to.eql({x: 92, y: 142});
+				var offset = htmlElement.relativeOffset({x: 100, y: 150});
+
+				if (browserHasSporadicFrameRelatedPositioningBug()) {
+					// compensate for off-by-one error in IE 8
+					expect(offset.x).to.equal(92);
+					expect(offset.y === 141 || offset.y === 142).to.be(true);
+				}
+				else {
+					expect(offset).to.eql({x: 92, y: 142});
+				}
 			} finally {
 				htmlElement.remove();
 			}
@@ -84,7 +94,16 @@
 		it("converts relative coordinates into page coordinates", function() {
 			try {
 				htmlElement.appendSelfToBody();
-				expect(htmlElement.pageOffset({x: 100, y: 150})).to.eql({x: 108, y: 158});
+				var offset = htmlElement.pageOffset({x: 100, y: 150});
+
+				if (browserHasSporadicFrameRelatedPositioningBug()) {
+					// compensate for off-by-one error in IE 8
+					expect(offset.x).to.equal(108);
+					expect(offset.y === 158 || offset.y === 159).to.be(true);
+				}
+				else {
+					expect(offset).to.eql({x: 108, y: 158});
+				}
 			} finally {
 				htmlElement.remove();
 			}
@@ -140,6 +159,13 @@
 			return (typeof Touch !== "undefined") && ('ontouchstart' in window);
 		}
 
+		function browserHasSporadicFrameRelatedPositioningBug() {
+			return isIe8();
+		}
+
+		function isIe8() {
+			return $.browser.msie && $.browser.version === "8.0";
+		}
 
 	});
 

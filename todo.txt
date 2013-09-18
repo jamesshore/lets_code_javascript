@@ -23,16 +23,12 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* Update Karma 0.8.x --> 0.10.x
-  - What is up with IE 8 failing when Chrome is not running?
-    - related to list of browsers interfering with metrics
-    --> fails when *even number* of browsers running, with off-by-one error. (?!?!?)
 - Deal with duplication in touch event testing (use Modernizr?)
+  - also _html_element_test.isIe8() and .browserHasSporadicFrameRelatedPositioningBug()
 - drawing doesn't work in IE8
   - double-check other browsers
 
 To Do on current task:
-* Check into IE8 weirdnesses
 - Turn down Karma log level
 
 Notes:
