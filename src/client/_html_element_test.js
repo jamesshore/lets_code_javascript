@@ -5,6 +5,7 @@
 	"use strict";
 
 	var HtmlElement = require("./html_element.js");
+	var browser = require("./browser.js");
 
 	describe("HtmlElement", function() {
 		var htmlElement;
@@ -22,8 +23,7 @@
 		});
 
 		it("handles single-touch events", function() {
-			if (!browserSupportsTouchEvents()) return;
-
+			if (!browser.supportsTouchEvents()) return;
 			testEvent(htmlElement.onSingleTouchStart, htmlElement.doSingleTouchStart);
 			testEvent(htmlElement.onSingleTouchMove, htmlElement.doSingleTouchMove);
 			testEvent(htmlElement.onSingleTouchEnd, htmlElement.doSingleTouchEnd);
@@ -31,8 +31,7 @@
 		});
 
 		it("handles multi-touch events", function() {
-			if (!browserSupportsTouchEvents()) return;
-
+			if (!browser.supportsTouchEvents()) return;
 			var eventTriggered = false;
 			htmlElement.onMultiTouchStart(function() {
 				eventTriggered = true;
@@ -53,8 +52,7 @@
 		});
 
 		it("allows touch events to be triggered without coordinates", function() {
-			if (!browserSupportsTouchEvents()) return;
-
+			if (!browser.supportsTouchEvents()) return;
 			var eventPageOffset;
 			htmlElement.onSingleTouchStart(function(pageOffset) {
 				eventPageOffset = pageOffset;
@@ -153,10 +151,6 @@
 			finally {
 				htmlElement.remove();
 			}
-		}
-
-		function browserSupportsTouchEvents() {
-			return (typeof Touch !== "undefined") && ('ontouchstart' in window);
 		}
 
 		function browserHasSporadicFrameRelatedPositioningBug() {

@@ -23,12 +23,16 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-- Deal with duplication in touch event testing (use Modernizr?)
+* Deal with duplication in touch event testing (use Modernizr?)
   - also _html_element_test.isIe8() and .browserHasSporadicFrameRelatedPositioningBug()
 - drawing doesn't work in IE8
   - double-check other browsers
 
 To Do on current task:
+* Refactor feature support logic to remove duplication
+  - browserHasSporadicFrameRelatedPositioningBug()
+- Figure out how to test browser.js?
+- Introduce Modernizr
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

@@ -5,6 +5,7 @@
 	"use strict";
 
 	var client = require("./client.js");
+	var browser = require("./browser.js");
 	var HtmlElement = require("./html_element.js");
 
 	mocha.setup({ignoreLeaks: true});
@@ -208,7 +209,7 @@
 			});
 		});
 
-		if (browserSupportsTouchEvents()) {
+		if (browser.supportsTouchEvents()) {
 			describe("touch events", function() {
 
 				it("draw lines in response to touch events", function() {
@@ -268,10 +269,6 @@
 					]);
 				});
 			});
-		}
-
-		function browserSupportsTouchEvents() {
-			return (typeof Touch !== "undefined") && ('ontouchstart' in window);
 		}
 
 		function lineSegments() {
