@@ -76,7 +76,7 @@
 				htmlElement.appendSelfToBody();
 				var offset = htmlElement.relativeOffset({x: 100, y: 150});
 
-				if (browserHasSporadicFrameRelatedPositioningBug()) {
+				if (browser.reportsElementPositionOffByOneSometimes()) {
 					// compensate for off-by-one error in IE 8
 					expect(offset.x).to.equal(92);
 					expect(offset.y === 141 || offset.y === 142).to.be(true);
@@ -94,7 +94,7 @@
 				htmlElement.appendSelfToBody();
 				var offset = htmlElement.pageOffset({x: 100, y: 150});
 
-				if (browserHasSporadicFrameRelatedPositioningBug()) {
+				if (browser.reportsElementPositionOffByOneSometimes()) {
 					// compensate for off-by-one error in IE 8
 					expect(offset.x).to.equal(108);
 					expect(offset.y === 158 || offset.y === 159).to.be(true);
@@ -151,14 +151,6 @@
 			finally {
 				htmlElement.remove();
 			}
-		}
-
-		function browserHasSporadicFrameRelatedPositioningBug() {
-			return isIe8();
-		}
-
-		function isIe8() {
-			return $.browser.msie && $.browser.version === "8.0";
 		}
 
 	});

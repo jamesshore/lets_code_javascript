@@ -29,9 +29,7 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-* Refactor feature support logic to remove duplication
-  - browserHasSporadicFrameRelatedPositioningBug()
-- Figure out how to test browser.js?
+* Figure out how to test browser.js?
 - Introduce Modernizr
 
 Notes:
