@@ -29,7 +29,6 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-- Turn down Karma log level
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
