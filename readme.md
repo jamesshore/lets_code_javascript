@@ -16,7 +16,7 @@ Before building or running for the first time:
 3. Clone source repository: `git clone https://github.com/jamesshore/lets_code_javascript.git`
 4. All commands must run from root of repository: `cd lets_code_javascript`
 
-*Note:* If you update the repository (with `git pull` or similar), be sure to erase generated files with `git clean -fdx` afterwards. (Note that this will erase any changes you've made, so be sure to check in what you want to keep first.)
+*Note:* If you update the repository (with `git pull` or similar), be sure to erase generated files with `git clean -fdx` afterwards. (Note that this will erase any files you've added, so be sure to check in what you want to keep first.)
 
 To build and test:
 ------------------
