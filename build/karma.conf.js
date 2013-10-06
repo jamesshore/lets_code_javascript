@@ -9,12 +9,11 @@ module.exports = function(config) {
 
 
     // frameworks to use
-    frameworks: ['mocha', 'commonjs'],
+    frameworks: ['mocha', 'commonjs', 'expect'],
 
 
     // list of files / patterns to load in the browser
     files: [
-	    'node_modules/expect.js/expect.js',
       'src/client/**/*.js'
     ],
 
