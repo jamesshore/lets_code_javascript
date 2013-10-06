@@ -27,8 +27,10 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-* AT START OF NEXT EPISODE
-  - Use karma-expect instead of loading expect.js in 'files'
+* properly test it
+- add support for setCapture/releaseCapture in our HtmlElement abstraction
+  - get rid of drawingAreaDom hack
+- fix duplication of mouse positioning handling in our window-related client tests
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

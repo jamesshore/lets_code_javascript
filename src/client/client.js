@@ -10,12 +10,14 @@
 	var svgCanvas = null;
 	var start = null;
 	var drawingArea;
+	var drawingAreaDom;
 	var documentBody;
 	var windowElement;
 
 	exports.initializeDrawingArea = function(htmlElement) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
+		drawingAreaDom = htmlElement._element[0];
 		documentBody = new HtmlElement(document.body);
 		windowElement = new HtmlElement(window);
 
@@ -34,6 +36,7 @@
 		drawingArea.onMouseDown(startDrag);
 		documentBody.onMouseMove(continueDrag);
 		windowElement.onMouseUp(endDrag);
+//		drawingArea.onMouseUp(endDrag);
 
 		drawingArea.onSingleTouchStart(startDrag);
 		drawingArea.onSingleTouchMove(continueDrag);
@@ -60,6 +63,7 @@
 
 	function startDrag(pageOffset) {
 		start = drawingArea.relativeOffset(pageOffset);
+//		if (drawingAreaDom.setCapture) drawingAreaDom.setCapture();
 	}
 
 	function continueDrag(pageOffset) {
@@ -72,6 +76,7 @@
 
 	function endDrag() {
 		start = null;
+//		if (drawingAreaDom.releaseCapture) drawingAreaDom.releaseCapture();
 	}
 
 }());

@@ -135,7 +135,7 @@
 				]);
 			});
 
-			it("stops drawing if mouse leaves window and mouse button is released", function() {
+			it("stops drawing if mouse leaves window and mouse button is released (on browsers that support mouse events on window)", function() {
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseLeave(700, 70);
@@ -148,6 +148,23 @@
 				windowElement.doMouseUp();
 
 				drawingArea.doMouseMove(90, 40);
+
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60],
+					[50, 60, 700, 70]
+				]);
+			});
+
+			it("stops drawing if mouse leaves window and mouse button is released (on IE 8, which doesn't support mouse events on window)", function() {
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseLeave(700, 70);
+
+				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
+				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
+				documentBody.doMouseMove(bodyRelative.x, bodyRelative.y);
+
+				documentBody.doMouseUp();
 
 				expect(lineSegments()).to.eql([
 					[20, 30, 50, 60],
