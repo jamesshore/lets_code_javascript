@@ -28,6 +28,7 @@ Engineering Tasks:
 
 To Do on current task:
 - modify test to use feature detection--only run if browser doesn't support events on window object
+- fix bad code in setup() method
 - add support for setCapture/releaseCapture in our HtmlElement abstraction
   - get rid of drawingAreaDom hack
 - fix duplication of mouse positioning handling in our window-related client tests

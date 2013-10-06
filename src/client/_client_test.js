@@ -17,6 +17,14 @@
 		var svgCanvas;
 
 		beforeEach(function() {
+
+				// prevent window object from responding to events on IE 8
+				$(window).on("mouseup", function(event) {
+					event.stopImmediatePropagation();
+				})
+
+
+
 			documentBody = new HtmlElement(document.body);
 			windowElement = new HtmlElement(window);
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
@@ -155,10 +163,9 @@
 				]);
 			});
 
-			it("stops drawing if mouse leaves window and mouse button is released (on IE 8, which doesn't support mouse events on window)", function() {
+			it.only("stops drawing if mouse leaves window and mouse button is released (on IE 8, which doesn't support mouse events on window)", function() {
 				var drawingAreaDom = drawingArea._element[0];
 				if (!drawingAreaDom.setCapture) return;
-
 
 				var setCaptureCalled = false;
 				var releaseCaptureCalled = false;
