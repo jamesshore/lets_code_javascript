@@ -27,8 +27,7 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-* ensure that setCapture() and releaseCapture() are called
-- make tests work on browsers that don't support setCapture() and releaseCapture()
+- modify test to use feature detection--only run if browser doesn't support events on window object
 - add support for setCapture/releaseCapture in our HtmlElement abstraction
   - get rid of drawingAreaDom hack
 - fix duplication of mouse positioning handling in our window-related client tests

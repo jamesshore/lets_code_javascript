@@ -63,7 +63,7 @@
 
 	function startDrag(pageOffset) {
 		start = drawingArea.relativeOffset(pageOffset);
-//    if (drawingAreaDom.setCapture) drawingAreaDom.setCapture();
+    if (drawingAreaDom.setCapture) drawingAreaDom.setCapture();
 	}
 
 	function continueDrag(pageOffset) {

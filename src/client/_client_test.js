@@ -157,13 +157,25 @@
 
 			it("stops drawing if mouse leaves window and mouse button is released (on IE 8, which doesn't support mouse events on window)", function() {
 				var drawingAreaDom = drawingArea._element[0];
+				if (!drawingAreaDom.setCapture) return;
+
+
 				var setCaptureCalled = false;
+				var releaseCaptureCalled = false;
 
 				var originalSetCapture = drawingAreaDom.setCapture;
 				if (originalSetCapture) {
 					drawingAreaDom.setCapture = function() {
 						setCaptureCalled = true;
 						originalSetCapture.apply(drawingAreaDom, arguments);
+					};
+				}
+
+				var originalReleaseCapture = drawingAreaDom.releaseCapture;
+				if (originalReleaseCapture) {
+					drawingAreaDom.releaseCapture = function() {
+						releaseCaptureCalled = true;
+						originalReleaseCapture.apply(drawingAreaDom, arguments);
 					};
 				}
 
@@ -180,6 +192,7 @@
 					drawingArea.doMouseUp();
 
 					expect(setCaptureCalled).to.be(true);
+					expect(releaseCaptureCalled).to.be(true);
 
 					expect(lineSegments()).to.eql([
 						[20, 30, 50, 60],
@@ -189,6 +202,7 @@
 				finally
 				{
 					drawingAreaDom.setCapture = originalSetCapture;
+					drawingAreaDom.releaseCapture = originalReleaseCapture;
 				}
 			});
 
