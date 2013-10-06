@@ -27,6 +27,8 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
+* AT START OF NEXT EPISODE
+  - Use karma-expect instead of loading expect.js in 'files'
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
