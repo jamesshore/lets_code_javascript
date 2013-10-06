@@ -36,7 +36,7 @@
 		drawingArea.onMouseDown(startDrag);
 		documentBody.onMouseMove(continueDrag);
 		windowElement.onMouseUp(endDrag);
-//		drawingArea.onMouseUp(endDrag);
+		drawingArea.onMouseUp(endDrag);
 
 		drawingArea.onSingleTouchStart(startDrag);
 		drawingArea.onSingleTouchMove(continueDrag);
@@ -63,7 +63,7 @@
 
 	function startDrag(pageOffset) {
 		start = drawingArea.relativeOffset(pageOffset);
-//		if (drawingAreaDom.setCapture) drawingAreaDom.setCapture();
+//    if (drawingAreaDom.setCapture) drawingAreaDom.setCapture();
 	}
 
 	function continueDrag(pageOffset) {
@@ -76,7 +76,7 @@
 
 	function endDrag() {
 		start = null;
-//		if (drawingAreaDom.releaseCapture) drawingAreaDom.releaseCapture();
+		if (drawingAreaDom.releaseCapture) drawingAreaDom.releaseCapture();
 	}
 
 }());

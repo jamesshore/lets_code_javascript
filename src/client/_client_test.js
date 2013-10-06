@@ -156,20 +156,40 @@
 			});
 
 			it("stops drawing if mouse leaves window and mouse button is released (on IE 8, which doesn't support mouse events on window)", function() {
-				drawingArea.doMouseDown(20, 30);
-				drawingArea.doMouseMove(50, 60);
-				drawingArea.doMouseLeave(700, 70);
+				var drawingAreaDom = drawingArea._element[0];
+				var setCaptureCalled = false;
 
-				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
-				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
-				documentBody.doMouseMove(bodyRelative.x, bodyRelative.y);
+				var originalSetCapture = drawingAreaDom.setCapture;
+				if (originalSetCapture) {
+					drawingAreaDom.setCapture = function() {
+						setCaptureCalled = true;
+						originalSetCapture.apply(drawingAreaDom, arguments);
+					};
+				}
 
-				documentBody.doMouseUp();
+				try {
+					drawingArea.doMouseDown(20, 30);
+					drawingArea.doMouseMove(50, 60);
+					drawingArea.doMouseLeave(700, 70);
 
-				expect(lineSegments()).to.eql([
-					[20, 30, 50, 60],
-					[50, 60, 700, 70]
-				]);
+					var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
+					var bodyRelative = documentBody.relativeOffset(pageCoordinates);
+					drawingArea.doMouseMove(700, 70);
+
+					drawingArea.doMouseLeave();
+					drawingArea.doMouseUp();
+
+					expect(setCaptureCalled).to.be(true);
+
+					expect(lineSegments()).to.eql([
+						[20, 30, 50, 60],
+						[50, 60, 700, 70]
+					]);
+				}
+				finally
+				{
+					drawingAreaDom.setCapture = originalSetCapture;
+				}
 			});
 
 			it("does not start drawing if drag is started outside drawing area", function() {
