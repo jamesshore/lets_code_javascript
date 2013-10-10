@@ -36,7 +36,7 @@
 		drawingArea.onMouseDown(startDrag);
 		documentBody.onMouseMove(continueDrag);
 		windowElement.onMouseUp(endDrag);
-//		drawingArea.onMouseUp(endDrag);
+		drawingArea.onMouseUp(endDrag);
 
 		drawingArea.onSingleTouchStart(startDrag);
 		drawingArea.onSingleTouchMove(continueDrag);
@@ -76,7 +76,7 @@
 
 	function endDrag() {
 		start = null;
-		if (drawingAreaDom.releaseCapture) drawingAreaDom.releaseCapture();
+//		if (drawingAreaDom.releaseCapture) drawingAreaDom.releaseCapture();
 	}
 
 }());

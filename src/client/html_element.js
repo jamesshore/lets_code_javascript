@@ -71,8 +71,6 @@
 
 	function doMouseEventFn(event) {
 		return function(relativeX, relativeY) {
-			if (browser.doesNotSendUserEventsToWindow() && this._domElement === window) return;      // NOT TESTED
-
 			sendMouseEvent(this, event, relativeX, relativeY);
 		};
 	}
@@ -120,6 +118,8 @@
 
 	function onMouseEventFn(event) {
 		return function(callback) {
+			if (browser.doesNotHandlesUserEventsOnWindow() && this._domElement === window) return;      // NOT TESTED
+
 			this._element.on(event, mouseEventHandlerFn(this, callback));
 		};
 	}

@@ -12,7 +12,7 @@
 		return isIe8();
 	};
 
-	exports.doesNotSendUserEventsToWindow = function() {
+	exports.doesNotHandlesUserEventsOnWindow = function() {
 		return isIe8();
 	};
 

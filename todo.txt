@@ -27,7 +27,8 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-- finish _client_test.js and client.js--we need to test-drive "drawingArea.onMouseUp(endDrag);"
+- generalize setCapture and releaseCapture simulation
+- test-drive releaseCapture in client.js
 - put tests around changes to html_element.js
 - look for Modernizr/feature-based solution to browser.doesNotSendUserEventsToWindowObject()
 - add support for setCapture/releaseCapture in our HtmlElement abstraction
