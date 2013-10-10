@@ -6,18 +6,17 @@
 
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
+	var browser = require("./browser.js");
 
 	var svgCanvas = null;
 	var start = null;
 	var drawingArea;
-	var drawingAreaDom;
 	var documentBody;
 	var windowElement;
 
 	exports.initializeDrawingArea = function(htmlElement) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
-		drawingAreaDom = htmlElement._element[0];
 		documentBody = new HtmlElement(document.body);
 		windowElement = new HtmlElement(window);
 
@@ -63,7 +62,7 @@
 
 	function startDrag(pageOffset) {
 		start = drawingArea.relativeOffset(pageOffset);
-    if (drawingAreaDom.setCapture) drawingAreaDom.setCapture();
+    if (browser.doesNotHandlesUserEventsOnWindow()) drawingArea.setCapture();
 	}
 
 	function continueDrag(pageOffset) {
@@ -76,7 +75,7 @@
 
 	function endDrag() {
 		start = null;
-//		if (drawingAreaDom.releaseCapture) drawingAreaDom.releaseCapture();
+		if (browser.doesNotHandlesUserEventsOnWindow()) drawingArea.releaseCapture();
 	}
 
 }());

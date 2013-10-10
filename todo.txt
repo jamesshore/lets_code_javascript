@@ -27,18 +27,14 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-* generalize setCapture and releaseCapture simulation
-- test-drive releaseCapture in client.js
+* take a second look at HtmlElement.setCapture() -- is that the right abstraction?
 - put tests around changes to html_element.js
   - onMouseEventHandlerFn()
   - setCapture/releaseCapture()
+    - relativeX and relativeY does not work properly when setCapture is used?
   - HtmlElement.fromHtml() must send through DomElement for setCapture/releaseCapture to work
-- deal with issue where setCapture() will be redefined multiple times if HtmlElement is constructed
-	on the same object multiple times
-- does relativeX and relativeY work properly when setCapture is used?
+- test-drive releaseCapture in client.js -- take a second look, does it need more specific tests?
 - look for Modernizr/feature-based solution to browser.doesNotSendUserEventsToWindowObject()
-- add support for setCapture/releaseCapture in our HtmlElement abstraction
-  - get rid of drawingAreaDom hack
 - fix duplication of mouse positioning handling in our window-related client tests
 
 Notes:

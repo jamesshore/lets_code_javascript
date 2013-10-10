@@ -135,25 +135,7 @@
 				]);
 			});
 
-			it.only("stops drawing if mouse leaves window and mouse button is released (on browsers that support mouse events on window)", function() {
-				var drawingAreaDom = drawingArea._element[0];
-
-//				var originalSetCapture = drawingAreaDom.setCapture;
-//				if (originalSetCapture) {
-//					drawingAreaDom.setCapture = function() {
-//						windowElement = new HtmlElement(this);
-//						originalSetCapture.apply(drawingAreaDom, arguments);
-//					};
-//				}
-//
-//				var originalReleaseCapture = drawingAreaDom.releaseCapture;
-//				if (originalReleaseCapture) {
-//					drawingAreaDom.releaseCapture = function() {
-//						windowElement = new HtmlElement(window);
-//						originalReleaseCapture.apply(drawingAreaDom, arguments);
-//					};
-//				}
-
+			it("stops drawing if mouse leaves window and mouse button is released (on browsers that support mouse events on window)", function() {
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseLeave(700, 70);
@@ -172,56 +154,6 @@
 					[50, 60, 700, 70]
 				]);
 			});
-
-//			it("stops drawing if mouse leaves window and mouse button is released (on IE 8, which doesn't support mouse events on window)", function() {
-//				var drawingAreaDom = drawingArea._element[0];
-//				if (!drawingAreaDom.setCapture) return;
-//
-//				var setCaptureCalled = false;
-//				var releaseCaptureCalled = false;
-//
-//				var originalSetCapture = drawingAreaDom.setCapture;
-//				if (originalSetCapture) {
-//					drawingAreaDom.setCapture = function() {
-//						setCaptureCalled = true;
-//						originalSetCapture.apply(drawingAreaDom, arguments);
-//					};
-//				}
-//
-//				var originalReleaseCapture = drawingAreaDom.releaseCapture;
-//				if (originalReleaseCapture) {
-//					drawingAreaDom.releaseCapture = function() {
-//						releaseCaptureCalled = true;
-//						originalReleaseCapture.apply(drawingAreaDom, arguments);
-//					};
-//				}
-//
-//				try {
-//					drawingArea.doMouseDown(20, 30);
-//					drawingArea.doMouseMove(50, 60);
-//					drawingArea.doMouseLeave(700, 70);
-//
-//					var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
-//					var bodyRelative = documentBody.relativeOffset(pageCoordinates);
-//					drawingArea.doMouseMove(700, 70);
-//
-//					drawingArea.doMouseLeave();
-//					windowElement.doMouseUp();
-//
-//					expect(setCaptureCalled).to.be(true);
-//					expect(releaseCaptureCalled).to.be(true);
-//
-//					expect(lineSegments()).to.eql([
-//						[20, 30, 50, 60],
-//						[50, 60, 700, 70]
-//					]);
-//				}
-//				finally
-//				{
-//					drawingAreaDom.setCapture = originalSetCapture;
-//					drawingAreaDom.releaseCapture = originalReleaseCapture;
-//				}
-//			});
 
 			it("does not start drawing if drag is started outside drawing area", function() {
 				documentBody.doMouseDown(601, 150);

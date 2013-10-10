@@ -13,16 +13,20 @@
 
 		self._domElement = domElement;
 		self._element = $(domElement);
+	};
 
-		// NOT TESTED
-		var originalSetCapture = domElement.setCapture;
-		if (originalSetCapture) {
-			domElement.setCapture = function() {
-				dump("setCapture() override runs: " + domElement.tagName);
-				capturedElement = self;
-				originalSetCapture.apply(domElement, arguments);
-			};
-		}
+	// NOT TESTED
+	HtmlElement.prototype.setCapture = function() {
+		dump("setCapture() override runs: " + this._domElement.tagName);
+		capturedElement = this;
+		this._domElement.setCapture();
+	};
+
+	//NOT TESTED
+	HtmlElement.prototype.releaseCapture = function() {
+		dump("releaseCapture() override runs: " + this._domElement.tagName);
+		capturedElement = null;
+		this._domElement.releaseCapture();
 	};
 
 	HtmlElement.fromHtml = function(html) {
