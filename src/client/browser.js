@@ -12,6 +12,10 @@
 		return isIe8();
 	};
 
+	exports.doesNotSendUserEventsToWindow = function() {
+		return isIe8();
+	};
+
 	function isIe8() {
 		return $.browser.msie && $.browser.version === "8.0";
 	}

@@ -4,7 +4,10 @@
 (function() {
 	"use strict";
 
+	var browser = require("./browser.js");
+
 	var HtmlElement = module.exports = function(domElement) {
+		this._domElement = domElement;
 		this._element = $(domElement);
 	};
 
@@ -68,6 +71,8 @@
 
 	function doMouseEventFn(event) {
 		return function(relativeX, relativeY) {
+			if (browser.doesNotSendUserEventsToWindow() && this._domElement === window) return;      // NOT TESTED
+
 			sendMouseEvent(this, event, relativeX, relativeY);
 		};
 	}

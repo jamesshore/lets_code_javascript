@@ -27,8 +27,9 @@ Engineering Tasks:
   - double-check other browsers
 
 To Do on current task:
-- modify test to use feature detection--only run if browser doesn't support events on window object
-- fix bad code in setup() method
+- finish _client_test.js and client.js--we need to test-drive "drawingArea.onMouseUp(endDrag);"
+- put tests around changes to html_element.js
+- look for Modernizr/feature-based solution to browser.doesNotSendUserEventsToWindowObject()
 - add support for setCapture/releaseCapture in our HtmlElement abstraction
   - get rid of drawingAreaDom hack
 - fix duplication of mouse positioning handling in our window-related client tests
