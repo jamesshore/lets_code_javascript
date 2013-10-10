@@ -138,46 +138,39 @@
 			it.only("stops drawing if mouse leaves window and mouse button is released (on browsers that support mouse events on window)", function() {
 				var drawingAreaDom = drawingArea._element[0];
 
-				var originalSetCapture = drawingAreaDom.setCapture;
-				if (originalSetCapture) {
-					drawingAreaDom.setCapture = function() {
-						windowElement = new HtmlElement(this);
-						originalSetCapture.apply(drawingAreaDom, arguments);
-					};
-				}
+//				var originalSetCapture = drawingAreaDom.setCapture;
+//				if (originalSetCapture) {
+//					drawingAreaDom.setCapture = function() {
+//						windowElement = new HtmlElement(this);
+//						originalSetCapture.apply(drawingAreaDom, arguments);
+//					};
+//				}
+//
+//				var originalReleaseCapture = drawingAreaDom.releaseCapture;
+//				if (originalReleaseCapture) {
+//					drawingAreaDom.releaseCapture = function() {
+//						windowElement = new HtmlElement(window);
+//						originalReleaseCapture.apply(drawingAreaDom, arguments);
+//					};
+//				}
 
-				var originalReleaseCapture = drawingAreaDom.releaseCapture;
-				if (originalReleaseCapture) {
-					drawingAreaDom.releaseCapture = function() {
-						windowElement = new HtmlElement(window);
-						originalReleaseCapture.apply(drawingAreaDom, arguments);
-					};
-				}
+				drawingArea.doMouseDown(20, 30);
+				drawingArea.doMouseMove(50, 60);
+				drawingArea.doMouseLeave(700, 70);
 
-				try {
-					drawingArea.doMouseDown(20, 30);
-					drawingArea.doMouseMove(50, 60);
-					drawingArea.doMouseLeave(700, 70);
+				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
+				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
+				documentBody.doMouseMove(bodyRelative.x, bodyRelative.y);
 
-					var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
-					var bodyRelative = documentBody.relativeOffset(pageCoordinates);
-					documentBody.doMouseMove(bodyRelative.x, bodyRelative.y);
+				windowElement.doMouseLeave();
+				windowElement.doMouseUp();
 
-					windowElement.doMouseLeave();
-					windowElement.doMouseUp();
+				drawingArea.doMouseMove(90, 40);
 
-					drawingArea.doMouseMove(90, 40);
-
-					expect(lineSegments()).to.eql([
-						[20, 30, 50, 60],
-						[50, 60, 700, 70]
-					]);
-				}
-				finally
-				{
-					drawingAreaDom.setCapture = originalSetCapture;
-					drawingAreaDom.releaseCapture = originalReleaseCapture;
-				}
+				expect(lineSegments()).to.eql([
+					[20, 30, 50, 60],
+					[50, 60, 700, 70]
+				]);
 			});
 
 //			it("stops drawing if mouse leaves window and mouse button is released (on IE 8, which doesn't support mouse events on window)", function() {

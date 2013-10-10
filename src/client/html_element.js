@@ -6,13 +6,27 @@
 
 	var browser = require("./browser.js");
 
+	var capturedElement = null;
+
 	var HtmlElement = module.exports = function(domElement) {
-		this._domElement = domElement;
-		this._element = $(domElement);
+		var self = this;
+
+		self._domElement = domElement;
+		self._element = $(domElement);
+
+		// NOT TESTED
+		var originalSetCapture = domElement.setCapture;
+		if (originalSetCapture) {
+			domElement.setCapture = function() {
+				dump("setCapture() override runs: " + domElement.tagName);
+				capturedElement = self;
+				originalSetCapture.apply(domElement, arguments);
+			};
+		}
 	};
 
 	HtmlElement.fromHtml = function(html) {
-		return new HtmlElement($(html));
+		return new HtmlElement($(html)[0]);   // NOT TESTED: ensure that DOM element is passed through
 	};
 
 	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
@@ -71,7 +85,9 @@
 
 	function doMouseEventFn(event) {
 		return function(relativeX, relativeY) {
-			sendMouseEvent(this, event, relativeX, relativeY);
+			var targetElement = capturedElement || this;
+
+			sendMouseEvent(targetElement, event, relativeX, relativeY);
 		};
 	}
 
