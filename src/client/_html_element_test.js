@@ -147,7 +147,18 @@
 		});
 
 
-		describe("DOM tree modification", function() {
+		describe("DOM manipulation", function() {
+
+			it.only("creates element from raw HTML; also, converts to DOM element", function() {
+				var element = HtmlElement.fromHtml("<code>foo</code>");
+
+				var domElement = element.toDomElement();
+
+				expect(domElement.outerHTML.toLowerCase()).to.equal("<code>foo</code>");
+
+				// Ensure that fromHtml converts HTML to DOM element, not jQuery element
+				expect(element._domElement).to.equal(domElement);
+			});
 
 			it("appends elements", function() {
 				htmlElement.append(HtmlElement.fromHtml("<div></div>"));
@@ -172,11 +183,6 @@
 				htmlElement.append(elementToAppend);
 				elementToAppend.remove();
 				expect(htmlElement._element.children().length).to.equal(0);
-			});
-
-			it("converts to DOM element", function() {
-				var domElement = htmlElement.toDomElement();
-				expect(domElement.tagName).to.equal("DIV");
 			});
 		});
 

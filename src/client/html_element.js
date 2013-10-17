@@ -28,7 +28,7 @@
 	};
 
 	HtmlElement.fromHtml = function(html) {
-		return new HtmlElement($(html)[0]);   // NOT TESTED: ensure that DOM element is passed through
+		return new HtmlElement($(html)[0]);
 	};
 
 	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
@@ -136,7 +136,7 @@
 
 	function onMouseEventFn(event) {
 		return function(callback) {
-			if (browser.doesNotHandlesUserEventsOnWindow() && this._domElement === window) return;      // NOT TESTED
+			if (browser.doesNotHandlesUserEventsOnWindow() && this._domElement === window) return;
 
 			this._element.on(event, mouseEventHandlerFn(this, callback));
 		};

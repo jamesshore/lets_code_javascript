@@ -33,8 +33,6 @@ Engineering Tasks:
 
 To Do on current task:
 * put tests around changes to html_element.js
-  * onMouseEventHandlerFn()
-  - HtmlElement.fromHtml() must send through DomElement for setCapture/releaseCapture to work
   - setCapture/releaseCapture()
     - relativeX and relativeY does not work properly when setCapture is used?
 - take a second look at HtmlElement.setCapture() -- is that the right abstraction?
