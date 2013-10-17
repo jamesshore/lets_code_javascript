@@ -26,7 +26,17 @@
 			});
 
 			it("simulates buggy IE 8 behavior (where user events on window aren't sent to window object)", function() {
-				// to do
+				if (!browser.doesNotHandlesUserEventsOnWindow()) return;
+
+				var windowElement = new HtmlElement(window);
+
+				var eventTriggered = false;
+				windowElement.onMouseUp(function() {
+					eventTriggered = true;
+				});
+
+				windowElement.doMouseUp();
+				expect(eventTriggered).to.be(false);
 			});
 
 			it("handles single-touch events", function() {
@@ -39,6 +49,7 @@
 
 			it("handles multi-touch events", function() {
 				if (!browser.supportsTouchEvents()) return;
+
 				var eventTriggered = false;
 				htmlElement.onMultiTouchStart(function() {
 					eventTriggered = true;
