@@ -14,19 +14,27 @@ User Stories:
 - draw a single pixel when mouse is clicked (or screen is tapped)
 - 'clear screen' button
 - quality user-facing site design
+- fix issue: drawing area doesn't quite fit to borders
+  - correct in Safari, Mobile Safari
+  - can draw slightly outside border Chrome, Firefox
+  - shifted slightly to top-left in IE 9
 ? click tracking needs to account for margin, border, and padding (if needed; fail fast if not)
   - test that em is converted px
 - Site monitoring and logging
 - Performance
+  - Note: serious performance degradation in IE 8 as more lines drawn
 - Scalability
 - Deploy (including smoke test to ensure that div is in home page)
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
 * drawing doesn't work in IE8
-  - double-check other browsers
+- integrate
 
 To Do on current task:
+- AT START OF EPISODE:
+  - double-checked other browsers; found issue with border, performance issue in IE 8
+  - upgraded iOS simulator to iOS 7
 * take a second look at HtmlElement.setCapture() -- is that the right abstraction?
 - put tests around changes to html_element.js
   - onMouseEventHandlerFn()
