@@ -17,14 +17,12 @@
 
 	// NOT TESTED
 	HtmlElement.prototype.setCapture = function() {
-		dump("setCapture() override runs: " + this._domElement.tagName);
 		capturedElement = this;
 		this._domElement.setCapture();
 	};
 
-	//NOT TESTED
+	// NOT TESTED
 	HtmlElement.prototype.releaseCapture = function() {
-		dump("releaseCapture() override runs: " + this._domElement.tagName);
 		capturedElement = null;
 		this._domElement.releaseCapture();
 	};

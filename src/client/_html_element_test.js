@@ -62,7 +62,7 @@
 			expect(eventPageOffset).to.eql({ x: 0, y: 0 });
 		});
 
-		it("clears all events (useful for testing)", function() {
+		it("clears all event handlers (useful for testing)", function() {
 			htmlElement.onMouseDown(function() {
 				throw new Error("event handler should have been removed");
 			});

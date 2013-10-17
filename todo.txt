@@ -15,7 +15,7 @@ User Stories:
 - 'clear screen' button
 - quality user-facing site design
 - fix issue: drawing area doesn't quite fit to borders
-  - correct in Safari, Mobile Safari
+  - correct in Safari, Mobile Safari, IE 8
   - can draw slightly outside border Chrome, Firefox
   - shifted slightly to top-left in IE 9
 ? click tracking needs to account for margin, border, and padding (if needed; fail fast if not)
@@ -32,15 +32,12 @@ Engineering Tasks:
 - integrate
 
 To Do on current task:
-- AT START OF EPISODE:
-  - double-checked other browsers; found issue with border, performance issue in IE 8
-  - upgraded iOS simulator to iOS 7
-* take a second look at HtmlElement.setCapture() -- is that the right abstraction?
-- put tests around changes to html_element.js
+* put tests around changes to html_element.js
   - onMouseEventHandlerFn()
+  - HtmlElement.fromHtml() must send through DomElement for setCapture/releaseCapture to work
   - setCapture/releaseCapture()
     - relativeX and relativeY does not work properly when setCapture is used?
-  - HtmlElement.fromHtml() must send through DomElement for setCapture/releaseCapture to work
+- take a second look at HtmlElement.setCapture() -- is that the right abstraction?
 - test-drive releaseCapture in client.js -- take a second look, does it need more specific tests?
 - look for Modernizr/feature-based solution to browser.doesNotSendUserEventsToWindowObject()
 - fix duplication of mouse positioning handling in our window-related client tests

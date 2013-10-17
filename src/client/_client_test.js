@@ -135,7 +135,7 @@
 				]);
 			});
 
-			it("stops drawing if mouse leaves window and mouse button is released (on browsers that support mouse events on window)", function() {
+			it("stops drawing if mouse leaves window and mouse button is released", function() {
 				drawingArea.doMouseDown(20, 30);
 				drawingArea.doMouseMove(50, 60);
 				drawingArea.doMouseLeave(700, 70);
