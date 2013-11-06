@@ -4,6 +4,10 @@
 (function() {
 	"use strict";
 
+	// TODO: Laurent Bourgalt-Roy suggested a better way of smoke testing
+	// using Selenium in combination with PhantomJS:
+	// http://www.letscodejavascript.com/v3/comments/live/101#comment-1095901476
+
 	var page = require("webpage").create();
 
 	page.onConsoleMessage = function(message) {
