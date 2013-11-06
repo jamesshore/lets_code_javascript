@@ -32,6 +32,9 @@ Engineering Tasks:
 - integrate
 
 To Do on current task:
+AT START OF NEXT EPISODE:
+  - Upgraded Node
+  - Laurent Bourgalt-Roy w/ a better way of smoke testing: http://www.letscodejavascript.com/v3/comments/live/101#comment-1095901476
 * put tests around changes to html_element.js
   - setCapture/releaseCapture()
     - relativeX and relativeY does not work properly when setCapture is used?
