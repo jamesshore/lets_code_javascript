@@ -149,7 +149,7 @@
 
 		describe("DOM manipulation", function() {
 
-			it.only("creates element from raw HTML; also, converts to DOM element", function() {
+			it("creates element from raw HTML; also, converts to DOM element", function() {
 				var element = HtmlElement.fromHtml("<code>foo</code>");
 
 				var domElement = element.toDomElement();
