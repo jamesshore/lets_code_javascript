@@ -32,6 +32,8 @@ Engineering Tasks:
 - integrate
 
 To Do on current task:
+- AT START OF NEXT EPISODE:
+  - http://www.letscodejavascript.com/v3/comments/live/145#comment-1112202388
 - put tests around changes to html_element.js
   - setCapture/releaseCapture()
     - relativeX and relativeY does not work properly when setCapture is used?
