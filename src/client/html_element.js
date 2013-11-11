@@ -15,13 +15,11 @@
 		self._element = $(domElement);
 	};
 
-	// NOT TESTED
 	HtmlElement.prototype.setCapture = function() {
 		capturedElement = this;
 		this._domElement.setCapture();
 	};
 
-	// NOT TESTED
 	HtmlElement.prototype.releaseCapture = function() {
 		capturedElement = null;
 		this._domElement.releaseCapture();

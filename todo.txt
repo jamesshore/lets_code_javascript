@@ -33,13 +33,12 @@ Engineering Tasks:
 
 To Do on current task:
 - AT START OF NEXT EPISODE:
-  - http://www.letscodejavascript.com/v3/comments/live/145#comment-1112202388
-- put tests around changes to html_element.js
-  - setCapture/releaseCapture()
-    - relativeX and relativeY does not work properly when setCapture is used?
+- improve _html_element_test.js
 - test-drive releaseCapture in client.js -- take a second look, does it need more specific tests?
+- Modify client.js so it isn't vulnerable to releaseCapture() not being called.
 - look for Modernizr/feature-based solution to browser.doesNotSendUserEventsToWindowObject()
 - fix duplication of mouse positioning handling in our window-related client tests
+- relativeX and relativeY does not work properly when setCapture is used?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

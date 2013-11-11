@@ -14,6 +14,9 @@
 			htmlElement = HtmlElement.fromHtml("<div></div>");
 		});
 
+		afterEach(function() {
+			if (browser.supportsCaptureApi()) htmlElement.releaseCapture();
+		});
 
 		describe("event handling", function() {
 
@@ -23,6 +26,37 @@
 				testEvent(htmlElement.onMouseMove, htmlElement.doMouseMove);
 				testEvent(htmlElement.onMouseLeave, htmlElement.doMouseLeave);
 				testEvent(htmlElement.onMouseUp, htmlElement.doMouseUp);
+			});
+
+			it("emulates behavior of setCapture() (on browsers that support it)", function() {
+				if (!browser.supportsCaptureApi()) return;
+
+				var body = new HtmlElement(document.body);
+
+				var eventTriggered = false;
+				htmlElement.onMouseMove(function() {
+					eventTriggered = true;
+				});
+
+				htmlElement.setCapture();
+				body.doMouseMove();
+				expect(eventTriggered).to.be(true);
+			});
+
+			it("emulates behavior of releaseCapture() (on browsers that support it)", function() {
+				if (!browser.supportsCaptureApi()) return;
+
+				var body = new HtmlElement(document.body);
+
+				var eventTriggered = false;
+				htmlElement.onMouseMove(function() {
+					eventTriggered = true;
+				});
+
+				htmlElement.setCapture();
+				htmlElement.releaseCapture();
+				body.doMouseMove();
+				expect(eventTriggered).to.be(false);
 			});
 
 			it("simulates buggy IE 8 behavior (where user events on window aren't sent to window object)", function() {

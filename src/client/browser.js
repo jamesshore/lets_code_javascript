@@ -8,6 +8,10 @@
 		return Modernizr.touch;
 	};
 
+	exports.supportsCaptureApi = function() {
+		return document.body.setCapture && document.body.releaseCapture;
+	};
+
 	exports.reportsElementPositionOffByOneSometimes = function() {
 		return isIe8();
 	};
