@@ -23,7 +23,7 @@
 		"Firefox 25.0.0 (Mac OS X 10.8)",
 		"Chrome 30.0.1599 (Mac OS X 10.8.5)",
 		"Safari 6.1.0 (Mac OS X 10.8.5)",
-		"Mobile Safari 7.0.0 (iOS 7.0)"
+		"Mobile Safari 7.0.0 (iOS 7.0.3)"
 	];
 
 	var GENERATED_DIR = "generated";
