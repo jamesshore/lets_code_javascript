@@ -7,14 +7,21 @@
 	var browser = require("./browser.js");
 
 	describe("HtmlElement", function() {
+		var windowElement;
+		var bodyElement;
 		var htmlElement;
 
 		beforeEach(function() {
+			windowElement = new HtmlElement(window);
+			bodyElement = new HtmlElement(document.body);
 			htmlElement = HtmlElement.fromHtml("<div></div>");
 		});
 
 		afterEach(function() {
 			if (browser.supportsCaptureApi()) htmlElement.releaseCapture();
+			windowElement.removeAllEventHandlers();
+			bodyElement.removeAllEventHandlers();
+			htmlElement.removeAllEventHandlers();
 		});
 
 		describe("event handling", function() {
@@ -29,27 +36,17 @@
 				});
 
 				it("allows mouse events to be triggered without coordinates", function() {
-					var eventPageOffset;
-					htmlElement.onMouseDown(function(pageOffset) {
-						eventPageOffset = pageOffset;
-					});
-
+					var monitor = monitorEvent(htmlElement, htmlElement.onMouseDown);
 					htmlElement.doMouseDown();
-					expect(eventPageOffset).to.eql({ x: 0, y: 0 });
+					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0 });
 				});
 
 				it("simulates buggy IE 8 behavior (where mouse events on window aren't sent to window object)", function() {
 					if (!browser.doesNotHandlesUserEventsOnWindow()) return;
 
-					var windowElement = new HtmlElement(window);
-
-					var eventTriggered = false;
-					windowElement.onMouseUp(function() {
-						eventTriggered = true;
-					});
-
+					var monitor = monitorEvent(windowElement, windowElement.onMouseUp);
 					windowElement.doMouseUp();
-					expect(eventTriggered).to.be(false);
+					expect(monitor.eventTriggered).to.be(false);
 				});
 			});
 
@@ -64,56 +61,34 @@
 				});
 
 				it("handles multi-touch events", function() {
-					var eventTriggered = false;
-					htmlElement.onMultiTouchStart(function() {
-						eventTriggered = true;
-					});
-
+					var monitor = monitorEvent(htmlElement, htmlElement.onMultiTouchStart);
 					htmlElement.doMultiTouchStart(1, 2, 3, 4);
-					expect(eventTriggered).to.be(true);
+					expect(monitor.eventTriggered).to.be(true);
 				});
 
 				it("allows touch events to be triggered without coordinates", function() {
-					var eventPageOffset;
-					htmlElement.onSingleTouchStart(function(pageOffset) {
-						eventPageOffset = pageOffset;
-					});
-
+					var monitor = monitorEvent(htmlElement, htmlElement.onSingleTouchStart);
 					htmlElement.doSingleTouchStart();
-					expect(eventPageOffset).to.eql({ x: 0, y: 0 });
+					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0});
 				});
 			});
 
 			describe("Capture API", function() {
+				if (!browser.supportsCaptureApi()) return;
+
 				it("emulates behavior of setCapture() (on browsers that support it)", function() {
-					if (!browser.supportsCaptureApi()) return;
-
-					var body = new HtmlElement(document.body);
-
-					var eventTriggered = false;
-					htmlElement.onMouseMove(function() {
-						eventTriggered = true;
-					});
-
+					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
-					body.doMouseMove();
-					expect(eventTriggered).to.be(true);
+					bodyElement.doMouseMove();
+					expect(monitor.eventTriggered).to.be(true);
 				});
 
 				it("emulates behavior of releaseCapture() (on browsers that support it)", function() {
-					if (!browser.supportsCaptureApi()) return;
-
-					var body = new HtmlElement(document.body);
-
-					var eventTriggered = false;
-					htmlElement.onMouseMove(function() {
-						eventTriggered = true;
-					});
-
+					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
 					htmlElement.releaseCapture();
-					body.doMouseMove();
-					expect(eventTriggered).to.be(false);
+					bodyElement.doMouseMove();
+					expect(monitor.eventTriggered).to.be(false);
 				});
 			});
 
@@ -125,6 +100,18 @@
 				htmlElement.removeAllEventHandlers();
 				htmlElement.doMouseDown(0, 0);
 			});
+
+			function monitorEvent(htmlElement, eventFunction) {
+				var monitor = {
+					eventTriggered: false
+				};
+
+				eventFunction.call(htmlElement, function(pageOffset) {
+					monitor.eventTriggered = true;
+					monitor.eventTriggeredAt = pageOffset;
+				});
+				return monitor;
+			}
 
 			function testEvent(eventSender, eventHandler) {
 				try {
@@ -202,11 +189,10 @@
 
 			it("appends to body", function() {
 				try {
-					var body = new HtmlElement(document.body);
-					var childrenBeforeAppend = body._element.children().length;
+					var childrenBeforeAppend = bodyElement._element.children().length;
 
 					htmlElement.appendSelfToBody();
-					var childrenAfterAppend = body._element.children().length;
+					var childrenAfterAppend = bodyElement._element.children().length;
 					expect(childrenBeforeAppend + 1).to.equal(childrenAfterAppend);
 				} finally {
 					htmlElement.remove();
