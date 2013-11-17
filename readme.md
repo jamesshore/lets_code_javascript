@@ -22,7 +22,7 @@ To build and test:
 ------------------
 
 1. Run `./jake.sh karma` (Unix/Mac) or `jake karma` (Windows)
-2. Navigate at least one browser to http://localhost:8080
+2. Navigate at least one browser to http://localhost:9876
 3. Run `./jake.sh loose=true` (Unix/Mac) or `jake loose=true` (Windows)
 
 *Note:* The master branch is not guaranteed to build successfully. For a known-good build (tested on Mac and Windows, and assumed to work on Linux), use the integration branch:
