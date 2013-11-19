@@ -13,6 +13,7 @@ User Stories:
 * drawing should continue even if user leaves boundaries (just pick up again when they come back in)
 - draw a single pixel when mouse is clicked (or screen is tapped)
 - 'clear screen' button
+- painting tools (such as colors or line width)
 - quality user-facing site design
 - fix issue: drawing area doesn't quite fit to borders
   - correct in Safari, Mobile Safari, IE 8
@@ -28,16 +29,10 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* Clean up code
 - Upgrade dependencies to latest versions
 - Integrate
 
 To Do on current task:
-- Make sure setCapture tests always releaseCapture
-- relativeX and relativeY does not work properly when setCapture is used?
-- test-drive releaseCapture in client.js -- take a second look, does it need more specific tests?
-- Modify client.js so it isn't vulnerable to releaseCapture() not being called.
-- look for Modernizr/feature-based solution to browser.doesNotSendUserEventsToWindowObject()
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
