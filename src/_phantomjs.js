@@ -37,9 +37,9 @@
 			var HtmlElement = require("./html_element.js");
 
 			var drawingArea = new HtmlElement(document.getElementById("drawingArea"));
-			drawingArea.doMouseDown(10, 20);
-			drawingArea.doMouseMove(50, 60);
-			drawingArea.doMouseUp(50, 60);
+			drawingArea.triggerMouseDown(10, 20);
+			drawingArea.triggerMouseMove(50, 60);
+			drawingArea.triggerMouseUp(50, 60);
 
 			var actual = JSON.stringify(client.drawingAreaCanvas.lineSegments());
 			var expected = JSON.stringify([[ "10", "20", "50", "60" ]]);

@@ -45,22 +45,22 @@
 
 	/* Mouse events */
 
-	HtmlElement.prototype.doSelectStart = doMouseEventFn("selectstart");
+	HtmlElement.prototype.triggerSelectStart = triggerMouseEventFn("selectstart");
 	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
 
-	HtmlElement.prototype.doMouseDown = doMouseEventFn("mousedown");
+	HtmlElement.prototype.triggerMouseDown = triggerMouseEventFn("mousedown");
 	HtmlElement.prototype.onMouseDown = onMouseEventFn("mousedown");
 
-	HtmlElement.prototype.doMouseMove = doMouseEventFn("mousemove");
+	HtmlElement.prototype.triggerMouseMove = triggerMouseEventFn("mousemove");
 	HtmlElement.prototype.onMouseMove = onMouseEventFn("mousemove");
 
-	HtmlElement.prototype.doMouseLeave = doMouseEventFn("mouseleave");
+	HtmlElement.prototype.triggerMouseLeave = triggerMouseEventFn("mouseleave");
 	HtmlElement.prototype.onMouseLeave = onMouseEventFn("mouseleave");
 
-	HtmlElement.prototype.doMouseUp = doMouseEventFn("mouseup");
+	HtmlElement.prototype.triggerMouseUp = triggerMouseEventFn("mouseup");
 	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
 
-	function doMouseEventFn(event) {
+	function triggerMouseEventFn(event) {
 		return function(relativeX, relativeY) {
 			var targetElement = capturedElement || this;
 
@@ -104,22 +104,22 @@
 
 	/* Touch events */
 
-	HtmlElement.prototype.doSingleTouchStart = doSingleTouchEventFn("touchstart");
+	HtmlElement.prototype.triggerSingleTouchStart = triggerSingleTouchEventFn("touchstart");
 	HtmlElement.prototype.onSingleTouchStart = onSingleTouchEventFn("touchstart");
 
-	HtmlElement.prototype.doSingleTouchMove = doSingleTouchEventFn("touchmove");
+	HtmlElement.prototype.triggerSingleTouchMove = triggerSingleTouchEventFn("touchmove");
 	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
 
-	HtmlElement.prototype.doSingleTouchEnd = doSingleTouchEventFn("touchend");
+	HtmlElement.prototype.triggerSingleTouchEnd = triggerSingleTouchEventFn("touchend");
 	HtmlElement.prototype.onSingleTouchEnd = onSingleTouchEventFn("touchend");
 
-	HtmlElement.prototype.doSingleTouchCancel = doSingleTouchEventFn("touchcancel");
+	HtmlElement.prototype.triggerSingleTouchCancel = triggerSingleTouchEventFn("touchcancel");
 	HtmlElement.prototype.onSingleTouchCancel = onSingleTouchEventFn("touchcancel");
 
-	HtmlElement.prototype.doMultiTouchStart = doMultiTouchEventFn("touchstart");
+	HtmlElement.prototype.triggerMultiTouchStart = triggerMultiTouchEventFn("touchstart");
 	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
 
-	function doSingleTouchEventFn(event) {
+	function triggerSingleTouchEventFn(event) {
 		return function(relativeX, relativeY) {
 			sendSingleTouchEvent(this, event, relativeX, relativeY);
 		};
@@ -130,7 +130,7 @@
 		sendTouchEvent(self, event, new TouchList(touch));
 	}
 
-	function doMultiTouchEventFn(event) {
+	function triggerMultiTouchEventFn(event) {
 		return function(relative1X, relative1Y, relative2X, relative2Y) {
 			sendMultiTouchEvent(this, event, relative1X, relative1Y, relative2X, relative2Y);
 		};

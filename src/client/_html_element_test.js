@@ -28,16 +28,16 @@
 
 			describe("mouse events", function() {
 				it("triggers mouse events relative to element and handles them relative to page", function() {
-					testEvent(htmlElement.onSelectStart_ie8Only, htmlElement.doSelectStart);
-					testEvent(htmlElement.onMouseDown, htmlElement.doMouseDown);
-					testEvent(htmlElement.onMouseMove, htmlElement.doMouseMove);
-					testEvent(htmlElement.onMouseLeave, htmlElement.doMouseLeave);
-					testEvent(htmlElement.onMouseUp, htmlElement.doMouseUp);
+					testEvent(htmlElement.onSelectStart_ie8Only, htmlElement.triggerSelectStart);
+					testEvent(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
+					testEvent(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
+					testEvent(htmlElement.onMouseLeave, htmlElement.triggerMouseLeave);
+					testEvent(htmlElement.onMouseUp, htmlElement.triggerMouseUp);
 				});
 
 				it("allows mouse events to be triggered without coordinates", function() {
 					var monitor = monitorEvent(htmlElement, htmlElement.onMouseDown);
-					htmlElement.doMouseDown();
+					htmlElement.triggerMouseDown();
 					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0 });
 				});
 
@@ -45,7 +45,7 @@
 					if (!browser.doesNotHandlesUserEventsOnWindow()) return;
 
 					var monitor = monitorEvent(windowElement, windowElement.onMouseUp);
-					windowElement.doMouseUp();
+					windowElement.triggerMouseUp();
 					expect(monitor.eventTriggered).to.be(false);
 				});
 			});
@@ -54,21 +54,21 @@
 				if (!browser.supportsTouchEvents()) return;
 
 				it("handles single-touch events", function() {
-					testEvent(htmlElement.onSingleTouchStart, htmlElement.doSingleTouchStart);
-					testEvent(htmlElement.onSingleTouchMove, htmlElement.doSingleTouchMove);
-					testEvent(htmlElement.onSingleTouchEnd, htmlElement.doSingleTouchEnd);
-					testEvent(htmlElement.onSingleTouchCancel, htmlElement.doSingleTouchCancel);
+					testEvent(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
+					testEvent(htmlElement.onSingleTouchMove, htmlElement.triggerSingleTouchMove);
+					testEvent(htmlElement.onSingleTouchEnd, htmlElement.triggerSingleTouchEnd);
+					testEvent(htmlElement.onSingleTouchCancel, htmlElement.triggerSingleTouchCancel);
 				});
 
 				it("handles multi-touch events", function() {
 					var monitor = monitorEvent(htmlElement, htmlElement.onMultiTouchStart);
-					htmlElement.doMultiTouchStart(1, 2, 3, 4);
+					htmlElement.triggerMultiTouchStart(1, 2, 3, 4);
 					expect(monitor.eventTriggered).to.be(true);
 				});
 
 				it("allows touch events to be triggered without coordinates", function() {
 					var monitor = monitorEvent(htmlElement, htmlElement.onSingleTouchStart);
-					htmlElement.doSingleTouchStart();
+					htmlElement.triggerSingleTouchStart();
 					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0});
 				});
 			});
@@ -79,7 +79,7 @@
 				it("emulates behavior of setCapture() (on browsers that support it)", function() {
 					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
-					bodyElement.doMouseMove();
+					bodyElement.triggerMouseMove();
 					expect(monitor.eventTriggered).to.be(true);
 				});
 
@@ -87,7 +87,7 @@
 					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
 					htmlElement.releaseCapture();
-					bodyElement.doMouseMove();
+					bodyElement.triggerMouseMove();
 					expect(monitor.eventTriggered).to.be(false);
 				});
 			});
@@ -98,7 +98,7 @@
 				});
 
 				htmlElement.removeAllEventHandlers();
-				htmlElement.doMouseDown(0, 0);
+				htmlElement.triggerMouseDown(0, 0);
 			});
 
 			function monitorEvent(htmlElement, eventFunction) {
