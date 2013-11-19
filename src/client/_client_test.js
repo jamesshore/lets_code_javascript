@@ -26,8 +26,9 @@
 
 		afterEach(function() {
 			drawingArea.remove();
-			client.drawingAreaHasBeenRemovedFromDom();
 			documentBody.removeAllEventHandlers();
+			windowElement.removeAllEventHandlers();
+			client.drawingAreaHasBeenRemovedFromDom();
 		});
 
 		describe("mouse events", function() {
@@ -36,7 +37,7 @@
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseUp(50, 60);
 
-				expect(lineSegments()).to.eql([
+				expect(lines()).to.eql([
 					[20, 30, 50, 60]
 				]);
 			});
@@ -48,7 +49,7 @@
 				drawingArea.triggerMouseMove(10, 15);
 				drawingArea.triggerMouseUp(10, 15);
 
-				expect(lineSegments()).to.eql([
+				expect(lines()).to.eql([
 					[20, 30, 50, 60],
 					[50, 60, 40, 20],
 					[40, 20, 10, 15]
@@ -66,24 +67,10 @@
 				drawingArea.triggerMouseMove(10, 15);
 				drawingArea.triggerMouseUp(10, 15);
 
-				expect(lineSegments()).to.eql([
+				expect(lines()).to.eql([
 					[20, 30, 50, 60],
 					[30, 25, 10, 15]
 				]);
-			});
-
-			it("does not draw line segment when mouse button is released", function() {
-				drawingArea.triggerMouseDown(20, 30);
-				drawingArea.triggerMouseUp(50, 60);
-
-				expect(lineSegments()).to.eql([]);
-			});
-
-			it("does not draw line segments when mouse button has never been pushed", function() {
-				drawingArea.triggerMouseMove(20, 30);
-				drawingArea.triggerMouseMove(50, 60);
-
-				expect(lineSegments()).to.eql([]);
 			});
 
 			it("stops drawing line segments after mouse button is released", function() {
@@ -93,9 +80,23 @@
 
 				drawingArea.triggerMouseMove(10, 15);
 
-				expect(lineSegments()).to.eql([
+				expect(lines()).to.eql([
 					[20, 30, 50, 60]
 				]);
+			});
+
+			it("does not draw line segment when mouse button is released", function() {
+				drawingArea.triggerMouseDown(20, 30);
+				drawingArea.triggerMouseUp(50, 60);
+
+				expect(lines()).to.eql([]);
+			});
+
+			it("does not draw line segments when mouse button has never been pushed", function() {
+				drawingArea.triggerMouseMove(20, 30);
+				drawingArea.triggerMouseMove(50, 60);
+
+				expect(lines()).to.eql([]);
 			});
 
 			it("continues drawing if mouse leaves drawing area and comes back in", function() {
@@ -105,12 +106,12 @@
 
 				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
 				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
-
 				documentBody.triggerMouseMove(bodyRelative.x, bodyRelative.y);
+
 				drawingArea.triggerMouseMove(90, 40);
 				drawingArea.triggerMouseUp(90, 40);
 
-				expect(lineSegments()).to.eql([
+				expect(lines()).to.eql([
 					[20, 30, 50, 60],
 					[50, 60, 700, 70],
 					[700, 70, 90, 40]
@@ -124,12 +125,12 @@
 
 				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
 				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
-
 				documentBody.triggerMouseMove(bodyRelative.x, bodyRelative.y);
 				documentBody.triggerMouseUp(bodyRelative.x, bodyRelative.y);
+
 				drawingArea.triggerMouseMove(90, 40);
 
-				expect(lineSegments()).to.eql([
+				expect(lines()).to.eql([
 					[20, 30, 50, 60],
 					[50, 60, 700, 70]
 				]);
@@ -149,45 +150,18 @@
 
 				drawingArea.triggerMouseMove(90, 40);
 
-				expect(lineSegments()).to.eql([
+				expect(lines()).to.eql([
 					[20, 30, 50, 60],
 					[50, 60, 700, 70]
 				]);
 			});
 
 			it("does not start drawing if drag is started outside drawing area", function() {
-				documentBody.triggerMouseDown(601, 150);
+				documentBody.triggerMouseDown(700, 70);
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseUp(50, 60);
 
-				documentBody.triggerMouseDown(-1, 150);
-				drawingArea.triggerMouseMove(50, 60);
-				drawingArea.triggerMouseUp(50, 60);
-
-				documentBody.triggerMouseDown(120, 301);
-				drawingArea.triggerMouseMove(50, 60);
-				drawingArea.triggerMouseUp(50, 60);
-
-				documentBody.triggerMouseDown(-1, 301);
-				drawingArea.triggerMouseMove(50, 60);
-				drawingArea.triggerMouseUp(50, 60);
-
-				expect(lineSegments()).to.eql([]);
-			});
-
-			it("does start drawing if drag is initiated exactly at edge of drawing area", function() {
-				drawingArea.triggerMouseDown(600, 300);
-				drawingArea.triggerMouseMove(50, 60);
-				drawingArea.triggerMouseUp(50, 60);
-
-				drawingArea.triggerMouseDown(0, 0);
-				drawingArea.triggerMouseMove(50, 60);
-				drawingArea.triggerMouseUp(50, 60);
-
-				expect(lineSegments()).to.eql([
-					[600, 300, 50, 60],
-					[0, 0, 50, 60]
-				]);
+				expect(lines()).to.eql([]);
 			});
 
 			it("does not allow text to be selected outside drawing area when drag starts within drawing area", function() {
@@ -200,7 +174,7 @@
 				drawingArea.triggerMouseUp(90, 40);
 			});
 
-			it("does not allow text to be selected outside drawing area even -- INCLUDING IE 8", function() {
+			it("does not allow text to be selected outside drawing area even on IE 8", function() {
 				drawingArea.onSelectStart_ie8Only(function(offset, event) {
 					expect(event.isDefaultPrevented()).to.be(true);
 				});
@@ -217,7 +191,7 @@
 					drawingArea.triggerSingleTouchMove(5, 20);
 					drawingArea.triggerSingleTouchEnd(5, 20);
 
-					expect(lineSegments()).to.eql([
+					expect(lines()).to.eql([
 						[10, 40, 5, 20]
 					]);
 				});
@@ -229,7 +203,7 @@
 
 					drawingArea.triggerSingleTouchMove(50, 60);
 
-					expect(lineSegments()).to.eql([
+					expect(lines()).to.eql([
 						[10, 40, 5, 20]
 					]);
 				});
@@ -241,7 +215,7 @@
 
 					drawingArea.triggerSingleTouchMove(50, 60);
 
-					expect(lineSegments()).to.eql([
+					expect(lines()).to.eql([
 						[10, 40, 5, 20]
 					]);
 				});
@@ -264,14 +238,14 @@
 					drawingArea.triggerSingleTouchMove(1, 10, 7, 70);
 					drawingArea.triggerSingleTouchEnd(1, 10, 7, 70);
 
-					expect(lineSegments()).to.eql([
+					expect(lines()).to.eql([
 						[10, 40, 5, 20]
 					]);
 				});
 			});
 		}
 
-		function lineSegments() {
+		function lines() {
 			return svgCanvas.lineSegments();
 		}
 

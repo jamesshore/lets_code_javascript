@@ -33,15 +33,9 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-- START OF NEXT EPISODE:
-  - Laurent Bourgault-Roy: http://www.letscodejavascript.com/v3/comments/live/151
-  - Rename doEvent methods to triggerEvent
-- Review and clean up _client_test.js
+- relativeX and relativeY does not work properly when setCapture is used?
 - test-drive releaseCapture in client.js -- take a second look, does it need more specific tests?
 - Modify client.js so it isn't vulnerable to releaseCapture() not being called.
-- client.js has an off-by-one error when it tests [600, 300] coordinate
-- fix duplication of mouse positioning handling in our window-related client tests
-- relativeX and relativeY does not work properly when setCapture is used?
 - look for Modernizr/feature-based solution to browser.doesNotSendUserEventsToWindowObject()
 
 Notes:
