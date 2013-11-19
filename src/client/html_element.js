@@ -64,24 +64,24 @@
 		return function(relativeX, relativeY) {
 			var targetElement = capturedElement || this;
 
-			sendMouseEvent(targetElement, event, relativeX, relativeY);
+			var pageCoords;
+			if (relativeX === undefined || relativeY === undefined) {
+				pageCoords = { x: 0, y: 0 };
+			}
+			else {
+				pageCoords = pageOffset(this, relativeX, relativeY);
+			}
+
+			sendMouseEvent(targetElement, event, pageCoords);
 		};
 	}
 
-	function sendMouseEvent(self, event, relativeX, relativeY) {
+	function sendMouseEvent(self, event, pageCoords) {
 		var jqElement = self._element;
 
-		var page;
-		if (relativeX === undefined || relativeY === undefined) {
-			page = { x: 0, y: 0 };
-		}
-		else {
-			page = pageOffset(self, relativeX, relativeY);
-		}
-
 		var eventData = new jQuery.Event();
-		eventData.pageX = page.x;
-		eventData.pageY = page.y;
+		eventData.pageX = pageCoords.x;
+		eventData.pageY = pageCoords.y;
 		eventData.type = event;
 		jqElement.trigger(eventData);
 	}

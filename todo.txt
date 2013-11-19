@@ -33,6 +33,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
+- Make sure setCapture tests always releaseCapture
 - relativeX and relativeY does not work properly when setCapture is used?
 - test-drive releaseCapture in client.js -- take a second look, does it need more specific tests?
 - Modify client.js so it isn't vulnerable to releaseCapture() not being called.

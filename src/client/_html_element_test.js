@@ -76,6 +76,10 @@
 			describe("Capture API", function() {
 				if (!browser.supportsCaptureApi()) return;
 
+				afterEach(function() {
+					htmlElement.releaseCapture();
+				});
+
 				it("emulates behavior of setCapture() (on browsers that support it)", function() {
 					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
@@ -90,6 +94,16 @@
 					bodyElement.triggerMouseMove();
 					expect(monitor.eventTriggered).to.be(false);
 				});
+
+				it("when event triggered, event coordinates are relative to triggering element, not capturing element", function() {
+					var expectedPageCoordinates = bodyElement.pageOffset({ x: 30, y: 20 });
+
+					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
+					htmlElement.setCapture();
+					bodyElement.triggerMouseMove(30, 20);
+					expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
+				});
+
 			});
 
 			it("clears all event handlers (useful for testing)", function() {
