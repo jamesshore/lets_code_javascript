@@ -4,7 +4,8 @@ var charmer = require('../');
 http.createServer(function (req, res) {
     res.setHeader('content-type', 'text/ansi');
     
-    var charm = charmer(res);
+    var charm = charmer();
+    charm.pipe(res);
     charm.reset();
     
     var radius = 10;
@@ -30,6 +31,6 @@ http.createServer(function (req, res) {
     
     req.connection.on('end', function () {
         clearInterval(iv);
-        charm.destroy();
+        charm.end();
     });
 }).listen(8081);

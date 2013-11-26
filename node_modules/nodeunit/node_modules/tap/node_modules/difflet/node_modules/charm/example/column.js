@@ -1,4 +1,5 @@
-var charm = require('../')(process);
+var charm = require('../')();
+charm.pipe(process.stdout);
 
 charm
     .column(16)
@@ -6,5 +7,5 @@ charm
     .down()
     .column(32)
     .write('boop\n')
-    .destroy()
+    .end()
 ;
