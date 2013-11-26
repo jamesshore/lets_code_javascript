@@ -2,9 +2,20 @@
 
 node.js resolve algorithm with [browser](https://gist.github.com/shtylman/4339901) field support.
 
-# example
+## api
 
-## relative
+### resolve(pkg, opts={}, cb)
+
+Resolve a module path and call `cb(err, path)`
+
+Options:
+
+* filename - the calling filename where the require call originated (in the source)
+* paths - require.paths array to use if nothing is found on the normal node_modules recursive walk
+* packageFilter - transform the parsed package.json contents before looking at the "main" field
+* modules - object with module id/name -> path mappings to consult before doing manual resolution (use to provide core modules)
+
+## basic usage
 
 you can resolve files like `require.resolve()`:
 ``` js
@@ -19,13 +30,17 @@ $ node example/resolve.js
 /home/substack/projects/node-browser-resolve/index.js
 ```
 
-## core
+## core modules
 
-or if you `require()` core modules you'll get a version that works in browsers:
+By default, core modules (http, dgram, etc) will return their same name as the path. If you want to have specific paths returned, specify a `modules` property in the options object.
 
 ``` js
+var shims = {
+    http: '/your/path/to/http.js'
+};
+
 var resolve = require('browser-resolve');
-resolve('fs', null, function(err, path) {
+resolve('fs', { modules: shims }, function(err, path) {
     console.log(path);
 });
 ```
@@ -35,11 +50,8 @@ $ node example/builtin.js
 /home/substack/projects/node-browser-resolve/builtin/fs.js
 ```
 
-## custom
-
-and you can use the
-[browser field](https://gist.github.com/shtylman/4339901) to load
-browser-specific versions of modules:
+## browser field
+browser-specific versions of modules
 
 ``` js
 {
@@ -113,3 +125,9 @@ $ node example/skip.js
 # license
 
 MIT
+
+# upgrade notes
+
+Prior to v1.x this library provided shims for node core modules. These have since been removed. If you want to have alternative core modules provided, use the `modules` option when calling resolve.
+
+This was done to allow package managers to choose which shims they want to use without browser-resolve being the central point of update.
