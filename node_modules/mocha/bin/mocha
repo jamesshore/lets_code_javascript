@@ -8,8 +8,10 @@
 var spawn = require('child_process').spawn
   , args = [ __dirname + '/_mocha' ];
 
-process.argv.slice(2).forEach(function (arg) {
-  switch (arg) {
+process.argv.slice(2).forEach(function(arg){
+  var flag = arg.split('=')[0];
+
+  switch (flag) {
     case '-d':
       args.unshift('--debug');
       break;
@@ -26,6 +28,8 @@ process.argv.slice(2).forEach(function (arg) {
     case '--harmony':
     case '--harmony-proxies':
     case '--harmony-collections':
+    case '--harmony-generators':
+    case '--prof':
       args.unshift(arg);
       break;
     default:
