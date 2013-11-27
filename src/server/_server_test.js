@@ -5,14 +5,12 @@
 	var http = require("http");
 	var fs = require("fs");
 	var assert = require("assert");
-	var send = require("send");
 
 	var server;
 
 	var CONTENT_DIR = "generated/test";
 
 	var INDEX_PAGE = "index.html";
-	var NOT_FOUND_PAGE = "test404.html";
 
 	var INDEX_PAGE_DATA = "This is index page file";
 
@@ -25,10 +23,11 @@
 
 		server = http.createServer();
 		server.on("request", function(request, response) {
-			send(request, request.url).
-					root(CONTENT_DIR).
-					pipe(response);
-//
+			var stream = fs.createReadStream(path);
+			stream.pipe(response);
+
+
+
 //			fs.readFile(path, function(err, fileContents) {
 //				response.end(fileContents);
 //			});
