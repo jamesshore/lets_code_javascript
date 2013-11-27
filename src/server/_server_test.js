@@ -29,10 +29,11 @@
 	};
 
 	exports.tearDown = function(done) {
-		cleanUpFile(CONTENT_DIR + "/" + INDEX_PAGE);
-		cleanUpFile(CONTENT_DIR + "/" + OTHER_PAGE);
-		cleanUpFile(CONTENT_DIR + "/" + NOT_FOUND_PAGE);
-		done();
+		cleanUpFile(CONTENT_DIR + "/" + INDEX_PAGE, function() {
+			cleanUpFile(CONTENT_DIR + "/" + OTHER_PAGE, function() {
+				cleanUpFile(CONTENT_DIR + "/" + NOT_FOUND_PAGE, done);
+			});
+		});
 	};
 
 	exports.test_servesFilesFromDirectory = function(test) {
@@ -123,10 +124,12 @@
 		});
 	}
 
-	function cleanUpFile(file) {
+	function cleanUpFile(file, done) {
 		if (fs.existsSync(file)) {
-			fs.unlinkSync(file);
-			assert.ok(!fs.existsSync(file), "could not delete test file: [" + file + "]");
+			fs.unlink(file, function() {
+				assert.ok(!fs.existsSync(file), "could not delete test file: [" + file + "]");
+				done();
+			});
 		}
 	}
 
