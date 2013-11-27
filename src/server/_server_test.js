@@ -20,7 +20,19 @@
 	var BASE_URL = "http://localhost:" + PORT;
 
 	exports.unifiedTestCase = function (test) {
-		startServer(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function () {
+		server = http.createServer();
+		server.on("request", function(request, response) {
+			send(request, request.url).
+					root(CONTENT_DIR).
+					on("error", handleError).
+					pipe(response);
+
+			function handleError(err) {
+				if (err.status === 404) serveErrorFile(response, 404, CONTENT_DIR + "/" + NOT_FOUND_PAGE);
+				else throw err;
+			}
+		});
+		server.listen(PORT, function() {
 
 			var path = CONTENT_DIR + "/" + INDEX_PAGE;
 			fs.writeFileSync(path, INDEX_PAGE_DATA);
@@ -50,37 +62,13 @@
 				console.log("ERROR", err);
 			});
 			response.on("end", function () {
-				stopServer(function () {
+				server.close(function() {
 					callback(response, receivedData);
 				});
 			});
 		});
 	}
 
-
-
-
-	function startServer(contentDir, notFoundPageToServe, portNumber, callback) {
-		if (!portNumber) throw "port number is required";
-
-		server = http.createServer();
-		server.on("request", function(request, response) {
-			send(request, request.url).
-					root(contentDir).
-					on("error", handleError).
-					pipe(response);
-
-			function handleError(err) {
-				if (err.status === 404) serveErrorFile(response, 404, contentDir + "/" + notFoundPageToServe);
-				else throw err;
-			}
-		});
-		server.listen(portNumber, callback);
-	}
-
-	function stopServer(callback) {
-		server.close(callback);
-	}
 
 	function serveErrorFile(response, statusCode, file) {
 		response.statusCode = statusCode;
