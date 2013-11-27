@@ -10,12 +10,9 @@
 	var CONTENT_DIR = "generated/test";
 
 	var INDEX_PAGE = "index.html";
-	var OTHER_PAGE = "other.html";
 	var NOT_FOUND_PAGE = "test404.html";
 
 	var INDEX_PAGE_DATA = "This is index page file";
-	var OTHER_PAGE_DATA = "This is another page";
-	var NOT_FOUND_DATA = "This is 404 page file";
 
 	var PORT = 5020;
 	var BASE_URL = "http://localhost:" + PORT;
@@ -27,11 +24,10 @@
 
 		httpGet(BASE_URL + "/" + INDEX_PAGE, function (response, responseData) {
 			fs.unlinkSync(path);
-			fs.writeFileSync(path, INDEX_PAGE_DATA);
-			httpGet(BASE_URL + "/" + INDEX_PAGE, function (response, responseData) {
-				fs.unlinkSync(path);
+//			fs.unlink(path, function() {
+				fs.writeFileSync(path, INDEX_PAGE_DATA);
 				test.done();
-			});
+//			});
 		});
 
 	};
