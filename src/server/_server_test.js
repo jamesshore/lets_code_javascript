@@ -20,20 +20,27 @@
 	var BASE_URL = "http://localhost:" + PORT;
 
 	exports.unifiedTestCase = function (test) {
+		var path = CONTENT_DIR + "/" + INDEX_PAGE;
+
+
 		server = http.createServer();
 		server.on("request", function(request, response) {
-			response.end("foo");
-//			send(request, request.url).
-//					root(CONTENT_DIR).
-//					pipe(response);
+			send(request, request.url).
+					root(CONTENT_DIR).
+					pipe(response);
+//
+//			fs.readFile(path, function(err, fileContents) {
+//				response.end(fileContents);
+//			});
 		});
 		server.listen(PORT, function() {
 
-			var path = CONTENT_DIR + "/" + INDEX_PAGE;
 			fs.writeFileSync(path, INDEX_PAGE_DATA);
 
 			http.get(BASE_URL + "/" + INDEX_PAGE, function (response) {
-				response.on("data", function() {});
+				response.on("data", function(chunk) {
+					console.log("DATA: " + chunk);
+				});
 				response.on("error", function(err) {
 					console.log("ERROR", err);
 				});
