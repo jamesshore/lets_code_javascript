@@ -10,36 +10,41 @@
 
 	var CONTENT_DIR = "generated/test";
 
-	var INDEX_PAGE = "index.html";
+	var READ_FILE = "read.txt";
+	var WRITE_FILE = "write.txt";
 
 	var INDEX_PAGE_DATA = "This is index page file";
 
 	var PORT = 5020;
 	var BASE_URL = "http://localhost:" + PORT;
 
-	exports.simplestEpermTestCase = function(test) {
-		var path = CONTENT_DIR + "/" + INDEX_PAGE;
+	exports.fileSystemEpermTestCase = function (test) {
+		var readPath = CONTENT_DIR + "/" + READ_FILE;
+		var writePath = CONTENT_DIR + "/" + WRITE_FILE;
 
+		fs.writeFileSync(readPath, INDEX_PAGE_DATA);
 
-		fs.writeFileSync(path, INDEX_PAGE_DATA);
+		var readStream = fs.createReadStream(readPath);
+		var writeStream = fs.createWriteStream(writePath);
 
-		var stream = fs.createReadStream(path);
-		stream.pipe(process.stdout);
+		readStream.pipe(writeStream);
 
-		stream.on("close", function() {
-			console.log("File reading stream CLOSED!");
+		readStream.on("close", function () {
+			console.log("Read stream CLOSED!");
+			test.done();
 		});
 
-		process.stdout.on("finish", function() {
-			console.log("Server response FINISH!");
+		writeStream.on("finish", function () {
+			console.log("Write stream FINISH!");
+			fs.unlinkSync(readPath);
+//			fs.unlink(readPath, function () {
+			fs.writeFileSync(readPath, INDEX_PAGE_DATA);
+//			});
 		});
-
-		test.done();
-
 	};
 
-//	exports.unifiedTestCase = function (test) {
-//		var path = CONTENT_DIR + "/" + INDEX_PAGE;
+//	exports.httpEpermTestCase = function (test) {
+//		var path = CONTENT_DIR + "/" + READ_FILE;
 //
 //
 //		server = http.createServer();
@@ -64,7 +69,7 @@
 //
 //			fs.writeFileSync(path, INDEX_PAGE_DATA);
 //
-//			http.get(BASE_URL + "/" + INDEX_PAGE, function (response) {
+//			http.get(BASE_URL + "/" + READ_FILE, function (response) {
 //				response.on("data", function(chunk) {
 //					console.log("DATA: " + chunk);
 //				});
