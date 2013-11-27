@@ -37,8 +37,10 @@
 		writeStream.on("finish", function () {
 			console.log("Write stream FINISH!");
 			fs.unlinkSync(readPath);
+			console.log("Read file UNLINKED!");
 //			fs.unlink(readPath, function () {
 			fs.writeFileSync(readPath, INDEX_PAGE_DATA);
+			console.log("Read file WRITTEN!");
 //			});
 		});
 	};
