@@ -26,6 +26,13 @@
 			var stream = fs.createReadStream(path);
 			stream.pipe(response);
 
+			stream.on("close", function() {
+				console.log("File reading stream CLOSED!");
+			});
+
+			response.on("finish", function() {
+				console.log("Server response FINISH!");
+			});
 
 
 //			fs.readFile(path, function(err, fileContents) {
