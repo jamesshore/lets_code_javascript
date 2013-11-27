@@ -22,9 +22,10 @@
 	exports.unifiedTestCase = function (test) {
 		server = http.createServer();
 		server.on("request", function(request, response) {
-			send(request, request.url).
-					root(CONTENT_DIR).
-					pipe(response);
+			response.end("foo");
+//			send(request, request.url).
+//					root(CONTENT_DIR).
+//					pipe(response);
 		});
 		server.listen(PORT, function() {
 
