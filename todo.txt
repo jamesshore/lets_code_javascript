@@ -29,8 +29,7 @@ User Stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-- Upgrade dependencies to latest versions
-- Integrate
+* Integrate
 
 To Do on current task:
 
