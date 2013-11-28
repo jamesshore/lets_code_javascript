@@ -1,32 +1,33 @@
-var fs = require("fs");
-var assert = require("assert");
+"use strict";
 
-var READ_FILE = "read.txt";
-var WRITE_FILE = "write.txt";
+console.log("Starting timeout...");
+setTimeout(function () {
+	var fs = require("fs");
 
-var readPath = READ_FILE;
-var writePath = WRITE_FILE;
+	var READ_PATH = "read.txt";
+	var WRITE_PATH = "write.txt";
 
-fs.writeFileSync(readPath, "foo");
+	fs.writeFileSync(READ_PATH, "foo");
 
-var readStream = fs.createReadStream(readPath);
-var writeStream = fs.createWriteStream(writePath);
+	var readStream = fs.createReadStream(READ_PATH);
+	var writeStream = fs.createWriteStream(WRITE_PATH);
 
-console.log("Starting pipe...");
-readStream.pipe(writeStream);
+	console.log("Starting pipe...");
+	readStream.pipe(writeStream);
 
-readStream.on("close", function() {
-	console.log("Read stream closed.");
-});
+	readStream.on("close", function () {
+		console.log("Read stream closed.");
+	});
 
-writeStream.on("finish", function() {
-	console.log("Write stream finished.");
+	writeStream.on("finish", function () {
+		console.log("Write stream finished.");
 
-	console.log("File unlink...");
-	fs.unlinkSync(readPath);
-	console.log("Unlink successful.");
+		console.log("File unlink...");
+		fs.unlinkSync(READ_PATH);
+		console.log("Unlink successful.");
 
-	console.log("File write...");
-	fs.writeFileSync(readPath, "foo");
-	console.log("Write successful");
-});
+		console.log("File write...");
+		fs.writeFileSync(READ_PATH, "foo");
+		console.log("Write successful");
+	});
+}, 1000);
