@@ -1,7 +1,7 @@
 "use strict";
 
 console.log("Starting timeout...");
-setTimeout(function () {
+setTimeout(function () {      // REQUIRED to reproduce
 	var fs = require("fs");
 
 	var READ_PATH = "read.txt";
@@ -23,7 +23,7 @@ setTimeout(function () {
 		console.log("Write stream finished.");
 
 		console.log("File unlink...");
-		fs.unlinkSync(READ_PATH);
+		fs.unlinkSync(READ_PATH);     // MUST BE SYNC to reproduce
 		console.log("Unlink successful.");
 
 		console.log("File write...");
