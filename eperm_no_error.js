@@ -1,34 +1,29 @@
 "use strict";
 
-// This program is the same as eperm_no_race.js, but it uses asynchronous fs calls
+// This program is the same as eperm_repro.js, but it uses asynchronous fs calls
 // rather than synchronous. It works without error on both Mac and Windows.
 
 var fs = require("fs");
+"use strict";
 
-var READ_PATH = "read.txt";
+var PATH = "read.txt";
 
-fs.writeFileSync(READ_PATH, "foo");
+fs.writeFileSync(PATH, "foo");
 
-console.log("Opening read stream...");
-var readStream = fs.createReadStream(READ_PATH);
+console.log("Opening file");
+var fd = fs.openSync(PATH, "r");
+console.log("File opened.");
 
-readStream.on("open", function () {
-	console.log("Read stream opened.");
+console.log("Unlinking file...");
+fs.unlink(PATH, function () {
+	console.log("Unlink successful.");
 
-	console.log("Unlinking read file...");
-	fs.unlink(READ_PATH, function () {
-		console.log("Unlink successful.");
+	console.log("Overwriting file...");
+	fs.writeFile(PATH, "foo2", function () {
+		console.log("Overwrite successful.");
 
-		console.log("Overwriting read file...");
-		fs.writeFile(READ_PATH, "foo2", function () {
-			console.log("Overwrite successful.");
-
-			console.log("Closing read stream...");
-			readStream.close();
-		});
+		console.log("Closing file...");
+		fs.closeSync(fd);
+		console.log("File closed.");
 	});
-});
-
-readStream.on("close", function () {
-	console.log("Read stream closed.");
 });

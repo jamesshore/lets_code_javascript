@@ -1,33 +1,27 @@
 "use strict";
 
-console.log("Starting timeout...");
-setTimeout(function () {      // REQUIRED to reproduce
-	var fs = require("fs");
+// This program demonstrates a cross-platform inconsistency in Node.js between Mac and Windows.
+// It deletes and overwrites a file before closing it.
+// It will work on Mac but fail with an EPERM error on Windows.
 
-	var READ_PATH = "read.txt";
-	var WRITE_PATH = "write.txt";
+var fs = require("fs");
 
-	fs.writeFileSync(READ_PATH, "foo");
+var PATH = "read.txt";
 
-	var readStream = fs.createReadStream(READ_PATH);
-	var writeStream = fs.createWriteStream(WRITE_PATH);
+fs.writeFileSync(PATH, "foo");
 
-	console.log("Starting pipe...");
-	readStream.pipe(writeStream);
+console.log("Opening file");
+var fd = fs.openSync(PATH, "r");
+console.log("File opened.");
 
-	readStream.on("close", function () {
-		console.log("Read stream closed.");
-	});
+console.log("Unlinking file...");
+fs.unlinkSync(PATH);
+console.log("Unlink successful.");
 
-	writeStream.on("finish", function () {
-		console.log("Write stream finished.");
+console.log("Overwriting file...");
+fs.writeFileSync(PATH, "foo2");
+console.log("Overwrite successful.");
 
-		console.log("File unlink...");
-		fs.unlinkSync(READ_PATH);     // MUST BE SYNC to reproduce
-		console.log("Unlink successful.");
-
-		console.log("File write...");
-		fs.writeFileSync(READ_PATH, "foo");
-		console.log("Write successful");
-	});
-}, 1000);
+console.log("Closing file...");
+fs.closeSync(fd);
+console.log("File closed.")
