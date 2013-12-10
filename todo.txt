@@ -10,12 +10,11 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* drawing should continue even if user leaves boundaries (just pick up again when they come back in)
 - draw a single pixel when mouse is clicked (or screen is tapped)
 - 'clear screen' button
-- painting tools (such as colors or line width)
-- quality user-facing site design
-- fix issue: drawing area doesn't quite fit to borders
+- non-embarrasing site design
+? painting tools (such as colors or line width)
+? fix issue: drawing area doesn't quite fit to borders
   - correct in Safari, Mobile Safari, IE 8
   - can draw slightly outside border Chrome, Firefox
   - shifted slightly to top-left in IE 9
@@ -27,9 +26,12 @@ User Stories:
 - Scalability
 - Deploy (including smoke test to ensure that div is in home page)
     (needs to depend on 'build'; just running foreman could give us outdated files)
+- quality user-facing site design
 
 Engineering Tasks:
-* Integrate
+* add click event handling to HtmlElement
+- modify SvgCanvas to support drawing a single dot (drawLine doesn't work)
+- modify client.js to support clicks
 
 To Do on current task:
 
