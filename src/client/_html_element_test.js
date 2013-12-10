@@ -28,11 +28,12 @@
 
 			describe("mouse events", function() {
 				it("triggers mouse events relative to element and handles them relative to page", function() {
-					testEvent(htmlElement.onSelectStart_ie8Only, htmlElement.triggerSelectStart);
+					testEvent(htmlElement.onClick, htmlElement.triggerClick);
 					testEvent(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
 					testEvent(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
 					testEvent(htmlElement.onMouseLeave, htmlElement.triggerMouseLeave);
 					testEvent(htmlElement.onMouseUp, htmlElement.triggerMouseUp);
+					testEvent(htmlElement.onSelectStart_ie8Only, htmlElement.triggerSelectStart);
 				});
 
 				it("allows mouse events to be triggered without coordinates", function() {

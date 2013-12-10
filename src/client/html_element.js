@@ -45,8 +45,8 @@
 
 	/* Mouse events */
 
-	HtmlElement.prototype.triggerSelectStart = triggerMouseEventFn("selectstart");
-	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
+	HtmlElement.prototype.triggerClick = triggerMouseEventFn("click");
+	HtmlElement.prototype.onClick = onMouseEventFn("click");
 
 	HtmlElement.prototype.triggerMouseDown = triggerMouseEventFn("mousedown");
 	HtmlElement.prototype.onMouseDown = onMouseEventFn("mousedown");
@@ -59,6 +59,9 @@
 
 	HtmlElement.prototype.triggerMouseUp = triggerMouseEventFn("mouseup");
 	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
+
+	HtmlElement.prototype.triggerSelectStart = triggerMouseEventFn("selectstart");
+	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
 
 	function triggerMouseEventFn(event) {
 		return function(relativeX, relativeY) {

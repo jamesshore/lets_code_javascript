@@ -10,7 +10,8 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-- draw a single pixel when mouse is clicked (or screen is tapped)
+* draw a single pixel when mouse is clicked
+- draw a single pixel when screen is tapped
 - 'clear screen' button
 - non-embarrasing site design
 ? painting tools (such as colors or line width)
@@ -29,11 +30,11 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* add click event handling to HtmlElement
 - modify SvgCanvas to support drawing a single dot (drawLine doesn't work)
 - modify client.js to support clicks
 
 To Do on current task:
+-
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
