@@ -6,3 +6,4 @@ node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_mod
 node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws/builderror.log
 node_modules/phantomjs/lib/phantom
 node_modules/phantomjs/tmp
+node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/lib/vendor/web-socket-js/flash-src/com/hurlant/crypto/rsa/RSAKey.as
