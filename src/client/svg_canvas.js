@@ -9,7 +9,14 @@
 	};
 
 	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
-		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
+
+//		this._paper.path("M10,10L20,20");
+//
+		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY + " Z")
+			.attr({
+				"stroke-width": 2,
+				"stroke-linecap": "round"
+			});
 	};
 
 	SvgCanvas.prototype.height = function() {
@@ -43,6 +50,11 @@
 	function svgPathFor(element) {
 		var pathRegex;
 
+//		console.log("Hello!", element.node.attributes);
+//		console.log("stroke-width", element.node.attributes["stroke-width"].value);
+//		console.log("stroke-linecap", element.node.attributes["stroke-linecap"].value);
+
+
 		var path = element.node.attributes.d.value;
 		if (path.indexOf(",") !== -1)
 		// We're in Firefox, Safari, Chrome, which uses format "M20,30L30,300"
@@ -67,6 +79,8 @@
 		var VML_MAGIC_NUMBER = 21600;
 
 		var path = element.node.path.value;
+		console.log("stroke-width", element.node.attributes["stroke-width"].value);
+		console.log("stroke-linecap", element.node.attributes["stroke-linecap"].value);
 
 		var ie8PathRegex = /m(\d+),(\d+) l(\d+),(\d+) e/;
 		var ie8 = path.match(ie8PathRegex);

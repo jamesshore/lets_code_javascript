@@ -47,6 +47,17 @@
 			]);
 		});
 
+		it.only("draws a dot when line segment consists of a single pixel", function() {
+
+			svgCanvas.drawLine(3, 3, 4, 4);
+			svgCanvas.lineSegments();
+
+			// TO DO: a comment about why line-cap and stroke-width matter here
+
+			// assertions about line-cap and stroke-width
+
+		});
+
 	});
 
 }());

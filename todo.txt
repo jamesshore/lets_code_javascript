@@ -30,12 +30,16 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* modify client.js to support clicks
-- modify SvgCanvas to support drawing a single dot (drawLine doesn't work)
+* modify SvgCanvas to support drawing a single dot (drawLine doesn't work)
 
 To Do on current task:
+* test stroke width & linecaps for SVG
+- test stroke width & linecaps for VML
+- Be sure to document the obscure reasons for 2-pixel stroke and linecaps (for dots)
+- Check SVG dots in other browsers
 - Should a dot be represented by "lines"?
 - Should we eliminate the relativeOffset duplication in client.js?
+
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
