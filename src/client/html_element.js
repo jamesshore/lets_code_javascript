@@ -45,8 +45,8 @@
 
 	/* Mouse events */
 
-	HtmlElement.prototype.triggerClick = triggerMouseEventFn("click");
-	HtmlElement.prototype.onClick = onMouseEventFn("click");
+	HtmlElement.prototype.triggerMouseClick = triggerMouseEventFn("click");
+	HtmlElement.prototype.onMouseClick = onMouseEventFn("click");
 
 	HtmlElement.prototype.triggerMouseDown = triggerMouseEventFn("mousedown");
 	HtmlElement.prototype.onMouseDown = onMouseEventFn("mousedown");

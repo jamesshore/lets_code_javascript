@@ -28,7 +28,7 @@
 
 			describe("mouse events", function() {
 				it("triggers mouse events relative to element and handles them relative to page", function() {
-					testEvent(htmlElement.onClick, htmlElement.triggerClick);
+					testEvent(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
 					testEvent(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
 					testEvent(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
 					testEvent(htmlElement.onMouseLeave, htmlElement.triggerMouseLeave);

@@ -30,11 +30,11 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
+* modify client.js to support clicks
 - modify SvgCanvas to support drawing a single dot (drawLine doesn't work)
-- modify client.js to support clicks
 
 To Do on current task:
--
+- Should a dot be represented by "lines"?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

@@ -32,6 +32,13 @@
 		});
 
 		describe("mouse events", function() {
+//			it("draws a dot in response to mouse click", function() {
+//				drawingArea.triggerMouseClick(15, 24);
+//				expect(lines()).to.eql([
+//					[15, 24, 15, 24]
+//				]);
+//			});
+
 			it("draws a line in response to mouse drag", function() {
 				drawingArea.triggerMouseDown(20, 30);
 				drawingArea.triggerMouseMove(50, 60);
