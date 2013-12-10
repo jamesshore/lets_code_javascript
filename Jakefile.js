@@ -17,13 +17,13 @@
 	var runServer = require("./src/_run_server.js");
 	var path = require("path");
 
-	var SUPPORTED_BROWSERS = [
-		"IE 8.0 (Windows)",
-		"IE 9.0 (Windows)",
-		"Firefox 23.0 (Mac)",
-		"Chrome 29.0 (Mac)",
-		"Safari 6.0 (Mac)",
-		"Safari 6.0 (iOS)"
+	var REQUIRED_BROWSERS = [
+		"IE 8.0.0 (Windows 7)",
+		"IE 9.0.0 (Windows 7)",
+		"Firefox 25.0.0 (Mac OS X 10.8)",
+		"Chrome 31.0.1650 (Mac OS X 10.8.5)",
+		"Safari 6.1.0 (Mac OS X 10.8.5)",
+		"Mobile Safari 7.0.0 (iOS 7.0.3)"
 	];
 
 	var GENERATED_DIR = "generated";
@@ -80,7 +80,7 @@
 
 	desc("Test client code");
 	task("testClient", [], function() {
-		karma.runTests(SUPPORTED_BROWSERS, complete, fail);
+		karma.runTests(REQUIRED_BROWSERS, complete, fail);
 	}, {async: true});
 
 	desc("End-to-end smoke tests");
@@ -222,7 +222,10 @@
 			expect: false,
 			dump: false,
 			beforeEach: false,
-			afterEach: false
+			afterEach: false,
+
+			// Browser
+			console: false
 		};
 	}
 

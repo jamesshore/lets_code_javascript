@@ -13,25 +13,25 @@ User Stories:
 * drawing should continue even if user leaves boundaries (just pick up again when they come back in)
 - draw a single pixel when mouse is clicked (or screen is tapped)
 - 'clear screen' button
+- painting tools (such as colors or line width)
 - quality user-facing site design
+- fix issue: drawing area doesn't quite fit to borders
+  - correct in Safari, Mobile Safari, IE 8
+  - can draw slightly outside border Chrome, Firefox
+  - shifted slightly to top-left in IE 9
 ? click tracking needs to account for margin, border, and padding (if needed; fail fast if not)
   - test that em is converted px
 - Site monitoring and logging
 - Performance
+  - Note: serious performance degradation in IE 8 as more lines drawn
 - Scalability
 - Deploy (including smoke test to ensure that div is in home page)
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* Update Karma 0.8.x --> 0.10.x
-  - What is up with IE 8 failing when Chrome is not running?
-  --> fails when *even number* of browsers running, with off-by-one error. (?!?!?)
-- Deal with duplication in touch event testing (use Modernizr?)
-- drawing doesn't work in IE8
-  - double-check other browsers
+* Integrate
 
 To Do on current task:
-*
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

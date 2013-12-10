@@ -4,93 +4,122 @@
 (function() {
 	"use strict";
 
+	var browser = require("./browser.js");
+
+	var capturedElement = null;
+
+
+	/* Constructors */
+
 	var HtmlElement = module.exports = function(domElement) {
-		this._element = $(domElement);
+		var self = this;
+
+		self._domElement = domElement;
+		self._element = $(domElement);
 	};
 
 	HtmlElement.fromHtml = function(html) {
-		return new HtmlElement($(html));
+		return new HtmlElement($(html)[0]);
 	};
 
-	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
-	HtmlElement.prototype.onMouseDown = onMouseEventFn("mousedown");
-	HtmlElement.prototype.onMouseMove = onMouseEventFn("mousemove");
-	HtmlElement.prototype.onMouseLeave = onMouseEventFn("mouseleave");
-	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
 
-	HtmlElement.prototype.doSelectStart = doMouseEventFn("selectstart");
-	HtmlElement.prototype.doMouseDown = doMouseEventFn("mousedown");
-	HtmlElement.prototype.doMouseMove = doMouseEventFn("mousemove");
-	HtmlElement.prototype.doMouseLeave = doMouseEventFn("mouseleave");
-	HtmlElement.prototype.doMouseUp = doMouseEventFn("mouseup");
+	/* Capture API */
 
-	HtmlElement.prototype.onSingleTouchStart = onSingleTouchEventFn("touchstart");
-	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
-	HtmlElement.prototype.onSingleTouchEnd = onSingleTouchEventFn("touchend");
-	HtmlElement.prototype.onSingleTouchCancel = onSingleTouchEventFn("touchcancel");
+	HtmlElement.prototype.setCapture = function() {
+		capturedElement = this;
+		this._domElement.setCapture();
+	};
 
-	HtmlElement.prototype.doSingleTouchStart = doSingleTouchEventFn("touchstart");
-	HtmlElement.prototype.doSingleTouchMove = doSingleTouchEventFn("touchmove");
-	HtmlElement.prototype.doSingleTouchEnd = doSingleTouchEventFn("touchend");
-	HtmlElement.prototype.doSingleTouchCancel = doSingleTouchEventFn("touchcancel");
+	HtmlElement.prototype.releaseCapture = function() {
+		capturedElement = null;
+		this._domElement.releaseCapture();
+	};
 
-	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
 
-	HtmlElement.prototype.doMultiTouchStart = doMultiTouchEventFn("touchstart");
+	/* General event handling */
 
 	HtmlElement.prototype.removeAllEventHandlers = function() {
 		this._element.off();
 	};
 
-	HtmlElement.prototype.relativeOffset = function(pageOffset) {
-		return relativeOffset(this, pageOffset.x, pageOffset.y);
-	};
 
-	HtmlElement.prototype.pageOffset = function(relativeOffset) {
-		return pageOffset(this, relativeOffset.x, relativeOffset.y);
-	};
+	/* Mouse events */
 
-	HtmlElement.prototype.append = function(elementToAppend) {
-		this._element.append(elementToAppend._element);
-	};
+	HtmlElement.prototype.triggerSelectStart = triggerMouseEventFn("selectstart");
+	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
 
-	HtmlElement.prototype.appendSelfToBody = function() {
-		$(document.body).append(this._element);
-	};
+	HtmlElement.prototype.triggerMouseDown = triggerMouseEventFn("mousedown");
+	HtmlElement.prototype.onMouseDown = onMouseEventFn("mousedown");
 
-	HtmlElement.prototype.remove = function() {
-		this._element.remove();
-	};
+	HtmlElement.prototype.triggerMouseMove = triggerMouseEventFn("mousemove");
+	HtmlElement.prototype.onMouseMove = onMouseEventFn("mousemove");
 
-	HtmlElement.prototype.toDomElement = function() {
-		return this._element[0];
-	};
+	HtmlElement.prototype.triggerMouseLeave = triggerMouseEventFn("mouseleave");
+	HtmlElement.prototype.onMouseLeave = onMouseEventFn("mouseleave");
 
-	function doMouseEventFn(event) {
+	HtmlElement.prototype.triggerMouseUp = triggerMouseEventFn("mouseup");
+	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
+
+	function triggerMouseEventFn(event) {
 		return function(relativeX, relativeY) {
-			sendMouseEvent(this, event, relativeX, relativeY);
+			var targetElement = capturedElement || this;
+
+			var pageCoords;
+			if (relativeX === undefined || relativeY === undefined) {
+				pageCoords = { x: 0, y: 0 };
+			}
+			else {
+				pageCoords = pageOffset(this, relativeX, relativeY);
+			}
+
+			sendMouseEvent(targetElement, event, pageCoords);
 		};
 	}
 
-	function sendMouseEvent(self, event, relativeX, relativeY) {
+	function sendMouseEvent(self, event, pageCoords) {
 		var jqElement = self._element;
 
-		var page;
-		if (relativeX === undefined || relativeY === undefined) {
-			page = { x: 0, y: 0 };
-		}
-		else {
-			page = pageOffset(self, relativeX, relativeY);
-		}
-
 		var eventData = new jQuery.Event();
-		eventData.pageX = page.x;
-		eventData.pageY = page.y;
+		eventData.pageX = pageCoords.x;
+		eventData.pageY = pageCoords.y;
 		eventData.type = event;
 		jqElement.trigger(eventData);
 	}
 
-	function doSingleTouchEventFn(event) {
+	function onMouseEventFn(event) {
+		return function(callback) {
+			if (browser.doesNotHandlesUserEventsOnWindow() && this._domElement === window) return;
+
+			this._element.on(event, mouseEventHandlerFn(this, callback));
+		};
+	}
+
+	function mouseEventHandlerFn(self, callback) {
+		return function(event) {
+			var pageOffset = { x: event.pageX, y: event.pageY };
+			callback(pageOffset, event);
+		};
+	}
+
+
+	/* Touch events */
+
+	HtmlElement.prototype.triggerSingleTouchStart = triggerSingleTouchEventFn("touchstart");
+	HtmlElement.prototype.onSingleTouchStart = onSingleTouchEventFn("touchstart");
+
+	HtmlElement.prototype.triggerSingleTouchMove = triggerSingleTouchEventFn("touchmove");
+	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
+
+	HtmlElement.prototype.triggerSingleTouchEnd = triggerSingleTouchEventFn("touchend");
+	HtmlElement.prototype.onSingleTouchEnd = onSingleTouchEventFn("touchend");
+
+	HtmlElement.prototype.triggerSingleTouchCancel = triggerSingleTouchEventFn("touchcancel");
+	HtmlElement.prototype.onSingleTouchCancel = onSingleTouchEventFn("touchcancel");
+
+	HtmlElement.prototype.triggerMultiTouchStart = triggerMultiTouchEventFn("touchstart");
+	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
+
+	function triggerSingleTouchEventFn(event) {
 		return function(relativeX, relativeY) {
 			sendSingleTouchEvent(this, event, relativeX, relativeY);
 		};
@@ -101,7 +130,7 @@
 		sendTouchEvent(self, event, new TouchList(touch));
 	}
 
-	function doMultiTouchEventFn(event) {
+	function triggerMultiTouchEventFn(event) {
 		return function(relative1X, relative1Y, relative2X, relative2Y) {
 			sendMultiTouchEvent(this, event, relative1X, relative1Y, relative2X, relative2Y);
 		};
@@ -111,19 +140,6 @@
 		var touch1 = createTouch(self, relative1X, relative1Y);
 		var touch2 = createTouch(self, relative2X, relative2Y);
 		sendTouchEvent(self, event, new TouchList(touch1, touch2));
-	}
-
-	function onMouseEventFn(event) {
-		return function(callback) {
-			this._element.on(event, mouseEventHandlerFn(this, callback));
-		};
-	}
-
-	function mouseEventHandlerFn(self, callback) {
-		return function(event) {
-			var pageOffset = { x: event.pageX, y: event.pageY };
-			callback(pageOffset, event);
-		};
 	}
 
 	function onSingleTouchEventFn(event) {
@@ -188,6 +204,17 @@
 		return new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
 	}
 
+
+	/* Offsets and positioning */
+
+	HtmlElement.prototype.relativeOffset = function(pageOffset) {
+		return relativeOffset(this, pageOffset.x, pageOffset.y);
+	};
+
+	HtmlElement.prototype.pageOffset = function(relativeOffset) {
+		return pageOffset(this, relativeOffset.x, relativeOffset.y);
+	};
+
 	function relativeOffset(self, pageX, pageY) {
 		var pageOffset = self._element.offset();
 
@@ -204,5 +231,24 @@
 			y: relativeY + topLeftOfDrawingArea.top
 		};
 	}
+
+
+	/* DOM Manipulation */
+
+	HtmlElement.prototype.append = function(elementToAppend) {
+		this._element.append(elementToAppend._element);
+	};
+
+	HtmlElement.prototype.appendSelfToBody = function() {
+		$(document.body).append(this._element);
+	};
+
+	HtmlElement.prototype.remove = function() {
+		this._element.remove();
+	};
+
+	HtmlElement.prototype.toDomElement = function() {
+		return this._element[0];
+	};
 
 }());

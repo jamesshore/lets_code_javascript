@@ -63,6 +63,10 @@ $ node example/detect.js
      exported: [ 'w', 'RAWR', 'BLARG', 'ZZZ' ] } }
 ```
 
+# live demo
+
+If you are using a modern browser, you can go to http://lexical-scope.forbeslindesay.co.uk/ for a live demo.
+
 # methods
 
 ``` js

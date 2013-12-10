@@ -6,6 +6,7 @@
 	var http = require("http");
 	var fs = require("fs");
 	var assert = require("assert");
+	var async = require("async");
 
 	var CONTENT_DIR = "generated/test";
 
@@ -29,10 +30,13 @@
 	};
 
 	exports.tearDown = function(done) {
-		cleanUpFile(CONTENT_DIR + "/" + INDEX_PAGE);
-		cleanUpFile(CONTENT_DIR + "/" + OTHER_PAGE);
-		cleanUpFile(CONTENT_DIR + "/" + NOT_FOUND_PAGE);
-		done();
+		var filesToDelete = [
+			CONTENT_DIR + "/" + INDEX_PAGE,
+			CONTENT_DIR + "/" + OTHER_PAGE,
+			CONTENT_DIR + "/" + NOT_FOUND_PAGE
+		];
+
+		async.each(filesToDelete, cleanUpFile, done);
 	};
 
 	exports.test_servesFilesFromDirectory = function(test) {
@@ -123,10 +127,16 @@
 		});
 	}
 
-	function cleanUpFile(file) {
+	function cleanUpFile(file, done) {
+		// Note: unlink() MUST be called asynchronously here in order for this code to work on Windows 7.
+		// If it's called synchronously, then it will run before the file is closed, and that is not allowed
+		// on Windows 7. It's possible that this is the result of a Node.js bug; see this issue for details:
+		// https://github.com/joyent/node/issues/6599
 		if (fs.existsSync(file)) {
-			fs.unlinkSync(file);
-			assert.ok(!fs.existsSync(file), "could not delete test file: [" + file + "]");
+			fs.unlink(file, function() {
+				assert.ok(!fs.existsSync(file), "could not delete test file: [" + file + "]");
+				done();
+			});
 		}
 	}
 

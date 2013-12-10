@@ -2,11 +2,12 @@
 (function() {
 	"use strict";
 
-	var KARMA = "node node_modules/karma/bin/karma";
-	var CONFIG = {};
-
+	var path = require("path");
 	var sh = require("./sh.js");
-	var runner = require("karma/lib/runner");
+	var runner = require("karma").runner;
+
+	var KARMA = "node node_modules/karma/bin/karma";
+	var CONFIG = { configFile: path.resolve("build/karma.conf.js") };
 
 	exports.serve = function(configFile, success, fail) {
 		sh.run(KARMA + " start " + configFile, success, function() {

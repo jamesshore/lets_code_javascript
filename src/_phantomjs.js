@@ -4,6 +4,10 @@
 (function() {
 	"use strict";
 
+	// TODO: Laurent Bourgalt-Roy suggested a better way of smoke testing
+	// using Selenium in combination with PhantomJS:
+	// http://www.letscodejavascript.com/v3/comments/live/101#comment-1095901476
+
 	var page = require("webpage").create();
 
 	page.onConsoleMessage = function(message) {
@@ -33,9 +37,9 @@
 			var HtmlElement = require("./html_element.js");
 
 			var drawingArea = new HtmlElement(document.getElementById("drawingArea"));
-			drawingArea.doMouseDown(10, 20);
-			drawingArea.doMouseMove(50, 60);
-			drawingArea.doMouseUp(50, 60);
+			drawingArea.triggerMouseDown(10, 20);
+			drawingArea.triggerMouseMove(50, 60);
+			drawingArea.triggerMouseUp(50, 60);
 
 			var actual = JSON.stringify(client.drawingAreaCanvas.lineSegments());
 			var expected = JSON.stringify([[ "10", "20", "50", "60" ]]);

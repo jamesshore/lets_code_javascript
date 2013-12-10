@@ -1,19 +1,18 @@
-var charm = require('../')(process);
+var charm = require('../')();
+charm.pipe(process.stdout);
 
-charm.write("Progress: 0 %");
+charm.write('Progress: 0 %');
 var i = 0;
 
-var increment = function () {
+var iv = setInterval(function () {
     charm.left(i.toString().length + 2);
-    i = i + 1;
-    charm.write(i + " %");
+    i ++;
+    charm.write(i + ' %');
     if (i === 100) {
-        charm.write("\nDone!\n");
-        process.exit();
+        charm.end('\nDone!\n');
+        clearInterval(iv);
     }
-};
-
-var loop = setInterval(increment, 50);
+}, 25);
 
 charm.on('^C',process.exit);
 

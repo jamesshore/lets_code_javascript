@@ -6,12 +6,14 @@
 
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
+	var browser = require("./browser.js");
 
 	var svgCanvas = null;
 	var start = null;
 	var drawingArea;
 	var documentBody;
 	var windowElement;
+	var useSetCaptureApi = false;
 
 	exports.initializeDrawingArea = function(htmlElement) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
@@ -20,7 +22,11 @@
 		windowElement = new HtmlElement(window);
 
 		svgCanvas = new SvgCanvas(drawingArea);
-		handleDragEvents();
+
+		preventDefaults();
+		handleMouseDragEvents();
+		handleTouchDragEvents();
+
 		return svgCanvas;
 	};
 
@@ -28,13 +34,18 @@
 		svgCanvas = null;
 	};
 
-	function handleDragEvents() {
-		preventDefaults();
-
+	function handleMouseDragEvents() {
 		drawingArea.onMouseDown(startDrag);
 		documentBody.onMouseMove(continueDrag);
 		windowElement.onMouseUp(endDrag);
 
+		if (browser.doesNotHandlesUserEventsOnWindow()) {
+			drawingArea.onMouseUp(endDrag);
+			useSetCaptureApi = true;
+		}
+	}
+
+	function handleTouchDragEvents() {
 		drawingArea.onSingleTouchStart(startDrag);
 		drawingArea.onSingleTouchMove(continueDrag);
 		drawingArea.onSingleTouchEnd(endDrag);
@@ -60,6 +71,7 @@
 
 	function startDrag(pageOffset) {
 		start = drawingArea.relativeOffset(pageOffset);
+    if (useSetCaptureApi) drawingArea.setCapture();
 	}
 
 	function continueDrag(pageOffset) {
@@ -72,6 +84,7 @@
 
 	function endDrag() {
 		start = null;
+		if (useSetCaptureApi) drawingArea.releaseCapture();
 	}
 
 }());
