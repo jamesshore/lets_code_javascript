@@ -35,6 +35,7 @@ Engineering Tasks:
 
 To Do on current task:
 - Should a dot be represented by "lines"?
+- Should we eliminate the relativeOffset duplication in client.js?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

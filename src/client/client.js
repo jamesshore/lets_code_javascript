@@ -24,6 +24,7 @@
 		svgCanvas = new SvgCanvas(drawingArea);
 
 		preventDefaults();
+		handleMouseClickEvents();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
 
@@ -33,6 +34,10 @@
 	exports.drawingAreaHasBeenRemovedFromDom = function() {
 		svgCanvas = null;
 	};
+
+	function handleMouseClickEvents() {
+		drawingArea.onMouseClick(drawDot);
+	}
 
 	function handleMouseDragEvents() {
 		drawingArea.onMouseDown(startDrag);
@@ -67,6 +72,11 @@
 		drawingArea.onSingleTouchStart(function(relativeOffset, event) {
 			event.preventDefault();
 		});
+	}
+
+	function drawDot(pageOffset) {
+		var point = drawingArea.relativeOffset(pageOffset);
+		svgCanvas.drawLine(point.x, point.y, point.x, point.y);
 	}
 
 	function startDrag(pageOffset) {
