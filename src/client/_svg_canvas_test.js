@@ -48,18 +48,10 @@
 		});
 
 		it("styles the lines nicely", function() {
-
 			svgCanvas.drawLine(3, 3, 4, 4);
-			expect(svgCanvas.lineSegmentsAndAttributes()).to.eql([{
-				coords: [3, 3, 4, 4],
-				strokeWidth: SvgCanvas.STROKE_WIDTH,
-				strokeLineCap: SvgCanvas.LINE_CAP
-			}]);
-
-			// TO DO: a comment about why line-cap and stroke-width matter here
-
-			// assertions about line-cap and stroke-width
-
+			var line = svgCanvas.lineSegmentsWithAttributes()[0];
+			expect(line.attrs["stroke-width"]).to.equal(SvgCanvas.STROKE_WIDTH);
+			expect(line.attrs["stroke-linecap"]).to.equal(SvgCanvas.LINE_CAP);
 		});
 
 	});

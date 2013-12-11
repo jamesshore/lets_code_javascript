@@ -12,6 +12,11 @@
 	SvgCanvas.LINE_CAP = "round";
 
 	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
+		if (startX === endX && startY === endY) {
+			this._paper.circle(startX, startY, SvgCanvas.STROKE_WIDTH / 2)
+				.attr({ "fill": "black"} );
+			return;
+		}
 
 		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
 			.attr({
@@ -31,15 +36,19 @@
 	SvgCanvas.prototype.lineSegments = function() {
 		var result = [];
 		this._paper.forEach(function(element) {
-			result.push(pathFor(element).coords);
+			result.push(pathFor(element));
 		});
 		return result;
 	};
 
-	SvgCanvas.prototype.lineSegmentsAndAttributes = function() {
+	SvgCanvas.prototype.lineSegmentsWithAttributes = function() {
 		var result = [];
 		this._paper.forEach(function(element) {
-			result.push(pathFor(element));
+			var path = pathFor(element);
+			result.push({
+				path: path,
+				attrs: element.attrs
+			});
 		});
 		return result;
 	};
@@ -71,16 +80,12 @@
 		}
 		var pathComponents = path.match(pathRegex);
 
-		return {
-			coords: [
-				pathComponents[1],
-				pathComponents[2],
-				pathComponents[3],
-				pathComponents[4]
-			],
-			strokeWidth: element.attrs["stroke-width"],
-			strokeLineCap: element.attrs["stroke-linecap"]
-		};
+		return [
+			pathComponents[1],
+			pathComponents[2],
+			pathComponents[3],
+			pathComponents[4]
+		];
 	}
 
 	function vmlPathFor(element) {
@@ -88,9 +93,6 @@
 		var VML_MAGIC_NUMBER = 21600;
 
 		var path = element.node.path.value;
-
-//		console.log("stroke-width", element.attrs["stroke-width"]);
-//		console.log("stroke-linecap", element.attrs["stroke-linecap"]);
 
 		var ie8PathRegex = /m(\d+),(\d+) l(\d+),(\d+) e/;
 		var ie8 = path.match(ie8PathRegex);
@@ -100,16 +102,12 @@
 		var endX = ie8[3] / VML_MAGIC_NUMBER;
 		var endY = ie8[4] / VML_MAGIC_NUMBER;
 
-		return {
-			coords: [
-				startX,
-				startY,
-				endX,
-				endY
-			],
-			strokeWidth: element.attrs["stroke-width"],
-			strokeLineCap: element.attrs["stroke-linecap"]
-		};
+		return [
+			startX,
+			startY,
+			endX,
+			endY
+		];
 	}
 
 }());
