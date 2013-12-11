@@ -3,8 +3,8 @@ WeeWikiPaint
 Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 * single-user painting on home page (episodes 33+)
+	? support more browsers (Android, IE10, IE11)
 - collaborative painting
-- support more browsers (Android, IE10?)
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
@@ -12,6 +12,8 @@ Minimum Marketable Features:
 User Stories:
 * draw a single pixel when mouse is clicked
 - draw a single pixel when screen is tapped
+  - note: client.endDrag() is not currently called when touch stops. There's an error in HtmlElement:
+    # of touches in endtouch event is number of touches *left*, so zero, not one.
 ? fix gaps in lines when zoomed in
 - 'clear screen' button
 - non-embarrasing site design
@@ -36,6 +38,8 @@ Engineering Tasks:
 To Do on current task:
 * factor out "fill" constant (and also style line segments)
 - Clean up SvgCanvas.drawLine()
+- don't draw dots in middle of line (eliminate zero-length lines in middle of drag)
+- don't draw dot at end of drag (click event isn't working the way we want)
 - Should we eliminate the relativeOffset duplication in client.js?
 - Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
 
