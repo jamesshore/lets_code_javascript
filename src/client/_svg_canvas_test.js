@@ -47,7 +47,14 @@
 			]);
 		});
 
-		it("styles the lines nicely", function() {
+		it.only("draws a circle when line segment is zero-length", function() {
+			svgCanvas.drawLine(5, 10, 5, 10);
+
+			var line = svgCanvas.lineSegmentsWithAttributes()[0];
+			expect(line.attrs.fill).to.equal("black");
+		});
+
+		it("styles lines nicely", function() {
 			svgCanvas.drawLine(3, 3, 4, 4);
 			var line = svgCanvas.lineSegmentsWithAttributes()[0];
 			expect(line.attrs["stroke-width"]).to.equal(SvgCanvas.STROKE_WIDTH);

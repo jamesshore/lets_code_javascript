@@ -44,7 +44,7 @@
 	SvgCanvas.prototype.lineSegmentsWithAttributes = function() {
 		var result = [];
 		this._paper.forEach(function(element) {
-			var path = pathFor(element);
+			var path = Raphael.svg ? element.node.attributes.d.value : element.node.path.value;
 			result.push({
 				path: path,
 				attrs: element.attrs

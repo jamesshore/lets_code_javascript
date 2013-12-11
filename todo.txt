@@ -35,6 +35,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Test a circle when a line is one-pixel long
+- factor out "fill" constant
 - Should we eliminate the relativeOffset duplication in client.js?
 - Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
 
