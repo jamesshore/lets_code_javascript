@@ -35,6 +35,7 @@ Engineering Tasks:
 To Do on current task:
 * test stroke width & linecaps for SVG
 - test stroke width & linecaps for VML
+- clean up lineSegmentsAndAttributes()
 - Be sure to document the obscure reasons for 2-pixel stroke and linecaps (for dots)
 - Check SVG dots in other browsers
 - Should a dot be represented by "lines"?

@@ -30,6 +30,14 @@
 	SvgCanvas.prototype.lineSegments = function() {
 		var result = [];
 		this._paper.forEach(function(element) {
+			result.push(pathFor(element).coords);
+		});
+		return result;
+	};
+
+	SvgCanvas.prototype.lineSegmentsAndAttributes = function() {
+		var result = [];
+		this._paper.forEach(function(element) {
 			result.push(pathFor(element));
 		});
 		return result;
@@ -50,11 +58,6 @@
 	function svgPathFor(element) {
 		var pathRegex;
 
-//		console.log("Hello!", element.node.attributes);
-//		console.log("stroke-width", element.node.attributes["stroke-width"].value);
-//		console.log("stroke-linecap", element.node.attributes["stroke-linecap"].value);
-
-
 		var path = element.node.attributes.d.value;
 		if (path.indexOf(",") !== -1)
 		// We're in Firefox, Safari, Chrome, which uses format "M20,30L30,300"
@@ -66,12 +69,17 @@
 			pathRegex = /M (\d+) (\d+) L (\d+) (\d+)/;
 		}
 		var pathComponents = path.match(pathRegex);
-		return [
-			pathComponents[1],
-			pathComponents[2],
-			pathComponents[3],
-			pathComponents[4]
-		];
+
+		return {
+			coords: [
+				pathComponents[1],
+				pathComponents[2],
+				pathComponents[3],
+				pathComponents[4]
+			],
+			strokeWidth: element.attrs["stroke-width"],
+			strokeLineCap: element.attrs["stroke-linecap"]
+		};
 	}
 
 	function vmlPathFor(element) {
@@ -79,8 +87,9 @@
 		var VML_MAGIC_NUMBER = 21600;
 
 		var path = element.node.path.value;
-		console.log("stroke-width", element.node.attributes["stroke-width"].value);
-		console.log("stroke-linecap", element.node.attributes["stroke-linecap"].value);
+
+//		console.log("stroke-width", element.attrs["stroke-width"]);
+//		console.log("stroke-linecap", element.attrs["stroke-linecap"]);
 
 		var ie8PathRegex = /m(\d+),(\d+) l(\d+),(\d+) e/;
 		var ie8 = path.match(ie8PathRegex);
