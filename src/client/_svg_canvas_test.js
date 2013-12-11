@@ -47,19 +47,25 @@
 			]);
 		});
 
-		it.only("draws a circle when line segment is zero-length", function() {
-			svgCanvas.drawLine(5, 10, 5, 10);
-
-			var line = svgCanvas.lineSegmentsWithAttributes()[0];
-			expect(line.attrs.fill).to.equal("black");
-		});
-
-		it("styles lines nicely", function() {
-			svgCanvas.drawLine(3, 3, 4, 4);
-			var line = svgCanvas.lineSegmentsWithAttributes()[0];
-			expect(line.attrs["stroke-width"]).to.equal(SvgCanvas.STROKE_WIDTH);
-			expect(line.attrs["stroke-linecap"]).to.equal(SvgCanvas.LINE_CAP);
-		});
+//		it("draws a circle when line segment is zero-length", function() {
+//			svgCanvas.drawLine(5, 10, 5, 10);
+//			svgCanvas.drawLine(5, 10, 20, 30);
+//
+//			expect(svgCanvas.normalizedElements()).to.eql([
+//				{ type: "circle", parms: [ 5, 10, 1 ] },
+//				{ type: "path", parms: "M5,10L20,30" }
+//			])
+//
+//			var line = svgCanvas.lineSegmentsWithAttributes()[0];
+//			expect(line.attrs.fill).to.equal("black");
+//		});
+//
+//		it("styles lines nicely", function() {
+//			svgCanvas.drawLine(3, 3, 4, 4);
+//			var line = svgCanvas.lineSegmentsWithAttributes()[0];
+//			expect(line.attrs["stroke-width"]).to.equal(SvgCanvas.STROKE_WIDTH);
+//			expect(line.attrs["stroke-linecap"]).to.equal(SvgCanvas.LINE_CAP);
+//		});
 
 	});
 

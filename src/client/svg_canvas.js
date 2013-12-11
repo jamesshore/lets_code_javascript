@@ -36,7 +36,7 @@
 	SvgCanvas.prototype.lineSegments = function() {
 		var result = [];
 		this._paper.forEach(function(element) {
-			result.push(pathFor(element));
+			result.push(normalizeToLineSegment(element));
 		});
 		return result;
 	};
@@ -53,19 +53,36 @@
 		return result;
 	};
 
-	function pathFor(element) {
-		if (Raphael.vml) {
-			return vmlPathFor(element);
-		}
-		else if (Raphael.svg) {
-			return svgPathFor(element);
-		}
-		else {
-			throw new Error("Unknown Raphael type");
+	function normalizeToLineSegment(element) {
+		switch(element.type) {
+			case "path":
+				return normalizePath(element);
+			case "circle":
+				return normalizeCircle(element);
+			default:
+				throw new Error("Unknown element type: " + element.type);
 		}
 	}
 
-	function svgPathFor(element) {
+	function normalizeCircle(element) {
+		return [
+			element.attrs.cx,
+			element.attrs.cy,
+			element.attrs.cx,
+			element.attrs.cy,
+		];
+	}
+
+	function normalizePath(element) {
+		// SVG: [[ "M", 20, 30 ], [ "L", 30, 300 ]]
+		// VML: "M20,30L30,300"
+
+		if (Raphael.svg) return normalizeSvgPath(element);
+		else if (Raphael.vml) return normalizeVmlPath(element);
+		else throw new Error("Unknown Raphael rendering engine");
+	}
+
+	function normalizeSvgPath(element) {
 		var pathRegex;
 
 		var path = element.node.attributes.d.value;
@@ -88,7 +105,7 @@
 		];
 	}
 
-	function vmlPathFor(element) {
+	function normalizeVmlPath(element) {
 		// We're in IE 8, which uses format "m432000,648000 l648000,67456800 e"
 		var VML_MAGIC_NUMBER = 21600;
 
