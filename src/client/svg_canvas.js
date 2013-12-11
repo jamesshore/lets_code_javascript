@@ -41,14 +41,10 @@
 		return result;
 	};
 
-	SvgCanvas.prototype.lineSegmentsWithAttributes = function() {
+	SvgCanvas.prototype.elementsForTestingOnly = function() {
 		var result = [];
 		this._paper.forEach(function(element) {
-			var path = Raphael.svg ? element.node.attributes.d.value : element.node.path.value;
-			result.push({
-				path: path,
-				attrs: element.attrs
-			});
+			result.push(element);
 		});
 		return result;
 	};
@@ -74,9 +70,6 @@
 	}
 
 	function normalizePath(element) {
-		// SVG: [[ "M", 20, 30 ], [ "L", 30, 300 ]]
-		// VML: "M20,30L30,300"
-
 		if (Raphael.svg) return normalizeSvgPath(element);
 		else if (Raphael.vml) return normalizeVmlPath(element);
 		else throw new Error("Unknown Raphael rendering engine");

@@ -47,19 +47,21 @@
 			]);
 		});
 
-//		it("draws a circle when line segment is zero-length", function() {
-//			svgCanvas.drawLine(5, 10, 5, 10);
-//			svgCanvas.drawLine(5, 10, 20, 30);
-//
-//			expect(svgCanvas.normalizedElements()).to.eql([
-//				{ type: "circle", parms: [ 5, 10, 1 ] },
-//				{ type: "path", parms: "M5,10L20,30" }
-//			])
-//
-//			var line = svgCanvas.lineSegmentsWithAttributes()[0];
-//			expect(line.attrs.fill).to.equal("black");
-//		});
-//
+		it("draws a circle when line segment is zero-length", function() {
+			svgCanvas.drawLine(5, 10, 5, 10);
+
+			var elements = svgCanvas.elementsForTestingOnly();
+			expect(elements.length).to.equal(1);
+
+			expect(elements[0].type).to.equal("circle");
+
+			var attrs = elements[0].attrs;
+			expect(attrs.cx).to.equal(5);
+			expect(attrs.cy).to.equal(10);
+			expect(attrs.r).to.equal(SvgCanvas.STROKE_WIDTH / 2);
+			expect(attrs.fill).to.equal("black");
+		});
+
 //		it("styles lines nicely", function() {
 //			svgCanvas.drawLine(3, 3, 4, 4);
 //			var line = svgCanvas.lineSegmentsWithAttributes()[0];
