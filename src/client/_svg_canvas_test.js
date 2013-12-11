@@ -62,12 +62,12 @@
 			expect(attrs.fill).to.equal("black");
 		});
 
-//		it("styles lines nicely", function() {
-//			svgCanvas.drawLine(3, 3, 4, 4);
-//			var line = svgCanvas.lineSegmentsWithAttributes()[0];
-//			expect(line.attrs["stroke-width"]).to.equal(SvgCanvas.STROKE_WIDTH);
-//			expect(line.attrs["stroke-linecap"]).to.equal(SvgCanvas.LINE_CAP);
-//		});
+		it("styles lines nicely", function() {
+			svgCanvas.drawLine(3, 3, 4, 4);
+			var attrs = svgCanvas.elementsForTestingOnly()[0].attrs;
+			expect(attrs["stroke-width"]).to.equal(SvgCanvas.STROKE_WIDTH);
+			expect(attrs["stroke-linecap"]).to.equal(SvgCanvas.LINE_CAP);
+		});
 
 	});
 

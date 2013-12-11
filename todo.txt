@@ -34,9 +34,8 @@ Engineering Tasks:
 * modify SvgCanvas to support drawing a single dot (drawLine doesn't work)
 
 To Do on current task:
-* Test a circle when a line is one-pixel long
-- uncomment 'dot' test in _client_test.js
-- factor out "fill" constant
+* factor out "fill" constant (and also style line segments)
+- Clean up SvgCanvas.drawLine()
 - Should we eliminate the relativeOffset duplication in client.js?
 - Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
 
