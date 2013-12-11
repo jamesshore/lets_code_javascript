@@ -47,13 +47,13 @@
 			]);
 		});
 
-		it("draws a dot when line segment consists of a single pixel", function() {
+		it("styles the lines nicely", function() {
 
 			svgCanvas.drawLine(3, 3, 4, 4);
 			expect(svgCanvas.lineSegmentsAndAttributes()).to.eql([{
 				coords: [3, 3, 4, 4],
-				strokeWidth: 2,
-				strokeLineCap: "round"
+				strokeWidth: SvgCanvas.STROKE_WIDTH,
+				strokeLineCap: SvgCanvas.LINE_CAP
 			}]);
 
 			// TO DO: a comment about why line-cap and stroke-width matter here

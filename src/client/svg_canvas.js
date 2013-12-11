@@ -8,12 +8,15 @@
 		this._paper = new Raphael(htmlElement.toDomElement());
 	};
 
+	SvgCanvas.STROKE_WIDTH = 2;
+	SvgCanvas.LINE_CAP = "round";
+
 	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
 
 		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
 			.attr({
-				"stroke-width": 2,
-				"stroke-linecap": "round"
+				"stroke-width": SvgCanvas.STROKE_WIDTH,
+				"stroke-linecap": SvgCanvas.LINE_CAP
 			});
 	};
 
