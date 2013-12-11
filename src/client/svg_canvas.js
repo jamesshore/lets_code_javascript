@@ -10,9 +10,7 @@
 
 	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
 
-//		this._paper.path("M10,10L20,20");
-//
-		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY + " Z")
+		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
 			.attr({
 				"stroke-width": 2,
 				"stroke-linecap": "round"
@@ -99,12 +97,16 @@
 		var endX = ie8[3] / VML_MAGIC_NUMBER;
 		var endY = ie8[4] / VML_MAGIC_NUMBER;
 
-		return [
-			startX,
-			startY,
-			endX,
-			endY
-		];
+		return {
+			coords: [
+				startX,
+				startY,
+				endX,
+				endY
+			],
+			strokeWidth: element.attrs["stroke-width"],
+			strokeLineCap: element.attrs["stroke-linecap"]
+		};
 	}
 
 }());
