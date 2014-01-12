@@ -84,9 +84,11 @@
 		if (start === null) return;
 
 		var end = drawingArea.relativeOffset(pageOffset);
-		svgCanvas.drawLine(start.x, start.y, end.x, end.y);
-		lineDrawn = true;
-		start = end;
+		if (start.x !== end.x || start.y !== end.y) {
+			svgCanvas.drawLine(start.x, start.y, end.x, end.y);
+			start = end;
+			lineDrawn = true;
+		}
 	}
 
 	function endDrag(pageOffset) {

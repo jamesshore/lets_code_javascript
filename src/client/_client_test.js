@@ -83,6 +83,25 @@
 				]);
 			});
 
+			it("does not draw a dot when mouse is dragged slowly in the middle of a line", function() {
+				drawingArea.triggerMouseDown(20, 30);
+				drawingArea.triggerMouseMove(50, 60);
+
+				drawingArea.triggerMouseMove(40, 20);
+				drawingArea.triggerMouseMove(40, 20);
+				drawingArea.triggerMouseMove(40, 20);
+
+				drawingArea.triggerMouseMove(10, 15);
+				drawingArea.triggerMouseUp(10, 15);
+
+				expect(lines()).to.eql([
+					[20, 30, 50, 60],
+					[50, 60, 40, 20],
+					[40, 20, 10, 15]
+				]);
+
+			});
+
 			it("draws multiple line segments when there are multiple drags", function() {
 				drawingArea.triggerMouseDown(20, 30);
 				drawingArea.triggerMouseMove(50, 60);
