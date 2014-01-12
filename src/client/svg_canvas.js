@@ -8,18 +8,23 @@
 		this._paper = new Raphael(htmlElement.toDomElement());
 	};
 
+	SvgCanvas.LINE_COLOR = "black";
 	SvgCanvas.STROKE_WIDTH = 2;
 	SvgCanvas.LINE_CAP = "round";
 
 	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
 		if (startX === endX && startY === endY) {
 			this._paper.circle(startX, startY, SvgCanvas.STROKE_WIDTH / 2)
-				.attr({ "fill": "black"} );
+				.attr({
+					"stroke": SvgCanvas.LINE_COLOR,
+					"fill": SvgCanvas.LINE_COLOR
+				} );
 			return;
 		}
 
 		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
 			.attr({
+				"stroke": SvgCanvas.LINE_COLOR,
 				"stroke-width": SvgCanvas.STROKE_WIDTH,
 				"stroke-linecap": SvgCanvas.LINE_CAP
 			});

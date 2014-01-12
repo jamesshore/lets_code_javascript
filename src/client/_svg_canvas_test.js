@@ -59,12 +59,14 @@
 			expect(attrs.cx).to.equal(5);
 			expect(attrs.cy).to.equal(10);
 			expect(attrs.r).to.equal(SvgCanvas.STROKE_WIDTH / 2);
-			expect(attrs.fill).to.equal("black");
+			expect(attrs.stroke).to.equal(SvgCanvas.LINE_COLOR);
+			expect(attrs.fill).to.equal(SvgCanvas.LINE_COLOR);
 		});
 
 		it("styles lines nicely", function() {
 			svgCanvas.drawLine(3, 3, 4, 4);
 			var attrs = svgCanvas.elementsForTestingOnly()[0].attrs;
+			expect(attrs.stroke).to.equal(SvgCanvas.LINE_COLOR);
 			expect(attrs["stroke-width"]).to.equal(SvgCanvas.STROKE_WIDTH);
 			expect(attrs["stroke-linecap"]).to.equal(SvgCanvas.LINE_CAP);
 		});
