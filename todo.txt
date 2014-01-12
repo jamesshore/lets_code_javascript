@@ -34,10 +34,8 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* modify SvgCanvas to support drawing a single dot (drawLine doesn't work)
 
 To Do on current task:
-- SvgCanvas should have a drawDot method
 
 
 Notes:

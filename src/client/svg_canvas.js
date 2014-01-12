@@ -13,26 +13,21 @@
 	SvgCanvas.LINE_CAP = "round";
 
 	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
-		if (startX === endX && startY === endY) drawCircle(this._paper, startX, startY);
-		else drawLine(this._paper, startX, startY, endX, endY);
+		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
+			.attr({
+				"stroke": SvgCanvas.LINE_COLOR,
+				"stroke-width": SvgCanvas.STROKE_WIDTH,
+				"stroke-linecap": SvgCanvas.LINE_CAP
+			});
 	};
 
-	function drawCircle(paper, x, y) {
-		paper.circle(x, y, SvgCanvas.STROKE_WIDTH / 2)
-		.attr({
-			"stroke": SvgCanvas.LINE_COLOR,
-			"fill": SvgCanvas.LINE_COLOR
-		});
-	}
-
-	function drawLine(paper, startX, startY, endX, endY) {
-		paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
-		.attr({
-			"stroke": SvgCanvas.LINE_COLOR,
-			"stroke-width": SvgCanvas.STROKE_WIDTH,
-			"stroke-linecap": SvgCanvas.LINE_CAP
-		});
-	}
+	SvgCanvas.prototype.drawDot = function(x, y) {
+		this._paper.circle(x, y, SvgCanvas.STROKE_WIDTH / 2)
+			.attr({
+				"stroke": SvgCanvas.LINE_COLOR,
+				"fill": SvgCanvas.LINE_COLOR
+			});
+	};
 
 	SvgCanvas.prototype.height = function() {
 		return this._paper.height;

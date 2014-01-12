@@ -89,7 +89,7 @@
 	function endDrag(pageOffset) {
 		if (start !== null && !lineDrawn) {
 			var relativeOffset = drawingArea.relativeOffset(pageOffset);
-			svgCanvas.drawLine(relativeOffset.x, relativeOffset.y, relativeOffset.x, relativeOffset.y);
+			svgCanvas.drawDot(relativeOffset.x, relativeOffset.y);
 		}
 
 		if (useSetCaptureApi) drawingArea.releaseCapture();

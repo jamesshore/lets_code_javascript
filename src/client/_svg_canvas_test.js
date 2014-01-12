@@ -47,8 +47,8 @@
 			]);
 		});
 
-		it("draws a circle when line segment is zero-length", function() {
-			svgCanvas.drawLine(5, 10, 5, 10);
+		it("draws dots and styles them nicely", function() {
+			svgCanvas.drawDot(5, 10);
 
 			var elements = svgCanvas.elementsForTestingOnly();
 			expect(elements.length).to.equal(1);
