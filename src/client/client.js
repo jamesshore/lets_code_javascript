@@ -10,6 +10,7 @@
 
 	var svgCanvas = null;
 	var start = null;
+	var lineDrawn = false;
 	var drawingArea;
 	var documentBody;
 	var windowElement;
@@ -24,7 +25,6 @@
 		svgCanvas = new SvgCanvas(drawingArea);
 
 		preventDefaults();
-		handleMouseClickEvents();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
 
@@ -34,10 +34,6 @@
 	exports.drawingAreaHasBeenRemovedFromDom = function() {
 		svgCanvas = null;
 	};
-
-	function handleMouseClickEvents() {
-		drawingArea.onMouseClick(drawDot);
-	}
 
 	function handleMouseDragEvents() {
 		drawingArea.onMouseDown(startDrag);
@@ -89,12 +85,19 @@
 
 		var end = drawingArea.relativeOffset(pageOffset);
 		svgCanvas.drawLine(start.x, start.y, end.x, end.y);
+		lineDrawn = true;
 		start = end;
 	}
 
-	function endDrag() {
-		start = null;
+	function endDrag(pageOffset) {
+		if (start !== null && !lineDrawn) {
+			var relativeOffset = drawingArea.relativeOffset(pageOffset);
+			svgCanvas.drawLine(relativeOffset.x, relativeOffset.y, relativeOffset.x, relativeOffset.y);
+		}
+
 		if (useSetCaptureApi) drawingArea.releaseCapture();
+		start = null;
+		lineDrawn = false;
 	}
 
 }());

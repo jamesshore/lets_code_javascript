@@ -33,9 +33,12 @@
 
 		describe("mouse events", function() {
 			it("draws a dot in response to mouse click", function() {
-				drawingArea.triggerMouseClick(15, 24);
+				drawingArea.triggerMouseDown(50, 60);
+				drawingArea.triggerMouseUp(50, 60);
+				drawingArea.triggerMouseClick(50, 60);
+
 				expect(lines()).to.eql([
-					[15, 24, 15, 24]
+					[50, 60, 50, 60]
 				]);
 			});
 
@@ -47,6 +50,23 @@
 				expect(lines()).to.eql([
 					[20, 30, 50, 60]
 				]);
+			});
+
+			it("does not draw a dot at the end of a drag", function() {
+				drawingArea.triggerMouseDown(20, 30);
+				drawingArea.triggerMouseMove(50, 60);
+				drawingArea.triggerMouseUp(50, 60);
+				drawingArea.triggerMouseClick(50, 60);
+
+				expect(lines()).to.eql([
+					[20, 30, 50, 60]
+				]);
+			});
+
+			it("does not draw a dot if drag not started in drawing area", function() {
+				drawingArea.triggerMouseUp(20, 40);
+
+				expect(lines()).to.eql([]);
 			});
 
 			it("draws multiple line segments when mouse is dragged multiple places", function() {
@@ -90,13 +110,6 @@
 				expect(lines()).to.eql([
 					[20, 30, 50, 60]
 				]);
-			});
-
-			it("does not draw line segment when mouse button is released", function() {
-				drawingArea.triggerMouseDown(20, 30);
-				drawingArea.triggerMouseUp(50, 60);
-
-				expect(lines()).to.eql([]);
 			});
 
 			it("does not draw line segments when mouse button has never been pushed", function() {

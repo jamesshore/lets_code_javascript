@@ -36,10 +36,7 @@ Engineering Tasks:
 * modify SvgCanvas to support drawing a single dot (drawLine doesn't work)
 
 To Do on current task:
-* factor out "fill" constant (and also style line segments)
-- Clean up SvgCanvas.drawLine()
-- don't draw dots in middle of line (eliminate zero-length lines in middle of drag)
-- don't draw dot at end of drag (click event isn't working the way we want)
+* don't draw dots in middle of line (eliminate zero-length lines in middle of drag)
 - Should we eliminate the relativeOffset duplication in client.js?
 - Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
 
