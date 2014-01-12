@@ -72,9 +72,7 @@
 	function normalizeCircle(element) {
 		return [
 			element.attrs.cx,
-			element.attrs.cy,
-			element.attrs.cx,
-			element.attrs.cy,
+			element.attrs.cy
 		];
 	}
 

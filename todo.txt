@@ -14,6 +14,7 @@ User Stories:
 - draw a single pixel when screen is tapped
   - note: client.endDrag() is not currently called when touch stops. There's an error in HtmlElement:
     # of touches in endtouch event is number of touches *left*, so zero, not one.
+  - Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
 ? fix gaps in lines when zoomed in
 - 'clear screen' button
 - non-embarrasing site design
@@ -36,9 +37,7 @@ Engineering Tasks:
 * modify SvgCanvas to support drawing a single dot (drawLine doesn't work)
 
 To Do on current task:
-* don't draw dots in middle of line (eliminate zero-length lines in middle of drag)
-- Should we eliminate the relativeOffset duplication in client.js?
-- Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
+- SvgCanvas should have a drawDot method
 
 
 Notes:

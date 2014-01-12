@@ -70,11 +70,6 @@
 		});
 	}
 
-	function drawDot(pageOffset) {
-		var point = drawingArea.relativeOffset(pageOffset);
-		svgCanvas.drawLine(point.x, point.y, point.x, point.y);
-	}
-
 	function startDrag(pageOffset) {
 		start = drawingArea.relativeOffset(pageOffset);
     if (useSetCaptureApi) drawingArea.setCapture();

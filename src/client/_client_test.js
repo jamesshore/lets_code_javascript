@@ -38,7 +38,7 @@
 				drawingArea.triggerMouseClick(50, 60);
 
 				expect(lines()).to.eql([
-					[50, 60, 50, 60]
+					[50, 60]
 				]);
 			});
 
