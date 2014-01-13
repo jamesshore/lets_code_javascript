@@ -126,6 +126,9 @@
 		sendTouchEvent(this, "touchend", new TouchList());
 	};
 
+	HtmlElement.prototype.triggerTouchCancel = function() {
+		sendTouchEvent(this, "touchcancel", new TouchList());
+	};
 
 	function triggerSingleTouchEventFn(event) {
 		return function(relativeX, relativeY) {

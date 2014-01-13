@@ -55,23 +55,34 @@
 				if (!browser.supportsTouchEvents()) return;
 
 				it("sends zero touches when triggering a touch end event", function() {
-					var eventCalled = false;
-					var touches;
-
-					htmlElement._element.on("touchend", function(event) {
-						eventCalled = true;
-						touches = [];
-						var eventTouches = event.originalEvent.touches;
-						for (var i = 0; i < eventTouches.length; i++) {
-							touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
-						}
-					});
+					var monitor = monitorTouchEvent("touchend");
 					htmlElement.triggerTouchEnd();
-
-					expect(eventCalled).to.be(true);
-					expect(touches).to.eql([]);
+					expect(monitor.touches).to.eql([]);
 				});
 
+				it("sends zero touches when triggering a touch cancel event", function() {
+					var monitor = monitorTouchEvent("touchcancel");
+					htmlElement.triggerTouchCancel();
+					expect(monitor.touches).to.eql([]);
+				});
+
+				function monitorTouchEvent(event) {
+					var monitor = {
+						eventTriggered: false,
+						touches: null
+					};
+
+					htmlElement._element.on(event, function(event) {
+						monitor.eventTriggered = true;
+						monitor.touches = [];
+						var eventTouches = event.originalEvent.touches;
+						for (var i = 0; i < eventTouches.length; i++) {
+							monitor.touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
+						}
+					});
+
+					return monitor;
+				}
 
 				it("handles single-touch events", function() {
 					testEvent(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
