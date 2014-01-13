@@ -54,6 +54,11 @@
 			describe("touch events", function() {
 				if (!browser.supportsTouchEvents()) return;
 
+				it("sends zero touches when triggering a touch end event", function() {
+
+				})
+
+
 				it("handles single-touch events", function() {
 					testEvent(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
 					testEvent(htmlElement.onSingleTouchMove, htmlElement.triggerSingleTouchMove);

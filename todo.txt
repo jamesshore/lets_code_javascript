@@ -10,11 +10,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories:
-* draw a single pixel when mouse is clicked
-- draw a single pixel when screen is tapped
-  - note: client.endDrag() is not currently called when touch stops. There's an error in HtmlElement:
-    # of touches in endtouch event is number of touches *left*, so zero, not one.
-  - Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
+* draw a single pixel when screen is tapped
 ? fix gaps in lines when zoomed in
 - 'clear screen' button
 - non-embarrasing site design
@@ -34,6 +30,9 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
+* Modify HtmlElement.triggerSingleTouchEnd() and .triggerSingleTouchCancel() to generate zero touches.
+- Modify HtmlElement to look for *zero* touches when the touch ends. (Or make some other change.)
+- Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
 
 To Do on current task:
 
