@@ -122,6 +122,11 @@
 	HtmlElement.prototype.triggerMultiTouchStart = triggerMultiTouchEventFn("touchstart");
 	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
 
+	HtmlElement.prototype.triggerTouchEnd = function() {
+		sendTouchEvent(this, "touchend", new TouchList());
+	};
+
+
 	function triggerSingleTouchEventFn(event) {
 		return function(relativeX, relativeY) {
 			sendSingleTouchEvent(this, event, relativeX, relativeY);

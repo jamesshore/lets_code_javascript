@@ -55,8 +55,22 @@
 				if (!browser.supportsTouchEvents()) return;
 
 				it("sends zero touches when triggering a touch end event", function() {
+					var eventCalled = false;
+					var touches;
 
-				})
+					htmlElement._element.on("touchend", function(event) {
+						eventCalled = true;
+						touches = [];
+						var eventTouches = event.originalEvent.touches;
+						for (var i = 0; i < eventTouches.length; i++) {
+							touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
+						}
+					});
+					htmlElement.triggerTouchEnd();
+
+					expect(eventCalled).to.be(true);
+					expect(touches).to.eql([]);
+				});
 
 
 				it("handles single-touch events", function() {
