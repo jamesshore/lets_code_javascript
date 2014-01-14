@@ -54,25 +54,35 @@
 			describe("touch events", function() {
 				if (!browser.supportsTouchEvents()) return;
 
-				it("sends zero touches when triggering a touch end event", function() {
+				it("sends zero touches when triggering a touchend event", function() {
 					var monitor = monitorTouchEvent("touchend");
 					htmlElement.triggerTouchEnd();
 					expect(monitor.touches).to.eql([]);
 				});
 
-				it("sends zero touches when triggering a touch cancel event", function() {
+				it("sends zero touches when triggering a touchcancel event", function() {
 					var monitor = monitorTouchEvent("touchcancel");
 					htmlElement.triggerTouchCancel();
 					expect(monitor.touches).to.eql([]);
 				});
 
-				it("handles zero-touch events", function() {
+				it("handles zero-touch touchend event", function() {
 					var functionCalled = false;
 					htmlElement.onTouchEnd(function() {
 						functionCalled = true;
 					});
 
 					htmlElement.triggerTouchEnd();
+					expect(functionCalled).to.be(true);
+				});
+
+				it("handles zero-touch touchcancel event", function() {
+					var functionCalled = false;
+					htmlElement.onTouchCancel(function() {
+						functionCalled = true;
+					});
+
+					htmlElement.triggerTouchCancel();
 					expect(functionCalled).to.be(true);
 				});
 

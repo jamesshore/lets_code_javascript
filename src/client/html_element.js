@@ -134,6 +134,12 @@
 		});
 	};
 
+	HtmlElement.prototype.onTouchCancel = function(callback) {
+		this._element.on("touchcancel", function() {
+			callback();
+		});
+	};
+
 	function triggerSingleTouchEventFn(event) {
 		return function(relativeX, relativeY) {
 			sendSingleTouchEvent(this, event, relativeX, relativeY);
