@@ -225,7 +225,7 @@
 		if (browser.supportsTouchEvents()) {
 			describe("touch events", function() {
 
-				it("draws a dot when screen is tapped", function() {
+				it.skip("draws a dot when screen is tapped", function() {
 					drawingArea.triggerSingleTouchStart(3, 42);
 					drawingArea.triggerTouchEnd();
 

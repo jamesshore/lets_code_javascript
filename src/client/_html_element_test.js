@@ -87,8 +87,6 @@
 				it("handles single-touch events", function() {
 					testEvent(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
 					testEvent(htmlElement.onSingleTouchMove, htmlElement.triggerSingleTouchMove);
-					testEvent(htmlElement.onSingleTouchEnd, htmlElement.triggerSingleTouchEnd);
-					testEvent(htmlElement.onSingleTouchCancel, htmlElement.triggerSingleTouchCancel);
 				});
 
 				it("handles multi-touch events", function() {

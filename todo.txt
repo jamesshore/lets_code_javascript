@@ -32,14 +32,12 @@ User Stories:
 Engineering Tasks:
 * Modify HtmlElement.triggerSingleTouchEnd() and .triggerSingleTouchCancel() to generate zero touches.
 - Modify HtmlElement to look for *zero* touches when the touch ends. (Or make some other change.)
+- Re-enable dot test in _client_test.js
 - Clean up HtmlElementTest eventMonitor code and usage
 - Clean up HtmlElement and its overly? complex function-creating functions
 - Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
 
 To Do on current task:
-* Factor out new event monitoring code
-- Add triggerTouchCancel()
-- Modify existing code to use our new triggerTouchEnd() and triggerTouchCancel()
 - Remove triggerSingleTouchEnd() and triggerSingleTouchCancel()
 
 
