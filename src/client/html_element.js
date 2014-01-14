@@ -128,6 +128,12 @@
 		sendTouchEvent(this, "touchcancel", new TouchList());
 	};
 
+	HtmlElement.prototype.onTouchEnd = function(callback) {
+		this._element.on("touchend", function() {
+			callback();
+		});
+	};
+
 	function triggerSingleTouchEventFn(event) {
 		return function(relativeX, relativeY) {
 			sendSingleTouchEvent(this, event, relativeX, relativeY);

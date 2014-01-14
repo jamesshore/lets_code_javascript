@@ -66,23 +66,15 @@
 					expect(monitor.touches).to.eql([]);
 				});
 
-				function monitorTouchEvent(event) {
-					var monitor = {
-						eventTriggered: false,
-						touches: null
-					};
-
-					htmlElement._element.on(event, function(event) {
-						monitor.eventTriggered = true;
-						monitor.touches = [];
-						var eventTouches = event.originalEvent.touches;
-						for (var i = 0; i < eventTouches.length; i++) {
-							monitor.touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
-						}
+				it("handles zero-touch events", function() {
+					var functionCalled = false;
+					htmlElement.onTouchEnd(function() {
+						functionCalled = true;
 					});
 
-					return monitor;
-				}
+					htmlElement.triggerTouchEnd();
+					expect(functionCalled).to.be(true);
+				});
 
 				it("handles single-touch events", function() {
 					testEvent(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
@@ -100,6 +92,24 @@
 					htmlElement.triggerSingleTouchStart();
 					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0});
 				});
+
+				function monitorTouchEvent(event) {
+					var monitor = {
+						eventTriggered: false,
+						touches: null
+					};
+
+					htmlElement._element.on(event, function(event) {
+						monitor.eventTriggered = true;
+						monitor.touches = [];
+						var eventTouches = event.originalEvent.touches;
+						for (var i = 0; i < eventTouches.length; i++) {
+							monitor.touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
+						}
+					});
+
+					return monitor;
+				}
 			});
 
 			describe("Capture API", function() {
