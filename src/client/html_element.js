@@ -113,10 +113,6 @@
 	HtmlElement.prototype.triggerSingleTouchMove = triggerSingleTouchEventFn("touchmove");
 	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
 
-	HtmlElement.prototype.onSingleTouchEnd = onSingleTouchEventFn("touchend");
-
-	HtmlElement.prototype.onSingleTouchCancel = onSingleTouchEventFn("touchcancel");
-
 	HtmlElement.prototype.triggerMultiTouchStart = triggerMultiTouchEventFn("touchstart");
 	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
 
