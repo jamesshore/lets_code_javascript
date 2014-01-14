@@ -40,6 +40,7 @@ To Do on current task:
 * Factor out new event monitoring code
 - Add triggerTouchCancel()
 - Modify existing code to use our new triggerTouchEnd() and triggerTouchCancel()
+- Remove triggerSingleTouchEnd() and triggerSingleTouchCancel()
 
 
 Notes:

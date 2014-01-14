@@ -225,34 +225,44 @@
 		if (browser.supportsTouchEvents()) {
 			describe("touch events", function() {
 
+				it("draws a dot when screen is tapped", function() {
+					drawingArea.triggerSingleTouchStart(3, 42);
+					drawingArea.triggerTouchEnd();
+
+					expect(lines()).to.eql([
+						[3, 34]
+					]);
+				});
+
 				it("draw lines in response to touch events", function() {
 					drawingArea.triggerSingleTouchStart(10, 40);
 					drawingArea.triggerSingleTouchMove(5, 20);
-					drawingArea.triggerSingleTouchEnd(5, 20);
+					drawingArea.triggerTouchEnd(5, 20);
 
 					expect(lines()).to.eql([
 						[10, 40, 5, 20]
 					]);
 				});
 
-				it("stops drawing lines when touch ends", function() {
+				it("draws multiple lines in response to multiple touch drags", function() {
 					drawingArea.triggerSingleTouchStart(10, 40);
 					drawingArea.triggerSingleTouchMove(5, 20);
-					drawingArea.triggerSingleTouchEnd(5, 20);
+					drawingArea.triggerTouchEnd(5, 20);
 
+					drawingArea.triggerSingleTouchStart(30, 40);
 					drawingArea.triggerSingleTouchMove(50, 60);
+					drawingArea.triggerTouchEnd(50, 60);
 
 					expect(lines()).to.eql([
-						[10, 40, 5, 20]
+						[10, 40, 5, 20],
+						[30, 40, 50, 60]
 					]);
 				});
 
 				it("stop drawing lines when touch is cancelled", function() {
 					drawingArea.triggerSingleTouchStart(10, 40);
 					drawingArea.triggerSingleTouchMove(5, 20);
-					drawingArea.triggerSingleTouchCancel(5, 20);
-
-					drawingArea.triggerSingleTouchMove(50, 60);
+					drawingArea.triggerTouchCancel(5, 20);
 
 					expect(lines()).to.eql([
 						[10, 40, 5, 20]
@@ -266,7 +276,7 @@
 
 					drawingArea.triggerSingleTouchStart(10, 40);
 					drawingArea.triggerSingleTouchMove(5, 20);
-					drawingArea.triggerSingleTouchEnd(5, 20);
+					drawingArea.triggerTouchEnd(5, 20);
 				});
 
 				it("stops drawing when multiple touches occur", function() {
@@ -275,7 +285,7 @@
 
 					drawingArea.triggerMultiTouchStart(5, 20, 6, 60);
 					drawingArea.triggerSingleTouchMove(1, 10, 7, 70);
-					drawingArea.triggerSingleTouchEnd(1, 10, 7, 70);
+					drawingArea.triggerTouchEnd(1, 10, 7, 70);
 
 					expect(lines()).to.eql([
 						[10, 40, 5, 20]
