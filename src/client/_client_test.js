@@ -225,12 +225,12 @@
 		if (browser.supportsTouchEvents()) {
 			describe("touch events", function() {
 
-				it.skip("draws a dot when screen is tapped", function() {
+				it("draws a dot when screen is tapped", function() {
 					drawingArea.triggerSingleTouchStart(3, 42);
 					drawingArea.triggerTouchEnd();
 
 					expect(lines()).to.eql([
-						[3, 34]
+						[3, 42]
 					]);
 				});
 

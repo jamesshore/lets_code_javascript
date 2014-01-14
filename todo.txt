@@ -30,14 +30,15 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
-- Modify HtmlElement to look for *zero* touches when the touch ends. (Or make some other change.)
+* Modify HtmlElement to look for *zero* touches when the touch ends. (Or make some other change.)
 - Re-enable dot test in _client_test.js
 - Clean up HtmlElementTest eventMonitor code and usage
 - Clean up HtmlElement and its overly? complex function-creating functions
 - Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
 
 To Do on current task:
-
+* Modify client.endDrag() to not take any parameters (because onTouchEnd() doesn't provide any)
+- Delete onSingleTouchEnd and onSingleTouchCancel
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

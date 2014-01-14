@@ -49,8 +49,8 @@
 	function handleTouchDragEvents() {
 		drawingArea.onSingleTouchStart(startDrag);
 		drawingArea.onSingleTouchMove(continueDrag);
-		drawingArea.onSingleTouchEnd(endDrag);
-		drawingArea.onSingleTouchCancel(endDrag);
+		drawingArea.onTouchEnd(endDrag);
+		drawingArea.onTouchCancel(endDrag);
 
 		drawingArea.onMultiTouchStart(endDrag);
 	}
@@ -86,10 +86,9 @@
 		}
 	}
 
-	function endDrag(pageOffset) {
+	function endDrag() {
 		if (start !== null && !lineDrawn) {
-			var relativeOffset = drawingArea.relativeOffset(pageOffset);
-			svgCanvas.drawDot(relativeOffset.x, relativeOffset.y);
+			svgCanvas.drawDot(start.x, start.y);
 		}
 
 		if (useSetCaptureApi) drawingArea.releaseCapture();
