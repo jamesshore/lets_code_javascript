@@ -27,6 +27,38 @@
 		describe("event handling", function() {
 
 			describe("mouse events", function() {
+				it("triggerMouseClick sends coordinates relative to the element", function() {
+					htmlElement.appendSelfToBody();
+
+					try {
+						var monitor = monitorEventTrigger("click");
+						htmlElement.triggerMouseClick(4, 7);
+						expect(monitor.pageCoordinates).to.eql([ 12, 15 ]);
+					}
+					finally {
+						htmlElement.remove();
+					}
+				});
+
+
+
+//				function testEvent(eventSender, eventHandler) {
+//					try {
+//						htmlElement.appendSelfToBody();
+//
+//						var eventPageOffset = null;
+//						eventSender.call(htmlElement, function(pageOffset) {
+//							eventPageOffset = pageOffset;
+//						});
+//						eventHandler.call(htmlElement, 42, 13);
+//						expect(htmlElement.relativeOffset(eventPageOffset)).to.eql({ x: 42, y: 13});
+//					}
+//					finally {
+//						htmlElement.remove();
+//					}
+//				}
+
+
 				it("triggers mouse events relative to element and handles them relative to page", function() {
 					testEvent(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
 					testEvent(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
@@ -37,7 +69,7 @@
 				});
 
 				it("allows mouse events to be triggered without coordinates", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onMouseDown);
+					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseDown);
 					htmlElement.triggerMouseDown();
 					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0 });
 				});
@@ -45,7 +77,7 @@
 				it("simulates buggy IE 8 behavior (where mouse events on window aren't sent to window object)", function() {
 					if (!browser.doesNotHandlesUserEventsOnWindow()) return;
 
-					var monitor = monitorEvent(windowElement, windowElement.onMouseUp);
+					var monitor = monitorEventHandler(windowElement, windowElement.onMouseUp);
 					windowElement.triggerMouseUp();
 					expect(monitor.eventTriggered).to.be(false);
 				});
@@ -55,13 +87,13 @@
 				if (!browser.supportsTouchEvents()) return;
 
 				it("sends zero touches when triggering a touchend event", function() {
-					var monitor = monitorTouchEvent("touchend");
+					var monitor = monitorEventTrigger("touchend");
 					htmlElement.triggerTouchEnd();
 					expect(monitor.touches).to.eql([]);
 				});
 
 				it("sends zero touches when triggering a touchcancel event", function() {
-					var monitor = monitorTouchEvent("touchcancel");
+					var monitor = monitorEventTrigger("touchcancel");
 					htmlElement.triggerTouchCancel();
 					expect(monitor.touches).to.eql([]);
 				});
@@ -92,34 +124,16 @@
 				});
 
 				it("handles multi-touch events", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onMultiTouchStart);
+					var monitor = monitorEventHandler(htmlElement, htmlElement.onMultiTouchStart);
 					htmlElement.triggerMultiTouchStart(1, 2, 3, 4);
 					expect(monitor.eventTriggered).to.be(true);
 				});
 
 				it("allows touch events to be triggered without coordinates", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onSingleTouchStart);
+					var monitor = monitorEventHandler(htmlElement, htmlElement.onSingleTouchStart);
 					htmlElement.triggerSingleTouchStart();
 					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0});
 				});
-
-				function monitorTouchEvent(event) {
-					var monitor = {
-						eventTriggered: false,
-						touches: null
-					};
-
-					htmlElement._element.on(event, function(event) {
-						monitor.eventTriggered = true;
-						monitor.touches = [];
-						var eventTouches = event.originalEvent.touches;
-						for (var i = 0; i < eventTouches.length; i++) {
-							monitor.touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
-						}
-					});
-
-					return monitor;
-				}
 			});
 
 			describe("Capture API", function() {
@@ -130,14 +144,14 @@
 				});
 
 				it("emulates behavior of setCapture() (on browsers that support it)", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
+					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
 					bodyElement.triggerMouseMove();
 					expect(monitor.eventTriggered).to.be(true);
 				});
 
 				it("emulates behavior of releaseCapture() (on browsers that support it)", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
+					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
 					htmlElement.releaseCapture();
 					bodyElement.triggerMouseMove();
@@ -147,7 +161,7 @@
 				it("when event triggered, event coordinates are relative to triggering element, not capturing element", function() {
 					var expectedPageCoordinates = bodyElement.pageOffset({ x: 30, y: 20 });
 
-					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
+					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
 					bodyElement.triggerMouseMove(30, 20);
 					expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
@@ -164,7 +178,30 @@
 				htmlElement.triggerMouseDown(0, 0);
 			});
 
-			function monitorEvent(htmlElement, eventFunction) {
+			function monitorEventTrigger(event) {
+				var monitor = {
+					eventTriggered: false,
+					touches: null,
+					pageCoordinates: null
+				};
+
+				htmlElement._element.on(event, function(event) {
+					monitor.eventTriggered = true;
+					monitor.pageCoordinates = [ event.pageX, event.pageY ];
+
+					if (event.originalEvent) {
+						var eventTouches = event.originalEvent.touches;
+						monitor.touches = [];
+						for (var i = 0; i < eventTouches.length; i++) {
+							monitor.touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
+						}
+					}
+				});
+
+				return monitor;
+			}
+
+			function monitorEventHandler(htmlElement, eventFunction) {
 				var monitor = {
 					eventTriggered: false
 				};
