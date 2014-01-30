@@ -76,7 +76,7 @@
 	}
 
 	function continueDrag(pageOffset) {
-		if (start === null) return;
+		if (!isCurrentlyDrawing()) return;
 
 		var end = drawingArea.relativeOffset(pageOffset);
 		if (start.x !== end.x || start.y !== end.y) {
@@ -87,13 +87,17 @@
 	}
 
 	function endDrag() {
-		if (start !== null && !lineDrawn) {
-			svgCanvas.drawDot(start.x, start.y);
-		}
+		if (!isCurrentlyDrawing()) return;
+
+		if (!lineDrawn) svgCanvas.drawDot(start.x, start.y);
 
 		if (useSetCaptureApi) drawingArea.releaseCapture();
 		start = null;
 		lineDrawn = false;
+	}
+
+	function isCurrentlyDrawing() {
+		return start !== null;
 	}
 
 }());
