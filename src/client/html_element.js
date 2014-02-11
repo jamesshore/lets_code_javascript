@@ -16,6 +16,7 @@
 
 		self._domElement = domElement;
 		self._element = $(domElement);
+		self._dragDefaultsPrevented = false;
 	};
 
 	HtmlElement.fromHtml = function(html) {
@@ -54,6 +55,12 @@
 		this.onSingleTouchStart(function(relativeOffset, event) {
 			event.preventDefault();
 		});
+
+		this._dragDefaultsPrevented = true;
+	};
+
+	HtmlElement.prototype.isBrowserDragDefaultsPrevented = function() {
+		return this._dragDefaultsPrevented;
 	};
 
 

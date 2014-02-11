@@ -34,18 +34,26 @@
 				htmlElement.remove();
 			});
 
-			it("allows drag-related browser defaults to be prevented", function() {
-				htmlElement.preventBrowserDragDefaults();
+			describe("default prevention", function() {
+				it("allows drag-related browser defaults to be prevented", function() {
+					htmlElement.preventBrowserDragDefaults();
 
-				expectEventToBePrevented("selectstart", htmlElement.triggerSelectStart);
-				expectEventToBePrevented("mousedown", htmlElement.triggerMouseDown);
-				if (browser.supportsTouchEvents()) expectEventToBePrevented("touchstart", htmlElement.triggerSingleTouchStart);
+					expectEventToBePrevented("selectstart", htmlElement.triggerSelectStart);   // required for IE 8 text dragging
+					expectEventToBePrevented("mousedown", htmlElement.triggerMouseDown);
+					if (browser.supportsTouchEvents()) expectEventToBePrevented("touchstart", htmlElement.triggerSingleTouchStart);
 
-				function expectEventToBePrevented(event, eventTriggerFn) {
-					var monitor = monitorEvent(event);
-					eventTriggerFn.call(htmlElement);
-					expect(monitor.defaultPrevented).to.be(true);
-				}
+					function expectEventToBePrevented(event, eventTriggerFn) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement);
+						expect(monitor.defaultPrevented).to.be(true);
+					}
+				});
+
+				it("reports whether drag-related defaults have been prevented", function() {
+					expect(htmlElement.isBrowserDragDefaultsPrevented()).to.be(false);
+					htmlElement.preventBrowserDragDefaults();
+					expect(htmlElement.isBrowserDragDefaultsPrevented()).to.be(true);
+				});
 			});
 
 			describe("mouse events", function() {

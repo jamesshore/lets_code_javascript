@@ -36,7 +36,8 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-- Move onSelectStart and onSelectTrigger into a "preventDragDefaults()" (or similar) in html_element.js?
+* Remove 'event' parameter from event handler callbacks
+- Delete onSelectStart methods in HtmlElement
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
