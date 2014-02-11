@@ -42,6 +42,19 @@
 		this._element.off();
 	};
 
+	HtmlElement.prototype.preventBrowserDragDefaults = function() {
+		this.onSelectStart_ie8Only(function(relativeOffset, event) {
+			event.preventDefault();
+		});
+
+		this.onMouseDown(function(relativeOffset, event) {
+			event.preventDefault();
+		});
+
+		this.onSingleTouchStart(function(relativeOffset, event) {
+			event.preventDefault();
+		});
+	};
 
 
 	HtmlElement.prototype.triggerSelectStart = triggerMouseEventFn("selectstart");

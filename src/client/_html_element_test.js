@@ -34,6 +34,20 @@
 				htmlElement.remove();
 			});
 
+			it("allows drag-related browser defaults to be prevented", function() {
+				htmlElement.preventBrowserDragDefaults();
+
+				expectEventToBePrevented("selectstart", htmlElement.triggerSelectStart);
+				expectEventToBePrevented("mousedown", htmlElement.triggerMouseDown);
+				expectEventToBePrevented("touchstart", htmlElement.triggerSingleTouchStart);
+
+				function expectEventToBePrevented(event, eventTriggerFn) {
+					var monitor = monitorEvent(event);
+					eventTriggerFn.call(htmlElement);
+					expect(monitor.defaultPrevented).to.be(true);
+				}
+			});
+
 			describe("mouse events", function() {
 				it("can be triggered with coordinates relative to the element", function() {
 					checkEventTrigger(htmlElement.triggerMouseClick, "click");
@@ -43,7 +57,7 @@
 					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
 
 					function checkEventTrigger(eventTriggerFn, event) {
-						var monitor = monitorEventTriggerer(event);
+						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement, 4, 7);
 
 						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
@@ -59,7 +73,7 @@
 					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
 
 					function checkEventTrigger(eventTriggerFn, event) {
-						var monitor = monitorEventTriggerer(event);
+						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
 						expect(monitor.pageCoordinates).to.eql([ 0, 0 ]);
 					}
@@ -96,13 +110,13 @@
 				if (!browser.supportsTouchEvents()) return;
 
 				it("sends zero touches when triggering a touchend event", function() {
-					var monitor = monitorEventTriggerer("touchend");
+					var monitor = monitorEvent("touchend");
 					htmlElement.triggerTouchEnd();
 					expect(monitor.touches).to.eql([]);
 				});
 
 				it("sends zero touches when triggering a touchcancel event", function() {
-					var monitor = monitorEventTriggerer("touchcancel");
+					var monitor = monitorEvent("touchcancel");
 					htmlElement.triggerTouchCancel();
 					expect(monitor.touches).to.eql([]);
 				});
@@ -187,16 +201,18 @@
 				htmlElement.triggerMouseDown(0, 0);
 			});
 
-			function monitorEventTriggerer(event) {
+			function monitorEvent(event) {
 				var monitor = {
 					eventTriggered: false,
 					touches: null,
-					pageCoordinates: null
+					pageCoordinates: null,
+					defaultPrevented: false
 				};
 
 				htmlElement._element.on(event, function(event) {
 					monitor.eventTriggered = true;
 					monitor.pageCoordinates = [ event.pageX, event.pageY ];
+					monitor.defaultPrevented = event.isDefaultPrevented();
 
 					if (event.originalEvent) {
 						var eventTouches = event.originalEvent.touches;
