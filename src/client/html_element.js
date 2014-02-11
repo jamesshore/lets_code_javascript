@@ -44,21 +44,16 @@
 
 
 	/* Mouse events */
+	createMouseMethods("Click", "click");
+	createMouseMethods("Down", "mousedown");
+	createMouseMethods("Move", "mousemove");
+	createMouseMethods("Leave", "mouseleave");
+	createMouseMethods("Up", "mouseup");
 
-	HtmlElement.prototype.triggerMouseClick = triggerMouseEventFn("click");
-	HtmlElement.prototype.onMouseClick = onMouseEventFn("click");
-
-	HtmlElement.prototype.triggerMouseDown = triggerMouseEventFn("mousedown");
-	HtmlElement.prototype.onMouseDown = onMouseEventFn("mousedown");
-
-	HtmlElement.prototype.triggerMouseMove = triggerMouseEventFn("mousemove");
-	HtmlElement.prototype.onMouseMove = onMouseEventFn("mousemove");
-
-	HtmlElement.prototype.triggerMouseLeave = triggerMouseEventFn("mouseleave");
-	HtmlElement.prototype.onMouseLeave = onMouseEventFn("mouseleave");
-
-	HtmlElement.prototype.triggerMouseUp = triggerMouseEventFn("mouseup");
-	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
+	function createMouseMethods(methodName, eventname) {
+		HtmlElement.prototype["triggerMouse" + methodName] = triggerMouseEventFn(eventname);
+		HtmlElement.prototype["onMouse" + methodName] = onMouseEventFn(eventname);
+	}
 
 	HtmlElement.prototype.triggerSelectStart = triggerMouseEventFn("selectstart");
 	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
