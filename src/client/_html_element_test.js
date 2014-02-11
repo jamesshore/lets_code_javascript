@@ -39,7 +39,7 @@
 
 				expectEventToBePrevented("selectstart", htmlElement.triggerSelectStart);
 				expectEventToBePrevented("mousedown", htmlElement.triggerMouseDown);
-				expectEventToBePrevented("touchstart", htmlElement.triggerSingleTouchStart);
+				if (browser.supportsTouchEvents()) expectEventToBePrevented("touchstart", htmlElement.triggerSingleTouchStart);
 
 				function expectEventToBePrevented(event, eventTriggerFn) {
 					var monitor = monitorEvent(event);
