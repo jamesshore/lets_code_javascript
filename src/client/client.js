@@ -24,7 +24,7 @@
 
 		svgCanvas = new SvgCanvas(drawingArea);
 
-		preventDefaults();
+		drawingArea.preventBrowserDragDefaults();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
 
@@ -53,21 +53,6 @@
 		drawingArea.onTouchCancel(endDrag);
 
 		drawingArea.onMultiTouchStart(endDrag);
-	}
-
-	function preventDefaults() {
-		drawingArea.onSelectStart_ie8Only(function(relativeOffset, event) {
-			// This event handler is needed so IE 8 doesn't select text when you drag outside drawing area
-			event.preventDefault();
-		});
-
-		drawingArea.onMouseDown(function(relativeOffset, event) {
-			event.preventDefault();
-		});
-
-		drawingArea.onSingleTouchStart(function(relativeOffset, event) {
-			event.preventDefault();
-		});
 	}
 
 	function startDrag(pageOffset) {
