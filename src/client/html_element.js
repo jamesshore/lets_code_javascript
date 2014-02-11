@@ -43,20 +43,23 @@
 	};
 
 
-	/* Mouse events */
-	createMouseMethods("Click", "click");
-	createMouseMethods("Down", "mousedown");
-	createMouseMethods("Move", "mousemove");
-	createMouseMethods("Leave", "mouseleave");
-	createMouseMethods("Up", "mouseup");
-
-	function createMouseMethods(methodName, eventname) {
-		HtmlElement.prototype["triggerMouse" + methodName] = triggerMouseEventFn(eventname);
-		HtmlElement.prototype["onMouse" + methodName] = onMouseEventFn(eventname);
-	}
 
 	HtmlElement.prototype.triggerSelectStart = triggerMouseEventFn("selectstart");
 	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
+
+
+	/* Mouse events */
+	HtmlElement.prototype.triggerMouseClick = triggerMouseEventFn("click");
+	HtmlElement.prototype.triggerMouseDown = triggerMouseEventFn("mousedown");
+	HtmlElement.prototype.triggerMouseMove = triggerMouseEventFn("mousemove");
+	HtmlElement.prototype.triggerMouseLeave = triggerMouseEventFn("mouseleave");
+	HtmlElement.prototype.triggerMouseUp = triggerMouseEventFn("mouseup");
+
+	HtmlElement.prototype.onMouseClick = onMouseEventFn("click");
+	HtmlElement.prototype.onMouseDown = onMouseEventFn("mousedown");
+	HtmlElement.prototype.onMouseMove = onMouseEventFn("mousemove");
+	HtmlElement.prototype.onMouseLeave = onMouseEventFn("mouseleave");
+	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
 
 	function triggerMouseEventFn(event) {
 		return function(relativeX, relativeY) {
@@ -74,6 +77,17 @@
 		};
 	}
 
+	function onMouseEventFn(event) {
+		return function(callback) {
+			if (browser.doesNotHandlesUserEventsOnWindow() && this._domElement === window) return;
+
+			this._element.on(event, function(event) {
+				var pageOffset = { x: event.pageX, y: event.pageY };
+				callback(pageOffset, event);
+			});
+		};
+	}
+
 	function sendMouseEvent(self, event, pageCoords) {
 		var jqElement = self._element;
 
@@ -82,21 +96,6 @@
 		eventData.pageY = pageCoords.y;
 		eventData.type = event;
 		jqElement.trigger(eventData);
-	}
-
-	function onMouseEventFn(event) {
-		return function(callback) {
-			if (browser.doesNotHandlesUserEventsOnWindow() && this._domElement === window) return;
-
-			this._element.on(event, mouseEventHandlerFn(this, callback));
-		};
-	}
-
-	function mouseEventHandlerFn(self, callback) {
-		return function(event) {
-			var pageOffset = { x: event.pageX, y: event.pageY };
-			callback(pageOffset, event);
-		};
 	}
 
 
