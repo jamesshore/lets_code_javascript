@@ -31,6 +31,12 @@
 			client.drawingAreaHasBeenRemovedFromDom();
 		});
 
+
+		it("does not allow text to be selected or page to scroll when drag starts within drawing area", function() {
+			expect(drawingArea.isBrowserDragDefaultsPrevented()).to.be(true);
+		});
+
+
 		describe("mouse events", function() {
 			it("draws a dot in response to mouse click", function() {
 				drawingArea.triggerMouseDown(50, 60);
@@ -203,23 +209,6 @@
 				expect(lines()).to.eql([]);
 			});
 
-			it("does not allow text to be selected outside drawing area when drag starts within drawing area", function() {
-				drawingArea.onMouseDown(function(offset, event) {
-					expect(event.isDefaultPrevented()).to.be(true);
-				});
-
-				drawingArea.triggerMouseDown(20, 30);
-				drawingArea.triggerMouseMove(90, 40);
-				drawingArea.triggerMouseUp(90, 40);
-			});
-
-			it("does not allow text to be selected outside drawing area even on IE 8", function() {
-				drawingArea.onSelectStart_ie8Only(function(offset, event) {
-					expect(event.isDefaultPrevented()).to.be(true);
-				});
-
-				drawingArea.triggerSelectStart(20, 30);
-			});
 		});
 
 		if (browser.supportsTouchEvents()) {
@@ -267,16 +256,6 @@
 					expect(lines()).to.eql([
 						[10, 40, 5, 20]
 					]);
-				});
-
-				it("does not scroll or zoom the page when user is drawing with finger", function() {
-					drawingArea.onSingleTouchStart(function(offset, event) {
-						expect(event.isDefaultPrevented()).to.be(true);
-					});
-
-					drawingArea.triggerSingleTouchStart(10, 40);
-					drawingArea.triggerSingleTouchMove(5, 20);
-					drawingArea.triggerTouchEnd(5, 20);
 				});
 
 				it("stops drawing when multiple touches occur", function() {
