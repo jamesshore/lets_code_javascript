@@ -36,6 +36,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
+- Move onSelectStart and onSelectTrigger into a "preventDragDefaults()" (or similar) in html_element.js?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

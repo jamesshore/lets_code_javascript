@@ -66,22 +66,20 @@
 				});
 
 				it("handlers receive coordinates relative to the page", function() {
-//					checkEventHandler(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
-//
-//					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
-						var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseClick);
-						htmlElement.triggerMouseClick(60, 40);
+					checkEventHandler(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
+					checkEventHandler(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
+					checkEventHandler(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
+					checkEventHandler(htmlElement.onMouseLeave, htmlElement.triggerMouseLeave);
+					checkEventHandler(htmlElement.onMouseUp, htmlElement.triggerMouseUp);
+
+					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
+						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
+						eventTriggerFn.call(htmlElement, 60, 40);
 						expect(monitor.eventTriggeredAt).to.eql({ x: 68, y: 48 });
-//					}
+					}
 				});
 
-
 				it("triggers mouse events relative to element and handles them relative to page", function() {
-					testEvent(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
-					testEvent(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
-					testEvent(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
-					testEvent(htmlElement.onMouseLeave, htmlElement.triggerMouseLeave);
-					testEvent(htmlElement.onMouseUp, htmlElement.triggerMouseUp);
 					testEvent(htmlElement.onSelectStart_ie8Only, htmlElement.triggerSelectStart);
 				});
 
