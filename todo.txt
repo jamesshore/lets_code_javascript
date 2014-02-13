@@ -30,7 +30,6 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Integrate
 
 To Do on current task:
 
