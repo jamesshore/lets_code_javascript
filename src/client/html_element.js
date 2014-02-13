@@ -124,7 +124,6 @@
 	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
 	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
 
-
 	function triggerZeroTouchEventFn(event) {
 		return function() {
 			sendTouchEvent(this, event, new TouchList());
@@ -133,26 +132,19 @@
 
 	function triggerSingleTouchEventFn(event) {
 		return function(relativeX, relativeY) {
-			sendSingleTouchEvent(this, event, relativeX, relativeY);
+			var touch = createTouch(this, relativeX, relativeY);
+			sendTouchEvent(this, event, new TouchList(touch));
 		};
-	}
-
-	function sendSingleTouchEvent(self, event, relativeX, relativeY) {
-		var touch = createTouch(self, relativeX, relativeY);
-		sendTouchEvent(self, event, new TouchList(touch));
 	}
 
 	function triggerMultiTouchEventFn(event) {
 		return function(relative1X, relative1Y, relative2X, relative2Y) {
-			sendMultiTouchEvent(this, event, relative1X, relative1Y, relative2X, relative2Y);
+			var touch1 = createTouch(this, relative1X, relative1Y);
+			var touch2 = createTouch(this, relative2X, relative2Y);
+			sendTouchEvent(this, event, new TouchList(touch1, touch2));
 		};
 	}
 
-	function sendMultiTouchEvent(self, event, relative1X, relative1Y, relative2X, relative2Y) {
-		var touch1 = createTouch(self, relative1X, relative1Y);
-		var touch2 = createTouch(self, relative2X, relative2Y);
-		sendTouchEvent(self, event, new TouchList(touch1, touch2));
-	}
 
 	function onZeroTouchEventFn(event) {
 		return function(callback) {
