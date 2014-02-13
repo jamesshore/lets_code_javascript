@@ -31,7 +31,23 @@
 			client.drawingAreaHasBeenRemovedFromDom();
 		});
 
+
+		it("does not allow text to be selected or page to scroll when drag starts within drawing area", function() {
+			expect(drawingArea.isBrowserDragDefaultsPrevented()).to.be(true);
+		});
+
+
 		describe("mouse events", function() {
+			it("draws a dot in response to mouse click", function() {
+				drawingArea.triggerMouseDown(50, 60);
+				drawingArea.triggerMouseUp(50, 60);
+				drawingArea.triggerMouseClick(50, 60);
+
+				expect(lines()).to.eql([
+					[50, 60]
+				]);
+			});
+
 			it("draws a line in response to mouse drag", function() {
 				drawingArea.triggerMouseDown(20, 30);
 				drawingArea.triggerMouseMove(50, 60);
@@ -40,6 +56,23 @@
 				expect(lines()).to.eql([
 					[20, 30, 50, 60]
 				]);
+			});
+
+			it("does not draw a dot at the end of a drag", function() {
+				drawingArea.triggerMouseDown(20, 30);
+				drawingArea.triggerMouseMove(50, 60);
+				drawingArea.triggerMouseUp(50, 60);
+				drawingArea.triggerMouseClick(50, 60);
+
+				expect(lines()).to.eql([
+					[20, 30, 50, 60]
+				]);
+			});
+
+			it("does not draw a dot if drag not started in drawing area", function() {
+				drawingArea.triggerMouseUp(20, 40);
+
+				expect(lines()).to.eql([]);
 			});
 
 			it("draws multiple line segments when mouse is dragged multiple places", function() {
@@ -54,6 +87,25 @@
 					[50, 60, 40, 20],
 					[40, 20, 10, 15]
 				]);
+			});
+
+			it("does not draw a dot when mouse is dragged slowly in the middle of a line", function() {
+				drawingArea.triggerMouseDown(20, 30);
+				drawingArea.triggerMouseMove(50, 60);
+
+				drawingArea.triggerMouseMove(40, 20);
+				drawingArea.triggerMouseMove(40, 20);
+				drawingArea.triggerMouseMove(40, 20);
+
+				drawingArea.triggerMouseMove(10, 15);
+				drawingArea.triggerMouseUp(10, 15);
+
+				expect(lines()).to.eql([
+					[20, 30, 50, 60],
+					[50, 60, 40, 20],
+					[40, 20, 10, 15]
+				]);
+
 			});
 
 			it("draws multiple line segments when there are multiple drags", function() {
@@ -83,13 +135,6 @@
 				expect(lines()).to.eql([
 					[20, 30, 50, 60]
 				]);
-			});
-
-			it("does not draw line segment when mouse button is released", function() {
-				drawingArea.triggerMouseDown(20, 30);
-				drawingArea.triggerMouseUp(50, 60);
-
-				expect(lines()).to.eql([]);
 			});
 
 			it("does not draw line segments when mouse button has never been pushed", function() {
@@ -164,70 +209,53 @@
 				expect(lines()).to.eql([]);
 			});
 
-			it("does not allow text to be selected outside drawing area when drag starts within drawing area", function() {
-				drawingArea.onMouseDown(function(offset, event) {
-					expect(event.isDefaultPrevented()).to.be(true);
-				});
-
-				drawingArea.triggerMouseDown(20, 30);
-				drawingArea.triggerMouseMove(90, 40);
-				drawingArea.triggerMouseUp(90, 40);
-			});
-
-			it("does not allow text to be selected outside drawing area even on IE 8", function() {
-				drawingArea.onSelectStart_ie8Only(function(offset, event) {
-					expect(event.isDefaultPrevented()).to.be(true);
-				});
-
-				drawingArea.triggerSelectStart(20, 30);
-			});
 		});
 
 		if (browser.supportsTouchEvents()) {
 			describe("touch events", function() {
 
+				it("draws a dot when screen is tapped", function() {
+					drawingArea.triggerSingleTouchStart(3, 42);
+					drawingArea.triggerTouchEnd();
+
+					expect(lines()).to.eql([
+						[3, 42]
+					]);
+				});
+
 				it("draw lines in response to touch events", function() {
 					drawingArea.triggerSingleTouchStart(10, 40);
 					drawingArea.triggerSingleTouchMove(5, 20);
-					drawingArea.triggerSingleTouchEnd(5, 20);
+					drawingArea.triggerTouchEnd(5, 20);
 
 					expect(lines()).to.eql([
 						[10, 40, 5, 20]
 					]);
 				});
 
-				it("stops drawing lines when touch ends", function() {
+				it("draws multiple lines in response to multiple touch drags", function() {
 					drawingArea.triggerSingleTouchStart(10, 40);
 					drawingArea.triggerSingleTouchMove(5, 20);
-					drawingArea.triggerSingleTouchEnd(5, 20);
+					drawingArea.triggerTouchEnd(5, 20);
 
+					drawingArea.triggerSingleTouchStart(30, 40);
 					drawingArea.triggerSingleTouchMove(50, 60);
+					drawingArea.triggerTouchEnd(50, 60);
 
 					expect(lines()).to.eql([
-						[10, 40, 5, 20]
+						[10, 40, 5, 20],
+						[30, 40, 50, 60]
 					]);
 				});
 
 				it("stop drawing lines when touch is cancelled", function() {
 					drawingArea.triggerSingleTouchStart(10, 40);
 					drawingArea.triggerSingleTouchMove(5, 20);
-					drawingArea.triggerSingleTouchCancel(5, 20);
-
-					drawingArea.triggerSingleTouchMove(50, 60);
+					drawingArea.triggerTouchCancel(5, 20);
 
 					expect(lines()).to.eql([
 						[10, 40, 5, 20]
 					]);
-				});
-
-				it("does not scroll or zoom the page when user is drawing with finger", function() {
-					drawingArea.onSingleTouchStart(function(offset, event) {
-						expect(event.isDefaultPrevented()).to.be(true);
-					});
-
-					drawingArea.triggerSingleTouchStart(10, 40);
-					drawingArea.triggerSingleTouchMove(5, 20);
-					drawingArea.triggerSingleTouchEnd(5, 20);
 				});
 
 				it("stops drawing when multiple touches occur", function() {
@@ -236,7 +264,7 @@
 
 					drawingArea.triggerMultiTouchStart(5, 20, 6, 60);
 					drawingArea.triggerSingleTouchMove(1, 10, 7, 70);
-					drawingArea.triggerSingleTouchEnd(1, 10, 7, 70);
+					drawingArea.triggerTouchEnd(1, 10, 7, 70);
 
 					expect(lines()).to.eql([
 						[10, 40, 5, 20]

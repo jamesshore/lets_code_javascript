@@ -10,6 +10,7 @@
 
 	var svgCanvas = null;
 	var start = null;
+	var lineDrawn = false;
 	var drawingArea;
 	var documentBody;
 	var windowElement;
@@ -23,7 +24,7 @@
 
 		svgCanvas = new SvgCanvas(drawingArea);
 
-		preventDefaults();
+		drawingArea.preventBrowserDragDefaults();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
 
@@ -48,25 +49,10 @@
 	function handleTouchDragEvents() {
 		drawingArea.onSingleTouchStart(startDrag);
 		drawingArea.onSingleTouchMove(continueDrag);
-		drawingArea.onSingleTouchEnd(endDrag);
-		drawingArea.onSingleTouchCancel(endDrag);
+		drawingArea.onTouchEnd(endDrag);
+		drawingArea.onTouchCancel(endDrag);
 
 		drawingArea.onMultiTouchStart(endDrag);
-	}
-
-	function preventDefaults() {
-		drawingArea.onSelectStart_ie8Only(function(relativeOffset, event) {
-			// This event handler is needed so IE 8 doesn't select text when you drag outside drawing area
-			event.preventDefault();
-		});
-
-		drawingArea.onMouseDown(function(relativeOffset, event) {
-			event.preventDefault();
-		});
-
-		drawingArea.onSingleTouchStart(function(relativeOffset, event) {
-			event.preventDefault();
-		});
 	}
 
 	function startDrag(pageOffset) {
@@ -75,16 +61,28 @@
 	}
 
 	function continueDrag(pageOffset) {
-		if (start === null) return;
+		if (!isCurrentlyDrawing()) return;
 
 		var end = drawingArea.relativeOffset(pageOffset);
-		svgCanvas.drawLine(start.x, start.y, end.x, end.y);
-		start = end;
+		if (start.x !== end.x || start.y !== end.y) {
+			svgCanvas.drawLine(start.x, start.y, end.x, end.y);
+			start = end;
+			lineDrawn = true;
+		}
 	}
 
 	function endDrag() {
-		start = null;
+		if (!isCurrentlyDrawing()) return;
+
+		if (!lineDrawn) svgCanvas.drawDot(start.x, start.y);
+
 		if (useSetCaptureApi) drawingArea.releaseCapture();
+		start = null;
+		lineDrawn = false;
+	}
+
+	function isCurrentlyDrawing() {
+		return start !== null;
 	}
 
 }());

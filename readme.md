@@ -48,7 +48,7 @@ Before deploying for first time:
 2. Install [Heroku Toolbelt](https://toolbelt.heroku.com/)
 3. Sign up for a [Heroku account](https://id.heroku.com/signup)
 4. Run `heroku create <app_name>` (requires git repository and Heroku account)
-5. Search codebase for `weewikipaint.herokuapp.com` URLs and change them to refer to <app_name>
+5. Search codebase for `weewikipaint.herokuapp.com` URLs and change them to refer to `<app_name>`
 6. Push known-good deploy to Heroku: `git push heroku episode32:master`
 
 To deploy:

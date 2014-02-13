@@ -3,19 +3,19 @@ WeeWikiPaint
 Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 * single-user painting on home page (episodes 33+)
+	? support more browsers (Android, IE10, IE11)
 - collaborative painting
-- support more browsers (Android, IE10?)
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
 
 User Stories:
-* drawing should continue even if user leaves boundaries (just pick up again when they come back in)
-- draw a single pixel when mouse is clicked (or screen is tapped)
+* draw a single pixel when screen is tapped
+? fix gaps in lines when zoomed in
 - 'clear screen' button
-- painting tools (such as colors or line width)
-- quality user-facing site design
-- fix issue: drawing area doesn't quite fit to borders
+- non-embarrasing site design
+? painting tools (such as colors or line width)
+? fix issue: drawing area doesn't quite fit to borders
   - correct in Safari, Mobile Safari, IE 8
   - can draw slightly outside border Chrome, Firefox
   - shifted slightly to top-left in IE 9
@@ -27,6 +27,7 @@ User Stories:
 - Scalability
 - Deploy (including smoke test to ensure that div is in home page)
     (needs to depend on 'build'; just running foreman could give us outdated files)
+- quality user-facing site design
 
 Engineering Tasks:
 * Integrate

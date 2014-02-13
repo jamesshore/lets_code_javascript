@@ -47,6 +47,30 @@
 			]);
 		});
 
+		it("draws dots and styles them nicely", function() {
+			svgCanvas.drawDot(5, 10);
+
+			var elements = svgCanvas.elementsForTestingOnly();
+			expect(elements.length).to.equal(1);
+
+			expect(elements[0].type).to.equal("circle");
+
+			var attrs = elements[0].attrs;
+			expect(attrs.cx).to.equal(5);
+			expect(attrs.cy).to.equal(10);
+			expect(attrs.r).to.equal(SvgCanvas.STROKE_WIDTH / 2);
+			expect(attrs.stroke).to.equal(SvgCanvas.LINE_COLOR);
+			expect(attrs.fill).to.equal(SvgCanvas.LINE_COLOR);
+		});
+
+		it("styles lines nicely", function() {
+			svgCanvas.drawLine(3, 3, 4, 4);
+			var attrs = svgCanvas.elementsForTestingOnly()[0].attrs;
+			expect(attrs.stroke).to.equal(SvgCanvas.LINE_COLOR);
+			expect(attrs["stroke-width"]).to.equal(SvgCanvas.STROKE_WIDTH);
+			expect(attrs["stroke-linecap"]).to.equal(SvgCanvas.LINE_CAP);
+		});
+
 	});
 
 }());

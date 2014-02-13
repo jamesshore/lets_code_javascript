@@ -26,84 +26,12 @@
 
 		describe("event handling", function() {
 
-			describe("mouse events", function() {
-				it("triggers mouse events relative to element and handles them relative to page", function() {
-					testEvent(htmlElement.onSelectStart_ie8Only, htmlElement.triggerSelectStart);
-					testEvent(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
-					testEvent(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
-					testEvent(htmlElement.onMouseLeave, htmlElement.triggerMouseLeave);
-					testEvent(htmlElement.onMouseUp, htmlElement.triggerMouseUp);
-				});
-
-				it("allows mouse events to be triggered without coordinates", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onMouseDown);
-					htmlElement.triggerMouseDown();
-					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0 });
-				});
-
-				it("simulates buggy IE 8 behavior (where mouse events on window aren't sent to window object)", function() {
-					if (!browser.doesNotHandlesUserEventsOnWindow()) return;
-
-					var monitor = monitorEvent(windowElement, windowElement.onMouseUp);
-					windowElement.triggerMouseUp();
-					expect(monitor.eventTriggered).to.be(false);
-				});
+			beforeEach(function() {
+				htmlElement.appendSelfToBody();
 			});
 
-			describe("touch events", function() {
-				if (!browser.supportsTouchEvents()) return;
-
-				it("handles single-touch events", function() {
-					testEvent(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
-					testEvent(htmlElement.onSingleTouchMove, htmlElement.triggerSingleTouchMove);
-					testEvent(htmlElement.onSingleTouchEnd, htmlElement.triggerSingleTouchEnd);
-					testEvent(htmlElement.onSingleTouchCancel, htmlElement.triggerSingleTouchCancel);
-				});
-
-				it("handles multi-touch events", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onMultiTouchStart);
-					htmlElement.triggerMultiTouchStart(1, 2, 3, 4);
-					expect(monitor.eventTriggered).to.be(true);
-				});
-
-				it("allows touch events to be triggered without coordinates", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onSingleTouchStart);
-					htmlElement.triggerSingleTouchStart();
-					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0});
-				});
-			});
-
-			describe("Capture API", function() {
-				if (!browser.supportsCaptureApi()) return;
-
-				afterEach(function() {
-					htmlElement.releaseCapture();
-				});
-
-				it("emulates behavior of setCapture() (on browsers that support it)", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
-					htmlElement.setCapture();
-					bodyElement.triggerMouseMove();
-					expect(monitor.eventTriggered).to.be(true);
-				});
-
-				it("emulates behavior of releaseCapture() (on browsers that support it)", function() {
-					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
-					htmlElement.setCapture();
-					htmlElement.releaseCapture();
-					bodyElement.triggerMouseMove();
-					expect(monitor.eventTriggered).to.be(false);
-				});
-
-				it("when event triggered, event coordinates are relative to triggering element, not capturing element", function() {
-					var expectedPageCoordinates = bodyElement.pageOffset({ x: 30, y: 20 });
-
-					var monitor = monitorEvent(htmlElement, htmlElement.onMouseMove);
-					htmlElement.setCapture();
-					bodyElement.triggerMouseMove(30, 20);
-					expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
-				});
-
+			afterEach(function() {
+				htmlElement.remove();
 			});
 
 			it("clears all event handlers (useful for testing)", function() {
@@ -115,7 +43,238 @@
 				htmlElement.triggerMouseDown(0, 0);
 			});
 
-			function monitorEvent(htmlElement, eventFunction) {
+			describe("default prevention", function() {
+				it("allows drag-related browser defaults to be prevented", function() {
+					htmlElement.preventBrowserDragDefaults();
+
+					expectEventToBePrevented("selectstart", htmlElement.triggerSelectStart);   // required for IE 8 text dragging
+					expectEventToBePrevented("mousedown", htmlElement.triggerMouseDown);
+					if (browser.supportsTouchEvents()) {
+						expectEventToBePrevented("touchstart", htmlElement.triggerSingleTouchStart);
+						expectEventToBePrevented("touchstart", htmlElement.triggerMultiTouchStart);
+					}
+
+					function expectEventToBePrevented(event, eventTriggerFn) {
+						var monitor = monitorEvent(event);
+						htmlElement._element.trigger(event);
+						expect(monitor.defaultPrevented).to.be(true);
+					}
+				});
+
+				it("reports whether drag-related defaults have been prevented", function() {
+					expect(htmlElement.isBrowserDragDefaultsPrevented()).to.be(false);
+					htmlElement.preventBrowserDragDefaults();
+					expect(htmlElement.isBrowserDragDefaultsPrevented()).to.be(true);
+				});
+			});
+
+			describe("mouse events", function() {
+				it("can be triggered with coordinates relative to the element", function() {
+					checkEventTrigger(htmlElement.triggerMouseClick, "click");
+					checkEventTrigger(htmlElement.triggerMouseDown, "mousedown");
+					checkEventTrigger(htmlElement.triggerMouseMove, "mousemove");
+					checkEventTrigger(htmlElement.triggerMouseLeave, "mouseleave");
+					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, 4, 7);
+
+						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
+						expect(monitor.pageCoordinates).to.eql([ expectedPageCoordinates.x, expectedPageCoordinates.y ]);
+					}
+				});
+
+				it("can be triggered without coordinates", function() {
+					checkEventTrigger(htmlElement.triggerMouseClick, "click");
+					checkEventTrigger(htmlElement.triggerMouseDown, "mousedown");
+					checkEventTrigger(htmlElement.triggerMouseMove, "mousemove");
+					checkEventTrigger(htmlElement.triggerMouseLeave, "mouseleave");
+					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement);
+						expect(monitor.pageCoordinates).to.eql([ 0, 0 ]);
+					}
+				});
+
+				it("handlers receive coordinates relative to the page", function() {
+					checkEventHandler(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
+					checkEventHandler(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
+					checkEventHandler(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
+					checkEventHandler(htmlElement.onMouseLeave, htmlElement.triggerMouseLeave);
+					checkEventHandler(htmlElement.onMouseUp, htmlElement.triggerMouseUp);
+
+					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
+						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
+						eventTriggerFn.call(htmlElement, 60, 40);
+
+						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
+						expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
+					}
+				});
+
+				it("simulates buggy IE 8 behavior (where mouse events on window aren't sent to window object)", function() {
+					if (!browser.doesNotHandlesUserEventsOnWindow()) return;
+
+					var monitor = monitorEventHandler(windowElement, windowElement.onMouseUp);
+					windowElement.triggerMouseUp();
+					expect(monitor.eventTriggered).to.be(false);
+				});
+			});
+
+			describe("touch events", function() {
+				if (!browser.supportsTouchEvents()) return;
+
+				it("sends zero touches when emulating the end of a touch", function() {
+					checkEventTrigger("touchend", htmlElement.triggerTouchEnd);
+					checkEventTrigger("touchcancel", htmlElement.triggerTouchCancel);
+
+					function checkEventTrigger(event, eventTriggerFn) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement);
+						expect(monitor.touches).to.eql([]);
+					}
+				});
+
+				it("sends single-touch events relative to triggering element", function() {
+					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
+					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, 4, 7);
+
+						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
+						expect(monitor.touches).to.eql([[ expectedPageCoordinates.x, expectedPageCoordinates.y ]]);
+					}
+				});
+
+				it("can send single-touch events without coordinates", function() {
+					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
+					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement);
+						expect(monitor.touches).to.eql([[ 0, 0 ]]);
+					}
+				});
+
+				it("sends multi-touch events relative to triggering element", function() {
+					checkEventTrigger(htmlElement.triggerMultiTouchStart, "touchstart");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, 10, 20, 30, 40);
+						
+						var expectedFirstTouch = htmlElement.pageOffset({ x: 10, y: 20 });
+						var expectedSecondTouch = htmlElement.pageOffset({ x: 30, y: 40 });
+						expect(monitor.touches).to.eql([
+							[ expectedFirstTouch.x, expectedFirstTouch.y ],
+							[ expectedSecondTouch.x, expectedSecondTouch.y ]
+						]);
+					}
+				});
+
+				it("handles zero-touch events", function() {
+					checkEventHandler(htmlElement.onTouchEnd, htmlElement.triggerTouchEnd);
+					checkEventHandler(htmlElement.onTouchCancel, htmlElement.triggerTouchCancel);
+
+					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
+						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
+						eventTriggerFn.call(htmlElement);
+						expect(monitor.eventTriggered).to.be(true);
+						expect(monitor.eventTriggeredAt).to.be(undefined);
+					}
+				});
+
+				it("handles single-touch events", function() {
+					checkEventHandler(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
+					checkEventHandler(htmlElement.onSingleTouchMove, htmlElement.triggerSingleTouchMove);
+
+					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
+						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
+						eventTriggerFn.call(htmlElement, 60, 40);
+
+						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
+						expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
+					}
+				});
+
+				it("handles multi-touch events (but doesn't provide coordinates)", function() {
+					checkEventHandler(htmlElement.onMultiTouchStart, htmlElement.triggerMultiTouchStart);
+
+					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
+						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
+						eventTriggerFn.call(htmlElement, 1, 2, 3, 4);
+
+						expect(monitor.eventTriggered).to.be(true);
+						expect(monitor.eventTriggeredAt).to.be(undefined);
+					}
+				});
+			});
+
+			describe("Capture API", function() {
+				if (!browser.supportsCaptureApi()) return;
+
+				afterEach(function() {
+					htmlElement.releaseCapture();
+				});
+
+				it("emulates behavior of setCapture() (on browsers that support it)", function() {
+					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
+					htmlElement.setCapture();
+					bodyElement.triggerMouseMove();
+					expect(monitor.eventTriggered).to.be(true);
+				});
+
+				it("emulates behavior of releaseCapture() (on browsers that support it)", function() {
+					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
+					htmlElement.setCapture();
+					htmlElement.releaseCapture();
+					bodyElement.triggerMouseMove();
+					expect(monitor.eventTriggered).to.be(false);
+				});
+
+				it("when event triggered, event coordinates are relative to triggering element, not capturing element", function() {
+					var expectedPageCoordinates = bodyElement.pageOffset({ x: 30, y: 20 });
+
+					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
+					htmlElement.setCapture();
+					bodyElement.triggerMouseMove(30, 20);
+					expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
+				});
+
+			});
+
+			function monitorEvent(event) {
+				var monitor = {
+					eventTriggered: false,
+					touches: null,
+					pageCoordinates: null,
+					defaultPrevented: false
+				};
+
+				htmlElement._element.on(event, function(event) {
+					monitor.eventTriggered = true;
+					monitor.pageCoordinates = [ event.pageX, event.pageY ];
+					monitor.defaultPrevented = event.isDefaultPrevented();
+
+					if (event.originalEvent) {
+						var eventTouches = event.originalEvent.touches;
+						monitor.touches = [];
+						for (var i = 0; i < eventTouches.length; i++) {
+							monitor.touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
+						}
+					}
+				});
+
+				return monitor;
+			}
+
+			function monitorEventHandler(htmlElement, eventFunction) {
 				var monitor = {
 					eventTriggered: false
 				};
@@ -125,22 +284,6 @@
 					monitor.eventTriggeredAt = pageOffset;
 				});
 				return monitor;
-			}
-
-			function testEvent(eventSender, eventHandler) {
-				try {
-					htmlElement.appendSelfToBody();
-
-					var eventPageOffset = null;
-					eventSender.call(htmlElement, function(pageOffset) {
-						eventPageOffset = pageOffset;
-					});
-					eventHandler.call(htmlElement, 42, 13);
-					expect(htmlElement.relativeOffset(eventPageOffset)).to.eql({ x: 42, y: 13});
-				}
-				finally {
-					htmlElement.remove();
-				}
 			}
 		});
 

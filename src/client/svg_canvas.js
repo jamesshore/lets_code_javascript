@@ -8,8 +8,25 @@
 		this._paper = new Raphael(htmlElement.toDomElement());
 	};
 
+	SvgCanvas.LINE_COLOR = "black";
+	SvgCanvas.STROKE_WIDTH = 2;
+	SvgCanvas.LINE_CAP = "round";
+
 	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
-		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY);
+		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
+			.attr({
+				"stroke": SvgCanvas.LINE_COLOR,
+				"stroke-width": SvgCanvas.STROKE_WIDTH,
+				"stroke-linecap": SvgCanvas.LINE_CAP
+			});
+	};
+
+	SvgCanvas.prototype.drawDot = function(x, y) {
+		this._paper.circle(x, y, SvgCanvas.STROKE_WIDTH / 2)
+			.attr({
+				"stroke": SvgCanvas.LINE_COLOR,
+				"fill": SvgCanvas.LINE_COLOR
+			});
 	};
 
 	SvgCanvas.prototype.height = function() {
@@ -19,28 +36,54 @@
 	SvgCanvas.prototype.width = function() {
 		return this._paper.width;
 	};
-	
+
 	SvgCanvas.prototype.lineSegments = function() {
 		var result = [];
 		this._paper.forEach(function(element) {
-			result.push(pathFor(element));
+			result.push(normalizeToLineSegment(element));
 		});
 		return result;
 	};
 
-	function pathFor(element) {
-		if (Raphael.vml) {
-			return vmlPathFor(element);
-		}
-		else if (Raphael.svg) {
-			return svgPathFor(element);
-		}
-		else {
-			throw new Error("Unknown Raphael type");
+	SvgCanvas.prototype.elementsForTestingOnly = function() {
+		var result = [];
+		this._paper.forEach(function(element) {
+			result.push(element);
+		});
+		return result;
+	};
+
+	function normalizeToLineSegment(element) {
+		switch (element.type) {
+			case "path":
+				return normalizePath(element);
+			case "circle":
+				return normalizeCircle(element);
+			default:
+				throw new Error("Unknown element type: " + element.type);
 		}
 	}
 
-	function svgPathFor(element) {
+	function normalizeCircle(element) {
+		return [
+			element.attrs.cx,
+			element.attrs.cy
+		];
+	}
+
+	function normalizePath(element) {
+		if (Raphael.svg) {
+			return normalizeSvgPath(element);
+		}
+		else if (Raphael.vml) {
+			return normalizeVmlPath(element);
+		}
+		else {
+			throw new Error("Unknown Raphael rendering engine");
+		}
+	}
+
+	function normalizeSvgPath(element) {
 		var pathRegex;
 
 		var path = element.node.attributes.d.value;
@@ -54,6 +97,7 @@
 			pathRegex = /M (\d+) (\d+) L (\d+) (\d+)/;
 		}
 		var pathComponents = path.match(pathRegex);
+
 		return [
 			pathComponents[1],
 			pathComponents[2],
@@ -62,7 +106,7 @@
 		];
 	}
 
-	function vmlPathFor(element) {
+	function normalizeVmlPath(element) {
 		// We're in IE 8, which uses format "m432000,648000 l648000,67456800 e"
 		var VML_MAGIC_NUMBER = 21600;
 
