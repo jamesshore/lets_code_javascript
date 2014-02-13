@@ -44,19 +44,15 @@
 	};
 
 	HtmlElement.prototype.preventBrowserDragDefaults = function() {
-		this.onSelectStart_ie8Only(function(relativeOffset, event) {
-			event.preventDefault();
-		});
-
-		this.onMouseDown(function(relativeOffset, event) {
-			event.preventDefault();
-		});
-
-		this.onSingleTouchStart(function(relativeOffset, event) {
-			event.preventDefault();
-		});
+		this._element.on("selectstart", preventDefaults);
+		this._element.on("mousedown", preventDefaults);
+		this._element.on("touchstart", preventDefaults);
 
 		this._dragDefaultsPrevented = true;
+
+		function preventDefaults(event) {
+			event.preventDefault();
+		}
 	};
 
 	HtmlElement.prototype.isBrowserDragDefaultsPrevented = function() {

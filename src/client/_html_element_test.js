@@ -40,7 +40,10 @@
 
 					expectEventToBePrevented("selectstart", htmlElement.triggerSelectStart);   // required for IE 8 text dragging
 					expectEventToBePrevented("mousedown", htmlElement.triggerMouseDown);
-					if (browser.supportsTouchEvents()) expectEventToBePrevented("touchstart", htmlElement.triggerSingleTouchStart);
+					if (browser.supportsTouchEvents()) {
+						expectEventToBePrevented("touchstart", htmlElement.triggerSingleTouchStart);
+						expectEventToBePrevented("touchstart", htmlElement.triggerMultiTouchStart);
+					}
 
 					function expectEventToBePrevented(event, eventTriggerFn) {
 						var monitor = monitorEvent(event);
