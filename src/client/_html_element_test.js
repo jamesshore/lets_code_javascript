@@ -116,16 +116,39 @@
 			describe("touch events", function() {
 				if (!browser.supportsTouchEvents()) return;
 
-				it("sends zero touches when triggering a touchend event", function() {
-					var monitor = monitorEvent("touchend");
-					htmlElement.triggerTouchEnd();
-					expect(monitor.touches).to.eql([]);
+				it("sends zero touches when emulating the end of a touch", function() {
+					checkEventTrigger("touchend", htmlElement.triggerTouchEnd);
+					checkEventTrigger("touchcancel", htmlElement.triggerTouchCancel);
+
+					function checkEventTrigger(event, eventTriggerFn) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement);
+						expect(monitor.touches).to.eql([]);
+					}
 				});
 
-				it("sends zero touches when triggering a touchcancel event", function() {
-					var monitor = monitorEvent("touchcancel");
-					htmlElement.triggerTouchCancel();
-					expect(monitor.touches).to.eql([]);
+				it("sends one touch (relative to triggering element) when triggering single-touch events", function() {
+					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
+					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, 4, 7);
+
+						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
+						expect(monitor.touches).to.eql([[ expectedPageCoordinates.x, expectedPageCoordinates.y ]]);
+					}
+				});
+
+				it("can send single-touch events without coordinates", function() {
+					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
+					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement);
+						expect(monitor.touches).to.eql([[ 0, 0 ]]);
+					}
 				});
 
 				it("handles zero-touch touchend event", function() {
