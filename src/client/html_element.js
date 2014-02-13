@@ -112,34 +112,24 @@
 
 	/* Touch events */
 
+	HtmlElement.prototype.triggerTouchEnd = triggerZeroTouchEventFn("touchend");
+	HtmlElement.prototype.triggerTouchCancel = triggerZeroTouchEventFn("touchcancel");
 	HtmlElement.prototype.triggerSingleTouchStart = triggerSingleTouchEventFn("touchstart");
-	HtmlElement.prototype.onSingleTouchStart = onSingleTouchEventFn("touchstart");
-
 	HtmlElement.prototype.triggerSingleTouchMove = triggerSingleTouchEventFn("touchmove");
-	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
-
 	HtmlElement.prototype.triggerMultiTouchStart = triggerMultiTouchEventFn("touchstart");
+
+	HtmlElement.prototype.onTouchEnd = onZeroTouchEventFn("touchend");
+	HtmlElement.prototype.onTouchCancel = onZeroTouchEventFn("touchcancel");
+	HtmlElement.prototype.onSingleTouchStart = onSingleTouchEventFn("touchstart");
+	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
 	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
 
-	HtmlElement.prototype.triggerTouchEnd = function() {
-		sendTouchEvent(this, "touchend", new TouchList());
-	};
 
-	HtmlElement.prototype.triggerTouchCancel = function() {
-		sendTouchEvent(this, "touchcancel", new TouchList());
-	};
-
-	HtmlElement.prototype.onTouchEnd = function(callback) {
-		this._element.on("touchend", function() {
-			callback();
-		});
-	};
-
-	HtmlElement.prototype.onTouchCancel = function(callback) {
-		this._element.on("touchcancel", function() {
-			callback();
-		});
-	};
+	function triggerZeroTouchEventFn(event) {
+		return function() {
+			sendTouchEvent(this, event, new TouchList());
+		};
+	}
 
 	function triggerSingleTouchEventFn(event) {
 		return function(relativeX, relativeY) {
@@ -162,6 +152,14 @@
 		var touch1 = createTouch(self, relative1X, relative1Y);
 		var touch2 = createTouch(self, relative2X, relative2Y);
 		sendTouchEvent(self, event, new TouchList(touch1, touch2));
+	}
+
+	function onZeroTouchEventFn(event) {
+		return function(callback) {
+			this._element.on(event, function() {
+				callback();
+			});
+		};
 	}
 
 	function onSingleTouchEventFn(event) {
