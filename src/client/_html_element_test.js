@@ -34,6 +34,15 @@
 				htmlElement.remove();
 			});
 
+			it("clears all event handlers (useful for testing)", function() {
+				htmlElement.onMouseDown(function() {
+					throw new Error("event handler should have been removed");
+				});
+
+				htmlElement.removeAllEventHandlers();
+				htmlElement.triggerMouseDown(0, 0);
+			});
+
 			describe("default prevention", function() {
 				it("allows drag-related browser defaults to be prevented", function() {
 					htmlElement.preventBrowserDragDefaults();
@@ -100,7 +109,9 @@
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
 						eventTriggerFn.call(htmlElement, 60, 40);
-						expect(monitor.eventTriggeredAt).to.eql({ x: 68, y: 48 });
+
+						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
+						expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
 					}
 				});
 
@@ -167,41 +178,41 @@
 					}
 				});
 
-				it("handles zero-touch touchend event", function() {
-					var functionCalled = false;
-					htmlElement.onTouchEnd(function() {
-						functionCalled = true;
-					});
+				it("handles zero-touch events", function() {
+					checkEventHandler(htmlElement.onTouchEnd, htmlElement.triggerTouchEnd);
+					checkEventHandler(htmlElement.onTouchCancel, htmlElement.triggerTouchCancel);
 
-					htmlElement.triggerTouchEnd();
-					expect(functionCalled).to.be(true);
-				});
-
-				it("handles zero-touch touchcancel event", function() {
-					var functionCalled = false;
-					htmlElement.onTouchCancel(function() {
-						functionCalled = true;
-					});
-
-					htmlElement.triggerTouchCancel();
-					expect(functionCalled).to.be(true);
+					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
+						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
+						eventTriggerFn.call(htmlElement);
+						expect(monitor.eventTriggered).to.be(true);
+						expect(monitor.eventTriggeredAt).to.be(undefined);
+					}
 				});
 
 				it("handles single-touch events", function() {
-					testEvent(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
-					testEvent(htmlElement.onSingleTouchMove, htmlElement.triggerSingleTouchMove);
+					checkEventHandler(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
+					checkEventHandler(htmlElement.onSingleTouchMove, htmlElement.triggerSingleTouchMove);
+
+					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
+						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
+						eventTriggerFn.call(htmlElement, 60, 40);
+
+						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
+						expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
+					}
 				});
 
-				it("handles multi-touch events", function() {
-					var monitor = monitorEventHandler(htmlElement, htmlElement.onMultiTouchStart);
-					htmlElement.triggerMultiTouchStart(1, 2, 3, 4);
-					expect(monitor.eventTriggered).to.be(true);
-				});
+				it("handles multi-touch events (but doesn't provide coordinates)", function() {
+					checkEventHandler(htmlElement.onMultiTouchStart, htmlElement.triggerMultiTouchStart);
 
-				it("allows touch events to be triggered without coordinates", function() {
-					var monitor = monitorEventHandler(htmlElement, htmlElement.onSingleTouchStart);
-					htmlElement.triggerSingleTouchStart();
-					expect(monitor.eventTriggeredAt).to.eql({ x: 0, y: 0});
+					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
+						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
+						eventTriggerFn.call(htmlElement, 1, 2, 3, 4);
+
+						expect(monitor.eventTriggered).to.be(true);
+						expect(monitor.eventTriggeredAt).to.be(undefined);
+					}
 				});
 			});
 
@@ -236,15 +247,6 @@
 					expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
 				});
 
-			});
-
-			it("clears all event handlers (useful for testing)", function() {
-				htmlElement.onMouseDown(function() {
-					throw new Error("event handler should have been removed");
-				});
-
-				htmlElement.removeAllEventHandlers();
-				htmlElement.triggerMouseDown(0, 0);
 			});
 
 			function monitorEvent(event) {
@@ -282,22 +284,6 @@
 					monitor.eventTriggeredAt = pageOffset;
 				});
 				return monitor;
-			}
-
-			function testEvent(eventSender, eventHandler) {
-				try {
-					htmlElement.appendSelfToBody();
-
-					var eventPageOffset = null;
-					eventSender.call(htmlElement, function(pageOffset) {
-						eventPageOffset = pageOffset;
-					});
-					eventHandler.call(htmlElement, 42, 13);
-					expect(htmlElement.relativeOffset(eventPageOffset)).to.eql({ x: 42, y: 13});
-				}
-				finally {
-					htmlElement.remove();
-				}
 			}
 		});
 
