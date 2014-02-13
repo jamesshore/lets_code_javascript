@@ -154,9 +154,18 @@
 		};
 	}
 
-	function onSingleTouchEventFn(event) {
+	function onSingleTouchEventFn(eventName) {
 		return function(callback) {
-			this._element.on(event, oneTouchEventHandlerFn(this, callback));
+			this._element.on(eventName, function(event) {
+				var originalEvent = event.originalEvent;
+				if (originalEvent.touches.length !== 1) return;
+
+				var pageX = originalEvent.touches[0].pageX;
+				var pageY = originalEvent.touches[0].pageY;
+				var offset = { x: pageX, y: pageY };
+
+				callback(offset);
+			});
 		};
 	}
 
@@ -167,19 +176,6 @@
 				var originalEvent = event.originalEvent;
 				if (originalEvent.touches.length !== 1) callback();
 			});
-		};
-	}
-
-	function oneTouchEventHandlerFn(self, callback) {
-		return function(event) {
-			var originalEvent = event.originalEvent;
-			if (originalEvent.touches.length !== 1) return;
-
-			var pageX = originalEvent.touches[0].pageX;
-			var pageY = originalEvent.touches[0].pageY;
-			var offset = { x: pageX, y: pageY };
-
-			callback(offset);
 		};
 	}
 
