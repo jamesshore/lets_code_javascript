@@ -99,7 +99,7 @@
 
 			this._element.on(event, function(event) {
 				var pageOffset = { x: event.pageX, y: event.pageY };
-				callback(pageOffset, event);
+				callback(pageOffset);
 			});
 		};
 	}
@@ -194,7 +194,7 @@
 			var pageY = originalEvent.touches[0].pageY;
 			var offset = { x: pageX, y: pageY };
 
-			callback(offset, event);
+			callback(offset);
 		};
 	}
 

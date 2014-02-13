@@ -36,8 +36,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-* Remove 'event' parameter from event handler callbacks
-- Delete onSelectStart methods in HtmlElement
+* Delete onSelectStart methods in HtmlElement
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
