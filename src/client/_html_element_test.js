@@ -47,7 +47,7 @@
 
 					function expectEventToBePrevented(event, eventTriggerFn) {
 						var monitor = monitorEvent(event);
-						eventTriggerFn.call(htmlElement);
+						htmlElement._element.trigger(event);
 						expect(monitor.defaultPrevented).to.be(true);
 					}
 				});
@@ -102,10 +102,6 @@
 						eventTriggerFn.call(htmlElement, 60, 40);
 						expect(monitor.eventTriggeredAt).to.eql({ x: 68, y: 48 });
 					}
-				});
-
-				it("triggers mouse events relative to element and handles them relative to page", function() {
-					testEvent(htmlElement.onSelectStart_ie8Only, htmlElement.triggerSelectStart);
 				});
 
 				it("simulates buggy IE 8 behavior (where mouse events on window aren't sent to window object)", function() {

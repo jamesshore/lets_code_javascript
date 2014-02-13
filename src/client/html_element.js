@@ -59,11 +59,6 @@
 		return this._dragDefaultsPrevented;
 	};
 
-
-	HtmlElement.prototype.triggerSelectStart = triggerMouseEventFn("selectstart");
-	HtmlElement.prototype.onSelectStart_ie8Only = onMouseEventFn("selectstart");
-
-
 	/* Mouse events */
 	HtmlElement.prototype.triggerMouseClick = triggerMouseEventFn("click");
 	HtmlElement.prototype.triggerMouseDown = triggerMouseEventFn("mousedown");
