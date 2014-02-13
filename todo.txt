@@ -30,13 +30,14 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Clean up HtmlElementTest eventMonitor code and usage
+* Clean up HtmlElementTest
 - Clean up HtmlElement and its overly? complex function-creating functions
 - Modernizr touch detection is broken--tests fail on IE8 depending on number of browsers captured due to 9px detection
 - Integrate
 
 To Do on current task:
-
+* Clean up HtmlElementTest's touch events
+- Clean up HtmlElement's touch events
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
