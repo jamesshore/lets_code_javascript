@@ -37,6 +37,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Clean up HtmlElementTest's touch events
+  - touch handlers
 - Clean up HtmlElement's touch events
 
 Notes:

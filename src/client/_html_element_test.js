@@ -127,7 +127,7 @@
 					}
 				});
 
-				it("sends one touch (relative to triggering element) when triggering single-touch events", function() {
+				it("sends single-touch events relative to triggering element", function() {
 					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
 					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
 
@@ -148,6 +148,22 @@
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
 						expect(monitor.touches).to.eql([[ 0, 0 ]]);
+					}
+				});
+
+				it("sends multi-touch events relative to triggering element", function() {
+					checkEventTrigger(htmlElement.triggerMultiTouchStart, "touchstart");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, 10, 20, 30, 40);
+						
+						var expectedFirstTouch = htmlElement.pageOffset({ x: 10, y: 20 });
+						var expectedSecondTouch = htmlElement.pageOffset({ x: 30, y: 40 });
+						expect(monitor.touches).to.eql([
+							[ expectedFirstTouch.x, expectedFirstTouch.y ],
+							[ expectedSecondTouch.x, expectedSecondTouch.y ]
+						]);
 					}
 				});
 
