@@ -13,7 +13,7 @@ User Stories:
 * draw a single pixel when screen is tapped
 ? fix gaps in lines when zoomed in
 - 'clear screen' button
-- non-embarrasing site design
+- non-embarrassing site design
 ? painting tools (such as colors or line width)
 ? fix issue: drawing area doesn't quite fit to borders
   - correct in Safari, Mobile Safari, IE 8
@@ -30,6 +30,10 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
+- BEFORE NEXT EPISODE:
+  - Upgrade Node
+  - Upgrade WebStorm
+  - Update design
 
 To Do on current task:
 
