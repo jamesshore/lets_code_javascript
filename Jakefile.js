@@ -21,7 +21,7 @@
 		"IE 8.0.0 (Windows 7)",
 		"IE 9.0.0 (Windows 7)",
 		"Firefox 27.0.0 (Mac OS X 10.8)",
-		"Chrome 32.0.1700 (Mac OS X 10.8.5)",
+		"Chrome 33.0.1750 (Mac OS X 10.8.5)",
 		"Safari 6.1.1 (Mac OS X 10.8.5)",
 		"Mobile Safari 7.0.0 (iOS 7.0.3)"
 	];
