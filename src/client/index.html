@@ -9,6 +9,8 @@
         /* Height hackery */
 
         html, body {
+            margin: 0;
+            padding: 0;
             height: 100%;
         }
 
@@ -32,7 +34,7 @@
             font-weight: 400;
         }
 
-        section h1 {
+        .section h1 {
             color: #cc0000;
         }
 
@@ -91,17 +93,17 @@
 
         /* Headers and footers */
 
-        header {
+        .header {
             font-size: 125%;
             margin: -1em 0 1em 0;
             padding-top: 1em;
         }
 
-        header h1 {
+        .header h1 {
             font-size: 125%;
         }
 
-        footer {
+        .footer {
             padding: 2em 0 1em 0;
             margin-left: -4em;
             font-size: 67%;
@@ -127,23 +129,23 @@
 <body>
 <div id="container">
     <div id="content">
-        <header>
+        <div class="header">
             <h1>WeeWikiPaint</h1>
-        </header>
-        <section>
+        </div>
+        <div class="section">
             <h1>Under Construction</h1>
 
             <p>WeeWikiPaint is the web’s premier <em>collaborative painting site</em>. At least, it will be. Right now, it’s just a neat little doodling tool. Try it!</p>
 
             <p>You can watch this site get developed! This project is part of James Shore’s <a href="http://www.letscodejavascript.com">Let's Code: Test-Driven Javascript</a> screencast, a series focused on rigorous, professional Javascript development. Come join the fun!</p>
-        </section>
-        <section>
+        </div>
+        <div class="section">
             <h1>Draw Here:</h1>
 
             <div id="drawingArea"></div>
-        </section>
+        </div>
     </div>
-    <footer></footer>
+    <div class="footer"></div>
 </div>
 
 <script type="text/javascript">
