@@ -32,7 +32,6 @@ User Stories:
 Engineering Tasks:
 - BEFORE NEXT EPISODE:
   - Upgrade Node
-  - Upgrade WebStorm
   - Update design
 
 To Do on current task:

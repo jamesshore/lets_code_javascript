@@ -20,88 +20,14 @@
             height: 100%;
         }
 
-        /* Page */
-
-        body {
-            background-color: #006666;
-        }
-
-        #container {
-            font-family: helvetica neue, helvetica, arial, sans-serif;
-            font-size: 16pt;
-            font-weight: 200;
-            max-width: 36em;
-
-            background-color: white;
-            padding: 0em 2em 0em 3.25em;
-            margin-left: auto;
-            margin-right: auto;
-
-            -moz-box-shadow: 0px 0px 15px 5px black;
-            -webkit-box-shadow: 0px 0px 15px 5px black;
-            box-shadow: 0px 0px 15px 5px black;
-        }
-
-        header {
-            font-size: 125%;
-            margin-bottom: 1em;
-            margin-top: -1em;
-            padding-top: 1em;
-        }
-
-        header h1 {
-            font-size: 125%;
-        }
-
-        header h2 {
-            font-size: 125%;
-        }
-
-        header a:hover {
-            background-color: transparent;
-        }
-
-        footer {
-            padding-bottom: 1em;
-        }
-
-        /* Dynamic Columns */
-
-        #left-column {
-            float: left;
-            /*			width: 525px; */
-            width: 15em;
-            padding-right: 3.5em;
-            text-align: center;
-        }
-
-        #right-column {
-            float: left;
-            max-width: 30em;
-            padding-right: 2em;
-            margin-top: 1em;
-        }
-
-        footer {
-            clear: both;
-        }
 
         /* General */
-
-        .clear {
-            clear: both;
-        }
 
         h1, h2, h3, h4, h5, h6 {
             margin-top: 1em;
         }
 
         h1 {
-            font-size: 110%;
-            font-weight: 400;
-        }
-
-        h2 {
             font-size: 110%;
             font-weight: 400;
         }
@@ -138,13 +64,59 @@
             margin-left: 1em;
         }
 
-        /* Footer */
+
+        /* Page */
+
+        body {
+            background-color: #006666;
+        }
+
+        #container {
+            font-family: helvetica neue, helvetica, arial, sans-serif;
+            font-size: 16pt;
+            font-weight: 200;
+            width: 36em;
+
+            background-color: white;
+            padding: 0em 3.25em 0em 3.25em;
+            margin: 0 auto 0 auto;
+
+            box-shadow: 0px 0px 15px 5px black;
+        }
+
+        #content {
+            margin-top: 1em;
+        }
+
+
+        /* Headers and footers */
+
+        header {
+            font-size: 125%;
+            margin: -1em 0 1em 0;
+            padding-top: 1em;
+        }
+
+        header h1 {
+            font-size: 125%;
+        }
 
         footer {
-            padding-top: 2em;
+            padding: 2em 0 1em 0;
             margin-left: -4em;
             font-size: 67%;
         }
+
+
+        /* Drawing area */
+
+        #drawingArea {
+            height: 500px;
+            width: 36em;
+            border: solid #cc0000 2px;
+        }
+
+
     </style>
 
     <script src="vendor/jquery-1.8.2.js" type="text/javascript"></script>
@@ -154,23 +126,24 @@
 
 <body>
 <div id="container">
-    <div id="right-column">
+    <div id="content">
         <header>
             <h1>WeeWikiPaint</h1>
         </header>
         <section>
-            <h1>Coming Soon</h1>
+            <h1>Under Construction</h1>
 
-            <p>WeeWikiPaint is the web's premier <em>collaborative painting site</em>. Or at least, it could be. In the weeks to come, we'll be adding many new features. Check back soon!</p>
+            <p>WeeWikiPaint is the web’s premier <em>collaborative painting site</em>. At least, it will be. Right now, it’s just a neat little doodling tool. Try it!</p>
 
-            <p>You can watch this site get developed! This project is part of James Shore's <a href="http://www.letscodejavascript.com">Let's Code: Test-Driven Javascript</a> screencast, a series focused on rigorous, professional Javascript development. Come join the fun!</p>
+            <p>You can watch this site get developed! This project is part of James Shore’s <a href="http://www.letscodejavascript.com">Let's Code: Test-Driven Javascript</a> screencast, a series focused on rigorous, professional Javascript development. Come join the fun!</p>
         </section>
         <section>
             <h1>Draw Here:</h1>
 
-            <div id="drawingArea" style='height: 300px; width: 500px; border: solid red 2px'></div>
+            <div id="drawingArea"></div>
         </section>
     </div>
+    <footer></footer>
 </div>
 
 <script type="text/javascript">
