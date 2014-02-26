@@ -5,7 +5,8 @@
 	"use strict";
 
 	var SvgCanvas = module.exports = function(htmlElement) {
-		this._paper = new Raphael(htmlElement.toDomElement());
+		var dimensions = htmlElement.getDimensions();
+		this._paper = new Raphael(htmlElement.toDomElement()); //, dimensions.width, dimensions.height);
 	};
 
 	SvgCanvas.LINE_COLOR = "black";
@@ -34,6 +35,7 @@
 	};
 
 	SvgCanvas.prototype.width = function() {
+//		dump("Raphael width: " + this._paper.width);
 		return this._paper.width;
 	};
 

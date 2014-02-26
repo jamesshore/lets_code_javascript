@@ -27,6 +27,8 @@ Engineering Tasks:
 * Modify SvgCanvas to use element dimensions rather than having Raphael auto-calculate it
 
 To Do on current task:
+* Write a test for passing through correct coordinates to Raphael
+- Update production code to use HtmlElement.getDimensions()
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
