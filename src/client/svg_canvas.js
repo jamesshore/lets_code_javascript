@@ -6,7 +6,7 @@
 
 	var SvgCanvas = module.exports = function(htmlElement) {
 		var dimensions = htmlElement.getDimensions();
-		this._paper = new Raphael(htmlElement.toDomElement()); //, dimensions.width, dimensions.height);
+		this._paper = new Raphael(htmlElement.toDomElement(), dimensions.width, dimensions.height);
 	};
 
 	SvgCanvas.LINE_COLOR = "black";
@@ -28,15 +28,6 @@
 				"stroke": SvgCanvas.LINE_COLOR,
 				"fill": SvgCanvas.LINE_COLOR
 			});
-	};
-
-	SvgCanvas.prototype.height = function() {
-		return this._paper.height;
-	};
-
-	SvgCanvas.prototype.width = function() {
-//		dump("Raphael width: " + this._paper.width);
-		return this._paper.width;
 	};
 
 	SvgCanvas.prototype.lineSegments = function() {

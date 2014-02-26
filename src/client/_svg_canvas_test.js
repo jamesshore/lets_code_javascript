@@ -1,5 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.TXT for details.
-/*global HtmlElement, $ */
+/*global HtmlElement, $, Raphael:true */
 
 (function() {
 	"use strict";
@@ -22,8 +22,22 @@
 			div.remove();
 		});
 
-		it.only("has the same dimensions as its enclosing div, regardless of border", function() {
-			// TO DO
+		it("has the same dimensions as its enclosing div, regardless of border", function() {
+			var realRaphael = Raphael;
+			try {
+				Raphael = SpyRaphael;
+				svgCanvas = new SvgCanvas(div);
+				expect(Raphael.width).to.equal(200);
+				expect(Raphael.height).to.equal(900);
+			}
+			finally {
+				Raphael = realRaphael;
+			}
+
+			function SpyRaphael(element, width, height) {
+				SpyRaphael.width = width;
+				SpyRaphael.height = height;
+			}
 		});
 
 		it("returns zero line segments", function() {
