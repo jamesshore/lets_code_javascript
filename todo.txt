@@ -3,24 +3,18 @@ WeeWikiPaint
 Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 * single-user painting on home page (episodes 33+)
-	? support more browsers (Android, IE10, IE11)
+- support more browsers (Android, IE10, IE11)
 - collaborative painting
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
 
-User Stories:
-* draw a single pixel when screen is tapped
-? fix gaps in lines when zoomed in
-- 'clear screen' button
-- non-embarrassing site design
-? painting tools (such as colors or line width)
-? fix issue: drawing area doesn't quite fit to borders
-  - correct in Safari, Mobile Safari, IE 8
-  - can draw slightly outside border Chrome, Firefox
-  - shifted slightly to top-left in IE 9
-? click tracking needs to account for margin, border, and padding (if needed; fail fast if not)
-  - test that em is converted px
+User Stories to finish current MMF:
+* fix issue: drawing area doesn't quite fit to borders
+- click tracking is a little bit off (because of borders)
+- eraser tool
+
+Potential future stories:
 - Site monitoring and logging
 - Performance
   - Note: serious performance degradation in IE 8 as more lines drawn
@@ -30,9 +24,9 @@ User Stories:
 - quality user-facing site design
 
 Engineering Tasks:
-- BEFORE NEXT EPISODE:
-  - Upgrade Node
-  - Update design
+* Check our assumption that Raphael is using the wrong dimensions
+- Modify HtmlElement to provide the inner dimensions of an element
+- Modify SvgCanvas to use element dimensions rather than having Raphael auto-calculate it
 
 To Do on current task:
 
