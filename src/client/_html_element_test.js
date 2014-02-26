@@ -287,6 +287,30 @@
 			}
 		});
 
+		describe("sizing", function() {
+
+			it("provides its dimensions", function() {
+				var element = HtmlElement.fromHtml("<div style='width: 120px; height: 80px;'></div>");
+				expect(element.getDimensions()).to.eql({
+					width: 120,
+					height: 80
+				});
+			});
+
+			it("dimensions are not affected by border", function() {
+				// TO DO
+			});
+
+			it("dimensions are not affected by padding", function() {
+				// TO DO
+			});
+
+			it("dimensions are not affected by margin", function() {
+				// TO DO
+			});
+
+		});
+
 		describe("coordinate conversion", function() {
 
 			it("converts page coordinates into relative element coordinates", function() {

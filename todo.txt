@@ -24,11 +24,14 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Check our assumption that Raphael is using the wrong dimensions
-- Modify HtmlElement to provide the inner dimensions of an element
+* Modify HtmlElement to provide the inner dimensions of an element
 - Modify SvgCanvas to use element dimensions rather than having Raphael auto-calculate it
 
 To Do on current task:
+* Add basic dimension method
+- Correct dimensions for border
+- Correct dimensions for padding
+- Correct dimensions for margin
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

@@ -213,7 +213,14 @@
 	}
 
 
-	/* Offsets and positioning */
+	/* Dimensions, offsets, and positioning */
+
+	HtmlElement.prototype.getDimensions = function() {
+		return {
+			width: this._element.width(),
+			height: this._element.height()
+		};
+	};
 
 	HtmlElement.prototype.relativeOffset = function(pageOffset) {
 		return relativeOffset(this, pageOffset.x, pageOffset.y);
