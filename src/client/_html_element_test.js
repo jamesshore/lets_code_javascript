@@ -288,7 +288,6 @@
 		});
 
 		describe("sizing", function() {
-
 			it("provides its dimensions", function() {
 				var element = HtmlElement.fromHtml("<div style='width: 120px; height: 80px;'></div>");
 				expect(element.getDimensions()).to.eql({
@@ -298,17 +297,40 @@
 			});
 
 			it("dimensions are not affected by border", function() {
-				// TO DO
+				var element = HtmlElement.fromHtml("<div style='" +
+					"width: 120px; " +
+					"height: 80px; " +
+					"border: 13px; " +
+					"'></div>");
+				expect(element.getDimensions()).to.eql({
+					width: 120,
+					height: 80
+				});
 			});
 
 			it("dimensions are not affected by padding", function() {
-				// TO DO
+				var element = HtmlElement.fromHtml("<div style='" +
+					"width: 120px; " +
+					"height: 80px; " +
+					"padding: 13px; " +
+					"'></div>");
+				expect(element.getDimensions()).to.eql({
+					width: 120,
+					height: 80
+				});
 			});
 
 			it("dimensions are not affected by margin", function() {
-				// TO DO
+				var element = HtmlElement.fromHtml("<div style='" +
+					"width: 120px; " +
+					"height: 80px; " +
+					"margin: 13px; " +
+					"'></div>");
+				expect(element.getDimensions()).to.eql({
+					width: 120,
+					height: 80
+				});
 			});
-
 		});
 
 		describe("coordinate conversion", function() {
