@@ -26,6 +26,7 @@ Potential future stories:
 Engineering Tasks:
 
 To Do on current task:
+- Handle 'medium' returned by IE 8 when there is no border size
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

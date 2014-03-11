@@ -233,9 +233,18 @@
 	function relativeOffset(self, pageX, pageY) {
 		var pageOffset = self._element.offset();
 
+		var paddingLeft = parseInt(self._element.css("padding-left"), 10);
+		var paddingTop = parseInt(self._element.css("padding-top"), 10);
+
+		var borderLeft = parseInt(self._element.css("border-left-width"), 10);
+		var borderTop = parseInt(self._element.css("border-top-width"), 10);
+
+
+		dump(self._element.css("border-left-width"));
+
 		return {
-			x: pageX - pageOffset.left,
-			y: pageY - pageOffset.top
+			x: pageX - pageOffset.left - paddingLeft - borderLeft,
+			y: pageY - pageOffset.top - paddingTop - borderTop
 		};
 	}
 

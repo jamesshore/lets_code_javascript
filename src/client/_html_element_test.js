@@ -319,13 +319,13 @@
 					"width: 120px; " +
 					"height: 80px; " +
 					"padding: 13px; " +
-//					"border: 7px; " +
+					"border: 7px; " +
 //					"margin: 19px; " +
 					"'></div>"
 				);
 
-//				fullElement.appendSelfToBody();
 				htmlElement.appendSelfToBody();
+				fullElement.appendSelfToBody();
 			});
 
 			afterEach(function() {
@@ -338,10 +338,10 @@
 				assertRelativeOffsetEquals(offset, 92, 142);
 			});
 
-//			it("page coordinate to relative coordinate conversion accounts for padding, border, and margin", function() {
-//				var offset = fullElement.relativeOffset({x: 100, y: 150});
-//				assertRelativeOffsetEquals(offset, 92, 142);
-//			});
+			it("page coordinate to relative coordinate conversion accounts for padding, border, and margin", function() {
+				var offset = fullElement.relativeOffset({x: 100, y: 150});
+				assertRelativeOffsetEquals(offset, 72, 122);
+			});
 
 			it("converts relative coordinates into page coordinates", function() {
 				var offset = htmlElement.pageOffset({x: 100, y: 150});
