@@ -11,6 +11,7 @@ Minimum Marketable Features:
 
 User Stories to finish current MMF:
 * click tracking is a little bit off (because of borders)
+? Raphael seems to non-deterministically shift the svg "top" and "left" position by 0 < x < -1
 - eraser tool
 
 Potential future stories:
