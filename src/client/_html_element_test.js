@@ -338,10 +338,38 @@
 				assertRelativeOffsetEquals(offset, 92, 142);
 			});
 
-			it("page coordinate to relative coordinate conversion accounts for padding, border, and margin", function() {
-				var offset = fullElement.relativeOffset({x: 100, y: 150});
-				assertRelativeOffsetEquals(offset, 72, 122);
+			it("page coordinate conversion accounts for top padding", function() {
+				var styleToCheck = "padding-top: 13px;";
+				checkStyle(styleToCheck, 0, 13);
+
+				function checkStyle(elementStyle, additionalXOffset, additionalYOffset) {
+					var BASE_STYLE = "width: 120px; height: 80px;";
+
+					var unstyledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + "'></div>");
+					unstyledElement.appendSelfToBody();
+					var unstyledOffset = unstyledElement.relativeOffset({x: 100, y: 150});
+					unstyledElement.remove();
+
+					var styledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + elementStyle + "'></div>");
+					try {
+						styledElement.appendSelfToBody();
+						var styledOffset = styledElement.relativeOffset({x: 100, y: 150});
+						assertRelativeOffsetEquals(
+							styledOffset,
+							unstyledOffset.x - additionalXOffset,
+							unstyledOffset.y - additionalYOffset
+						);
+					}
+					finally {
+						styledElement.remove();
+					}
+				}
 			});
+
+//			it("page coordinate to relative coordinate conversion accounts for padding, border, and margin", function() {
+//				var offset = fullElement.relativeOffset({x: 100, y: 150});
+//				assertRelativeOffsetEquals(offset, 72, 122);
+//			});
 
 			it("converts relative coordinates into page coordinates", function() {
 				var offset = htmlElement.pageOffset({x: 100, y: 150});
