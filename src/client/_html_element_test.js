@@ -168,7 +168,7 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement, 10, 20, 30, 40);
-						
+
 						var expectedFirstTouch = htmlElement.pageOffset({ x: 10, y: 20 });
 						var expectedSecondTouch = htmlElement.pageOffset({ x: 30, y: 40 });
 						expect(monitor.touches).to.eql([
@@ -313,6 +313,8 @@
 
 		describe("coordinate conversion", function() {
 
+			var CONTAINER_WIDTH = 1000;
+
 			var fullElement;
 			beforeEach(function() {
 				fullElement = HtmlElement.fromHtml("<div style='" +
@@ -343,7 +345,10 @@
 				checkStyle("padding-left: 13px;", 13, 0);
 				checkStyle("padding: 13px;", 13, 13);
 				checkStyle("padding: 1em; font-size: 16px", 16, 16);
-//				checkStyle("padding: 10%; width: 50; height: 40", 5, 4);
+
+				// IE 8 weirdness
+				checkStyle("padding-top: 20%", 0, CONTAINER_WIDTH * 0.20);
+				checkStyle("padding-left: 20%", CONTAINER_WIDTH * 0.20, 0);
 			});
 
 			it("page coordinate conversion accounts for margin", function() {
@@ -369,14 +374,17 @@
 			function checkStyle(elementStyle, additionalXOffset, additionalYOffset) {
 				var BASE_STYLE = "width: 120px; height: 80px; border: 0px none;";
 
+				var containerElement = HtmlElement.fromHtml("<div style='width: " + CONTAINER_WIDTH + "px;'></div>");
+				containerElement.appendSelfToBody();
+
 				var unstyledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + "'></div>");
-				unstyledElement.appendSelfToBody();
+				containerElement.append(unstyledElement);
 				var unstyledOffset = unstyledElement.relativeOffset({x: 100, y: 150});
 				unstyledElement.remove();
 
 				var styledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + elementStyle + "'></div>");
 				try {
-					styledElement.appendSelfToBody();
+					containerElement.append(styledElement);
 					var styledOffset = styledElement.relativeOffset({x: 100, y: 150});
 					assertRelativeOffsetEquals(
 						styledOffset,
@@ -385,7 +393,7 @@
 					);
 				}
 				finally {
-					styledElement.remove();
+					containerElement.remove();
 				}
 			}
 
