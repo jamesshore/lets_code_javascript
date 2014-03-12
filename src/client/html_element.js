@@ -237,15 +237,17 @@
 		var paddingTop = parseInt(self._element.css("padding-top"), 10);
 
 //		var borderLeft = parseInt(self._element.css("border-left-width"), 10);
-//		var borderTop = parseInt(self._element.css("border-top-width"), 10);
+		var borderTopText = self._element.css("border-top-width");
+		if (borderTopText === "medium") borderTopText = "3";
+		var borderTop = parseInt(borderTopText, 10);
 
-
-
-//		dump(self._element.css("border-left-width"));
-
+		var borderLeftText = self._element.css("border-left-width");
+		if (borderLeftText === "medium") borderLeftText = "3";
+		var borderLeft = parseInt(borderLeftText, 10);
+		
 		return {
-			x: pageX - pageOffset.left - paddingLeft,// - paddingLeft - borderLeft,
-			y: pageY - pageOffset.top - paddingTop// - paddingTop - borderTop
+			x: pageX - pageOffset.left - paddingLeft - borderLeft,
+			y: pageY - pageOffset.top - paddingTop - borderTop
 		};
 	}
 
