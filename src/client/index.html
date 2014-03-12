@@ -77,7 +77,7 @@
             font-family: helvetica neue, helvetica, arial, sans-serif;
             font-size: 16pt;
             font-weight: 200;
-            width: 36em;
+            width: 768px;
 
             background-color: white;
             padding: 0em 3.25em 0em 3.25em;
@@ -113,11 +113,13 @@
         /* Drawing area */
 
         #drawingArea {
+            /* NOTE:
+                Don't use percentage paddings on the drawing area! It causes relative offsets to be incorrect
+                on IE 8 for an unknown reason.
+            */
             height: 500px;
-            width: 36em;
-            border: solid #cc0000 20px;
-            /*border-top-width: 20px;*/
-            /*border-top-style: solid;*/
+            width: 768px;
+            border: solid #cc0000 2px;
         }
 
 
