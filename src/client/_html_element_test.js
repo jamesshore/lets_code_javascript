@@ -338,9 +338,12 @@
 				assertRelativeOffsetEquals(offset, 92, 142);
 			});
 
-			it("page coordinate conversion accounts for top padding", function() {
-				var styleToCheck = "padding-top: 13px;";
-				checkStyle(styleToCheck, 0, 13);
+			it("page coordinate conversion accounts for padding", function() {
+				checkStyle("padding-top: 13px;", 0, 13);
+				checkStyle("padding-left: 13px;", 13, 0);
+				checkStyle("padding: 13px;", 13, 13);
+
+				checkStyle("padding: 1em; font-size: 16px", 16, 16);
 
 				function checkStyle(elementStyle, additionalXOffset, additionalYOffset) {
 					var BASE_STYLE = "width: 120px; height: 80px;";

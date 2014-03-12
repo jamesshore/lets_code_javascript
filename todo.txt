@@ -24,9 +24,12 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
+- Modify HtmlElement relativeOffset() to account for margin, borders, and padding
+- Modify HtmlElement pageOffset() to account for margin, borders, and padding
 
 To Do on current task:
 - Handle 'medium' returned by IE 8 when there is no border size
+- Deal with smoke tests
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
