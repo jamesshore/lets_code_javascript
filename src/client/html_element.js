@@ -232,23 +232,25 @@
 
 	function relativeOffset(self, pageX, pageY) {
 		var pageOffset = self._element.offset();
-
-		var paddingLeft = parseInt(self._element.css("padding-left"), 10);
-		var paddingTop = parseInt(self._element.css("padding-top"), 10);
-
-//		var borderLeft = parseInt(self._element.css("border-left-width"), 10);
-		var borderTopText = self._element.css("border-top-width");
-		if (borderTopText === "medium") borderTopText = "3";
-		var borderTop = parseInt(borderTopText, 10);
-
-		var borderLeftText = self._element.css("border-left-width");
-		if (borderLeftText === "medium") borderLeftText = "3";
-		var borderLeft = parseInt(borderLeftText, 10);
-		
 		return {
-			x: pageX - pageOffset.left - paddingLeft - borderLeft,
-			y: pageY - pageOffset.top - paddingTop - borderTop
+			x: pageX - pageOffset.left - computePaddingWidth("left") - computeBorderWidth("left"),
+			y: pageY - pageOffset.top - computePaddingWidth("top") - computeBorderWidth("top")
 		};
+
+		function computePaddingWidth(side) {
+			return parseInt(self._element.css("padding-" + side), 10);
+		}
+
+		function computeBorderWidth(side) {
+			var text = self._element.css("border-" + side + "-width");
+			if (browser.doesNotComputeStyles()) {
+				if (text === "thin") text = "1";
+				if (text === "medium") text = "3";
+				if (text === "thick") text = "5";
+				if (self._element.css("border-" + side + "-style") === "none") text = "0";
+			}
+			return parseInt(text, 10);
+		}
 	}
 
 	function pageOffset(self, relativeX, relativeY) {

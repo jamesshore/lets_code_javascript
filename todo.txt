@@ -29,6 +29,7 @@ Engineering Tasks:
 
 To Do on current task:
 - Handle 'medium' returned by IE 8 when there is no border size
+- Doublecheck that 'medium' === 3px on IE8 (and "thin" and "thick" too)
 - Deal with smoke tests
 - Refactor checkStyle
 
