@@ -23,6 +23,9 @@
 		});
 
 		it("has the same dimensions as its enclosing div, regardless of border", function() {
+			// There might be a better way of coding this that doesn't use a spy.
+			// See Martin Grandrath's suggestion at http://www.letscodejavascript.com/v3/comments/live/185#comment-1292169079
+
 			var realRaphael = Raphael;
 			try {
 				Raphael = SpyRaphael;
