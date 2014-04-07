@@ -231,25 +231,29 @@
 	};
 
 	function relativeOffset(self, pageX, pageY) {
+		failFastIfPaddingPresent("top");
+		failFastIfPaddingPresent("left");
+		failFastIfBorderPresent("top");
+		failFastIfBorderPresent("left");
+
 		var pageOffset = self._element.offset();
 		return {
-			x: pageX - pageOffset.left - computePaddingWidth("left") - computeBorderWidth("left"),
-			y: pageY - pageOffset.top - computePaddingWidth("top") - computeBorderWidth("top")
+			x: pageX - pageOffset.left,
+			y: pageY - pageOffset.top
 		};
 
-		function computePaddingWidth(side) {
-			return parseInt(self._element.css("padding-" + side), 10);
+		function failFastIfPaddingPresent(side) {
+			var css = self._element.css("padding-" + side);
+			if (css !== "0px") throw new Error("Do not apply padding to elements used with relativeOffset()");
 		}
 
-		function computeBorderWidth(side) {
+		function failFastIfBorderPresent(side) {
 			var text = self._element.css("border-" + side + "-width");
 			if (browser.doesNotComputeStyles()) {
-				if (text === "thin") text = "1";
-				if (text === "medium") text = "3";
-				if (text === "thick") text = "5";
-				if (self._element.css("border-" + side + "-style") === "none") text = "0";
+				if (self._element.css("border-" + side + "-style") === "none") text = "0px";
 			}
-			return parseInt(text, 10);
+
+			if (text !== "0px") throw new Error("Do not apply border to elements used with relativeOffset()");
 		}
 	}
 

@@ -340,17 +340,6 @@
 				assertRelativeOffsetEquals(offset, 92, 142);
 			});
 
-			it("page coordinate conversion accounts for padding", function() {
-				checkStyle("padding-top: 13px;", 0, 13);
-				checkStyle("padding-left: 13px;", 13, 0);
-				checkStyle("padding: 13px;", 13, 13);
-				checkStyle("padding: 1em; font-size: 16px", 16, 16);
-
-				// IE 8 weirdness
-				checkStyle("padding-top: 20%", 0, CONTAINER_WIDTH * 0.20);
-				checkStyle("padding-left: 20%", CONTAINER_WIDTH * 0.20, 0);
-			});
-
 			it("page coordinate conversion accounts for margin", function() {
 				checkStyle("margin-top: 13px;", 0, 13);
 				checkStyle("margin-left: 13px;", 13, 0);
@@ -358,18 +347,44 @@
 				checkStyle("margin: 1em; font-size: 16px", 16, 16);
 			});
 
-			it("page coordinate conversion accounts for border", function() {
-				checkStyle("border-top: 13px solid;", 0, 13);
-				checkStyle("border-left: 13px solid;", 13, 0);
-				checkStyle("border: 13px solid;", 13, 13);
-				checkStyle("border: 1em solid; font-size: 16px", 16, 16);
+			it("page coordinate conversion fails fast if there is any padding", function() {
+				expectFailFast("padding-top: 13px;");
+				expectFailFast("padding-left: 13px;");
+				expectFailFast("padding: 13px;");
+				expectFailFast("padding: 1em; font-size: 16px");
 
 				// IE 8 weirdness
-				checkStyle("border: thin solid", 1, 1);
-				checkStyle("border: medium solid", 3, 3);
-				checkStyle("border: thick solid", 5, 5);
+				expectFailFast("padding-top: 20%");
+				expectFailFast("padding-left: 20%");
+			});
+
+			it("page coordinate conversion accounts for border", function() {
+				expectFailFast("border-top: 13px solid;");
+				expectFailFast("border-left: 13px solid;");
+				expectFailFast("border: 13px solid;");
+				expectFailFast("border: 1em solid; font-size: 16px");
+
+				// IE 8 weirdness
+				expectFailFast("border: thin solid");
+				expectFailFast("border: medium solid");
+				expectFailFast("border: thick solid");
 				checkStyle("border: 13px none", 0, 0);
 			});
+
+			function expectFailFast(elementStyle) {
+				var BASE_STYLE = "width: 120px; height: 80px; border: 0px none;";
+
+				var styledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + elementStyle + "'></div>");
+				try {
+					styledElement.appendSelfToBody();
+					expect(function() {
+						styledElement.relativeOffset({ x: 100, y: 150 });
+					}).to.throwException();
+				}
+				finally {
+					styledElement.remove();
+				}
+			}
 
 			function checkStyle(elementStyle, additionalXOffset, additionalYOffset) {
 				var BASE_STYLE = "width: 120px; height: 80px; border: 0px none;";

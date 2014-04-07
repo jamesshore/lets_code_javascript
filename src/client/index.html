@@ -112,14 +112,16 @@
 
         /* Drawing area */
 
+        #drawingAreaContainer {
+            border: solid #cc0000 2px;
+        }
+
         #drawingArea {
             /* NOTE:
                 Don't use percentage paddings on the drawing area! It causes relative offsets to be incorrect
                 on IE 8 for an unknown reason.
             */
             height: 500px;
-            width: 768px;
-            border: solid #cc0000 2px;
         }
 
 
@@ -146,7 +148,9 @@
         <div class="section">
             <h1>Draw Here:</h1>
 
-            <div id="drawingArea"></div>
+            <div id="drawingAreaContainer">
+                <div id="drawingArea"></div>
+            </div>
         </div>
     </div>
     <div class="footer"></div>

@@ -42,7 +42,7 @@
 			drawingArea.triggerMouseUp(50, 60);
 
 			var actual = JSON.stringify(client.drawingAreaCanvas.lineSegments());
-			var expected = JSON.stringify([[ "8", "18", "48", "58" ]]);
+			var expected = JSON.stringify([[ "10", "20", "50", "60" ]]);
 
 			if (actual !== expected) return "lines drawn expected " + expected + " but was " + actual;
 			else return null;
