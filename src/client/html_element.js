@@ -231,16 +231,29 @@
 	};
 
 	function relativeOffset(self, pageX, pageY) {
-		failFastIfPaddingPresent("top");
-		failFastIfPaddingPresent("left");
-		failFastIfBorderPresent("top");
-		failFastIfBorderPresent("left");
+		failFastIfStylingPresent(self);
 
 		var pageOffset = self._element.offset();
 		return {
 			x: pageX - pageOffset.left,
 			y: pageY - pageOffset.top
 		};
+	}
+
+	function pageOffset(self, relativeX, relativeY) {
+		failFastIfStylingPresent(self);
+		var topLeftOfDrawingArea = self._element.offset();
+		return {
+			x: relativeX + topLeftOfDrawingArea.left,
+			y: relativeY + topLeftOfDrawingArea.top
+		};
+	}
+
+	function failFastIfStylingPresent(self) {
+		failFastIfPaddingPresent("top");
+		failFastIfPaddingPresent("left");
+		failFastIfBorderPresent("top");
+		failFastIfBorderPresent("left");
 
 		function failFastIfPaddingPresent(side) {
 			var css = self._element.css("padding-" + side);
@@ -256,15 +269,6 @@
 			if (text !== "0px") throw new Error("Do not apply border to elements used with relativeOffset()");
 		}
 	}
-
-	function pageOffset(self, relativeX, relativeY) {
-		var topLeftOfDrawingArea = self._element.offset();
-		return {
-			x: relativeX + topLeftOfDrawingArea.left,
-			y: relativeY + topLeftOfDrawingArea.top
-		};
-	}
-
 
 	/* DOM Manipulation */
 

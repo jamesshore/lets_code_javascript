@@ -313,8 +313,6 @@
 
 		describe("coordinate conversion", function() {
 
-			var CONTAINER_WIDTH = 1000;
-
 			var fullElement;
 			beforeEach(function() {
 				fullElement = HtmlElement.fromHtml("<div style='" +
@@ -341,40 +339,74 @@
 			});
 
 			it("page coordinate conversion accounts for margin", function() {
-				checkStyle("margin-top: 13px;", 0, 13);
-				checkStyle("margin-left: 13px;", 13, 0);
-				checkStyle("margin: 13px;", 13, 13);
-				checkStyle("margin: 1em; font-size: 16px", 16, 16);
+				checkRelativeStyle("margin-top: 13px;", 0, 13);
+				checkRelativeStyle("margin-left: 13px;", 13, 0);
+				checkRelativeStyle("margin: 13px;", 13, 13);
+				checkRelativeStyle("margin: 1em; font-size: 16px", 16, 16);
 			});
 
 			it("page coordinate conversion fails fast if there is any padding", function() {
-				expectFailFast("padding-top: 13px;");
-				expectFailFast("padding-left: 13px;");
-				expectFailFast("padding: 13px;");
-				expectFailFast("padding: 1em; font-size: 16px");
+				expectRelativeFailFast("padding-top: 13px;");
+				expectRelativeFailFast("padding-left: 13px;");
+				expectRelativeFailFast("padding: 13px;");
+				expectRelativeFailFast("padding: 1em; font-size: 16px");
 
 				// IE 8 weirdness
-				expectFailFast("padding-top: 20%");
-				expectFailFast("padding-left: 20%");
+				expectRelativeFailFast("padding-top: 20%");
+				expectRelativeFailFast("padding-left: 20%");
 			});
 
-			it("page coordinate conversion accounts for border", function() {
-				expectFailFast("border-top: 13px solid;");
-				expectFailFast("border-left: 13px solid;");
-				expectFailFast("border: 13px solid;");
-				expectFailFast("border: 1em solid; font-size: 16px");
+			it("page coordinate conversion fails fast if there is any border", function() {
+				expectRelativeFailFast("border-top: 13px solid;");
+				expectRelativeFailFast("border-left: 13px solid;");
+				expectRelativeFailFast("border: 13px solid;");
+				expectRelativeFailFast("border: 1em solid; font-size: 16px");
 
 				// IE 8 weirdness
-				expectFailFast("border: thin solid");
-				expectFailFast("border: medium solid");
-				expectFailFast("border: thick solid");
-				checkStyle("border: 13px none", 0, 0);
+				expectRelativeFailFast("border: thin solid");
+				expectRelativeFailFast("border: medium solid");
+				expectRelativeFailFast("border: thick solid");
+				checkRelativeStyle("border: 13px none", 0, 0);
 			});
 
-			function expectFailFast(elementStyle) {
-				var BASE_STYLE = "width: 120px; height: 80px; border: 0px none;";
+			it("converts relative coordinates into page coordinates", function() {
+				var offset = htmlElement.relativeOffset({x: 100, y: 150});
+				assertPageOffsetEquals(offset, 92, 142);
+			});
 
-				var styledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + elementStyle + "'></div>");
+			it("relative coordinate conversion accounts for margin", function() {
+				checkPageStyle("margin-top: 13px;", 0, 13);
+				checkPageStyle("margin-left: 13px;", 13, 0);
+				checkPageStyle("margin: 13px;", 13, 13);
+				checkPageStyle("margin: 1em; font-size: 16px", 16, 16);
+			});
+
+			it("relative coordinate conversion fails fast if there is any padding", function() {
+				expectPageFailFast("padding-top: 13px;");
+				expectPageFailFast("padding-left: 13px;");
+				expectPageFailFast("padding: 13px;");
+				expectPageFailFast("padding: 1em; font-size: 16px");
+
+				// IE 8 weirdness
+				expectPageFailFast("padding-top: 20%");
+				expectPageFailFast("padding-left: 20%");
+			});
+
+			it("relative coordinate conversion fails fast if there is any border", function() {
+				expectPageFailFast("border-top: 13px solid;");
+				expectPageFailFast("border-left: 13px solid;");
+				expectPageFailFast("border: 13px solid;");
+				expectPageFailFast("border: 1em solid; font-size: 16px");
+
+				// IE 8 weirdness
+				expectPageFailFast("border: thin solid");
+				expectPageFailFast("border: medium solid");
+				expectPageFailFast("border: thick solid");
+				checkPageStyle("border: 13px none", 0, 0);
+			});
+
+			function expectRelativeFailFast(elementStyle) {
+				var styledElement = HtmlElement.fromHtml("<div style='" + elementStyle + "'></div>");
 				try {
 					styledElement.appendSelfToBody();
 					expect(function() {
@@ -386,20 +418,30 @@
 				}
 			}
 
-			function checkStyle(elementStyle, additionalXOffset, additionalYOffset) {
+			function expectPageFailFast(elementStyle) {
+				var styledElement = HtmlElement.fromHtml("<div style='" + elementStyle + "'></div>");
+				try {
+					styledElement.appendSelfToBody();
+					expect(function() {
+						styledElement.pageOffset({ x: 100, y: 150 });
+					}).to.throwException();
+				}
+				finally {
+					styledElement.remove();
+				}
+			}
+
+			function checkRelativeStyle(elementStyle, additionalXOffset, additionalYOffset) {
 				var BASE_STYLE = "width: 120px; height: 80px; border: 0px none;";
 
-				var containerElement = HtmlElement.fromHtml("<div style='width: " + CONTAINER_WIDTH + "px;'></div>");
-				containerElement.appendSelfToBody();
-
 				var unstyledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + "'></div>");
-				containerElement.append(unstyledElement);
+				unstyledElement.appendSelfToBody();
 				var unstyledOffset = unstyledElement.relativeOffset({x: 100, y: 150});
 				unstyledElement.remove();
 
 				var styledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + elementStyle + "'></div>");
 				try {
-					containerElement.append(styledElement);
+					styledElement.appendSelfToBody();
 					var styledOffset = styledElement.relativeOffset({x: 100, y: 150});
 					assertRelativeOffsetEquals(
 						styledOffset,
@@ -408,28 +450,32 @@
 					);
 				}
 				finally {
-					containerElement.remove();
+					styledElement.remove();
 				}
 			}
 
+			function checkPageStyle(elementStyle, additionalXOffset, additionalYOffset) {
+				var BASE_STYLE = "width: 120px; height: 80px; border: 0px none;";
 
-//			it("page coordinate to relative coordinate conversion accounts for padding, border, and margin", function() {
-//				var offset = fullElement.relativeOffset({x: 100, y: 150});
-//				assertRelativeOffsetEquals(offset, 72, 122);
-//			});
+				var unstyledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + "'></div>");
+				unstyledElement.appendSelfToBody();
+				var unstyledOffset = unstyledElement.pageOffset({x: 100, y: 150});
+				unstyledElement.remove();
 
-			it("converts relative coordinates into page coordinates", function() {
-				var offset = htmlElement.pageOffset({x: 100, y: 150});
-
-				if (browser.reportsElementPositionOffByOneSometimes()) {
-					// compensate for off-by-one error in IE 8
-					expect(offset.x).to.equal(108);
-					expect(offset.y === 158 || offset.y === 159).to.be(true);
+				var styledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + elementStyle + "'></div>");
+				try {
+					styledElement.appendSelfToBody();
+					var styledOffset = styledElement.pageOffset({x: 100, y: 150});
+					assertRelativeOffsetEquals(
+						styledOffset,
+						unstyledOffset.x + additionalXOffset,
+						unstyledOffset.y + additionalYOffset
+					);
 				}
-				else {
-					expect(offset).to.eql({x: 108, y: 158});
+				finally {
+					styledElement.remove();
 				}
-			});
+			}
 
 			function assertRelativeOffsetEquals(actualOffset, expectedX, expectedY) {
 				if (browser.reportsElementPositionOffByOneSometimes()) {
@@ -444,6 +490,20 @@
 				}
 			}
 		});
+
+		function assertPageOffsetEquals(actualOffset, expectedX, expectedY) {
+			if (browser.reportsElementPositionOffByOneSometimes()) {
+				// compensate for off-by-one error in IE 8
+				expect(actualOffset.x).to.equal(expectedX);
+				if (actualOffset.y !== expectedY + 1) {
+					expect(actualOffset.y).to.equal(expectedY);
+				}
+			}
+			else {
+				expect(actualOffset).to.eql({x: expectedX, y: expectedY});
+			}
+		}
+
 
 		describe("DOM manipulation", function() {
 

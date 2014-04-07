@@ -24,16 +24,13 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Make relativeOffset() fail fast when border or padding is present
-- Modify HtmlElement pageOffset() to account for margin, borders, and padding
+* Modify HtmlElement pageOffset() to account for margin, borders, and padding
 - Update WebStorm, module dependencies
 - Integrate
 
 To Do on current task:
-* Make relativeOffset() fail fast
-- Refactor checkStyle & expectFailFast
+* Make pageOffset() fail fast for margin, borders, and padding
 - Clean up beforeEach/afterEach in coordinate conversion tests
-- Fix index.html to style #drawingAreaContainer
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
