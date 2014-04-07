@@ -29,7 +29,6 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-* Make pageOffset() fail fast for margin, borders, and padding
 - Clean up beforeEach/afterEach in coordinate conversion tests
 
 Notes:
