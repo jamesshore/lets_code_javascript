@@ -10,7 +10,6 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* click tracking is a little bit off (because of borders)
 ? Raphael seems to non-deterministically shift the svg "top" and "left" position by 0 < x < -1
 - eraser tool
 
@@ -24,13 +23,11 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Modify HtmlElement pageOffset() to account for margin, borders, and padding
 - Update WebStorm, module dependencies
 - Integrate
 
 To Do on current task:
-- Combine relativeFailFast and pageFailFast
-- Eliminate duplicate fail-fast tests
+-
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
