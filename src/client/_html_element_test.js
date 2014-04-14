@@ -313,24 +313,14 @@
 
 		describe("coordinate conversion", function() {
 
-			var fullElement;
-			beforeEach(function() {
-				fullElement = HtmlElement.fromHtml("<div style='" +
-					"width: 120px; " +
-					"height: 80px; " +
-					"padding: 13px; " +
-					"border: 7px; " +
-//					"margin: 19px; " +
-					"'></div>"
-				);
+			var COLLAPSING_BODY_MARGIN = 8;
 
+			beforeEach(function() {
 				htmlElement.appendSelfToBody();
-				fullElement.appendSelfToBody();
 			});
 
 			afterEach(function() {
 				htmlElement.remove();
-				fullElement.remove();
 			});
 
 			it("converts page coordinates into relative element coordinates", function() {
@@ -339,10 +329,10 @@
 			});
 
 			it("page coordinate conversion accounts for margin", function() {
-				checkRelativeStyle("margin-top: 13px;", 0, 13);
+				checkRelativeStyle("margin-top: 13px;", 0, 13 - COLLAPSING_BODY_MARGIN);
 				checkRelativeStyle("margin-left: 13px;", 13, 0);
-				checkRelativeStyle("margin: 13px;", 13, 13);
-				checkRelativeStyle("margin: 1em; font-size: 16px", 16, 16);
+				checkRelativeStyle("margin: 13px;", 13, 13 - COLLAPSING_BODY_MARGIN);
+				checkRelativeStyle("margin: 1em; font-size: 16px", 16, 16 - COLLAPSING_BODY_MARGIN);
 			});
 
 			it("page coordinate conversion fails fast if there is any padding", function() {
@@ -375,10 +365,10 @@
 			});
 
 			it("relative coordinate conversion accounts for margin", function() {
-				checkPageStyle("margin-top: 13px;", 0, 13);
+				checkPageStyle("margin-top: 13px;", 0, 13 - COLLAPSING_BODY_MARGIN);
 				checkPageStyle("margin-left: 13px;", 13, 0);
-				checkPageStyle("margin: 13px;", 13, 13);
-				checkPageStyle("margin: 1em; font-size: 16px", 16, 16);
+				checkPageStyle("margin: 13px;", 13, 13 - COLLAPSING_BODY_MARGIN);
+				checkPageStyle("margin: 1em; font-size: 16px", 16, 16 - COLLAPSING_BODY_MARGIN);
 			});
 
 			it("relative coordinate conversion fails fast if there is any padding", function() {
