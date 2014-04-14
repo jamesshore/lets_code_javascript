@@ -242,6 +242,7 @@
 
 	function pageOffset(self, relativeX, relativeY) {
 		failFastIfStylingPresent(self);
+
 		var topLeftOfDrawingArea = self._element.offset();
 		return {
 			x: relativeX + topLeftOfDrawingArea.left,

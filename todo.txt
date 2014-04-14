@@ -29,7 +29,8 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-- Clean up beforeEach/afterEach in coordinate conversion tests
+- Combine relativeFailFast and pageFailFast
+- Eliminate duplicate fail-fast tests
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
