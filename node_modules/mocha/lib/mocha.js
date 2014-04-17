@@ -73,6 +73,21 @@ function Mocha(options) {
   if (null != options.timeout) this.timeout(options.timeout);
   this.useColors(options.useColors)
   if (options.slow) this.slow(options.slow);
+
+  this.suite.on('pre-require', function (context) {
+    exports.afterEach = context.afterEach || context.teardown;
+    exports.after = context.after || context.suiteTeardown;
+    exports.beforeEach = context.beforeEach || context.setup;
+    exports.before = context.before || context.suiteSetup;
+    exports.describe = context.describe || context.suite;
+    exports.it = context.it || context.test;
+    exports.setup = context.setup || context.beforeEach;
+    exports.suiteSetup = context.suiteSetup || context.before;
+    exports.suiteTeardown = context.suiteTeardown || context.after;
+    exports.suite = context.suite || context.describe;
+    exports.teardown = context.teardown || context.afterEach;
+    exports.test = context.test || context.it;
+  });
 }
 
 /**
@@ -277,6 +292,21 @@ Mocha.prototype.useColors = function(colors){
 };
 
 /**
+ * Use inline diffs rather than +/-.
+ *
+ * @param {Boolean} inlineDiffs
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.useInlineDiffs = function(inlineDiffs) {
+  this.options.useInlineDiffs = arguments.length && inlineDiffs != undefined
+  ? inlineDiffs
+  : false;
+  return this;
+};
+
+/**
  * Set the timeout in milliseconds.
  *
  * @param {Number} timeout
@@ -326,13 +356,15 @@ Mocha.prototype.run = function(fn){
   if (this.files.length) this.loadFiles();
   var suite = this.suite;
   var options = this.options;
+  options.files = this.files;
   var runner = new exports.Runner(suite);
-  var reporter = new this._reporter(runner);
+  var reporter = new this._reporter(runner, options);
   runner.ignoreLeaks = false !== options.ignoreLeaks;
   runner.asyncOnly = options.asyncOnly;
   if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
   if (options.growl) this._growl(runner, reporter);
   exports.reporters.Base.useColors = options.useColors;
+  exports.reporters.Base.inlineDiffs = options.useInlineDiffs;
   return runner.run(fn);
 };

@@ -84,6 +84,7 @@ program
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
+  .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
 
 program.name = 'mocha';
 
@@ -211,7 +212,7 @@ if (~process.argv.indexOf('--colors') ||
 
 // --inline-diffs
 
-if (program.inlineDiffs) Base.inlineDiffs = true;
+if (program.inlineDiffs) mocha.useInlineDiffs(true);
 
 // --slow <ms>
 
@@ -295,6 +296,7 @@ if (program.sort) {
 
 // --watch
 
+var runner;
 if (program.watch) {
   console.log();
   hideCursor();
@@ -304,21 +306,18 @@ if (program.watch) {
     process.exit();
   });
 
-  var spinner = 'win32' == process.platform
-    ? ['|','/','-','\\']
-    : ['◜','◠','◝','◞','◡','◟'];
-
-  var frames = spinner.map(function(c) {
-    return sprintf('  \u001b[96m%s \u001b[90mwatching\u001b[0m', c);
-  });
-
   var watchFiles = utils.files(cwd);
+  var runAgain = false;
 
   function loadAndRun() {
     try {
       mocha.files = files;
-      mocha.run(function(){
-        play(frames);
+      runAgain = false;
+      runner = mocha.run(function(){
+        runner = null;
+        if (runAgain) {
+          rerun();
+        }
       });
     } catch(e) {
       console.log(e.stack);
@@ -333,12 +332,22 @@ if (program.watch) {
 
   loadAndRun();
 
-  utils.watch(watchFiles, function(){
+  function rerun() {
     purge();
     stop()
     mocha.suite = mocha.suite.clone();
+    mocha.suite.ctx = new Mocha.Context;
     mocha.ui(program.ui);
     loadAndRun();
+  }
+
+  utils.watch(watchFiles, function(){
+    runAgain = true;
+    if (runner) {
+      runner.abort();
+    } else {
+      rerun();
+    }
   });
 
   return;
@@ -347,7 +356,13 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-mocha.run(process.exit);
+runner = mocha.run(program.exit ? process.exit : exitLater);
+
+function exitLater(code) {
+  process.on('exit', function() { process.exit(code) })
+}
+
+process.on('SIGINT', function() { runner.abort(); })
 
 // enable growl notifications
 
@@ -413,7 +428,9 @@ function lookupFiles(path, recursive) {
     if (exists(path + '.js')) {
       path += '.js'
     } else {
-      return glob.sync(path);
+      files = glob.sync(path);
+      if (!files.length) throw new Error("cannot resolve path (or pattern) '" + path + "'");
+      return files;
     }
   }
 
