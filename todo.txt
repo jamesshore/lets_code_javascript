@@ -3,6 +3,7 @@ WeeWikiPaint
 Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 * single-user painting on home page (episodes 33+)
+- multiple painting/erasing tools
 - support more browsers (Android, IE10, IE11)
 - collaborative painting
 - wiki-fy the pages
@@ -10,8 +11,8 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-? Raphael seems to non-deterministically shift the svg "top" and "left" position by 0 < x < -1
-- eraser tool
+* "clear screen" button
+- ship it!
 
 Potential future stories:
 - Site monitoring and logging
@@ -23,12 +24,11 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
--
+- Hook up clear screen button to SvgCanvas in client.js
+- Make clear screen button
 
 To Do on current task:
-- AT START OF EPISODE:
-  - Updated modules, WebStorm
-  - Tweaked smoke test (to work on Windows)
+-
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

@@ -87,6 +87,12 @@
 			expect(attrs["stroke-linecap"]).to.equal(SvgCanvas.LINE_CAP);
 		});
 
+		it("clears everything", function() {
+			svgCanvas.drawLine(3, 3, 4, 4);
+			svgCanvas.clear();
+			expect(svgCanvas.lineSegments()).to.eql([]);
+		});
+
 	});
 
 }());

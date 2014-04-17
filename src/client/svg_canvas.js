@@ -13,6 +13,10 @@
 	SvgCanvas.STROKE_WIDTH = 2;
 	SvgCanvas.LINE_CAP = "round";
 
+	SvgCanvas.prototype.clear = function() {
+		this._paper.clear();
+	};
+
 	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
 		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
 			.attr({
