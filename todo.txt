@@ -29,7 +29,9 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
--
+- AT START OF EPISODE:
+  - Updated modules, WebStorm, Node
+  - Tweaked smoke test (to work on Windows)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

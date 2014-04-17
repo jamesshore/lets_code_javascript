@@ -6,6 +6,7 @@
 
 	var child_process = require("child_process");
 	var http = require("http");
+	var phantomjs = require("phantomjs");
 
 	var runServer = require("./_run_server.js");
 
@@ -45,7 +46,7 @@
 	};
 
 	exports.test_userCanDrawOnPage = function(test) {
-		var phantomJsProcess = child_process.spawn("node", ["node_modules/phantomjs/bin/phantomjs", "src/_phantomjs.js"], { stdio: "inherit" });
+		var phantomJsProcess = child_process.spawn(phantomjs.path, ["src/_phantomjs.js"], { stdio: "inherit" });
 		phantomJsProcess.on("exit", function(code) {
 			test.equals(code, 0, "PhantomJS test failures");
 			test.done();
