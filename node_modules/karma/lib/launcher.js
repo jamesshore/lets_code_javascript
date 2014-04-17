@@ -1,18 +1,51 @@
 var log = require('./logger').create('launcher');
-var baseBrowserDecoratorFactory = require('./launchers/Base').decoratorFactory;
+var q = require('q');
 
+var baseDecorator = require('./launchers/base').decoratorFactory;
+var captureTimeoutDecorator = require('./launchers/capture_timeout').decoratorFactory;
+var retryDecorator = require('./launchers/retry').decoratorFactory;
+var processDecorator = require('./launchers/process').decoratorFactory;
+
+
+// TODO(vojta): remove once nobody uses it
+var baseBrowserDecoratorFactory = function(baseLauncherDecorator, captureTimeoutLauncherDecorator,
+    retryLauncherDecorator, processLauncherDecorator) {
+  return function(launcher) {
+    baseLauncherDecorator(launcher);
+    captureTimeoutLauncherDecorator(launcher);
+    retryLauncherDecorator(launcher);
+    processLauncherDecorator(launcher);
+  };
+};
 
 var Launcher = function(emitter, injector) {
   var browsers = [];
+  var lastStartTime;
+
+  var getBrowserById = function(id) {
+    for (var i = 0; i < browsers.length; i++) {
+      if (browsers[i].id === id) {
+        return browsers[i];
+      }
+    }
+
+    return null;
+  };
 
   this.launch = function(names, hostname, port, urlRoot) {
-    var url = 'http://' + hostname + ':' + port + urlRoot;
     var browser;
+    var url = 'http://' + hostname + ':' + port + urlRoot;
+
+    lastStartTime = Date.now();
 
     names.forEach(function(name) {
       var locals = {
         id: ['value', Launcher.generateId()],
         name: ['value', name],
+        baseLauncherDecorator: ['factory', baseDecorator],
+        captureTimeoutLauncherDecorator: ['factory', captureTimeoutDecorator],
+        retryLauncherDecorator: ['factory', retryDecorator],
+        processLauncherDecorator: ['factory', processDecorator],
         baseBrowserDecorator: ['factory', baseBrowserDecoratorFactory]
       };
 
@@ -34,16 +67,62 @@ var Launcher = function(emitter, injector) {
         return;
       }
 
+      // TODO(vojta): remove in v1.0 (BC for old launchers)
+      if (!browser.forceKill) {
+        browser.forceKill = function() {
+          var deferred = q.defer();
+          this.kill(function() {
+            deferred.resolve();
+          });
+          return deferred.promise;
+        };
+
+        browser.restart = function() {
+          var self = this;
+          this.kill(function() {
+            self.start(url);
+          });
+        };
+      }
+
       log.info('Starting browser %s', browser.name);
       browser.start(url);
       browsers.push(browser);
     });
+
+    return browsers;
   };
 
   this.launch.$inject = ['config.browsers', 'config.hostname', 'config.port', 'config.urlRoot'];
 
 
-  this.kill = function(callback) {
+  this.kill = function(id, callback) {
+    var browser = getBrowserById(id);
+    callback = callback || function() {};
+
+    if (!browser) {
+      process.nextTick(callback);
+      return false;
+    }
+
+    browser.forceKill().then(callback);
+    return true;
+  };
+
+
+  this.restart = function(id) {
+    var browser = getBrowserById(id);
+
+    if (!browser) {
+      return false;
+    }
+
+    browser.restart();
+    return true;
+  };
+
+
+  this.killAll = function(callback) {
     log.debug('Disconnecting all browsers');
 
     var remaining = 0;
@@ -60,7 +139,7 @@ var Launcher = function(emitter, injector) {
 
     browsers.forEach(function(browser) {
       remaining++;
-      browser.kill(finish);
+      browser.forceKill().then(finish);
     });
   };
 
@@ -76,19 +155,21 @@ var Launcher = function(emitter, injector) {
     browsers.forEach(function(browser) {
       if (browser.id === id) {
         browser.markCaptured();
+        log.debug('%s (id %s) captured in %d secs', browser.name, browser.id,
+            (Date.now() - lastStartTime) / 1000);
       }
     });
   };
 
 
   // register events
-  emitter.on('exit', this.kill);
+  emitter.on('exit', this.killAll);
 };
 
 Launcher.$inject = ['emitter', 'injector'];
 
 Launcher.generateId = function() {
-  return Math.floor(Math.random() * 100000000);
+  return '' + Math.floor(Math.random() * 100000000);
 };
 
 
