@@ -16,7 +16,9 @@
 	var windowElement;
 	var useSetCaptureApi = false;
 
-	exports.initializeDrawingArea = function(htmlElement) {
+	exports.initializeDrawingArea = function(elements) {
+		var htmlElement = elements.drawingAreaDiv;
+
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 		drawingArea = htmlElement;
 		documentBody = new HtmlElement(document.body);

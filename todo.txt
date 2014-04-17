@@ -24,11 +24,13 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-- Hook up clear screen button to SvgCanvas in client.js
+* Hook up clear screen button to SvgCanvas in client.js
 - Make clear screen button
 
 To Do on current task:
--
+* Write tests and implement
+- Add HtmlElement.fromId
+- Fail fast if client options contains extra parameters?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

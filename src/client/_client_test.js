@@ -21,7 +21,10 @@
 			windowElement = new HtmlElement(window);
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			drawingArea.appendSelfToBody();
-			svgCanvas = client.initializeDrawingArea(drawingArea);
+			svgCanvas = client.initializeDrawingArea({
+				drawingAreaDiv: drawingArea,
+				clearScreenButton: null
+			});
 		});
 
 		afterEach(function() {
@@ -36,8 +39,11 @@
 			expect(drawingArea.isBrowserDragDefaultsPrevented()).to.be(true);
 		});
 
+		it("clears drawing area when 'clear screen' button is clicked", function() {
 
-		describe("mouse events", function() {
+		});
+
+		describe("mouse drag events", function() {
 			it("draws a dot in response to mouse click", function() {
 				drawingArea.triggerMouseDown(50, 60);
 				drawingArea.triggerMouseUp(50, 60);
@@ -212,9 +218,9 @@
 		});
 
 		if (browser.supportsTouchEvents()) {
-			describe("touch events", function() {
+			describe("touch drag events", function() {
 
-				it("draws a dot when screen is tapped", function() {
+				it("draw a dot when screen is tapped", function() {
 					drawingArea.triggerSingleTouchStart(3, 42);
 					drawingArea.triggerTouchEnd();
 
