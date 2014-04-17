@@ -213,7 +213,14 @@
 	}
 
 
-	/* Offsets and positioning */
+	/* Dimensions, offsets, and positioning */
+
+	HtmlElement.prototype.getDimensions = function() {
+		return {
+			width: this._element.width(),
+			height: this._element.height()
+		};
+	};
 
 	HtmlElement.prototype.relativeOffset = function(pageOffset) {
 		return relativeOffset(this, pageOffset.x, pageOffset.y);
@@ -224,8 +231,9 @@
 	};
 
 	function relativeOffset(self, pageX, pageY) {
-		var pageOffset = self._element.offset();
+		failFastIfStylingPresent(self);
 
+		var pageOffset = self._element.offset();
 		return {
 			x: pageX - pageOffset.left,
 			y: pageY - pageOffset.top
@@ -233,6 +241,8 @@
 	}
 
 	function pageOffset(self, relativeX, relativeY) {
+		failFastIfStylingPresent(self);
+
 		var topLeftOfDrawingArea = self._element.offset();
 		return {
 			x: relativeX + topLeftOfDrawingArea.left,
@@ -240,6 +250,26 @@
 		};
 	}
 
+	function failFastIfStylingPresent(self) {
+		failFastIfPaddingPresent("top");
+		failFastIfPaddingPresent("left");
+		failFastIfBorderPresent("top");
+		failFastIfBorderPresent("left");
+
+		function failFastIfPaddingPresent(side) {
+			var css = self._element.css("padding-" + side);
+			if (css !== "0px") throw new Error("Do not apply padding to elements used with relativeOffset()");
+		}
+
+		function failFastIfBorderPresent(side) {
+			var text = self._element.css("border-" + side + "-width");
+			if (browser.doesNotComputeStyles()) {
+				if (self._element.css("border-" + side + "-style") === "none") text = "0px";
+			}
+
+			if (text !== "0px") throw new Error("Do not apply border to elements used with relativeOffset()");
+		}
+	}
 
 	/* DOM Manipulation */
 

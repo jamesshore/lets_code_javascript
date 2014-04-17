@@ -1,5 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.TXT for details.
-/*global HtmlElement, $ */
+/*global HtmlElement, $, Raphael:true */
 
 (function() {
 	"use strict";
@@ -13,7 +13,7 @@
 		var svgCanvas;
 
 		beforeEach(function() {
-			div = HtmlElement.fromHtml("<div style='height: 900px; width: 200px'>hi</div>");
+			div = HtmlElement.fromHtml("<div style='width: 200px; height: 900px;'>hi</div>");
 			div.appendSelfToBody();
 			svgCanvas = new SvgCanvas(div);
 		});
@@ -22,9 +22,25 @@
 			div.remove();
 		});
 
-		it("should have the same dimensions as its enclosing div", function() {
-			expect(svgCanvas.height()).to.equal(900);
-			expect(svgCanvas.width()).to.equal(200);
+		it("has the same dimensions as its enclosing div, regardless of border", function() {
+			// There might be a better way of coding this that doesn't use a spy.
+			// See Martin Grandrath's suggestion at http://www.letscodejavascript.com/v3/comments/live/185#comment-1292169079
+
+			var realRaphael = Raphael;
+			try {
+				Raphael = SpyRaphael;
+				svgCanvas = new SvgCanvas(div);
+				expect(Raphael.width).to.equal(200);
+				expect(Raphael.height).to.equal(900);
+			}
+			finally {
+				Raphael = realRaphael;
+			}
+
+			function SpyRaphael(element, width, height) {
+				SpyRaphael.width = width;
+				SpyRaphael.height = height;
+			}
 		});
 
 		it("returns zero line segments", function() {
