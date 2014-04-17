@@ -23,14 +23,11 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-- Update WebStorm
-- Update module dependencies
-- Update Node.js
 - Integrate
 
 To Do on current task:
 - AT START OF EPISODE:
-  - Updated modules, WebStorm, Node
+  - Updated modules, WebStorm
   - Tweaked smoke test (to work on Windows)
 
 Notes:
