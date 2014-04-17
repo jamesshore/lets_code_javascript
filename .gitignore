@@ -2,9 +2,6 @@
 .DS_Store
 generated/
 .bin
-node_modules/phantomjs/lib/phantom
-node_modules/phantomjs/tmp
-node_modules/phantomjs/lib/location.js
 
 node_modules/karma/node_modules/chokidar/node_modules/fsevents/build/
 node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws/build/
@@ -12,3 +9,5 @@ node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_mod
 
 node_modules/gaze/build/
 
+node_modules/phantomjs/lib/location.js
+node_modules/phantomjs/lib/phantom/
