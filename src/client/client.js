@@ -17,10 +17,10 @@
 	var useSetCaptureApi = false;
 
 	exports.initializeDrawingArea = function(elements) {
-		var htmlElement = elements.drawingAreaDiv;
-
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
-		drawingArea = htmlElement;
+		drawingArea = elements.drawingAreaDiv;
+		if (drawingArea === undefined) throw new Error("Expected drawingAreaDiv");
+
 		documentBody = new HtmlElement(document.body);
 		windowElement = new HtmlElement(window);
 

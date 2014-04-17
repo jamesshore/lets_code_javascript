@@ -12,6 +12,7 @@
 
 	describe("Drawing area", function() {
 		var drawingArea;
+		var clearButton;
 		var documentBody;
 		var windowElement;
 		var svgCanvas;
@@ -19,11 +20,15 @@
 		beforeEach(function() {
 			documentBody = new HtmlElement(document.body);
 			windowElement = new HtmlElement(window);
+
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			drawingArea.appendSelfToBody();
+
+			clearButton = HtmlElement.fromHtml("<input type='button'>");
+
 			svgCanvas = client.initializeDrawingArea({
 				drawingAreaDiv: drawingArea,
-				clearScreenButton: null
+				clearScreenButton: clearButton
 			});
 		});
 
@@ -40,7 +45,9 @@
 		});
 
 		it("clears drawing area when 'clear screen' button is clicked", function() {
-
+			dragMouse(10, 20, 40, 90);
+			clearButton.triggerMouseClick();
+			expect(lines()).to.eql([]);
 		});
 
 		describe("mouse drag events", function() {
@@ -277,6 +284,12 @@
 					]);
 				});
 			});
+		}
+
+		function dragMouse(startX, startY, endX, endY) {
+			drawingArea.triggerMouseDown(startX, startY);
+			drawingArea.triggerMouseMove(endX, endY);
+			drawingArea.triggerMouseUp(endX, endY);
 		}
 
 		function lines() {

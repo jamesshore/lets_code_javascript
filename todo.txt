@@ -28,7 +28,7 @@ Engineering Tasks:
 - Make clear screen button
 
 To Do on current task:
-* Write tests and implement
+* Implement support for clicking clear button
 - Add HtmlElement.fromId
 - Fail fast if client options contains extra parameters?
 
