@@ -23,7 +23,9 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-- Update WebStorm, module dependencies
+- Update WebStorm
+- Update module dependencies
+- Update Node.js
 - Integrate
 
 To Do on current task:
