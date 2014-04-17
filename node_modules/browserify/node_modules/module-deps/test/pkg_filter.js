@@ -1,11 +1,11 @@
 var mdeps = require('../');
-var test = require('tap').test;
+var test = require('tape');
 var JSONStream = require('JSONStream');
 var packer = require('browser-pack');
 var concat = require('concat-stream');
 
 test('pkg filter', function (t) {
-    t.plan(2);
+    t.plan(3);
     
     var p = mdeps(__dirname + '/files/pkg_filter/test.js', {
         packageFilter: function (pkg) {
