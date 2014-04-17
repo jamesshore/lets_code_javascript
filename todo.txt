@@ -23,7 +23,7 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-- Integrate
+-
 
 To Do on current task:
 - AT START OF EPISODE:
