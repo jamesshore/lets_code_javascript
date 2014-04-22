@@ -159,8 +159,8 @@
         var HtmlElement = require("./html_element.js");
 
         client.drawingAreaCanvas = client.initializeDrawingArea({
-            drawingAreaDiv: new HtmlElement(document.getElementById("drawingArea")),
-            clearScreenButton: new HtmlElement(document.getElementById("clearScreen"))
+            drawingAreaDiv: HtmlElement.fromId("drawingArea"),
+            clearScreenButton: HtmlElement.fromId("clrScreen")
         });
     });
 </script>

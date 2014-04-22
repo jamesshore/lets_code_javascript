@@ -24,14 +24,12 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Make clear screen button
-- Update smoke test? (probably not)
+* Make sure that smoke test fails if an ID is misspelled
 - (OFF CAMERA) Improve button styling
 - Integrate
 
 To Do on current task:
-* Add HtmlElement.fromId
-- Fail fast if client options contains extra parameters?
+* Make HtmlElement.fromId fail fast
 - Create fail fast library
 
 Notes:
