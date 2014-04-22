@@ -25,6 +25,10 @@
 
         /* General */
 
+        .clear {
+            clear: both;
+        }
+
         h1, h2, h3, h4, h5, h6 {
             margin-top: 1em;
         }
@@ -50,16 +54,16 @@
         }
 
         a {
-            color: #AD0000;
+            color: #ad0000;
         }
 
         a:visited {
-            color: #AD0000;
+            color: #ad0000;
         }
 
         a:hover {
             background-color: pink;
-            color: #AD0000;
+            color: #ad0000;
         }
 
         pre {
@@ -110,7 +114,24 @@
         }
 
 
-        /* Drawing area */
+        /* Drawing widgets */
+
+        #clearScreen {
+            float: right;
+            background-color: white;
+            border: solid 1px #ad0000;
+            border-radius: 10px;
+            width: 100px;
+            font-size: 90%;
+            font-weight: 100;
+            text-align: center;
+            color: #ad0000;
+        }
+
+        #clearScreen:active {
+            background-color: #ad0000;
+            color: white;
+        }
 
         #drawingAreaContainer {
             border: solid #cc0000 2px;
@@ -143,15 +164,16 @@
         <div class="section">
             <h1>Under Construction</h1>
 
-            <p>WeeWikiPaint is the web's premier <em>collaborative painting site</em>. At least, it will be. Right now, it's just a neat little doodling tool. Try it!</p>
+            <p>WeeWikiPaint is the web's premier <em>collaborative painting site</em>. At least, it could be. Right now, it's just a neat little doodling tool. Try it!</p>
 
             <p>You can watch this site get developed! This project is part of James Shore's <a href="http://www.letscodejavascript.com">Let's Code: Test-Driven JavaScript</a> screencast, a series focused on rigorous, professional Javascript development. Come join the fun!</p>
         </div>
         <div class="section">
-            <input id="clearScreen" type="button" style="float:right;" value="Clear">
+            <input id="clearScreen" type="button" value="Clear">
             <h1>Draw Here:</h1>
+            <div class="clear"></div>
 
-            <div id="drawingAreaContainer" style="clear: both;">
+            <div id="drawingAreaContainer">
                 <div id="drawingArea"></div>
             </div>
         </div>

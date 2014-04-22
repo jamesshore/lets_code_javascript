@@ -24,9 +24,10 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-OFF-CAMERA:
+DONE OFF-CAMERA:
 * Update client dependencies
-- Improve button styling
+* Improve button styling
+  - Check on all browsers
 - Integrate
 
 To Do on current task:
