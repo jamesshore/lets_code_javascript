@@ -23,6 +23,9 @@
 		return new HtmlElement($(html)[0]);
 	};
 
+	HtmlElement.fromId = function(id) {
+		return new HtmlElement(document.getElementById(id));
+	};
 
 	/* Capture API */
 

@@ -475,6 +475,14 @@
 				expect(element._domElement).to.equal(domElement);
 			});
 
+			it("finds element by ID", function() {
+				var expectedElement = HtmlElement.fromHtml("<div id='anElement'></div>");
+				expectedElement.appendSelfToBody();
+
+				var actualElement = HtmlElement.fromId("anElement");
+				expect(actualElement._domElement).to.equal(expectedElement._domElement);
+			});
+
 			it("appends elements", function() {
 				htmlElement.append(HtmlElement.fromHtml("<div></div>"));
 				expect(htmlElement._element.children().length).to.equal(1);

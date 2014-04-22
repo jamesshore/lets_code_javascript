@@ -26,10 +26,11 @@ Potential future stories:
 Engineering Tasks:
 * Make clear screen button
 - Update smoke test? (probably not)
+- (OFF CAMERA) Improve button styling
+- Integrate
 
 To Do on current task:
-* Implement support for clicking clear button
-- Add HtmlElement.fromId
+* Add HtmlElement.fromId
 - Fail fast if client options contains extra parameters?
 - Create fail fast library
 
