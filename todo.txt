@@ -24,13 +24,12 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
+
+To Do on current task:
 DONE OFF-CAMERA:
 * Update client dependencies
 * Improve button styling
-  - Check on all browsers
-- Integrate
-
-To Do on current task:
+* Integrate
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
