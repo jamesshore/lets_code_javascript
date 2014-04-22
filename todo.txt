@@ -29,8 +29,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-* Make HtmlElement.fromId fail fast
-- Create fail fast library
+* Create fail fast library
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
