@@ -7,6 +7,7 @@
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
+	var failFast = require("./fail_fast.js");
 
 	var svgCanvas = null;
 	var start = null;
@@ -21,10 +22,10 @@
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 
 		drawingArea = elements.drawingAreaDiv;
-		if (drawingArea === undefined) throw new Error("Expected drawingAreaDiv");
-
 		clearScreenButton = elements.clearScreenButton;
-		if (clearScreenButton === undefined) throw new Error("Expected clearScreenButton");
+
+		failFast.unlessDefined(drawingArea, "elements.drawingArea");
+		failFast.unlessDefined(clearScreenButton, "elements.clearScreenButton");
 
 		documentBody = new HtmlElement(document.body);
 		windowElement = new HtmlElement(window);

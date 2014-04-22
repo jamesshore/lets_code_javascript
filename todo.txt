@@ -24,12 +24,10 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Make sure that smoke test fails if an ID is misspelled
-- (OFF CAMERA) Improve button styling
+* (OFF CAMERA) Improve button styling
 - Integrate
 
 To Do on current task:
-* Create fail fast library
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

@@ -5,6 +5,7 @@
 	"use strict";
 
 	var browser = require("./browser.js");
+	var failFast = require("./fail_fast.js");
 
 	var capturedElement = null;
 
@@ -25,7 +26,7 @@
 
 	HtmlElement.fromId = function(id) {
 		var domElement = document.getElementById(id);
-		if (domElement === null) throw new Error("could not find element with id '" + id + "'");
+		failFast.unlessTrue(domElement !== null, "could not find element with id '" + id + "'");
 		return new HtmlElement(domElement);
 	};
 
