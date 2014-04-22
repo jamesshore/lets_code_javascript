@@ -26,11 +26,13 @@ Potential future stories:
 Engineering Tasks:
 * Hook up clear screen button to SvgCanvas in client.js
 - Make clear screen button
+- Update smoke test? (probably not)
 
 To Do on current task:
 * Implement support for clicking clear button
 - Add HtmlElement.fromId
 - Fail fast if client options contains extra parameters?
+- Create fail fast library
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

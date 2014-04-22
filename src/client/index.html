@@ -145,6 +145,7 @@
             <h1>Draw Here:</h1>
 
             <div id="drawingAreaContainer">
+                <input id="clearScreen" type="button">
                 <div id="drawingArea"></div>
             </div>
         </div>
@@ -158,7 +159,8 @@
         var HtmlElement = require("./html_element.js");
 
         client.drawingAreaCanvas = client.initializeDrawingArea({
-            drawingAreaDiv: new HtmlElement(document.getElementById("drawingArea"))
+            drawingAreaDiv: new HtmlElement(document.getElementById("drawingArea")),
+            clearScreenButton: new HtmlElement(document.getElementById("clearScreen"))
         });
     });
 </script>

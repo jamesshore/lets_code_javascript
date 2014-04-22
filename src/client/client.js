@@ -12,14 +12,19 @@
 	var start = null;
 	var lineDrawn = false;
 	var drawingArea;
+	var clearScreenButton;
 	var documentBody;
 	var windowElement;
 	var useSetCaptureApi = false;
 
 	exports.initializeDrawingArea = function(elements) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
+
 		drawingArea = elements.drawingAreaDiv;
 		if (drawingArea === undefined) throw new Error("Expected drawingAreaDiv");
+
+		clearScreenButton = elements.clearScreenButton;
+		if (clearScreenButton === undefined) throw new Error("Expected clearScreenButton");
 
 		documentBody = new HtmlElement(document.body);
 		windowElement = new HtmlElement(window);
@@ -27,6 +32,7 @@
 		svgCanvas = new SvgCanvas(drawingArea);
 
 		drawingArea.preventBrowserDragDefaults();
+		handleClearScreenClick();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
 
@@ -36,6 +42,12 @@
 	exports.drawingAreaHasBeenRemovedFromDom = function() {
 		svgCanvas = null;
 	};
+
+	function handleClearScreenClick() {
+		clearScreenButton.onMouseClick(function() {
+			svgCanvas.clear();
+		});
+	}
 
 	function handleMouseDragEvents() {
 		drawingArea.onMouseDown(startDrag);
