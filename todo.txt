@@ -24,8 +24,7 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Hook up clear screen button to SvgCanvas in client.js
-- Make clear screen button
+* Make clear screen button
 - Update smoke test? (probably not)
 
 To Do on current task:
