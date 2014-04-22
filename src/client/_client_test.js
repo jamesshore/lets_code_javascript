@@ -12,6 +12,7 @@
 
 	describe("Drawing area", function() {
 		var drawingArea;
+		var clearButton;
 		var documentBody;
 		var windowElement;
 		var svgCanvas;
@@ -19,9 +20,16 @@
 		beforeEach(function() {
 			documentBody = new HtmlElement(document.body);
 			windowElement = new HtmlElement(window);
+
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			drawingArea.appendSelfToBody();
-			svgCanvas = client.initializeDrawingArea(drawingArea);
+
+			clearButton = HtmlElement.fromHtml("<input type='button'>");
+
+			svgCanvas = client.initializeDrawingArea({
+				drawingAreaDiv: drawingArea,
+				clearScreenButton: clearButton
+			});
 		});
 
 		afterEach(function() {
@@ -36,8 +44,13 @@
 			expect(drawingArea.isBrowserDragDefaultsPrevented()).to.be(true);
 		});
 
+		it("clears drawing area when 'clear screen' button is clicked", function() {
+			dragMouse(10, 20, 40, 90);
+			clearButton.triggerMouseClick();
+			expect(lines()).to.eql([]);
+		});
 
-		describe("mouse events", function() {
+		describe("mouse drag events", function() {
 			it("draws a dot in response to mouse click", function() {
 				drawingArea.triggerMouseDown(50, 60);
 				drawingArea.triggerMouseUp(50, 60);
@@ -212,9 +225,9 @@
 		});
 
 		if (browser.supportsTouchEvents()) {
-			describe("touch events", function() {
+			describe("touch drag events", function() {
 
-				it("draws a dot when screen is tapped", function() {
+				it("draw a dot when screen is tapped", function() {
 					drawingArea.triggerSingleTouchStart(3, 42);
 					drawingArea.triggerTouchEnd();
 
@@ -271,6 +284,12 @@
 					]);
 				});
 			});
+		}
+
+		function dragMouse(startX, startY, endX, endY) {
+			drawingArea.triggerMouseDown(startX, startY);
+			drawingArea.triggerMouseMove(endX, endY);
+			drawingArea.triggerMouseUp(endX, endY);
 		}
 
 		function lines() {

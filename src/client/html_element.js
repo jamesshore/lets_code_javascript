@@ -5,6 +5,7 @@
 	"use strict";
 
 	var browser = require("./browser.js");
+	var failFast = require("./fail_fast.js");
 
 	var capturedElement = null;
 
@@ -23,6 +24,11 @@
 		return new HtmlElement($(html)[0]);
 	};
 
+	HtmlElement.fromId = function(id) {
+		var domElement = document.getElementById(id);
+		failFast.unlessTrue(domElement !== null, "could not find element with id '" + id + "'");
+		return new HtmlElement(domElement);
+	};
 
 	/* Capture API */
 

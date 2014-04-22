@@ -7,24 +7,33 @@
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
+	var failFast = require("./fail_fast.js");
 
 	var svgCanvas = null;
 	var start = null;
 	var lineDrawn = false;
 	var drawingArea;
+	var clearScreenButton;
 	var documentBody;
 	var windowElement;
 	var useSetCaptureApi = false;
 
-	exports.initializeDrawingArea = function(htmlElement) {
+	exports.initializeDrawingArea = function(elements) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
-		drawingArea = htmlElement;
+
+		drawingArea = elements.drawingAreaDiv;
+		clearScreenButton = elements.clearScreenButton;
+
+		failFast.unlessDefined(drawingArea, "elements.drawingArea");
+		failFast.unlessDefined(clearScreenButton, "elements.clearScreenButton");
+
 		documentBody = new HtmlElement(document.body);
 		windowElement = new HtmlElement(window);
 
 		svgCanvas = new SvgCanvas(drawingArea);
 
 		drawingArea.preventBrowserDragDefaults();
+		handleClearScreenClick();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
 
@@ -34,6 +43,12 @@
 	exports.drawingAreaHasBeenRemovedFromDom = function() {
 		svgCanvas = null;
 	};
+
+	function handleClearScreenClick() {
+		clearScreenButton.onMouseClick(function() {
+			svgCanvas.clear();
+		});
+	}
 
 	function handleMouseDragEvents() {
 		drawingArea.onMouseDown(startDrag);
