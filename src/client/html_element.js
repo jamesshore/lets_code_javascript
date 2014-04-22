@@ -24,7 +24,9 @@
 	};
 
 	HtmlElement.fromId = function(id) {
-		return new HtmlElement(document.getElementById(id));
+		var domElement = document.getElementById(id);
+		if (domElement === null) throw new Error("could not find element with id '" + id + "'");
+		return new HtmlElement(domElement);
 	};
 
 	/* Capture API */

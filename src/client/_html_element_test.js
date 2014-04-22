@@ -483,6 +483,12 @@
 				expect(actualElement._domElement).to.equal(expectedElement._domElement);
 			});
 
+			it("finding element by ID fails fast if ID not present", function() {
+				expect(function() {
+					var element = HtmlElement.fromId("noSuchId");
+				}).to.throwError();
+			});
+
 			it("appends elements", function() {
 				htmlElement.append(HtmlElement.fromHtml("<div></div>"));
 				expect(htmlElement._element.children().length).to.equal(1);
