@@ -23,8 +23,8 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Fix everything that goes wrong
-- Deploy to production
+* Deploy to production
+- Update readme with new deployment instructions
 
 To Do on current task:
 
