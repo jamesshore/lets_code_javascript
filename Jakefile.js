@@ -111,7 +111,7 @@
 
 		// Correction: Use "git push heroku integration:master" to deploy from integration branch.
 		// Thanks to Jüri A, http://www.letscodejavascript.com/v3/comments/live/32#comment-798947003 .
-		console.log("2. 'git push heroku integration:master'");
+		console.log("2. 'git push heroku integration:master' (or 'git push staging integration:master')");
 		console.log("3. 'jake test'");
 		console.log();
 		console.log("To deploy latest code to staging server:");

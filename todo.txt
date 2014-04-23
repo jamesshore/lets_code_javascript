@@ -2,7 +2,8 @@ WeeWikiPaint
 
 Minimum Marketable Features:
 + marketing home page (episodes 1-32)
-* single-user painting on home page (episodes 33+)
++ single-user painting on home page (episodes 33-200)
+* quality user-facing site design (episodes 201+)
 - multiple painting/erasing tools
 - support more browsers (Android, IE10, IE11)
 - collaborative painting
@@ -11,7 +12,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* ship it!
+-
 
 Potential future stories:
 - Site monitoring and logging
@@ -20,13 +21,12 @@ Potential future stories:
 - Scalability
 - Deploy (including smoke test to ensure that div is in home page)
     (needs to depend on 'build'; just running foreman could give us outdated files)
-- quality user-facing site design
 
 Engineering Tasks:
-* Deploy to production
-- Update readme with new deployment instructions
+-
 
 To Do on current task:
+-
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
