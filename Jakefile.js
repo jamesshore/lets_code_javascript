@@ -105,13 +105,19 @@
 	}, {async: true});
 
 	desc("Deploy to Heroku");
-	task("deploy", ["default"], function() {
-		console.log("1. Make sure 'git status' is clean.");
+	task("deploy", function() {
+		console.log("To deploy to production:");
+		console.log("1. Integrate ('jake integrate')");
 
 		// Correction: Use "git push heroku integration:master" to deploy from integration branch.
 		// Thanks to Jüri A, http://www.letscodejavascript.com/v3/comments/live/32#comment-798947003 .
-		console.log("2. 'git push heroku master' (or integration:master)");
+		console.log("2. 'git push heroku integration:master'");
 		console.log("3. 'jake test'");
+		console.log();
+		console.log("To deploy latest code to staging server:");
+		console.log("1. Make sure 'git status' is clean.");
+		console.log("2. 'git push staging master");
+		console.log("3. Visit http://wwp-staging.herokuapp.com/");
 	});
 
 //	desc("Ensure correct version of Node is present.");

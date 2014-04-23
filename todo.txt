@@ -11,8 +11,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* "clear screen" button
-- ship it!
+* ship it!
 
 Potential future stories:
 - Site monitoring and logging
@@ -24,12 +23,10 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
+* Deploy to production
+- Update readme with new deployment instructions
 
 To Do on current task:
-DONE OFF-CAMERA:
-* Update client dependencies
-* Improve button styling
-* Integrate
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
