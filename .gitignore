@@ -1,6 +1,5 @@
 .idea/workspace.xml
 .DS_Store
-generated/
 .bin
 
 node_modules/karma/node_modules/chokidar/node_modules/fsevents/

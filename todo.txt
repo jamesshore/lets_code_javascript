@@ -23,9 +23,7 @@ Potential future stories:
 - quality user-facing site design
 
 Engineering Tasks:
-* Create staging environment
-- Attempt deployment
-- Fix everything that goes wrong
+* Fix everything that goes wrong
 - Deploy to production
 
 To Do on current task:
