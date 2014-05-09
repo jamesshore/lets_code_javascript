@@ -12,7 +12,8 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
--
+* Professional design work
+- Implement design
 
 Potential future stories:
 - Site monitoring and logging
@@ -23,7 +24,9 @@ Potential future stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
--
+* Basic typography & colors - right personality
+- Make drawing area main focus of the app (includes layout)
+- Consider "measure" - length of each line
 
 To Do on current task:
 -
