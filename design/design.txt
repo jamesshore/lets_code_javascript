@@ -1,0 +1,31 @@
+Design guidelines from Espen Brunborg of primate.co.uk:
+
+Colours:
+Blue (main background): #42a9cc
+Medium blue (mainly used for hover states on buttons): #006f8f
+Dark blue (for button dropshadows and text): #0d576d
+Gray (for button): #e5e5e5
+medium gray (for button dropshadow): #a7a9ab
+dark gray (for button text): #595959
+
+// If any of the colours are inconsistent with the JS site, please feel free to use what you already have.
+
+Typography:
+Intro text: Alwyn new rounded, regular, 14px (or em equivalent), dark blue
+Call-out text at the bottom: Alwyn new rounded, regular, 14px,white
+
+Clear button:
+Text: Alwyn new rounded, bold, 12px, dark gray, uppercase
+Background: gray
+Dimensions: try to keep it 30px tall, with a generous padding left/right
+Dropshadow: medium gray, 2px vertical offset, no blur
+
+Call-out button:
+Text: Alwyn new rounded, bold, 14px, white, uppercase
+Background: medium blue
+Dimensions, try to keep it 35px tall, generous padding left/right (maybe even have a min-width of 175px)
+
+404 page:
+404 Text: Alwyn new rounded, bold, 220px, medium blue
+Strapline text: Same as intro text
+Button: same as call-out button 
