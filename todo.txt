@@ -3,7 +3,8 @@ WeeWikiPaint
 Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 + single-user painting on home page (episodes 33-200)
-* quality user-facing site design (episodes 201+)
+* replace home page with professional design (episodes 201+)
+- replace 404 page with professional design
 - multiple painting/erasing tools
 - support more browsers (Android, IE10, IE11)
 - collaborative painting
@@ -12,7 +13,15 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Implement design
+* Logo
+- Headline
+- Layout w/ blue background
+- Drawing area
+- Arrow pointing into drawing area
+- "Clear" button
+- Footer's call to action
+- Footer's "Join Me" button
+- Release new design
 
 Potential future stories:
 - "Try me" text in drawing area
@@ -25,9 +34,9 @@ Potential future stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-- test-driven CSS
+- Experiment with testing CSS
 
-expect(css("myHeadline").isCentered()).to.be(true)
+Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
 -
