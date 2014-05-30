@@ -34,12 +34,13 @@ Potential future stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-- Experiment with testing CSS
+- Spike testing CSS
+- Consider whether/how to support IE 8?
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
--
+- isElementCentered()
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
