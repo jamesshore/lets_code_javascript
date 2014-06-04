@@ -41,6 +41,7 @@ Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
 - isElementCentered()
+- Update expected Safari version
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

@@ -39,6 +39,10 @@
 		return textAlign === "center";
 	}
 
+	function pixelsToInt(pixels) {
+		return parseInt(pixels, 10);
+	}
+
 	function isElementCenteredInPage(element) {
 		var domElement = element.toDomElement();
 
@@ -47,23 +51,24 @@
 		var elementLeft = boundingBox.left;
 		var elementRight = boundingBox.right;
 
-		dump(elementWidth, elementLeft, elementRight);
+		var bodyStyle = window.getComputedStyle(document.body);
 
-//		dump(document.body.getBoundingClientRect());
-
-		var bodyWidth = document.body.clientWidth;
+		var bodyWidthExcludingMargins = document.body.clientWidth;
+		var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
+		var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
+		var bodyWidth = bodyWidthExcludingMargins + bodyLeftMarginWidth + bodyRightMarginWidth;
 
 		var expectedSides = (bodyWidth - elementWidth) / 2;
 
 		var success = true;
-		if (elementLeft !== expectedSides) {
+		if (elementLeft !== Math.round(expectedSides)) {
 			console.log("expected left to be " + expectedSides + " but was " + elementLeft + " (element is " + elementWidth + "px wide; screen is " + bodyWidth + "px wide)");
 			success = false;
 		}
 
-		var rightSide = bodyWidth - elementRight;
-		if (rightSide !== expectedSides) {
-			console.log("expected right to be " + expectedSides + " but was " + elementRight + " (element is " + elementWidth + "px wide; screen is " + bodyWidth + "px wide)");
+		var expectedRight = Math.round(bodyWidth - expectedSides);
+		if (elementRight !== expectedRight) {
+			console.log("expected right to be " + expectedRight + " but was " + elementRight + " (element is " + elementWidth + "px wide; screen is " + bodyWidth + "px wide)");
 			success = false;
 		}
 
