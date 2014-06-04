@@ -40,7 +40,7 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-- Update expected Safari version
+- Load real CSS from a file
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
