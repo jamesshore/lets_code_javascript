@@ -29,12 +29,6 @@
 		});
 
 		it.only("loads css from file", function(done) {
-			var styleTag = document.createElement("link");
-			styleTag.rel = "stylesheet";
-			styleTag.href = "./deleteme.css";
-			styleTag.type = "text/css";
-			document.head.appendChild(styleTag);
-
 			setTimeout(done, 1500);
 		});
 
