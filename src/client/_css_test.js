@@ -5,7 +5,7 @@
 	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
 
-	describe("CSS", function() {
+	describe("Home page", function() {
 		if (browser.doesNotComputeStyles()) return;
 
 		var htmlElement;
@@ -19,12 +19,16 @@
 			htmlElement.remove();
 		});
 
-		it("headline is centered", function() {
-			expect(isElementCenteredInPage(htmlElement)).to.be(true);
-			expect(isTextCentered(htmlElement)).to.be(true);
+		it("has a blue background", function() {
+			expect(backgroundColorOf(document.body)).to.be("rgb(66, 169, 204)");
 		});
 
 	});
+
+	function backgroundColorOf(domElement) {
+		var style = window.getComputedStyle(domElement);
+		return style.getPropertyValue("background-color");
+	}
 
 	function isTextCentered(element) {
 		var domElement = element.toDomElement();
