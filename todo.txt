@@ -39,12 +39,13 @@ Engineering Tasks:
 - Test that style sheet is actually being loaded by index.html
 - Need to cache-bust stylesheet
 - Confirm that styling works cross-platform
+- Should isElementCenteredInPage() force element to have a width other than 100%?
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Get stylesheet working on index.html
-- Implement headline
+* Check logo on actual page
+- Figure out how to test <img> tag (or is it necessary?)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

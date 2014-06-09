@@ -1,3 +1,8 @@
 body {
 	background-color: #42a9cc;
 }
+
+#logo {
+	margin-left: auto;
+	margin-right: auto;
+}
