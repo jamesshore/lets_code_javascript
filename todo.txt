@@ -42,7 +42,8 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
--
+- Get stylesheet working on index.html
+- Implement headline
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
