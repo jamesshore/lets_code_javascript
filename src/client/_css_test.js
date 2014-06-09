@@ -6,13 +6,12 @@
 	var browser = require("./browser.js");
 
 	describe("CSS", function() {
-		if (browser.doesNotComputeStyles()) return;   // TODO: fix me?
+		if (browser.doesNotComputeStyles()) return;
 
 		var htmlElement;
 
 		beforeEach(function() {
-//			htmlElement = HtmlElement.fromHtml("<h1 style='text-align: center'>Hello World</h1>");
-			htmlElement = HtmlElement.fromHtml("<h1 style='margin-left: auto; margin-right: auto; width: 200px;'>Hello World</h1>");
+			htmlElement = HtmlElement.fromHtml("<h1 id='headline'>Hello World</h1>");
 			htmlElement.appendSelfToBody();
 		});
 
@@ -20,16 +19,9 @@
 			htmlElement.remove();
 		});
 
-		it("headline is centered", function(done) {
-//			expect(isTextCentered(htmlElement)).to.be(true);
+		it("headline is centered", function() {
 			expect(isElementCenteredInPage(htmlElement)).to.be(true);
-
-//			setTimeout(done, 5000);
-			done();
-		});
-
-		it.only("loads css from file", function(done) {
-			setTimeout(done, 1500);
+			expect(isTextCentered(htmlElement)).to.be(true);
 		});
 
 	});

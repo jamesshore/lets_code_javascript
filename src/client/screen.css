@@ -1,3 +1,4 @@
-h1 {
+#headline {
 	border: solid red 2px;
+	text-align: center;
 }

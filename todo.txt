@@ -35,12 +35,11 @@ Potential future stories:
 
 Engineering Tasks:
 * Spike testing CSS
-- Consider whether/how to support IE 8?
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Load real CSS from a file
+-
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
