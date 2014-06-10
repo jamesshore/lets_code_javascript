@@ -23,9 +23,7 @@ A note about Node versions:
 
 Some episodes' source code was written for old versions of Node. You can check which version of Node the code expects by running `./jake.sh version`, or `jake version` on Windows. (Episodes 1-13 didn't support that command. They expected v0.6.17 or v0.8.4; either should work.)
 
-If you're having trouble getting the code to work properly, especially if the code expects Node 0.8 or earlier, try installing the right version of Node installed.
- 
-Convenient tools for changing Node versions include [nvm](https://github.com/creationix/nvm) and [n](https://github.com/visionmedia/n) on Mac/Linux, and [nvmw](https://github.com/hakobera/nvmw) and [nodist](https://github.com/marcelklehr/nodist) on Windows. 
+If you're having trouble getting the code to work properly, especially if the code expects Node 0.8 or earlier, try installing the right version of Node installed. Convenient tools for changing Node versions include [nvm](https://github.com/creationix/nvm) and [n](https://github.com/visionmedia/n) on Mac/Linux, and [nvmw](https://github.com/hakobera/nvmw) and [nodist](https://github.com/marcelklehr/nodist) on Windows.
 
 
 To build and test:
