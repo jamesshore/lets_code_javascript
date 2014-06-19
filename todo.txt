@@ -41,12 +41,12 @@ Engineering Tasks:
 - Confirm that styling works cross-platform
 - Should isElementCenteredInPage() force element to have a width other than 100%?
 - What about alt tags? Semantic markup?
+- Fix old test breakage that occurs when changing body margins (don't assume body margins? don't always load CSS?)
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* logo top margin
-- logo bottom margin
+* logo bottom margin
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
 
 Notes:

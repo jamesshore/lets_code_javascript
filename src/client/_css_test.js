@@ -13,10 +13,10 @@
 		});
 
 		it("centers logo at top of page", function() {
-			expect(isElementCenteredInPage("<div id='logo' style='width: 200px;'></div>")).to.be(true);
-			expect(isTextCentered("<div id='logo' style='width: 200px;'></div>")).to.be(true);
+			expect(isElementCenteredInPage("<h1 id='logo' style='width: 200px;'>Hello World</h1>")).to.be(true);
+			expect(isTextCentered("<h1 id='logo' style='width: 200px;'>Hello World</h1>")).to.be(true);
 
-			expect(elementPixelsFromTopOfPage("<div id='logo' style='width: 200px;'></div>")).to.be(16);
+			expect(elementPixelsFromTopOfPage("<h1 id='logo' style='width: 200px;'>Hello World</h1>")).to.be(12);
 		});
 
 	});
@@ -54,6 +54,21 @@
 			}
 
 			return success;
+		}
+		finally {
+			element.remove();
+		}
+	}
+
+	function elementPixelsFromTopOfPage(html) {
+		var element = HtmlElement.fromHtml(html);
+		element.appendSelfToBody();
+		try {
+			var domElement = element.toDomElement();
+
+			var boundingBox = domElement.getBoundingClientRect();
+
+			return boundingBox.top;
 		}
 		finally {
 			element.remove();
