@@ -15,6 +15,8 @@
 		it("centers logo at top of page", function() {
 			expect(isElementCenteredInPage("<div id='logo' style='width: 200px;'></div>")).to.be(true);
 			expect(isTextCentered("<div id='logo' style='width: 200px;'></div>")).to.be(true);
+
+			expect(elementPixelsFromTopOfPage("<div id='logo' style='width: 200px;'></div>")).to.be(16);
 		});
 
 	});

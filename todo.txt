@@ -45,7 +45,8 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Make logo margins correct
+* logo top margin
+- logo bottom margin
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
 
 Notes:
