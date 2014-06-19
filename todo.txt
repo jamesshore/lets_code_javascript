@@ -45,7 +45,9 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
+* Color tagline
+- Adjust spacing between tagline and logo
+- Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

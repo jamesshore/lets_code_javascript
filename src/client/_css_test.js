@@ -19,6 +19,10 @@
 			expect(elementPixelsFromTopOfPage("<h1 id='logo' style='width: 200px;'>Hello World</h1>")).to.be(12);
 		});
 
+		it("centers tagline directly below logo", function() {
+			expect(isTextCentered("<p id='tagline'>Tag line here</p>")).to.be(true);
+		});
+
 	});
 
 	function isElementCenteredInPage(html) {
