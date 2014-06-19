@@ -45,8 +45,8 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Check logo on actual page
-- Figure out how to test <img> tag (or is it necessary?)
+* Make logo margins correct
+- Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

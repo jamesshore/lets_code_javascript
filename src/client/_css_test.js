@@ -14,6 +14,7 @@
 
 		it("centers logo at top of page", function() {
 			expect(isElementCenteredInPage("<div id='logo' style='width: 200px;'></div>")).to.be(true);
+			expect(isTextCentered("<div id='logo' style='width: 200px;'></div>")).to.be(true);
 		});
 
 	});
@@ -62,13 +63,20 @@
 		return style.getPropertyValue("background-color");
 	}
 
-	function isTextCentered(element) {
-		var domElement = element.toDomElement();
+	function isTextCentered(html) {
+		var element = HtmlElement.fromHtml(html);
+		element.appendSelfToBody();
+		try {
+			var domElement = element.toDomElement();
 
-		var style = window.getComputedStyle(domElement);
-		var textAlign = style.getPropertyValue("text-align");
+			var style = window.getComputedStyle(domElement);
+			var textAlign = style.getPropertyValue("text-align");
 
-		return textAlign === "center";
+			return textAlign === "center";
+		}
+		finally {
+			element.remove();
+		}
 	}
 
 	function pixelsToInt(pixels) {
