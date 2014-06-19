@@ -40,6 +40,7 @@ Engineering Tasks:
 - Need to cache-bust stylesheet
 - Confirm that styling works cross-platform
 - Should isElementCenteredInPage() force element to have a width other than 100%?
+- What about alt tags? Semantic markup?
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 

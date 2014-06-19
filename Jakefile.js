@@ -91,7 +91,7 @@
 	desc("Bundle and build code");
 	task("build", [BUILD_CLIENT_DIR], function() {
 		shell.rm("-rf", BUILD_CLIENT_DIR + "/*");
-		shell.cp("-R", "src/client/*.html", "src/client/*.css", "src/client/vendor", BUILD_CLIENT_DIR);
+		shell.cp("-R", "src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor", BUILD_CLIENT_DIR);
 
 		console.log("Bundling client files with Browserify...");
 		var b = browserify();
