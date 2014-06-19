@@ -13,8 +13,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Logo
-- Headline
+* Tagline
 - Layout w/ blue background
 - Drawing area
 - Arrow pointing into drawing area
@@ -46,8 +45,7 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* logo bottom margin
-- Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
+* Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
