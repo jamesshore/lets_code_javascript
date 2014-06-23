@@ -45,6 +45,8 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
+- BEFORE NEXT EPISODE:
+  - Michal Svoboda's E215 comment re centered elements
 * Color tagline
 - Adjust spacing between tagline and logo
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
