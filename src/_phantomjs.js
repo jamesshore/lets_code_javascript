@@ -14,7 +14,7 @@
 		console.log("CONSOLE: " + message);
 	};
 
-	page.open("http://localhost:5000", function(success) {
+	page.open("http://app.weewikipaint.com:5000", function(success) {
 		try {
 			var error = page.evaluate(inBrowser);
 			if (error) {
