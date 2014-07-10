@@ -36,7 +36,7 @@ Engineering Tasks:
 * Implement each design element
 - backgroundColorOf() -- how should it deal with hex values? (use assertion style rather than expect style?)
 - Test that style sheet is actually being loaded by index.html
-- Need to cache-bust stylesheet
+- Need to cache-bust stylesheet and bundle.js
 - Confirm that styling works cross-platform
 - Should isElementCenteredInPage() force element to have a width other than 100%?
 - What about alt tags? Semantic markup?
