@@ -35,7 +35,7 @@
 		}
 
 		it("has a blue background", function() {
-			expect(backgroundColorOf(document.body)).to.be(backgroundBlue);
+			expect(backgroundColorOf(new HtmlElement(document.body))).to.be(backgroundBlue);
 		});
 
 		it("centers logo at top of page", function() {
@@ -55,7 +55,10 @@
 
 		it("centers drawing area below tagline", function() {
 			expect(isElementCenteredInPage(drawingArea)).to.be(true);
+			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
+
 			expect(elementHeightInPixels(drawingArea)).to.equal(600);
+			expect(backgroundColorOf(drawingArea)).to.equal(white);
 		});
 
 	});
@@ -121,8 +124,8 @@
 		return style.getPropertyValue(propertyName);
 	}
 
-	function backgroundColorOf(domElement) {
-		return getComputedProperty(domElement, "background-color");
+	function backgroundColorOf(element) {
+		return getComputedProperty(element.toDomElement(), "background-color");
 	}
 
 	function fontSizeOf(element) {
