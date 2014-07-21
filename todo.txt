@@ -13,13 +13,12 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Tagline
-- Layout w/ blue background
+* Arrow pointing into drawing area
 - Drawing area
-- Arrow pointing into drawing area
 - "Clear" button
 - Footer's call to action
 - Footer's "Join Me" button
+- Web font
 - Release new design
 
 Potential future stories:
@@ -45,9 +44,6 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Font size for tagline
-- Font size for logo
-- Color tagline
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
   - Michal Svoboda's E215 comment re centered elements
 

@@ -9,10 +9,12 @@ h1#logo {
 	margin-bottom: 0px;
 	text-align: center;
 	font-size: 22px;
+	color: white;
 }
 
 #tagline {
 	margin-top: 5px;
 	text-align: center;
 	font-size: 14px;
+	color: #0d576d;
 }

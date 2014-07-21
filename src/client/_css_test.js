@@ -8,6 +8,10 @@
 	describe("Home page", function() {
 		if (browser.doesNotComputeStyles()) return;
 
+		var white = "rgb(255, 255, 255)";
+		var backgroundBlue = "rgb(66, 169, 204)";
+		var darkBlue = "rgb(13, 87, 109)";
+
 		var logo;
 		var tagline;
 
@@ -28,13 +32,14 @@
 		}
 
 		it("has a blue background", function() {
-			expect(backgroundColorOf(document.body)).to.be("rgb(66, 169, 204)");
+			expect(backgroundColorOf(document.body)).to.be(backgroundBlue);
 		});
 
 		it("centers logo at top of page", function() {
 			expect(isTextCenteredInPage(logo)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
 			expect(fontSizeOf(logo)).to.be("22px");
+			expect(textColorOf(logo)).to.be(white);
 		});
 
 		it("centers tagline directly below logo", function() {
@@ -42,6 +47,7 @@
 			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 
 			expect(fontSizeOf(tagline)).to.be("14px");
+			expect(textColorOf(tagline)).to.be(darkBlue);
 		});
 
 	});
@@ -107,6 +113,10 @@
 
 	function fontSizeOf(element) {
 		return getComputedProperty(element.toDomElement(), "font-size");
+	}
+
+	function textColorOf(element) {
+		return getComputedProperty(element.toDomElement(), "color");
 	}
 
 	function isTextCenteredInPage(element) {
