@@ -32,18 +32,15 @@
 		});
 
 		it("centers logo at top of page", function() {
-			expect(isElementCenteredInPage(logo)).to.be(true);
-			expect(isTextCentered(logo)).to.be(true);
+			expect(isTextCenteredInPage(logo)).to.be(true);
 
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
 		});
 
 		it("centers tagline directly below logo", function() {
-			expect(isTextCentered(tagline)).to.be(true);
+			expect(isTextCenteredInPage(tagline)).to.be(true);
 
-//			expect(elementPixelsBelowElement(tagline, logo)).to.be(8);
-
-
+			expect(elementPixelsBelowElement(tagline, logo)).to.be(8);
 		});
 
 	});
@@ -88,12 +85,24 @@
 		return boundingBox.top;
 	}
 
+	function elementPixelsBelowElement(element, relativeToElement) {
+		var domElement = element.toDomElement();
+		var domRelativeElement = relativeToElement.toDomElement();
+
+		var elementBox = domElement.getBoundingClientRect();
+		var relativeBox = domRelativeElement.getBoundingClientRect();
+
+		return elementBox.top - relativeBox.bottom;
+	}
+
 	function backgroundColorOf(domElement) {
 		var style = window.getComputedStyle(domElement);
 		return style.getPropertyValue("background-color");
 	}
 
-	function isTextCentered(element) {
+	function isTextCenteredInPage(element) {
+		if (!isElementCenteredInPage(element)) return false;
+
 		var domElement = element.toDomElement();
 
 		var style = window.getComputedStyle(domElement);
