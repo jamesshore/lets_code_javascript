@@ -15,6 +15,7 @@ Minimum Marketable Features:
 User Stories to finish current MMF:
 * Arrow pointing into drawing area
 - "Clear" button
+  - Use <a> not <button> as suggested by Laurent Bourgault-Roy in E221 comments
 - Footer's call to action
 - Footer's "Join Me" button
 - Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
