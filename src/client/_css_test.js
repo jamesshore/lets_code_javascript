@@ -33,8 +33,8 @@
 
 		it("centers logo at top of page", function() {
 			expect(isTextCenteredInPage(logo)).to.be(true);
-
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
+			expect(fontSizeOf(logo)).to.be("22px");
 		});
 
 		it("centers tagline directly below logo", function() {
