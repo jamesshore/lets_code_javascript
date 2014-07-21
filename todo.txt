@@ -13,11 +13,12 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Arrow pointing into drawing area
-- Drawing area
+* Drawing area
+- Arrow pointing into drawing area
 - "Clear" button
 - Footer's call to action
 - Footer's "Join Me" button
+- Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
 - Web font
 - Release new design
 

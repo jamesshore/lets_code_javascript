@@ -18,3 +18,9 @@ h1#logo {
 	font-size: 14px;
 	color: #0d576d;
 }
+
+#drawingArea {
+	height: 600px;
+	margin: 0 auto;
+	background-color: grey;
+}

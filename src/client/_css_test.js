@@ -14,15 +14,18 @@
 
 		var logo;
 		var tagline;
+		var drawingArea;
 
 		beforeEach(function() {
 			logo = newElement("<h1 id='logo'>Hello World</h1>");
 			tagline = newElement("<p id='tagline'>Tag line here</p>");
+			drawingArea = newElement("<div id='drawingArea'></div>");
 		});
 
 		afterEach(function() {
 			logo.remove();
 			tagline.remove();
+			drawingArea.remove();
 		});
 
 		function newElement(html) {
@@ -48,6 +51,11 @@
 
 			expect(fontSizeOf(tagline)).to.be("14px");
 			expect(textColorOf(tagline)).to.be(darkBlue);
+		});
+
+		it("centers drawing area below tagline", function() {
+			expect(isElementCenteredInPage(drawingArea)).to.be(true);
+			expect(elementHeightInPixels(drawingArea)).to.equal(600);
 		});
 
 	});
@@ -90,6 +98,12 @@
 		var boundingBox = domElement.getBoundingClientRect();
 
 		return boundingBox.top;
+	}
+
+	function elementHeightInPixels(element) {
+		var domElement = element.toDomElement();
+		var boundingBox = domElement.getBoundingClientRect();
+		return boundingBox.height;
 	}
 
 	function elementPixelsBelowElement(element, relativeToElement) {
