@@ -39,8 +39,9 @@
 
 		it("centers tagline directly below logo", function() {
 			expect(isTextCenteredInPage(tagline)).to.be(true);
-
 			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
+
+			expect(fontSizeOf(tagline)).to.be("14px");
 		});
 
 	});
@@ -95,9 +96,17 @@
 		return elementBox.top - relativeBox.bottom;
 	}
 
-	function backgroundColorOf(domElement) {
+	function getComputedProperty(domElement, propertyName) {
 		var style = window.getComputedStyle(domElement);
-		return style.getPropertyValue("background-color");
+		return style.getPropertyValue(propertyName);
+	}
+
+	function backgroundColorOf(domElement) {
+		return getComputedProperty(domElement, "background-color");
+	}
+
+	function fontSizeOf(element) {
+		return getComputedProperty(element.toDomElement(), "font-size");
 	}
 
 	function isTextCenteredInPage(element) {
