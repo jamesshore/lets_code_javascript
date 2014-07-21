@@ -45,12 +45,12 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-- BEFORE NEXT EPISODE:
-  - Michal Svoboda's E215 comment re centered elements
-  - Upgraded PhantomJS 1.9.7-3 --> 1.9.7-9 & Karma 0.12.9 --> 0.12.16
-* Color tagline
+* Clean up HTML element creation
+  - Have textCentered also check that the element is centered
 - Adjust spacing between tagline and logo
+- Color tagline
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
+  - Michal Svoboda's E215 comment re centered elements
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
