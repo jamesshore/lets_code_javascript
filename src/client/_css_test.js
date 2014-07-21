@@ -40,7 +40,7 @@
 		it("centers tagline directly below logo", function() {
 			expect(isTextCenteredInPage(tagline)).to.be(true);
 
-			expect(elementPixelsBelowElement(tagline, logo)).to.be(8);
+			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 		});
 
 	});

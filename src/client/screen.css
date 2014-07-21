@@ -6,9 +6,12 @@ h1#logo {
 	margin-top: 12px;
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 0px;
 	text-align: center;
+	font-size: 6px;
 }
 
 #tagline {
+	margin-top: 5px;
 	text-align: center;
 }

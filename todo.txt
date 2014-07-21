@@ -46,6 +46,7 @@ Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
 * Adjust spacing between tagline and logo
+- Font size for logo
 - Color tagline
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
   - Michal Svoboda's E215 comment re centered elements
