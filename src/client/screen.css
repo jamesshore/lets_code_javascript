@@ -28,8 +28,15 @@ h1#logo {
 	background-color: white;
 }
 
+#drawingAreaContainer {
+	background-color: grey;
+	position: relative;
+}
+
 #drawingAreaArrow {
 	text-align: center;
-	margin-top: 0px;
-	margin-bottom: -24px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
 }

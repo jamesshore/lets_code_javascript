@@ -14,21 +14,27 @@
 
 		var logo;
 		var tagline;
-		var drawingArea;
+		var drawingAreaContainer;
 		var drawingAreaArrow;
+		var drawingArea;
 
 		beforeEach(function() {
 			logo = newElement("<h1 id='logo'>Hello World</h1>");
 			tagline = newElement("<p id='tagline'>Tag line here</p>");
-			drawingAreaArrow = newElement("<div id='drawingAreaArrow'>v</div>");
-			drawingArea = newElement("<div id='drawingArea'></div>");
+			drawingAreaContainer = newElement("" +
+				"<div id='drawingAreaContainer'>" +
+				" <div id='drawingAreaArrow'>v</div>" +
+				" <div id='drawingArea'></div>"
+			);
+
+			drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
+			drawingArea = HtmlElement.fromId("drawingArea");
 		});
 
 		afterEach(function() {
 			logo.remove();
 			tagline.remove();
-			drawingArea.remove();
-			drawingAreaArrow.remove();
+			drawingAreaContainer.remove();
 		});
 
 		function newElement(html) {

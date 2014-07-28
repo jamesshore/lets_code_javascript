@@ -41,10 +41,13 @@ Engineering Tasks:
 - Should isElementCenteredInPage() force element to have a width other than 100%?
 - What about alt tags? Semantic markup?
 - Fix old test breakage that occurs when changing body margins (don't assume body margins? don't always load CSS?)
+- How do we deal with errors related to CSS test HTML and production HTML having different structure?
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
+* Why is height of 'drawingAreaArrow' div so much taller than the img it contains
+- Make sure arrow isn't overdrawn by user's lines
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
   - Michal Svoboda's E215 comment re centered elements
 
