@@ -15,10 +15,12 @@
 		var logo;
 		var tagline;
 		var drawingArea;
+		var drawingAreaArrow;
 
 		beforeEach(function() {
 			logo = newElement("<h1 id='logo'>Hello World</h1>");
 			tagline = newElement("<p id='tagline'>Tag line here</p>");
+			drawingAreaArrow = newElement("<div id='drawingAreaArrow'>v</div>");
 			drawingArea = newElement("<div id='drawingArea'></div>");
 		});
 
@@ -26,6 +28,7 @@
 			logo.remove();
 			tagline.remove();
 			drawingArea.remove();
+			drawingAreaArrow.remove();
 		});
 
 		function newElement(html) {
@@ -39,14 +42,14 @@
 		});
 
 		it("centers logo at top of page", function() {
-			expect(isTextCenteredInPage(logo)).to.be(true);
+			expect(isContentCenteredInPage(logo)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
 			expect(fontSizeOf(logo)).to.be("22px");
 			expect(textColorOf(logo)).to.be(white);
 		});
 
 		it("centers tagline directly below logo", function() {
-			expect(isTextCenteredInPage(tagline)).to.be(true);
+			expect(isContentCenteredInPage(tagline)).to.be(true);
 			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 
 			expect(fontSizeOf(tagline)).to.be("14px");
@@ -60,6 +63,13 @@
 			expect(elementHeightInPixels(drawingArea)).to.equal(600);
 			expect(backgroundColorOf(drawingArea)).to.equal(white);
 		});
+
+		it("centers arrow at top of drawing area", function() {
+			expect(isContentCenteredInPage(drawingAreaArrow)).to.be(true);
+
+			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
+		});
+
 
 	});
 
@@ -119,6 +129,21 @@
 		return elementBox.top - relativeBox.bottom;
 	}
 
+	function elementPixelsOverlappingTopOfElement(element, relativeToElement) {
+		var domElement = element.toDomElement();
+		var domRelativeElement = relativeToElement.toDomElement();
+
+		var elementBox = domElement.getBoundingClientRect();
+		var relativeBox = domRelativeElement.getBoundingClientRect();
+
+		dump("elementBox.top: " + elementBox.top);
+		dump("relativeBox.top: " + relativeBox.top);
+		var result = elementBox.top - relativeBox.top;
+		dump("result: " + result);
+
+		return result;
+	}
+
 	function getComputedProperty(domElement, propertyName) {
 		var style = window.getComputedStyle(domElement);
 		return style.getPropertyValue(propertyName);
@@ -136,7 +161,7 @@
 		return getComputedProperty(element.toDomElement(), "color");
 	}
 
-	function isTextCenteredInPage(element) {
+	function isContentCenteredInPage(element) {
 		if (!isElementCenteredInPage(element)) return false;
 
 		var domElement = element.toDomElement();
