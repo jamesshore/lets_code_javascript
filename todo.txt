@@ -46,6 +46,8 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
+- START OF NEXT EPISODE:
+  - Martin Grandranth re arrow being design, not content
 * Why is height of 'drawingAreaArrow' div so much taller than the img it contains
 - Make sure arrow isn't overdrawn by user's lines
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
