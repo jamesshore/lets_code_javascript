@@ -77,8 +77,13 @@
 		it("centers arrow at top of drawing area", function() {
 			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
 
-//			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
+			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
 			// TODO: haven't tested background image, position, or repeat
+		});
+
+		it("positions clear screen button at top right of drawing area", function() {
+			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
+			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
 		});
 
 
@@ -89,8 +94,8 @@
 
 		var boundingBox = domElement.getBoundingClientRect();
 		var elementWidth = boundingBox.width;
-		var elementLeft = boundingBox.left;
-		var elementRight = boundingBox.right;
+		var elementLeft = Math.round(boundingBox.left);
+		var elementRight = Math.round(boundingBox.right);
 
 		var bodyStyle = window.getComputedStyle(document.body);
 
@@ -147,11 +152,18 @@
 		var elementBox = domElement.getBoundingClientRect();
 		var relativeBox = domRelativeElement.getBoundingClientRect();
 
-		dump("elementBox.top: " + elementBox.top);
-		dump("relativeBox.top: " + relativeBox.top);
 		var result = elementBox.top - relativeBox.top;
-		dump("result: " + result);
+		return result;
+	}
 
+	function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
+		var domElement = element.toDomElement();
+		var domRelativeElement = relativeToElement.toDomElement();
+
+		var elementBox = domElement.getBoundingClientRect();
+		var relativeBox = domRelativeElement.getBoundingClientRect();
+
+		var result = relativeBox.right - elementBox.right;
 		return result;
 	}
 

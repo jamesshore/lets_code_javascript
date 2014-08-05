@@ -47,4 +47,9 @@ h1#logo {
 
 #clearButton {
 	position: absolute;
+	top: 15px;
+	right: 15px;
+	padding: 0;
+	border: solid 1px grey;
+	margin: 0;
 }
