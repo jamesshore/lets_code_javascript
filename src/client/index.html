@@ -17,10 +17,10 @@
 
     <div id="drawingAreaContainer">
         <div id="drawingAreaArrow"></div>
+        <button id="clearButton" type="button">Clear</button>
         <div id="drawingArea"></div>
     </div>
 
-    <button id="clearButton" type="button">Clear</button>
 
 
     <p>You can watch this site be developed at Let's Code: Test-Driven JavaScript!</p>
@@ -34,7 +34,7 @@
 
             client.drawingAreaCanvas = client.initializeDrawingArea({
                 drawingAreaDiv: HtmlElement.fromId("drawingArea"),
-                clearScreenButton: HtmlElement.fromId("clearScreen")
+                clearScreenButton: HtmlElement.fromId("clearButton")
             });
         });
     </script>
