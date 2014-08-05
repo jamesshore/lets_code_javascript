@@ -17,6 +17,7 @@
 		var drawingAreaContainer;
 		var drawingAreaArrow;
 		var drawingArea;
+		var clearButton;
 
 		beforeEach(function() {
 			logo = newElement("<h1 id='logo'>Hello World</h1>");
@@ -24,11 +25,14 @@
 			drawingAreaContainer = newElement("" +
 				"<div id='drawingAreaContainer'>" +
 				" <div id='drawingAreaArrow'>v</div>" +
-				" <div id='drawingArea'></div>"
+				" <button id='clearButton' type='button'>Clear</button>" +
+				" <div id='drawingArea'></div>" +
+				"</div>"
 			);
 
 			drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
 			drawingArea = HtmlElement.fromId("drawingArea");
+			clearButton = HtmlElement.fromId("clearButton");
 		});
 
 		afterEach(function() {

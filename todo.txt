@@ -13,12 +13,13 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Arrow pointing into drawing area
-- "Clear" button
-  - Use <a> not <button> as suggested by Laurent Bourgault-Roy in E221 comments
+* "Clear" button moved into position
 - Footer's call to action
+- "Clear" button styled as a button
 - Footer's "Join Me" button
+  - Use <a> not <button> as suggested by Laurent Bourgault-Roy in E221 comments
 - Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
+- Drawing area arrow and button need to be above the drawing area
 - Web font
 - Release new design
 
