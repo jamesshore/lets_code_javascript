@@ -13,13 +13,13 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* "Clear" button moved into position
-- Footer's call to action
-- "Clear" button styled as a button
-- Footer's "Join Me" button
+* Footer's call to action
+- Footer's "Join Us" button moved to position
   - Use <a> not <button> as suggested by Laurent Bourgault-Roy in E221 comments
+- "Clear" and "Join Me" buttons styled properly
 - Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
 - Drawing area arrow and button need to be above the drawing area
+- Rounded corners on drawing area
 - Web font
 - Release new design
 
@@ -46,16 +46,13 @@ Engineering Tasks:
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
+- Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
+  - Michal Svoboda's E215 comment re centered elements
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-- START OF NEXT EPISODE:
-  - Martin Grandranth re arrow being design, not content (E225)
-* Why is height of 'drawingAreaArrow' div so much taller than the img it contains
-- Make sure arrow isn't overdrawn by user's lines
-- Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
-  - Michal Svoboda's E215 comment re centered elements
+
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
