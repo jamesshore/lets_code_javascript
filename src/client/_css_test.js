@@ -19,6 +19,7 @@
 		var drawingArea;
 		var clearButton;
 		var footer;
+		var joinUsDiv;
 
 		beforeEach(function() {
 			logo = newElement("<h1 id='logo'>Hello World</h1>");
@@ -31,6 +32,7 @@
 				"</div>"
 			);
 			footer = newElement("<p id='footer'>Footer here</p>");
+			joinUsDiv = newElement("<div id='joinUs'><a href='#'>Join Us!</a></div>");
 
 			drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
 			drawingArea = HtmlElement.fromId("drawingArea");
@@ -42,6 +44,7 @@
 			tagline.remove();
 			drawingAreaContainer.remove();
 			footer.remove();
+			joinUsDiv.remove();
 		});
 
 		function newElement(html) {
@@ -103,12 +106,17 @@
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
 		});
 
-		it("positions footer below the drawing area", function() {
+		it("centers footer below the drawing area", function() {
 			expect(isContentCenteredInPage(footer)).to.be(true);
 			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
 
 			expect(fontSizeOf(footer)).to.be("15px");
 			expect(textColorOf(footer)).to.be(white);
+		});
+
+		it("centers 'join us' button below footer", function() {
+			expect(isContentCenteredInPage(joinUsDiv)).to.be(true);
+			expect(elementPixelsBelowElement(joinUsDiv, footer)).to.be(13);
 		});
 
 
