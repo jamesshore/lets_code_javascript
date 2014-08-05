@@ -48,6 +48,8 @@ Engineering Tasks:
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
   - Michal Svoboda's E215 comment re centered elements
+- Need to isolate Safari problem that occurs with getBoundingClientRect and getComputedStyle()
+  - See 'create iOS Safari failure' test (ref E229)
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 

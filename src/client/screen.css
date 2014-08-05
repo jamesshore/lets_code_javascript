@@ -53,3 +53,12 @@ h1#logo {
 	border: solid 1px grey;
 	margin: 0;
 }
+
+#footer {
+	text-align: center;
+	margin-top: 13px;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 15px;
+	color: white;
+}

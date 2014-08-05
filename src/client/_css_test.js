@@ -18,6 +18,7 @@
 		var drawingAreaArrow;
 		var drawingArea;
 		var clearButton;
+		var footer;
 
 		beforeEach(function() {
 			logo = newElement("<h1 id='logo'>Hello World</h1>");
@@ -29,6 +30,7 @@
 				" <div id='drawingArea'></div>" +
 				"</div>"
 			);
+			footer = newElement("<p id='footer'>Footer here</p>");
 
 			drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
 			drawingArea = HtmlElement.fromId("drawingArea");
@@ -39,6 +41,7 @@
 			logo.remove();
 			tagline.remove();
 			drawingAreaContainer.remove();
+			footer.remove();
 		});
 
 		function newElement(html) {
@@ -57,6 +60,20 @@
 			expect(fontSizeOf(logo)).to.be("22px");
 			expect(textColorOf(logo)).to.be(white);
 		});
+
+//		it("create iOS Safari failure", function() {
+//			newElement('<div><p id="tagline">tagline</p><p id="footer">footer</p></div>');
+//
+//
+//			var domElement = document.getElementById("tagline");
+//			var boundingBox = domElement.getBoundingClientRect();     // comment this line out to make test pass
+//
+//
+//			var style = window.getComputedStyle(domElement);
+//			var fontSize = style.getPropertyValue("font-size");
+//
+//			expect(fontSize).to.be("14px");
+//		});
 
 		it("centers tagline directly below logo", function() {
 			expect(isContentCenteredInPage(tagline)).to.be(true);
@@ -84,6 +101,14 @@
 		it("positions clear screen button at top right of drawing area", function() {
 			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
+		});
+
+		it("positions footer below the drawing area", function() {
+			expect(isContentCenteredInPage(footer)).to.be(true);
+			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
+
+			expect(fontSizeOf(footer)).to.be("15px");
+			expect(textColorOf(footer)).to.be(white);
 		});
 
 
@@ -142,7 +167,7 @@
 		var elementBox = domElement.getBoundingClientRect();
 		var relativeBox = domRelativeElement.getBoundingClientRect();
 
-		return elementBox.top - relativeBox.bottom;
+		return Math.round(elementBox.top - relativeBox.bottom);
 	}
 
 	function elementPixelsOverlappingTopOfElement(element, relativeToElement) {
