@@ -42,12 +42,15 @@ Engineering Tasks:
 - What about alt tags? Semantic markup?
 - Fix old test breakage that occurs when changing body margins (don't assume body margins? don't always load CSS?)
 - How do we deal with errors related to CSS test HTML and production HTML having different structure?
+- Need to test arrow's background elements--is there a clean way of doing this?
+  - Consider using :before pseudoelement rather than a separate div
+  - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
 - START OF NEXT EPISODE:
-  - Martin Grandranth re arrow being design, not content
+  - Martin Grandranth re arrow being design, not content (E225)
 * Why is height of 'drawingAreaArrow' div so much taller than the img it contains
 - Make sure arrow isn't overdrawn by user's lines
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)

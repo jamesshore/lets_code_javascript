@@ -34,7 +34,11 @@ h1#logo {
 }
 
 #drawingAreaArrow {
-	text-align: center;
+	background-image: url(/images/arrow.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 9px;
+
 	position: absolute;
 	top: 0px;
 	left: 0px;

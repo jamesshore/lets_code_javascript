@@ -71,9 +71,10 @@
 		});
 
 		it("centers arrow at top of drawing area", function() {
-			expect(isContentCenteredInPage(drawingAreaArrow)).to.be(true);
+			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
 
-			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
+//			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
+			// TODO: haven't tested background image, position, or repeat
 		});
 
 
