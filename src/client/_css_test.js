@@ -121,7 +121,9 @@
 
 			expect(textColorOf(joinUs)).to.be(white);
 			expect(backgroundColorOf(joinUs)).to.be(mediumBlue);
+
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
+//			expect(elementWidthInPixels(joinUs)).to.equal(175);
 		});
 
 
@@ -130,7 +132,7 @@
 	function isElementCenteredInPage(element) {
 		var domElement = element.toDomElement();
 
-		var boundingBox = domElement.getBoundingClientRect();
+		var boundingBox = getBoundingBox(element);
 		var elementWidth = boundingBox.width;
 		var elementLeft = Math.round(boundingBox.left);
 		var elementRight = Math.round(boundingBox.right);
@@ -160,54 +162,23 @@
 	}
 
 	function elementPixelsFromTopOfPage(element) {
-		var domElement = element.toDomElement();
-
-		var boundingBox = domElement.getBoundingClientRect();
-
-		return boundingBox.top;
+		return getBoundingBox(element).top;
 	}
 
 	function elementHeightInPixels(element) {
-		var domElement = element.toDomElement();
-		var boundingBox = domElement.getBoundingClientRect();
-		return boundingBox.height;
+		return getBoundingBox(element).height;
 	}
 
 	function elementPixelsBelowElement(element, relativeToElement) {
-		var domElement = element.toDomElement();
-		var domRelativeElement = relativeToElement.toDomElement();
-
-		var elementBox = domElement.getBoundingClientRect();
-		var relativeBox = domRelativeElement.getBoundingClientRect();
-
-		return Math.round(elementBox.top - relativeBox.bottom);
+		return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).bottom);
 	}
 
 	function elementPixelsOverlappingTopOfElement(element, relativeToElement) {
-		var domElement = element.toDomElement();
-		var domRelativeElement = relativeToElement.toDomElement();
-
-		var elementBox = domElement.getBoundingClientRect();
-		var relativeBox = domRelativeElement.getBoundingClientRect();
-
-		var result = elementBox.top - relativeBox.top;
-		return result;
+		return getBoundingBox(element).top - getBoundingBox(relativeToElement).top;
 	}
 
 	function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
-		var domElement = element.toDomElement();
-		var domRelativeElement = relativeToElement.toDomElement();
-
-		var elementBox = domElement.getBoundingClientRect();
-		var relativeBox = domRelativeElement.getBoundingClientRect();
-
-		var result = relativeBox.right - elementBox.right;
-		return result;
-	}
-
-	function getComputedProperty(domElement, propertyName) {
-		var style = window.getComputedStyle(domElement);
-		return style.getPropertyValue(propertyName);
+		return getBoundingBox(relativeToElement).right - getBoundingBox(element).right;
 	}
 
 	function backgroundColorOf(element) {
@@ -231,6 +202,16 @@
 		var textAlign = style.getPropertyValue("text-align");
 
 		return textAlign === "center";
+	}
+
+	function getBoundingBox(element) {
+		var domElement = element.toDomElement();
+		return domElement.getBoundingClientRect();
+	}
+
+	function getComputedProperty(domElement, propertyName) {
+		var style = window.getComputedStyle(domElement);
+		return style.getPropertyValue(propertyName);
 	}
 
 	function pixelsToInt(pixels) {
