@@ -51,6 +51,7 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
+- ANNOUNCE: upgraded Node to 0.10.30
 
 
 Notes:
