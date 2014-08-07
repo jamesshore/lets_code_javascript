@@ -18,6 +18,14 @@ Before building or running for the first time:
 
 *Note:* If you update the repository (with `git pull` or similar), be sure to erase generated files with `git clean -fdx` afterwards. (Note that this will erase any files you've added, so be sure to check in what you want to keep first.)
 
+A note about Node versions:
+------------------
+
+Some episodes' source code was written for old versions of Node. You can check which version of Node the code expects by running `./jake.sh version`, or `jake version` on Windows. (Episodes 1-13 didn't support that command. They expected v0.6.17 or v0.8.4; either should work.)
+
+If you're having trouble getting the code to work properly, especially if the code expects Node 0.8 or earlier, try installing the exact version of Node the code expects. Convenient tools for changing Node versions include [nvm](https://github.com/creationix/nvm) and [n](https://github.com/visionmedia/n) on Mac/Linux, and [nvmw](https://github.com/hakobera/nvmw) and [nodist](https://github.com/marcelklehr/nodist) on Windows.
+
+
 To build and test:
 ------------------
 
@@ -49,11 +57,11 @@ Before deploying for first time:
 3. Sign up for a [Heroku account](https://id.heroku.com/signup)
 4. Run `heroku create <app_name>` (requires git repository and Heroku account)
 5. Search codebase for `weewikipaint.herokuapp.com` URLs and change them to refer to `<app_name>`
-6. Push known-good deploy to Heroku: `git push heroku episode32:master`
+6. Push known-good deploy to Heroku: `git push heroku episode200:master`
 
 To deploy:
 ----------
 
-1. Run `./jake.sh deploy` (Unix/Mac) or `jake deploy` (Windows)
+1. Run `./jake.sh deploy` (Unix/Mac) or `jake deploy` (Windows) for instructions
 
-*Note:* The master and integration branches are not guaranteed to deploy successfully. The last known-good deploy was commit eccf8da793aef7871ab1fcc104b7f64d79986681. We'll establish better deployment practices in a future chapter of the screencast.
+*Note:* The master and integration branches are not guaranteed to deploy successfully. The last known-good deploy was commit 85c35e5ce5387d2814ceeb849e39eee8e5c1847e. We'll establish better deployment practices in a future chapter of the screencast.

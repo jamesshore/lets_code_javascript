@@ -20,9 +20,9 @@
 	var REQUIRED_BROWSERS = [
 		"IE 8.0.0 (Windows 7)",
 		"IE 9.0.0 (Windows 7)",
-		"Firefox 28.0.0 (Mac OS X 10.8)",
-		"Chrome 34.0.1847 (Mac OS X 10.8.5)",
-		"Safari 6.1.3 (Mac OS X 10.8.5)",
+		"Firefox 31.0.0 (Mac OS X 10.8)",
+		"Chrome 36.0.1985 (Mac OS X 10.8.5)",
+		"Safari 6.1.5 (Mac OS X 10.8.5)",
 		"Mobile Safari 7.0.0 (iOS 7.1)"
 	];
 
@@ -91,7 +91,7 @@
 	desc("Bundle and build code");
 	task("build", [BUILD_CLIENT_DIR], function() {
 		shell.rm("-rf", BUILD_CLIENT_DIR + "/*");
-		shell.cp("-R", "src/client/*.html", "src/client/vendor", BUILD_CLIENT_DIR);
+		shell.cp("-R", "src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor", BUILD_CLIENT_DIR);
 
 		console.log("Bundling client files with Browserify...");
 		var b = browserify();
@@ -111,7 +111,7 @@
 
 		// Correction: Use "git push heroku integration:master" to deploy from integration branch.
 		// Thanks to Jüri A, http://www.letscodejavascript.com/v3/comments/live/32#comment-798947003 .
-		console.log("2. 'git push heroku integration:master'");
+		console.log("2. 'git push heroku integration:master' (or 'git push staging integration:master')");
 		console.log("3. 'jake test'");
 		console.log();
 		console.log("To deploy latest code to staging server:");

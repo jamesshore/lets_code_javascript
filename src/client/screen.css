@@ -1,0 +1,70 @@
+body {
+	background-color: #42a9cc;
+}
+
+h1#logo {
+	margin-top: 12px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0px;
+	text-align: center;
+	font-size: 22px;
+	color: white;
+}
+
+#tagline {
+	margin-top: 5px;
+	margin-bottom: 0px;
+	text-align: center;
+	font-size: 14px;
+	color: #0d576d;
+}
+
+#drawingArea {
+	height: 600px;
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
+}
+
+#drawingAreaContainer {
+	background-color: grey;
+	position: relative;
+}
+
+#drawingAreaArrow {
+	background-image: url(/images/arrow.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 9px;
+
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+}
+
+#clearButton {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	padding: 0;
+	border: solid 1px grey;
+	margin: 0;
+}
+
+#footer {
+	text-align: center;
+	margin-top: 13px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0;
+	font-size: 15px;
+	color: white;
+}
+
+#joinUs {
+	text-align: center;
+	margin-top: 13px;
+}
