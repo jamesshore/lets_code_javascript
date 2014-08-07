@@ -51,10 +51,10 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-- ANNOUNCE:
-  - upgraded Node to 0.10.30
-  - integrated
-
+* Set Join Us button to correct width
+- rounded corners on Join Us button
+- drop shadow on Join Us button
+- Deal with :hover and :visited pseudo-classes
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

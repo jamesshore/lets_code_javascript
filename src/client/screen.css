@@ -68,4 +68,7 @@ h1#logo {
 	display: block;
 	text-align: center;
 	margin-top: 13px;
+	color: white;
+	background-color: #006f8f;
+	height: 35px;
 }

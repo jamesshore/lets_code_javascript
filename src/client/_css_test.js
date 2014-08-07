@@ -11,6 +11,7 @@
 		var white = "rgb(255, 255, 255)";
 		var backgroundBlue = "rgb(66, 169, 204)";
 		var darkBlue = "rgb(13, 87, 109)";
+		var mediumBlue = "rgb(0, 111, 143)";
 
 		var logo;
 		var tagline;
@@ -117,6 +118,10 @@
 		it("centers 'join us' button below footer", function() {
 			expect(isContentCenteredInPage(joinUs)).to.be(true);
 			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
+
+			expect(textColorOf(joinUs)).to.be(white);
+			expect(backgroundColorOf(joinUs)).to.be(mediumBlue);
+			expect(elementHeightInPixels(joinUs)).to.equal(35);
 		});
 
 
