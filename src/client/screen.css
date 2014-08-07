@@ -68,7 +68,11 @@ h1#logo {
 	display: block;
 	text-align: center;
 	margin-top: 13px;
+	margin-left: auto;
+	margin-right: auto;
 	color: white;
 	background-color: #006f8f;
 	height: 35px;
+	width: 175px;
+
 }

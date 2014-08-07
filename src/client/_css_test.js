@@ -123,42 +123,60 @@
 			expect(backgroundColorOf(joinUs)).to.be(mediumBlue);
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
-//			expect(elementWidthInPixels(joinUs)).to.equal(175);
+			expect(elementWidthInPixels(joinUs)).to.equal(175);
 		});
 
 
 	});
 
 	function isElementCenteredInPage(element) {
-		var domElement = element.toDomElement();
-
-		var boundingBox = getBoundingBox(element);
-		var elementWidth = boundingBox.width;
-		var elementLeft = Math.round(boundingBox.left);
-		var elementRight = Math.round(boundingBox.right);
-
 		var bodyStyle = window.getComputedStyle(document.body);
-
 		var bodyWidthExcludingMargins = document.body.clientWidth;
 		var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
 		var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
-		var bodyWidth = bodyWidthExcludingMargins + bodyLeftMarginWidth + bodyRightMarginWidth;
 
-		var expectedSides = (bodyWidth - elementWidth) / 2;
+		var documentLeft = 0;
+		var documentRight = bodyWidthExcludingMargins + bodyLeftMarginWidth + bodyRightMarginWidth;
 
-		var success = true;
-		if (elementLeft !== Math.round(expectedSides)) {
-			console.log("expected left to be " + expectedSides + " but was " + elementLeft + " (element is " + elementWidth + "px wide; screen is " + bodyWidth + "px wide)");
-			success = false;
-		}
+		var elementBoundingBox = getBoundingBox(element);
+		var elementLeft = elementBoundingBox.left;
+		var elementRight = elementBoundingBox.right;
 
-		var expectedRight = Math.round(bodyWidth - expectedSides);
-		if (elementRight !== expectedRight) {
-			console.log("expected right to be " + expectedRight + " but was " + elementRight + " (element is " + elementWidth + "px wide; screen is " + bodyWidth + "px wide)");
-			success = false;
-		}
+		var leftGap = elementLeft - documentLeft;
+		var rightGap = documentRight - elementRight;
+		return leftGap === rightGap;
 
-		return success;
+//		var domElement = element.toDomElement();
+//
+//		var boundingBox = getBoundingBox(element);
+//		var elementWidth = boundingBox.width;
+//		var elementLeft = Math.round(boundingBox.left);
+//		var elementRight = Math.round(boundingBox.right);
+//
+//		var bodyStyle = window.getComputedStyle(document.body);
+//
+//		var bodyWidthExcludingMargins = document.body.clientWidth;
+//		var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
+//		var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
+//		var bodyWidth = bodyWidthExcludingMargins + bodyLeftMarginWidth + bodyRightMarginWidth;
+//
+//		var expectedSides = (bodyWidth - elementWidth) / 2;
+//
+//		var success = true;
+//
+//		var expectedLeft = Math.round(expectedSides);
+//		if (elementLeft !== expectedLeft) {
+//			console.log("expected left to be " + expectedLeft + " but was " + elementLeft + " (element is " + elementWidth + "px wide; screen is " + bodyWidth + "px wide)");
+//			success = false;
+//		}
+//
+//		var expectedRight = Math.round(bodyWidth - expectedSides);
+//		if (elementRight !== expectedRight) {
+//			console.log("expected right to be " + expectedRight + " but was " + elementRight + " (element is " + elementWidth + "px wide; screen is " + bodyWidth + "px wide)");
+//			success = false;
+//		}
+//
+//		return success;
 	}
 
 	function elementPixelsFromTopOfPage(element) {
@@ -167,6 +185,10 @@
 
 	function elementHeightInPixels(element) {
 		return getBoundingBox(element).height;
+	}
+
+	function elementWidthInPixels(element) {
+		return getBoundingBox(element).width;
 	}
 
 	function elementPixelsBelowElement(element, relativeToElement) {
