@@ -14,9 +14,9 @@ Minimum Marketable Features:
 
 User Stories to finish current MMF:
 * "Clear" and "Join Me" buttons styled properly
+- Rounded corners on drawing area
 - Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
 - Drawing area arrow and button need to be above the drawing area
-- Rounded corners on drawing area
 - Web font
 - Release new design
 
@@ -51,7 +51,9 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-- ANNOUNCE: upgraded Node to 0.10.30
+- ANNOUNCE:
+  - upgraded Node to 0.10.30
+  - integrated
 
 
 Notes:

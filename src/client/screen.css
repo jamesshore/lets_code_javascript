@@ -65,6 +65,7 @@ h1#logo {
 }
 
 #joinUs {
+	display: block;
 	text-align: center;
 	margin-top: 13px;
 }
