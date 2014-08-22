@@ -115,7 +115,7 @@
 			expect(textColorOf(footer)).to.be(white);
 		});
 
-		it("centers 'join us' button below footer", function() {
+		it.only("centers 'join us' button below footer", function() {
 			expect(isContentCenteredInPage(joinUs)).to.be(true);
 			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
 
@@ -130,11 +130,14 @@
 	});
 
 	function isElementCenteredInPage(element) {
+		// Calculate document bounding box. We could have used
+		//   document.documentElement.getBoundingClientRect();
+		// but IE9 returns an empty object for documentElement.
+		// (getBoundingClientRect() does work in IE9 for regular elements, just not on documentElement.)
 		var bodyStyle = window.getComputedStyle(document.body);
 		var bodyWidthExcludingMargins = document.body.clientWidth;
 		var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
 		var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
-
 		var documentLeft = 0;
 		var documentRight = bodyWidthExcludingMargins + bodyLeftMarginWidth + bodyRightMarginWidth;
 
@@ -144,7 +147,18 @@
 
 		var leftGap = elementLeft - documentLeft;
 		var rightGap = documentRight - elementRight;
-		return leftGap === rightGap;
+
+		console.log("*** CENTER: element width", elementBoundingBox.width);
+		console.log("documentLeft", documentLeft);
+		console.log("documentRight", documentRight);
+		console.log("elementLeft", elementLeft);
+		console.log("elementRight", elementRight);
+		console.log("leftGap", leftGap);
+		console.log("rightGap", rightGap);
+
+		var result = leftGap === rightGap;
+		console.log(result ? "✔ SUCCESS" : "✘ FAILURE");
+		return  result;
 
 //		var domElement = element.toDomElement();
 //
