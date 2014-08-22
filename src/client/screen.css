@@ -73,7 +73,9 @@ h1#logo {
 	color: white;
 	background-color: #006f8f;
 	height: 35px;
+	line-height: 35px;
 	width: 175px;
 	border-radius: 2px;
 	box-shadow: 0 1px 0 0 #0d576d;
+	vertical-align: middle;
 }

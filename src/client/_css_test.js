@@ -124,6 +124,7 @@
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
 			expect(elementWidthInPixels(joinUs)).to.equal(175);
+			expect(isTextVerticallyCentered(joinUs)).to.be(true);
 
 			expect(roundedCornersOf(joinUs)).to.be("2px");
 			expect(dropShadowOf(joinUs)).to.be(darkBlue + " 0px 1px 0px 0px");
@@ -187,6 +188,13 @@
 
 	function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
 		return Math.round(getBoundingBox(relativeToElement).right - getBoundingBox(element).right);
+	}
+
+	function isTextVerticallyCentered(element) {
+		var elementHeight = getBoundingBox(element).height;
+		var lineHeight = getComputedProperty(element.toDomElement(), "line-height");
+
+		return elementHeight + "px" === lineHeight;
 	}
 
 	function backgroundColorOf(element) {
