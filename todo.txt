@@ -51,8 +51,12 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* rounded corners on Join Us button
-- drop shadow on Join Us button
+* drop shadow on Join Us button
+- fix colors of Join Us button to match sample screen shot
+- fix 'Join Us' text
+  - center vertically
+  - no underline
+  - all caps
 - Deal with :hover and :visited pseudo-classes
 
 Notes:

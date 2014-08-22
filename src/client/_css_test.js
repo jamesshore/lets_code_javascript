@@ -124,6 +124,8 @@
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
 			expect(elementWidthInPixels(joinUs)).to.equal(175);
+
+			expect(roundedCornersOf(joinUs)).to.be("2px");
 		});
 
 
@@ -197,6 +199,17 @@
 
 	function textColorOf(element) {
 		return getComputedProperty(element.toDomElement(), "color");
+	}
+
+	function roundedCornersOf(element) {
+		// We can't just look at border-radius because it returns "" on Firefox and IE 9
+		var topLeft = getComputedProperty(element.toDomElement(), "border-top-left-radius");
+		var topRight = getComputedProperty(element.toDomElement(), "border-top-right-radius");
+		var bottomLeft = getComputedProperty(element.toDomElement(), "border-bottom-left-radius");
+		var bottomRight = getComputedProperty(element.toDomElement(), "border-bottom-right-radius");
+
+		if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
+		else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
 	}
 
 	function isContentCenteredInPage(element) {
