@@ -126,8 +126,8 @@
 			expect(elementWidthInPixels(joinUs)).to.equal(175);
 
 			expect(roundedCornersOf(joinUs)).to.be("2px");
+			expect(dropShadowOf(joinUs)).to.be(darkBlue + " 0px 1px 0px 0px");
 		});
-
 
 	});
 
@@ -210,6 +210,22 @@
 
 		if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
 		else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
+	}
+
+	function dropShadowOf(element) {
+		var shadow = getComputedProperty(element.toDomElement(), "box-shadow");
+
+		// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
+		// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
+		// BTW, we don't support multiple shadows yet
+		var groups = shadow.match(/^([^#]+) #(..)(..)(..)/);   // get everything before the '#' and the r, g, b
+		if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
+
+		var sizes = groups[1];
+		var r = parseInt(groups[2], 16);
+		var g = parseInt(groups[3], 16);
+		var b = parseInt(groups[4], 16);
+		return "rgb(" + r + ", " + g + ", " + b + ") " + sizes;
 	}
 
 	function isContentCenteredInPage(element) {
