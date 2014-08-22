@@ -115,7 +115,7 @@
 			expect(textColorOf(footer)).to.be(white);
 		});
 
-		it.only("centers 'join us' button below footer", function() {
+		it("centers 'join us' button below footer", function() {
 			expect(isContentCenteredInPage(joinUs)).to.be(true);
 			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
 
@@ -180,11 +180,11 @@
 	}
 
 	function elementPixelsOverlappingTopOfElement(element, relativeToElement) {
-		return getBoundingBox(element).top - getBoundingBox(relativeToElement).top;
+		return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).top);
 	}
 
 	function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
-		return getBoundingBox(relativeToElement).right - getBoundingBox(element).right;
+		return Math.round(getBoundingBox(relativeToElement).right - getBoundingBox(element).right);
 	}
 
 	function backgroundColorOf(element) {

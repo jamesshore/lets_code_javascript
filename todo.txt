@@ -51,8 +51,7 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Set Join Us button to correct width
-- rounded corners on Join Us button
+* rounded corners on Join Us button
 - drop shadow on Join Us button
 - Deal with :hover and :visited pseudo-classes
 
