@@ -145,52 +145,22 @@
 		var elementLeft = elementBoundingBox.left;
 		var elementRight = elementBoundingBox.right;
 
-		var leftGap = elementLeft - documentLeft;
-		var rightGap = documentRight - elementRight;
+		var documentCenter = (documentRight - documentLeft) / 2;
+		var elementCenter = elementLeft + ((elementRight - elementLeft) / 2);
 
-		console.log("*** CENTER: element width", elementBoundingBox.width);
-		console.log("documentLeft", documentLeft);
-		console.log("documentRight", documentRight);
-		console.log("elementLeft", elementLeft);
-		console.log("elementRight", elementRight);
-		console.log("leftGap", leftGap);
-		console.log("rightGap", rightGap);
+//		console.log("*** CENTER: element width", elementBoundingBox.width);
+//		console.log("documentLeft", documentLeft);
+//		console.log("documentRight", documentRight);
+//		console.log("elementLeft", elementLeft);
+//		console.log("elementRight", elementRight);
+//		console.log("documentCenter", documentCenter);
+//		console.log("elementCenter", elementCenter);
 
-		var result = leftGap === rightGap;
-		console.log(result ? "✔ SUCCESS" : "✘ FAILURE");
-		return  result;
+		var offset = Math.abs(documentCenter - elementCenter);
+		var success = (offset <= 0.5);
+//		console.log(success ? "✔ SUCCESS" : "✘ FAILURE");
 
-//		var domElement = element.toDomElement();
-//
-//		var boundingBox = getBoundingBox(element);
-//		var elementWidth = boundingBox.width;
-//		var elementLeft = Math.round(boundingBox.left);
-//		var elementRight = Math.round(boundingBox.right);
-//
-//		var bodyStyle = window.getComputedStyle(document.body);
-//
-//		var bodyWidthExcludingMargins = document.body.clientWidth;
-//		var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
-//		var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
-//		var bodyWidth = bodyWidthExcludingMargins + bodyLeftMarginWidth + bodyRightMarginWidth;
-//
-//		var expectedSides = (bodyWidth - elementWidth) / 2;
-//
-//		var success = true;
-//
-//		var expectedLeft = Math.round(expectedSides);
-//		if (elementLeft !== expectedLeft) {
-//			console.log("expected left to be " + expectedLeft + " but was " + elementLeft + " (element is " + elementWidth + "px wide; screen is " + bodyWidth + "px wide)");
-//			success = false;
-//		}
-//
-//		var expectedRight = Math.round(bodyWidth - expectedSides);
-//		if (elementRight !== expectedRight) {
-//			console.log("expected right to be " + expectedRight + " but was " + elementRight + " (element is " + elementWidth + "px wide; screen is " + bodyWidth + "px wide)");
-//			success = false;
-//		}
-//
-//		return success;
+		return success;
 	}
 
 	function elementPixelsFromTopOfPage(element) {
