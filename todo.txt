@@ -52,14 +52,7 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-- Pseudoclasses
-  * :active
-    - Restore 'join us' link
-  - :focus?
-  - :visited?
-  - :link?
-- Is 'join us' text vertically centered correctly?
-- Style 'clear' button
+* Style 'clear' button
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
