@@ -53,12 +53,12 @@ Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
 - Pseudoclasses
-  * :hover
-  - :active
+  * :active
   - :focus?
   - :visited?
   - :link?
 - Is 'join us' text vertically centered correctly?
+- Style 'clear' button
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

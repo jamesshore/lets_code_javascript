@@ -85,3 +85,9 @@ h1#logo {
 #joinUs:hover, #joinUs._hover_ {
 	background-color: #006f8f;
 }
+
+#joinUs:active {
+	/*box-shadow: none;*/
+	/*position: relative;*/
+	/*top: 1px;*/
+}
