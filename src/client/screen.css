@@ -78,4 +78,5 @@ h1#logo {
 	border-radius: 2px;
 	box-shadow: 0 1px 0 0 #0d576d;
 	vertical-align: middle;
+	text-decoration: none;
 }

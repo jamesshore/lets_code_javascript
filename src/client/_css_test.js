@@ -128,6 +128,8 @@
 
 			expect(roundedCornersOf(joinUs)).to.be("2px");
 			expect(dropShadowOf(joinUs)).to.be(darkBlue + " 0px 1px 0px 0px");
+
+			expect(textIsUnderlined(joinUs)).to.be(false);
 		});
 
 	});
@@ -207,6 +209,11 @@
 
 	function textColorOf(element) {
 		return getComputedProperty(element.toDomElement(), "color");
+	}
+
+	function textIsUnderlined(element) {
+		var style = getComputedProperty(element.toDomElement(), "text-decoration");
+		return style.indexOf("none") !== 0;
 	}
 
 	function roundedCornersOf(element) {

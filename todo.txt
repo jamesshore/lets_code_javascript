@@ -54,6 +54,7 @@ To Do on current task:
 - fix 'Join Us' text
   * no underline
   - all caps
+- remove duplication of "toDomElement()" in all getComputedStyle calls
 - fix colors of Join Us button to match sample screen shot
 - Deal with :hover and :visited pseudo-classes
 
