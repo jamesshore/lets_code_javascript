@@ -12,7 +12,7 @@
 		var backgroundBlue = "rgb(65, 169, 204)";
 		var darkBlue = "rgb(13, 87, 109)";
 		var mediumBlue = "rgb(0, 121, 156)";
-//		var darkenedMediumBlue = "rgb(0, 111, 143)";
+		var darkenedMediumBlue = "rgb(0, 111, 143)";
 
 		var logo;
 		var tagline;
@@ -132,6 +132,12 @@
 
 			expect(textIsUnderlined(joinUs)).to.be(false);
 			expect(textIsUppercase(joinUs)).to.be(true);
+		});
+
+		it("darkens the 'join us' button when the user hovers over it", function() {
+			joinUs.toDomElement().className += " _hover_";
+
+			expect(backgroundColorOf(joinUs)).to.be(darkenedMediumBlue);
 		});
 
 	});

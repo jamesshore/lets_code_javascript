@@ -47,6 +47,7 @@ Engineering Tasks:
   - Michal Svoboda's E215 comment re centered elements
 - Need to isolate Safari problem that occurs with getBoundingClientRect and getComputedStyle()
   - See 'create iOS Safari failure' test (ref E229)
+- Automatically convert psuedoclasses to regular classes in our tests?
 
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
@@ -57,7 +58,6 @@ To Do on current task:
   - :focus?
   - :visited?
   - :link?
-- fix colors of Join Us button to match sample screen shot
 - Is 'join us' text vertically centered correctly?
 
 Notes:
