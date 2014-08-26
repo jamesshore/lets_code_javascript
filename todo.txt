@@ -51,8 +51,12 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* :hover
-- :visited
+- Pseudoclasses
+  * :hover
+  - :active
+  - :focus?
+  - :visited?
+  - :link?
 - fix colors of Join Us button to match sample screen shot
 - Is 'join us' text vertically centered correctly?
 

@@ -1,8 +1,9 @@
 Design guidelines from Espen Brunborg of primate.co.uk:
 
 Colours:
-Blue (main background): #42a9cc
-Medium blue (mainly used for hover states on buttons): #006f8f
+Blue (main background): #41a9cc
+Medium blue (button background): #00799c
+Darkened medium blue (mainly used for hover states on buttons): #006f8f
 Dark blue (for button dropshadows and text): #0d576d
 Gray (for button): #e5e5e5
 medium gray (for button dropshadow): #a7a9ab
@@ -26,6 +27,6 @@ Background: medium blue
 Dimensions, try to keep it 35px tall, generous padding left/right (maybe even have a min-width of 175px)
 
 404 page:
-404 Text: Alwyn new rounded, bold, 220px, medium blue
+404 Text: Alwyn new rounded, bold, 220px, darkened medium blue
 Strapline text: Same as intro text
 Button: same as call-out button 

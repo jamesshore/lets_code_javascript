@@ -9,9 +9,10 @@
 		if (browser.doesNotComputeStyles()) return;
 
 		var white = "rgb(255, 255, 255)";
-		var backgroundBlue = "rgb(66, 169, 204)";
+		var backgroundBlue = "rgb(65, 169, 204)";
 		var darkBlue = "rgb(13, 87, 109)";
-		var mediumBlue = "rgb(0, 111, 143)";
+		var mediumBlue = "rgb(0, 121, 156)";
+//		var darkenedMediumBlue = "rgb(0, 111, 143)";
 
 		var logo;
 		var tagline;
