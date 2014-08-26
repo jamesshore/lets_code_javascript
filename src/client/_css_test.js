@@ -130,6 +130,7 @@
 			expect(dropShadowOf(joinUs)).to.be(darkBlue + " 0px 1px 0px 0px");
 
 			expect(textIsUnderlined(joinUs)).to.be(false);
+			expect(textIsUppercase(joinUs)).to.be(true);
 		});
 
 	});
@@ -214,6 +215,10 @@
 	function textIsUnderlined(element) {
 		var style = getComputedProperty(element.toDomElement(), "text-decoration");
 		return style.indexOf("none") !== 0;
+	}
+
+	function textIsUppercase(element) {
+		return getComputedProperty(element.toDomElement(), "text-transform") === "uppercase";
 	}
 
 	function roundedCornersOf(element) {
