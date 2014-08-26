@@ -140,6 +140,13 @@
 			expect(backgroundColorOf(joinUs)).to.be(darkenedMediumBlue);
 		});
 
+		it("'join us' button appears to depress when user activates it", function() {
+			joinUs.toDomElement().className += " _active_";
+
+			expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
+			expect(dropShadowOf(joinUs)).to.be("none");
+		});
+
 	});
 
 	function isElementCenteredInPage(element) {
@@ -241,6 +248,9 @@
 
 	function dropShadowOf(element) {
 		var shadow = getComputedProperty(element, "box-shadow");
+
+		// When there is no drop shadow, most browsers say 'none', but IE 9 says 'white'. We handle that case here.
+		if (shadow === "white") return "none";
 
 		// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
 		// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.

@@ -86,8 +86,8 @@ h1#logo {
 	background-color: #006f8f;
 }
 
-#joinUs:active {
-	/*box-shadow: none;*/
-	/*position: relative;*/
-	/*top: 1px;*/
+#joinUs:active, #joinUs._active_ {
+	box-shadow: none;
+	position: relative;
+	top: 1px;
 }
