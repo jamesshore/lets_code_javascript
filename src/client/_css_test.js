@@ -9,6 +9,10 @@
 		if (browser.doesNotComputeStyles()) return;
 
 		var white = "rgb(255, 255, 255)";
+		var darkGray = "rgb(89, 89, 89)";
+		var gray = "rgb(229, 229, 229)";
+		var mediumGray = "rgb(167, 169, 171)";
+
 		var backgroundBlue = "rgb(65, 169, 204)";
 		var darkBlue = "rgb(13, 87, 109)";
 		var mediumBlue = "rgb(0, 121, 156)";
@@ -106,6 +110,19 @@
 		it("positions clear screen button at top right of drawing area", function() {
 			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
+
+			expect(textColorOf(clearButton)).to.be(darkGray);
+			expect(backgroundColorOf(clearButton)).to.be(gray);
+
+			expect(elementHeightInPixels(clearButton)).to.equal(30);
+			expect(elementWidthInPixels(clearButton)).to.equal(70);
+			expect(isTextVerticallyCentered(clearButton)).to.be(true);
+
+			expect(roundedCornersOf(clearButton)).to.be("2px");
+			expect(dropShadowOf(clearButton)).to.be(mediumGray + " 0px 1px 0px 0px");
+
+			expect(textIsUnderlined(clearButton)).to.be(false);
+			expect(textIsUppercase(clearButton)).to.be(true);
 		});
 
 		it("centers footer below the drawing area", function() {
