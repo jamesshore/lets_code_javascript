@@ -13,9 +13,9 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
+* Drawing area arrow and button need to be above the drawing area
 - Rounded corners on drawing area
 - Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
-- Drawing area arrow and button need to be above the drawing area
 - Web font
 - Release new design
 
@@ -39,9 +39,6 @@ Engineering Tasks:
 - What about alt tags? Semantic markup?
 - Fix old test breakage that occurs when changing body margins (don't assume body margins? don't always load CSS?)
 - How do we deal with errors related to CSS test HTML and production HTML having different structure?
-- Need to test arrow's background elements--is there a clean way of doing this?
-  - Consider using :before pseudoelement rather than a separate div
-  - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 - Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
   - Michal Svoboda's E215 comment re centered elements
 - Need to isolate Safari problem that occurs with getBoundingClientRect and getComputedStyle()
@@ -51,7 +48,10 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Martin Grandranth's vertical centering comments on E234
+* Confirm stacking order when z indexes are the same based on sibling order
+- Need to test arrow's background elements--is there a clean way of doing this?
+  - Consider using :before pseudoelement rather than a separate div
+  - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

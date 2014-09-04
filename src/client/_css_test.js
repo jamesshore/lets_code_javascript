@@ -33,9 +33,9 @@
 			tagline = newElement("<p id='tagline'>Tag line here</p>");
 			drawingAreaContainer = newElement("" +
 				"<div id='drawingAreaContainer'>" +
+				" <div id='drawingArea'></div>" +
 				" <div id='drawingAreaArrow'>v</div>" +
 				" <button id='clearButton' type='button'>Clear</button>" +
-				" <div id='drawingArea'></div>" +
 				"</div>"
 			);
 			footer = newElement("<p id='footer'>Footer here</p>");
@@ -101,11 +101,13 @@
 			expect(backgroundColorOf(drawingArea)).to.equal(white);
 		});
 
-		it("centers arrow at top of drawing area", function() {
+		it("centers an arrow at top of drawing area", function() {
 			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
 
 			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
 			// TODO: haven't tested background image, position, or repeat
+
+			expect(elementAboveElement(drawingAreaArrow, drawingArea)).to.be(true);
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
@@ -238,6 +240,22 @@
 
 	function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
 		return Math.round(getBoundingBox(relativeToElement).right - getBoundingBox(element).right);
+	}
+
+	function elementAboveElement(element, relativeToElement) {
+		var elementZ = getZIndex(element);
+		var relativeZ = getZIndex(relativeToElement);
+
+		console.log("elementZ", elementZ);
+		console.log("relativeZ", relativeZ);
+
+		return (elementZ > relativeZ);
+
+		function getZIndex(element) {
+			var z = getComputedProperty(element, "z-index");
+			if (z === "auto") z = 0;
+			return z;
+		}
 	}
 
 	function isTextVerticallyCentered(element) {
