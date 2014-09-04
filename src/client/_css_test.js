@@ -4,6 +4,7 @@
 
 	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
+	var failFast = require("./fail_fast.js");
 
 	describe("Home page", function() {
 		if (browser.doesNotComputeStyles()) return;
@@ -107,7 +108,7 @@
 			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
 			// TODO: haven't tested background image, position, or repeat
 
-			expect(elementAboveElement(drawingAreaArrow, drawingArea)).to.be(true);
+			expect(elementOverElement(drawingAreaArrow, drawingArea)).to.be(true);
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
@@ -242,20 +243,36 @@
 		return Math.round(getBoundingBox(relativeToElement).right - getBoundingBox(element).right);
 	}
 
-	function elementAboveElement(element, relativeToElement) {
+	function elementOverElement(element, relativeToElement) {
 		var elementZ = getZIndex(element);
 		var relativeZ = getZIndex(relativeToElement);
 
-		console.log("elementZ", elementZ);
-		console.log("relativeZ", relativeZ);
-
-		return (elementZ > relativeZ);
+		if (elementZ === relativeZ) return isElementAfterElementInDomTree();
+		else return (elementZ > relativeZ);
 
 		function getZIndex(element) {
 			var z = getComputedProperty(element, "z-index");
 			if (z === "auto") z = 0;
 			return z;
 		}
+
+		function isElementAfterElementInDomTree() {
+			var elementNode = element.toDomElement();
+			var relativeNode = relativeToElement.toDomElement();
+			var foundRelative = false;
+			var elementAfterRelative = false;
+			for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
+				dump(child);
+				if (child === elementNode) {
+					if (foundRelative) elementAfterRelative = true;
+				}
+				if (child === relativeNode) foundRelative = true;
+			}
+			failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
+			dump("element AFTER relativeTo element? " + elementAfterRelative);
+		}
+
+
 	}
 
 	function isTextVerticallyCentered(element) {
