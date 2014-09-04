@@ -113,6 +113,7 @@
 
 			expect(textColorOf(clearButton)).to.be(darkGray);
 			expect(backgroundColorOf(clearButton)).to.be(gray);
+			expect(hasBorder(clearButton)).to.be(false);
 
 			expect(elementHeightInPixels(clearButton)).to.equal(30);
 			expect(elementWidthInPixels(clearButton)).to.equal(70);
@@ -241,6 +242,14 @@
 
 	function textColorOf(element) {
 		return getComputedProperty(element, "color");
+	}
+
+	function hasBorder(element) {
+		var top = getComputedProperty(element, "border-top-style");
+		var right = getComputedProperty(element, "border-right-style");
+		var bottom = getComputedProperty(element, "border-bottom-style");
+		var left = getComputedProperty(element, "border-left-style");
+		return !(top === "none" && right === "none" && bottom === "none" && left === "none");
 	}
 
 	function textIsUnderlined(element) {

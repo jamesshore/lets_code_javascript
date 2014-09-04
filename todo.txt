@@ -53,6 +53,7 @@ Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
 * Style 'clear' button
+- Martin Grandranth's vertical centering comments on E234
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
