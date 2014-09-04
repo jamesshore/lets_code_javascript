@@ -13,7 +13,6 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* "Clear" and "Join Me" buttons styled properly
 - Rounded corners on drawing area
 - Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
 - Drawing area arrow and button need to be above the drawing area
@@ -52,8 +51,7 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Style 'clear' button
-- Martin Grandranth's vertical centering comments on E234
+* Martin Grandranth's vertical centering comments on E234
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

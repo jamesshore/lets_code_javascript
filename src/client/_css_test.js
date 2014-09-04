@@ -11,6 +11,7 @@
 		var white = "rgb(255, 255, 255)";
 		var darkGray = "rgb(89, 89, 89)";
 		var gray = "rgb(229, 229, 229)";
+		var darkenedGray = "rgb(217, 217, 217)";
 		var mediumGray = "rgb(167, 169, 171)";
 
 		var backgroundBlue = "rgb(65, 169, 204)";
@@ -125,6 +126,20 @@
 			expect(textIsUnderlined(clearButton)).to.be(false);
 			expect(textIsUppercase(clearButton)).to.be(true);
 		});
+
+		it("darkens the 'clear' button when the user hovers over it", function() {
+			clearButton.toDomElement().className += " _hover_";
+
+			expect(backgroundColorOf(clearButton)).to.be(darkenedGray);
+		});
+
+		it("'clear' button appears to depress when user activates it", function() {
+			clearButton.toDomElement().className += " _active_";
+
+			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
+			expect(dropShadowOf(clearButton)).to.be("none");
+		});
+
 
 		it("centers footer below the drawing area", function() {
 			expect(isContentCenteredInPage(footer)).to.be(true);
@@ -275,8 +290,10 @@
 	function dropShadowOf(element) {
 		var shadow = getComputedProperty(element, "box-shadow");
 
-		// When there is no drop shadow, most browsers say 'none', but IE 9 says 'white'. We handle that case here.
+		// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
+		// We handle that case here.
 		if (shadow === "white") return "none";
+		if (shadow.match(/^#[0-9a-f]{6}$/)) return "none";      // look for '#' followed by six hex digits
 
 		// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
 		// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.

@@ -6,6 +6,7 @@ Medium blue (button background): #00799c
 Darkened medium blue (mainly used for hover states on buttons): #006f8f
 Dark blue (for button dropshadows and text): #0d576d
 Gray (for button): #e5e5e5
+Darkened gray (for button hover state): #d9d9d9
 medium gray (for button dropshadow): #a7a9ab
 dark gray (for button text): #595959
 
