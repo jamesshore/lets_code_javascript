@@ -13,14 +13,14 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Rounded corners on drawing area
-- Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
+* Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
 - Web font
 - Release new design
 
 Potential future stories:
 - "Try me" text in drawing area
 - Responsive design
+- Accessibility
 - Site monitoring and logging
 - Performance
   - Note: serious performance degradation in IE 8 as more lines drawn
@@ -30,19 +30,15 @@ Potential future stories:
 
 Engineering Tasks:
 * Implement each design element
-- backgroundColorOf() -- how should it deal with hex values? (use assertion style rather than expect style?)
 - Test that style sheet is actually being loaded by index.html
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 - Need to cache-bust stylesheet and bundle.js
-- Confirm that styling works cross-platform
-- Should isElementCenteredInPage() force element to have a width other than 100%?
+- Manually confirm that styling works cross-platform
 - What about alt tags? Semantic markup?
 - Fix old test breakage that occurs when changing body margins (don't assume body margins? don't always load CSS?)
 - How do we deal with errors related to CSS test HTML and production HTML having different structure?
-- Fix ugliness in "center" assertions ("isTextCenteredOnPage"?)
-  - Michal Svoboda's E215 comment re centered elements
 - Need to isolate Safari problem that occurs with getBoundingClientRect and getComputedStyle()
   - See 'create iOS Safari failure' test (ref E229)
 - Automatically convert psuedoclasses to regular classes in our tests?
@@ -50,7 +46,6 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-- Factor out 'rounded corners' constant
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
