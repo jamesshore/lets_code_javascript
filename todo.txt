@@ -13,8 +13,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Drawing area arrow and button need to be above the drawing area
-- Rounded corners on drawing area
+* Rounded corners on drawing area
 - Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
 - Web font
 - Release new design
@@ -33,6 +32,9 @@ Engineering Tasks:
 * Implement each design element
 - backgroundColorOf() -- how should it deal with hex values? (use assertion style rather than expect style?)
 - Test that style sheet is actually being loaded by index.html
+- Need to test arrow's background elements--is there a clean way of doing this?
+  - Consider using :before pseudoelement rather than a separate div
+  - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 - Need to cache-bust stylesheet and bundle.js
 - Confirm that styling works cross-platform
 - Should isElementCenteredInPage() force element to have a width other than 100%?
@@ -48,10 +50,7 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Use 'front' and 'behind' in stacking order tests
-- Need to test arrow's background elements--is there a clean way of doing this?
-  - Consider using :before pseudoelement rather than a separate div
-  - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
+- Factor out 'rounded corners' constant
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

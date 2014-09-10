@@ -9,16 +9,19 @@
 	describe("Home page", function() {
 		if (browser.doesNotComputeStyles()) return;
 
-		var white = "rgb(255, 255, 255)";
-		var darkGray = "rgb(89, 89, 89)";
-		var gray = "rgb(229, 229, 229)";
-		var darkenedGray = "rgb(217, 217, 217)";
-		var mediumGray = "rgb(167, 169, 171)";
+		var WHITE = "rgb(255, 255, 255)";
+		var DARK_GRAY = "rgb(89, 89, 89)";
+		var GRAY = "rgb(229, 229, 229)";
+		var DARKENED_GRAY = "rgb(217, 217, 217)";
+		var MEDIUM_GRAY = "rgb(167, 169, 171)";
 
-		var backgroundBlue = "rgb(65, 169, 204)";
-		var darkBlue = "rgb(13, 87, 109)";
-		var mediumBlue = "rgb(0, 121, 156)";
-		var darkenedMediumBlue = "rgb(0, 111, 143)";
+		var BACKGROUND_BLUE = "rgb(65, 169, 204)";
+		var DARK_BLUE = "rgb(13, 87, 109)";
+		var MEDIUM_BLUE = "rgb(0, 121, 156)";
+		var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
+
+		var CORNER_ROUNDING = "2px";
+		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
 		var logo;
 		var tagline;
@@ -62,14 +65,14 @@
 		}
 
 		it("has a blue background", function() {
-			expect(backgroundColorOf(new HtmlElement(document.body))).to.be(backgroundBlue);
+			expect(backgroundColorOf(new HtmlElement(document.body))).to.be(BACKGROUND_BLUE);
 		});
 
 		it("centers logo at top of page", function() {
 			expect(isContentCenteredInPage(logo)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
 			expect(fontSizeOf(logo)).to.be("22px");
-			expect(textColorOf(logo)).to.be(white);
+			expect(textColorOf(logo)).to.be(WHITE);
 		});
 
 //		it("create iOS Safari failure", function() {
@@ -91,7 +94,7 @@
 			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 
 			expect(fontSizeOf(tagline)).to.be("14px");
-			expect(textColorOf(tagline)).to.be(darkBlue);
+			expect(textColorOf(tagline)).to.be(DARK_BLUE);
 		});
 
 		it("centers drawing area below tagline", function() {
@@ -99,7 +102,8 @@
 			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
 
 			expect(elementHeightInPixels(drawingArea)).to.equal(600);
-			expect(backgroundColorOf(drawingArea)).to.equal(white);
+			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
+			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
 		});
 
 		it("centers an arrow at top of drawing area", function() {
@@ -116,16 +120,16 @@
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
 			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
 
-			expect(textColorOf(clearButton)).to.be(darkGray);
-			expect(backgroundColorOf(clearButton)).to.be(gray);
+			expect(textColorOf(clearButton)).to.be(DARK_GRAY);
+			expect(backgroundColorOf(clearButton)).to.be(GRAY);
 			expect(hasBorder(clearButton)).to.be(false);
 
 			expect(elementHeightInPixels(clearButton)).to.equal(30);
 			expect(elementWidthInPixels(clearButton)).to.equal(70);
 			expect(isTextVerticallyCentered(clearButton)).to.be(true);
 
-			expect(roundedCornersOf(clearButton)).to.be("2px");
-			expect(dropShadowOf(clearButton)).to.be(mediumGray + " 0px 1px 0px 0px");
+			expect(roundedCornersOf(clearButton)).to.be(CORNER_ROUNDING);
+			expect(dropShadowOf(clearButton)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
 
 			expect(textIsUnderlined(clearButton)).to.be(false);
 			expect(textIsUppercase(clearButton)).to.be(true);
@@ -134,7 +138,7 @@
 		it("darkens the 'clear' button when the user hovers over it", function() {
 			clearButton.toDomElement().className += " _hover_";
 
-			expect(backgroundColorOf(clearButton)).to.be(darkenedGray);
+			expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
@@ -150,22 +154,22 @@
 			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
 
 			expect(fontSizeOf(footer)).to.be("15px");
-			expect(textColorOf(footer)).to.be(white);
+			expect(textColorOf(footer)).to.be(WHITE);
 		});
 
 		it("centers 'join us' button below footer", function() {
 			expect(isContentCenteredInPage(joinUs)).to.be(true);
 			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
 
-			expect(textColorOf(joinUs)).to.be(white);
-			expect(backgroundColorOf(joinUs)).to.be(mediumBlue);
+			expect(textColorOf(joinUs)).to.be(WHITE);
+			expect(backgroundColorOf(joinUs)).to.be(MEDIUM_BLUE);
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
 			expect(elementWidthInPixels(joinUs)).to.equal(175);
 			expect(isTextVerticallyCentered(joinUs)).to.be(true);
 
-			expect(roundedCornersOf(joinUs)).to.be("2px");
-			expect(dropShadowOf(joinUs)).to.be(darkBlue + " 0px 1px 0px 0px");
+			expect(roundedCornersOf(joinUs)).to.be(CORNER_ROUNDING);
+			expect(dropShadowOf(joinUs)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
 
 			expect(textIsUnderlined(joinUs)).to.be(false);
 			expect(textIsUppercase(joinUs)).to.be(true);
@@ -174,7 +178,7 @@
 		it("darkens the 'join us' button when the user hovers over it", function() {
 			joinUs.toDomElement().className += " _hover_";
 
-			expect(backgroundColorOf(joinUs)).to.be(darkenedMediumBlue);
+			expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
 		});
 
 		it("'join us' button appears to depress when user activates it", function() {
