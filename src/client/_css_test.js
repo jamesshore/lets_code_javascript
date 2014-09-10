@@ -108,13 +108,13 @@
 			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
 			// TODO: haven't tested background image, position, or repeat
 
-			expect(elementOverElement(drawingAreaArrow, drawingArea)).to.be(true);
+			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
 			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
-			expect(elementOverElement(clearButton, drawingArea)).to.be(true);
+			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
 
 			expect(textColorOf(clearButton)).to.be(darkGray);
 			expect(backgroundColorOf(clearButton)).to.be(gray);
@@ -244,12 +244,12 @@
 		return Math.round(getBoundingBox(relativeToElement).right - getBoundingBox(element).right);
 	}
 
-	function elementOverElement(element, relativeToElement) {
+	function isElementBehindElement(element, relativeToElement) {
 		var elementZ = getZIndex(element);
 		var relativeZ = getZIndex(relativeToElement);
 
-		if (elementZ === relativeZ) return isElementAfterElementInDomTree();
-		else return (elementZ > relativeZ);
+		if (elementZ === relativeZ) return !isElementAfterElementInDomTree();
+		else return (elementZ < relativeZ);
 
 		function getZIndex(element) {
 			var z = getComputedProperty(element, "z-index");
