@@ -23,6 +23,7 @@
 		var CORNER_ROUNDING = "2px";
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
+		var frame;
 		var logo;
 		var tagline;
 		var drawingAreaContainer;
@@ -45,6 +46,11 @@
 			footer = newElement("<p id='footer'>Footer here</p>");
 			joinUs = newElement("<a id='joinUs' href='#'>Join Us!</a></div>");
 
+			frame = newElement("<iframe width='1000px' height='1000px'></iframe>");
+			var frameBody = new HtmlElement(frame.toDomElement().contentDocument.body);
+			frameBody.append(logo);
+
+
 			drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
 			drawingArea = HtmlElement.fromId("drawingArea");
 			clearButton = HtmlElement.fromId("clearButton");
@@ -56,6 +62,7 @@
 			drawingAreaContainer.remove();
 			footer.remove();
 			joinUs.remove();
+			frame.remove();
 		});
 
 		function newElement(html) {
