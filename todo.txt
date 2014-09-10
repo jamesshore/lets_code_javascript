@@ -49,6 +49,7 @@ Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
 * Confirm stacking order when z indexes are the same based on sibling order
+- Use 'front' and 'behind' in stacking order tests
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)

@@ -114,6 +114,7 @@
 		it("positions clear screen button at top right of drawing area", function() {
 			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
+			expect(elementOverElement(clearButton, drawingArea)).to.be(true);
 
 			expect(textColorOf(clearButton)).to.be(darkGray);
 			expect(backgroundColorOf(clearButton)).to.be(gray);
@@ -262,14 +263,13 @@
 			var foundRelative = false;
 			var elementAfterRelative = false;
 			for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
-				dump(child);
 				if (child === elementNode) {
 					if (foundRelative) elementAfterRelative = true;
 				}
 				if (child === relativeNode) foundRelative = true;
 			}
 			failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
-			dump("element AFTER relativeTo element? " + elementAfterRelative);
+			return elementAfterRelative;
 		}
 
 
