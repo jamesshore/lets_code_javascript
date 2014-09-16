@@ -84,7 +84,7 @@
 		});
 
 		it.only("centers logo at top of page", function() {
-//			expect(isContentCenteredInPage(logo)).to.be(true);
+			expect(isContentCenteredInPage(logo)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
 			expect(fontSizeOf(logo)).to.be("22px");
 			expect(textColorOf(logo)).to.be(WHITE);
@@ -203,188 +203,181 @@
 //			expect(dropShadowOf(joinUs)).to.be("none");
 //		});
 
-	});
+		function isElementCenteredInPage(element) {
+			var documentLeft = 0;
+			var documentRight = pixelsToInt(frame.toDomElement().width);
 
-	function isElementCenteredInPage(element) {
-		// Calculate document bounding box. We could have used
-		//   document.documentElement.getBoundingClientRect();
-		// but IE9 returns an empty object for documentElement.
-		// (getBoundingClientRect() does work in IE9 for regular elements, just not on documentElement.)
-		var bodyStyle = window.getComputedStyle(document.body);
-		var bodyWidthExcludingMargins = document.body.clientWidth;
-		var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
-		var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
-		var documentLeft = 0;
-		var documentRight = bodyWidthExcludingMargins + bodyLeftMarginWidth + bodyRightMarginWidth;
+			var elementBoundingBox = getBoundingBox(element);
+			var elementLeft = elementBoundingBox.left;
+			var elementRight = elementBoundingBox.right;
 
-		var elementBoundingBox = getBoundingBox(element);
-		var elementLeft = elementBoundingBox.left;
-		var elementRight = elementBoundingBox.right;
+			var documentCenter = (documentRight - documentLeft) / 2;
+			var elementCenter = elementLeft + ((elementRight - elementLeft) / 2);
 
-		var documentCenter = (documentRight - documentLeft) / 2;
-		var elementCenter = elementLeft + ((elementRight - elementLeft) / 2);
+//			console.log("*** CENTER: element width", elementBoundingBox.width);
+//			console.log("documentLeft", documentLeft);
+//			console.log("documentRight", documentRight);
+//			console.log("elementLeft", elementLeft);
+//			console.log("elementRight", elementRight);
+//			console.log("documentCenter", documentCenter);
+//			console.log("elementCenter", elementCenter);
 
-//		console.log("*** CENTER: element width", elementBoundingBox.width);
-//		console.log("documentLeft", documentLeft);
-//		console.log("documentRight", documentRight);
-//		console.log("elementLeft", elementLeft);
-//		console.log("elementRight", elementRight);
-//		console.log("documentCenter", documentCenter);
-//		console.log("elementCenter", elementCenter);
+			var offset = Math.abs(documentCenter - elementCenter);
+			var success = (offset <= 0.5);
 
-		var offset = Math.abs(documentCenter - elementCenter);
-		var success = (offset <= 0.5);
-//		console.log(success ? "✔ SUCCESS" : "✘ FAILURE");
+	//		console.log(success ? "✔ SUCCESS" : "✘ FAILURE");
 
-		return success;
-	}
-
-	function elementPixelsFromTopOfPage(element) {
-		return getBoundingBox(element).top;
-	}
-
-	function elementHeightInPixels(element) {
-		return getBoundingBox(element).height;
-	}
-
-	function elementWidthInPixels(element) {
-		return getBoundingBox(element).width;
-	}
-
-	function elementPixelsBelowElement(element, relativeToElement) {
-		return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).bottom);
-	}
-
-	function elementPixelsOverlappingTopOfElement(element, relativeToElement) {
-		return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).top);
-	}
-
-	function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
-		return Math.round(getBoundingBox(relativeToElement).right - getBoundingBox(element).right);
-	}
-
-	function isElementBehindElement(element, relativeToElement) {
-		var elementZ = getZIndex(element);
-		var relativeZ = getZIndex(relativeToElement);
-
-		if (elementZ === relativeZ) return !isElementAfterElementInDomTree();
-		else return (elementZ < relativeZ);
-
-		function getZIndex(element) {
-			var z = getComputedProperty(element, "z-index");
-			if (z === "auto") z = 0;
-			return z;
+			return success;
 		}
 
-		function isElementAfterElementInDomTree() {
-			var elementNode = element.toDomElement();
-			var relativeNode = relativeToElement.toDomElement();
-			var foundRelative = false;
-			var elementAfterRelative = false;
-			for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
-				if (child === elementNode) {
-					if (foundRelative) elementAfterRelative = true;
-				}
-				if (child === relativeNode) foundRelative = true;
+		function elementPixelsFromTopOfPage(element) {
+			return getBoundingBox(element).top;
+		}
+
+		function elementHeightInPixels(element) {
+			return getBoundingBox(element).height;
+		}
+
+		function elementWidthInPixels(element) {
+			return getBoundingBox(element).width;
+		}
+
+		function elementPixelsBelowElement(element, relativeToElement) {
+			return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).bottom);
+		}
+
+		function elementPixelsOverlappingTopOfElement(element, relativeToElement) {
+			return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).top);
+		}
+
+		function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
+			return Math.round(getBoundingBox(relativeToElement).right - getBoundingBox(element).right);
+		}
+
+		function isElementBehindElement(element, relativeToElement) {
+			var elementZ = getZIndex(element);
+			var relativeZ = getZIndex(relativeToElement);
+
+			if (elementZ === relativeZ) return !isElementAfterElementInDomTree();
+			else return (elementZ < relativeZ);
+
+			function getZIndex(element) {
+				var z = getComputedProperty(element, "z-index");
+				if (z === "auto") z = 0;
+				return z;
 			}
-			failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
-			return elementAfterRelative;
+
+			function isElementAfterElementInDomTree() {
+				var elementNode = element.toDomElement();
+				var relativeNode = relativeToElement.toDomElement();
+				var foundRelative = false;
+				var elementAfterRelative = false;
+				for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
+					if (child === elementNode) {
+						if (foundRelative) elementAfterRelative = true;
+					}
+					if (child === relativeNode) foundRelative = true;
+				}
+				failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
+				return elementAfterRelative;
+			}
+
+
 		}
 
+		function isTextVerticallyCentered(element) {
+			var elementHeight = getBoundingBox(element).height;
+			var lineHeight = getComputedProperty(element, "line-height");
 
-	}
+			return elementHeight + "px" === lineHeight;
+		}
 
-	function isTextVerticallyCentered(element) {
-		var elementHeight = getBoundingBox(element).height;
-		var lineHeight = getComputedProperty(element, "line-height");
+		function backgroundColorOf(element) {
+			return getComputedProperty(element, "background-color");
+		}
 
-		return elementHeight + "px" === lineHeight;
-	}
+		function fontSizeOf(element) {
+			return getComputedProperty(element, "font-size");
+		}
 
-	function backgroundColorOf(element) {
-		return getComputedProperty(element, "background-color");
-	}
+		function textColorOf(element) {
+			return getComputedProperty(element, "color");
+		}
 
-	function fontSizeOf(element) {
-		return getComputedProperty(element, "font-size");
-	}
+		function hasBorder(element) {
+			var top = getComputedProperty(element, "border-top-style");
+			var right = getComputedProperty(element, "border-right-style");
+			var bottom = getComputedProperty(element, "border-bottom-style");
+			var left = getComputedProperty(element, "border-left-style");
+			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
+		}
 
-	function textColorOf(element) {
-		return getComputedProperty(element, "color");
-	}
+		function textIsUnderlined(element) {
+			var style = getComputedProperty(element, "text-decoration");
+			return style.indexOf("none") !== 0;
+		}
 
-	function hasBorder(element) {
-		var top = getComputedProperty(element, "border-top-style");
-		var right = getComputedProperty(element, "border-right-style");
-		var bottom = getComputedProperty(element, "border-bottom-style");
-		var left = getComputedProperty(element, "border-left-style");
-		return !(top === "none" && right === "none" && bottom === "none" && left === "none");
-	}
+		function textIsUppercase(element) {
+			return getComputedProperty(element, "text-transform") === "uppercase";
+		}
 
-	function textIsUnderlined(element) {
-		var style = getComputedProperty(element, "text-decoration");
-		return style.indexOf("none") !== 0;
-	}
+		function roundedCornersOf(element) {
+			// We can't just look at border-radius because it returns "" on Firefox and IE 9
+			var topLeft = getComputedProperty(element, "border-top-left-radius");
+			var topRight = getComputedProperty(element, "border-top-right-radius");
+			var bottomLeft = getComputedProperty(element, "border-bottom-left-radius");
+			var bottomRight = getComputedProperty(element, "border-bottom-right-radius");
 
-	function textIsUppercase(element) {
-		return getComputedProperty(element, "text-transform") === "uppercase";
-	}
+			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
+			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
+		}
 
-	function roundedCornersOf(element) {
-		// We can't just look at border-radius because it returns "" on Firefox and IE 9
-		var topLeft = getComputedProperty(element, "border-top-left-radius");
-		var topRight = getComputedProperty(element, "border-top-right-radius");
-		var bottomLeft = getComputedProperty(element, "border-bottom-left-radius");
-		var bottomRight = getComputedProperty(element, "border-bottom-right-radius");
+		function dropShadowOf(element) {
+			var shadow = getComputedProperty(element, "box-shadow");
 
-		if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
-		else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
-	}
+			// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
+			// We handle that case here.
+			if (shadow === "white") return "none";
+			if (shadow.match(/^#[0-9a-f]{6}$/)) return "none";      // look for '#' followed by six hex digits
 
-	function dropShadowOf(element) {
-		var shadow = getComputedProperty(element, "box-shadow");
+			// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
+			// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
+			// BTW, we don't support multiple shadows yet
+			var groups = shadow.match(/^([^#]+) #(..)(..)(..)/);   // get everything before the '#' and the r, g, b
+			if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
 
-		// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
-		// We handle that case here.
-		if (shadow === "white") return "none";
-		if (shadow.match(/^#[0-9a-f]{6}$/)) return "none";      // look for '#' followed by six hex digits
+			var sizes = groups[1];
+			var r = parseInt(groups[2], 16);
+			var g = parseInt(groups[3], 16);
+			var b = parseInt(groups[4], 16);
+			return "rgb(" + r + ", " + g + ", " + b + ") " + sizes;
+		}
 
-		// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
-		// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
-		// BTW, we don't support multiple shadows yet
-		var groups = shadow.match(/^([^#]+) #(..)(..)(..)/);   // get everything before the '#' and the r, g, b
-		if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
+		function isContentCenteredInPage(element) {
+			if (!isElementCenteredInPage(element)) return false;
 
-		var sizes = groups[1];
-		var r = parseInt(groups[2], 16);
-		var g = parseInt(groups[3], 16);
-		var b = parseInt(groups[4], 16);
-		return "rgb(" + r + ", " + g + ", " + b + ") " + sizes;
-	}
+			var domElement = element.toDomElement();
 
-	function isContentCenteredInPage(element) {
-		if (!isElementCenteredInPage(element)) return false;
+			var style = window.getComputedStyle(domElement);
+			var textAlign = style.getPropertyValue("text-align");
 
-		var domElement = element.toDomElement();
+			return textAlign === "center";
+		}
 
-		var style = window.getComputedStyle(domElement);
-		var textAlign = style.getPropertyValue("text-align");
+		function getBoundingBox(element) {
+			var domElement = element.toDomElement();
+			return domElement.getBoundingClientRect();
+		}
 
-		return textAlign === "center";
-	}
+		function getComputedProperty(element, propertyName) {
+			var style = window.getComputedStyle(element.toDomElement());
+			return style.getPropertyValue(propertyName);
+		}
 
-	function getBoundingBox(element) {
-		var domElement = element.toDomElement();
-		return domElement.getBoundingClientRect();
-	}
+		function pixelsToInt(pixels) {
+			return parseInt(pixels, 10);
+		}
 
-	function getComputedProperty(element, propertyName) {
-		var style = window.getComputedStyle(element.toDomElement());
-		return style.getPropertyValue(propertyName);
-	}
-
-	function pixelsToInt(pixels) {
-		return parseInt(pixels, 10);
-	}
+	});
 
 }());
