@@ -42,6 +42,7 @@
 				style.toDomElement().addEventListener("load", function() {
 					logo = newElement("<h1 id='logo'>Hello World</h1>");
 					tagline = newElement("<p id='tagline'>Tag line here</p>");
+					drawingArea = newElement("<div id='drawingArea'></div>");
 //					drawingAreaContainer = newElement("" +
 //						"<div id='drawingAreaContainer'>" +
 //						" <div id='drawingArea'></div>" +
@@ -108,15 +109,15 @@
 			expect(textColorOf(tagline)).to.be(DARK_BLUE);
 		});
 
-//		it("centers drawing area below tagline", function() {
-//			expect(isElementCenteredInPage(drawingArea)).to.be(true);
+		it("centers drawing area below tagline", function() {
+			expect(isElementCenteredInPage(drawingArea)).to.be(true);
 //			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
 //
 //			expect(elementHeightInPixels(drawingArea)).to.equal(600);
 //			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
 //			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
-//		});
-//
+		});
+
 //		it("centers an arrow at top of drawing area", function() {
 //			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
 //
@@ -200,8 +201,16 @@
 //		});
 
 		function isElementCenteredInPage(element) {
-			var documentLeft = 0;
-			var documentRight = pixelsToInt(frame.toDomElement().width);
+			var frameBody = frame.toDomElement().contentDocument.body;
+
+			var bodyStyle = frame.toDomElement().contentWindow.getComputedStyle(frameBody);
+			var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
+			var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
+
+			// We can't just base the document width on the frame width because that doesn't account for scroll bars.
+			var bodyBoundingBox = frameBody.getBoundingClientRect();
+			var documentLeft = bodyBoundingBox.left - bodyLeftMarginWidth;
+			var documentRight = bodyBoundingBox.right + bodyRightMarginWidth;
 
 			var elementBoundingBox = getBoundingBox(element);
 			var elementLeft = elementBoundingBox.left;
@@ -210,18 +219,18 @@
 			var documentCenter = (documentRight - documentLeft) / 2;
 			var elementCenter = elementLeft + ((elementRight - elementLeft) / 2);
 
-			console.log("*** CENTER: element width", elementBoundingBox.width);
-			console.log("documentLeft", documentLeft);
-			console.log("documentRight", documentRight);
-			console.log("elementLeft", elementLeft);
-			console.log("elementRight", elementRight);
-			console.log("documentCenter", documentCenter);
-			console.log("elementCenter", elementCenter);
+//			console.log("*** CENTER: element width", elementBoundingBox.width);
+//			console.log("documentLeft", documentLeft);
+//			console.log("documentRight", documentRight);
+//			console.log("elementLeft", elementLeft);
+//			console.log("elementRight", elementRight);
+//			console.log("documentCenter", documentCenter);
+//			console.log("elementCenter", elementCenter);
 
 			var offset = Math.abs(documentCenter - elementCenter);
 			var success = (offset <= 0.5);
 
-			console.log(success ? "✔ SUCCESS" : "✘ FAILURE");
+//			console.log(success ? "✔ SUCCESS" : "✘ FAILURE");
 
 			return success;
 		}
