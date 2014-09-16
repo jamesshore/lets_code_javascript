@@ -21,13 +21,17 @@ h1#logo {
 }
 
 #drawingArea {
-	height: 600px;
-	margin-top: 10px;
+	background-color: green;
+}
+
+/*#drawingArea {*/
+	/*height: 600px;*/
+	/*margin-top: 10px;*/
 	/*margin-left: auto;*/
 	/*margin-right: auto;*/
 	/*background-color: white;*/
 	/*border-radius: 2px;*/
-}
+/*}*/
 
 #drawingAreaContainer {
 	background-color: grey;
