@@ -47,16 +47,14 @@
 
 			frame = HtmlElement.fromHtml("<iframe width='500px' height='500px'></iframe>");
 			frame.toDomElement().onload = function() {
-
-				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'></link>");
+				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'>");
 				new HtmlElement(frame.toDomElement().contentDocument.head).append(style);
-
-				logo = newElement("<h1 id='logo'>Hello World</h1>");
-
-				done();
+				style.toDomElement().addEventListener("load", function() {
+					logo = newElement("<h1 id='logo'>Hello World</h1>");
+					done();
+				});
 			};
 			frame.appendSelfToBody();
-
 
 //			drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
 //			drawingArea = HtmlElement.fromId("drawingArea");
@@ -85,12 +83,11 @@
 			expect(backgroundColorOf(new HtmlElement(document.body))).to.be(BACKGROUND_BLUE);
 		});
 
-		it.only("centers logo at top of page", function(done) {
-			setTimeout(done, 1000);
-			expect(isContentCenteredInPage(logo)).to.be(true);
-//			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
-//			expect(fontSizeOf(logo)).to.be("22px");
-//			expect(textColorOf(logo)).to.be(WHITE);
+		it.only("centers logo at top of page", function() {
+//			expect(isContentCenteredInPage(logo)).to.be(true);
+			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
+			expect(fontSizeOf(logo)).to.be("22px");
+			expect(textColorOf(logo)).to.be(WHITE);
 		});
 
 ////		it("create iOS Safari failure", function() {
