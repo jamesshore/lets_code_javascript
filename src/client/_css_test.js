@@ -111,8 +111,8 @@
 
 		it("centers drawing area below tagline", function() {
 			expect(isElementCenteredInPage(drawingArea)).to.be(true);
-//			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
-//
+			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
+
 //			expect(elementHeightInPixels(drawingArea)).to.equal(600);
 //			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
 //			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
@@ -375,7 +375,7 @@
 		}
 
 		function getComputedProperty(element, propertyName) {
-			var style = window.getComputedStyle(element.toDomElement());
+			var style = frame.toDomElement().contentWindow.getComputedStyle(element.toDomElement());
 			return style.getPropertyValue(propertyName);
 		}
 
