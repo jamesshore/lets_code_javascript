@@ -51,7 +51,7 @@
 //						"</div>"
 //					);
 					footer = newElement("<p id='footer'>Footer here</p>");
-//					joinUs = newElement("<a id='joinUs' href='#'>Join Us!</a></div>");
+					joinUs = newElement("<a id='joinUs' href='#'>Join Us!</a></div>");
 //					drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
 //					drawingArea = HtmlElement.fromId("drawingArea");
 //					clearButton = HtmlElement.fromId("clearButton");
@@ -169,8 +169,8 @@
 			expect(textColorOf(footer)).to.be(WHITE);
 		});
 
-//		it("centers 'join us' button below footer", function() {
-//			expect(isContentCenteredInPage(joinUs)).to.be(true);
+		it("centers 'join us' button below footer", function() {
+			expect(isContentCenteredInPage(joinUs)).to.be(true);
 //			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
 //
 //			expect(textColorOf(joinUs)).to.be(WHITE);
@@ -185,8 +185,8 @@
 //
 //			expect(textIsUnderlined(joinUs)).to.be(false);
 //			expect(textIsUppercase(joinUs)).to.be(true);
-//		});
-//
+		});
+
 //		it("darkens the 'join us' button when the user hovers over it", function() {
 //			joinUs.toDomElement().className += " _hover_";
 //
