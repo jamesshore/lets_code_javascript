@@ -50,7 +50,7 @@
 //						" <button id='clearButton' type='button'>Clear</button>" +
 //						"</div>"
 //					);
-//					footer = newElement("<p id='footer'>Footer here</p>");
+					footer = newElement("<p id='footer'>Footer here</p>");
 //					joinUs = newElement("<a id='joinUs' href='#'>Join Us!</a></div>");
 //					drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
 //					drawingArea = HtmlElement.fromId("drawingArea");
@@ -161,14 +161,14 @@
 //		});
 //
 //
-//		it("centers footer below the drawing area", function() {
-//			expect(isContentCenteredInPage(footer)).to.be(true);
+		it("centers footer below the drawing area", function() {
+			expect(isContentCenteredInPage(footer)).to.be(true);
 //			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
 //
 //			expect(fontSizeOf(footer)).to.be("15px");
 //			expect(textColorOf(footer)).to.be(WHITE);
-//		});
-//
+		});
+
 //		it("centers 'join us' button below footer", function() {
 //			expect(isContentCenteredInPage(joinUs)).to.be(true);
 //			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
