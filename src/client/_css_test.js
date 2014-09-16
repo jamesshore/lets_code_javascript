@@ -42,7 +42,7 @@
 				style.toDomElement().addEventListener("load", function() {
 					logo = newElement("<h1 id='logo'>Hello World</h1>");
 					tagline = newElement("<p id='tagline'>Tag line here</p>");
-//					drawingArea = newElement("<div id='drawingArea'>Foo!</div>");
+					drawingArea = newElement("<div id='drawingArea'>Foo!</div>");
 //					drawingAreaContainer = newElement("" +
 //						"<div id='drawingAreaContainer'>" +
 //						" <div id='drawingArea'></div>" +
@@ -64,7 +64,7 @@
 		});
 
 		afterEach(function() {
-//			frame.remove();
+			frame.remove();
 		});
 
 		function newElement(html) {
@@ -163,10 +163,10 @@
 //
 		it("centers footer below the drawing area", function() {
 			expect(isContentCenteredInPage(footer)).to.be(true);
-//			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
-//
-//			expect(fontSizeOf(footer)).to.be("15px");
-//			expect(textColorOf(footer)).to.be(WHITE);
+			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
+
+			expect(fontSizeOf(footer)).to.be("15px");
+			expect(textColorOf(footer)).to.be(WHITE);
 		});
 
 //		it("centers 'join us' button below footer", function() {
