@@ -34,39 +34,35 @@
 		var joinUs;
 
 		beforeEach(function(done) {
-//			tagline = newElement("<p id='tagline'>Tag line here</p>");
-//			drawingAreaContainer = newElement("" +
-//				"<div id='drawingAreaContainer'>" +
-//				" <div id='drawingArea'></div>" +
-//				" <div id='drawingAreaArrow'>v</div>" +
-//				" <button id='clearButton' type='button'>Clear</button>" +
-//				"</div>"
-//			);
-//			footer = newElement("<p id='footer'>Footer here</p>");
-//			joinUs = newElement("<a id='joinUs' href='#'>Join Us!</a></div>");
 
-			frame = HtmlElement.fromHtml("<iframe width='500px' height='500px'></iframe>");
+			frame = HtmlElement.fromHtml("<iframe width='1000px' height='500px'></iframe>");
 			frame.toDomElement().onload = function() {
 				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'>");
 				new HtmlElement(frame.toDomElement().contentDocument.head).append(style);
 				style.toDomElement().addEventListener("load", function() {
 					logo = newElement("<h1 id='logo'>Hello World</h1>");
+					tagline = newElement("<p id='tagline'>Tag line here</p>");
+//					drawingAreaContainer = newElement("" +
+//						"<div id='drawingAreaContainer'>" +
+//						" <div id='drawingArea'></div>" +
+//						" <div id='drawingAreaArrow'>v</div>" +
+//						" <button id='clearButton' type='button'>Clear</button>" +
+//						"</div>"
+//					);
+//					footer = newElement("<p id='footer'>Footer here</p>");
+//					joinUs = newElement("<a id='joinUs' href='#'>Join Us!</a></div>");
+//					drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
+//					drawingArea = HtmlElement.fromId("drawingArea");
+//					clearButton = HtmlElement.fromId("clearButton");
+
 					done();
 				});
 			};
 			frame.appendSelfToBody();
 
-//			drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
-//			drawingArea = HtmlElement.fromId("drawingArea");
-//			clearButton = HtmlElement.fromId("clearButton");
 		});
 
 		afterEach(function() {
-//			logo.remove();
-//			tagline.remove();
-//			drawingAreaContainer.remove();
-//			footer.remove();
-//			joinUs.remove();
 			frame.remove();
 		});
 
@@ -83,35 +79,35 @@
 			expect(backgroundColorOf(new HtmlElement(document.body))).to.be(BACKGROUND_BLUE);
 		});
 
-		it.only("centers logo at top of page", function() {
+		it("centers logo at top of page", function() {
 			expect(isContentCenteredInPage(logo)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
 			expect(fontSizeOf(logo)).to.be("22px");
 			expect(textColorOf(logo)).to.be(WHITE);
 		});
 
-////		it("create iOS Safari failure", function() {
-////			newElement('<div><p id="tagline">tagline</p><p id="footer">footer</p></div>');
-////
-////
-////			var domElement = document.getElementById("tagline");
-////			var boundingBox = domElement.getBoundingClientRect();     // comment this line out to make test pass
-////
-////
-////			var style = window.getComputedStyle(domElement);
-////			var fontSize = style.getPropertyValue("font-size");
-////
-////			expect(fontSize).to.be("14px");
-////		});
+//		it("create iOS Safari failure", function() {
+//			newElement('<div><p id="tagline">tagline</p><p id="footer">footer</p></div>');
 //
-//		it("centers tagline directly below logo", function() {
-//			expect(isContentCenteredInPage(tagline)).to.be(true);
-//			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 //
-//			expect(fontSizeOf(tagline)).to.be("14px");
-//			expect(textColorOf(tagline)).to.be(DARK_BLUE);
+//			var domElement = document.getElementById("tagline");
+//			var boundingBox = domElement.getBoundingClientRect();     // comment this line out to make test pass
+//
+//
+//			var style = window.getComputedStyle(domElement);
+//			var fontSize = style.getPropertyValue("font-size");
+//
+//			expect(fontSize).to.be("14px");
 //		});
-//
+
+		it("centers tagline directly below logo", function() {
+			expect(isContentCenteredInPage(tagline)).to.be(true);
+			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
+
+			expect(fontSizeOf(tagline)).to.be("14px");
+			expect(textColorOf(tagline)).to.be(DARK_BLUE);
+		});
+
 //		it("centers drawing area below tagline", function() {
 //			expect(isElementCenteredInPage(drawingArea)).to.be(true);
 //			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
@@ -214,18 +210,18 @@
 			var documentCenter = (documentRight - documentLeft) / 2;
 			var elementCenter = elementLeft + ((elementRight - elementLeft) / 2);
 
-//			console.log("*** CENTER: element width", elementBoundingBox.width);
-//			console.log("documentLeft", documentLeft);
-//			console.log("documentRight", documentRight);
-//			console.log("elementLeft", elementLeft);
-//			console.log("elementRight", elementRight);
-//			console.log("documentCenter", documentCenter);
-//			console.log("elementCenter", elementCenter);
+			console.log("*** CENTER: element width", elementBoundingBox.width);
+			console.log("documentLeft", documentLeft);
+			console.log("documentRight", documentRight);
+			console.log("elementLeft", elementLeft);
+			console.log("elementRight", elementRight);
+			console.log("documentCenter", documentCenter);
+			console.log("elementCenter", elementCenter);
 
 			var offset = Math.abs(documentCenter - elementCenter);
 			var success = (offset <= 0.5);
 
-	//		console.log(success ? "✔ SUCCESS" : "✘ FAILURE");
+			console.log(success ? "✔ SUCCESS" : "✘ FAILURE");
 
 			return success;
 		}
