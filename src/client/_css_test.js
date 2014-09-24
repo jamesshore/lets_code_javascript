@@ -43,16 +43,15 @@
 					logo = newElement("<h1 id='logo'>Hello World</h1>");
 					tagline = newElement("<p id='tagline'>Tag line here</p>");
 					drawingAreaContainer = newElement("" +
-						"<div id='drawingAreaContainer'>" +
+						"<div id='drawing-area-container'>" +
 						" <div id='drawing-area'></div>" +
-//						" <div id='drawingAreaArrow'>v</div>" +
+						" <div id='drawing-area-arrow'>v</div>" +
 //						" <button id='clearButton' type='button'>Clear</button>" +
 						"</div>"
 					);
 					footer = newElement("<p id='footer'>Footer here</p>");
 					joinUs = newElement("<a id='join-us' href='#'>Join Us!</a></div>");
-//					drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
-//					drawingArea = HtmlElement.fromId("drawingArea");
+						drawingAreaArrow = new HtmlElement(frame.toDomElement().contentDocument.getElementById("drawing-area-arrow"));
 						drawingArea = new HtmlElement(frame.toDomElement().contentDocument.getElementById("drawing-area"));
 //					clearButton = HtmlElement.fromId("clearButton");
 
@@ -118,15 +117,15 @@
 			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
 		});
 
-//		it("centers an arrow at top of drawing area", function() {
-//			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
-//
-//			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
-//			// TODO: haven't tested background image, position, or repeat
-//
-//			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
-//		});
-//
+		it("centers an arrow at top of drawing area", function() {
+			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
+
+			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
+			// TODO: haven't tested background image, position, or repeat
+
+			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
+		});
+
 //		it("positions clear screen button at top right of drawing area", function() {
 //			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
 //			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);

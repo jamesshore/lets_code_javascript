@@ -29,12 +29,12 @@ h1#logo {
 	border-radius: 2px;
 }
 
-#drawingAreaContainer {
+#drawing-area-container {
 	background-color: grey;
 	position: relative;
 }
 
-#drawingAreaArrow {
+#drawing-area-arrow {
 	background-image: url(/images/arrow.png);
 	background-repeat: no-repeat;
 	background-position: center;
