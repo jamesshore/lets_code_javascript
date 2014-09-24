@@ -51,9 +51,10 @@
 					);
 					footer = newElement("<p id='footer'>Footer here</p>");
 					joinUs = newElement("<a id='join-us' href='#'>Join Us!</a></div>");
-						drawingAreaArrow = new HtmlElement(frame.toDomElement().contentDocument.getElementById("drawing-area-arrow"));
-						drawingArea = new HtmlElement(frame.toDomElement().contentDocument.getElementById("drawing-area"));
-						clearButton = new HtmlElement(frame.toDomElement().contentDocument.getElementById("clear-button"));
+
+					drawingArea = getElement("drawing-area");
+					drawingAreaArrow = getElement("drawing-area-arrow");
+					clearButton = getElement("clear-button");
 
 					done();
 				});
@@ -73,6 +74,10 @@
 			frameBody.append(element);
 
 			return element;
+		}
+
+		function getElement(id) {
+			return new HtmlElement(frame.toDomElement().contentDocument.getElementById(id));
 		}
 
 		it("has a blue background", function() {
