@@ -48,6 +48,7 @@ Goal: expect(css("myHeadline").isCentered()).to.be(true)
 To Do on current task:
 - Figure out how to test fixed-width drawing area without it breaking when test browser is narrower than drawing area
   * elementPixelsBelowElement
+  - factor out getElementById() code for getting elements from frame (in beforeEach())
   - Test/implement fixed-width drawing area
 - Change Karma to use 'dots' reporter (avoids text-repeating bug)
 

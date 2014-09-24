@@ -46,14 +46,14 @@
 						"<div id='drawing-area-container'>" +
 						" <div id='drawing-area'></div>" +
 						" <div id='drawing-area-arrow'>v</div>" +
-//						" <button id='clearButton' type='button'>Clear</button>" +
+						" <button id='clear-button' type='button'>Clear</button>" +
 						"</div>"
 					);
 					footer = newElement("<p id='footer'>Footer here</p>");
 					joinUs = newElement("<a id='join-us' href='#'>Join Us!</a></div>");
 						drawingAreaArrow = new HtmlElement(frame.toDomElement().contentDocument.getElementById("drawing-area-arrow"));
 						drawingArea = new HtmlElement(frame.toDomElement().contentDocument.getElementById("drawing-area"));
-//					clearButton = HtmlElement.fromId("clearButton");
+						clearButton = new HtmlElement(frame.toDomElement().contentDocument.getElementById("clear-button"));
 
 					done();
 				});
@@ -126,40 +126,39 @@
 			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
 		});
 
-//		it("positions clear screen button at top right of drawing area", function() {
-//			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
-//			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
-//			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
-//
-//			expect(textColorOf(clearButton)).to.be(DARK_GRAY);
-//			expect(backgroundColorOf(clearButton)).to.be(GRAY);
-//			expect(hasBorder(clearButton)).to.be(false);
-//
-//			expect(elementHeightInPixels(clearButton)).to.equal(30);
-//			expect(elementWidthInPixels(clearButton)).to.equal(70);
-//			expect(isTextVerticallyCentered(clearButton)).to.be(true);
-//
-//			expect(roundedCornersOf(clearButton)).to.be(CORNER_ROUNDING);
-//			expect(dropShadowOf(clearButton)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
-//
-//			expect(textIsUnderlined(clearButton)).to.be(false);
-//			expect(textIsUppercase(clearButton)).to.be(true);
-//		});
-//
-//		it("darkens the 'clear' button when the user hovers over it", function() {
-//			clearButton.toDomElement().className += " _hover_";
-//
-//			expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
-//		});
-//
-//		it("'clear' button appears to depress when user activates it", function() {
-//			clearButton.toDomElement().className += " _active_";
-//
-//			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
-//			expect(dropShadowOf(clearButton)).to.be("none");
-//		});
-//
-//
+		it("positions clear screen button at top right of drawing area", function() {
+			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
+			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
+			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
+
+			expect(textColorOf(clearButton)).to.be(DARK_GRAY);
+			expect(backgroundColorOf(clearButton)).to.be(GRAY);
+			expect(hasBorder(clearButton)).to.be(false);
+
+			expect(elementHeightInPixels(clearButton)).to.equal(30);
+			expect(elementWidthInPixels(clearButton)).to.equal(70);
+			expect(isTextVerticallyCentered(clearButton)).to.be(true);
+
+			expect(roundedCornersOf(clearButton)).to.be(CORNER_ROUNDING);
+			expect(dropShadowOf(clearButton)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+
+			expect(textIsUnderlined(clearButton)).to.be(false);
+			expect(textIsUppercase(clearButton)).to.be(true);
+		});
+
+		it("darkens the 'clear' button when the user hovers over it", function() {
+			clearButton.toDomElement().className += " _hover_";
+
+			expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+		});
+
+		it("'clear' button appears to depress when user activates it", function() {
+			clearButton.toDomElement().className += " _active_";
+
+			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
+			expect(dropShadowOf(clearButton)).to.be("none");
+		});
+
 		it("centers footer below the drawing area", function() {
 			expect(isContentCenteredInPage(footer)).to.be(true);
 			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);

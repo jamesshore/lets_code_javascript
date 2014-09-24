@@ -46,7 +46,7 @@ h1#logo {
 	right: 0px;
 }
 
-#clearButton {
+#clear-button {
 	position: absolute;
 	top: 15px;
 	right: 15px;
@@ -63,11 +63,11 @@ h1#logo {
 	text-transform: uppercase;
 }
 
-#clearButton:hover, #clearButton._hover_ {
+#clear-button:hover, #clear-button._hover_ {
 	background-color: #d9d9d9;
 }
 
-#clearButton:active, #clearButton._active_ {
+#clear-button:active, #clear-button._active_ {
 	top: 16px;
 	box-shadow: none;
 }
