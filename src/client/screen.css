@@ -22,15 +22,15 @@ h1#logo {
 
 #drawing-area {
 	height: 600px;
-	margin-top: 10px;
-	margin-left: auto;
-	margin-right: auto;
 	background-color: white;
 	border-radius: 2px;
 }
 
 #drawing-area-container {
-	background-color: grey;
+	width: 980px;
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
 	position: relative;
 }
 

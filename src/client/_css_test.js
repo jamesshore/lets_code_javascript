@@ -20,6 +20,7 @@
 		var MEDIUM_BLUE = "rgb(0, 121, 156)";
 		var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
 
+		var IOS_BROWSER_WIDTH = 980;
 		var CORNER_ROUNDING = "2px";
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
@@ -34,8 +35,7 @@
 		var joinUs;
 
 		beforeEach(function(done) {
-
-			frame = HtmlElement.fromHtml("<iframe width='1000px' height='500px'></iframe>");
+			frame = HtmlElement.fromHtml("<iframe width='1200px' height='500px'></iframe>");
 			frame.toDomElement().onload = function() {
 				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'>");
 				new HtmlElement(frame.toDomElement().contentDocument.head).append(style);
@@ -60,7 +60,6 @@
 				});
 			};
 			frame.appendSelfToBody();
-
 		});
 
 		afterEach(function() {
@@ -117,6 +116,7 @@
 			expect(isElementCenteredInPage(drawingArea)).to.be(true);
 			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
 
+			expect(elementWidthInPixels(drawingArea)).to.equal(IOS_BROWSER_WIDTH);
 			expect(elementHeightInPixels(drawingArea)).to.equal(600);
 			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
 			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
