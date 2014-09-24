@@ -15,15 +15,14 @@
 
     <p id="tagline">WeeWikiPaint is the web's premier collaborative site. Go on, give it a try!</p>
 
-    <div id="drawingAreaContainer">
-        <div id="drawingArea"></div>
-        <div id="drawingAreaArrow"></div>
-        <button id="clearButton" type="button">Clear</button>
+    <div id="drawing-area-container">
+        <div id="drawing-area"></div>
+        <div id="drawing-area-arrow"></div>
+        <button id="clear-button" type="button">Clear</button>
     </div>
 
     <p id="footer">You can watch this site be developed at Let's Code: Test-Driven JavaScript!</p>
-    <a id="joinUs" href='http://www.letscodejavascript.com'>Join Us!</a>
-    <iframe width='1000px' height='1000px'></iframe>
+    <a id="join-us" href='http://www.letscodejavascript.com'>Join Us!</a>
 
     <script type="text/javascript">
         $(function() {
@@ -31,8 +30,8 @@
             var HtmlElement = require("./html_element.js");
 
             client.drawingAreaCanvas = client.initializeDrawingArea({
-                drawingAreaDiv: HtmlElement.fromId("drawingArea"),
-                clearScreenButton: HtmlElement.fromId("clearButton")
+                drawingAreaDiv: HtmlElement.fromId("drawing-area"),
+                clearScreenButton: HtmlElement.fromId("clear-button")
             });
         });
     </script>
