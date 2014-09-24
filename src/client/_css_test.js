@@ -51,7 +51,7 @@
 //						"</div>"
 //					);
 					footer = newElement("<p id='footer'>Footer here</p>");
-					joinUs = newElement("<a id='joinUs' href='#'>Join Us!</a></div>");
+					joinUs = newElement("<a id='join-us' href='#'>Join Us!</a></div>");
 //					drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
 //					drawingArea = HtmlElement.fromId("drawingArea");
 //					clearButton = HtmlElement.fromId("clearButton");
