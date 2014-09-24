@@ -13,8 +13,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Drawing area width (including centering & testing cases where drawing area is wider/narrower than browser)
-- Web font
+* Web font
 - Release new design
 
 Potential future stories:
@@ -46,7 +45,6 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-- Change Karma to use 'dots' reporter (avoids text-repeating bug)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
