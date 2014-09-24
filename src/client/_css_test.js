@@ -42,18 +42,18 @@
 				style.toDomElement().addEventListener("load", function() {
 					logo = newElement("<h1 id='logo'>Hello World</h1>");
 					tagline = newElement("<p id='tagline'>Tag line here</p>");
-					drawingArea = newElement("<div id='drawingArea'>Foo!</div>");
-//					drawingAreaContainer = newElement("" +
-//						"<div id='drawingAreaContainer'>" +
-//						" <div id='drawingArea'></div>" +
+					drawingAreaContainer = newElement("" +
+						"<div id='drawingAreaContainer'>" +
+						" <div id='drawing-area'></div>" +
 //						" <div id='drawingAreaArrow'>v</div>" +
 //						" <button id='clearButton' type='button'>Clear</button>" +
-//						"</div>"
-//					);
+						"</div>"
+					);
 					footer = newElement("<p id='footer'>Footer here</p>");
 					joinUs = newElement("<a id='join-us' href='#'>Join Us!</a></div>");
 //					drawingAreaArrow = HtmlElement.fromId("drawingAreaArrow");
 //					drawingArea = HtmlElement.fromId("drawingArea");
+						drawingArea = new HtmlElement(frame.toDomElement().contentDocument.getElementById("drawing-area"));
 //					clearButton = HtmlElement.fromId("clearButton");
 
 					done();
@@ -109,14 +109,14 @@
 			expect(textColorOf(tagline)).to.be(DARK_BLUE);
 		});
 
-//		it.only("centers drawing area below tagline", function() {
-//			expect(isElementCenteredInPage(drawingArea)).to.be(true);
-//			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
-//
-//			expect(elementHeightInPixels(drawingArea)).to.equal(600);
-//			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
-//			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
-//		});
+		it("centers drawing area below tagline", function() {
+			expect(isElementCenteredInPage(drawingArea)).to.be(true);
+			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
+
+			expect(elementHeightInPixels(drawingArea)).to.equal(600);
+			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
+			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
+		});
 
 //		it("centers an arrow at top of drawing area", function() {
 //			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
