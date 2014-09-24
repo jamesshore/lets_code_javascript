@@ -187,18 +187,18 @@
 			expect(textIsUppercase(joinUs)).to.be(true);
 		});
 
-//		it("darkens the 'join us' button when the user hovers over it", function() {
-//			joinUs.toDomElement().className += " _hover_";
-//
-//			expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
-//		});
-//
-//		it("'join us' button appears to depress when user activates it", function() {
-//			joinUs.toDomElement().className += " _active_";
-//
-//			expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
-//			expect(dropShadowOf(joinUs)).to.be("none");
-//		});
+		it("darkens the 'join us' button when the user hovers over it", function() {
+			joinUs.toDomElement().className += " _hover_";
+
+			expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
+		});
+
+		it("'join us' button appears to depress when user activates it", function() {
+			joinUs.toDomElement().className += " _active_";
+
+			expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
+			expect(dropShadowOf(joinUs)).to.be("none");
+		});
 
 		function isElementCenteredInPage(element) {
 			var frameBody = frame.toDomElement().contentDocument.body;

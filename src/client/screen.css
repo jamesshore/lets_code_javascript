@@ -104,11 +104,11 @@ h1#logo {
 	text-transform: uppercase;
 }
 
-#joinUs:hover, #joinUs._hover_ {
+#join-us:hover, #join-us._hover_ {
 	background-color: #006f8f;
 }
 
-#joinUs:active, #joinUs._active_ {
+#join-us:active, #join-us._active_ {
 	box-shadow: none;
 	position: relative;
 	top: 1px;
