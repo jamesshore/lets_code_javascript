@@ -35,7 +35,7 @@
 		var joinUs;
 
 		beforeEach(function(done) {
-			frame = HtmlElement.fromHtml("<iframe width='1200px' height='500px' src='/base/src/client/index.html'></iframe>");
+			frame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
 			frame.toDomElement().onload = function() {
 //				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'>");
 //				new HtmlElement(frame.toDomElement().contentDocument.head).append(style);
@@ -79,8 +79,8 @@
 			return new HtmlElement(frame.toDomElement().contentDocument.getElementById(id));
 		}
 
-		it("has a blue background", function() {
-			expect(backgroundColorOf(new HtmlElement(document.body))).to.be(BACKGROUND_BLUE);
+		it.only("has a blue background", function() {
+			expect(backgroundColorOf(new HtmlElement(frame.toDomElement().contentDocument.body))).to.be(BACKGROUND_BLUE);
 		});
 
 //		it("centers logo at top of page", function() {
