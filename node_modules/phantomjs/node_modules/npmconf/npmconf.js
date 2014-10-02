@@ -17,9 +17,11 @@ exports.loaded = false
 exports.rootConf = null
 exports.usingBuiltin = false
 exports.defs = configDefs
+
 Object.defineProperty(exports, 'defaults', { get: function () {
   return configDefs.defaults
 }, enumerable: true })
+
 Object.defineProperty(exports, 'types', { get: function () {
   return configDefs.types
 }, enumerable: true })
@@ -67,6 +69,7 @@ function load (cli_, builtin_, cb_) {
   loadCbs.push(cb)
   if (loading)
     return
+
   loading = true
 
   cb = once(function (er, conf) {
@@ -81,45 +84,111 @@ function load (cli_, builtin_, cb_) {
   // check for a builtin if provided.
   exports.usingBuiltin = !!builtin
   var rc = exports.rootConf = new Conf()
-  var defaults = configDefs.defaults
   if (builtin)
     rc.addFile(builtin, 'builtin')
   else
     rc.add({}, 'builtin')
 
   rc.on('load', function () {
-    var conf = new Conf(rc)
-    conf.usingBuiltin = !!builtin
-    conf.add(cli, 'cli')
-    conf.addEnv()
-    conf.addFile(conf.get('userconfig'), 'user')
-    conf.once('error', cb)
-    conf.once('load', function () {
-      // globalconfig and globalignorefile defaults
-      // need to respond to the "prefix" setting up to this point.
-      // Eg, `npm config get globalconfig --prefix ~/local` should
-      // return `~/local/etc/npmrc`
-      // annoying humans and their expectations!
-      if (conf.get('prefix')) {
-        var etc = path.resolve(conf.get("prefix"), "etc")
-        defaults.globalconfig = path.resolve(etc, "npmrc")
-        defaults.globalignorefile = path.resolve(etc, "npmignore")
-      }
-      conf.addFile(conf.get('globalconfig'), 'global')
-
-      // move the builtin into the conf stack now.
-      conf.root = defaults
-      conf.add(rc.shift(), 'builtin')
-      conf.once('load', function () {
-        // warn about invalid bits.
-        validate(conf)
-        exports.loaded = conf
-        cb(null, conf)
-      })
-    })
+    load_(builtin, rc, cli, cb)
   })
 }
 
+function load_(builtin, rc, cli, cb) {
+  var defaults = configDefs.defaults
+  var conf = new Conf(rc)
+
+  conf.usingBuiltin = !!builtin
+  conf.add(cli, 'cli')
+  conf.addEnv()
+
+  conf.loadPrefix(function(er) {
+    if (er)
+      return cb(er)
+
+    // If you're doing `npm --userconfig=~/foo.npmrc` then you'd expect
+    // that ~/.npmrc won't override the stuff in ~/foo.npmrc (or, indeed
+    // be used at all).
+    //
+    // However, if the cwd is ~, then ~/.npmrc is the home for the project
+    // config, and will override the userconfig.
+    //
+    // If you're not setting the userconfig explicitly, then it will be loaded
+    // twice, which is harmless but excessive.  If you *are* setting the
+    // userconfig explicitly then it will override your explicit intent, and
+    // that IS harmful and unexpected.
+    //
+    // Solution: Do not load project config file that is the same as either
+    // the default or resolved userconfig value.  npm will log a "verbose"
+    // message about this when it happens, but it is a rare enough edge case
+    // that we don't have to be super concerned about it.
+    var projectConf = path.resolve(conf.localPrefix, '.npmrc')
+    var defaultUserConfig = rc.get('userconfig')
+    var resolvedUserConfig = conf.get('userconfig')
+    if (!conf.get('global') &&
+        projectConf !== defaultUserConfig &&
+        projectConf !== resolvedUserConfig) {
+      conf.addFile(projectConf, 'project')
+      conf.once('load', afterPrefix)
+    } else {
+      conf.add({}, 'project')
+      afterPrefix()
+    }
+  })
+
+  function afterPrefix() {
+    conf.addFile(conf.get('userconfig'), 'user')
+    conf.once('error', cb)
+    conf.once('load', afterUser)
+  }
+
+  function afterUser () {
+    // globalconfig and globalignorefile defaults
+    // need to respond to the 'prefix' setting up to this point.
+    // Eg, `npm config get globalconfig --prefix ~/local` should
+    // return `~/local/etc/npmrc`
+    // annoying humans and their expectations!
+    if (conf.get('prefix')) {
+      var etc = path.resolve(conf.get('prefix'), 'etc')
+      defaults.globalconfig = path.resolve(etc, 'npmrc')
+      defaults.globalignorefile = path.resolve(etc, 'npmignore')
+    }
+
+    conf.addFile(conf.get('globalconfig'), 'global')
+
+    // move the builtin into the conf stack now.
+    conf.root = defaults
+    conf.add(rc.shift(), 'builtin')
+    conf.once('load', function () {
+      conf.loadExtras(afterExtras)
+    })
+  }
+
+  function afterExtras(er) {
+    if (er)
+      return cb(er)
+
+    // warn about invalid bits.
+    validate(conf)
+
+    var cafile = conf.get('cafile')
+
+    if (cafile) {
+      return conf.loadCAFile(cafile, finalize)
+    }
+
+    finalize()
+  }
+
+  function finalize(er) {
+    if (er) {
+      return cb(er)
+    }
+
+    exports.loaded = conf
+    cb(er, conf)
+  }
+}
 
 // Basically the same as CC, but:
 // 1. Always ini
@@ -142,11 +211,32 @@ function Conf (base) {
     this.root = configDefs.defaults
 }
 
+Conf.prototype.loadPrefix = require('./lib/load-prefix.js')
+Conf.prototype.loadCAFile = require('./lib/load-cafile.js')
+Conf.prototype.loadUid = require('./lib/load-uid.js')
+Conf.prototype.setUser = require('./lib/set-user.js')
+Conf.prototype.findPrefix = require('./lib/find-prefix.js')
+Conf.prototype.getCredentialsByURI = require('./lib/get-credentials-by-uri.js')
+Conf.prototype.setCredentialsByURI = require('./lib/set-credentials-by-uri.js')
+
+Conf.prototype.loadExtras = function(cb) {
+  this.setUser(function(er) {
+    if (er)
+      return cb(er)
+    this.loadUid(function(er) {
+      if (er)
+        return cb(er)
+      // Without prefix, nothing will ever work
+      mkdirp(this.prefix, cb)
+    }.bind(this))
+  }.bind(this))
+}
+
 Conf.prototype.save = function (where, cb) {
   var target = this.sources[where]
   if (!target || !(target.path || target.source) || !target.data) {
     if (where !== 'builtin')
-      var er = new Error('bad save target: '+where)
+      var er = new Error('bad save target: ' + where)
     if (cb) {
       process.nextTick(cb.bind(null, er))
       return this
@@ -163,31 +253,19 @@ Conf.prototype.save = function (where, cb) {
     return this
   }
 
-  var data = target.data
-
-  if (typeof data._password === 'string' &&
-      typeof data.username === 'string') {
-    var auth = data.username + ':' + data._password
-    data = Object.keys(data).reduce(function (c, k) {
-      if (k === 'username' || k === '_password')
-        return c
-      c[k] = data[k]
-      return c
-    }, { _auth: new Buffer(auth, 'utf8').toString('base64') })
-    delete data.username
-    delete data._password
-  }
-
-  data = ini.stringify(data)
+  var data = ini.stringify(target.data)
 
   then = then.bind(this)
   done = done.bind(this)
   this._saving ++
 
-  var mode = where === 'user' ? 0600 : 0666
-  if (!data.trim())
-    fs.unlink(target.path, done)
-  else {
+  var mode = where === 'user' ? "0600" : "0666"
+  if (!data.trim()) {
+    fs.unlink(target.path, function (er) {
+      // ignore the possible error (e.g. the file doesn't exist)
+      done(null)
+    })
+  } else {
     mkdirp(path.dirname(target.path), function (er) {
       if (er)
         return then(er)
@@ -246,13 +324,6 @@ Conf.prototype.add = function (data, marker) {
   Object.keys(data).forEach(function (k) {
     data[k] = parseField(data[k], k)
   })
-  if (Object.prototype.hasOwnProperty.call(data, '_auth')) {
-    var auth = new Buffer(data._auth, 'base64').toString('utf8').split(':')
-    var username = auth.shift()
-    var password = auth.join(':')
-    data.username = username
-    data._password = password
-  }
   return CC.prototype.add.call(this, data, marker)
 }
 
@@ -260,19 +331,22 @@ Conf.prototype.addEnv = function (env) {
   env = env || process.env
   var conf = {}
   Object.keys(env)
-    .filter(function (k) { return k.match(/^npm_config_[^_]/i) })
+    .filter(function (k) { return k.match(/^npm_config_/i) })
     .forEach(function (k) {
       if (!env[k])
         return
 
-      conf[k.replace(/^npm_config_/i, '')
-            .toLowerCase()
-            .replace(/_/g, '-')] = env[k]
+      // leave first char untouched, even if
+      // it is a "_" - convert all other to "-"
+      var p = k.toLowerCase()
+               .replace(/^npm_config_/, '')
+               .replace(/(?!^)_/g, '-')
+      conf[p] = env[k]
     })
   return CC.prototype.addEnv.call(this, '', conf, 'env')
 }
 
-function parseField (f, k, emptyIsFalse) {
+function parseField (f, k) {
   if (typeof f !== 'string' && !(f instanceof String))
     return f
 
@@ -316,23 +390,25 @@ function parseField (f, k, emptyIsFalse) {
 }
 
 function envReplace (f) {
-  if (typeof f !== "string" || !f) return f
+  if (typeof f !== 'string' || !f) return f
 
   // replace any ${ENV} values with the appropriate environ.
   var envExpr = /(\\*)\$\{([^}]+)\}/g
-  return f.replace(envExpr, function (orig, esc, name, i, s) {
+  return f.replace(envExpr, function (orig, esc, name) {
     esc = esc.length && esc.length % 2
     if (esc)
       return orig
     if (undefined === process.env[name])
-      throw new Error("Failed to replace env in config: "+orig)
+      throw new Error('Failed to replace env in config: '+orig)
     return process.env[name]
   })
 }
 
 function validate (cl) {
   // warn about invalid configs at every level.
-  cl.list.forEach(function (conf, level) {
+  cl.list.forEach(function (conf) {
     nopt.clean(conf, configDefs.types)
   })
+
+  nopt.clean(cl.root, configDefs.types)
 }

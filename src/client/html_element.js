@@ -264,16 +264,16 @@
 
 		function failFastIfPaddingPresent(side) {
 			var css = self._element.css("padding-" + side);
-			if (css !== "0px") throw new Error("Do not apply padding to elements used with relativeOffset()");
+			if (css !== "0px") throw new Error("Do not apply padding to elements used with relativeOffset() (expected 0px but was " + css + ")");
 		}
 
 		function failFastIfBorderPresent(side) {
-			var text = self._element.css("border-" + side + "-width");
+			var css = self._element.css("border-" + side + "-width");
 			if (browser.doesNotComputeStyles()) {
-				if (self._element.css("border-" + side + "-style") === "none") text = "0px";
+				if (self._element.css("border-" + side + "-style") === "none") css = "0px";
 			}
 
-			if (text !== "0px") throw new Error("Do not apply border to elements used with relativeOffset()");
+			if (css !== "0px") throw new Error("Do not apply border to elements used with relativeOffset() (expected 0px but was " + css + ")");
 		}
 	}
 

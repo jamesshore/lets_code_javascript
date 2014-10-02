@@ -1,6 +1,6 @@
 # Async.js
 
-[![Build Status via Travis CI](https://travis-ci.org/caolan/async.png?branch=master)](https://travis-ci.org/caolan/async)
+[![Build Status via Travis CI](https://travis-ci.org/caolan/async.svg?branch=master)](https://travis-ci.org/caolan/async)
 
 
 Async is a utility module which provides straight-forward, powerful functions
@@ -130,7 +130,7 @@ Usage:
 
 ### Control Flow
 
-* [`series`](#series)
+* [`series`](#seriestasks-callback)
 * [`parallel`](#parallel)
 * [`parallelLimit`](#parallellimittasks-limit-callback)
 * [`whilst`](#whilst)
@@ -144,6 +144,7 @@ Usage:
 * [`applyEach`](#applyEach)
 * [`applyEachSeries`](#applyEachSeries)
 * [`queue`](#queue)
+* [`priorityQueue`](#priorityQueue)
 * [`cargo`](#cargo)
 * [`auto`](#auto)
 * [`retry`](#retry)
@@ -199,26 +200,23 @@ async.each(openFiles, saveFile, function(err){
 ```
 
 ```js
-// assuming openFiles is an array of file names and saveFile is a function
-// to save the modified contents of that file:
+// assuming openFiles is an array of file names 
 
 async.each(openFiles, function( file, callback) {
   
   // Perform operation on file here.
   console.log('Processing file ' + file);
-  callback();
-
+  
   if( file.length > 32 ) {
     console.log('This file name is too long');
     callback('File name too long');
-
-    return;
   } else {
-    console.log('File saved');
+    // Do work to process file here
+    console.log('File processed');
     callback();
   }
 }, function(err){
-    // if any of the saves produced an error, err would equal that error
+    // if any of the file processing produced an error, err would equal that error
     if( err ) {
       // One of the iterations produced an error.
       // All processing will now stop.
@@ -535,20 +533,21 @@ __Sort Order__
 
 By modifying the callback parameter the sorting order can be influenced:
 
-    //ascending order
-    async.sortBy([1,9,3,5], function(x, callback){
-        callback(err, x);
-    }, function(err,result){
-        //result callback
-    } );
+```js
+//ascending order
+async.sortBy([1,9,3,5], function(x, callback){
+    callback(err, x);
+}, function(err,result){
+    //result callback
+} );
 
-    //descending order
-    async.sortBy([1,9,3,5], function(x, callback){
-        callback(err, x*-1);    //<- x*-1 instead of x, turns the order around
-    }, function(err,result){
-        //result callback
-    } );
-
+//descending order
+async.sortBy([1,9,3,5], function(x, callback){
+    callback(err, x*-1);    //<- x*-1 instead of x, turns the order around
+}, function(err,result){
+    //result callback
+} );
+```
 
 ---------------------------------------
 
@@ -1132,6 +1131,18 @@ q.unshift({name: 'bar'}, function (err) {
     console.log('finished processing bar');
 });
 ```
+
+
+---------------------------------------
+
+<a name="priorityQueue" />
+### priorityQueue(worker, concurrency)
+
+The same as [`queue`](#queue) only tasks are assigned a priority and completed in ascending priority order. There are two differences between `queue` and `priorityQueue` objects:
+
+* `push(task, priority, [callback])` - `priority` should be a number. If an array of
+  `tasks` is given, all tasks will be assigned the same priority.
+* The `unshift` method was removed.
 
 ---------------------------------------
 

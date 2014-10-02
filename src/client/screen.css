@@ -1,5 +1,5 @@
 body {
-	background-color: #42a9cc;
+	background-color: #41a9cc;
 }
 
 h1#logo {
@@ -20,20 +20,21 @@ h1#logo {
 	color: #0d576d;
 }
 
-#drawingArea {
+#drawing-area {
 	height: 600px;
+	background-color: white;
+	border-radius: 2px;
+}
+
+#drawing-area-container {
+	width: 980px;
 	margin-top: 10px;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: white;
-}
-
-#drawingAreaContainer {
-	background-color: grey;
 	position: relative;
 }
 
-#drawingAreaArrow {
+#drawing-area-arrow {
 	background-image: url(/images/arrow.png);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -45,13 +46,30 @@ h1#logo {
 	right: 0px;
 }
 
-#clearButton {
+#clear-button {
 	position: absolute;
 	top: 15px;
 	right: 15px;
+	border: none;
 	padding: 0;
-	border: solid 1px grey;
 	margin: 0;
+	color: #595959;
+	background-color: #e5e5e5;
+	height: 30px;
+	line-height: 30px;
+	width: 70px;
+	border-radius: 2px;
+	box-shadow: 0 1px 0 0 #a7a9ab;
+	text-transform: uppercase;
+}
+
+#clear-button:hover, #clear-button._hover_ {
+	background-color: #d9d9d9;
+}
+
+#clear-button:active, #clear-button._active_ {
+	top: 16px;
+	box-shadow: none;
 }
 
 #footer {
@@ -64,7 +82,30 @@ h1#logo {
 	color: white;
 }
 
-#joinUs {
+#join-us {
+	display: block;
 	text-align: center;
 	margin-top: 13px;
+	margin-left: auto;
+	margin-right: auto;
+	color: white;
+	background-color: #00799c;
+	height: 35px;
+	line-height: 35px;
+	width: 175px;
+	border-radius: 2px;
+	box-shadow: 0 1px 0 0 #0d576d;
+	vertical-align: middle;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+#join-us:hover, #join-us._hover_ {
+	background-color: #006f8f;
+}
+
+#join-us:active, #join-us._active_ {
+	box-shadow: none;
+	position: relative;
+	top: 1px;
 }

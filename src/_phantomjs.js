@@ -26,7 +26,7 @@
 			}
 		}
 		catch(err) {
-			console.log("Exception in PhantomJS code");
+			console.log("Exception in PhantomJS code", err);
 			phantom.exit(1);
 		}
 	});
@@ -36,7 +36,7 @@
 			var client = require("./client.js");
 			var HtmlElement = require("./html_element.js");
 
-			var drawingArea = new HtmlElement(document.getElementById("drawingArea"));
+			var drawingArea = HtmlElement.fromId("drawing-area");
 			drawingArea.triggerMouseDown(10, 20);
 			drawingArea.triggerMouseMove(50, 60);
 			drawingArea.triggerMouseUp(50, 60);
@@ -48,7 +48,7 @@
 			else return null;
 		}
 		catch(err) {
-			return "Exception in PhantomJS browser code";
+			return "Exception in PhantomJS browser code: " + err.stack;
 		}
 	}
 

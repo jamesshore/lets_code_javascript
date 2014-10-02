@@ -21,22 +21,18 @@
 	var PORT = 5020;
 	var BASE_URL = "http://localhost:" + PORT;
 
-	exports.setUp = function(done) {
-		fs.writeFileSync(CONTENT_DIR + "/" + INDEX_PAGE, INDEX_PAGE_DATA);
-		fs.writeFileSync(CONTENT_DIR + "/" + OTHER_PAGE, OTHER_PAGE_DATA);
-		fs.writeFileSync(CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA);
+	var TEST_FILES = [
+		[ CONTENT_DIR + "/" + INDEX_PAGE, INDEX_PAGE_DATA],
+		[ CONTENT_DIR + "/" + OTHER_PAGE, OTHER_PAGE_DATA],
+		[ CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA]
+	];
 
-		done();
+	exports.setUp = function(done) {
+		async.each(TEST_FILES, createTestFile, done);
 	};
 
 	exports.tearDown = function(done) {
-		var filesToDelete = [
-			CONTENT_DIR + "/" + INDEX_PAGE,
-			CONTENT_DIR + "/" + OTHER_PAGE,
-			CONTENT_DIR + "/" + NOT_FOUND_PAGE
-		];
-
-		async.each(filesToDelete, cleanUpFile, done);
+		async.each(TEST_FILES, deleteTestFile, done);
 	};
 
 	exports.test_servesFilesFromDirectory = function(test) {
@@ -127,14 +123,27 @@
 		});
 	}
 
-	function cleanUpFile(file, done) {
+	function createTestFile(fileAndData, done) {
+		// Note: writeFile() MUST be called asynchronously in order for this code to work on Windows 7.
+		// If it's called synchronously, it fails with an EPERM error when the second test starts. This
+		// may be related to this Node.js issue: https://github.com/joyent/node/issues/6599
+		// This issue appeared after upgrading send 0.2.0 to 0.9.3. Prior to that, writeFileSync()
+		// worked fine.
+		fs.writeFile(fileAndData[0], fileAndData[1], function(err) {
+			if (err) console.log("could not create test file: [" + fileAndData[0] + "]. Error: " + err);
+			done();
+		});
+	}
+
+	function deleteTestFile(fileAndData, done) {
 		// Note: unlink() MUST be called asynchronously here in order for this code to work on Windows 7.
 		// If it's called synchronously, then it will run before the file is closed, and that is not allowed
 		// on Windows 7. It's possible that this is the result of a Node.js bug; see this issue for details:
 		// https://github.com/joyent/node/issues/6599
+		var file = fileAndData[0];
 		if (fs.existsSync(file)) {
-			fs.unlink(file, function() {
-				assert.ok(!fs.existsSync(file), "could not delete test file: [" + file + "]");
+			fs.unlink(file, function(err) {
+				if (err || fs.existsSync(file)) console.log("could not delete test file: [" + file + "]. Error: " + err);
 				done();
 			});
 		}

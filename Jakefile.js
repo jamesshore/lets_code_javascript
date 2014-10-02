@@ -20,9 +20,9 @@
 	var REQUIRED_BROWSERS = [
 		"IE 8.0.0 (Windows 7)",
 		"IE 9.0.0 (Windows 7)",
-		"Firefox 31.0.0 (Mac OS X 10.8)",
-		"Chrome 36.0.1985 (Mac OS X 10.8.5)",
-		"Safari 6.1.5 (Mac OS X 10.8.5)",
+		"Firefox 32.0.0 (Mac OS X 10.8)",
+		"Chrome 37.0.2062 (Mac OS X 10.8.5)",
+		"Safari 6.2.0 (Mac OS X 10.8.5)",
 		"Mobile Safari 7.0.0 (iOS 7.1)"
 	];
 
@@ -94,10 +94,10 @@
 		shell.cp("-R", "src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor", BUILD_CLIENT_DIR);
 
 		console.log("Bundling client files with Browserify...");
-		var b = browserify();
+		var b = browserify({ debug: true });
 		b.require("./src/client/client.js", {expose: "./client.js"} );
 		b.require("./src/client/html_element.js", {expose: "./html_element.js"} );
-		b.bundle({ debug: true }, function(err, bundle) {
+		b.bundle(function(err, bundle) {
 			if (err) fail(err);
 			fs.writeFileSync(BUILD_CLIENT_DIR + "/bundle.js", bundle);
 			complete();
