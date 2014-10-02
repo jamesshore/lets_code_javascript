@@ -35,35 +35,35 @@
 		var joinUs;
 
 		beforeEach(function(done) {
-			frame = HtmlElement.fromHtml("<iframe width='1200px' height='500px'></iframe>");
+			frame = HtmlElement.fromHtml("<iframe width='1200px' height='500px' src='index.html??'></iframe>");
 			frame.toDomElement().onload = function() {
-				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'>");
-				new HtmlElement(frame.toDomElement().contentDocument.head).append(style);
-				style.toDomElement().addEventListener("load", function() {
-					logo = newElement("<h1 id='logo'>Hello World</h1>");
-					tagline = newElement("<p id='tagline'>Tag line here</p>");
-					drawingAreaContainer = newElement("" +
-						"<div id='drawing-area-container'>" +
-						" <div id='drawing-area'></div>" +
-						" <div id='drawing-area-arrow'>v</div>" +
-						" <button id='clear-button' type='button'>Clear</button>" +
-						"</div>"
-					);
-					footer = newElement("<p id='footer'>Footer here</p>");
-					joinUs = newElement("<a id='join-us' href='#'>Join Us!</a></div>");
-
-					drawingArea = getElement("drawing-area");
-					drawingAreaArrow = getElement("drawing-area-arrow");
-					clearButton = getElement("clear-button");
+//				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'>");
+//				new HtmlElement(frame.toDomElement().contentDocument.head).append(style);
+//				style.toDomElement().addEventListener("load", function() {
+//					logo = newElement("<h1 id='logo'>Hello World</h1>");
+//					tagline = newElement("<p id='tagline'>Tag line here</p>");
+//					drawingAreaContainer = newElement("" +
+//						"<div id='drawing-area-container'>" +
+//						" <div id='drawing-area'></div>" +
+//						" <div id='drawing-area-arrow'>v</div>" +
+//						" <button id='clear-button' type='button'>Clear</button>" +
+//						"</div>"
+//					);
+//					footer = newElement("<p id='footer'>Footer here</p>");
+//					joinUs = newElement("<a id='join-us' href='#'>Join Us!</a></div>");
+//
+//					drawingArea = getElement("drawing-area");
+//					drawingAreaArrow = getElement("drawing-area-arrow");
+//					clearButton = getElement("clear-button");
 
 					done();
-				});
+//				});
 			};
 			frame.appendSelfToBody();
 		});
 
 		afterEach(function() {
-			frame.remove();
+//			frame.remove();
 		});
 
 		function newElement(html) {
@@ -83,125 +83,125 @@
 			expect(backgroundColorOf(new HtmlElement(document.body))).to.be(BACKGROUND_BLUE);
 		});
 
-		it("centers logo at top of page", function() {
-			expect(isContentCenteredInPage(logo)).to.be(true);
-			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
-			expect(fontSizeOf(logo)).to.be("22px");
-			expect(textColorOf(logo)).to.be(WHITE);
-		});
-
-//		it("create iOS Safari failure", function() {
-//			newElement('<div><p id="tagline">tagline</p><p id="footer">footer</p></div>');
-//
-//
-//			var domElement = document.getElementById("tagline");
-//			var boundingBox = domElement.getBoundingClientRect();     // comment this line out to make test pass
-//
-//
-//			var style = window.getComputedStyle(domElement);
-//			var fontSize = style.getPropertyValue("font-size");
-//
-//			expect(fontSize).to.be("14px");
+//		it("centers logo at top of page", function() {
+//			expect(isContentCenteredInPage(logo)).to.be(true);
+//			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
+//			expect(fontSizeOf(logo)).to.be("22px");
+//			expect(textColorOf(logo)).to.be(WHITE);
 //		});
-
-		it("centers tagline directly below logo", function() {
-			expect(isContentCenteredInPage(tagline)).to.be(true);
-			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
-
-			expect(fontSizeOf(tagline)).to.be("14px");
-			expect(textColorOf(tagline)).to.be(DARK_BLUE);
-		});
-
-		it("centers drawing area below tagline", function() {
-			expect(isElementCenteredInPage(drawingArea)).to.be(true);
-			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
-
-			expect(elementWidthInPixels(drawingArea)).to.equal(IOS_BROWSER_WIDTH);
-			expect(elementHeightInPixels(drawingArea)).to.equal(600);
-			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
-			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
-		});
-
-		it("centers an arrow at top of drawing area", function() {
-			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
-
-			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
-			// TODO: haven't tested background image, position, or repeat
-
-			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
-		});
-
-		it("positions clear screen button at top right of drawing area", function() {
-			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
-			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
-			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
-
-			expect(textColorOf(clearButton)).to.be(DARK_GRAY);
-			expect(backgroundColorOf(clearButton)).to.be(GRAY);
-			expect(hasBorder(clearButton)).to.be(false);
-
-			expect(elementHeightInPixels(clearButton)).to.equal(30);
-			expect(elementWidthInPixels(clearButton)).to.equal(70);
-			expect(isTextVerticallyCentered(clearButton)).to.be(true);
-
-			expect(roundedCornersOf(clearButton)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(clearButton)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
-
-			expect(textIsUnderlined(clearButton)).to.be(false);
-			expect(textIsUppercase(clearButton)).to.be(true);
-		});
-
-		it("darkens the 'clear' button when the user hovers over it", function() {
-			clearButton.toDomElement().className += " _hover_";
-
-			expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
-		});
-
-		it("'clear' button appears to depress when user activates it", function() {
-			clearButton.toDomElement().className += " _active_";
-
-			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
-			expect(dropShadowOf(clearButton)).to.be("none");
-		});
-
-		it("centers footer below the drawing area", function() {
-			expect(isContentCenteredInPage(footer)).to.be(true);
-			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
-
-			expect(fontSizeOf(footer)).to.be("15px");
-			expect(textColorOf(footer)).to.be(WHITE);
-		});
-
-		it("centers 'join us' button below footer", function() {
-			expect(isContentCenteredInPage(joinUs)).to.be(true);
-			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
-
-			expect(textColorOf(joinUs)).to.be(WHITE);
-			expect(backgroundColorOf(joinUs)).to.be(MEDIUM_BLUE);
-
-			expect(elementHeightInPixels(joinUs)).to.equal(35);
-			expect(elementWidthInPixels(joinUs)).to.equal(175);
-			expect(isTextVerticallyCentered(joinUs)).to.be(true);
-
-			expect(roundedCornersOf(joinUs)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(joinUs)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
-
-			expect(textIsUnderlined(joinUs)).to.be(false);
-			expect(textIsUppercase(joinUs)).to.be(true);
-		});
-
-		it("darkens the 'join us' button when the user hovers over it", function() {
-			joinUs.toDomElement().className += " _hover_";
-
-			expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
-		});
-
-		it("'join us' button appears to depress when user activates it", function() {
-			joinUs.toDomElement().className += " _active_";
-
-			expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
-			expect(dropShadowOf(joinUs)).to.be("none");
-		});
+//
+////		it("create iOS Safari failure", function() {
+////			newElement('<div><p id="tagline">tagline</p><p id="footer">footer</p></div>');
+////
+////
+////			var domElement = document.getElementById("tagline");
+////			var boundingBox = domElement.getBoundingClientRect();     // comment this line out to make test pass
+////
+////
+////			var style = window.getComputedStyle(domElement);
+////			var fontSize = style.getPropertyValue("font-size");
+////
+////			expect(fontSize).to.be("14px");
+////		});
+//
+//		it("centers tagline directly below logo", function() {
+//			expect(isContentCenteredInPage(tagline)).to.be(true);
+//			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
+//
+//			expect(fontSizeOf(tagline)).to.be("14px");
+//			expect(textColorOf(tagline)).to.be(DARK_BLUE);
+//		});
+//
+//		it("centers drawing area below tagline", function() {
+//			expect(isElementCenteredInPage(drawingArea)).to.be(true);
+//			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
+//
+//			expect(elementWidthInPixels(drawingArea)).to.equal(IOS_BROWSER_WIDTH);
+//			expect(elementHeightInPixels(drawingArea)).to.equal(600);
+//			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
+//			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
+//		});
+//
+//		it("centers an arrow at top of drawing area", function() {
+//			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
+//
+//			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
+//			// TODO: haven't tested background image, position, or repeat
+//
+//			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
+//		});
+//
+//		it("positions clear screen button at top right of drawing area", function() {
+//			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
+//			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
+//			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
+//
+//			expect(textColorOf(clearButton)).to.be(DARK_GRAY);
+//			expect(backgroundColorOf(clearButton)).to.be(GRAY);
+//			expect(hasBorder(clearButton)).to.be(false);
+//
+//			expect(elementHeightInPixels(clearButton)).to.equal(30);
+//			expect(elementWidthInPixels(clearButton)).to.equal(70);
+//			expect(isTextVerticallyCentered(clearButton)).to.be(true);
+//
+//			expect(roundedCornersOf(clearButton)).to.be(CORNER_ROUNDING);
+//			expect(dropShadowOf(clearButton)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+//
+//			expect(textIsUnderlined(clearButton)).to.be(false);
+//			expect(textIsUppercase(clearButton)).to.be(true);
+//		});
+//
+//		it("darkens the 'clear' button when the user hovers over it", function() {
+//			clearButton.toDomElement().className += " _hover_";
+//
+//			expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+//		});
+//
+//		it("'clear' button appears to depress when user activates it", function() {
+//			clearButton.toDomElement().className += " _active_";
+//
+//			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
+//			expect(dropShadowOf(clearButton)).to.be("none");
+//		});
+//
+//		it("centers footer below the drawing area", function() {
+//			expect(isContentCenteredInPage(footer)).to.be(true);
+//			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
+//
+//			expect(fontSizeOf(footer)).to.be("15px");
+//			expect(textColorOf(footer)).to.be(WHITE);
+//		});
+//
+//		it("centers 'join us' button below footer", function() {
+//			expect(isContentCenteredInPage(joinUs)).to.be(true);
+//			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
+//
+//			expect(textColorOf(joinUs)).to.be(WHITE);
+//			expect(backgroundColorOf(joinUs)).to.be(MEDIUM_BLUE);
+//
+//			expect(elementHeightInPixels(joinUs)).to.equal(35);
+//			expect(elementWidthInPixels(joinUs)).to.equal(175);
+//			expect(isTextVerticallyCentered(joinUs)).to.be(true);
+//
+//			expect(roundedCornersOf(joinUs)).to.be(CORNER_ROUNDING);
+//			expect(dropShadowOf(joinUs)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
+//
+//			expect(textIsUnderlined(joinUs)).to.be(false);
+//			expect(textIsUppercase(joinUs)).to.be(true);
+//		});
+//
+//		it("darkens the 'join us' button when the user hovers over it", function() {
+//			joinUs.toDomElement().className += " _hover_";
+//
+//			expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
+//		});
+//
+//		it("'join us' button appears to depress when user activates it", function() {
+//			joinUs.toDomElement().className += " _active_";
+//
+//			expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
+//			expect(dropShadowOf(joinUs)).to.be("none");
+//		});
 
 		function isElementCenteredInPage(element) {
 			var frameBody = frame.toDomElement().contentDocument.body;
