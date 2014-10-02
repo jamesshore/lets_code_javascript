@@ -4,7 +4,7 @@ var Utils = require("../util"),
 /* The central directory file header */
 module.exports = function () {
     var _verMade = 0x0A,
-        _version = 10,
+        _version = 0x0A,
         _flags = 0,
         _method = 0,
         _time = 0,
@@ -13,11 +13,28 @@ module.exports = function () {
         _size = 0,
         _fnameLen = 0,
         _extraLen = 0,
+
         _comLen = 0,
         _diskStart = 0,
-        _inattr = 438,
-        _attr = 438,
+        _inattr = 0,
+        _attr = 0,
         _offset = 0;
+
+    var _dataHeader = {};
+
+    function setTime(val) {
+        var val = new Date(val);
+        _time = (val.getFullYear() - 1980 & 0x7f) << 25  // b09-16 years from 1980
+            | (val.getMonth() + 1) << 21                 // b05-08 month
+            | val.getDay() << 16                         // b00-04 hour
+
+            // 2 bytes time
+            | val.getHours() << 11    // b11-15 hour
+            | val.getMinutes() << 5   // b05-10 minute
+            | val.getSeconds() >> 1;  // b00-04 seconds divided by 2
+    }
+
+    setTime(+new Date());
 
     return {
         get made () { return _verMade; },
@@ -41,13 +58,8 @@ module.exports = function () {
             (_time & 0x1f) << 1
         );
         },
-        set time (val) { val = new Date(val);
-            _time = (val.getFullYear() - 1980 & 0x7f) << 25
-                | (val.getMonth() + 1) << 21
-                | val.getDay() << 16
-                | val.getHours() << 11
-                | val.getMinutes() << 5
-                | val.getSeconds() >> 1;
+        set time (val) {
+            setTime(val);
         },
 
         get crc () { return _crc; },
@@ -84,6 +96,42 @@ module.exports = function () {
 
         get entryHeaderSize () {
             return Constants.CENHDR + _fnameLen + _extraLen + _comLen;
+        },
+
+        get realDataOffset () {
+            return _offset + Constants.LOCHDR + _dataHeader.fnameLen + _dataHeader.extraLen;
+        },
+
+        get dataHeader () {
+            return _dataHeader;
+        },
+
+        loadDataHeaderFromBinary : function(/*Buffer*/input) {
+            var data = input.slice(_offset, _offset + Constants.LOCHDR);
+            // 30 bytes and should start with "PK\003\004"
+            if (data.readUInt32LE(0) != Constants.LOCSIG) {
+                throw Utils.Errors.INVALID_LOC;
+            }
+            _dataHeader = {
+                // version needed to extract
+                version : data.readUInt16LE(Constants.LOCVER),
+                // general purpose bit flag
+                flags : data.readUInt16LE(Constants.LOCFLG),
+                // compression method
+                method : data.readUInt16LE(Constants.LOCHOW),
+                // modification time (2 bytes time, 2 bytes date)
+                time : data.readUInt32LE(Constants.LOCTIM),
+                // uncompressed file crc-32 value
+                crc : data.readUInt32LE(Constants.LOCCRC),
+                // compressed size
+                compressedSize : data.readUInt32LE(Constants.LOCSIZ),
+                // uncompressed size
+                size : data.readUInt32LE(Constants.LOCLEN),
+                // filename length
+                fnameLen : data.readUInt16LE(Constants.LOCNAM),
+                // extra field length
+                extraLen : data.readUInt16LE(Constants.LOCEXT)
+            }
         },
 
         loadFromBinary : function(/*Buffer*/data) {
@@ -123,7 +171,33 @@ module.exports = function () {
             _offset = data.readUInt32LE(Constants.CENOFF);
         },
 
-        toBinary : function() {
+        dataHeaderToBinary : function() {
+            // LOC header size (30 bytes)
+            var data = new Buffer(Constants.LOCHDR);
+            // "PK\003\004"
+            data.writeUInt32LE(Constants.LOCSIG, 0);
+            // version needed to extract
+            data.writeUInt16LE(_version, Constants.LOCVER);
+            // general purpose bit flag
+            data.writeUInt16LE(_flags, Constants.LOCFLG);
+            // compression method
+            data.writeUInt16LE(_method, Constants.LOCHOW);
+            // modification time (2 bytes time, 2 bytes date)
+            data.writeUInt32LE(_time, Constants.LOCTIM);
+            // uncompressed file crc-32 value
+            data.writeUInt32LE(_crc, Constants.LOCCRC);
+            // compressed size
+            data.writeUInt32LE(_compressedSize, Constants.LOCSIZ);
+            // uncompressed size
+            data.writeUInt32LE(_size, Constants.LOCLEN);
+            // filename length
+            data.writeUInt16LE(_fnameLen, Constants.LOCNAM);
+            // extra field length
+            data.writeUInt16LE(_extraLen, Constants.LOCEXT);
+            return data;
+        },
+
+        entryHeaderToBinary : function() {
             // CEN header size (46 bytes)
             var data = new Buffer(Constants.CENHDR + _fnameLen + _extraLen + _comLen);
             // "PK\001\002"
