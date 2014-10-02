@@ -10,7 +10,10 @@
 (function() {
 	"use strict";
 
-	var gaze = require("gaze");
+	var gaze;
+	try { gaze = require("gaze"); }
+	catch (err) { console.log("To use this script, run 'npm install gaze'."); process.exit(1); }
+
 	var spawn = require("child_process").spawn;
 
 	var WATCH = "src/**/*.js";
