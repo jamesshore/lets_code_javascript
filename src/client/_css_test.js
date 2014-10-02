@@ -66,7 +66,7 @@
 		});
 
 		afterEach(function() {
-			frame.remove();
+//			frame.remove();
 		});
 
 		function newElement(html) {
@@ -154,10 +154,13 @@
 			expect(textIsUppercase(clearButton)).to.be(true);
 		});
 
-		it.skip("darkens the 'clear' button when the user hovers over it", function() {
-			clearButton.toDomElement().className += " _hover_";
+		it.only("darkens the 'clear' button when the user hovers over it", function() {
+			setTimeout(function() {
 
-			expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+				clearButton.toDomElement().className += " _hover_";
+
+				expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+			}, 500);
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
