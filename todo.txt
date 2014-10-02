@@ -51,6 +51,7 @@ To Do on current task:
   - updated dependencies (and added to package.json)
     - modified Jakefile.js: browserify no longer supports option arguments
     - modified server.js: send now takes root as an option
+    - modified _server_test.js: new version of send triggers EPERM on Windows; need async file creation
     - modified autojake.js: gaze no longer installs on vanilla Windows, so removed it from repo
   - integrated
 
