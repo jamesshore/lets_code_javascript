@@ -12,8 +12,7 @@
 
 		server = http.createServer();
 		server.on("request", function(request, response) {
-			send(request, request.url).
-				root(contentDir).
+			send(request, request.url, { root: contentDir }).
 				on("error", handleError).
 				pipe(response);
 

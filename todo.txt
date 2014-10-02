@@ -49,7 +49,8 @@ To Do on current task:
 - AT START OF EPISODE:
   - new story
   - updated dependencies (and added to package.json)
-    - browserify no longer supports option arguments
+    - modified Jakefile.js: browserify no longer supports option arguments
+    - modified server.js: send now takes root as an option
   - integrated
 
 Notes:
