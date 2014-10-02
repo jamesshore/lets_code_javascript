@@ -66,7 +66,7 @@
 		});
 
 		afterEach(function() {
-//			frame.remove();
+			frame.remove();
 		});
 
 		function newElement(html) {
@@ -154,13 +154,11 @@
 			expect(textIsUppercase(clearButton)).to.be(true);
 		});
 
-		it.only("darkens the 'clear' button when the user hovers over it", function() {
-			setTimeout(function() {
+		it("darkens the 'clear' button when the user hovers over it", function() {
+			clearButton.toDomElement().className += " _hover_";
+			forceReflow(clearButton);
 
-				clearButton.toDomElement().className += " _hover_";
-
-				expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
-			}, 500);
+			expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
@@ -196,8 +194,9 @@
 			expect(textIsUppercase(joinUs)).to.be(true);
 		});
 
-		it.skip("darkens the 'join us' button when the user hovers over it", function() {
+		it("darkens the 'join us' button when the user hovers over it", function() {
 			joinUs.toDomElement().className += " _hover_";
+			forceReflow(joinUs);
 
 			expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
 		});
@@ -386,6 +385,10 @@
 		function getComputedProperty(element, propertyName) {
 			var style = window.getComputedStyle(element.toDomElement());
 			return style.getPropertyValue(propertyName);
+		}
+
+		function forceReflow(element) {
+			var makeLintHappy = element.toDomElement().offsetHeight;
 		}
 
 		function pixelsToInt(pixels) {
