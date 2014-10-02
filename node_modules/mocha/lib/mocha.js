@@ -18,6 +18,16 @@ var path = require('path')
 exports = module.exports = Mocha;
 
 /**
+ * To require local UIs and reporters when running in node.
+ */
+
+if (typeof process !== 'undefined' && typeof process.cwd === 'function') {
+  var join = path.join
+    , cwd = process.cwd();
+  module.paths.push(cwd, join(cwd, 'node_modules'));
+}
+
+/**
  * Expose internals.
  */
 
@@ -49,7 +59,7 @@ function image(name) {
  * Options:
  *
  *   - `ui` name "bdd", "tdd", "exports" etc
- *   - `reporter` reporter instance, defaults to `mocha.reporters.Dot`
+ *   - `reporter` reporter instance, defaults to `mocha.reporters.spec`
  *   - `globals` array of accepted globals
  *   - `timeout` timeout in milliseconds
  *   - `bail` bail on the first test failure
@@ -72,6 +82,7 @@ function Mocha(options) {
   this.reporter(options.reporter);
   if (null != options.timeout) this.timeout(options.timeout);
   this.useColors(options.useColors)
+  if (options.enableTimeouts !== null) this.enableTimeouts(options.enableTimeouts);
   if (options.slow) this.slow(options.slow);
 
   this.suite.on('pre-require', function (context) {
@@ -116,7 +127,7 @@ Mocha.prototype.addFile = function(file){
 };
 
 /**
- * Set reporter to `reporter`, defaults to "dot".
+ * Set reporter to `reporter`, defaults to "spec".
  *
  * @param {String|Function} reporter name or constructor
  * @api public
@@ -126,7 +137,7 @@ Mocha.prototype.reporter = function(reporter){
   if ('function' == typeof reporter) {
     this._reporter = reporter;
   } else {
-    reporter = reporter || 'dot';
+    reporter = reporter || 'spec';
     var _reporter;
     try { _reporter = require('./reporters/' + reporter); } catch (err) {};
     if (!_reporter) try { _reporter = require(reporter); } catch (err) {};
@@ -330,6 +341,21 @@ Mocha.prototype.timeout = function(timeout){
 Mocha.prototype.slow = function(slow){
   this.suite.slow(slow);
   return this;
+};
+
+/**
+ * Enable timeouts.
+ *
+ * @param {Boolean} enabled
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.enableTimeouts = function(enabled) {
+  this.suite.enableTimeouts(arguments.length && enabled !== undefined
+    ? enabled
+    : true);
+  return this
 };
 
 /**
