@@ -18,7 +18,8 @@
     "mocha": "^1.21.4",
     "nodeunit": "^0.9.0",
     "phantomjs": "^1.9.10",
-    "procfile": "^0.1.1"
+    "procfile": "^0.1.1",
+    "shelljs": "^0.3.0"
   },
   "dependencies": {
     "send": "^0.9.3"
