@@ -13,6 +13,7 @@
     "jshint": "^2.5.6",
     "karma": "^0.12.24",
     "karma-commonjs": "0.0.12",
-    "karma-expect": "^1.1.0"
+    "karma-expect": "^1.1.0",
+    "karma-mocha": "^0.1.9"
   }
 }
