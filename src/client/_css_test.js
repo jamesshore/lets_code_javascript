@@ -33,7 +33,7 @@
 		var footer;
 		var joinUs;
 
-		beforeEach(function(done) {
+		before(function(done) {
 			frame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
 			frame.toDomElement().addEventListener("load", function() {
 				logo = getElement("logo");
@@ -49,7 +49,7 @@
 			frame.appendSelfToBody();
 		});
 
-		afterEach(function() {
+		after(function() {
 			frame.remove();
 		});
 
@@ -130,10 +130,17 @@
 		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
-			clearButton.toDomElement().className += " _hover_";
-			forceReflow(clearButton);
+			var clearDom = clearButton.toDomElement();
+			var oldClassName = clearDom.className;
+			try {
+				clearDom.className += " _hover_";
+				forceReflow(clearButton);
 
-			expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+				expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+			}
+			finally {
+				clearDom.className = oldClassName;
+			}
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {

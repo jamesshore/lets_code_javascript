@@ -229,6 +229,8 @@
 			dump: false,
 			beforeEach: false,
 			afterEach: false,
+			before: false,
+			after: false,
 
 			// Browser
 			console: false
