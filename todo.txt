@@ -14,6 +14,7 @@ Minimum Marketable Features:
 
 User Stories to finish current MMF:
 * Web font
+- Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
 - Release new design
 
 Potential future stories:
@@ -45,6 +46,10 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
+- AT START OF EPISODE:
+  - new story
+  - updated dependencies (and added to package.json)
+  - integrated
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
