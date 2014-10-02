@@ -49,6 +49,7 @@ To Do on current task:
 - AT START OF EPISODE:
   - new story
   - updated dependencies (and added to package.json)
+    - browserify no longer supports option arguments
   - integrated
 
 Notes:

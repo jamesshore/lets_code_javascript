@@ -94,10 +94,10 @@
 		shell.cp("-R", "src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor", BUILD_CLIENT_DIR);
 
 		console.log("Bundling client files with Browserify...");
-		var b = browserify();
+		var b = browserify({ debug: true });
 		b.require("./src/client/client.js", {expose: "./client.js"} );
 		b.require("./src/client/html_element.js", {expose: "./html_element.js"} );
-		b.bundle({ debug: true }, function(err, bundle) {
+		b.bundle(function(err, bundle) {
 			if (err) fail(err);
 			fs.writeFileSync(BUILD_CLIENT_DIR + "/bundle.js", bundle);
 			complete();
