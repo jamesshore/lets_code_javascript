@@ -35,48 +35,23 @@
 
 		beforeEach(function(done) {
 			frame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
-			frame.toDomElement().onload = function() {
-//				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'>");
-//				new HtmlElement(frame.toDomElement().contentDocument.head).append(style);
-//				style.toDomElement().addEventListener("load", function() {
-//					logo = newElement("<h1 id='logo'>Hello World</h1>");
-//					tagline = newElement("<p id='tagline'>Tag line here</p>");
-//					drawingAreaContainer = newElement("" +
-//						"<div id='drawing-area-container'>" +
-//						" <div id='drawing-area'></div>" +
-//						" <div id='drawing-area-arrow'>v</div>" +
-//						" <button id='clear-button' type='button'>Clear</button>" +
-//						"</div>"
-//					);
-//					footer = newElement("<p id='footer'>Footer here</p>");
-//					joinUs = newElement("<a id='join-us' href='#'>Join Us!</a></div>");
-//
+			frame.toDomElement().addEventListener("load", function() {
 				logo = getElement("logo");
 				tagline = getElement("tagline");
-					drawingArea = getElement("drawing-area");
-					drawingAreaArrow = getElement("drawing-area-arrow");
-					clearButton = getElement("clear-button");
+				drawingArea = getElement("drawing-area");
+				drawingAreaArrow = getElement("drawing-area-arrow");
+				clearButton = getElement("clear-button");
 				footer = getElement("footer");
 				joinUs = getElement("join-us");
 
-					done();
-//				});
-			};
+				done();
+			});
 			frame.appendSelfToBody();
 		});
 
 		afterEach(function() {
 			frame.remove();
 		});
-
-		function newElement(html) {
-			var element = HtmlElement.fromHtml(html);
-
-			var frameBody = new HtmlElement(frame.toDomElement().contentDocument.body);
-			frameBody.append(element);
-
-			return element;
-		}
 
 		function getElement(id) {
 			return new HtmlElement(frame.toDomElement().contentDocument.getElementById(id));

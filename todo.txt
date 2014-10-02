@@ -46,8 +46,8 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Modify test to use real index.html
-- Speed up CSS tests
+* Speed up CSS tests
+- Take out HtmlElement usage?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
