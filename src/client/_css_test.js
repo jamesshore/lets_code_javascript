@@ -35,7 +35,7 @@
 		var joinUs;
 
 		beforeEach(function(done) {
-			frame = HtmlElement.fromHtml("<iframe width='1200px' height='500px' src='index.html??'></iframe>");
+			frame = HtmlElement.fromHtml("<iframe width='1200px' height='500px' src='/base/src/client/index.html'></iframe>");
 			frame.toDomElement().onload = function() {
 //				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'>");
 //				new HtmlElement(frame.toDomElement().contentDocument.head).append(style);

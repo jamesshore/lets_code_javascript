@@ -46,6 +46,7 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
+* Modify test to use real index.html
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

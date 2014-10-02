@@ -15,7 +15,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'src/client/**/*.js',
-	    { pattern: 'src/client/screen.css', included: false }
+	    { pattern: 'src/client/screen.css', included: false },
+	    { pattern: 'src/client/index.html', included: false }
     ],
 
 
