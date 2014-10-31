@@ -61,7 +61,9 @@
 		}
 
 		it("has a blue background", function() {
-			expect(backgroundColorOf(frameDom.contentDocument.body)).to.be(BACKGROUND_BLUE);
+			var body = frameDom.contentDocument.body;
+			expect(backgroundColorOf(body)).to.be(BACKGROUND_BLUE);
+			expect(fontFamilyOf(body)).to.be('"Helvetica"');
 		});
 
 		it("centers logo at top of page", function() {
@@ -290,6 +292,13 @@
 
 		function backgroundColorOf(domElement) {
 			return getComputedProperty(domElement, "background-color");
+		}
+
+		function fontFamilyOf(domElement) {
+			var family = getComputedProperty(domElement, "font-family");
+
+			if (family[0] !== '"') return '"' + family + '"';
+			else return family;
 		}
 
 		function fontSizeOf(domElement) {
