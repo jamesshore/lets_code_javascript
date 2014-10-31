@@ -25,6 +25,7 @@
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
 		var frame;
+
 		var logo;
 		var tagline;
 		var drawingAreaArrow;
@@ -38,8 +39,8 @@
 			frame.toDomElement().addEventListener("load", function() {
 				logo = getElement("logo");
 				tagline = getElement("tagline");
-				drawingArea = getElement("drawing-area");
 				drawingAreaArrow = getElement("drawing-area-arrow");
+				drawingArea = getElement("drawing-area");
 				clearButton = getElement("clear-button");
 				footer = getElement("footer");
 				joinUs = getElement("join-us");
@@ -54,7 +55,7 @@
 		});
 
 		function getElement(id) {
-			return new HtmlElement(frame.toDomElement().contentDocument.getElementById(id));
+			return frame.toDomElement().contentDocument.getElementById(id);
 		}
 
 		it("has a blue background", function() {
@@ -62,12 +63,10 @@
 		});
 
 		it("centers logo at top of page", function() {
-			var logoDom = logo.toDomElement();
-
-			expect(isContentCenteredInPage(logoDom)).to.be(true);
-			expect(elementPixelsFromTopOfPage(logoDom)).to.be(12);
-			expect(fontSizeOf(logoDom)).to.be("22px");
-			expect(textColorOf(logoDom)).to.be(WHITE);
+			expect(isContentCenteredInPage(logo)).to.be(true);
+			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
+			expect(fontSizeOf(logo)).to.be("22px");
+			expect(textColorOf(logo)).to.be(WHITE);
 		});
 
 //		it("create iOS Safari failure", function() {
@@ -85,130 +84,101 @@
 //		});
 
 		it("centers tagline directly below logo", function() {
-			var taglineDom = tagline.toDomElement();
-			var logoDom = logo.toDomElement();
+			expect(isContentCenteredInPage(tagline)).to.be(true);
+			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 
-			expect(isContentCenteredInPage(taglineDom)).to.be(true);
-			expect(elementPixelsBelowElement(taglineDom, logoDom)).to.be(5);
-
-			expect(fontSizeOf(taglineDom)).to.be("14px");
-			expect(textColorOf(taglineDom)).to.be(DARK_BLUE);
+			expect(fontSizeOf(tagline)).to.be("14px");
+			expect(textColorOf(tagline)).to.be(DARK_BLUE);
 		});
 
 		it("centers drawing area below tagline", function() {
-			var drawingAreaDom = drawingArea.toDomElement();
-			var taglineDom = tagline.toDomElement();
+			expect(isElementCenteredInPage(drawingArea)).to.be(true);
+			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
 
-			expect(isElementCenteredInPage(drawingAreaDom)).to.be(true);
-			expect(elementPixelsBelowElement(drawingAreaDom, taglineDom)).to.be(10);
-
-			expect(elementWidthInPixels(drawingAreaDom)).to.equal(IOS_BROWSER_WIDTH);
-			expect(elementHeightInPixels(drawingAreaDom)).to.equal(600);
-			expect(backgroundColorOf(drawingAreaDom)).to.equal(WHITE);
-			expect(roundedCornersOf(drawingAreaDom)).to.be(CORNER_ROUNDING);
+			expect(elementWidthInPixels(drawingArea)).to.equal(IOS_BROWSER_WIDTH);
+			expect(elementHeightInPixels(drawingArea)).to.equal(600);
+			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
+			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
 		});
 
 		it("centers an arrow at top of drawing area", function() {
-			var drawingAreaArrowDom = drawingAreaArrow.toDomElement();
-			var drawingAreaDom = drawingArea.toDomElement();
+			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
 
-
-			expect(isElementCenteredInPage(drawingAreaArrowDom)).to.be(true);
-
-			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrowDom, drawingAreaDom)).to.be(0);
+			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
 			// TODO: haven't tested background image, position, or repeat
 
-			expect(isElementBehindElement(drawingAreaArrowDom, drawingAreaDom)).to.be(false);
+			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
-			var clearButtonDom = clearButton.toDomElement();
-			var drawingAreaDom = drawingArea.toDomElement();
+			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
+			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
+			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
 
-			expect(elementPixelsOverlappingTopOfElement(clearButtonDom, drawingAreaDom)).to.be(15);
-			expect(elementPixelsOverlappingRightOfElement(clearButtonDom, drawingAreaDom)).to.be(15);
-			expect(isElementBehindElement(clearButtonDom, drawingAreaDom)).to.be(false);
+			expect(textColorOf(clearButton)).to.be(DARK_GRAY);
+			expect(backgroundColorOf(clearButton)).to.be(GRAY);
+			expect(hasBorder(clearButton)).to.be(false);
 
-			expect(textColorOf(clearButtonDom)).to.be(DARK_GRAY);
-			expect(backgroundColorOf(clearButtonDom)).to.be(GRAY);
-			expect(hasBorder(clearButtonDom)).to.be(false);
+			expect(elementHeightInPixels(clearButton)).to.equal(30);
+			expect(elementWidthInPixels(clearButton)).to.equal(70);
+			expect(isTextVerticallyCentered(clearButton)).to.be(true);
 
-			expect(elementHeightInPixels(clearButtonDom)).to.equal(30);
-			expect(elementWidthInPixels(clearButtonDom)).to.equal(70);
-			expect(isTextVerticallyCentered(clearButtonDom)).to.be(true);
+			expect(roundedCornersOf(clearButton)).to.be(CORNER_ROUNDING);
+			expect(dropShadowOf(clearButton)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
 
-			expect(roundedCornersOf(clearButtonDom)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(clearButtonDom)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
-
-			expect(textIsUnderlined(clearButtonDom)).to.be(false);
-			expect(textIsUppercase(clearButtonDom)).to.be(true);
+			expect(textIsUnderlined(clearButton)).to.be(false);
+			expect(textIsUppercase(clearButton)).to.be(true);
 		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
-			var clearButtonDom = clearButton.toDomElement();
-
-			applyClass(clearButton.toDomElement(), "_hover_", function() {
-				expect(backgroundColorOf(clearButtonDom)).to.be(DARKENED_GRAY);
+			applyClass(clearButton, "_hover_", function() {
+				expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
 			});
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
-			var clearButtonDom = clearButton.toDomElement();
-			var drawingAreaDom = drawingArea.toDomElement();
-
-			applyClass(clearButtonDom, "_active_", function() {
-				expect(elementPixelsOverlappingTopOfElement(clearButtonDom, drawingAreaDom)).to.be(16);
-				expect(dropShadowOf(clearButtonDom)).to.be("none");
+			applyClass(clearButton, "_active_", function() {
+				expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
+				expect(dropShadowOf(clearButton)).to.be("none");
 			});
 		});
 
 		it("centers footer below the drawing area", function() {
-			var footerDom = footer.toDomElement();
-			var drawingAreaDom = drawingArea.toDomElement();
+			expect(isContentCenteredInPage(footer)).to.be(true);
+			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
 
-			expect(isContentCenteredInPage(footerDom)).to.be(true);
-			expect(elementPixelsBelowElement(footerDom, drawingAreaDom)).to.be(13);
-
-			expect(fontSizeOf(footerDom)).to.be("15px");
-			expect(textColorOf(footerDom)).to.be(WHITE);
+			expect(fontSizeOf(footer)).to.be("15px");
+			expect(textColorOf(footer)).to.be(WHITE);
 		});
 
 		it("centers 'join us' button below footer", function() {
-			var joinUsDom = joinUs.toDomElement();
-			var footerDom = footer.toDomElement();
+			expect(isContentCenteredInPage(joinUs)).to.be(true);
+			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
 
-			expect(isContentCenteredInPage(joinUsDom)).to.be(true);
-			expect(elementPixelsBelowElement(joinUsDom, footerDom)).to.be(13);
+			expect(textColorOf(joinUs)).to.be(WHITE);
+			expect(backgroundColorOf(joinUs)).to.be(MEDIUM_BLUE);
 
-			expect(textColorOf(joinUsDom)).to.be(WHITE);
-			expect(backgroundColorOf(joinUsDom)).to.be(MEDIUM_BLUE);
+			expect(elementHeightInPixels(joinUs)).to.equal(35);
+			expect(elementWidthInPixels(joinUs)).to.equal(175);
+			expect(isTextVerticallyCentered(joinUs)).to.be(true);
 
-			expect(elementHeightInPixels(joinUsDom)).to.equal(35);
-			expect(elementWidthInPixels(joinUsDom)).to.equal(175);
-			expect(isTextVerticallyCentered(joinUsDom)).to.be(true);
+			expect(roundedCornersOf(joinUs)).to.be(CORNER_ROUNDING);
+			expect(dropShadowOf(joinUs)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
 
-			expect(roundedCornersOf(joinUsDom)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(joinUsDom)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
-
-			expect(textIsUnderlined(joinUsDom)).to.be(false);
-			expect(textIsUppercase(joinUsDom)).to.be(true);
+			expect(textIsUnderlined(joinUs)).to.be(false);
+			expect(textIsUppercase(joinUs)).to.be(true);
 		});
 
 		it("darkens the 'join us' button when the user hovers over it", function() {
-			var joinUsDom = joinUs.toDomElement();
-
-			applyClass(joinUs.toDomElement(), "_hover_", function() {
-				expect(backgroundColorOf(joinUsDom)).to.be(DARKENED_MEDIUM_BLUE);
+			applyClass(joinUs, "_hover_", function() {
+				expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
 			});
 		});
 
 		it("'join us' button appears to depress when user activates it", function() {
-			var joinUsDom = joinUs.toDomElement();
-			var footerDom = footer.toDomElement();
-
-			applyClass(joinUsDom, "_active_", function() {
-				expect(elementPixelsBelowElement(joinUsDom, footerDom)).to.be(14);
-				expect(dropShadowOf(joinUsDom)).to.be("none");
+			applyClass(joinUs, "_active_", function() {
+				expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
+				expect(dropShadowOf(joinUs)).to.be("none");
 			});
 		});
 
