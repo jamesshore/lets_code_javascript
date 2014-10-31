@@ -124,7 +124,7 @@
 			var drawingAreaDom = drawingArea.toDomElement();
 
 			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
-			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
+			expect(elementPixelsOverlappingRightOfElement(clearButtonDom, drawingAreaDom)).to.be(15);
 			expect(isElementBehindElement(clearButtonDom, drawingAreaDom)).to.be(false);
 
 			expect(textColorOf(clearButtonDom)).to.be(DARK_GRAY);
@@ -268,8 +268,8 @@
 			return Math.round(getBoundingBox(element.toDomElement()).top - getBoundingBox(relativeToElement.toDomElement()).top);
 		}
 
-		function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
-			return Math.round(getBoundingBox(relativeToElement.toDomElement()).right - getBoundingBox(element.toDomElement()).right);
+		function elementPixelsOverlappingRightOfElement(domElement, domRelativeToElement) {
+			return Math.round(getBoundingBox(domRelativeToElement).right - getBoundingBox(domElement).right);
 		}
 
 		function isElementBehindElement(domElement, domRelativeToElement) {
