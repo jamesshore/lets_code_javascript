@@ -91,13 +91,15 @@
 		});
 
 		it("centers drawing area below tagline", function() {
+			var drawingAreaDom = drawingArea.toDomElement();
+
 			expect(isElementCenteredInPage(drawingArea)).to.be(true);
 			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
 
 			expect(elementWidthInPixels(drawingArea)).to.equal(IOS_BROWSER_WIDTH);
 			expect(elementHeightInPixels(drawingArea)).to.equal(600);
 			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
-			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
+			expect(roundedCornersOf(drawingAreaDom)).to.be(CORNER_ROUNDING);
 		});
 
 		it("centers an arrow at top of drawing area", function() {
@@ -110,6 +112,8 @@
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
+			var clearButtonDom = clearButton.toDomElement();
+
 			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
 			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
@@ -122,8 +126,8 @@
 			expect(elementWidthInPixels(clearButton)).to.equal(70);
 			expect(isTextVerticallyCentered(clearButton)).to.be(true);
 
-			expect(roundedCornersOf(clearButton)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(clearButton.toDomElement())).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+			expect(roundedCornersOf(clearButtonDom)).to.be(CORNER_ROUNDING);
+			expect(dropShadowOf(clearButtonDom)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
 
 			expect(textIsUnderlined(clearButton)).to.be(false);
 			expect(textIsUppercase(clearButton)).to.be(true);
@@ -151,6 +155,8 @@
 		});
 
 		it("centers 'join us' button below footer", function() {
+			var joinUsDom = joinUs.toDomElement();
+
 			expect(isContentCenteredInPage(joinUs)).to.be(true);
 			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
 
@@ -161,8 +167,8 @@
 			expect(elementWidthInPixels(joinUs)).to.equal(175);
 			expect(isTextVerticallyCentered(joinUs)).to.be(true);
 
-			expect(roundedCornersOf(joinUs)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(joinUs.toDomElement())).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
+			expect(roundedCornersOf(joinUsDom)).to.be(CORNER_ROUNDING);
+			expect(dropShadowOf(joinUsDom)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
 
 			expect(textIsUnderlined(joinUs)).to.be(false);
 			expect(textIsUppercase(joinUs)).to.be(true);
@@ -318,12 +324,12 @@
 			return getComputedProperty(element.toDomElement(), "text-transform") === "uppercase";
 		}
 
-		function roundedCornersOf(element) {
+		function roundedCornersOf(domElement) {
 			// We can't just look at border-radius because it returns "" on Firefox and IE 9
-			var topLeft = getComputedProperty(element.toDomElement(), "border-top-left-radius");
-			var topRight = getComputedProperty(element.toDomElement(), "border-top-right-radius");
-			var bottomLeft = getComputedProperty(element.toDomElement(), "border-bottom-left-radius");
-			var bottomRight = getComputedProperty(element.toDomElement(), "border-bottom-right-radius");
+			var topLeft = getComputedProperty(domElement, "border-top-left-radius");
+			var topRight = getComputedProperty(domElement, "border-top-right-radius");
+			var bottomLeft = getComputedProperty(domElement, "border-bottom-left-radius");
+			var bottomRight = getComputedProperty(domElement, "border-bottom-right-radius");
 
 			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
 			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
