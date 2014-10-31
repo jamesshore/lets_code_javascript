@@ -64,7 +64,7 @@
 		it("centers logo at top of page", function() {
 			var logoDom = logo.toDomElement();
 
-			expect(isContentCenteredInPage(logo)).to.be(true);
+			expect(isContentCenteredInPage(logoDom)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logoDom)).to.be(12);
 			expect(fontSizeOf(logoDom)).to.be("22px");
 			expect(textColorOf(logoDom)).to.be(WHITE);
@@ -88,7 +88,7 @@
 			var taglineDom = tagline.toDomElement();
 			var logoDom = logo.toDomElement();
 
-			expect(isContentCenteredInPage(tagline)).to.be(true);
+			expect(isContentCenteredInPage(taglineDom)).to.be(true);
 			expect(elementPixelsBelowElement(taglineDom, logoDom)).to.be(5);
 
 			expect(fontSizeOf(taglineDom)).to.be("14px");
@@ -166,7 +166,7 @@
 			var footerDom = footer.toDomElement();
 			var drawingAreaDom = drawingArea.toDomElement();
 
-			expect(isContentCenteredInPage(footer)).to.be(true);
+			expect(isContentCenteredInPage(footerDom)).to.be(true);
 			expect(elementPixelsBelowElement(footerDom, drawingAreaDom)).to.be(13);
 
 			expect(fontSizeOf(footerDom)).to.be("15px");
@@ -177,7 +177,7 @@
 			var joinUsDom = joinUs.toDomElement();
 			var footerDom = footer.toDomElement();
 
-			expect(isContentCenteredInPage(joinUs)).to.be(true);
+			expect(isContentCenteredInPage(joinUsDom)).to.be(true);
 			expect(elementPixelsBelowElement(joinUsDom, footerDom)).to.be(13);
 
 			expect(textColorOf(joinUsDom)).to.be(WHITE);
@@ -212,9 +212,7 @@
 			});
 		});
 
-		function isContentCenteredInPage(element) {
-			var domElement = element.toDomElement();
-
+		function isContentCenteredInPage(domElement) {
 			if (!isElementCenteredInPage(domElement)) return false;
 
 			var style = window.getComputedStyle(domElement);
