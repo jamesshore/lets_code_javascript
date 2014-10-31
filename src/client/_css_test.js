@@ -62,10 +62,12 @@
 		});
 
 		it("centers logo at top of page", function() {
+			var logoDom = logo.toDomElement();
+
 			expect(isContentCenteredInPage(logo)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
 			expect(fontSizeOf(logo)).to.be("22px");
-			expect(textColorOf(logo)).to.be(WHITE);
+			expect(textColorOf(logoDom)).to.be(WHITE);
 		});
 
 //		it("create iOS Safari failure", function() {
@@ -83,11 +85,13 @@
 //		});
 
 		it("centers tagline directly below logo", function() {
+			var taglineDom = tagline.toDomElement();
+
 			expect(isContentCenteredInPage(tagline)).to.be(true);
 			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 
 			expect(fontSizeOf(tagline)).to.be("14px");
-			expect(textColorOf(tagline)).to.be(DARK_BLUE);
+			expect(textColorOf(taglineDom)).to.be(DARK_BLUE);
 		});
 
 		it("centers drawing area below tagline", function() {
@@ -118,7 +122,7 @@
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
 			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
 
-			expect(textColorOf(clearButton)).to.be(DARK_GRAY);
+			expect(textColorOf(clearButtonDom)).to.be(DARK_GRAY);
 			expect(backgroundColorOf(clearButton)).to.be(GRAY);
 			expect(hasBorder(clearButtonDom)).to.be(false);
 
@@ -147,11 +151,13 @@
 		});
 
 		it("centers footer below the drawing area", function() {
+			var footerDom = footer.toDomElement();
+
 			expect(isContentCenteredInPage(footer)).to.be(true);
 			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
 
 			expect(fontSizeOf(footer)).to.be("15px");
-			expect(textColorOf(footer)).to.be(WHITE);
+			expect(textColorOf(footerDom)).to.be(WHITE);
 		});
 
 		it("centers 'join us' button below footer", function() {
@@ -160,7 +166,7 @@
 			expect(isContentCenteredInPage(joinUs)).to.be(true);
 			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
 
-			expect(textColorOf(joinUs)).to.be(WHITE);
+			expect(textColorOf(joinUsDom)).to.be(WHITE);
 			expect(backgroundColorOf(joinUs)).to.be(MEDIUM_BLUE);
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
@@ -303,8 +309,8 @@
 			return getComputedProperty(element.toDomElement(), "font-size");
 		}
 
-		function textColorOf(element) {
-			return getComputedProperty(element.toDomElement(), "color");
+		function textColorOf(domElement) {
+			return getComputedProperty(domElement, "color");
 		}
 
 		function hasBorder(domElement) {
