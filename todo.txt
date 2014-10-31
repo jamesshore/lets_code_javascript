@@ -43,7 +43,7 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-
+* Is there a way to tell if the font is actually loaded?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

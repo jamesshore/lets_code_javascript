@@ -1,6 +1,11 @@
+@font-face {
+	font-family: "VarelaRound-Regular";
+	src: url("/fonts/varela-round/VarelaRound-Regular.otf");
+}
+
 body {
 	background-color: #41a9cc;
-	font-family: "Helvetica";
+	font-family: "VarelaRound-Regular", "Helvetica", "sans-serif";
 }
 
 h1#logo {
