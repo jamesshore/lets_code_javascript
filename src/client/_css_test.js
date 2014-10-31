@@ -25,6 +25,7 @@
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
 		var frame;
+		var frameDom;
 
 		var logo;
 		var tagline;
@@ -36,7 +37,8 @@
 
 		before(function(done) {
 			frame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
-			frame.toDomElement().addEventListener("load", function() {
+			frameDom = frame.toDomElement();
+			frameDom.addEventListener("load", function() {
 				logo = getElement("logo");
 				tagline = getElement("tagline");
 				drawingAreaArrow = getElement("drawing-area-arrow");
@@ -55,11 +57,11 @@
 		});
 
 		function getElement(id) {
-			return frame.toDomElement().contentDocument.getElementById(id);
+			return frameDom.contentDocument.getElementById(id);
 		}
 
 		it("has a blue background", function() {
-			expect(backgroundColorOf(frame.toDomElement().contentDocument.body)).to.be(BACKGROUND_BLUE);
+			expect(backgroundColorOf(frameDom.contentDocument.body)).to.be(BACKGROUND_BLUE);
 		});
 
 		it("centers logo at top of page", function() {
@@ -192,9 +194,9 @@
 		}
 
 		function isElementCenteredInPage(domElement) {
-			var frameBody = frame.toDomElement().contentDocument.body;
+			var frameBody = frameDom.contentDocument.body;
 
-			var bodyStyle = frame.toDomElement().contentWindow.getComputedStyle(frameBody);
+			var bodyStyle = frameDom.contentWindow.getComputedStyle(frameBody);
 			var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
 			var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
 
@@ -277,8 +279,6 @@
 				failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
 				return elementAfterRelative;
 			}
-
-
 		}
 
 		function isTextVerticallyCentered(domElement) {
