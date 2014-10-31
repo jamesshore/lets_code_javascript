@@ -48,6 +48,7 @@ h1#logo {
 }
 
 #clear-button {
+	font-family: "Helvetica";
 	position: absolute;
 	top: 15px;
 	right: 15px;

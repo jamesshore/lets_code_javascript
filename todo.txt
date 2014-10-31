@@ -29,8 +29,7 @@ Potential future stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* Built-in fonts
-- @font-face
+* @font-face
 - Typekit?
 
 - Need to test arrow's background elements--is there a clean way of doing this?
@@ -44,8 +43,6 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-- Define font-family and font-size for clear button
-- Define font-family and font-size for "join us" button
 
 
 Notes:

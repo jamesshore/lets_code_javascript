@@ -125,6 +125,8 @@
 			expect(backgroundColorOf(clearButton)).to.be(GRAY);
 			expect(hasBorder(clearButton)).to.be(false);
 
+			expect(fontFamilyOf(clearButton)).to.be(STANDARD_FONT);
+
 			expect(elementHeightInPixels(clearButton)).to.equal(30);
 			expect(elementWidthInPixels(clearButton)).to.equal(70);
 			expect(isTextVerticallyCentered(clearButton)).to.be(true);
@@ -164,6 +166,8 @@
 
 			expect(textColorOf(joinUs)).to.be(WHITE);
 			expect(backgroundColorOf(joinUs)).to.be(MEDIUM_BLUE);
+
+			expect(fontFamilyOf(joinUs)).to.be(STANDARD_FONT);
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
 			expect(elementWidthInPixels(joinUs)).to.equal(175);
