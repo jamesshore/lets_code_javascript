@@ -102,7 +102,7 @@
 			expect(isElementCenteredInPage(drawingArea)).to.be(true);
 			expect(elementPixelsBelowElement(drawingAreaDom, taglineDom)).to.be(10);
 
-			expect(elementWidthInPixels(drawingArea)).to.equal(IOS_BROWSER_WIDTH);
+			expect(elementWidthInPixels(drawingAreaDom)).to.equal(IOS_BROWSER_WIDTH);
 			expect(elementHeightInPixels(drawingArea)).to.equal(600);
 			expect(backgroundColorOf(drawingAreaDom)).to.equal(WHITE);
 			expect(roundedCornersOf(drawingAreaDom)).to.be(CORNER_ROUNDING);
@@ -134,7 +134,7 @@
 			expect(hasBorder(clearButtonDom)).to.be(false);
 
 			expect(elementHeightInPixels(clearButton)).to.equal(30);
-			expect(elementWidthInPixels(clearButton)).to.equal(70);
+			expect(elementWidthInPixels(clearButtonDom)).to.equal(70);
 			expect(isTextVerticallyCentered(clearButtonDom)).to.be(true);
 
 			expect(roundedCornersOf(clearButtonDom)).to.be(CORNER_ROUNDING);
@@ -184,7 +184,7 @@
 			expect(backgroundColorOf(joinUsDom)).to.be(MEDIUM_BLUE);
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
-			expect(elementWidthInPixels(joinUs)).to.equal(175);
+			expect(elementWidthInPixels(joinUsDom)).to.equal(175);
 			expect(isTextVerticallyCentered(joinUsDom)).to.be(true);
 
 			expect(roundedCornersOf(joinUsDom)).to.be(CORNER_ROUNDING);
@@ -266,8 +266,8 @@
 			return getBoundingBox(element.toDomElement()).height;
 		}
 
-		function elementWidthInPixels(element) {
-			return getBoundingBox(element.toDomElement()).width;
+		function elementWidthInPixels(domElement) {
+			return getBoundingBox(domElement).width;
 		}
 
 		function elementPixelsBelowElement(domElement, domRelativeToElement) {
