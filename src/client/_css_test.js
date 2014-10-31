@@ -86,9 +86,10 @@
 
 		it("centers tagline directly below logo", function() {
 			var taglineDom = tagline.toDomElement();
+			var logoDom = logo.toDomElement();
 
 			expect(isContentCenteredInPage(tagline)).to.be(true);
-			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
+			expect(elementPixelsBelowElement(taglineDom, logoDom)).to.be(5);
 
 			expect(fontSizeOf(taglineDom)).to.be("14px");
 			expect(textColorOf(taglineDom)).to.be(DARK_BLUE);
@@ -96,9 +97,10 @@
 
 		it("centers drawing area below tagline", function() {
 			var drawingAreaDom = drawingArea.toDomElement();
+			var taglineDom = tagline.toDomElement();
 
 			expect(isElementCenteredInPage(drawingArea)).to.be(true);
-			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
+			expect(elementPixelsBelowElement(drawingAreaDom, taglineDom)).to.be(10);
 
 			expect(elementWidthInPixels(drawingArea)).to.equal(IOS_BROWSER_WIDTH);
 			expect(elementHeightInPixels(drawingArea)).to.equal(600);
@@ -162,9 +164,10 @@
 
 		it("centers footer below the drawing area", function() {
 			var footerDom = footer.toDomElement();
+			var drawingAreaDom = drawingArea.toDomElement();
 
 			expect(isContentCenteredInPage(footer)).to.be(true);
-			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
+			expect(elementPixelsBelowElement(footerDom, drawingAreaDom)).to.be(13);
 
 			expect(fontSizeOf(footerDom)).to.be("15px");
 			expect(textColorOf(footerDom)).to.be(WHITE);
@@ -172,9 +175,10 @@
 
 		it("centers 'join us' button below footer", function() {
 			var joinUsDom = joinUs.toDomElement();
+			var footerDom = footer.toDomElement();
 
 			expect(isContentCenteredInPage(joinUs)).to.be(true);
-			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
+			expect(elementPixelsBelowElement(joinUsDom, footerDom)).to.be(13);
 
 			expect(textColorOf(joinUsDom)).to.be(WHITE);
 			expect(backgroundColorOf(joinUsDom)).to.be(MEDIUM_BLUE);
@@ -199,9 +203,12 @@
 		});
 
 		it("'join us' button appears to depress when user activates it", function() {
-			applyClass(joinUs.toDomElement(), "_active_", function() {
-				expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
-				expect(dropShadowOf(joinUs.toDomElement())).to.be("none");
+			var joinUsDom = joinUs.toDomElement();
+			var footerDom = footer.toDomElement();
+
+			applyClass(joinUsDom, "_active_", function() {
+				expect(elementPixelsBelowElement(joinUsDom, footerDom)).to.be(14);
+				expect(dropShadowOf(joinUsDom)).to.be("none");
 			});
 		});
 
@@ -263,8 +270,8 @@
 			return getBoundingBox(element.toDomElement()).width;
 		}
 
-		function elementPixelsBelowElement(element, relativeToElement) {
-			return Math.round(getBoundingBox(element.toDomElement()).top - getBoundingBox(relativeToElement.toDomElement()).bottom);
+		function elementPixelsBelowElement(domElement, domRelativeToElement) {
+			return Math.round(getBoundingBox(domElement).top - getBoundingBox(domRelativeToElement).bottom);
 		}
 
 		function elementPixelsOverlappingTopOfElement(domElement, domRelativeToElement) {
