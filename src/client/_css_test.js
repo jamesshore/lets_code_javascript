@@ -99,7 +99,7 @@
 			var drawingAreaDom = drawingArea.toDomElement();
 			var taglineDom = tagline.toDomElement();
 
-			expect(isElementCenteredInPage(drawingArea)).to.be(true);
+			expect(isElementCenteredInPage(drawingAreaDom)).to.be(true);
 			expect(elementPixelsBelowElement(drawingAreaDom, taglineDom)).to.be(10);
 
 			expect(elementWidthInPixels(drawingAreaDom)).to.equal(IOS_BROWSER_WIDTH);
@@ -113,7 +113,7 @@
 			var drawingAreaDom = drawingArea.toDomElement();
 
 
-			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
+			expect(isElementCenteredInPage(drawingAreaArrowDom)).to.be(true);
 
 			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrowDom, drawingAreaDom)).to.be(0);
 			// TODO: haven't tested background image, position, or repeat
@@ -213,9 +213,9 @@
 		});
 
 		function isContentCenteredInPage(element) {
-			if (!isElementCenteredInPage(element)) return false;
-
 			var domElement = element.toDomElement();
+
+			if (!isElementCenteredInPage(domElement)) return false;
 
 			var style = window.getComputedStyle(domElement);
 			var textAlign = style.getPropertyValue("text-align");
@@ -223,7 +223,7 @@
 			return textAlign === "center";
 		}
 
-		function isElementCenteredInPage(element) {
+		function isElementCenteredInPage(domElement) {
 			var frameBody = frame.toDomElement().contentDocument.body;
 
 			var bodyStyle = frame.toDomElement().contentWindow.getComputedStyle(frameBody);
@@ -235,7 +235,7 @@
 			var documentLeft = bodyBoundingBox.left - bodyLeftMarginWidth;
 			var documentRight = bodyBoundingBox.right + bodyRightMarginWidth;
 
-			var elementBoundingBox = getBoundingBox(element.toDomElement());
+			var elementBoundingBox = getBoundingBox(domElement);
 			var elementLeft = elementBoundingBox.left;
 			var elementRight = elementBoundingBox.right;
 
