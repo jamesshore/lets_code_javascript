@@ -120,7 +120,7 @@
 
 			expect(textColorOf(clearButton)).to.be(DARK_GRAY);
 			expect(backgroundColorOf(clearButton)).to.be(GRAY);
-			expect(hasBorder(clearButton)).to.be(false);
+			expect(hasBorder(clearButtonDom)).to.be(false);
 
 			expect(elementHeightInPixels(clearButton)).to.equal(30);
 			expect(elementWidthInPixels(clearButton)).to.equal(70);
@@ -307,11 +307,11 @@
 			return getComputedProperty(element.toDomElement(), "color");
 		}
 
-		function hasBorder(element) {
-			var top = getComputedProperty(element.toDomElement(), "border-top-style");
-			var right = getComputedProperty(element.toDomElement(), "border-right-style");
-			var bottom = getComputedProperty(element.toDomElement(), "border-bottom-style");
-			var left = getComputedProperty(element.toDomElement(), "border-left-style");
+		function hasBorder(domElement) {
+			var top = getComputedProperty(domElement, "border-top-style");
+			var right = getComputedProperty(domElement, "border-right-style");
+			var bottom = getComputedProperty(domElement, "border-bottom-style");
+			var left = getComputedProperty(domElement, "border-left-style");
 			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
 		}
 
