@@ -107,20 +107,25 @@
 		});
 
 		it("centers an arrow at top of drawing area", function() {
+			var drawingAreaArrowDom = drawingAreaArrow.toDomElement();
+			var drawingAreaDom = drawingArea.toDomElement();
+
+
 			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
 
 			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
 			// TODO: haven't tested background image, position, or repeat
 
-			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
+			expect(isElementBehindElement(drawingAreaArrowDom, drawingAreaDom)).to.be(false);
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
 			var clearButtonDom = clearButton.toDomElement();
+			var drawingAreaDom = drawingArea.toDomElement();
 
 			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
-			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
+			expect(isElementBehindElement(clearButtonDom, drawingAreaDom)).to.be(false);
 
 			expect(textColorOf(clearButtonDom)).to.be(DARK_GRAY);
 			expect(backgroundColorOf(clearButtonDom)).to.be(GRAY);
@@ -267,22 +272,22 @@
 			return Math.round(getBoundingBox(relativeToElement.toDomElement()).right - getBoundingBox(element.toDomElement()).right);
 		}
 
-		function isElementBehindElement(element, relativeToElement) {
-			var elementZ = getZIndex(element);
-			var relativeZ = getZIndex(relativeToElement);
+		function isElementBehindElement(domElement, domRelativeToElement) {
+			var elementZ = getZIndex(domElement);
+			var relativeZ = getZIndex(domRelativeToElement);
 
 			if (elementZ === relativeZ) return !isElementAfterElementInDomTree();
 			else return (elementZ < relativeZ);
 
-			function getZIndex(element) {
-				var z = getComputedProperty(element.toDomElement(), "z-index");
+			function getZIndex(domElement) {
+				var z = getComputedProperty(domElement, "z-index");
 				if (z === "auto") z = 0;
 				return z;
 			}
 
 			function isElementAfterElementInDomTree() {
-				var elementNode = element.toDomElement();
-				var relativeNode = relativeToElement.toDomElement();
+				var elementNode = domElement;
+				var relativeNode = domRelativeToElement;
 				var foundRelative = false;
 				var elementAfterRelative = false;
 				for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
