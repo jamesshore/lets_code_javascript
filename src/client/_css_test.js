@@ -129,7 +129,7 @@
 			expect(roundedCornersOf(clearButtonDom)).to.be(CORNER_ROUNDING);
 			expect(dropShadowOf(clearButtonDom)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
 
-			expect(textIsUnderlined(clearButton)).to.be(false);
+			expect(textIsUnderlined(clearButtonDom)).to.be(false);
 			expect(textIsUppercase(clearButtonDom)).to.be(true);
 		});
 
@@ -170,7 +170,7 @@
 			expect(roundedCornersOf(joinUsDom)).to.be(CORNER_ROUNDING);
 			expect(dropShadowOf(joinUsDom)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
 
-			expect(textIsUnderlined(joinUs)).to.be(false);
+			expect(textIsUnderlined(joinUsDom)).to.be(false);
 			expect(textIsUppercase(joinUsDom)).to.be(true);
 		});
 
@@ -315,8 +315,8 @@
 			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
 		}
 
-		function textIsUnderlined(element) {
-			var style = getComputedProperty(element.toDomElement(), "text-decoration");
+		function textIsUnderlined(domElement) {
+			var style = getComputedProperty(domElement, "text-decoration");
 			return style.indexOf("none") !== 0;
 		}
 
