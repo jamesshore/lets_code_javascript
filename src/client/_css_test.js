@@ -113,7 +113,7 @@
 
 			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
 
-			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
+			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrowDom, drawingAreaDom)).to.be(0);
 			// TODO: haven't tested background image, position, or repeat
 
 			expect(isElementBehindElement(drawingAreaArrowDom, drawingAreaDom)).to.be(false);
@@ -123,7 +123,7 @@
 			var clearButtonDom = clearButton.toDomElement();
 			var drawingAreaDom = drawingArea.toDomElement();
 
-			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
+			expect(elementPixelsOverlappingTopOfElement(clearButtonDom, drawingAreaDom)).to.be(15);
 			expect(elementPixelsOverlappingRightOfElement(clearButtonDom, drawingAreaDom)).to.be(15);
 			expect(isElementBehindElement(clearButtonDom, drawingAreaDom)).to.be(false);
 
@@ -151,9 +151,12 @@
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
-			applyClass(clearButton.toDomElement(), "_active_", function() {
-				expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
-				expect(dropShadowOf(clearButton.toDomElement())).to.be("none");
+			var clearButtonDom = clearButton.toDomElement();
+			var drawingAreaDom = drawingArea.toDomElement();
+
+			applyClass(clearButtonDom, "_active_", function() {
+				expect(elementPixelsOverlappingTopOfElement(clearButtonDom, drawingAreaDom)).to.be(16);
+				expect(dropShadowOf(clearButtonDom)).to.be("none");
 			});
 		});
 
@@ -264,8 +267,8 @@
 			return Math.round(getBoundingBox(element.toDomElement()).top - getBoundingBox(relativeToElement.toDomElement()).bottom);
 		}
 
-		function elementPixelsOverlappingTopOfElement(element, relativeToElement) {
-			return Math.round(getBoundingBox(element.toDomElement()).top - getBoundingBox(relativeToElement.toDomElement()).top);
+		function elementPixelsOverlappingTopOfElement(domElement, domRelativeToElement) {
+			return Math.round(getBoundingBox(domElement).top - getBoundingBox(domRelativeToElement).top);
 		}
 
 		function elementPixelsOverlappingRightOfElement(domElement, domRelativeToElement) {
