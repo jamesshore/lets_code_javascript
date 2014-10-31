@@ -130,7 +130,7 @@
 			expect(dropShadowOf(clearButtonDom)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
 
 			expect(textIsUnderlined(clearButton)).to.be(false);
-			expect(textIsUppercase(clearButton)).to.be(true);
+			expect(textIsUppercase(clearButtonDom)).to.be(true);
 		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
@@ -171,7 +171,7 @@
 			expect(dropShadowOf(joinUsDom)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
 
 			expect(textIsUnderlined(joinUs)).to.be(false);
-			expect(textIsUppercase(joinUs)).to.be(true);
+			expect(textIsUppercase(joinUsDom)).to.be(true);
 		});
 
 		it("darkens the 'join us' button when the user hovers over it", function() {
@@ -320,8 +320,8 @@
 			return style.indexOf("none") !== 0;
 		}
 
-		function textIsUppercase(element) {
-			return getComputedProperty(element.toDomElement(), "text-transform") === "uppercase";
+		function textIsUppercase(domElement) {
+			return getComputedProperty(domElement, "text-transform") === "uppercase";
 		}
 
 		function roundedCornersOf(domElement) {
