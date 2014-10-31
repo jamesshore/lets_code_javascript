@@ -193,7 +193,7 @@
 			var documentLeft = bodyBoundingBox.left - bodyLeftMarginWidth;
 			var documentRight = bodyBoundingBox.right + bodyRightMarginWidth;
 
-			var elementBoundingBox = getBoundingBox(element);
+			var elementBoundingBox = getBoundingBox(element.toDomElement());
 			var elementLeft = elementBoundingBox.left;
 			var elementRight = elementBoundingBox.right;
 
@@ -217,27 +217,27 @@
 		}
 
 		function elementPixelsFromTopOfPage(element) {
-			return getBoundingBox(element).top;
+			return getBoundingBox(element.toDomElement()).top;
 		}
 
 		function elementHeightInPixels(element) {
-			return getBoundingBox(element).height;
+			return getBoundingBox(element.toDomElement()).height;
 		}
 
 		function elementWidthInPixels(element) {
-			return getBoundingBox(element).width;
+			return getBoundingBox(element.toDomElement()).width;
 		}
 
 		function elementPixelsBelowElement(element, relativeToElement) {
-			return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).bottom);
+			return Math.round(getBoundingBox(element.toDomElement()).top - getBoundingBox(relativeToElement.toDomElement()).bottom);
 		}
 
 		function elementPixelsOverlappingTopOfElement(element, relativeToElement) {
-			return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).top);
+			return Math.round(getBoundingBox(element.toDomElement()).top - getBoundingBox(relativeToElement.toDomElement()).top);
 		}
 
 		function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
-			return Math.round(getBoundingBox(relativeToElement).right - getBoundingBox(element).right);
+			return Math.round(getBoundingBox(relativeToElement.toDomElement()).right - getBoundingBox(element.toDomElement()).right);
 		}
 
 		function isElementBehindElement(element, relativeToElement) {
@@ -272,7 +272,7 @@
 		}
 
 		function isTextVerticallyCentered(element) {
-			var elementHeight = getBoundingBox(element).height;
+			var elementHeight = getBoundingBox(element.toDomElement()).height;
 			var lineHeight = getComputedProperty(element.toDomElement(), "line-height");
 
 			return elementHeight + "px" === lineHeight;
@@ -350,8 +350,7 @@
 			return textAlign === "center";
 		}
 
-		function getBoundingBox(element) {
-			var domElement = element.toDomElement();
+		function getBoundingBox(domElement) {
 			return domElement.getBoundingClientRect();
 		}
 
