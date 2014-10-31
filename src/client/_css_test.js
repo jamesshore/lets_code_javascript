@@ -248,7 +248,7 @@
 			else return (elementZ < relativeZ);
 
 			function getZIndex(element) {
-				var z = getComputedProperty(element, "z-index");
+				var z = getComputedProperty(element.toDomElement(), "z-index");
 				if (z === "auto") z = 0;
 				return z;
 			}
@@ -273,53 +273,53 @@
 
 		function isTextVerticallyCentered(element) {
 			var elementHeight = getBoundingBox(element).height;
-			var lineHeight = getComputedProperty(element, "line-height");
+			var lineHeight = getComputedProperty(element.toDomElement(), "line-height");
 
 			return elementHeight + "px" === lineHeight;
 		}
 
 		function backgroundColorOf(element) {
-			return getComputedProperty(element, "background-color");
+			return getComputedProperty(element.toDomElement(), "background-color");
 		}
 
 		function fontSizeOf(element) {
-			return getComputedProperty(element, "font-size");
+			return getComputedProperty(element.toDomElement(), "font-size");
 		}
 
 		function textColorOf(element) {
-			return getComputedProperty(element, "color");
+			return getComputedProperty(element.toDomElement(), "color");
 		}
 
 		function hasBorder(element) {
-			var top = getComputedProperty(element, "border-top-style");
-			var right = getComputedProperty(element, "border-right-style");
-			var bottom = getComputedProperty(element, "border-bottom-style");
-			var left = getComputedProperty(element, "border-left-style");
+			var top = getComputedProperty(element.toDomElement(), "border-top-style");
+			var right = getComputedProperty(element.toDomElement(), "border-right-style");
+			var bottom = getComputedProperty(element.toDomElement(), "border-bottom-style");
+			var left = getComputedProperty(element.toDomElement(), "border-left-style");
 			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
 		}
 
 		function textIsUnderlined(element) {
-			var style = getComputedProperty(element, "text-decoration");
+			var style = getComputedProperty(element.toDomElement(), "text-decoration");
 			return style.indexOf("none") !== 0;
 		}
 
 		function textIsUppercase(element) {
-			return getComputedProperty(element, "text-transform") === "uppercase";
+			return getComputedProperty(element.toDomElement(), "text-transform") === "uppercase";
 		}
 
 		function roundedCornersOf(element) {
 			// We can't just look at border-radius because it returns "" on Firefox and IE 9
-			var topLeft = getComputedProperty(element, "border-top-left-radius");
-			var topRight = getComputedProperty(element, "border-top-right-radius");
-			var bottomLeft = getComputedProperty(element, "border-bottom-left-radius");
-			var bottomRight = getComputedProperty(element, "border-bottom-right-radius");
+			var topLeft = getComputedProperty(element.toDomElement(), "border-top-left-radius");
+			var topRight = getComputedProperty(element.toDomElement(), "border-top-right-radius");
+			var bottomLeft = getComputedProperty(element.toDomElement(), "border-bottom-left-radius");
+			var bottomRight = getComputedProperty(element.toDomElement(), "border-bottom-right-radius");
 
 			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
 			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
 		}
 
 		function dropShadowOf(element) {
-			var shadow = getComputedProperty(element, "box-shadow");
+			var shadow = getComputedProperty(element.toDomElement(), "box-shadow");
 
 			// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
 			// We handle that case here.
@@ -355,8 +355,8 @@
 			return domElement.getBoundingClientRect();
 		}
 
-		function getComputedProperty(element, propertyName) {
-			var style = window.getComputedStyle(element.toDomElement());
+		function getComputedProperty(domElement, propertyName) {
+			var style = window.getComputedStyle(domElement);
 			return style.getPropertyValue(propertyName);
 		}
 

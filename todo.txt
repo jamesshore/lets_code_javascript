@@ -46,7 +46,6 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-* Factor out class handling for :hover and :active states
 - Take out HtmlElement usage?
 
 Notes:
