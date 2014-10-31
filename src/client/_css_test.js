@@ -65,7 +65,7 @@
 			var logoDom = logo.toDomElement();
 
 			expect(isContentCenteredInPage(logo)).to.be(true);
-			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
+			expect(elementPixelsFromTopOfPage(logoDom)).to.be(12);
 			expect(fontSizeOf(logoDom)).to.be("22px");
 			expect(textColorOf(logoDom)).to.be(WHITE);
 		});
@@ -258,8 +258,8 @@
 			return success;
 		}
 
-		function elementPixelsFromTopOfPage(element) {
-			return getBoundingBox(element.toDomElement()).top;
+		function elementPixelsFromTopOfPage(domElement) {
+			return getBoundingBox(domElement).top;
 		}
 
 		function elementHeightInPixels(domElement) {
