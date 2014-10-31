@@ -130,24 +130,16 @@
 		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
-			var clearDom = clearButton.toDomElement();
-			var oldClassName = clearDom.className;
-			try {
-				clearDom.className += " _hover_";
-				forceReflow(clearButton);
-
+			applyClass(clearButton.toDomElement(), "_hover_", function() {
 				expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
-			}
-			finally {
-				clearDom.className = oldClassName;
-			}
+			});
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
-			clearButton.toDomElement().className += " _active_";
-
-			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
-			expect(dropShadowOf(clearButton)).to.be("none");
+			applyClass(clearButton.toDomElement(), "_active_", function() {
+				expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
+				expect(dropShadowOf(clearButton)).to.be("none");
+			});
 		});
 
 		it("centers footer below the drawing area", function() {
@@ -177,17 +169,16 @@
 		});
 
 		it("darkens the 'join us' button when the user hovers over it", function() {
-			joinUs.toDomElement().className += " _hover_";
-			forceReflow(joinUs);
-
-			expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
+			applyClass(joinUs.toDomElement(), "_hover_", function() {
+				expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
+			});
 		});
 
 		it("'join us' button appears to depress when user activates it", function() {
-			joinUs.toDomElement().className += " _active_";
-
-			expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
-			expect(dropShadowOf(joinUs)).to.be("none");
+			applyClass(joinUs.toDomElement(), "_active_", function() {
+				expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
+				expect(dropShadowOf(joinUs)).to.be("none");
+			});
 		});
 
 		function isElementCenteredInPage(element) {
@@ -369,8 +360,22 @@
 			return style.getPropertyValue(propertyName);
 		}
 
-		function forceReflow(element) {
-			var makeLintHappy = element.toDomElement().offsetHeight;
+		function applyClass(domElement, className, fn) {
+			var oldClassName = domElement.className;
+			try {
+				domElement.className += className;
+				forceReflow(domElement);
+
+				fn();
+			}
+			finally {
+				domElement.className = oldClassName;
+				forceReflow(domElement);
+			}
+		}
+
+		function forceReflow(domElement) {
+			var makeLintHappy = domElement.offsetHeight;
 		}
 
 		function pixelsToInt(pixels) {
