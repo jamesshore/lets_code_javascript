@@ -128,7 +128,7 @@
 
 			expect(elementHeightInPixels(clearButton)).to.equal(30);
 			expect(elementWidthInPixels(clearButton)).to.equal(70);
-			expect(isTextVerticallyCentered(clearButton)).to.be(true);
+			expect(isTextVerticallyCentered(clearButtonDom)).to.be(true);
 
 			expect(roundedCornersOf(clearButtonDom)).to.be(CORNER_ROUNDING);
 			expect(dropShadowOf(clearButtonDom)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
@@ -173,7 +173,7 @@
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
 			expect(elementWidthInPixels(joinUs)).to.equal(175);
-			expect(isTextVerticallyCentered(joinUs)).to.be(true);
+			expect(isTextVerticallyCentered(joinUsDom)).to.be(true);
 
 			expect(roundedCornersOf(joinUsDom)).to.be(CORNER_ROUNDING);
 			expect(dropShadowOf(joinUsDom)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
@@ -298,9 +298,9 @@
 
 		}
 
-		function isTextVerticallyCentered(element) {
-			var elementHeight = getBoundingBox(element.toDomElement()).height;
-			var lineHeight = getComputedProperty(element.toDomElement(), "line-height");
+		function isTextVerticallyCentered(domElement) {
+			var elementHeight = getBoundingBox(domElement).height;
+			var lineHeight = getComputedProperty(domElement, "line-height");
 
 			return elementHeight + "px" === lineHeight;
 		}
