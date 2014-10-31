@@ -66,7 +66,7 @@
 
 			expect(isContentCenteredInPage(logo)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
-			expect(fontSizeOf(logo)).to.be("22px");
+			expect(fontSizeOf(logoDom)).to.be("22px");
 			expect(textColorOf(logoDom)).to.be(WHITE);
 		});
 
@@ -90,7 +90,7 @@
 			expect(isContentCenteredInPage(tagline)).to.be(true);
 			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 
-			expect(fontSizeOf(tagline)).to.be("14px");
+			expect(fontSizeOf(taglineDom)).to.be("14px");
 			expect(textColorOf(taglineDom)).to.be(DARK_BLUE);
 		});
 
@@ -156,7 +156,7 @@
 			expect(isContentCenteredInPage(footer)).to.be(true);
 			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
 
-			expect(fontSizeOf(footer)).to.be("15px");
+			expect(fontSizeOf(footerDom)).to.be("15px");
 			expect(textColorOf(footerDom)).to.be(WHITE);
 		});
 
@@ -305,8 +305,8 @@
 			return getComputedProperty(element.toDomElement(), "background-color");
 		}
 
-		function fontSizeOf(element) {
-			return getComputedProperty(element.toDomElement(), "font-size");
+		function fontSizeOf(domElement) {
+			return getComputedProperty(domElement, "font-size");
 		}
 
 		function textColorOf(domElement) {
