@@ -123,7 +123,7 @@
 			expect(isTextVerticallyCentered(clearButton)).to.be(true);
 
 			expect(roundedCornersOf(clearButton)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(clearButton)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+			expect(dropShadowOf(clearButton.toDomElement())).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
 
 			expect(textIsUnderlined(clearButton)).to.be(false);
 			expect(textIsUppercase(clearButton)).to.be(true);
@@ -138,7 +138,7 @@
 		it("'clear' button appears to depress when user activates it", function() {
 			applyClass(clearButton.toDomElement(), "_active_", function() {
 				expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
-				expect(dropShadowOf(clearButton)).to.be("none");
+				expect(dropShadowOf(clearButton.toDomElement())).to.be("none");
 			});
 		});
 
@@ -162,7 +162,7 @@
 			expect(isTextVerticallyCentered(joinUs)).to.be(true);
 
 			expect(roundedCornersOf(joinUs)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(joinUs)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
+			expect(dropShadowOf(joinUs.toDomElement())).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
 
 			expect(textIsUnderlined(joinUs)).to.be(false);
 			expect(textIsUppercase(joinUs)).to.be(true);
@@ -177,9 +177,20 @@
 		it("'join us' button appears to depress when user activates it", function() {
 			applyClass(joinUs.toDomElement(), "_active_", function() {
 				expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
-				expect(dropShadowOf(joinUs)).to.be("none");
+				expect(dropShadowOf(joinUs.toDomElement())).to.be("none");
 			});
 		});
+
+		function isContentCenteredInPage(element) {
+			if (!isElementCenteredInPage(element)) return false;
+
+			var domElement = element.toDomElement();
+
+			var style = window.getComputedStyle(domElement);
+			var textAlign = style.getPropertyValue("text-align");
+
+			return textAlign === "center";
+		}
 
 		function isElementCenteredInPage(element) {
 			var frameBody = frame.toDomElement().contentDocument.body;
@@ -318,8 +329,8 @@
 			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
 		}
 
-		function dropShadowOf(element) {
-			var shadow = getComputedProperty(element.toDomElement(), "box-shadow");
+		function dropShadowOf(domElement) {
+			var shadow = getComputedProperty(domElement, "box-shadow");
 
 			// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
 			// We handle that case here.
@@ -337,17 +348,6 @@
 			var g = parseInt(groups[3], 16);
 			var b = parseInt(groups[4], 16);
 			return "rgb(" + r + ", " + g + ", " + b + ") " + sizes;
-		}
-
-		function isContentCenteredInPage(element) {
-			if (!isElementCenteredInPage(element)) return false;
-
-			var domElement = element.toDomElement();
-
-			var style = window.getComputedStyle(domElement);
-			var textAlign = style.getPropertyValue("text-align");
-
-			return textAlign === "center";
 		}
 
 		function getBoundingBox(domElement) {
