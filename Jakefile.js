@@ -20,8 +20,8 @@
 	var REQUIRED_BROWSERS = [
 		"IE 8.0.0 (Windows 7)",
 		"IE 9.0.0 (Windows 7)",
-		"Firefox 32.0.0 (Mac OS X 10.8)",
-		"Chrome 37.0.2062 (Mac OS X 10.8.5)",
+		"Firefox 33.0.0 (Mac OS X 10.8)",
+		"Chrome 38.0.2125 (Mac OS X 10.8.5)",
 		"Safari 6.2.0 (Mac OS X 10.8.5)",
 		"Mobile Safari 7.0.0 (iOS 7.1)"
 	];
@@ -229,6 +229,8 @@
 			dump: false,
 			beforeEach: false,
 			afterEach: false,
+			before: false,
+			after: false,
 
 			// Browser
 			console: false

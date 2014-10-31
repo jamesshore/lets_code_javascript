@@ -25,62 +25,43 @@
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
 		var frame;
+		var frameDom;
+
 		var logo;
 		var tagline;
-		var drawingAreaContainer;
 		var drawingAreaArrow;
 		var drawingArea;
 		var clearButton;
 		var footer;
 		var joinUs;
 
-		beforeEach(function(done) {
-			frame = HtmlElement.fromHtml("<iframe width='1200px' height='500px'></iframe>");
-			frame.toDomElement().onload = function() {
-				var style = HtmlElement.fromHtml("<link rel='stylesheet' href='/base/src/client/screen.css' type='text/css'>");
-				new HtmlElement(frame.toDomElement().contentDocument.head).append(style);
-				style.toDomElement().addEventListener("load", function() {
-					logo = newElement("<h1 id='logo'>Hello World</h1>");
-					tagline = newElement("<p id='tagline'>Tag line here</p>");
-					drawingAreaContainer = newElement("" +
-						"<div id='drawing-area-container'>" +
-						" <div id='drawing-area'></div>" +
-						" <div id='drawing-area-arrow'>v</div>" +
-						" <button id='clear-button' type='button'>Clear</button>" +
-						"</div>"
-					);
-					footer = newElement("<p id='footer'>Footer here</p>");
-					joinUs = newElement("<a id='join-us' href='#'>Join Us!</a></div>");
+		before(function(done) {
+			frame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
+			frameDom = frame.toDomElement();
+			frameDom.addEventListener("load", function() {
+				logo = getElement("logo");
+				tagline = getElement("tagline");
+				drawingAreaArrow = getElement("drawing-area-arrow");
+				drawingArea = getElement("drawing-area");
+				clearButton = getElement("clear-button");
+				footer = getElement("footer");
+				joinUs = getElement("join-us");
 
-					drawingArea = getElement("drawing-area");
-					drawingAreaArrow = getElement("drawing-area-arrow");
-					clearButton = getElement("clear-button");
-
-					done();
-				});
-			};
+				done();
+			});
 			frame.appendSelfToBody();
 		});
 
-		afterEach(function() {
+		after(function() {
 			frame.remove();
 		});
 
-		function newElement(html) {
-			var element = HtmlElement.fromHtml(html);
-
-			var frameBody = new HtmlElement(frame.toDomElement().contentDocument.body);
-			frameBody.append(element);
-
-			return element;
-		}
-
 		function getElement(id) {
-			return new HtmlElement(frame.toDomElement().contentDocument.getElementById(id));
+			return frameDom.contentDocument.getElementById(id);
 		}
 
 		it("has a blue background", function() {
-			expect(backgroundColorOf(new HtmlElement(document.body))).to.be(BACKGROUND_BLUE);
+			expect(backgroundColorOf(frameDom.contentDocument.body)).to.be(BACKGROUND_BLUE);
 		});
 
 		it("centers logo at top of page", function() {
@@ -152,16 +133,16 @@
 		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
-			clearButton.toDomElement().className += " _hover_";
-
-			expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+			applyClass(clearButton, "_hover_", function() {
+				expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+			});
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
-			clearButton.toDomElement().className += " _active_";
-
-			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
-			expect(dropShadowOf(clearButton)).to.be("none");
+			applyClass(clearButton, "_active_", function() {
+				expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
+				expect(dropShadowOf(clearButton)).to.be("none");
+			});
 		});
 
 		it("centers footer below the drawing area", function() {
@@ -191,22 +172,31 @@
 		});
 
 		it("darkens the 'join us' button when the user hovers over it", function() {
-			joinUs.toDomElement().className += " _hover_";
-
-			expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
+			applyClass(joinUs, "_hover_", function() {
+				expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
+			});
 		});
 
 		it("'join us' button appears to depress when user activates it", function() {
-			joinUs.toDomElement().className += " _active_";
-
-			expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
-			expect(dropShadowOf(joinUs)).to.be("none");
+			applyClass(joinUs, "_active_", function() {
+				expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
+				expect(dropShadowOf(joinUs)).to.be("none");
+			});
 		});
 
-		function isElementCenteredInPage(element) {
-			var frameBody = frame.toDomElement().contentDocument.body;
+		function isContentCenteredInPage(domElement) {
+			if (!isElementCenteredInPage(domElement)) return false;
 
-			var bodyStyle = frame.toDomElement().contentWindow.getComputedStyle(frameBody);
+			var style = window.getComputedStyle(domElement);
+			var textAlign = style.getPropertyValue("text-align");
+
+			return textAlign === "center";
+		}
+
+		function isElementCenteredInPage(domElement) {
+			var frameBody = frameDom.contentDocument.body;
+
+			var bodyStyle = frameDom.contentWindow.getComputedStyle(frameBody);
 			var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
 			var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
 
@@ -215,7 +205,7 @@
 			var documentLeft = bodyBoundingBox.left - bodyLeftMarginWidth;
 			var documentRight = bodyBoundingBox.right + bodyRightMarginWidth;
 
-			var elementBoundingBox = getBoundingBox(element);
+			var elementBoundingBox = getBoundingBox(domElement);
 			var elementLeft = elementBoundingBox.left;
 			var elementRight = elementBoundingBox.right;
 
@@ -238,46 +228,46 @@
 			return success;
 		}
 
-		function elementPixelsFromTopOfPage(element) {
-			return getBoundingBox(element).top;
+		function elementPixelsFromTopOfPage(domElement) {
+			return getBoundingBox(domElement).top;
 		}
 
-		function elementHeightInPixels(element) {
-			return getBoundingBox(element).height;
+		function elementHeightInPixels(domElement) {
+			return getBoundingBox(domElement).height;
 		}
 
-		function elementWidthInPixels(element) {
-			return getBoundingBox(element).width;
+		function elementWidthInPixels(domElement) {
+			return getBoundingBox(domElement).width;
 		}
 
-		function elementPixelsBelowElement(element, relativeToElement) {
-			return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).bottom);
+		function elementPixelsBelowElement(domElement, domRelativeToElement) {
+			return Math.round(getBoundingBox(domElement).top - getBoundingBox(domRelativeToElement).bottom);
 		}
 
-		function elementPixelsOverlappingTopOfElement(element, relativeToElement) {
-			return Math.round(getBoundingBox(element).top - getBoundingBox(relativeToElement).top);
+		function elementPixelsOverlappingTopOfElement(domElement, domRelativeToElement) {
+			return Math.round(getBoundingBox(domElement).top - getBoundingBox(domRelativeToElement).top);
 		}
 
-		function elementPixelsOverlappingRightOfElement(element, relativeToElement) {
-			return Math.round(getBoundingBox(relativeToElement).right - getBoundingBox(element).right);
+		function elementPixelsOverlappingRightOfElement(domElement, domRelativeToElement) {
+			return Math.round(getBoundingBox(domRelativeToElement).right - getBoundingBox(domElement).right);
 		}
 
-		function isElementBehindElement(element, relativeToElement) {
-			var elementZ = getZIndex(element);
-			var relativeZ = getZIndex(relativeToElement);
+		function isElementBehindElement(domElement, domRelativeToElement) {
+			var elementZ = getZIndex(domElement);
+			var relativeZ = getZIndex(domRelativeToElement);
 
 			if (elementZ === relativeZ) return !isElementAfterElementInDomTree();
 			else return (elementZ < relativeZ);
 
-			function getZIndex(element) {
-				var z = getComputedProperty(element, "z-index");
+			function getZIndex(domElement) {
+				var z = getComputedProperty(domElement, "z-index");
 				if (z === "auto") z = 0;
 				return z;
 			}
 
 			function isElementAfterElementInDomTree() {
-				var elementNode = element.toDomElement();
-				var relativeNode = relativeToElement.toDomElement();
+				var elementNode = domElement;
+				var relativeNode = domRelativeToElement;
 				var foundRelative = false;
 				var elementAfterRelative = false;
 				for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
@@ -289,59 +279,57 @@
 				failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
 				return elementAfterRelative;
 			}
-
-
 		}
 
-		function isTextVerticallyCentered(element) {
-			var elementHeight = getBoundingBox(element).height;
-			var lineHeight = getComputedProperty(element, "line-height");
+		function isTextVerticallyCentered(domElement) {
+			var elementHeight = getBoundingBox(domElement).height;
+			var lineHeight = getComputedProperty(domElement, "line-height");
 
 			return elementHeight + "px" === lineHeight;
 		}
 
-		function backgroundColorOf(element) {
-			return getComputedProperty(element, "background-color");
+		function backgroundColorOf(domElement) {
+			return getComputedProperty(domElement, "background-color");
 		}
 
-		function fontSizeOf(element) {
-			return getComputedProperty(element, "font-size");
+		function fontSizeOf(domElement) {
+			return getComputedProperty(domElement, "font-size");
 		}
 
-		function textColorOf(element) {
-			return getComputedProperty(element, "color");
+		function textColorOf(domElement) {
+			return getComputedProperty(domElement, "color");
 		}
 
-		function hasBorder(element) {
-			var top = getComputedProperty(element, "border-top-style");
-			var right = getComputedProperty(element, "border-right-style");
-			var bottom = getComputedProperty(element, "border-bottom-style");
-			var left = getComputedProperty(element, "border-left-style");
+		function hasBorder(domElement) {
+			var top = getComputedProperty(domElement, "border-top-style");
+			var right = getComputedProperty(domElement, "border-right-style");
+			var bottom = getComputedProperty(domElement, "border-bottom-style");
+			var left = getComputedProperty(domElement, "border-left-style");
 			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
 		}
 
-		function textIsUnderlined(element) {
-			var style = getComputedProperty(element, "text-decoration");
+		function textIsUnderlined(domElement) {
+			var style = getComputedProperty(domElement, "text-decoration");
 			return style.indexOf("none") !== 0;
 		}
 
-		function textIsUppercase(element) {
-			return getComputedProperty(element, "text-transform") === "uppercase";
+		function textIsUppercase(domElement) {
+			return getComputedProperty(domElement, "text-transform") === "uppercase";
 		}
 
-		function roundedCornersOf(element) {
+		function roundedCornersOf(domElement) {
 			// We can't just look at border-radius because it returns "" on Firefox and IE 9
-			var topLeft = getComputedProperty(element, "border-top-left-radius");
-			var topRight = getComputedProperty(element, "border-top-right-radius");
-			var bottomLeft = getComputedProperty(element, "border-bottom-left-radius");
-			var bottomRight = getComputedProperty(element, "border-bottom-right-radius");
+			var topLeft = getComputedProperty(domElement, "border-top-left-radius");
+			var topRight = getComputedProperty(domElement, "border-top-right-radius");
+			var bottomLeft = getComputedProperty(domElement, "border-bottom-left-radius");
+			var bottomRight = getComputedProperty(domElement, "border-bottom-right-radius");
 
 			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
 			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
 		}
 
-		function dropShadowOf(element) {
-			var shadow = getComputedProperty(element, "box-shadow");
+		function dropShadowOf(domElement) {
+			var shadow = getComputedProperty(domElement, "box-shadow");
 
 			// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
 			// We handle that case here.
@@ -361,25 +349,31 @@
 			return "rgb(" + r + ", " + g + ", " + b + ") " + sizes;
 		}
 
-		function isContentCenteredInPage(element) {
-			if (!isElementCenteredInPage(element)) return false;
-
-			var domElement = element.toDomElement();
-
-			var style = window.getComputedStyle(domElement);
-			var textAlign = style.getPropertyValue("text-align");
-
-			return textAlign === "center";
-		}
-
-		function getBoundingBox(element) {
-			var domElement = element.toDomElement();
+		function getBoundingBox(domElement) {
 			return domElement.getBoundingClientRect();
 		}
 
-		function getComputedProperty(element, propertyName) {
-			var style = window.getComputedStyle(element.toDomElement());
+		function getComputedProperty(domElement, propertyName) {
+			var style = window.getComputedStyle(domElement);
 			return style.getPropertyValue(propertyName);
+		}
+
+		function applyClass(domElement, className, fn) {
+			var oldClassName = domElement.className;
+			try {
+				domElement.className += className;
+				forceReflow(domElement);
+
+				fn();
+			}
+			finally {
+				domElement.className = oldClassName;
+				forceReflow(domElement);
+			}
+		}
+
+		function forceReflow(domElement) {
+			var makeLintHappy = domElement.offsetHeight;
 		}
 
 		function pixelsToInt(pixels) {

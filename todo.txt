@@ -30,15 +30,12 @@ Potential future stories:
 
 Engineering Tasks:
 * Implement each design element
-- Test that style sheet is actually being loaded by index.html
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 - Need to cache-bust stylesheet and bundle.js
 - Manually confirm that styling works cross-platform
 - What about alt tags? Semantic markup?
-- Fix old test breakage that occurs when changing body margins (don't assume body margins? don't always load CSS?)
-- How do we deal with errors related to CSS test HTML and production HTML having different structure?
 - Need to isolate Safari problem that occurs with getBoundingClientRect and getComputedStyle()
   - See 'create iOS Safari failure' test (ref E229)
 - Automatically convert psuedoclasses to regular classes in our tests?
@@ -46,14 +43,7 @@ Engineering Tasks:
 Goal: expect(css("myHeadline").isCentered()).to.be(true)
 
 To Do on current task:
-- AT START OF EPISODE:
-  - new story
-  - updated dependencies (and added to package.json)
-    - modified Jakefile.js: browserify no longer supports option arguments
-    - modified server.js: send now takes root as an option
-    - modified _server_test.js: new version of send triggers EPERM on Windows; need async file creation
-    - modified autojake.js: gaze no longer installs on vanilla Windows, so removed it from repo
-  - integrated
+- Integrate
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
