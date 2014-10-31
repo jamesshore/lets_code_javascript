@@ -44,6 +44,9 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
+- Define font-family and font-size for clear button
+- Define font-family and font-size for "join us" button
+
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

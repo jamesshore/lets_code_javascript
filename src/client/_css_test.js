@@ -21,6 +21,7 @@
 		var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
 
 		var IOS_BROWSER_WIDTH = 980;
+		var STANDARD_FONT = '"Helvetica"';
 		var CORNER_ROUNDING = "2px";
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
@@ -63,12 +64,12 @@
 		it("has a blue background", function() {
 			var body = frameDom.contentDocument.body;
 			expect(backgroundColorOf(body)).to.be(BACKGROUND_BLUE);
-			expect(fontFamilyOf(body)).to.be('"Helvetica"');
 		});
 
 		it("centers logo at top of page", function() {
 			expect(isContentCenteredInPage(logo)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
+			expect(fontFamilyOf(logo)).to.be(STANDARD_FONT);
 			expect(fontSizeOf(logo)).to.be("22px");
 			expect(textColorOf(logo)).to.be(WHITE);
 		});
@@ -91,6 +92,7 @@
 			expect(isContentCenteredInPage(tagline)).to.be(true);
 			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 
+			expect(fontFamilyOf(tagline)).to.be(STANDARD_FONT);
 			expect(fontSizeOf(tagline)).to.be("14px");
 			expect(textColorOf(tagline)).to.be(DARK_BLUE);
 		});
@@ -151,6 +153,7 @@
 			expect(isContentCenteredInPage(footer)).to.be(true);
 			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
 
+			expect(fontFamilyOf(footer)).to.be(STANDARD_FONT);
 			expect(fontSizeOf(footer)).to.be("15px");
 			expect(textColorOf(footer)).to.be(WHITE);
 		});
