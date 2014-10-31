@@ -58,7 +58,7 @@
 		}
 
 		it("has a blue background", function() {
-			expect(backgroundColorOf(new HtmlElement(frame.toDomElement().contentDocument.body))).to.be(BACKGROUND_BLUE);
+			expect(backgroundColorOf(frame.toDomElement().contentDocument.body)).to.be(BACKGROUND_BLUE);
 		});
 
 		it("centers logo at top of page", function() {
@@ -102,7 +102,7 @@
 
 			expect(elementWidthInPixels(drawingArea)).to.equal(IOS_BROWSER_WIDTH);
 			expect(elementHeightInPixels(drawingArea)).to.equal(600);
-			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
+			expect(backgroundColorOf(drawingAreaDom)).to.equal(WHITE);
 			expect(roundedCornersOf(drawingAreaDom)).to.be(CORNER_ROUNDING);
 		});
 
@@ -123,7 +123,7 @@
 			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
 
 			expect(textColorOf(clearButtonDom)).to.be(DARK_GRAY);
-			expect(backgroundColorOf(clearButton)).to.be(GRAY);
+			expect(backgroundColorOf(clearButtonDom)).to.be(GRAY);
 			expect(hasBorder(clearButtonDom)).to.be(false);
 
 			expect(elementHeightInPixels(clearButton)).to.equal(30);
@@ -138,8 +138,10 @@
 		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
+			var clearButtonDom = clearButton.toDomElement();
+
 			applyClass(clearButton.toDomElement(), "_hover_", function() {
-				expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+				expect(backgroundColorOf(clearButtonDom)).to.be(DARKENED_GRAY);
 			});
 		});
 
@@ -167,7 +169,7 @@
 			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
 
 			expect(textColorOf(joinUsDom)).to.be(WHITE);
-			expect(backgroundColorOf(joinUs)).to.be(MEDIUM_BLUE);
+			expect(backgroundColorOf(joinUsDom)).to.be(MEDIUM_BLUE);
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
 			expect(elementWidthInPixels(joinUs)).to.equal(175);
@@ -181,8 +183,10 @@
 		});
 
 		it("darkens the 'join us' button when the user hovers over it", function() {
+			var joinUsDom = joinUs.toDomElement();
+
 			applyClass(joinUs.toDomElement(), "_hover_", function() {
-				expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
+				expect(backgroundColorOf(joinUsDom)).to.be(DARKENED_MEDIUM_BLUE);
 			});
 		});
 
@@ -301,8 +305,8 @@
 			return elementHeight + "px" === lineHeight;
 		}
 
-		function backgroundColorOf(element) {
-			return getComputedProperty(element.toDomElement(), "background-color");
+		function backgroundColorOf(domElement) {
+			return getComputedProperty(domElement, "background-color");
 		}
 
 		function fontSizeOf(domElement) {
