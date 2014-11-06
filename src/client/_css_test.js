@@ -116,7 +116,7 @@
 			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
 		});
 
-		it("positions clear screen button at top right of drawing area", function() {
+		it.only("positions clear screen button at top right of drawing area", function() {
 			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
 			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);

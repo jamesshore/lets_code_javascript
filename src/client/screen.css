@@ -53,7 +53,7 @@ h1#logo {
 }
 
 #clear-button {
-	font-family: "VarelaRound-Regular", "Helvetica", "sans-serif";
+	font-family: "VarelaRound-Regular", "monospace";
 	position: absolute;
 	top: 15px;
 	right: 15px;
