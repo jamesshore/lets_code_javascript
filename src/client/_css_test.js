@@ -21,7 +21,7 @@
 		var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
 
 		var IOS_BROWSER_WIDTH = 980;
-		var STANDARD_FONT = '"Helvetica"';
+		var STANDARD_FONT = "VarelaRound-Regular, Helvetica, sans-serif";
 		var CORNER_ROUNDING = "2px";
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
@@ -303,9 +303,17 @@
 
 		function fontFamilyOf(domElement) {
 			var family = getComputedProperty(domElement, "font-family");
+			family = family.replace(/\"/g, '');
+			var fonts = family.split(",");
 
-			if (family[0] !== '"') return '"' + family + '"';
-			else return family;
+			fonts = fonts.map(function(font) {
+				return font.trim();
+			});
+
+			fonts = fonts.join(", ");
+			dump(fonts);
+
+			return fonts;
 		}
 
 		function fontSizeOf(domElement) {
