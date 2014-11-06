@@ -304,16 +304,12 @@
 		function fontFamilyOf(domElement) {
 			var family = getComputedProperty(domElement, "font-family");
 			family = family.replace(/\"/g, '');
-			var fonts = family.split(",");
 
-			fonts = fonts.map(function(font) {
+			var fonts = family.split(",").map(function(font) {
 				return font.trim();
 			});
 
-			fonts = fonts.join(", ");
-			dump(fonts);
-
-			return fonts;
+			return fonts.join(", ");
 		}
 
 		function fontSizeOf(domElement) {
