@@ -20,6 +20,11 @@
 		var MEDIUM_BLUE = "rgb(0, 121, 156)";
 		var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
 
+		var BODY_TEXT_WEIGHT = "300";
+		var JOIN_US_BUTTON_WEIGHT = "400";
+		var CLEAR_BUTTON_WEIGHT = "600";
+		var HEADLINE_WEIGHT = "600";
+
 		var IOS_BROWSER_WIDTH = 980;
 		var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
 		var CORNER_ROUNDING = "2px";
@@ -70,6 +75,7 @@
 			expect(isContentCenteredInPage(logo)).to.be(true);
 			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
 			expect(fontFamilyOf(logo)).to.be(STANDARD_FONT);
+			expect(fontWeightOf(logo)).to.be(HEADLINE_WEIGHT);
 			expect(fontSizeOf(logo)).to.be("22px");
 			expect(textColorOf(logo)).to.be(WHITE);
 		});
@@ -93,6 +99,7 @@
 			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
 
 			expect(fontFamilyOf(tagline)).to.be(STANDARD_FONT);
+			expect(fontWeightOf(tagline)).to.be(BODY_TEXT_WEIGHT);
 			expect(fontSizeOf(tagline)).to.be("14px");
 			expect(textColorOf(tagline)).to.be(DARK_BLUE);
 		});
@@ -126,6 +133,8 @@
 			expect(hasBorder(clearButton)).to.be(false);
 
 			expect(fontFamilyOf(clearButton)).to.be(STANDARD_FONT);
+			expect(fontWeightOf(clearButton)).to.be(CLEAR_BUTTON_WEIGHT);
+			expect(fontSizeOf(clearButton)).to.be("12px");
 
 			expect(elementHeightInPixels(clearButton)).to.equal(30);
 			expect(elementWidthInPixels(clearButton)).to.equal(70);
@@ -156,6 +165,7 @@
 			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
 
 			expect(fontFamilyOf(footer)).to.be(STANDARD_FONT);
+			expect(fontWeightOf(footer)).to.be(BODY_TEXT_WEIGHT);
 			expect(fontSizeOf(footer)).to.be("15px");
 			expect(textColorOf(footer)).to.be(WHITE);
 		});
@@ -168,6 +178,8 @@
 			expect(backgroundColorOf(joinUs)).to.be(MEDIUM_BLUE);
 
 			expect(fontFamilyOf(joinUs)).to.be(STANDARD_FONT);
+			expect(fontWeightOf(joinUs)).to.be(JOIN_US_BUTTON_WEIGHT);
+			expect(fontSizeOf(joinUs)).to.be("16px");
 
 			expect(elementHeightInPixels(joinUs)).to.equal(35);
 			expect(elementWidthInPixels(joinUs)).to.equal(175);
@@ -310,6 +322,12 @@
 			});
 
 			return fonts.join(", ");
+		}
+
+		function fontWeightOf(domElement) {
+			var weight = getComputedProperty(domElement, "font-weight");
+			if (weight === "normal") weight = "400";
+			return weight;
 		}
 
 		function fontSizeOf(domElement) {
