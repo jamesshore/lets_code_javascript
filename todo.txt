@@ -29,7 +29,7 @@ Potential future stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* Typekit?
+* Typekit
 
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
@@ -42,7 +42,9 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* How do we test Typekit appropriately?
+* AT START OF EPISODE
+  - Removed VarelaRound and changed Jakefile
+- How do we test Typekit appropriately?
 - Look at font weights
 
 Notes:

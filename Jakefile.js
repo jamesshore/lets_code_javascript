@@ -93,7 +93,7 @@
 		shell.rm("-rf", BUILD_CLIENT_DIR + "/*");
 		shell.cp(
 			"-R",
-			"src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor", "src/client/fonts",
+			"src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor",
 			BUILD_CLIENT_DIR
 		);
 
