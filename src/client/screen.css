@@ -1,11 +1,6 @@
-@font-face {
-	font-family: "VarelaRound-Regular";
-	src: url("/fonts/varela-round/VarelaRound-Regular.otf");
-}
-
 body {
 	background-color: #41a9cc;
-	font-family: "VarelaRound-Regular", "Helvetica", "sans-serif";
+	font-family: "alwyn-new-rounded-web", "Helvetica", "sans-serif";
 }
 
 h1#logo {
@@ -53,7 +48,7 @@ h1#logo {
 }
 
 #clear-button {
-	font-family: "VarelaRound-Regular", "Helvetica", "sans-serif";
+	font-family: "alwyn-new-rounded-web", "Helvetica", "sans-serif";
 	position: absolute;
 	top: 15px;
 	right: 15px;

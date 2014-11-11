@@ -21,7 +21,7 @@
 		var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
 
 		var IOS_BROWSER_WIDTH = 980;
-		var STANDARD_FONT = "VarelaRound-Regular, Helvetica, sans-serif";
+		var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
 		var CORNER_ROUNDING = "2px";
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
@@ -116,7 +116,7 @@
 			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
 		});
 
-		it.only("positions clear screen button at top right of drawing area", function() {
+		it("positions clear screen button at top right of drawing area", function() {
 			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
 			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
 			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
