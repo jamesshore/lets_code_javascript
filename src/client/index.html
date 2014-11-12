@@ -10,10 +10,14 @@
     <script src="bundle.js" type="text/javascript"></script>
 
     <script>
+        console.log("TypeKit script starting");
         (function(d) {
             var config = {
                         kitId: 'qzr7zlc',
-                        scriptTimeout: 3000
+                        scriptTimeout: 3000,
+                        active: function() {
+                            console.log("Fonts loaded!");
+                        }
                     },
             h = d.documentElement,
             t = setTimeout(function() {
