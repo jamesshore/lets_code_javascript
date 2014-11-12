@@ -15,7 +15,15 @@
                         kitId: 'qzr7zlc',
                         scriptTimeout: 3000
                     },
-                    h = d.documentElement, t = setTimeout(function() {h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";}, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a;
+            h = d.documentElement,
+            t = setTimeout(function() {
+                h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
+            }, config.scriptTimeout),
+            tk = d.createElement("script"),
+            f = false,
+            s = d.getElementsByTagName("script")[0],
+            a;
+
             h.className += " wf-loading";
             tk.src = '//use.typekit.net/' + config.kitId + '.js';
             tk.async = true;
@@ -36,7 +44,7 @@
 <body>
     <h1 id="logo"><img src="/images/weewiki-logo.png" width="181" height="25" alt="WeeWikiPaint"></h1>
 
-    <p id="tagline">WeeWikiPaint is the web's premier collaborative site. Go on, give it a try!</p>
+    <p id="tagline">WeeWikiPaint is a nifty doodling tool. Go on, give it a try!</p>
 
     <div id="drawing-area-container">
         <div id="drawing-area"></div>
@@ -44,7 +52,7 @@
         <button id="clear-button" type="button">Clear</button>
     </div>
 
-    <p id="footer">You can watch this site be developed at Let's Code: Test-Driven JavaScript!</p>
+    <p id="footer">Watch this site be developed at Let’s Code: Test-Driven JavaScript!</p>
     <a id="join-us" href='http://www.letscodejavascript.com'>Join Us!</a>
 
     <script type="text/javascript">

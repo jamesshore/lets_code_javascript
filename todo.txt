@@ -4,17 +4,21 @@ Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 + single-user painting on home page (episodes 33-200)
 * replace home page with professional design (episodes 201+)
-- replace 404 page with professional design
-- multiple painting/erasing tools
 - support more browsers (Android, IE10, IE11)
+- replace 404 page with professional design
+? multiple painting/erasing tools
 - collaborative painting
+- save the pages (persistence / databases)
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
 
 User Stories to finish current MMF:
 * Web font
-- Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
+- Polish:
+  - Clear button retains focus when drawing (IE8, 9, Chrome
+  - Remove body padding
+  - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
 - Release new design
 
 Potential future stories:
@@ -29,7 +33,9 @@ Potential future stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* How do we test (or not) Typekit?
+* Analyze how Typekit loads its fonts
+- How do we smoke test Typekit is loading correctly?
+- How do we not test Typekit when we're just testing CSS?
 
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
@@ -42,9 +48,6 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-- AT START OF EPISODE:
-  - Body copy
-* How do we test Typekit appropriately?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
