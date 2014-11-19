@@ -22,7 +22,17 @@
 				phantom.exit(1);
 			}
 			else {
-				phantom.exit(0);
+				console.log("Pausing...");
+				setTimeout(function() {
+					console.log("Running browser code");
+					error = page.evaluate(checkFonts);
+					if (error) {
+						console.log("error", error);
+						phantom.exit(1);
+					}
+					console.log("Exiting.");
+					phantom.exit(0);
+				}, 10000);
 			}
 		}
 		catch(err) {
@@ -30,6 +40,11 @@
 			phantom.exit(1);
 		}
 	});
+
+	function checkFonts() {
+		console.log("checkFonts() running in browser");
+		console.log(window.wwp_loadedFonts);
+	}
 
 	function inBrowser() {
 		try {

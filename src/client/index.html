@@ -12,35 +12,44 @@
     <script>
         console.log("TypeKit script starting");
         (function(d) {
+            console.log("inside IIFE");
+
             function logEvent(event) {
                 return function() {
                     console.log(event, arguments);
                 };
             }
 
-            var loadedFonts = [];
+            window.wwp_loadedFonts = [];
 
             function done() {
-                console.log(loadedFonts);
+                console.log("font loading is done", window.wwp_loadedFonts);
             }
 
             var config = {
                 kitId: 'qzr7zlc',
                 scriptTimeout: 3000,
                 loading: logEvent("loading"),
-                active: done,
-                inactive: done,
+                active: logEvent("active"),
+                inactive: logEvent("inactive"),
                 fontloading: logEvent("fontloading"),
-                fontactive: function(font, variant) {
-                  loadedFonts.push({
-                      font: font,
-                      variant: variant
-                  });
-                },
+                fontactive: logEvent("fontactive"),
                 fontinactive: logEvent("fontinactive")
+
+                active: done,
+//                inactive: done,
+                fontactive: function(font, variant) {
+                    console.log("fontactive", font, variant);
+                    window.wwp_loadedFonts.push({
+                        font: font,
+                        variant: variant
+                    });
+                },
             },
             h = d.documentElement,
             t = setTimeout(function() {
+                console.log("wf-inactive timeout expired");
+
                 h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
             }, config.scriptTimeout),
             tk = d.createElement("script"),
@@ -52,13 +61,19 @@
             tk.src = '//use.typekit.net/' + config.kitId + '.js';
             tk.async = true;
             tk.onload = tk.onreadystatechange = function() {
+                console.log("Typekit async script onload");
+
                 a = this.readyState;
                 if (f || a && a != "complete" && a != "loaded")return;
                 f = true;
                 clearTimeout(t);
-                try {Typekit.load(config)} catch(e) {}
+
+                console.log("Running Typekit.load()");
+                try {Typekit.load(config)} catch(e) { console.log(e); }
             };
+            console.log("Inserting script tag");
             s.parentNode.insertBefore(tk, s)
+            console.log("script tag inserted");
         })(document);
     </script>
 
