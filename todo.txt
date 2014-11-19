@@ -48,11 +48,9 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Figure out how to detect our font is loading
-  - Maybe we look for @font-face
-  - Maybe we can use WebFontLoader events to ensure that alwyn-new-rounded-web is loaded
-- Review and improve smoke test code
+* Review and improve smoke test code
 - Put it all together in our smoke tests
+- Should we hardcode expected fonts, or programmatically get them out of CSS?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

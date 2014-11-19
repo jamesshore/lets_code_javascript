@@ -12,13 +12,33 @@
     <script>
         console.log("TypeKit script starting");
         (function(d) {
+            function logEvent(event) {
+                return function() {
+                    console.log(event, arguments);
+                };
+            }
+
+            var loadedFonts = [];
+
+            function done() {
+                console.log(loadedFonts);
+            }
+
             var config = {
-                        kitId: 'qzr7zlc',
-                        scriptTimeout: 3000,
-                        active: function() {
-                            console.log("Fonts loaded!");
-                        }
-                    },
+                kitId: 'qzr7zlc',
+                scriptTimeout: 3000,
+                loading: logEvent("loading"),
+                active: done,
+                inactive: done,
+                fontloading: logEvent("fontloading"),
+                fontactive: function(font, variant) {
+                  loadedFonts.push({
+                      font: font,
+                      variant: variant
+                  });
+                },
+                fontinactive: logEvent("fontinactive")
+            },
             h = d.documentElement,
             t = setTimeout(function() {
                 h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
