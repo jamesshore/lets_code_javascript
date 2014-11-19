@@ -33,8 +33,8 @@ Potential future stories:
     (needs to depend on 'build'; just running foreman could give us outdated files)
 
 Engineering Tasks:
-* Analyze how Typekit loads its fonts
-- How do we smoke test Typekit is loading correctly?
+* How do we smoke test Typekit is loading correctly?
+- Improve smoke test code
 - How do we not test Typekit when we're just testing CSS?
 
 - Need to test arrow's background elements--is there a clean way of doing this?
@@ -48,9 +48,9 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Review and improve smoke test code
-- Put it all together in our smoke tests
+- Figure out how to test fonts as quickly as they're loaded, without a race-condition timeout?
 - Should we hardcode expected fonts, or programmatically get them out of CSS?
+- Build isn't failing when font isn't found
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

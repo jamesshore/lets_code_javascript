@@ -1,5 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.TXT for details.
-/*global phantom, document */
+/*global phantom, document, window */
 
 (function() {
 	"use strict";
@@ -22,15 +22,12 @@
 				phantom.exit(1);
 			}
 			else {
-				console.log("Pausing...");
 				setTimeout(function() {
-					console.log("Running browser code");
 					error = page.evaluate(checkFonts);
 					if (error) {
 						console.log("error", error);
 						phantom.exit(1);
 					}
-					console.log("Exiting.");
 					phantom.exit(0);
 				}, 10000);
 			}
@@ -42,8 +39,21 @@
 	});
 
 	function checkFonts() {
-		console.log("checkFonts() running in browser");
-		console.log(window.wwp_loadedFonts);
+		try {
+			checkFont("alwyn-new-rounded-web", "n3");
+			checkFont("alwyn-new-rounded-web", "n4");
+			checkFont("alwyn-new-rounded-web", "n7");
+		}
+		catch (err) {
+			return "checkFonts() failed: " + err.stack;
+		}
+
+		function checkFont(family, variant) {
+			var hasFont = window.wwp_loadedFonts.some(function(loadedFont) {
+				return (loadedFont.family === family) && (loadedFont.variant === variant);
+			});
+			if (!hasFont) throw new Error("font not loaded: " + family + " " + variant);
+		}
 	}
 
 	function inBrowser() {
