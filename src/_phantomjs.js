@@ -57,7 +57,7 @@
 		try {
 			checkFont("alwyn-new-rounded-web", "n3");
 			checkFont("alwyn-new-rounded-web", "n4");
-			checkFont("alwyn-new-rounded-web", "n7");   // should be n6
+			checkFont("alwyn-new-rounded-web", "n6");   // should be n6
 		}
 		catch (err) {
 			return "checkFonts() failed: " + err.stack;
