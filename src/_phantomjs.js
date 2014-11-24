@@ -39,17 +39,48 @@
 	}
 
 	function runFontTest(callback) {
-		var intervalId = setInterval(function() {
-			var typekitDone = page.evaluate(function() {
-				return window.wwp_typekitDone;
-			});
-			if (typekitDone) runCheckFonts();
-		}, 100);
+		page.evaluate(determineExpectedFonts);
 
-		function runCheckFonts() {
-			clearInterval(intervalId);
-			var success = runTest(checkFonts);
-			callback(!success);
+		callback(null);
+
+		//var intervalId = setInterval(function() {
+		//	var typekitDone = page.evaluate(function() {
+		//		return window.wwp_typekitDone;
+		//	});
+		//	if (typekitDone) runCheckFonts();
+		//}, 100);
+		//
+		//function runCheckFonts() {
+		//	clearInterval(intervalId);
+		//	var success = runTest(checkFonts);
+		//	callback(!success);
+		//}
+	}
+
+	function determineExpectedFonts() {
+		var sheets = document.styleSheets;
+		console.log(sheets);
+
+		for (var i = 0; i < sheets.length; i++) {
+			console.log("Sheet #" + i, sheets[i]);
+			processStyleSheet(sheets[i]);
+		}
+
+		function processStyleSheet(sheet) {
+			if (sheet.disabled) {
+				console.log("Sheet disabled");
+				return;
+			}
+
+			var rules = sheet.cssRules;
+			for (var i = 0; i < rules.length; i++) {
+				console.log("Rule #" + i);
+				processRule(rules[i]);
+			}
+		}
+
+		function processRule(rule) {
+
 		}
 	}
 
