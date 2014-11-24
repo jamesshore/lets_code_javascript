@@ -12,13 +12,14 @@
     <script>
         (function(d) {
             window.wwp_loadedFonts = [];
+            window.wwp_typekitDone = false;
 
             function done() {
-                console.log("TODO: hook up to PhantomJS");
+                window.wwp_typekitDone = true;
             }
 
             var config = {
-                kitId: 'qzr7zlc',
+                kitId: 'xxx',
                 scriptTimeout: 3000,
                 active: done,
                 inactive: done,
@@ -32,6 +33,7 @@
             h = d.documentElement,
             t = setTimeout(function() {
                 h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
+                done();
             }, config.scriptTimeout),
             tk = d.createElement("script"),
             f = false,

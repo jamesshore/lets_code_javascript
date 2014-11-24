@@ -16,21 +16,12 @@
 
 	page.open("http://localhost:5000", function(success) {
 		try {
-			var error = page.evaluate(inBrowser);
-			if (error) {
-				console.log(error);
-				phantom.exit(1);
-			}
-			else {
-				setTimeout(function() {
-					error = page.evaluate(checkFonts);
-					if (error) {
-						console.log("error", error);
-						phantom.exit(1);
-					}
-					phantom.exit(0);
-				}, 10000);
-			}
+			runTest(checkDrawingArea);
+
+			runFontTest(function(err) {
+				if (err) phantom.exit(1);
+				else phantom.exit(0);
+			});
 		}
 		catch(err) {
 			console.log("Exception in PhantomJS code", err);
@@ -38,11 +29,35 @@
 		}
 	});
 
+	function runTest(browserFn) {
+		var error = page.evaluate(browserFn);
+		if (error) {
+			console.log("error", error);
+			phantom.exit(1);
+		}
+		return !error;
+	}
+
+	function runFontTest(callback) {
+		var intervalId = setInterval(function() {
+			var typekitDone = page.evaluate(function() {
+				return window.wwp_typekitDone;
+			});
+			if (typekitDone) runCheckFonts();
+		}, 100);
+
+		function runCheckFonts() {
+			clearInterval(intervalId);
+			var success = runTest(checkFonts);
+			callback(!success);
+		}
+	}
+
 	function checkFonts() {
 		try {
 			checkFont("alwyn-new-rounded-web", "n3");
 			checkFont("alwyn-new-rounded-web", "n4");
-			checkFont("alwyn-new-rounded-web", "n7");
+			checkFont("alwyn-new-rounded-web", "n7");   // should be n6
 		}
 		catch (err) {
 			return "checkFonts() failed: " + err.stack;
@@ -56,7 +71,7 @@
 		}
 	}
 
-	function inBrowser() {
+	function checkDrawingArea() {
 		try {
 			var client = require("./client.js");
 			var HtmlElement = require("./html_element.js");
