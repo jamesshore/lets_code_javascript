@@ -16,7 +16,7 @@
 
 	page.onInitialized = function () {
 		page.evaluate(function () {
-			var fonts = window.__loadedFonts = [];
+			var fonts = [];
 
 			window.__fontactive = function (family, variant) {
 				fonts.push({
@@ -31,8 +31,8 @@
 		});
 	};
 
-	page.onCallback = function (arg) {
-		var error = page.evaluate(checkFonts);
+	page.onCallback = function (loadedFonts) {
+		var error = page.evaluate(checkFonts, loadedFonts);
 		if (error) {
 			console.log("error", error);
 			phantom.exit(1);
@@ -56,18 +56,18 @@
 		}
 	});
 
-	function checkFonts() {
+	function checkFonts(loadedFonts) {
 		try {
-			checkFont("alwyn-new-rounded-web", "n3");
-			checkFont("alwyn-new-rounded-web", "n4");
-			checkFont("alwyn-new-rounded-web", "n6");
+			checkFont(loadedFonts, "alwyn-new-rounded-web", "n3");
+			checkFont(loadedFonts, "alwyn-new-rounded-web", "n4");
+			checkFont(loadedFonts, "alwyn-new-rounded-web", "n6");
 		}
 		catch (err) {
 			return "checkFonts() failed: " + err.stack;
 		}
 
-		function checkFont(family, variant) {
-			var hasFont = window.__loadedFonts.some(function(loadedFont) {
+		function checkFont(loadedFonts, family, variant) {
+			var hasFont = loadedFonts.some(function(loadedFont) {
 				return (loadedFont.family === family) && (loadedFont.variant === variant);
 			});
 			if (!hasFont) throw new Error("font not loaded: " + family + " " + variant);
