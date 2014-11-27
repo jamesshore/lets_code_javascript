@@ -11,23 +11,13 @@
 
     <script>
         (function(d) {
-            window.wwp_loadedFonts = [];
-
-            function done() {
-                console.log("TODO: hook up to PhantomJS");
-            }
-
+            var noop = function(){};
             var config = {
                 kitId: 'qzr7zlc',
                 scriptTimeout: 3000,
-                active: done,
-                inactive: done,
-                fontactive: function(family, variant) {
-                    window.wwp_loadedFonts.push({
-                        family: family,
-                        variant: variant
-                    });
-                }
+                active: window.__done || noop,
+                inactive: window.__done || noop,
+                fontactive: window.__fontactive || noop
             },
             h = d.documentElement,
             t = setTimeout(function() {
