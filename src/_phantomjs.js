@@ -14,22 +14,40 @@
 		console.log("CONSOLE: " + message);
 	};
 
+	page.onInitialized = function () {
+		page.evaluate(function () {
+			var fonts = window.__loadedFonts = [];
+
+			window.__fontactive = function (family, variant) {
+				fonts.push({
+					family: family,
+					variant: variant
+				});
+			};
+
+			window.__done = function () {
+				window.callPhantom(fonts);
+			};
+		});
+	};
+
+	page.onCallback = function (arg) {
+		var error = page.evaluate(checkFonts);
+		if (error) {
+			console.log("error", error);
+			phantom.exit(1);
+		}
+		else {
+			phantom.exit(0);
+		}
+	};
+
 	page.open("http://localhost:5000", function(success) {
 		try {
 			var error = page.evaluate(inBrowser);
 			if (error) {
 				console.log(error);
 				phantom.exit(1);
-			}
-			else {
-				setTimeout(function() {
-					error = page.evaluate(checkFonts);
-					if (error) {
-						console.log("error", error);
-						phantom.exit(1);
-					}
-					phantom.exit(0);
-				}, 10000);
 			}
 		}
 		catch(err) {
@@ -42,17 +60,18 @@
 		try {
 			checkFont("alwyn-new-rounded-web", "n3");
 			checkFont("alwyn-new-rounded-web", "n4");
-			checkFont("alwyn-new-rounded-web", "n7");
+			checkFont("alwyn-new-rounded-web", "n6");
 		}
 		catch (err) {
 			return "checkFonts() failed: " + err.stack;
 		}
 
 		function checkFont(family, variant) {
-			var hasFont = window.wwp_loadedFonts.some(function(loadedFont) {
+			var hasFont = window.__loadedFonts.some(function(loadedFont) {
 				return (loadedFont.family === family) && (loadedFont.variant === variant);
 			});
 			if (!hasFont) throw new Error("font not loaded: " + family + " " + variant);
+			else console.log("font loaded: " + family + " " + variant);
 		}
 	}
 
