@@ -28,7 +28,9 @@
 						console.log("error", error);
 						phantom.exit(1);
 					}
-					phantom.exit(0);
+					else {
+						phantom.exit(0);
+					}
 				}, 10000);
 			}
 		}
