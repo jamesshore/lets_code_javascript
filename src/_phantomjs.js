@@ -39,49 +39,58 @@
 	}
 
 	function runFontTest(callback) {
-		page.evaluate(determineExpectedFonts);
+		var intervalId = setInterval(function() {
+			var typekitDone = page.evaluate(function() {
+				return window.wwp_typekitDone;
+			});
+			if (typekitDone) testFonts();
+		}, 100);
 
-		callback(null);
+		function testFonts() {
+			clearInterval(intervalId);
 
-		//var intervalId = setInterval(function() {
-		//	var typekitDone = page.evaluate(function() {
-		//		return window.wwp_typekitDone;
-		//	});
-		//	if (typekitDone) runCheckFonts();
-		//}, 100);
-		//
-		//function runCheckFonts() {
-		//	clearInterval(intervalId);
-		//	var success = runTest(checkFonts);
-		//	callback(!success);
-		//}
+			var expectedFonts = page.evaluate(determineExpectedFonts);
+			var error = page.evaluate(checkFonts, expectedFonts);
+			if (error) {
+				console.log("error", error);
+				phantom.exit(1);
+			}
+			callback(error);
+		}
 	}
 
 	function determineExpectedFonts() {
-		var expectedFamilies = {};
-		var expectedWeights = {};
-		var expectedStyles = {};
+		// Rather than looking at stylesheet, we could descend the DOM.
+		// Pros: Knows exactly which combination of fonts, weights, and styles we're using
+		// Cons: It won't see all possibilities when using conditional styling such as media queries (I think)
+
+		var expectedFonts = {
+			families: {},
+			weights: {},
+			styles: {
+				"normal": true
+			}
+		};
 
 		var sheets = document.styleSheets;
-		console.log(sheets);
+		processAllSheets();
+		return expectedFonts;
 
-		for (var i = 0; i < sheets.length; i++) {
-			console.log("Sheet #" + i, sheets[i]);
-			processStyleSheet(sheets[i]);
-			console.log("families:", Object.keys(expectedFamilies));
-			console.log("weights:", Object.keys(expectedWeights));
-			console.log("styles:", Object.keys(expectedStyles));
+		function processAllSheets() {
+			for (var i = 0; i < sheets.length; i++) {
+				processStyleSheet(sheets[i]);
+			}
 		}
 
 		function processStyleSheet(sheet) {
 			if (sheet.disabled) {
-				console.log("Sheet disabled");
 				return;
 			}
 
 			var rules = sheet.cssRules;
+			if (rules === null) return;
+
 			for (var i = 0; i < rules.length; i++) {
-				console.log("Rule #" + i);
 				processRule(rules[i]);
 			}
 		}
@@ -103,28 +112,35 @@
 				family = family.trim();
 				if (family === "Helvetica" || family === "sans-serif") return;
 
-				expectedFamilies[family] = true;
+				expectedFonts.families[family] = true;
 			});
 		}
 
 		function processFontWeight(weightDeclaration) {
 			if (weightDeclaration === null) return;
 
-			expectedWeights[weightDeclaration + ""] = true;
+			expectedFonts.weights[weightDeclaration + ""] = true;
 		}
 
 		function processFontStyle(styleDeclaration) {
 			if (styleDeclaration === null) return;
 
-			expectedStyles[styleDeclaration] = true;
+			expectedFonts.styles[styleDeclaration] = true;
 		}
 	}
 
-	function checkFonts() {
+	function checkFonts(expectedFonts) {
 		try {
-			checkFont("alwyn-new-rounded-web", "n3");
-			checkFont("alwyn-new-rounded-web", "n4");
-			checkFont("alwyn-new-rounded-web", "n6");   // should be n6
+			Object.keys(expectedFonts.families).forEach(function(family) {
+				Object.keys(expectedFonts.styles).forEach(function(style) {
+					Object.keys(expectedFonts.weights).forEach(function(weight) {
+						style = style[0];
+						weight = weight[0];
+
+						checkFont(family, style + weight);
+					});
+				});
+			});
 		}
 		catch (err) {
 			return "checkFonts() failed: " + err.stack;

@@ -34,9 +34,8 @@ Potential future stories:
 - Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)
 
 Engineering Tasks:
-* How do we smoke test Typekit is loading correctly?
+* How do we not test Typekit when we're just testing CSS?
 - Improve smoke test code
-- How do we not test Typekit when we're just testing CSS?
 
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
@@ -49,8 +48,6 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Attempt to programmatically determine expected fonts from CSS
-- Rather than looking at stylesheet, descend the DOM?
 - Should we used Martin Grandrath's event-based solution to font loading (E263 comments)
 
 
