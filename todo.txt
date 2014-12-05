@@ -48,6 +48,10 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
+- AT START OF NEXT EPISODE:
+  - Martin Grandrath, E263: event-based solution to font loading
+  - Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)
+  - Rather than looking at stylesheet, descend the DOM?
 * Should we hardcode expected fonts, or programmatically get them out of CSS?
 
 Notes:
