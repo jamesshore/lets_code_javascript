@@ -1,5 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.TXT for details.
-/*global phantom, document, window */
+/*global phantom, document, window, CSSRule */
 
 (function() {
 	"use strict";
@@ -80,7 +80,12 @@
 		}
 
 		function processRule(rule) {
+			if (rule.type !== CSSRule.STYLE_RULE) return;
+			var style = rule.style;
 
+			console.log(style.getPropertyValue("font-family"));
+			console.log(style.getPropertyValue("font-weight"));
+			console.log(style.getPropertyValue("font-variant"));
 		}
 	}
 
