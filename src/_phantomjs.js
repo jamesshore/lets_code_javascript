@@ -58,12 +58,19 @@
 	}
 
 	function determineExpectedFonts() {
+		var expectedFamilies = {};
+		var expectedWeights = {};
+		var expectedStyles = {};
+
 		var sheets = document.styleSheets;
 		console.log(sheets);
 
 		for (var i = 0; i < sheets.length; i++) {
 			console.log("Sheet #" + i, sheets[i]);
 			processStyleSheet(sheets[i]);
+			console.log("families:", Object.keys(expectedFamilies));
+			console.log("weights:", Object.keys(expectedWeights));
+			console.log("styles:", Object.keys(expectedStyles));
 		}
 
 		function processStyleSheet(sheet) {
@@ -83,9 +90,33 @@
 			if (rule.type !== CSSRule.STYLE_RULE) return;
 			var style = rule.style;
 
-			console.log(style.getPropertyValue("font-family"));
-			console.log(style.getPropertyValue("font-weight"));
-			console.log(style.getPropertyValue("font-variant"));
+			processFontFamily(style.getPropertyValue("font-family"));
+			processFontWeight(style.getPropertyValue("font-weight"));
+			processFontStyle(style.getPropertyValue("font-style"));
+		}
+
+		function processFontFamily(familyDeclaration) {
+			if (familyDeclaration === null) return;
+
+			var families = familyDeclaration.split(",");
+			families.forEach(function(family) {
+				family = family.trim();
+				if (family === "Helvetica" || family === "sans-serif") return;
+
+				expectedFamilies[family] = true;
+			});
+		}
+
+		function processFontWeight(weightDeclaration) {
+			if (weightDeclaration === null) return;
+
+			expectedWeights[weightDeclaration + ""] = true;
+		}
+
+		function processFontStyle(styleDeclaration) {
+			if (styleDeclaration === null) return;
+
+			expectedStyles[styleDeclaration] = true;
 		}
 	}
 
