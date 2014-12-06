@@ -8,7 +8,7 @@ http://letscodejavascript.com .
 This repository contains the source code for WeeWikiPaint, the application
 being developed in the series.
 
-(Wondering why we check in things like `node_modules` or IDE settings? See "[The Reliable Build](http://www.letscodejavascript.com/v3/blog/2014/12/the_reliable_build)".
+(Wondering why we check in things like `node_modules` or IDE settings? See "[The Reliable Build](http://www.letscodejavascript.com/v3/blog/2014/12/the_reliable_build)".)
 
 Before building or running for the first time:
 -----------------------------------
