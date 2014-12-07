@@ -16,16 +16,17 @@
 
 	page.onInitialized = function () {
 		page.evaluate(function () {
+			var typekitConfig = window.__typekitConfig = {};
 			var fonts = [];
 
-			window.__fontactive = function (family, variant) {
+			typekitConfig.fontactive = function fontactive(family, variant) {
 				fonts.push({
 					family: family,
 					variant: variant
 				});
 			};
 
-			window.__done = function () {
+			typekitConfig.active = typekitConfig.inactive = function done() {
 				window.callPhantom(fonts);
 			};
 		});

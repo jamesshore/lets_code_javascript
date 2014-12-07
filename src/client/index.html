@@ -11,17 +11,14 @@
 
     <script>
         (function(d) {
-            var noop = function(){};
-            var config = {
-                kitId: 'qzr7zlc',
-                scriptTimeout: 3000,
-                active: window.__done || noop,
-                inactive: window.__done || noop,
-                fontactive: window.__fontactive || noop
-            },
-            h = d.documentElement,
+            var config = window.__typekitConfig || {};
+            config.kitId = 'qzr7zlc';
+            config.scriptTimeout = 3000;
+
+            var h = d.documentElement,
             t = setTimeout(function() {
                 h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
+                if (typeof config.inactive === "function") config.inactive();
             }, config.scriptTimeout),
             tk = d.createElement("script"),
             f = false,
