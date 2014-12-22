@@ -50,6 +50,7 @@ Engineering Tasks:
 To Do on current task:
 - AT BEGINNING OF EPISODE:
   - Git vulnerability
+  - PhantomJS performance problems: https://github.com/ariya/phantomjs/issues/10488
 - Should we use Martin Grandrath's event-based solution to font loading (E263 comments)?
 
 
