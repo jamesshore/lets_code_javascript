@@ -16,7 +16,7 @@ Minimum Marketable Features:
 User Stories to finish current MMF:
 * Web font
 - Polish:
-  - Clear button retains focus when drawing (IE8, 9, Chrome
+  - Clear button retains focus when drawing (IE8, 9, Chrome)
   - Remove body padding
   - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
 - Release new design
@@ -34,8 +34,8 @@ Potential future stories:
 - Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)
 
 Engineering Tasks:
-* How do we not test Typekit when we're just testing CSS?
-- Improve smoke test code
+* Improve smoke test code
+- How do we not test Typekit when we're just testing CSS?
 
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
@@ -48,8 +48,6 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-- AT BEGINNING OF EPISODE:
-  - Git vulnerability
   - PhantomJS performance problems: https://github.com/ariya/phantomjs/issues/10488
   - WebdriverJS 2.43 no longer relies on Java (released Sept 12)
 - Should we use Martin Grandrath's event-based solution to font loading (E263 comments)?
