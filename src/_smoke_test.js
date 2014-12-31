@@ -10,6 +10,8 @@
 
 	var runServer = require("./_run_server.js");
 
+	var HOME_PAGE_URL = "http://localhost:5000";
+
 	var serverProcess;
 
 	exports.setUp = function(done) {
@@ -29,7 +31,7 @@
 	};
 
 	exports.test_canGetHomePage = function(test) {
-		httpGet("http://localhost:5000", function(response, receivedData) {
+		httpGet(HOME_PAGE_URL, function(response, receivedData) {
 			var foundHomePage = receivedData.indexOf("WeeWikiPaint home page") !== -1;
 			test.ok(foundHomePage, "home page should have contained test marker");
 			test.done();
@@ -55,11 +57,22 @@
 
 	exports.test_browsersUsingSelenium_spike_replaceMe = function(test) {
 		var firefox = require("selenium-webdriver/firefox");
+		var By = require("selenium-webdriver").By;
 
 		var driver = new firefox.Driver();
+		var promise;
 
-		driver.quit();
-		test.done();
+		promise = driver.get(HOME_PAGE_URL);
+		//driver.findElement(By.name("q")).sendKeys("webdriver");
+		//var promise = driver.findElement(By.name("btnG")).click();
+
+		promise.then(function() {
+			setTimeout(function() {
+				driver.quit().then(function() {
+					test.done();
+				});
+			}, 2000);
+		});
 	};
 
 	function httpGet(url, callback) {

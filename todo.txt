@@ -48,7 +48,7 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-- Get a basic smoke test operating against WeeWikiPaint
+* See about improving Selenium performance -- can we leave browser running? Selenium server?
 - Start porting over PhantomJS smoke tests
 
 - Uncomment or delete PhantomJS tests in _smoke_test.js
