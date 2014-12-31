@@ -45,12 +45,21 @@
 		});
 	};
 
-	exports.test_userCanDrawOnPage = function(test) {
-		var phantomJsProcess = child_process.spawn(phantomjs.path, ["src/_phantomjs.js"], { stdio: "inherit" });
-		phantomJsProcess.on("exit", function(code) {
-			test.equals(code, 0, "PhantomJS test failures");
-			test.done();
-		});
+	//exports.test_userCanDrawOnPage = function(test) {
+	//	var phantomJsProcess = child_process.spawn(phantomjs.path, ["src/_phantomjs.js"], { stdio: "inherit" });
+	//	phantomJsProcess.on("exit", function(code) {
+	//		test.equals(code, 0, "PhantomJS test failures");
+	//		test.done();
+	//	});
+	//};
+
+	exports.test_browsersUsingSelenium_spike_replaceMe = function(test) {
+		var firefox = require("selenium-webdriver/firefox");
+
+		var driver = new firefox.Driver();
+
+		driver.quit();
+		test.done();
 	};
 
 	function httpGet(url, callback) {

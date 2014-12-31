@@ -48,8 +48,10 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-  - PhantomJS performance problems: https://github.com/ariya/phantomjs/issues/10488
-  - WebdriverJS 2.43 no longer relies on Java (released Sept 12)
+- Get a basic smoke test operating against WeeWikiPaint
+- Start porting over PhantomJS smoke tests
+
+- Uncomment or delete PhantomJS tests in _smoke_test.js
 - Should we use Martin Grandrath's event-based solution to font loading (E263 comments)?
 
 
