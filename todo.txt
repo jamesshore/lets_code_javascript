@@ -48,6 +48,9 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
+- AT START OF EPISODE:
+  - iOS 8.1 upgrade broke Mobile Safari tests
+
 * See about improving Selenium performance -- can we leave browser running? Selenium server?
 - Start porting over PhantomJS smoke tests
 
