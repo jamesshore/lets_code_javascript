@@ -7,6 +7,8 @@
 	var child_process = require("child_process");
 	var http = require("http");
 	var phantomjs = require("phantomjs");
+	var firefox = require("selenium-webdriver/firefox");
+	var webdriver = require("selenium-webdriver");
 
 	var runServer = require("./_run_server.js");
 
@@ -19,7 +21,6 @@
 		runServer.runProgrammatically(function(process) {
 			serverProcess = process;
 
-			var firefox = require("selenium-webdriver/firefox");
 			driver = new firefox.Driver();
 
 			test.done();
@@ -45,18 +46,27 @@
 	exports.test_userCanDrawOnPage = function(test) {
 		driver.get(HOME_PAGE_URL);
 
+		var drawingArea = driver.findElement({ id: "drawing-area" });
+
+		new webdriver.ActionSequence()
+			.mouseMove(drawingArea, { x: 10, y: 20 })
+			.mouseDown()
+			.mouseMove(drawingArea, { x: 50, y: 60 })
+			.mouseUp()
+			.perform();
+
 		driver.executeScript(function() {
 			var client = require("./client.js");
-			var HtmlElement = require("./html_element.js");
-
-			var drawingArea = HtmlElement.fromId("drawing-area");
-			drawingArea.triggerMouseDown(10, 20);
-			drawingArea.triggerMouseMove(50, 60);
-			drawingArea.triggerMouseUp(50, 60);
+			//var HtmlElement = require("./html_element.js");
+			//
+			//var drawingArea = HtmlElement.fromId("drawing-area");
+			//drawingArea.triggerMouseDown(10, 20);
+			//drawingArea.triggerMouseMove(50, 60);
+			//drawingArea.triggerMouseUp(50, 60);
 
 			return client.drawingAreaCanvas.lineSegments();
-		}).then(function(returnValue) {
-			test.deepEqual(returnValue, [[ "10", "20", "50", "60" ]]);
+		}).then(function(lineSegments) {
+			test.deepEqual(lineSegments, [[ "10", "20", "50", "60" ]]);
 			test.done();
 		});
 	};
