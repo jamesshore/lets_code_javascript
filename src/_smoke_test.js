@@ -16,7 +16,6 @@
 	var driver;
 
 	exports.test_setupOnce = function(test) {
-		console.log("setUp once");
 		runServer.runProgrammatically(function(process) {
 			serverProcess = process;
 
@@ -52,17 +51,14 @@
 
 			var drawingArea = HtmlElement.fromId("drawing-area");
 			drawingArea.triggerMouseDown(10, 20);
-			drawingArea.triggerMouseMove(50, 80);
+			drawingArea.triggerMouseMove(50, 60);
 			drawingArea.triggerMouseUp(50, 60);
 
-			var actual = JSON.stringify(client.drawingAreaCanvas.lineSegments());
-			var expected = JSON.stringify([[ "10", "20", "50", "60" ]]);
-
-			//throw new Error("foo!");
-
-			//if (actual !== expected) return "lines drawn expected " + expected + " but was " + actual;
-			//else return null;
-		}).then(test.done);
+			return client.drawingAreaCanvas.lineSegments();
+		}).then(function(returnValue) {
+			test.deepEqual(returnValue, [[ "10", "20", "50", "60" ]]);
+			test.done();
+		});
 	};
 
 	//exports.test_userCanDrawOnPage = function(test) {
@@ -100,9 +96,7 @@
 	};
 	exports.tearDown = function(done) {
 		if (!tearDownNow) return done();
-
-		console.log("tearDown once");
-		if (!serverProcess) return;
+		if (!serverProcess) return done();
 
 		serverProcess.on("exit", function(code, signal) {
 			driver.quit().then(done);
