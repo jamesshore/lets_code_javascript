@@ -13,21 +13,18 @@
 	var HOME_PAGE_URL = "http://localhost:5000";
 
 	var serverProcess;
+	var driver;
 
-	exports.setUp = function(done) {
+	exports.test_setupOnce = function(test) {
+		console.log("setUp once");
 		runServer.runProgrammatically(function(process) {
 			serverProcess = process;
-			done();
-		});
-	};
 
-	exports.tearDown = function(done) {
-		if (!serverProcess) return;
+			var firefox = require("selenium-webdriver/firefox");
+			driver = new firefox.Driver();
 
-		serverProcess.on("exit", function(code, signal) {
-			done();
+			test.done();
 		});
-		serverProcess.kill();
 	};
 
 	exports.test_canGetHomePage = function(test) {
@@ -47,11 +44,6 @@
 	};
 
 	exports.test_userCanDrawOnPage = function(test) {
-		var firefox = require("selenium-webdriver/firefox");
-		var By = require("selenium-webdriver").By;
-
-		var driver = new firefox.Driver();
-
 		driver.get(HOME_PAGE_URL);
 
 		driver.executeScript(function() {
@@ -66,11 +58,11 @@
 			var actual = JSON.stringify(client.drawingAreaCanvas.lineSegments());
 			var expected = JSON.stringify([[ "10", "20", "50", "60" ]]);
 
-			if (actual !== expected) return "lines drawn expected " + expected + " but was " + actual;
-			else return null;
-		});
+			//throw new Error("foo!");
 
-		driver.quit().then(test.done);
+			//if (actual !== expected) return "lines drawn expected " + expected + " but was " + actual;
+			//else return null;
+		}).then(test.done);
 	};
 
 	//exports.test_userCanDrawOnPage = function(test) {
@@ -100,6 +92,23 @@
 	//		}, 2000);
 	//	});
 	//};
+
+	var tearDownNow = false;
+	exports.test_tearDownOnce = function(test) {
+		tearDownNow = true;
+		test.done();
+	};
+	exports.tearDown = function(done) {
+		if (!tearDownNow) return done();
+
+		console.log("tearDown once");
+		if (!serverProcess) return;
+
+		serverProcess.on("exit", function(code, signal) {
+			driver.quit().then(done);
+		});
+		serverProcess.kill();
+	};
 
 	function httpGet(url, callback) {
 		var request = http.get(url);

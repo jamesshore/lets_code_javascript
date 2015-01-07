@@ -15,6 +15,7 @@ Before building or running for the first time:
 
 1. Install [Node.js](http://nodejs.org/download/)
 2. Install [Git](http://git-scm.com/downloads)
+3. Install [Firefox](http://getfirefox.com) (for smoke tests)
 3. Clone source repository: `git clone https://github.com/jamesshore/lets_code_javascript.git`
 4. All commands must run from root of repository: `cd lets_code_javascript`
 
