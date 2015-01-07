@@ -46,6 +46,33 @@
 		});
 	};
 
+	exports.test_userCanDrawOnPage = function(test) {
+		var firefox = require("selenium-webdriver/firefox");
+		var By = require("selenium-webdriver").By;
+
+		var driver = new firefox.Driver();
+
+		driver.get(HOME_PAGE_URL);
+
+		driver.executeScript(function() {
+			var client = require("./client.js");
+			var HtmlElement = require("./html_element.js");
+
+			var drawingArea = HtmlElement.fromId("drawing-area");
+			drawingArea.triggerMouseDown(10, 20);
+			drawingArea.triggerMouseMove(50, 80);
+			drawingArea.triggerMouseUp(50, 60);
+
+			var actual = JSON.stringify(client.drawingAreaCanvas.lineSegments());
+			var expected = JSON.stringify([[ "10", "20", "50", "60" ]]);
+
+			if (actual !== expected) return "lines drawn expected " + expected + " but was " + actual;
+			else return null;
+		});
+
+		driver.quit().then(test.done);
+	};
+
 	//exports.test_userCanDrawOnPage = function(test) {
 	//	var phantomJsProcess = child_process.spawn(phantomjs.path, ["src/_phantomjs.js"], { stdio: "inherit" });
 	//	phantomJsProcess.on("exit", function(code) {

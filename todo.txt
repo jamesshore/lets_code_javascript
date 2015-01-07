@@ -53,7 +53,8 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-
+* Figure out how to make Selenium test fail
+- Should we trigger mouse events from Selenium rather than using WeeWikiPaint functions?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
