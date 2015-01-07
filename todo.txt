@@ -35,8 +35,7 @@ Potential future stories:
 - Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)
 
 Engineering Tasks:
-* Rewrite 'checkDrawingArea' PhantomJS test in Selenium
-- Rewrite 'checkFonts' PhantomJS test in Selenium
+* Rewrite 'checkFonts' PhantomJS test in Selenium
   - Should we use Martin Grandrath's event-based solution to font loading (E263 comments)?
 - Remove PhantomJS and its tests
 - Migrate from NodeUnit to Mocha
@@ -54,8 +53,6 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Figure out how to make Selenium test fail
-- Should we trigger mouse events from Selenium rather than using WeeWikiPaint functions?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

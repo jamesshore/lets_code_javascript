@@ -8,7 +8,6 @@
 	var http = require("http");
 	var phantomjs = require("phantomjs");
 	var firefox = require("selenium-webdriver/firefox");
-	var webdriver = require("selenium-webdriver");
 
 	var runServer = require("./_run_server.js");
 
@@ -46,23 +45,14 @@
 	exports.test_userCanDrawOnPage = function(test) {
 		driver.get(HOME_PAGE_URL);
 
-		var drawingArea = driver.findElement({ id: "drawing-area" });
-
-		new webdriver.ActionSequence()
-			.mouseMove(drawingArea, { x: 10, y: 20 })
-			.mouseDown()
-			.mouseMove(drawingArea, { x: 50, y: 60 })
-			.mouseUp()
-			.perform();
-
 		driver.executeScript(function() {
 			var client = require("./client.js");
-			//var HtmlElement = require("./html_element.js");
-			//
-			//var drawingArea = HtmlElement.fromId("drawing-area");
-			//drawingArea.triggerMouseDown(10, 20);
-			//drawingArea.triggerMouseMove(50, 60);
-			//drawingArea.triggerMouseUp(50, 60);
+			var HtmlElement = require("./html_element.js");
+
+			var drawingArea = HtmlElement.fromId("drawing-area");
+			drawingArea.triggerMouseDown(10, 20);
+			drawingArea.triggerMouseMove(50, 60);
+			drawingArea.triggerMouseUp(50, 60);
 
 			return client.drawingAreaCanvas.lineSegments();
 		}).then(function(lineSegments) {
@@ -76,26 +66,6 @@
 	//	phantomJsProcess.on("exit", function(code) {
 	//		test.equals(code, 0, "PhantomJS test failures");
 	//		test.done();
-	//	});
-	//};
-
-	//exports.test_browsersUsingSelenium_spike_replaceMe = function(test) {
-	//	var firefox = require("selenium-webdriver/firefox");
-	//	var By = require("selenium-webdriver").By;
-	//
-	//	var driver = new firefox.Driver();
-	//	var promise;
-	//
-	//	promise = driver.get(HOME_PAGE_URL);
-	//	//driver.findElement(By.name("q")).sendKeys("webdriver");
-	//	//var promise = driver.findElement(By.name("btnG")).click();
-	//
-	//	promise.then(function() {
-	//		setTimeout(function() {
-	//			driver.quit().then(function() {
-	//				test.done();
-	//			});
-	//		}, 2000);
 	//	});
 	//};
 
