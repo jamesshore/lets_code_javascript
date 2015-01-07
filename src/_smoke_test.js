@@ -38,9 +38,8 @@
 		});
 	};
 
-	// TODO: Factor out common server name
 	exports.test_canGet404Page = function(test) {
-		httpGet("http://localhost:5000/nonexistant.html", function(response, receivedData) {
+		httpGet(HOME_PAGE_URL + "/nonexistant.html", function(response, receivedData) {
 			var foundHomePage = receivedData.indexOf("WeeWikiPaint 404 page") !== -1;
 			test.ok(foundHomePage, "404 page should have contained test marker");
 			test.done();
@@ -55,25 +54,25 @@
 	//	});
 	//};
 
-	exports.test_browsersUsingSelenium_spike_replaceMe = function(test) {
-		var firefox = require("selenium-webdriver/firefox");
-		var By = require("selenium-webdriver").By;
-
-		var driver = new firefox.Driver();
-		var promise;
-
-		promise = driver.get(HOME_PAGE_URL);
-		//driver.findElement(By.name("q")).sendKeys("webdriver");
-		//var promise = driver.findElement(By.name("btnG")).click();
-
-		promise.then(function() {
-			setTimeout(function() {
-				driver.quit().then(function() {
-					test.done();
-				});
-			}, 2000);
-		});
-	};
+	//exports.test_browsersUsingSelenium_spike_replaceMe = function(test) {
+	//	var firefox = require("selenium-webdriver/firefox");
+	//	var By = require("selenium-webdriver").By;
+	//
+	//	var driver = new firefox.Driver();
+	//	var promise;
+	//
+	//	promise = driver.get(HOME_PAGE_URL);
+	//	//driver.findElement(By.name("q")).sendKeys("webdriver");
+	//	//var promise = driver.findElement(By.name("btnG")).click();
+	//
+	//	promise.then(function() {
+	//		setTimeout(function() {
+	//			driver.quit().then(function() {
+	//				test.done();
+	//			});
+	//		}, 2000);
+	//	});
+	//};
 
 	function httpGet(url, callback) {
 		var request = http.get(url);

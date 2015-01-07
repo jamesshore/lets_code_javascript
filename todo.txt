@@ -5,6 +5,7 @@ Minimum Marketable Features:
 + single-user painting on home page (episodes 33-200)
 * replace home page with professional design (episodes 201+)
 - support more browsers (Android, IE10, IE11)
+  - iOS 8.1 upgrade broke Mobile Safari tests
 - replace 404 page with professional design
 ? multiple painting/erasing tools
 - collaborative painting
@@ -34,7 +35,11 @@ Potential future stories:
 - Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)
 
 Engineering Tasks:
-* Improve smoke test code
+- Rewrite 'checkDrawingArea' PhantomJS test in Selenium
+- Rewrite 'checkFonts' PhantomJS test in Selenium
+  - Should we use Martin Grandrath's event-based solution to font loading (E263 comments)?
+- Remove PhantomJS and its tests
+- Create a 'quick' build target that runs in <5 seconds
 - How do we not test Typekit when we're just testing CSS?
 
 - Need to test arrow's background elements--is there a clean way of doing this?
@@ -48,14 +53,6 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-- AT START OF EPISODE:
-  - iOS 8.1 upgrade broke Mobile Safari tests
-
-* See about improving Selenium performance -- can we leave browser running? Selenium server?
-- Start porting over PhantomJS smoke tests
-
-- Uncomment or delete PhantomJS tests in _smoke_test.js
-- Should we use Martin Grandrath's event-based solution to font loading (E263 comments)?
 
 
 Notes:
