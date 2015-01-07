@@ -57,8 +57,17 @@
 			return client.drawingAreaCanvas.lineSegments();
 		}).then(function(lineSegments) {
 			test.deepEqual(lineSegments, [[ "10", "20", "50", "60" ]]);
-			test.done();
 		});
+
+		driver.controlFlow().execute(test.done);
+	};
+
+	exports.test_webFontsAreLoaded = function(test) {
+		driver.get(HOME_PAGE_URL);
+
+
+
+		driver.controlFlow().execute(test.done);
 	};
 
 	//exports.test_userCanDrawOnPage = function(test) {

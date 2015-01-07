@@ -53,6 +53,7 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
+* Figure out how to wait for fonts to finish loading (in Selenium)
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
