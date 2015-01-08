@@ -1,4 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+/*global document, window, CSSRule */
 /*jshint regexp:false*/
 
 (function() {
@@ -63,9 +64,119 @@
 	};
 
 	exports.test_webFontsAreLoaded = function(test) {
+		var TIMEOUT = 10 * 1000;
+
 		driver.get(HOME_PAGE_URL);
 
+		driver.wait(function() {
+			return driver.executeScript(function() {
+				return window.wwp_typekitDone;
+			});
+		}, TIMEOUT, "Timed out waiting for web fonts to load");
 
+		driver.executeScript(function() {
+			// Rather than looking at stylesheet, we could descend the DOM.
+			// Pros: Knows exactly which combination of fonts, weights, and styles we're using
+			// Cons: It won't see all possibilities when using conditional styling such as media queries (I think)
+
+			var expectedFonts = {
+				families: {},
+				weights: {},
+				styles: {
+					"normal": true
+				}
+			};
+
+			try {
+				var sheets = document.styleSheets;
+				processAllSheets();
+				checkFonts(expectedFonts);
+			}
+			catch (err) {
+				return err + "\n" + err.stack;
+			}
+
+			function checkFonts(expectedFonts) {
+				try {
+					Object.keys(expectedFonts.families).forEach(function(family) {
+						Object.keys(expectedFonts.styles).forEach(function(style) {
+							Object.keys(expectedFonts.weights).forEach(function(weight) {
+								style = style[0];
+								weight = weight[0];
+
+								checkFont(family, style + weight);
+							});
+						});
+					});
+				}
+				catch (err) {
+					return "checkFonts() failed: " + err.stack;
+				}
+
+				function checkFont(family, variant) {
+					var hasFont = window.wwp_loadedFonts.some(function(loadedFont) {
+						return (loadedFont.family === family) && (loadedFont.variant === variant);
+					});
+					if (!hasFont) throw new Error("font not loaded: " + family + " " + variant);
+				}
+			}
+
+			function processAllSheets() {
+				for (var i = 0; i < sheets.length; i++) {
+					processStyleSheet(sheets[i]);
+				}
+			}
+
+			function processStyleSheet(sheet) {
+				if (sheet.disabled) {
+					return;
+				}
+
+				var rules = sheet.cssRules;     // THROWS EXCEPTION: how do we fix this?
+				var rules = null;
+				if (rules === null) return;
+
+				for (var i = 0; i < rules.length; i++) {
+					processRule(rules[i]);
+				}
+			}
+
+			function processRule(rule) {
+				if (rule.type !== CSSRule.STYLE_RULE) return;
+				var style = rule.style;
+
+				processFontFamily(style.getPropertyValue("font-family"));
+				processFontWeight(style.getPropertyValue("font-weight"));
+				processFontStyle(style.getPropertyValue("font-style"));
+			}
+
+			function processFontFamily(familyDeclaration) {
+				if (familyDeclaration === null) return;
+
+				var families = familyDeclaration.split(",");
+				families.forEach(function(family) {
+					family = family.trim();
+					if (family === "Helvetica" || family === "sans-serif") return;
+
+					expectedFonts.families[family] = true;
+				});
+			}
+
+			function processFontWeight(weightDeclaration) {
+				if (weightDeclaration === null) return;
+
+				expectedFonts.weights[weightDeclaration + ""] = true;
+			}
+
+			function processFontStyle(styleDeclaration) {
+				if (styleDeclaration === null) return;
+
+				expectedFonts.styles[styleDeclaration] = true;
+			}
+
+		}).then(function(returnValue) {
+			console.log(returnValue);
+		});
 
 		driver.controlFlow().execute(test.done);
 	};
