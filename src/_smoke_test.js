@@ -133,7 +133,6 @@
 				}
 
 				var rules = sheet.cssRules;     // THROWS EXCEPTION: how do we fix this?
-				var rules = null;
 				if (rules === null) return;
 
 				for (var i = 0; i < rules.length; i++) {
