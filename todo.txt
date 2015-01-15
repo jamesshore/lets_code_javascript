@@ -35,9 +35,7 @@ Potential future stories:
 - Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)
 
 Engineering Tasks:
-* Rewrite 'checkFonts' PhantomJS test in Selenium
-  - Should we use Martin Grandrath's event-based solution to font loading (E263 comments)?
-- Remove PhantomJS and its tests
+* Remove PhantomJS and its tests
 - Migrate from NodeUnit to Mocha
 - Create a 'quick' build target that runs in <5 seconds
 - How do we not test Typekit when we're just testing CSS?
@@ -53,8 +51,7 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Finish porting webfont test
-
+* Clean everything up
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

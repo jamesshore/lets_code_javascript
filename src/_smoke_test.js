@@ -68,50 +68,53 @@
 
 		driver.get(HOME_PAGE_URL);
 
+		// wait for fonts to load
 		driver.wait(function() {
 			return driver.executeScript(function() {
 				return window.wwp_typekitDone;
 			});
 		}, TIMEOUT, "Timed out waiting for web fonts to load");
 
-
-					//return checkFonts(expectedFonts);
-			//
-			//function checkFonts(expectedFonts) {
-			//	try {
-			//		Object.keys(expectedFonts.families).forEach(function(family) {
-			//			Object.keys(expectedFonts.styles).forEach(function(style) {
-			//				Object.keys(expectedFonts.weights).forEach(function(weight) {
-			//					style = style[0];
-			//					weight = weight[0];
-			//
-			//					checkFont(family, style + weight);
-			//				});
-			//			});
-			//		});
-			//	}
-			//	catch (err) {
-			//		return "checkFonts() failed: " + err.stack;
-			//	}
-			//
-			//	function checkFont(family, variant) {
-			//		var hasFont = window.wwp_loadedFonts.some(function(loadedFont) {
-			//			return (loadedFont.family === family) && (loadedFont.variant === variant);
-			//		});
-			//		if (!hasFont) throw new Error("font not loaded: " + family + " " + variant);
-			//	}
-			//}
-
-
+		// get fonts from style sheet
 		var expectedFonts;
-		var actualFonts;
-
 		driver.executeScript(browser_getStyleSheetFonts)
 		.then(function(returnValue) {
-			expectedFonts = [];
-			Object.keys(returnValue.families).forEach(function(family) {
-				Object.keys(returnValue.styles).forEach(function(style) {
-					Object.keys(returnValue.weights).forEach(function(weight) {
+			expectedFonts = normalizeExpectedFonts(returnValue);
+		});
+
+		// get loaded fonts
+		var actualFonts;
+		driver.executeScript(function() {
+			return window.wwp_loadedFonts;
+		}).then(function(returnValue) {
+			actualFonts = returnValue;
+		});
+
+		// check fonts
+		driver.controlFlow().execute(function() {
+			var fontsNotPresent = expectedFonts.filter(function(expectedFont) {
+				var fontPresent = actualFonts.some(function(actualFont) {
+					return ('"' + actualFont.family + '"' === expectedFont.family) && (actualFont.variant === expectedFont.variant);
+				});
+				return !fontPresent;
+			});
+
+			if (fontsNotPresent.length !== 0) {
+				console.log("Expected these fonts to be loaded, but they weren't:\n", fontsNotPresent);
+				console.log("All expected fonts:\n", expectedFonts);
+				console.log("All loaded fonts:\n", actualFonts);
+				test.ok(false, "Required fonts weren't loaded");
+			}
+
+			test.done();
+		});
+
+		function normalizeExpectedFonts(styleSheetFonts) {
+			var expectedFonts = [];
+
+			Object.keys(styleSheetFonts.families).forEach(function(family) {
+				Object.keys(styleSheetFonts.styles).forEach(function(style) {
+					Object.keys(styleSheetFonts.weights).forEach(function(weight) {
 						style = style[0];
 						weight = weight[0];
 
@@ -122,31 +125,9 @@
 					});
 				});
 			});
-		});
-
-		driver.executeScript(function() {
-			return window.wwp_loadedFonts;
-		}).then(function(returnValue) {
-			actualFonts = returnValue;
-		});
-
-		driver.controlFlow().execute(function() {
-			// assertion goes here
-
-			console.log("EXPECTED", expectedFonts);
-			console.log("ACTUAL", actualFonts);
-		});
-
-		driver.controlFlow().execute(test.done);
+			return expectedFonts;
+		}
 	};
-
-	//exports.test_userCanDrawOnPage = function(test) {
-	//	var phantomJsProcess = child_process.spawn(phantomjs.path, ["src/_phantomjs.js"], { stdio: "inherit" });
-	//	phantomJsProcess.on("exit", function(code) {
-	//		test.equals(code, 0, "PhantomJS test failures");
-	//		test.done();
-	//	});
-	//};
 
 	var tearDownNow = false;
 	exports.test_tearDownOnce = function(test) {
