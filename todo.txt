@@ -53,8 +53,7 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Figure out how to access sheet.cssRules without having Firefox a SecurityError
-- Finish porting webfont test
+* Finish porting webfont test
 
 
 Notes:

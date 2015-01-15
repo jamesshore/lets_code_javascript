@@ -87,14 +87,9 @@
 				}
 			};
 
-			try {
-				var sheets = document.styleSheets;
-				processAllSheets();
-				checkFonts(expectedFonts);
-			}
-			catch (err) {
-				return err + "\n" + err.stack;
-			}
+			var sheets = document.styleSheets;
+			processAllSheets();
+			checkFonts(expectedFonts);
 
 			function checkFonts(expectedFonts) {
 				try {
@@ -132,11 +127,24 @@
 					return;
 				}
 
-				var rules = sheet.cssRules;     // THROWS EXCEPTION: how do we fix this?
+				var rules = getCssRulesOrNullIfSecurityError(sheet);
 				if (rules === null) return;
 
 				for (var i = 0; i < rules.length; i++) {
 					processRule(rules[i]);
+				}
+			}
+
+			function getCssRulesOrNullIfSecurityError(sheet) {
+				// Reading cssRules from a different domain (typekit, in our case) causes a SecurityError on Firefox.
+				// This occurs even though the CORS header Access-Control-Allow-Origin is set by Typekit.
+				// So we have to squelch it here.
+				try {
+					return sheet.cssRules;
+				}
+				catch (err) {
+					if (err.name === "SecurityError") return null;
+					else throw err;
 				}
 			}
 
