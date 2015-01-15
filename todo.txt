@@ -35,7 +35,6 @@ Potential future stories:
 - Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)
 
 Engineering Tasks:
-* Remove PhantomJS and its tests
 - Migrate from NodeUnit to Mocha
 - Create a 'quick' build target that runs in <5 seconds
 - How do we not test Typekit when we're just testing CSS?

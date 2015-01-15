@@ -7,7 +7,6 @@
 
 	var child_process = require("child_process");
 	var http = require("http");
-	var phantomjs = require("phantomjs");
 	var firefox = require("selenium-webdriver/firefox");
 
 	var runServer = require("./_run_server.js");
