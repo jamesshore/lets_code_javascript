@@ -74,115 +74,67 @@
 			});
 		}, TIMEOUT, "Timed out waiting for web fonts to load");
 
-		driver.executeScript(function() {
-			// Rather than looking at stylesheet, we could descend the DOM.
-			// Pros: Knows exactly which combination of fonts, weights, and styles we're using
-			// Cons: It won't see all possibilities when using conditional styling such as media queries (I think)
 
-			var expectedFonts = {
-				families: {},
-				weights: {},
-				styles: {
-					"normal": true
-				}
-			};
+					//return checkFonts(expectedFonts);
+			//
+			//function checkFonts(expectedFonts) {
+			//	try {
+			//		Object.keys(expectedFonts.families).forEach(function(family) {
+			//			Object.keys(expectedFonts.styles).forEach(function(style) {
+			//				Object.keys(expectedFonts.weights).forEach(function(weight) {
+			//					style = style[0];
+			//					weight = weight[0];
+			//
+			//					checkFont(family, style + weight);
+			//				});
+			//			});
+			//		});
+			//	}
+			//	catch (err) {
+			//		return "checkFonts() failed: " + err.stack;
+			//	}
+			//
+			//	function checkFont(family, variant) {
+			//		var hasFont = window.wwp_loadedFonts.some(function(loadedFont) {
+			//			return (loadedFont.family === family) && (loadedFont.variant === variant);
+			//		});
+			//		if (!hasFont) throw new Error("font not loaded: " + family + " " + variant);
+			//	}
+			//}
 
-			var sheets = document.styleSheets;
-			processAllSheets();
-			checkFonts(expectedFonts);
 
-			function checkFonts(expectedFonts) {
-				try {
-					Object.keys(expectedFonts.families).forEach(function(family) {
-						Object.keys(expectedFonts.styles).forEach(function(style) {
-							Object.keys(expectedFonts.weights).forEach(function(weight) {
-								style = style[0];
-								weight = weight[0];
+		var expectedFonts;
+		var actualFonts;
 
-								checkFont(family, style + weight);
-							});
+		driver.executeScript(browser_getStyleSheetFonts)
+		.then(function(returnValue) {
+			expectedFonts = [];
+			Object.keys(returnValue.families).forEach(function(family) {
+				Object.keys(returnValue.styles).forEach(function(style) {
+					Object.keys(returnValue.weights).forEach(function(weight) {
+						style = style[0];
+						weight = weight[0];
+
+						expectedFonts.push({
+							family: family,
+							variant: style + weight
 						});
 					});
-				}
-				catch (err) {
-					return "checkFonts() failed: " + err.stack;
-				}
-
-				function checkFont(family, variant) {
-					var hasFont = window.wwp_loadedFonts.some(function(loadedFont) {
-						return (loadedFont.family === family) && (loadedFont.variant === variant);
-					});
-					if (!hasFont) throw new Error("font not loaded: " + family + " " + variant);
-				}
-			}
-
-			function processAllSheets() {
-				for (var i = 0; i < sheets.length; i++) {
-					processStyleSheet(sheets[i]);
-				}
-			}
-
-			function processStyleSheet(sheet) {
-				if (sheet.disabled) {
-					return;
-				}
-
-				var rules = getCssRulesOrNullIfSecurityError(sheet);
-				if (rules === null) return;
-
-				for (var i = 0; i < rules.length; i++) {
-					processRule(rules[i]);
-				}
-			}
-
-			function getCssRulesOrNullIfSecurityError(sheet) {
-				// Reading cssRules from a different domain (typekit, in our case) causes a SecurityError on Firefox.
-				// This occurs even though the CORS header Access-Control-Allow-Origin is set by Typekit.
-				// So we have to squelch it here.
-				try {
-					return sheet.cssRules;
-				}
-				catch (err) {
-					if (err.name === "SecurityError") return null;
-					else throw err;
-				}
-			}
-
-			function processRule(rule) {
-				if (rule.type !== CSSRule.STYLE_RULE) return;
-				var style = rule.style;
-
-				processFontFamily(style.getPropertyValue("font-family"));
-				processFontWeight(style.getPropertyValue("font-weight"));
-				processFontStyle(style.getPropertyValue("font-style"));
-			}
-
-			function processFontFamily(familyDeclaration) {
-				if (familyDeclaration === null) return;
-
-				var families = familyDeclaration.split(",");
-				families.forEach(function(family) {
-					family = family.trim();
-					if (family === "Helvetica" || family === "sans-serif") return;
-
-					expectedFonts.families[family] = true;
 				});
-			}
+			});
+		});
 
-			function processFontWeight(weightDeclaration) {
-				if (weightDeclaration === null) return;
-
-				expectedFonts.weights[weightDeclaration + ""] = true;
-			}
-
-			function processFontStyle(styleDeclaration) {
-				if (styleDeclaration === null) return;
-
-				expectedFonts.styles[styleDeclaration] = true;
-			}
-
+		driver.executeScript(function() {
+			return window.wwp_loadedFonts;
 		}).then(function(returnValue) {
-			console.log(returnValue);
+			actualFonts = returnValue;
+		});
+
+		driver.controlFlow().execute(function() {
+			// assertion goes here
+
+			console.log("EXPECTED", expectedFonts);
+			console.log("ACTUAL", actualFonts);
 		});
 
 		driver.controlFlow().execute(test.done);
@@ -224,6 +176,89 @@
 				callback(response, receivedData);
 			});
 		});
+	}
+
+	function browser_getStyleSheetFonts() {
+		// Rather than looking at stylesheet, we could descend the DOM.
+		// Pros: Knows exactly which combination of fonts, weights, and styles we're using
+		// Cons: It won't see all possibilities when using conditional styling such as media queries (I think)
+
+		var styleSheetFonts = {
+			families: {},
+			weights: {},
+			styles: {
+				"normal": true
+			}
+		};
+
+		var sheets = document.styleSheets;
+		processAllSheets();
+		return styleSheetFonts;
+
+		function processAllSheets() {
+			for (var i = 0; i < sheets.length; i++) {
+				processStyleSheet(sheets[i]);
+			}
+		}
+
+		function processStyleSheet(sheet) {
+			if (sheet.disabled) {
+				return;
+			}
+
+			var rules = getCssRulesOrNullIfSecurityError(sheet);
+			if (rules === null) return;
+
+			for (var i = 0; i < rules.length; i++) {
+				processRule(rules[i]);
+			}
+		}
+
+		function getCssRulesOrNullIfSecurityError(sheet) {
+			// Reading cssRules from a different domain (typekit, in our case) causes a SecurityError on Firefox.
+			// This occurs even though the CORS header Access-Control-Allow-Origin is set by Typekit.
+			// So we have to squelch it here.
+			try {
+				return sheet.cssRules;
+			}
+			catch(err) {
+				if (err.name === "SecurityError") return null;
+				else throw err;
+			}
+		}
+
+		function processRule(rule) {
+			if (rule.type !== CSSRule.STYLE_RULE) return;
+			var style = rule.style;
+
+			processFontFamily(style.getPropertyValue("font-family"));
+			processFontWeight(style.getPropertyValue("font-weight"));
+			processFontStyle(style.getPropertyValue("font-style"));
+		}
+
+		function processFontFamily(familyDeclaration) {
+			if (familyDeclaration === "") return;
+
+			var families = familyDeclaration.split(",");
+			families.forEach(function(family) {
+				family = family.trim();
+				if (family === '"Helvetica"' || family === "sans-serif" || family === "") return;
+
+				styleSheetFonts.families[family] = true;
+			});
+		}
+
+		function processFontWeight(weightDeclaration) {
+			if (weightDeclaration === "") return;
+
+			styleSheetFonts.weights[weightDeclaration + ""] = true;
+		}
+
+		function processFontStyle(styleDeclaration) {
+			if (styleDeclaration === "") return;
+
+			styleSheetFonts.styles[styleDeclaration] = true;
+		}
 	}
 
 }());
