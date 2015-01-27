@@ -52,6 +52,8 @@ Engineering Tasks:
 To Do on current task:
 * BEFORE NEXT EPISODE:
   - Figure out why browsers are timing out
+* AT START OF EPISODE:
+  - Add missing '<html>' to top of index.html
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
