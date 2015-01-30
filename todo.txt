@@ -43,7 +43,7 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-
+* Having 'quick' target only run needed tasks
 
 
 Notes:
