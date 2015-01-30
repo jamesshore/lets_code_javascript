@@ -8,17 +8,6 @@
 
 	if (!process.env.loose) console.log("For more forgiving test settings, use 'loose=true'");
 
-	var fs = require("fs");
-	var shell = require("shelljs");
-
-	var browserify = require("browserify");
-	var lint = require("./build/util/lint_runner.js");
-	var nodeunit = require("./build/util/nodeunit_runner.js");
-	var karma = require("./build/util/karma_runner.js");
-	var versionChecker = require("./build/util/version_checker.js");
-	var runServer = require("./src/_run_server.js");
-	var path = require("path");
-
 	var REQUIRED_BROWSERS = [
 		"IE 8.0.0 (Windows 7)",
 		"IE 9.0.0 (Windows 7)",
@@ -44,23 +33,23 @@
 
 	desc("Build and test");
 	task("default", ["lint", "test"], function() {
-		var elapsedSeconds = (Date.now() - startTime) / 1000;
-		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
+		buildOk();
 	});
 
 	desc("Build and test fast targets only");
 	task("quick", function() {
-		var elapsedSeconds = (Date.now() - startTime) / 1000;
-		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
+		buildOk();
 	});
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
-		karma.serve("build/karma.conf.js", complete, fail);
+		karma().serve("build/karma.conf.js", complete, fail);
 	}, {async: true});
 
 	desc("Start WeeWikiPaint server for manual testing");
 	task("run", ["build"], function() {
+		var runServer = require("./src/_run_server.js");
+
 		console.log("Running server. Press Ctrl-C to stop.");
 		runServer.runInteractively();
 		// We never call complete() because we want the task to hang until the user presses 'Ctrl-C'.
@@ -70,12 +59,12 @@
 	task("lint", ["lintNode", "lintClient"]);
 
 	task("lintNode", ["nodeVersion"], function() {
-		var passed = lint.validateFileList(nodeLintFiles(), nodeLintOptions(), {});
+		var passed = lint().validateFileList(nodeLintFiles(), nodeLintOptions(), {});
 		if (!passed) fail("Lint failed");
 	});
 
 	task("lintClient", function() {
-		var passed = lint.validateFileList(clientLintFiles(), clientLintOptions(), clientGlobals());
+		var passed = lint().validateFileList(clientLintFiles(), clientLintOptions(), clientGlobals());
 		if (!passed) fail("Lint failed");
 	});
 
@@ -84,21 +73,25 @@
 
 	desc("Test server code");
 	task("testServer", ["nodeVersion", TEMP_TESTFILE_DIR], function() {
-		nodeunit.runTests(serverTestFiles(), complete, fail);
+		nodeunit().runTests(serverTestFiles(), complete, fail);
 	}, {async: true});
 
 	desc("Test client code");
 	task("testClient", [], function() {
-		karma.runTests(REQUIRED_BROWSERS, complete, fail);
+		karma().runTests(REQUIRED_BROWSERS, complete, fail);
 	}, {async: true});
 
 	desc("End-to-end smoke tests");
 	task("testSmoke", ["build"], function() {
-		nodeunit.runTests(smokeTestFiles(), complete, fail);
+		nodeunit().runTests(smokeTestFiles(), complete, fail);
 	}, {async: true});
 
 	desc("Bundle and build code");
 	task("build", [BUILD_CLIENT_DIR], function() {
+		var fs = require("fs");
+		var shell = require("shelljs");
+		var browserify = require("browserify");
+
 		shell.rm("-rf", BUILD_CLIENT_DIR + "/*");
 		shell.cp(
 			"-R",
@@ -135,6 +128,8 @@
 
 //	desc("Ensure correct version of Node is present.");
 	task("nodeVersion", [], function() {
+		var versionChecker = require("./build/util/version_checker.js");
+
 		var deployedVersion = "v" + require("./package.json").engines.node;
 		versionChecker.check("Node", !process.env.loose, deployedVersion, process.version, fail);
 	});
@@ -248,6 +243,28 @@
 			// Browser
 			console: false
 		};
+	}
+
+	function buildOk() {
+		var elapsedSeconds = (Date.now() - startTime) / 1000;
+		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
+	}
+
+
+	// We've factored our require statements into functions so we don't have the overhead of loading
+	// modules we don't need. At the time this refactoring was done, module loading took about half a
+	// second, which was 10% of our desired maximum of five seconds for a quick build.
+
+	function lint() {
+		return require("./build/util/lint_runner.js");
+	}
+
+	function nodeunit() {
+		return require("./build/util/nodeunit_runner.js");
+	}
+
+	function karma() {
+		return require("./build/util/karma_runner.js");
 	}
 
 }());
