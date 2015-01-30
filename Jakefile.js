@@ -4,6 +4,8 @@
 (function() {
 	"use strict";
 
+	var startTime = Date.now();
+
 	if (!process.env.loose) console.log("For more forgiving test settings, use 'loose=true'");
 
 	var fs = require("fs");
@@ -42,7 +44,14 @@
 
 	desc("Build and test");
 	task("default", ["lint", "test"], function() {
-		console.log("\n\nOK");
+		var elapsedSeconds = (Date.now() - startTime) / 1000;
+		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
+	});
+
+	desc("Build and test fast targets only");
+	task("quick", function() {
+		var elapsedSeconds = (Date.now() - startTime) / 1000;
+		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
 	});
 
 	desc("Start Karma server for testing");
