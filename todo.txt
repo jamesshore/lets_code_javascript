@@ -23,8 +23,13 @@ User Stories to finish current MMF:
 - Release new design
 
 Engineering Tasks:
-- Migrate from NodeUnit to Mocha
 - Create a 'quick' build target that runs in <5 seconds
+- Migrate from NodeUnit to Mocha
+- General cleanup of build script
+  - Clean up CI script?
+  - Use automatopia ideas
+- Add HTML validation / linting?
+
 - How do we not test Typekit when we're just testing CSS?
 
 - Need to test arrow's background elements--is there a clean way of doing this?
@@ -38,10 +43,6 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* AT START OF EPISODE:
-  * Plan the chapter
-  - Add missing '<html>' to top of index.html
-
 
 
 
