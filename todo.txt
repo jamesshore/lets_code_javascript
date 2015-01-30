@@ -22,18 +22,6 @@ User Stories to finish current MMF:
   - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
 - Release new design
 
-Potential future stories:
-- "Try me" text in drawing area
-- Responsive design
-- Accessibility
-- Site monitoring and logging
-- Performance
-  - Note: serious performance degradation in IE 8 as more lines drawn
-- Scalability
-- Deploy (including smoke test to ensure that div is in home page)
-    (needs to depend on 'build'; just running foreman could give us outdated files)
-- Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)
-
 Engineering Tasks:
 - Migrate from NodeUnit to Mocha
 - Create a 'quick' build target that runs in <5 seconds
@@ -50,10 +38,24 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* BEFORE NEXT EPISODE:
-  - Figure out why browsers are timing out
 * AT START OF EPISODE:
+  * Plan the chapter
   - Add missing '<html>' to top of index.html
+
+
+
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
+
+Potential future stories:
+- "Try me" text in drawing area
+- Responsive design
+- Accessibility
+- Site monitoring and logging
+- Performance
+  - Note: serious performance degradation in IE 8 as more lines drawn
+- Scalability
+- Deploy (including smoke test to ensure that div is in home page)
+    (needs to depend on 'build'; just running foreman could give us outdated files)
+- Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)
