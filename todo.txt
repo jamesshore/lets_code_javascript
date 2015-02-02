@@ -25,7 +25,7 @@ User Stories to finish current MMF:
 - Release new design
 
 Engineering Tasks:
-- Create a 'quick' build target that runs in <5 seconds
+* Create a 'quick' build target that runs in <5 seconds
 - Migrate from NodeUnit to Mocha
 - General cleanup of build script
   - Clean up CI script?

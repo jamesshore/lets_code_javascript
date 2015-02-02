@@ -32,12 +32,12 @@
 	});
 
 	desc("Build and test");
-	task("default", ["lint", "test"], function() {
+	task("default", [ "lint", "test" ], function() {
 		buildOk();
 	});
 
 	desc("Build and test fast targets only");
-	task("quick", function() {
+	task("quick", [ "lint", "testFast" ], function() {
 		buildOk();
 	});
 
@@ -47,7 +47,7 @@
 	}, {async: true});
 
 	desc("Start WeeWikiPaint server for manual testing");
-	task("run", ["build"], function() {
+	task("run", [ "build" ], function() {
 		var runServer = require("./src/_run_server.js");
 
 		console.log("Running server. Press Ctrl-C to stop.");
@@ -56,9 +56,9 @@
 	}, {async: true});
 
 	desc("Lint everything");
-	task("lint", ["lintNode", "lintClient"]);
+	task("lint", [ "lintNode", "lintClient" ]);
 
-	task("lintNode", ["nodeVersion"], function() {
+	task("lintNode", [ "nodeVersion" ], function() {
 		var passed = lint().validateFileList(nodeLintFiles(), nodeLintOptions(), {});
 		if (!passed) fail("Lint failed");
 	});
@@ -69,10 +69,14 @@
 	});
 
 	desc("Test everything");
-	task("test", ["testServer", "testClient", "testSmoke"]);
+	task("test", [ "testFast", "testSlow" ]);
+
+	task("testFast", [ "testServer", "testClient" ]);
+
+	task("testSlow", [ "testSmoke" ]);
 
 	desc("Test server code");
-	task("testServer", ["nodeVersion", TEMP_TESTFILE_DIR], function() {
+	task("testServer", [ "nodeVersion", TEMP_TESTFILE_DIR ], function() {
 		nodeunit().runTests(serverTestFiles(), complete, fail);
 	}, {async: true});
 
@@ -82,12 +86,12 @@
 	}, {async: true});
 
 	desc("End-to-end smoke tests");
-	task("testSmoke", ["build"], function() {
+	task("testSmoke", [ "build" ], function() {
 		nodeunit().runTests(smokeTestFiles(), complete, fail);
 	}, {async: true});
 
 	desc("Bundle and build code");
-	task("build", [BUILD_CLIENT_DIR], function() {
+	task("build", [ BUILD_CLIENT_DIR ], function() {
 		var fs = require("fs");
 		var shell = require("shelljs");
 		var browserify = require("browserify");
@@ -135,7 +139,7 @@
 	});
 
 	desc("Integration checklist");
-	task("integrate", ["default"], function() {
+	task("integrate", [ "default" ], function() {
 		console.log("1. Make sure 'git status' is clean.");
 		console.log("2. Build on the integration box.");
 		console.log("   a. Walk over to integration box.");
