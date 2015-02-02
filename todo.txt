@@ -25,7 +25,7 @@ User Stories to finish current MMF:
 - Release new design
 
 Engineering Tasks:
-* Create a 'quick' build target that runs in <5 seconds
+* Only lint files that have changed
 - Migrate from NodeUnit to Mocha
 - General cleanup of build script
   - Clean up CI script?
@@ -45,8 +45,9 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Having 'quick' target only run needed tasks
-
+* Make a new build target that lints file-by-file
+- Have build target create a file when lint succeeds
+- Only lint files that have changed
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
