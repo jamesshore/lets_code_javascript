@@ -6,6 +6,8 @@ Minimum Marketable Features:
 * replace home page with professional design (episodes 201+)
 - support more browsers (Android, IE10, IE11)
   - iOS 8.1 upgrade broke Mobile Safari tests
+  - Firefox and Chrome fail on Windows 8.1 with a touch screen (ref Mattias Åslund email, 2 Feb 2015)
+    - was not able to reproduce using http://modern.ie VM. Presumably due to lack of touch screen?
 - replace 404 page with professional design
 ? multiple painting/erasing tools
 - collaborative painting
