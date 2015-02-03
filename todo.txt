@@ -45,8 +45,8 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Make our spike lint a single
-- Make a build target that lints all JS files
+* How do we put generated .lint files in the generated/lint tree?
+- How do we check all JS files
 - Migrate to simplebuild-jshint module
 
 Notes:

@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global desc, task, file, jake, fail, complete, directory*/
+/*global desc, task, file, jake, rule, fail, complete, directory*/
 
 (function() {
 	"use strict";
@@ -70,14 +70,23 @@
 
 
 
-	task("lintspike", [ "generated/lint/Jakefile.lint" ]);
+	task("lintspike", [ "Jakefile.lint", "src/_release_test.lint" ]);
 
-	file("generated/lint/Jakefile.lint", [ "generated/lint", "Jakefile.js" ], function() {
+	//file("generated/lint/Jakefile.lint", [ "generated/lint", "Jakefile.js" ], function() {
+	//	var fs = require("fs");
+	//
+	//	console.log("LINT SPIKE!");
+	//	var passed = lint().validateFile("Jakefile.js", nodeLintOptions(), {});
+	//	if (passed) fs.writeFileSync("generated/lint/Jakefile.lint", "Jakefile.js: lint ok");
+	//	else fail("Lint failed");
+	//});
+
+	rule(".lint", ".js", function() {
 		var fs = require("fs");
 
 		console.log("LINT SPIKE!");
-		var passed = lint().validateFile("Jakefile.js", nodeLintOptions(), {});
-		if (passed) fs.writeFileSync("generated/lint/Jakefile.lint", "Jakefile.js: lint ok");
+		var passed = lint().validateFile(this.source, nodeLintOptions(), {});
+		if (passed) fs.writeFileSync(this.name, "lint ok");
 		else fail("Lint failed");
 	});
 
