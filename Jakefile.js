@@ -70,7 +70,17 @@
 
 
 
-	task("lintspike", [ "generated/lint", "generated/lint/src", "generated/lint/Jakefile.lint", "generated/lint/src/_release_test.lint", "generated/lint/src/_smoke_test.lint" ]);
+	task("lintspike", [ "generated/lint", "generated/lint/src", "generated/lint/build" ]);
+
+	var path = require("path");
+
+	nodeLintFiles().forEach(function(jsFile) {
+		var lintFile = "generated/lint/" + jsFile.replace(/\.js$/, ".lint");
+		var lintDirectory = path.dirname(lintFile);
+
+		task("lintspike", [ lintDirectory, lintFile ]);
+		directory(lintDirectory);
+	});
 
 	function lintSourceFile(name) {
 		var result = name.replace(/^generated\/lint\//, "");
@@ -87,6 +97,7 @@
 
 	directory("generated/lint");
 	directory("generated/lint/src");
+	directory("generated/lint/build");
 
 
 

@@ -45,7 +45,8 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* How do we automatically lint all JS files (and create their directories)
+* How do we lint client code differently than server-side code?
+- Can we make directory scanning faster?
 - Migrate to simplebuild-jshint module
 
 Notes:
