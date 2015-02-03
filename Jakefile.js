@@ -41,6 +41,20 @@
 		buildOk();
 	});
 
+
+	task("lintspike", [ "generated/lint/Jakefile.lint" ]);
+
+	file("generated/lint/Jakefile.lint", [ "generated/lint", "Jakefile.js" ], function() {
+		var fs = require("fs");
+
+		console.log("LINT SPIKE!");
+		fs.writeFileSync("generated/lint/Jakefile.lint", "Jakefile.js: lint ok");
+	});
+
+	directory("generated/lint");
+
+
+
 	desc("Start Karma server for testing");
 	task("karma", function() {
 		karma().serve("build/karma.conf.js", complete, fail);

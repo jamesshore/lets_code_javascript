@@ -45,9 +45,9 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Make a new build target that lints file-by-file
-- Have build target create a file when lint succeeds
-- Only lint files that have changed
+* Make our spike lint a single
+- Make a build target that lints all JS files
+
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
