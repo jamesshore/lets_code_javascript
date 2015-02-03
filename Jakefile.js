@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global desc, task, jake, fail, complete, directory*/
+/*global desc, task, file, jake, fail, complete, directory*/
 
 (function() {
 	"use strict";
@@ -41,20 +41,6 @@
 		buildOk();
 	});
 
-
-	task("lintspike", [ "generated/lint/Jakefile.lint" ]);
-
-	file("generated/lint/Jakefile.lint", [ "generated/lint", "Jakefile.js" ], function() {
-		var fs = require("fs");
-
-		console.log("LINT SPIKE!");
-		fs.writeFileSync("generated/lint/Jakefile.lint", "Jakefile.js: lint ok");
-	});
-
-	directory("generated/lint");
-
-
-
 	desc("Start Karma server for testing");
 	task("karma", function() {
 		karma().serve("build/karma.conf.js", complete, fail);
@@ -81,6 +67,24 @@
 		var passed = lint().validateFileList(clientLintFiles(), clientLintOptions(), clientGlobals());
 		if (!passed) fail("Lint failed");
 	});
+
+
+
+	task("lintspike", [ "generated/lint/Jakefile.lint" ]);
+
+	file("generated/lint/Jakefile.lint", [ "generated/lint", "Jakefile.js" ], function() {
+		var fs = require("fs");
+
+		console.log("LINT SPIKE!");
+		var passed = lint().validateFile("Jakefile.js", nodeLintOptions(), {});
+		if (passed) fs.writeFileSync("generated/lint/Jakefile.lint", "Jakefile.js: lint ok");
+		else fail("Lint failed");
+	});
+
+	directory("generated/lint");
+
+
+
 
 	desc("Test everything");
 	task("test", [ "testFast", "testSlow" ]);

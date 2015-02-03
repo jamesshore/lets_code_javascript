@@ -47,7 +47,7 @@ Engineering Tasks:
 To Do on current task:
 * Make our spike lint a single
 - Make a build target that lints all JS files
-
+- Migrate to simplebuild-jshint module
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
