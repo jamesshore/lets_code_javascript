@@ -45,8 +45,7 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* How do we put generated .lint files in the generated/lint tree?
-- How do we check all JS files
+* How do we automatically lint all JS files (and create their directories)
 - Migrate to simplebuild-jshint module
 
 Notes:
