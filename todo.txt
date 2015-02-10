@@ -45,6 +45,11 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
+* AT BEGINNING OF EPISODE:
+  - Martin Grandrath comments (E283)
+  - Performance optimization strategy (min vs. ideal)
+  - Manual profiling
+  - Flame graphs and node-inspector
 * How do we lint client code differently than server-side code?
 - Can we make directory scanning faster?
 - Migrate to simplebuild-jshint module
