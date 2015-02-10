@@ -75,59 +75,52 @@
 	}
 
 
-var pathTime = Date.now();
+	var pathTime = Date.now();
 	var path = require("path");
 	var lintRunner = lint();
-logTime(pathTime, "require");
+	logTime(pathTime, "require");
 
 	task("lintspike2", function() {
 		var fileTime = Date.now();
-			var files = parallelNodeLintFiles(function(files) {
-				logTime(fileTime, "determine files");
+		var files = parallelNodeLintFiles(function(err, files) {
+			logTime(fileTime, "determine files");
+			if (err) return fail(err);
 
-				jake.Task.lintspike.invoke();
-				complete();
+			var createTaskTime = Date.now();
+			task("lintspike");
+			files.forEach(function(jsFile) {
+				var lintFile = "generated/lint/" + jsFile.replace(/\.js$/, ".lint");
+				var lintDirectory = path.dirname(lintFile);
+
+				task("lintspike", [ lintDirectory, lintFile ]);
+				directory(lintDirectory);
 			});
 
+			function lintSourceFile(name) {
+				var result = name.replace(/^generated\/lint\//, "");
+				return result.replace(/\.lint$/, ".js");
+			}
 
+			rule(".lint", lintSourceFile, function() {
+				var fs = require("fs");
+
+				var passed = lintRunner.validateFile(this.source, nodeLintOptions(), {});
+				if (passed) fs.writeFileSync(this.name, "lint ok");
+				else fail("Lint failed");
+			});
+
+			logTime(createTaskTime, "create tasks");
+
+			var taskTime = Date.now();
+			var lintspike = jake.Task.lintspike;
+			lintspike.addListener("complete", function() {
+				logTime(taskTime, "run lint");
+				complete();
+			});
+			lintspike.invoke();
+		});
 	}, { async: true });
 
-
-var files = nodeLintFiles();
-
-
-var createTaskTime = Date.now();
-	task("lintspike", [ "generated/lint", "generated/lint/src", "generated/lint/build" ], function() {
-		var elapsedSeconds = (Date.now() - taskTime) / 1000;
-		console.log("run tasks: " + elapsedSeconds.toFixed(2) + "s");
-	});
-	files.forEach(function(jsFile) {
-		var lintFile = "generated/lint/" + jsFile.replace(/\.js$/, ".lint");
-		var lintDirectory = path.dirname(lintFile);
-
-		task("lintspike", [ lintDirectory, lintFile ]);
-		directory(lintDirectory);
-	});
-
-	function lintSourceFile(name) {
-		var result = name.replace(/^generated\/lint\//, "");
-		return result.replace(/\.lint$/, ".js");
-	}
-
-	rule(".lint", lintSourceFile, function() {
-		var fs = require("fs");
-
-		var passed = lint().validateFile(this.source, nodeLintOptions(), {});
-		if (passed) fs.writeFileSync(this.name, "lint ok");
-		else fail("Lint failed");
-	});
-
-	directory("generated/lint");
-	directory("generated/lint/src");
-	directory("generated/lint/build");
-logTime(createTaskTime, "create tasks");
-
-var taskTime = Date.now();
 
 
 
@@ -138,9 +131,7 @@ var taskTime = Date.now();
 		javascriptFiles.include("src/server/**/*.js");
 		javascriptFiles.include("src/*.js");
 
-
 		callback(null, javascriptFiles.toArray());
-		return javascriptFiles.toArray();
 	}
 
 
