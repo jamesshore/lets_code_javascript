@@ -25,7 +25,7 @@ User Stories to finish current MMF:
 - Release new design
 
 Engineering Tasks:
-* Only lint files that have changed (goal: > 0.1s  <1.1s
+* Only lint files that have changed (goal: > 0.1s  <1.1s)
 - Migrate from NodeUnit to Mocha
 - General cleanup of build script
   - Clean up CI script?
@@ -45,8 +45,7 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Refactor lintspike to work asynchronously
-- Write an asynchronous version of nodeLintFiles()
+* Clean up our lint spike and make it part of our regular build
 - How do we lint client code differently than server-side code?
   - Martin Grandrath: simplify by removing for loop, separate lint options (E283 comments)
 - Can we make directory scanning faster?

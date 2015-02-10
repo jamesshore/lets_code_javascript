@@ -78,6 +78,7 @@
 	var pathTime = Date.now();
 	var path = require("path");
 	var lintRunner = lint();
+	var glob = require("glob");
 	logTime(pathTime, "require");
 
 	task("lintspike2", function() {
@@ -125,13 +126,16 @@
 
 
 	function parallelNodeLintFiles(callback) {
-		var javascriptFiles = new jake.FileList();
-		javascriptFiles.include("*.js");
-		javascriptFiles.include("build/util/*.js");
-		javascriptFiles.include("src/server/**/*.js");
-		javascriptFiles.include("src/*.js");
+		glob("{*.js,build/util/*.js,src/server/**/*.js,src/*.js}", callback);
 
-		callback(null, javascriptFiles.toArray());
+
+		//var javascriptFiles = new jake.FileList();
+		//javascriptFiles.include("*.js");
+		//javascriptFiles.include("build/util/*.js");
+		//javascriptFiles.include("src/server/**/*.js");
+		//javascriptFiles.include("src/*.js");
+		//
+		//callback(null, javascriptFiles.toArray());
 	}
 
 
