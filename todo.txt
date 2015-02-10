@@ -45,10 +45,10 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* AT BEGINNING OF EPISODE:
-  - Flame graphs (Brendan Gregg) and node-inspector
+* Refactor lintspike to work asynchronously
+- Write an asynchronous version of nodeLintFiles()
+- How do we lint client code differently than server-side code?
   - Martin Grandrath: simplify by removing for loop, separate lint options (E283 comments)
-* How do we lint client code differently than server-side code?
 - Can we make directory scanning faster?
 - Migrate to simplebuild-jshint module
 
