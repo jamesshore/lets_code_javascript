@@ -85,7 +85,7 @@ logTime(pathTime, "require");
 			var files = parallelNodeLintFiles(function(files) {
 				logTime(fileTime, "determine files");
 
-				jake.Task["lintspike"].invoke();
+				jake.Task.lintspike.invoke();
 				complete();
 			});
 
@@ -97,7 +97,10 @@ var files = nodeLintFiles();
 
 
 var createTaskTime = Date.now();
-	task("lintspike", [ "generated/lint", "generated/lint/src", "generated/lint/build" ]);
+	task("lintspike", [ "generated/lint", "generated/lint/src", "generated/lint/build" ], function() {
+		var elapsedSeconds = (Date.now() - taskTime) / 1000;
+		console.log("run tasks: " + elapsedSeconds.toFixed(2) + "s");
+	});
 	files.forEach(function(jsFile) {
 		var lintFile = "generated/lint/" + jsFile.replace(/\.js$/, ".lint");
 		var lintDirectory = path.dirname(lintFile);
@@ -125,10 +128,6 @@ var createTaskTime = Date.now();
 logTime(createTaskTime, "create tasks");
 
 var taskTime = Date.now();
-task("lintspike", function() {
-	var elapsedSeconds = (Date.now() - taskTime) / 1000;
-	console.log("run tasks: " + elapsedSeconds.toFixed(2) + "s");
-});
 
 
 
