@@ -69,12 +69,24 @@
 	});
 
 
+	function logTime(desc) {
+		var elapsedSeconds = (Date.now() - time) / 1000;
+		console.log(desc + ": " + elapsedSeconds.toFixed(2) + "s");
+	}
 
-	task("lintspike", [ "generated/lint", "generated/lint/src", "generated/lint/build" ]);
 
+var time = Date.now();
 	var path = require("path");
+	var lintRunner = lint();
+logTime("require");
 
-	nodeLintFiles().forEach(function(jsFile) {
+var time = Date.now();
+	var files = nodeLintFiles();
+logTime("determine files");
+
+var time = Date.now();
+	task("lintspike", [ "generated/lint", "generated/lint/src", "generated/lint/build" ]);
+	files.forEach(function(jsFile) {
 		var lintFile = "generated/lint/" + jsFile.replace(/\.js$/, ".lint");
 		var lintDirectory = path.dirname(lintFile);
 
@@ -98,6 +110,14 @@
 	directory("generated/lint");
 	directory("generated/lint/src");
 	directory("generated/lint/build");
+logTime("create tasks");
+
+var taskTime = Date.now();
+task("lintspike", function() {
+	var elapsedSeconds = (Date.now() - taskTime) / 1000;
+	console.log("run tasks: " + elapsedSeconds.toFixed(2) + "s");
+});
+
 
 
 

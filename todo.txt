@@ -25,7 +25,7 @@ User Stories to finish current MMF:
 - Release new design
 
 Engineering Tasks:
-* Only lint files that have changed
+* Only lint files that have changed (goal: > 0.1s  <1.1s
 - Migrate from NodeUnit to Mocha
 - General cleanup of build script
   - Clean up CI script?
@@ -46,10 +46,8 @@ Engineering Tasks:
 
 To Do on current task:
 * AT BEGINNING OF EPISODE:
-  - Martin Grandrath comments (E283)
-  - Performance optimization strategy (min vs. ideal)
-  - Manual profiling
-  - Flame graphs and node-inspector
+  - Flame graphs (Brendan Gregg) and node-inspector
+  - Martin Grandrath: simplify by removing for loop, separate lint options (E283 comments)
 * How do we lint client code differently than server-side code?
 - Can we make directory scanning faster?
 - Migrate to simplebuild-jshint module
