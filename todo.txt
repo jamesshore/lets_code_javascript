@@ -53,6 +53,7 @@ To Do on current task:
 - How do we lint client code differently than server-side code?
   - Martin Grandrath: simplify by removing for loop, separate lint options (E283 comments)
 - Migrate to simplebuild-jshint module
+- Where should 'nodeVersion' dependency go?
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
