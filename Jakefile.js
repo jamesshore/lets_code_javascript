@@ -55,30 +55,26 @@
 		// We never call complete() because we want the task to hang until the user presses 'Ctrl-C'.
 	}, {async: true});
 
+
+	//*** LINT
+
 	desc("Lint everything");
-	task("lint", [ "nodeVersion", "lintNode", "lintClient" ]);
-
-	task("lintClient", function() {
-		var passed = lint().validateFileList(clientLintFiles(), clientLintOptions(), clientGlobals());
-		if (!passed) fail("Lint failed");
-	});
-
-
-	task("lintNode");
-	task("lintNode", nodeLintDirectories());
-	task("lintNode", nodeLintOutput());
+	task("lint", [ "nodeVersion" ]);
+	task("lint", nodeLintDirectories());
+	task("lint", nodeLintOutput());
 
 	createDirectoryDependencies(nodeLintDirectories());
 
 	rule(".lint", determineLintDependency, function() {
 		var fs = require("fs");
 
-		var passed = lint().validateFile(this.source, nodeLintOptions(), {});
+		var passed = lint().validateFile(this.source, lintOptions(), lintGlobals());
 		if (passed) fs.writeFileSync(this.name, "lint ok");
 		else fail("Lint failed");
 	});
 
 
+	//*** TEST
 
 	desc("Test everything");
 	task("test", [ "testFast", "testSlow" ]);
@@ -193,18 +189,13 @@
 		return testFiles;
 	}
 
-	function clientLintFiles() {
-		var javascriptFiles = new jake.FileList();
-		javascriptFiles.include("src/client/*.js");
-		return javascriptFiles.toArray();
-	}
-
 	function nodeLintFiles() {
 		var glob = require("glob");
 
 		return glob.sync("{" +
 			"*.js," +
 			"build/util/*.js," +
+			"src/client/*.js," +
 			"src/server/**/*.js," +
 			"src/*.js" +
 		"}");
@@ -231,19 +222,7 @@
 		});
 	}
 
-	function nodeLintOptions() {
-		var options = sharedLintOptions();
-		options.node = true;
-		return options;
-	}
-
-	function clientLintOptions() {
-		var options = sharedLintOptions();
-		options.browser = true;
-		return options;
-	}
-
-	function sharedLintOptions() {
+	function lintOptions() {
 		return {
 			bitwise: true,
 			curly: false,
@@ -258,11 +237,13 @@
 			regexp: true,
 			undef: true,
 			strict: true,
-			trailing: true
+			trailing: true,
+			node: true,
+			browser: true
 		};
 	}
 
-	function clientGlobals() {
+	function lintGlobals() {
 		return {
 			// Browserify
 			require: false,
