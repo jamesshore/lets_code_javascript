@@ -46,9 +46,7 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Incremental testing: server tests
-- Incremental testing: client tests
-- Replace jake.FileList with glob in all cases
+* Replace jake.FileList with glob in all cases
 - Discuss and address safety w/ incremental builds
 - Where should 'nodeVersion' dependency go?
 - Migrate to simplebuild-jshint module

@@ -93,8 +93,14 @@
 	directory("generated/incremental");
 
 	desc("Test client code");
-	task("testClient", [], function() {
-		karma().runTests(REQUIRED_BROWSERS, complete, fail);
+	task("testClient", [ "generated/incremental", "generated/incremental/client.test" ]);
+	file("generated/incremental/client.test", clientFiles(), function() {
+		karma().runTests(REQUIRED_BROWSERS, succeed, fail);
+
+		function succeed() {
+			fs().writeFileSync("generated/incremental/client.test", "test ok");
+			complete();
+		}
 	}, {async: true});
 
 	desc("End-to-end smoke tests");
@@ -184,6 +190,14 @@
 		testFiles.include("src/server/**/_*_test.js");
 		testFiles = testFiles.toArray();
 		return testFiles;
+	}
+
+	function clientFiles() {
+		return glob().sync("{" +
+			"src/client/**/*.js," +
+			"src/client/**/*.html," +
+			"src/client/**/*.css," +
+		"}");
 	}
 
 	function serverFiles() {
