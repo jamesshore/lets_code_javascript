@@ -64,26 +64,16 @@
 	});
 
 
-	var path = require("path");
-	var lintRunner = lint();
-	var glob = require("glob");
-
 	task("lintNode");
-	nodeLintDirectories().forEach(function(lintDirectory) {
-		task("lintNode", [ lintDirectory ]);
-		directory(lintDirectory);
-	});
-	task("lintNode", nodeLintDependencies());
+	task("lintNode", nodeLintDirectories());
+	task("lintNode", nodeLintOutput());
 
-	function lintSourceFile(name) {
-		var result = name.replace(/^generated\/lint\//, "");
-		return result.replace(/\.lint$/, ".js");
-	}
+	createDirectoryDependencies(nodeLintDirectories());
 
-	rule(".lint", lintSourceFile, function() {
+	rule(".lint", determineLintDependency, function() {
 		var fs = require("fs");
 
-		var passed = lintRunner.validateFile(this.source, nodeLintOptions(), {});
+		var passed = lint().validateFile(this.source, nodeLintOptions(), {});
 		if (passed) fs.writeFileSync(this.name, "lint ok");
 		else fail("Lint failed");
 	});
@@ -210,18 +200,32 @@
 	}
 
 	function nodeLintFiles() {
-		return glob.sync("{*.js,build/util/*.js,src/server/**/*.js,src/*.js}");
+		var glob = require("glob");
+
+		return glob.sync("{" +
+			"*.js," +
+			"build/util/*.js," +
+			"src/server/**/*.js," +
+			"src/*.js" +
+		"}");
+	}
+
+	function determineLintDependency(name) {
+		var result = name.replace(/^generated\/lint\//, "");
+		return result.replace(/\.lint$/, ".js");
 	}
 
 	function nodeLintDirectories() {
+		var path = require("path");
+
 		var result = [];
-		nodeLintDependencies().forEach(function(lintDependency) {
+		nodeLintOutput().forEach(function(lintDependency) {
 			result.push(path.dirname(lintDependency));
 		});
 		return result;
 	}
 
-	function nodeLintDependencies() {
+	function nodeLintOutput() {
 		return nodeLintFiles().map(function(pathname) {
 			return "generated/lint/" + pathname.replace(/\.js$/, ".lint");
 		});
@@ -283,6 +287,13 @@
 	function buildOk() {
 		var elapsedSeconds = (Date.now() - startTime) / 1000;
 		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
+	}
+
+	function createDirectoryDependencies(directories) {
+		directories.forEach(function(lintDirectory) {
+			task("lintNode", [lintDirectory]);
+			directory(lintDirectory);
+		});
 	}
 
 

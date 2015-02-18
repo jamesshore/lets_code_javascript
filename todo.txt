@@ -48,8 +48,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Clean up our lint spike and make it part of our regular build
-  - Note: glob.sync is as fast as regular async glob. Actually, it's slightly faster (!).
-  - Consider multi-glob: https://github.com/busterjs/multi-glob (async only)
 - How do we lint client code differently than server-side code?
   - Martin Grandrath: simplify by removing for loop, separate lint options (E283 comments)
 - Migrate to simplebuild-jshint module
