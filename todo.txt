@@ -46,11 +46,12 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Replace jake.FileList with glob in all cases
-- Discuss and address safety w/ incremental builds
+* Discuss and address safety w/ incremental builds
 - Where should 'nodeVersion' dependency go?
 - Migrate to simplebuild-jshint module
 - Clean up 'testFast' and 'testSlow' distinction
+- Document 'quick' target in the readme (OFF-CAMERA)
+- Fix duplicate 'BUILD OK' when running default build
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows

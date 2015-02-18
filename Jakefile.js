@@ -32,7 +32,7 @@
 	});
 
 	desc("Build and test");
-	task("default", [ "quick", "testSlow" ], function() {
+	task("default", [ "clean", "quick", "testSlow" ], function() {
 		buildOk();
 	});
 
@@ -186,39 +186,33 @@
 	});
 
 	function serverTestFiles() {
-		var testFiles = new jake.FileList();
-		testFiles.include("src/server/**/_*_test.js");
-		testFiles = testFiles.toArray();
-		return testFiles;
+		return deglob("src/server/**/_*_test.js");
 	}
 
 	function clientFiles() {
-		return glob().sync("{" +
-			"src/client/**/*.js," +
-			"src/client/**/*.html," +
-			"src/client/**/*.css," +
-		"}");
+		return deglob([
+			"src/client/**/*.js",
+			"src/client/**/*.html",
+			"src/client/**/*.css",
+		]);
 	}
 
 	function serverFiles() {
-		return glob().sync("src/server/**/*.js");
+		return deglob("src/server/**/*.js");
 	}
 
 	function smokeTestFiles() {
-		var testFiles = new jake.FileList();
-		testFiles.include("src/_*_test.js");
-		testFiles = testFiles.toArray();
-		return testFiles;
+		return deglob("src/_*_test.js");
 	}
 
 	function nodeLintFiles() {
-		return glob().sync("{" +
-			"*.js," +
-			"build/util/*.js," +
-			"src/client/*.js," +
-			"src/server/**/*.js," +
-			"src/*.js" +
-		"}");
+		return deglob([
+			"*.js",
+			"build/util/*.js",
+			"src/client/*.js",
+			"src/server/**/*.js",
+			"src/*.js"
+		]);
 	}
 
 	function determineLintDependency(name) {
@@ -318,8 +312,14 @@
 		return require("fs");
 	}
 
-	function glob() {
-		return require("glob");
+	function deglob(patterns) {
+		var glob = require("glob");
+
+		var globPattern = patterns;
+		if (Array.isArray(patterns)) globPattern = "{" + patterns.join(",") + "}";
+
+		return glob.sync(globPattern);
 	}
+
 
 }());
