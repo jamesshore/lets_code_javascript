@@ -21,10 +21,19 @@
 	var TEMP_TESTFILE_DIR = GENERATED_DIR + "/test";
 	var BUILD_DIR = GENERATED_DIR + "/build";
 	var BUILD_CLIENT_DIR = BUILD_DIR + "/client";
+	var INCREMENTAL_DIR = "generated/incremental";
+	var SERVER_TEST_TARGET = INCREMENTAL_DIR + "/server.test";
+	var CLIENT_TEST_TARGET = INCREMENTAL_DIR + "/client.test";
+
+	//*** DIRECTORIES
 
 	directory(TEMP_TESTFILE_DIR);
 	directory(BUILD_DIR);
 	directory(BUILD_CLIENT_DIR);
+	directory(INCREMENTAL_DIR);
+
+
+	//*** GENERAL
 
 	desc("Delete all generated files");
 	task("clean", [], function() {
@@ -74,24 +83,23 @@
 	//*** TEST
 
 	desc("Test server code");
-	task("testServer", [ "generated/incremental", TEMP_TESTFILE_DIR, "generated/incremental/server.test" ]);
-	file("generated/incremental/server.test", serverFiles(), function() {
+	task("testServer", [INCREMENTAL_DIR, TEMP_TESTFILE_DIR, SERVER_TEST_TARGET ]);
+	file(SERVER_TEST_TARGET, serverFiles(), function() {
 		nodeunit().runTests(serverTestFiles(), succeed, fail);
 
 		function succeed() {
-			fs().writeFileSync("generated/incremental/server.test", "test ok");
+			fs().writeFileSync(SERVER_TEST_TARGET, "test ok");
 			complete();
 		}
 	}, {async: true});
-	directory("generated/incremental");
 
 	desc("Test client code");
-	task("testClient", [ "generated/incremental", "generated/incremental/client.test" ]);
-	file("generated/incremental/client.test", clientFiles(), function() {
+	task("testClient", [ INCREMENTAL_DIR, CLIENT_TEST_TARGET ]);
+	file(CLIENT_TEST_TARGET, clientFiles(), function() {
 		karma().runTests(REQUIRED_BROWSERS, succeed, fail);
 
 		function succeed() {
-			fs().writeFileSync("generated/incremental/client.test", "test ok");
+			fs().writeFileSync(CLIENT_TEST_TARGET, "test ok");
 			complete();
 		}
 	}, {async: true});
@@ -100,6 +108,9 @@
 	task("smoketest", [ "build" ], function() {
 		nodeunit().runTests(smokeTestFiles(), complete, fail);
 	}, {async: true});
+
+
+	//*** BUILD
 
 	desc("Bundle and build code");
 	task("build", [ BUILD_CLIENT_DIR ], function() {
@@ -125,6 +136,9 @@
 		});
 	}, {async: true});
 
+
+	//*** DEPLOY
+
 	desc("Deploy to Heroku");
 	task("deploy", function() {
 		console.log("To deploy to production:");
@@ -141,6 +155,9 @@
 		console.log("3. Visit http://wwp-staging.herokuapp.com/");
 	});
 
+
+	//*** CHECK VERSIONS
+
 //	desc("Ensure correct version of Node is present.");
 	task("nodeVersion", [], function() {
 		var versionChecker = require("./build/util/version_checker.js");
@@ -148,6 +165,9 @@
 		var deployedVersion = "v" + require("./package.json").engines.node;
 		versionChecker.check("Node", !process.env.loose, deployedVersion, process.version, fail);
 	});
+
+
+	//*** INTEGRATE
 
 	desc("Integration checklist");
 	task("integrate", [ "default" ], function() {
@@ -177,6 +197,9 @@
 		console.log("   e. 'jake'");
 		console.log("5. Tag episode: 'git tag -a episodeXX -m \"End of episode XX\"'");
 	});
+
+
+	//*** UTILITY FUNCTIONS
 
 	function serverTestFiles() {
 		return deglob("src/server/**/_*_test.js");
