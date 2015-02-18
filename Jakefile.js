@@ -40,12 +40,12 @@
 		jake.rmRf(GENERATED_DIR);
 	});
 
-	desc("Build and test");
+	desc("Lint and test everything");
 	task("default", [ "clean", "quick", "smoketest" ], function() {
 		buildOk();
 	});
 
-	desc("Build and test fast targets only");
+	desc("Incrementally lint and test fast targets");
 	task("quick", [ "nodeVersion", "lint", "testServer", "testClient" ], function() {
 		buildOk();
 	});
@@ -55,7 +55,7 @@
 		karma().serve("build/karma.conf.js", complete, fail);
 	}, {async: true});
 
-	desc("Start WeeWikiPaint server for manual testing");
+	desc("Start localhost server for manual testing");
 	task("run", [ "build" ], function() {
 		var runServer = require("./src/_run_server.js");
 
