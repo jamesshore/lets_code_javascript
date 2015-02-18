@@ -30,6 +30,7 @@ Engineering Tasks:
 - General cleanup of build script
   - Clean up CI script?
   - Use automatopia ideas
+  - Clean up -T output
 - Migrate from NodeUnit to Mocha
 - Add HTML validation / linting?
 
@@ -46,10 +47,6 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-* Discuss and address safety w/ incremental builds
-- Where should 'nodeVersion' dependency go?
-- Migrate to simplebuild-jshint module
-- Clean up 'testFast' and 'testSlow' distinction
 - Document 'quick' target in the readme (OFF-CAMERA)
 - Fix duplicate 'BUILD OK' when running default build
 

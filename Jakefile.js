@@ -32,12 +32,12 @@
 	});
 
 	desc("Build and test");
-	task("default", [ "clean", "quick", "testSlow" ], function() {
+	task("default", [ "clean", "quick", "smoketest" ], function() {
 		buildOk();
 	});
 
 	desc("Build and test fast targets only");
-	task("quick", [ "nodeVersion", "lint", "testFast" ], function() {
+	task("quick", [ "nodeVersion", "lint", "testServer", "testClient" ], function() {
 		buildOk();
 	});
 
@@ -73,13 +73,6 @@
 
 	//*** TEST
 
-	desc("Test everything");
-	task("test", [ "testFast", "testSlow" ]);
-
-	task("testFast", [ "testServer", "testClient" ]);
-
-	task("testSlow", [ "testSmoke" ]);
-
 	desc("Test server code");
 	task("testServer", [ "generated/incremental", TEMP_TESTFILE_DIR, "generated/incremental/server.test" ]);
 	file("generated/incremental/server.test", serverFiles(), function() {
@@ -104,7 +97,7 @@
 	}, {async: true});
 
 	desc("End-to-end smoke tests");
-	task("testSmoke", [ "build" ], function() {
+	task("smoketest", [ "build" ], function() {
 		nodeunit().runTests(smokeTestFiles(), complete, fail);
 	}, {async: true});
 
