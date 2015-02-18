@@ -32,12 +32,12 @@
 	});
 
 	desc("Build and test");
-	task("default", [ "lint", "test" ], function() {
+	task("default", [ "quick", "testSlow" ], function() {
 		buildOk();
 	});
 
 	desc("Build and test fast targets only");
-	task("quick", [ "lint", "testFast" ], function() {
+	task("quick", [ "nodeVersion", "lint", "testFast" ], function() {
 		buildOk();
 	});
 
@@ -59,17 +59,14 @@
 	//*** LINT
 
 	desc("Lint everything");
-	task("lint", [ "nodeVersion" ]);
 	task("lint", nodeLintDirectories());
 	task("lint", nodeLintOutput());
 
 	createDirectoryDependencies(nodeLintDirectories());
 
 	rule(".lint", determineLintDependency, function() {
-		var fs = require("fs");
-
 		var passed = lint().validateFile(this.source, lintOptions(), lintGlobals());
-		if (passed) fs.writeFileSync(this.name, "lint ok");
+		if (passed) fs().writeFileSync(this.name, "lint ok");
 		else fail("Lint failed");
 	});
 
@@ -84,9 +81,16 @@
 	task("testSlow", [ "testSmoke" ]);
 
 	desc("Test server code");
-	task("testServer", [ "nodeVersion", TEMP_TESTFILE_DIR ], function() {
-		nodeunit().runTests(serverTestFiles(), complete, fail);
+	task("testServer", [ "generated/incremental", TEMP_TESTFILE_DIR, "generated/incremental/server.test" ]);
+	file("generated/incremental/server.test", serverFiles(), function() {
+		nodeunit().runTests(serverTestFiles(), succeed, fail);
+
+		function succeed() {
+			fs().writeFileSync("generated/incremental/server.test", "test ok");
+			complete();
+		}
 	}, {async: true});
+	directory("generated/incremental");
 
 	desc("Test client code");
 	task("testClient", [], function() {
@@ -182,6 +186,10 @@
 		return testFiles;
 	}
 
+	function serverFiles() {
+		return glob().sync("src/server/**/*.js");
+	}
+
 	function smokeTestFiles() {
 		var testFiles = new jake.FileList();
 		testFiles.include("src/_*_test.js");
@@ -190,9 +198,7 @@
 	}
 
 	function nodeLintFiles() {
-		var glob = require("glob");
-
-		return glob.sync("{" +
+		return glob().sync("{" +
 			"*.js," +
 			"build/util/*.js," +
 			"src/client/*.js," +
@@ -292,6 +298,14 @@
 
 	function karma() {
 		return require("./build/util/karma_runner.js");
+	}
+
+	function fs() {
+		return require("fs");
+	}
+
+	function glob() {
+		return require("glob");
 	}
 
 }());

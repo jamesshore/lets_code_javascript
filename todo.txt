@@ -25,11 +25,11 @@ User Stories to finish current MMF:
 - Release new design
 
 Engineering Tasks:
-* General cleanup of build script
+* Additional incremental builds? (server tests, client tests)
+- Run slow tests in parallel with fast tests? (suggested by Danny Jones, E280 comments)
+- General cleanup of build script
   - Clean up CI script?
   - Use automatopia ideas
-- Additional incremental builds? (server tests, client tests)
-- Run slow tests in parallel with fast tests? (suggested by Danny Jones, E280 comments)
 - Migrate from NodeUnit to Mocha
 - Add HTML validation / linting?
 
@@ -46,8 +46,13 @@ Engineering Tasks:
 - Automatically convert psuedoclasses to regular classes in our tests?
 
 To Do on current task:
-- Migrate to simplebuild-jshint module
+* Incremental testing: server tests
+- Incremental testing: client tests
+- Replace jake.FileList with glob in all cases
+- Discuss and address safety w/ incremental builds
 - Where should 'nodeVersion' dependency go?
+- Migrate to simplebuild-jshint module
+- Clean up 'testFast' and 'testSlow' distinction
 
 Notes:
 - NodeUnit default reporter has minor display issue on Windows
