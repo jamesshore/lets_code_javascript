@@ -28,6 +28,7 @@ Engineering Tasks:
 * Additional incremental builds? (server tests, client tests)
 - Run slow tests in parallel with fast tests? (suggested by Danny Jones, E280 comments)
 - General cleanup of build script
+  - Move .lint files to 'incremental' dir, preserve '.js' extension (suggested by Jay Bazuzi, E282 comments)
   - Clean up CI script?
   - Use automatopia ideas
   - Clean up -T output
