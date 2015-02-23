@@ -21,12 +21,19 @@ Before building or running for the first time:
 
 *Note:* If you update the repository (with `git pull` or similar), be sure to erase generated files with `git clean -fdx` afterwards. (Note that this will erase any files you've added, so be sure to check in what you want to keep first.)
 
+
 A note about Node versions:
 ------------------
 
 Some episodes' source code was written for old versions of Node. You can check which version of Node the code expects by running `./jake.sh nodeVersion`, or `jake nodeVersion` on Windows. The build will fail if you're using a different version than expected. (Episodes 1-16 didn't support that command. They expected v0.6.17 or v0.8.4; either should work.)
 
 If you're having trouble getting the code to work properly, especially if the code expects Node 0.8 or earlier, try installing the exact version of Node the code expects. Convenient tools for changing Node versions include [nvm](https://github.com/creationix/nvm) and [n](https://github.com/visionmedia/n) on Mac/Linux, and [nvmw](https://github.com/hakobera/nvmw) and [nodist](https://github.com/marcelklehr/nodist) on Windows.
+
+Known version issues:
+
+* A few episodes rely on a feature of Node.js streams that was removed in Node 0.10. A workaround is included in the video for the episodes in question.
+* Early versions of NodeUnit use an internal 'evals' module that was removed in Node 0.12. (See Node.js [issue #291](https://github.com/caolan/nodeunit/issues/291).) You might be able to resolve this problem by running `npm install nodeunit`.
+* Node 0.12 changed the behavior of [server.close()](http://nodejs.org/api/net.html#net_server_close_callback) when the server is already closed. In previous versions, it threw an exception, but now it passes an `err` object to the server.close callback. This breaks one of the server tests. You can just delete the test in question, or see [episode 14](http://www.letscodejavascript.com/v3/comments/live/14#comment-1870243150) for a workaround.
 
 
 To build and test:
