@@ -10,6 +10,7 @@ being developed in the series.
 
 (Wondering why we check in things like `node_modules` or IDE settings? See "[The Reliable Build](http://www.letscodejavascript.com/v3/blog/2014/12/the_reliable_build)".)
 
+
 Before building or running for the first time:
 -----------------------------------
 
@@ -19,26 +20,53 @@ Before building or running for the first time:
 3. Clone source repository: `git clone https://github.com/jamesshore/lets_code_javascript.git`
 4. All commands must run from root of repository: `cd lets_code_javascript`
 
-*Note:* If you update the repository (with `git pull` or similar), be sure to erase generated files with `git clean -fdx` afterwards. (Note that this will erase any files you've added, so be sure to check in what you want to keep first.)
+*Note:* If you update the repository (with `git pull` or similar), be sure to erase generated files with `git clean -fdx` first. (Note that this will erase any files you've added, so be sure to check in what you want to keep first.)
 
 
-A note about Node versions:
-------------------
+Running old episodes:
+---------------------
 
-Some episodes' source code was written for old versions of Node. You can check which version of Node the code expects by looking at the `engines.node` property in `package.json`. (That file didn't exist prior to episode 31. Those episodes expected v0.6.17, 0.8.4, or 0.8.6; any should work.)
+Every episode's source code has an associated `episodeXX` tag. You can check out and run those episodes, but some episodes' code won't work on the current version of Node. You'll need to install the exact version of Node the code was written for.
 
-If you're having trouble getting the code to work properly, especially if the code expects Node 0.8 or earlier, try installing the exact version of Node the code expects. Convenient tools for changing Node versions include [nvm](https://github.com/creationix/nvm) and [n](https://github.com/visionmedia/n) on Mac/Linux, and [nvmw](https://github.com/hakobera/nvmw) and [nodist](https://github.com/marcelklehr/nodist) on Windows.
+### To check out an old episode:
 
-Known version issues:
+1. If you made any changes, check them in.
+2. Erase generated files: `git clean -fdx`
+3. Reset any changes: `git reset --hard`
+4. Check out old version: `git checkout episodeXX` (For example, `git checkout episode200`.)
+
+Compatibility notes:
+
+* Episodes 1-9 don't work on case-sensitive file systems. To fix the problem, rename `jakefile.js` to `Jakefile.js` (with a capital 'J').
+* Episodes 37-39 don't work on Windows. A workaround is included in the episode 37 video.
+
+
+### To change Node versions and run the code:
+
+1. Look at the `engines.node` property of `package.json` to see which version of Node the code runs on. Prior to episode 31, the Node version was documented in `readme.md`. Prior to episode 10, the version wasn't documented; those episodes used v0.6.17.
+
+2. Install the correct version of Node. On Unix and Mac, [n](https://github.com/visionmedia/n) is a convenient tool for switching Node versions. On Windows, you can use [nvmw](https://github.com/hakobera/nvmw).
+
+3. To see how to run the code, look at the episode's `readme.md` or watch the episode in question. Note that some episodes end with non-working code.
+
+
+### Known version issues:
+
+Node has introduced breaking changes with newer versions. Here are the issues we're aware of. I've included some workarounds, but the best way to run old code is to install the exact version of Node that the code was written for.
+
+* Some episodes include a version of Jake that doesn't run on Node 0.10+. You might be able to resolve this problem by running `npm install jake`.
+
+* Some episodes include a version of NodeUnit that relies on an internal 'evals' module that was removed in Node 0.12. (See Node.js [issue #291](https://github.com/caolan/nodeunit/issues/291).) You might be able to resolve this problem by running `npm install nodeunit`.
+
+* Some episodes include a version of Testacular (now named "Karma") that crashes when you capture a browser in Node 0.10+. There's no easy workaround for this problem, so just install Node 0.8 if you want to run the code in those episodes.
 
 * A few episodes rely on a feature of Node.js streams that was removed in Node 0.10. A workaround is included in the video for the episodes in question.
-* Early versions of Jake don't work on Node 0.10+. You might be able to resolve this problem by running `npm install jake`.
-* Early versions of NodeUnit use an internal 'evals' module that was removed in Node 0.12. (See Node.js [issue #291](https://github.com/caolan/nodeunit/issues/291).) You might be able to resolve this problem by running `npm install nodeunit`.
-* Node 0.12 changed the behavior of [server.close()](http://nodejs.org/api/net.html#net_server_close_callback) when the server is already closed. In previous versions, it threw an exception, but now it passes an `err` object to the server.close callback. This breaks one of the server tests. You can just delete the test in question, or see [episode 14](http://www.letscodejavascript.com/v3/comments/live/14#comment-1870243150) for a workaround.
+
+* Most episodes have a test that checks how [server.close()](http://nodejs.org/api/net.html#net_server_close_callback) handles errors. This behavior was changed in Node 0.12, so the test will fail. (In previous versions, it threw an exception, but now it passes an `err` object to the server.close callback.) You can just delete the test in question, or see [episode 14](http://www.letscodejavascript.com/v3/comments/live/14#comment-1870243150) for a workaround.
 
 
-To build and test:
-------------------
+To build and test this episode:
+-------------------------------
 
 1. Run `./jake.sh karma` (Unix/Mac) or `jake karma` (Windows)
 2. Navigate at least one browser to http://localhost:9876
@@ -46,24 +74,22 @@ To build and test:
 
 You can also run `./jake.sh quick loose=true` for a faster but less thorough set of tests.
 
-*Note:* The master branch is not guaranteed to build successfully. For a known-good build (tested on Mac and Windows, and assumed to work on Linux), use the integration branch:
+*Note:* The master branch is not guaranteed to build successfully. For a known-good build (tested on Mac and Windows, and assumed to work on Linux), use the integration branch. To change branches, follow the steps under "Running old episodes" (above), but replace `episodeXX` with `integration` (for the known-good integration branch) or `master` (for the latest code).
 
-1. Change to the integration branch: `git checkout integration`
-2. Erase generated files: `git clean -fdx` (Note that this will erase *all* new files, so be sure to check in anything you want to keep.)
-3. Stop Karma, if it's running
-4. Build using the steps above
-5. To change back to the development branch, follow these steps again using `git checkout master`
 
-To run locally:
----------------
+To run this episode locally:
+----------------------------
 
 1. Run `./jake.sh run` (Unix/Mac) or `jake run` (Windows)
 2. Navigate a browser to http://localhost:5000
 
 *Note:* The master branch is not guaranteed to run successfully. For a known-good build, use the integration branch as described above.
 
-Before deploying for first time:
---------------------------------
+
+To deploy:
+----------
+
+Before deploying for the first time:
 
 1. Make sure code is in Git repository (clone GitHub repo, or 'git init' yours)
 2. Install [Heroku Toolbelt](https://toolbelt.heroku.com/)
@@ -72,8 +98,7 @@ Before deploying for first time:
 5. Search codebase for `weewikipaint.herokuapp.com` URLs and change them to refer to `<app_name>`
 6. Push known-good deploy to Heroku: `git push heroku episode200:master`
 
-To deploy:
-----------
+Then, to deploy:
 
 1. Run `./jake.sh deploy` (Unix/Mac) or `jake deploy` (Windows) for instructions
 
