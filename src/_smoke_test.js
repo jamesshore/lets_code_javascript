@@ -12,6 +12,8 @@
 	var runServer = require("./_run_server.js");
 
 	var HOME_PAGE_URL = "http://localhost:5000";
+	var EXPECTED_BROWSER = "firefox 35.0.1";
+
 
 	var serverProcess;
 	var driver;
@@ -21,8 +23,13 @@
 			serverProcess = process;
 
 			driver = new firefox.Driver();
-
-			test.done();
+			driver.getCapabilities().then(function(capabilities) {
+				var version = capabilities.get("browserName") + " " + capabilities.get("version");
+				if (version !== EXPECTED_BROWSER) {
+					console.log("Warning: Smoke test browser expected " + EXPECTED_BROWSER + ", but was " + version);
+				}
+				test.done();
+			});
 		});
 	};
 
