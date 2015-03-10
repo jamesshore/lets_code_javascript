@@ -27,6 +27,17 @@
 		[ CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA]
 	];
 
+
+
+	describe("Hello", function() {
+		it("runs tests", function() {
+			console.log("TEST RUNS!");
+			assert.equal(true, true);
+		});
+	});
+
+
+
 	exports.setUp = function(done) {
 		async.each(TEST_FILES, createTestFile, done);
 	};

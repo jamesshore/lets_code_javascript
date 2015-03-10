@@ -19,13 +19,6 @@
 	var driver;
 
 
-	//describe("Hello", function() {
-	//	it("runs tests", function() {
-	//		console.log("TEST RUNS!");
-	//	});
-	//});
-
-
 	exports.test_setupOnce = function(test) {
 		runServer.runProgrammatically(function(process) {
 			serverProcess = process;
