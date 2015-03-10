@@ -22,37 +22,30 @@ User Stories to finish current MMF:
   - Clear button retains focus when drawing (IE8, 9, Chrome)
   - Remove body padding
   - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
+  - Need to test arrow's background elements--is there a clean way of doing this?
+    - Consider using :before pseudoelement rather than a separate div
+    - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
+  - Manually confirm that styling works cross-platform
+  - What about alt tags? Semantic markup?
 - Release new design
+  - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
-* Additional incremental builds? (server tests, client tests)
-- Run slow tests in parallel with fast tests? (suggested by Danny Jones, E280 comments)
+* Migrate from NodeUnit to Mocha
 - General cleanup of build script
   - Move .lint files to 'incremental' dir, preserve '.js' extension (suggested by Jay Bazuzi, E282 comments)
-  - Clean up CI script?
   - Use automatopia ideas
   - Clean up -T output
-- Migrate from NodeUnit to Mocha
+  - Fix duplicate 'BUILD OK' when running default build
+  - Clean up CI script?
 - Add HTML validation / linting?
-
 - How do we not test Typekit when we're just testing CSS?
 
-- Need to test arrow's background elements--is there a clean way of doing this?
-  - Consider using :before pseudoelement rather than a separate div
-  - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
-- Need to cache-bust stylesheet and bundle.js
-- Manually confirm that styling works cross-platform
-- What about alt tags? Semantic markup?
-- Need to isolate Safari problem that occurs with getBoundingClientRect and getComputedStyle()
-  - See 'create iOS Safari failure' test (ref E229)
-- Automatically convert psuedoclasses to regular classes in our tests?
-
 To Do on current task:
-- Document 'quick' target in the readme (OFF-CAMERA)
-- Fix duplicate 'BUILD OK' when running default build
+* AT START OF EPISODE:
+  - Discuss Firefox 36 downgrade / Selenium issues
 
-Notes:
-- NodeUnit default reporter has minor display issue on Windows
+
 
 Potential future stories:
 - "Try me" text in drawing area
