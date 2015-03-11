@@ -4,24 +4,18 @@
 (function() {
 	"use strict";
 
+	var startTime = Date.now();
+
 	// We've put our require statements in functions or the tasks that use them so we don't have the overhead
 	// of loading modules we don't need. At the time this refactoring was done, module loading took about half a
 	// second, which was 10% of our desired maximum of five seconds for a quick build.
-
-	var startTime = Date.now();
+	var paths = require("./build/config/paths.js");
 
 	var strict = !process.env.loose;
 	if (strict) console.log("For more forgiving test settings, use 'loose=true'");
 
-	var GENERATED_DIR = "generated";
-	var TEMP_TESTFILE_DIR = GENERATED_DIR + "/test";
-	var BUILD_DIR = GENERATED_DIR + "/build";
-	var BUILD_CLIENT_DIR = BUILD_DIR + "/client";
-	var INCREMENTAL_DIR = "generated/incremental";
-	var SERVER_TEST_TARGET = INCREMENTAL_DIR + "/server.test";
-	var CLIENT_TEST_TARGET = INCREMENTAL_DIR + "/client.test";
 
-	var KARMA_CONFIG = "./build/config/karma.conf.js";
+
 
 	var MOCHA_CONFIG = {
 		ui: "bdd",
@@ -30,17 +24,17 @@
 
 	//*** DIRECTORIES
 
-	directory(TEMP_TESTFILE_DIR);
-	directory(BUILD_DIR);
-	directory(BUILD_CLIENT_DIR);
-	directory(INCREMENTAL_DIR);
+	directory(paths.tempTestfileDir);
+	directory(paths.buildDir);
+	directory(paths.buildClientDir);
+	directory(paths.incrementalDir);
 
 
 	//*** GENERAL
 
 	desc("Delete all generated files");
 	task("clean", [], function() {
-		jake.rmRf(GENERATED_DIR);
+		jake.rmRf(paths.generatedDir);
 	});
 
 	desc("Lint and test everything");
@@ -55,7 +49,7 @@
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
-		karma().serve(KARMA_CONFIG, complete, fail);
+		karma().serve(paths.karmaConfig, complete, fail);
 	}, {async: true});
 
 	desc("Start localhost server for manual testing");
@@ -89,31 +83,31 @@
 	//*** TEST
 
 	desc("Test server code");
-	task("testServer", [ INCREMENTAL_DIR, TEMP_TESTFILE_DIR, SERVER_TEST_TARGET ]);
-	file(SERVER_TEST_TARGET, serverFiles(), function() {
+	task("testServer", [ paths.incrementalDir, paths.tempTestfileDir, paths.serverTestTarget ]);
+	file(paths.serverTestTarget, serverFiles(), function() {
 		mocha().runTests({
 			files: serverTestFiles(),
 			options: MOCHA_CONFIG
 		}, succeed, fail);
 
 		function succeed() {
-			fs().writeFileSync(SERVER_TEST_TARGET, "test ok");
+			fs().writeFileSync(paths.serverTestTarget, "test ok");
 			complete();
 		}
 	}, { async: true });
 
 	desc("Test client code");
-	task("testClient", [ INCREMENTAL_DIR, CLIENT_TEST_TARGET ]);
-	file(CLIENT_TEST_TARGET, clientFiles(), function() {
+	task("testClient", [ paths.incrementalDir, paths.clientTestTarget ]);
+	file(paths.clientTestTarget, clientFiles(), function() {
 		console.log("Testing browser code: ");
 		karma().runTests({
-			configFile: KARMA_CONFIG,
+			configFile: paths.karmaConfig,
 			browsers: require("./build/config/tested_browsers.js"),
 			strict: strict
 		}, succeed, fail);
 
 		function succeed() {
-			fs().writeFileSync(CLIENT_TEST_TARGET, "test ok");
+			fs().writeFileSync(paths.clientTestTarget, "test ok");
 			complete();
 		}
 	}, { async: true });
@@ -129,16 +123,16 @@
 	//*** BUILD
 
 	desc("Bundle and build code");
-	task("build", [ BUILD_CLIENT_DIR ], function() {
+	task("build", [ paths.buildClientDir ], function() {
 		var fs = require("fs");
 		var shell = require("shelljs");
 		var browserify = require("browserify");
 
-		shell.rm("-rf", BUILD_CLIENT_DIR + "/*");
+		shell.rm("-rf", paths.buildClientDir + "/*");
 		shell.cp(
 			"-R",
 			"src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor",
-			BUILD_CLIENT_DIR
+			paths.buildClientDir
 		);
 
 		console.log("Bundling client files with Browserify...");
@@ -147,7 +141,7 @@
 		b.require("./src/client/html_element.js", {expose: "./html_element.js"} );
 		b.bundle(function(err, bundle) {
 			if (err) fail(err);
-			fs.writeFileSync(BUILD_CLIENT_DIR + "/bundle.js", bundle);
+			fs.writeFileSync(paths.buildClientDir + "/bundle.js", bundle);
 			complete();
 		});
 	}, {async: true});
@@ -273,16 +267,6 @@
 			result.push(path.dirname(lintDependency));
 		});
 		return result;
-	}
-
-	var jshintConfig = require("./build/config/jshint.conf.js");
-
-	function lintOptions() {
-		return jshintConfig.options;
-	}
-
-	function lintGlobals() {
-		return jshintConfig.globals;
 	}
 
 	function buildOk() {
