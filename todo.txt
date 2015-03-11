@@ -31,22 +31,19 @@ User Stories to finish current MMF:
   - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
-* Migrate from Expect.js to a better assertion library
-- General cleanup of build script
-  - Move .lint files to 'incremental' dir, preserve '.js' extension (suggested by Jay Bazuzi, E282 comments)
-  - Use automatopia ideas
-  - Clean up -T output
-  - Fix duplicate 'BUILD OK' when running default build
-  - Move vendor directory to more convenient location?
-  - Need better of dealing with shared and vendor files' dependency
-    - currently, they're duplicated in clientFiles() & serverFiles()
-  - Clean up CI script?
+* General cleanup of build script
 - Add HTML validation / linting?
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-* Migrate client code
-
+- Move .lint files to 'incremental' dir, preserve '.js' extension (suggested by Jay Bazuzi, E282 comments)
+- Use automatopia ideas
+- Clean up -T output
+- Fix duplicate 'BUILD OK' when running default build
+- Move vendor directory to more convenient location?
+- Need better of dealing with shared and vendor files' dependency
+  - currently, they're duplicated in clientFiles() & serverFiles()
+- Clean up CI script?
 
 Potential future stories:
 - "Try me" text in drawing area
