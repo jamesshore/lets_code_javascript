@@ -8,15 +8,45 @@
 	var child_process = require("child_process");
 	var http = require("http");
 	var firefox = require("selenium-webdriver/firefox");
-
 	var runServer = require("./_run_server.js");
+	var assert = require("./shared/_assert.js");
 
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var EXPECTED_BROWSER = "firefox 35.0.1";
 
-
 	var serverProcess;
 	var driver;
+
+	describe("Smoke test", function() {
+		this.timeout(10 * 1000);
+
+		before(function (done) {
+			runServer.runProgrammatically(function(process) {
+				serverProcess = process;
+
+				driver = new firefox.Driver();
+				driver.getCapabilities().then(function(capabilities) {
+					var version = capabilities.get("browserName") + " " + capabilities.get("version");
+					if (version !== EXPECTED_BROWSER) {
+						console.log("Warning: Smoke test browser expected " + EXPECTED_BROWSER + ", but was " + version);
+					}
+					done();
+				});
+			});
+		});
+
+		after(function(done) {
+			serverProcess.on("exit", function(code, signal) {
+				driver.quit().then(done);
+			});
+			serverProcess.kill();
+		});
+
+		it("runs test", function() {
+			assert.equal(true, true);
+		});
+
+	});
 
 
 	exports.test_setupOnce = function(test) {
@@ -150,7 +180,6 @@
 		});
 		serverProcess.kill();
 	};
-
 	function httpGet(url, callback) {
 		var request = http.get(url);
 		request.on("response", function(response) {

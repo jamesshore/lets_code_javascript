@@ -90,9 +90,7 @@
 	desc("Test server code");
 	task("testServer", [ INCREMENTAL_DIR, TEMP_TESTFILE_DIR, SERVER_TEST_TARGET ]);
 	file(SERVER_TEST_TARGET, serverFiles(), function() {
-		var mocha = require("./build/util/mocha_runner.js");
-
-		mocha.runTests({
+		mocha().runTests({
 			files: serverTestFiles(),
 			options: MOCHA_CONFIG
 		}, succeed, fail);
@@ -112,13 +110,19 @@
 			fs().writeFileSync(CLIENT_TEST_TARGET, "test ok");
 			complete();
 		}
-	}, {async: true});
+	}, { async: true });
 
 	desc("End-to-end smoke tests");
-	task("smoketest", [ "build" ], function() {
+	task("smoketest", [ "build", "mochaTemp" ], function() {
 		nodeunit().runTests(smokeTestFiles(), complete, fail);
-	}, {async: true});
+	}, { async: true });
 
+	task("mochaTemp", function() {
+		mocha().runTests({
+			files: smokeTestFiles(),
+			options: MOCHA_CONFIG
+		}, complete, fail);
+	}, { async: true });
 
 	//*** BUILD
 
@@ -341,6 +345,10 @@
 
 	function fs() {
 		return require("fs");
+	}
+
+	function mocha() {
+		return require("./build/util/mocha_runner.js");
 	}
 
 	function deglob(patterns) {

@@ -9,15 +9,19 @@
 	var http = require("http");
 	var fs = require("fs");
 	var procfile = require("procfile");
-	var child;
+	var assert = require("./shared/_assert.js");
 
-	exports.test_isOnWeb = function(test) {
-		httpGet("http://weewikipaint.herokuapp.com", function(response, receivedData) {
-			var foundHomePage = receivedData.indexOf("WeeWikiPaint home page") !== -1;
-			test.ok(foundHomePage, "home page should have contained test marker");
-			test.done();
+	describe("Release", function() {
+
+		it("is on web", function(done) {
+			httpGet("http://weewikipaint.herokuapp.com", function(response, receivedData) {
+				var foundHomePage = receivedData.indexOf("WeeWikiPaint home page") !== -1;
+				assert.equal(foundHomePage, true, "home page should have contained test marker");
+				done();
+			});
 		});
-	};
+
+	});
 
 	function httpGet(url, callback) {
 		var request = http.get(url);

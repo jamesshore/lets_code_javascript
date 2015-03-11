@@ -46,8 +46,8 @@ Engineering Tasks:
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-* Incrementally re-test when shared files change
-- Migrate from NodeUnit to Mocha for smoke tests
+* Migrate from NodeUnit to Mocha for _release_test.js
+- Migrate from NodeUnit to Mocha for _smoke_test.js
 - Use better assertion library
 
 
