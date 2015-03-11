@@ -36,8 +36,11 @@ Engineering Tasks:
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-- Move .lint files to 'incremental' dir, preserve '.js' extension (suggested by Jay Bazuzi, E282 comments)
 - Use automatopia ideas
+  - Make tested_browsers.js
+  - Make jshint.conf.js
+  - Make paths.js config
+  - more?
 - Clean up -T output
 - Fix duplicate 'BUILD OK' when running default build
 - Move vendor directory to more convenient location?
