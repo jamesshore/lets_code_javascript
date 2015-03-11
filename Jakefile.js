@@ -88,24 +88,19 @@
 	//*** TEST
 
 	desc("Test server code");
-	task("testServer", ["testMochaTemp", INCREMENTAL_DIR, TEMP_TESTFILE_DIR, SERVER_TEST_TARGET ]);
+	task("testServer", [ INCREMENTAL_DIR, TEMP_TESTFILE_DIR, SERVER_TEST_TARGET ]);
 	file(SERVER_TEST_TARGET, serverFiles(), function() {
-		nodeunit().runTests(serverTestFiles(), succeed, fail);
+		var mocha = require("./build/util/mocha_runner.js");
+
+		mocha.runTests({
+			files: serverTestFiles(),
+			options: MOCHA_CONFIG
+		}, succeed, fail);
 
 		function succeed() {
 			fs().writeFileSync(SERVER_TEST_TARGET, "test ok");
 			complete();
 		}
-	}, { async: true });
-
-	task("testMochaTemp", function() {
-		var mocha = require("./build/util/mocha_runner.js");
-
-		console.log("MOCHA HERE!");
-		mocha.runTests({
-			files: serverTestFiles(),
-			options: MOCHA_CONFIG
-		}, complete, fail);
 	}, { async: true });
 
 	desc("Test client code");
