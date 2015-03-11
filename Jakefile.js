@@ -331,10 +331,6 @@
 		return require("./build/util/lint_runner.js");
 	}
 
-	function nodeunit() {
-		return require("./build/util/nodeunit_runner.js");
-	}
-
 	function karma() {
 		return require("./build/util/karma_runner.js");
 	}

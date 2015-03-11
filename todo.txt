@@ -31,8 +31,7 @@ User Stories to finish current MMF:
   - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
-* Migrate from NodeUnit to Mocha
-- Migrate from Expect.js to a better assertion library
+* Migrate from Expect.js to a better assertion library
 - General cleanup of build script
   - Move .lint files to 'incremental' dir, preserve '.js' extension (suggested by Jay Bazuzi, E282 comments)
   - Use automatopia ideas
@@ -45,8 +44,8 @@ Engineering Tasks:
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-* Migrate from NodeUnit to Mocha for _smoke_test.js
-- Use better assertion library
+* Use better assertion library in _assert.js
+- Migrate client code
 
 
 Potential future stories:
