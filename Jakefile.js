@@ -250,7 +250,7 @@
 
 	function determineLintDependency(name) {
 		var result = name.replace(/^generated\/lint\//, "");
-		return result.replace(/\.lint$/, ".js");
+		return result.replace(/\.lint$/, "");
 	}
 
 	function lintDirectories() {
@@ -265,7 +265,7 @@
 
 	function lintOutput() {
 		return lintFiles().map(function(pathname) {
-			return "generated/lint/" + pathname.replace(/\.js$/, ".lint");
+			return "generated/lint/" + pathname + ".lint";
 		});
 	}
 
