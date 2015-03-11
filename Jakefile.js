@@ -6,7 +6,8 @@
 
 	var startTime = Date.now();
 
-	if (!process.env.loose) console.log("For more forgiving test settings, use 'loose=true'");
+	var strict = !process.env.loose;
+	if (strict) console.log("For more forgiving test settings, use 'loose=true'");
 
 	var REQUIRED_BROWSERS = [
 		"IE 8.0.0 (Windows 7)",
@@ -24,6 +25,8 @@
 	var INCREMENTAL_DIR = "generated/incremental";
 	var SERVER_TEST_TARGET = INCREMENTAL_DIR + "/server.test";
 	var CLIENT_TEST_TARGET = INCREMENTAL_DIR + "/client.test";
+
+	var KARMA_CONFIG = "./build/config/karma.conf.js";
 
 	var MOCHA_CONFIG = {
 		ui: "bdd",
@@ -57,7 +60,7 @@
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
-		karma().serve("build/karma.conf.js", complete, fail);
+		karma().serve(KARMA_CONFIG, complete, fail);
 	}, {async: true});
 
 	desc("Start localhost server for manual testing");
@@ -104,7 +107,12 @@
 	desc("Test client code");
 	task("testClient", [ INCREMENTAL_DIR, CLIENT_TEST_TARGET ]);
 	file(CLIENT_TEST_TARGET, clientFiles(), function() {
-		karma().runTests(REQUIRED_BROWSERS, succeed, fail);
+		console.log("Testing browser code: ");
+		karma().runTests({
+			configFile: KARMA_CONFIG,
+			browsers: REQUIRED_BROWSERS,
+			strict: strict
+		}, succeed, fail);
 
 		function succeed() {
 			fs().writeFileSync(CLIENT_TEST_TARGET, "test ok");
