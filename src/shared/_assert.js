@@ -4,7 +4,11 @@
 
 	var assert = require("assert");
 
+	exports.fail = function(message) {
+		throw new Error("Assertion failed: " + message);
+	};
 	exports.equal = assert.strictEqual;
+	exports.deepEqual = assert.deepEqual;
 	exports.throws = assert.throws;
 
 }());

@@ -113,11 +113,7 @@
 	}, { async: true });
 
 	desc("End-to-end smoke tests");
-	task("smoketest", [ "build", "mochaTemp" ], function() {
-		nodeunit().runTests(smokeTestFiles(), complete, fail);
-	}, { async: true });
-
-	task("mochaTemp", function() {
+	task("smoketest", [ "build" ], function() {
 		mocha().runTests({
 			files: smokeTestFiles(),
 			options: MOCHA_CONFIG
