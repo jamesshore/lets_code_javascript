@@ -285,7 +285,7 @@
 				});
 			});
 		}
-		
+
 		function dragMouse(startX, startY, endX, endY) {
 			drawingArea.triggerMouseDown(startX, startY);
 			drawingArea.triggerMouseMove(endX, endY);
