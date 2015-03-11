@@ -1,0 +1,36 @@
+{
+  "name": "assertive-chai",
+  "version": "1.0.0",
+  "authors": [
+    "\"Ron Waldon\" (http://jokeyrhy.me/)"
+  ],
+  "description": "Chai.js without Expect or Should",
+  "main": "assertive-chai.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "test",
+    "assertion",
+    "assert",
+    "testing",
+    "chai"
+  ],
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "node-assert": "f25d9b80eac2cde3080613f4ef18a0a507dd4882"
+  },
+  "devDependencies": {
+    "mocha": "~1.19.0",
+    "es5-shim": "~3.4.0"
+  }
+}
