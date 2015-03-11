@@ -37,6 +37,10 @@
 			async.each(TEST_FILES, deleteTestFile, done);
 		});
 
+		it("runs tests", function() {
+			assert.deepEqual(1, 3);
+		});
+
 		it("serves files from directory", function(done) {
 			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
 				assert.equal(200, response.statusCode, "status code");

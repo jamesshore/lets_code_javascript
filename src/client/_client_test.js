@@ -41,13 +41,13 @@
 		});
 
 		it("does not allow text to be selected or page to scroll when drag starts within drawing area", function() {
-			expect(drawingArea.isBrowserDragDefaultsPrevented()).to.be(true);
+			assert.equal(drawingArea.isBrowserDragDefaultsPrevented(), true);
 		});
 
 		it("clears drawing area when 'clear screen' button is clicked", function() {
 			dragMouse(10, 20, 40, 90);
 			clearButton.triggerMouseClick();
-			expect(lines()).to.eql([]);
+			assert.deepEqual(lines(), []);
 		});
 
 		describe("mouse drag events", function() {

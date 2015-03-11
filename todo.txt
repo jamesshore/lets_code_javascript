@@ -45,8 +45,12 @@ Engineering Tasks:
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-* Incremental tests need to depend on 'vendor' directory
-- Migrate client code
+* Migrate client code
+  - _client_test.js
+  - _css_test.js
+  - _fail_fast_test.js
+  - _html_element_test.js
+  - _svg_canvas_test.js
 
 
 Potential future stories:
