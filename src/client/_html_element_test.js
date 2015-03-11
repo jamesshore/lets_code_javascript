@@ -5,6 +5,7 @@
 
 	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
+	var assert = require("../shared/_assert.js");
 
 	describe("HtmlElement", function() {
 		var windowElement;
@@ -47,24 +48,24 @@
 				it("allows drag-related browser defaults to be prevented", function() {
 					htmlElement.preventBrowserDragDefaults();
 
-					expectEventToBePrevented("selectstart", htmlElement.triggerSelectStart);   // required for IE 8 text dragging
-					expectEventToBePrevented("mousedown", htmlElement.triggerMouseDown);
+					assertEventPrevented("selectstart", htmlElement.triggerSelectStart);   // required for IE 8 text dragging
+					assertEventPrevented("mousedown", htmlElement.triggerMouseDown);
 					if (browser.supportsTouchEvents()) {
-						expectEventToBePrevented("touchstart", htmlElement.triggerSingleTouchStart);
-						expectEventToBePrevented("touchstart", htmlElement.triggerMultiTouchStart);
+						assertEventPrevented("touchstart", htmlElement.triggerSingleTouchStart);
+						assertEventPrevented("touchstart", htmlElement.triggerMultiTouchStart);
 					}
 
-					function expectEventToBePrevented(event, eventTriggerFn) {
+					function assertEventPrevented(event, eventTriggerFn) {
 						var monitor = monitorEvent(event);
 						htmlElement._element.trigger(event);
-						expect(monitor.defaultPrevented).to.be(true);
+						assert.equal(monitor.defaultPrevented, true);
 					}
 				});
 
 				it("reports whether drag-related defaults have been prevented", function() {
-					expect(htmlElement.isBrowserDragDefaultsPrevented()).to.be(false);
+					assert.equal(htmlElement.isBrowserDragDefaultsPrevented(), false);
 					htmlElement.preventBrowserDragDefaults();
-					expect(htmlElement.isBrowserDragDefaultsPrevented()).to.be(true);
+					assert.equal(htmlElement.isBrowserDragDefaultsPrevented(), true);
 				});
 			});
 
@@ -81,7 +82,7 @@
 						eventTriggerFn.call(htmlElement, 4, 7);
 
 						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
-						expect(monitor.pageCoordinates).to.eql([ expectedPageCoordinates.x, expectedPageCoordinates.y ]);
+						assert.deepEqual(monitor.pageCoordinates, [ expectedPageCoordinates.x, expectedPageCoordinates.y ]);
 					}
 				});
 
@@ -95,7 +96,7 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
-						expect(monitor.pageCoordinates).to.eql([ 0, 0 ]);
+						assert.deepEqual(monitor.pageCoordinates, [ 0, 0 ]);
 					}
 				});
 
@@ -111,7 +112,7 @@
 						eventTriggerFn.call(htmlElement, 60, 40);
 
 						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
-						expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
+						assert.deepEqual(monitor.eventTriggeredAt, expectedPageCoordinates);
 					}
 				});
 
@@ -120,7 +121,7 @@
 
 					var monitor = monitorEventHandler(windowElement, windowElement.onMouseUp);
 					windowElement.triggerMouseUp();
-					expect(monitor.eventTriggered).to.be(false);
+					assert.equal(monitor.eventTriggered, false);
 				});
 			});
 
@@ -134,7 +135,7 @@
 					function checkEventTrigger(event, eventTriggerFn) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
-						expect(monitor.touches).to.eql([]);
+						assert.deepEqual(monitor.touches, []);
 					}
 				});
 
@@ -147,7 +148,7 @@
 						eventTriggerFn.call(htmlElement, 4, 7);
 
 						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
-						expect(monitor.touches).to.eql([[ expectedPageCoordinates.x, expectedPageCoordinates.y ]]);
+						assert.deepEqual(monitor.touches, [[ expectedPageCoordinates.x, expectedPageCoordinates.y ]]);
 					}
 				});
 
@@ -158,7 +159,7 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
-						expect(monitor.touches).to.eql([[ 0, 0 ]]);
+						assert.deepEqual(monitor.touches, [[ 0, 0 ]]);
 					}
 				});
 
@@ -171,7 +172,7 @@
 
 						var expectedFirstTouch = htmlElement.pageOffset({ x: 10, y: 20 });
 						var expectedSecondTouch = htmlElement.pageOffset({ x: 30, y: 40 });
-						expect(monitor.touches).to.eql([
+						assert.deepEqual(monitor.touches, [
 							[ expectedFirstTouch.x, expectedFirstTouch.y ],
 							[ expectedSecondTouch.x, expectedSecondTouch.y ]
 						]);
@@ -185,8 +186,8 @@
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
 						eventTriggerFn.call(htmlElement);
-						expect(monitor.eventTriggered).to.be(true);
-						expect(monitor.eventTriggeredAt).to.be(undefined);
+						assert.equal(monitor.eventTriggered, true);
+						assert.equal(monitor.eventTriggeredAt, undefined);
 					}
 				});
 
@@ -199,7 +200,7 @@
 						eventTriggerFn.call(htmlElement, 60, 40);
 
 						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
-						expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
+						assert.deepEqual(monitor.eventTriggeredAt, expectedPageCoordinates);
 					}
 				});
 
@@ -210,8 +211,8 @@
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
 						eventTriggerFn.call(htmlElement, 1, 2, 3, 4);
 
-						expect(monitor.eventTriggered).to.be(true);
-						expect(monitor.eventTriggeredAt).to.be(undefined);
+						assert.equal(monitor.eventTriggered, true);
+						assert.equal(monitor.eventTriggeredAt, undefined);
 					}
 				});
 			});
@@ -227,7 +228,7 @@
 					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
 					bodyElement.triggerMouseMove();
-					expect(monitor.eventTriggered).to.be(true);
+					assert.equal(monitor.eventTriggered, true);
 				});
 
 				it("emulates behavior of releaseCapture() (on browsers that support it)", function() {
@@ -235,7 +236,7 @@
 					htmlElement.setCapture();
 					htmlElement.releaseCapture();
 					bodyElement.triggerMouseMove();
-					expect(monitor.eventTriggered).to.be(false);
+					assert.equal(monitor.eventTriggered, false);
 				});
 
 				it("when event triggered, event coordinates are relative to triggering element, not capturing element", function() {
@@ -244,7 +245,7 @@
 					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
 					htmlElement.setCapture();
 					bodyElement.triggerMouseMove(30, 20);
-					expect(monitor.eventTriggeredAt).to.eql(expectedPageCoordinates);
+					assert.deepEqual(monitor.eventTriggeredAt, expectedPageCoordinates);
 				});
 
 			});
@@ -290,7 +291,7 @@
 		describe("sizing", function() {
 			it("provides its dimensions", function() {
 				var element = HtmlElement.fromHtml("<div style='width: 120px; height: 80px;'></div>");
-				expect(element.getDimensions()).to.eql({
+				assert.deepEqual(element.getDimensions(), {
 					width: 120,
 					height: 80
 				});
@@ -304,7 +305,7 @@
 					"border: 7px; " +
 					"margin: 19px; " +
 					"'></div>");
-				expect(element.getDimensions()).to.eql({
+				assert.deepEqual(element.getDimensions(), {
 					width: 120,
 					height: 80
 				});
@@ -376,12 +377,12 @@
 				var styledElement = HtmlElement.fromHtml("<div style='" + elementStyle + "'></div>");
 				try {
 					styledElement.appendSelfToBody();
-					expect(function() {
+					assert.throws(function() {
 						styledElement.relativeOffset({ x: 100, y: 150 });
-					}).to.throwException();
-					expect(function() {
+					});
+					assert.throws(function() {
 						styledElement.pageOffset({ x: 100, y: 150 });
-					}).to.throwException();
+					});
 				}
 				finally {
 					styledElement.remove();
@@ -437,13 +438,13 @@
 			function assertRelativeOffsetEquals(actualOffset, expectedX, expectedY) {
 				if (browser.reportsElementPositionOffByOneSometimes()) {
 					// compensate for off-by-one error in IE 8
-					expect(actualOffset.x).to.equal(expectedX);
+					assert.equal(actualOffset.x, expectedX);
 					if (actualOffset.y !== expectedY - 1) {
-						expect(actualOffset.y).to.equal(expectedY);
+						assert.equal(actualOffset.y, expectedY);
 					}
 				}
 				else {
-					expect(actualOffset).to.eql({x: expectedX, y: expectedY});
+					assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
 				}
 			}
 		});
@@ -451,13 +452,13 @@
 		function assertPageOffsetEquals(actualOffset, expectedX, expectedY) {
 			if (browser.reportsElementPositionOffByOneSometimes()) {
 				// compensate for off-by-one error in IE 8
-				expect(actualOffset.x).to.equal(expectedX);
+				assert.equal(actualOffset.x, expectedX);
 				if (actualOffset.y !== expectedY + 1) {
-					expect(actualOffset.y).to.equal(expectedY);
+					assert.equal(actualOffset.y, expectedY);
 				}
 			}
 			else {
-				expect(actualOffset).to.eql({x: expectedX, y: expectedY});
+				assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
 			}
 		}
 
@@ -469,10 +470,10 @@
 
 				var domElement = element.toDomElement();
 
-				expect(domElement.outerHTML.toLowerCase()).to.equal("<code>foo</code>");
+				assert.equal(domElement.outerHTML.toLowerCase(), "<code>foo</code>");
 
 				// Ensure that fromHtml converts HTML to DOM element, not jQuery element
-				expect(element._domElement).to.equal(domElement);
+				assert.equal(element._domElement, domElement);
 			});
 
 			it("finds element by ID", function() {
@@ -480,18 +481,18 @@
 				expectedElement.appendSelfToBody();
 
 				var actualElement = HtmlElement.fromId("anElement");
-				expect(actualElement._domElement).to.equal(expectedElement._domElement);
+				assert.equal(actualElement._domElement, expectedElement._domElement);
 			});
 
 			it("finding element by ID fails fast if ID not present", function() {
-				expect(function() {
+				assert.throws(function() {
 					var element = HtmlElement.fromId("noSuchId");
-				}).to.throwError();
+				});
 			});
 
 			it("appends elements", function() {
 				htmlElement.append(HtmlElement.fromHtml("<div></div>"));
-				expect(htmlElement._element.children().length).to.equal(1);
+				assert.equal(htmlElement._element.children().length, 1);
 			});
 
 			it("appends to body", function() {
@@ -500,7 +501,7 @@
 
 					htmlElement.appendSelfToBody();
 					var childrenAfterAppend = bodyElement._element.children().length;
-					expect(childrenBeforeAppend + 1).to.equal(childrenAfterAppend);
+					assert.equal(childrenBeforeAppend + 1, childrenAfterAppend);
 				} finally {
 					htmlElement.remove();
 				}
@@ -510,7 +511,7 @@
 				var elementToAppend = HtmlElement.fromHtml("<div></div>");
 				htmlElement.append(elementToAppend);
 				elementToAppend.remove();
-				expect(htmlElement._element.children().length).to.equal(0);
+				assert.equal(htmlElement._element.children().length, 0);
 			});
 		});
 
