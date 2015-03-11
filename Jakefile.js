@@ -14,9 +14,6 @@
 	var strict = !process.env.loose;
 	if (strict) console.log("For more forgiving test settings, use 'loose=true'");
 
-
-
-
 	var MOCHA_CONFIG = {
 		ui: "bdd",
 		reporter: "dot"
@@ -65,11 +62,9 @@
 	//*** LINT
 
 	desc("Lint everything");
-	task("lint", lintDirectories());
-	task("lint", lintOutput());
-
-	createDirectoryDependencies(lintDirectories());
-
+	task("lint", paths.lintDirectories());
+	task("lint", paths.lintOutput());
+	createDirectoryDependencies(paths.lintDirectories());
 	rule(".lint", determineLintDependency, function() {
 		var lint = require("./build/util/lint_runner.js");
 		var lintConfig = require("./build/config/jshint.conf.js");
@@ -84,9 +79,9 @@
 
 	desc("Test server code");
 	task("testServer", [ paths.incrementalDir, paths.tempTestfileDir, paths.serverTestTarget ]);
-	file(paths.serverTestTarget, serverFiles(), function() {
+	file(paths.serverTestTarget, paths.serverFiles(), function() {
 		mocha().runTests({
-			files: serverTestFiles(),
+			files: paths.serverTestFiles(),
 			options: MOCHA_CONFIG
 		}, succeed, fail);
 
@@ -98,7 +93,7 @@
 
 	desc("Test client code");
 	task("testClient", [ paths.incrementalDir, paths.clientTestTarget ]);
-	file(paths.clientTestTarget, clientFiles(), function() {
+	file(paths.clientTestTarget, paths.clientFiles(), function() {
 		console.log("Testing browser code: ");
 		karma().runTests({
 			configFile: paths.karmaConfig,
@@ -115,7 +110,7 @@
 	desc("End-to-end smoke tests");
 	task("smoketest", [ "build" ], function() {
 		mocha().runTests({
-			files: smokeTestFiles(),
+			files: paths.smokeTestFiles(),
 			options: MOCHA_CONFIG
 		}, complete, fail);
 	}, { async: true });
@@ -168,7 +163,6 @@
 
 	//*** CHECK VERSIONS
 
-//	desc("Ensure correct version of Node is present.");
 	task("nodeVersion", [], function() {
 		var versionChecker = require("./build/util/version_checker.js");
 
@@ -211,62 +205,9 @@
 
 	//*** UTILITY FUNCTIONS
 
-	function serverTestFiles() {
-		return deglob("src/server/**/_*_test.js");
-	}
-
-	function clientFiles() {
-		return deglob([
-			"src/client/**/*.js",
-			"src/client/**/*.html",
-			"src/client/**/*.css",
-			"src/shared/**/*.js",
-			"src/client/vendor/**/*.js"
-		]);
-	}
-
-	function serverFiles() {
-		return deglob([
-			"src/server/**/*.js",
-			"src/shared/**/*.js",
-			"src/client/vendor/**/*.js"
-		]);
-	}
-
-	function smokeTestFiles() {
-		return deglob("src/_*_test.js");
-	}
-
-	function lintFiles() {
-		return deglob([
-			"*.js",
-			"build/util/*.js",
-			"src/client/*.js",
-			"src/server/**/*.js",
-			"src/shared/**/*.js",
-			"src/*.js"
-		]);
-	}
-
 	function determineLintDependency(name) {
 		var result = name.replace(/^generated\/incremental\/lint\//, "");
 		return result.replace(/\.lint$/, "");
-	}
-
-	function lintOutput() {
-		return lintFiles().map(function(pathname) {
-			return "generated/incremental/lint/" + pathname + ".lint";
-		});
-	}
-
-	function lintDirectories() {
-		var path = require("path");
-
-		var result = [];
-		lintOutput().forEach(function(lintDependency) {
-			result.push(path.dirname(lintDependency));
-		});
-		return result;
 	}
 
 	function buildOk() {
@@ -292,15 +233,5 @@
 	function mocha() {
 		return require("./build/util/mocha_runner.js");
 	}
-
-	function deglob(patterns) {
-		var glob = require("glob");
-
-		var globPattern = patterns;
-		if (Array.isArray(patterns)) globPattern = "{" + patterns.join(",") + "}";
-
-		return glob.sync(globPattern);
-	}
-
 
 }());
