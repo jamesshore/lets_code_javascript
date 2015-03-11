@@ -73,10 +73,10 @@
 	//*** LINT
 
 	desc("Lint everything");
-	task("lint", nodeLintDirectories());
-	task("lint", nodeLintOutput());
+	task("lint", lintDirectories());
+	task("lint", lintOutput());
 
-	createDirectoryDependencies(nodeLintDirectories());
+	createDirectoryDependencies(lintDirectories());
 
 	rule(".lint", determineLintDependency, function() {
 		var passed = lint().validateFile(this.source, lintOptions(), lintGlobals());
@@ -220,14 +220,16 @@
 			"src/client/**/*.js",
 			"src/client/**/*.html",
 			"src/client/**/*.css",
-			"src/shared/**/*.js"
+			"src/shared/**/*.js",
+			"src/client/vendor/**/*.js"
 		]);
 	}
 
 	function serverFiles() {
 		return deglob([
 			"src/server/**/*.js",
-			"src/shared/**/*.js"
+			"src/shared/**/*.js",
+			"src/client/vendor/**/*.js"
 		]);
 	}
 
@@ -235,7 +237,7 @@
 		return deglob("src/_*_test.js");
 	}
 
-	function nodeLintFiles() {
+	function lintFiles() {
 		return deglob([
 			"*.js",
 			"build/util/*.js",
@@ -251,18 +253,18 @@
 		return result.replace(/\.lint$/, ".js");
 	}
 
-	function nodeLintDirectories() {
+	function lintDirectories() {
 		var path = require("path");
 
 		var result = [];
-		nodeLintOutput().forEach(function(lintDependency) {
+		lintOutput().forEach(function(lintDependency) {
 			result.push(path.dirname(lintDependency));
 		});
 		return result;
 	}
 
-	function nodeLintOutput() {
-		return nodeLintFiles().map(function(pathname) {
+	function lintOutput() {
+		return lintFiles().map(function(pathname) {
 			return "generated/lint/" + pathname.replace(/\.js$/, ".lint");
 		});
 	}
@@ -317,7 +319,6 @@
 
 	function createDirectoryDependencies(directories) {
 		directories.forEach(function(lintDirectory) {
-			task("lintNode", [lintDirectory]);
 			directory(lintDirectory);
 		});
 	}

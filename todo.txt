@@ -38,14 +38,14 @@ Engineering Tasks:
   - Clean up -T output
   - Fix duplicate 'BUILD OK' when running default build
   - Move vendor directory to more convenient location?
-  - Need better of dealing with shared files' dependency (currently, it's duplicated in clientFiles() & serverFiles())
+  - Need better of dealing with shared and vendor files' dependency
+    - currently, they're duplicated in clientFiles() & serverFiles()
   - Clean up CI script?
 - Add HTML validation / linting?
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-* Uninstall assertive-chai npm module
-- Incremental tests need to depend on 'vendor' directory
+* Incremental tests need to depend on 'vendor' directory
 - Migrate client code
 
 
