@@ -220,11 +220,15 @@
 			"src/client/**/*.js",
 			"src/client/**/*.html",
 			"src/client/**/*.css",
+			"src/shared/**/*.js"
 		]);
 	}
 
 	function serverFiles() {
-		return deglob("src/server/**/*.js");
+		return deglob([
+			"src/server/**/*.js",
+			"src/shared/**/*.js"
+		]);
 	}
 
 	function smokeTestFiles() {
@@ -237,6 +241,7 @@
 			"build/util/*.js",
 			"src/client/*.js",
 			"src/server/**/*.js",
+			"src/shared/**/*.js",
 			"src/*.js"
 		]);
 	}

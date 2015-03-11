@@ -27,8 +27,6 @@
 		[ CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA]
 	];
 
-
-
 	describe("Server", function() {
 
 		beforeEach(function(done) {
@@ -40,9 +38,6 @@
 		});
 
 		it("serves files from directory", function(done) {
-			assert.equal(true, 1);
-
-
 			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
 				assert.equal(200, response.statusCode, "status code");
 				assert.equal(INDEX_PAGE_DATA, responseData, "response text");
