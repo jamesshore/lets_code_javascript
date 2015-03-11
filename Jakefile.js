@@ -249,8 +249,14 @@
 	}
 
 	function determineLintDependency(name) {
-		var result = name.replace(/^generated\/lint\//, "");
+		var result = name.replace(/^generated\/incremental\/lint\//, "");
 		return result.replace(/\.lint$/, "");
+	}
+
+	function lintOutput() {
+		return lintFiles().map(function(pathname) {
+			return "generated/incremental/lint/" + pathname + ".lint";
+		});
 	}
 
 	function lintDirectories() {
@@ -261,12 +267,6 @@
 			result.push(path.dirname(lintDependency));
 		});
 		return result;
-	}
-
-	function lintOutput() {
-		return lintFiles().map(function(pathname) {
-			return "generated/lint/" + pathname + ".lint";
-		});
 	}
 
 	function lintOptions() {
