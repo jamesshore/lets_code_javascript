@@ -4,6 +4,10 @@
 (function() {
 	"use strict";
 
+	// We've put our require statements in functions or the tasks that use them so we don't have the overhead
+	// of loading modules we don't need. At the time this refactoring was done, module loading took about half a
+	// second, which was 10% of our desired maximum of five seconds for a quick build.
+
 	var startTime = Date.now();
 
 	var strict = !process.env.loose;
@@ -73,7 +77,10 @@
 	createDirectoryDependencies(lintDirectories());
 
 	rule(".lint", determineLintDependency, function() {
-		var passed = lint().validateFile(this.source, lintOptions(), lintGlobals());
+		var lint = require("./build/util/lint_runner.js");
+		var lintConfig = require("./build/config/jshint.conf.js");
+
+		var passed = lint.validateFile(this.source, lintConfig.options, lintConfig.globals);
 		if (passed) fs().writeFileSync(this.name, "lint ok");
 		else fail("Lint failed");
 	});
@@ -268,47 +275,14 @@
 		return result;
 	}
 
+	var jshintConfig = require("./build/config/jshint.conf.js");
+
 	function lintOptions() {
-		return {
-			bitwise: true,
-			curly: false,
-			eqeqeq: true,
-			forin: true,
-			immed: true,
-			latedef: false,
-			newcap: true,
-			noarg: true,
-			noempty: true,
-			nonew: true,
-			regexp: true,
-			undef: true,
-			strict: true,
-			trailing: true,
-			node: true,
-			browser: true
-		};
+		return jshintConfig.options;
 	}
 
 	function lintGlobals() {
-		return {
-			// Browserify
-			require: false,
-			module: false,
-			exports: false,
-
-			// Mocha / expect.js
-			describe: false,
-			it: false,
-			expect: false,
-			dump: false,
-			beforeEach: false,
-			afterEach: false,
-			before: false,
-			after: false,
-
-			// Browser
-			console: false
-		};
+		return jshintConfig.globals;
 	}
 
 	function buildOk() {
@@ -322,14 +296,6 @@
 		});
 	}
 
-
-	// We've factored our require statements into functions so we don't have the overhead of loading
-	// modules we don't need. At the time this refactoring was done, module loading took about half a
-	// second, which was 10% of our desired maximum of five seconds for a quick build.
-
-	function lint() {
-		return require("./build/util/lint_runner.js");
-	}
 
 	function karma() {
 		return require("./build/util/karma_runner.js");
