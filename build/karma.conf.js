@@ -15,6 +15,9 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'src/client/**/*.js',
+      'src/shared/**/*.js',
+	    'src/client/vendor/assert-2014-12-13.js',
+	    'src/client/vendor/assertive-chai-1.0.0.js',
 	    { pattern: 'src/client/screen.css', included: false },
 	    { pattern: 'src/client/index.html', included: false }
     ],
@@ -27,7 +30,10 @@ module.exports = function(config) {
 
 	  // preprocesors
 	  preprocessors: {
-		  'src/client/*.js': ['commonjs']
+		  'src/client/vendor/assert-2014-12-13.js': ['commonjs'],
+		  'src/client/vendor/assertive-chai-1.0.0.js': ['commonjs'],
+		  'src/client/*.js': ['commonjs'],
+		  'src/shared/*.js': ['commonjs']
 	  },
 
 

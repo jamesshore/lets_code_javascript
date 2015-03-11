@@ -7,6 +7,7 @@
 	var client = require("./client.js");
 	var browser = require("./browser.js");
 	var HtmlElement = require("./html_element.js");
+	var assert = require("../shared/_assert.js");
 
 	mocha.setup({ignoreLeaks: true});
 
@@ -38,7 +39,6 @@
 			windowElement.removeAllEventHandlers();
 			client.drawingAreaHasBeenRemovedFromDom();
 		});
-
 
 		it("does not allow text to be selected or page to scroll when drag starts within drawing area", function() {
 			expect(drawingArea.isBrowserDragDefaultsPrevented()).to.be(true);
