@@ -33,7 +33,6 @@ User Stories to finish current MMF:
 Engineering Tasks:
 * Migrate from NodeUnit to Mocha
 - Migrate from Expect.js to a better assertion library
-- Migrate from NodeUnit to Mocha for smoke tests
 - General cleanup of build script
   - Move .lint files to 'incremental' dir, preserve '.js' extension (suggested by Jay Bazuzi, E282 comments)
   - Use automatopia ideas
@@ -46,8 +45,7 @@ Engineering Tasks:
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-* Migrate from NodeUnit to Mocha for _release_test.js
-- Migrate from NodeUnit to Mocha for _smoke_test.js
+* Migrate from NodeUnit to Mocha for _smoke_test.js
 - Use better assertion library
 
 
