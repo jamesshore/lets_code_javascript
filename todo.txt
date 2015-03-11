@@ -37,7 +37,6 @@ Engineering Tasks:
 
 To Do on current task:
 - Use automatopia ideas
-  - Make tested_browsers.js
   - Make jshint.conf.js
   - Make paths.js config
   - more?
