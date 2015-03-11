@@ -46,7 +46,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Migrate client code
-  - _svg_canvas_test.js
 
 
 Potential future stories:
