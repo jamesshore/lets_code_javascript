@@ -31,7 +31,7 @@ User Stories to finish current MMF:
   - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
-* Migrate from NodeUnit to Mocha for server tests
+* Migrate from NodeUnit to Mocha
 - Migrate from Expect.js to a better assertion library
 - Migrate from NodeUnit to Mocha for smoke tests
 - General cleanup of build script
@@ -44,9 +44,9 @@ Engineering Tasks:
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-* AT START OF EPISODE:
-  - Discuss Firefox 36 downgrade / Selenium issues
-
+* Migrate from NodeUnit to Mocha for server tests
+- Use better assertion library
+- Migrate from NodeUnit to Mocha for smoke tests
 
 
 Potential future stories:
