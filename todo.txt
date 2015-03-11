@@ -46,8 +46,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Migrate client code
-  - _css_test.js
-  - _fail_fast_test.js
   - _html_element_test.js
   - _svg_canvas_test.js
 
