@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var assert = require("assert");
+	var assert = require("assertive-chai").assert;
 
 	exports.fail = function(message) {
 		throw new Error("Assertion failed: " + message);
