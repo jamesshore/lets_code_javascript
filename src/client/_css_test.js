@@ -106,58 +106,58 @@
 		});
 
 		it("centers drawing area below tagline", function() {
-			expect(isElementCenteredInPage(drawingArea), true);
-			expect(elementPixelsBelowElement(drawingArea, tagline), 10);
+			assert.equal(isElementCenteredInPage(drawingArea), true);
+			assert.equal(elementPixelsBelowElement(drawingArea, tagline), 10);
 
-			expect(elementWidthInPixels(drawingArea), IOS_BROWSER_WIDTH);
-			expect(elementHeightInPixels(drawingArea), 600);
-			expect(backgroundColorOf(drawingArea), WHITE);
-			expect(roundedCornersOf(drawingArea), CORNER_ROUNDING);
+			assert.equal(elementWidthInPixels(drawingArea), IOS_BROWSER_WIDTH);
+			assert.equal(elementHeightInPixels(drawingArea), 600);
+			assert.equal(backgroundColorOf(drawingArea), WHITE);
+			assert.equal(roundedCornersOf(drawingArea), CORNER_ROUNDING);
 		});
 
 		it("centers an arrow at top of drawing area", function() {
-			expect(isElementCenteredInPage(drawingAreaArrow), true);
+			assert.equal(isElementCenteredInPage(drawingAreaArrow), true);
 
-			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea), 0);
+			assert.equal(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea), 0);
 			// TODO: haven't tested background image, position, or repeat
 
-			expect(isElementBehindElement(drawingAreaArrow, drawingArea), false);
+			assert.equal(isElementBehindElement(drawingAreaArrow, drawingArea), false);
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
-			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 15);
-			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea), 15);
-			expect(isElementBehindElement(clearButton, drawingArea), false);
+			assert.equal(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 15);
+			assert.equal(elementPixelsOverlappingRightOfElement(clearButton, drawingArea), 15);
+			assert.equal(isElementBehindElement(clearButton, drawingArea), false);
 
-			expect(textColorOf(clearButton), DARK_GRAY);
-			expect(backgroundColorOf(clearButton), GRAY);
-			expect(hasBorder(clearButton), false);
+			assert.equal(textColorOf(clearButton), DARK_GRAY);
+			assert.equal(backgroundColorOf(clearButton), GRAY);
+			assert.equal(hasBorder(clearButton), false);
 
-			expect(fontFamilyOf(clearButton), STANDARD_FONT);
-			expect(fontWeightOf(clearButton), CLEAR_BUTTON_WEIGHT);
-			expect(fontSizeOf(clearButton), "12px");
+			assert.equal(fontFamilyOf(clearButton), STANDARD_FONT);
+			assert.equal(fontWeightOf(clearButton), CLEAR_BUTTON_WEIGHT);
+			assert.equal(fontSizeOf(clearButton), "12px");
 
-			expect(elementHeightInPixels(clearButton), 30);
-			expect(elementWidthInPixels(clearButton), 70);
-			expect(isTextVerticallyCentered(clearButton), true);
+			assert.equal(elementHeightInPixels(clearButton), 30);
+			assert.equal(elementWidthInPixels(clearButton), 70);
+			assert.equal(isTextVerticallyCentered(clearButton), true);
 
-			expect(roundedCornersOf(clearButton), CORNER_ROUNDING);
-			expect(dropShadowOf(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+			assert.equal(roundedCornersOf(clearButton), CORNER_ROUNDING);
+			assert.equal(dropShadowOf(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW);
 
-			expect(textIsUnderlined(clearButton), false);
-			expect(textIsUppercase(clearButton), true);
+			assert.equal(textIsUnderlined(clearButton), false);
+			assert.equal(textIsUppercase(clearButton), true);
 		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
 			applyClass(clearButton, "_hover_", function() {
-				expect(backgroundColorOf(clearButton), DARKENED_GRAY);
+				assert.equal(backgroundColorOf(clearButton), DARKENED_GRAY);
 			});
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
 			applyClass(clearButton, "_active_", function() {
-				expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 16);
-				expect(dropShadowOf(clearButton), "none");
+				assert.equal(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 16);
+				assert.equal(dropShadowOf(clearButton), "none");
 			});
 		});
 
