@@ -14,11 +14,6 @@
 	var strict = !process.env.loose;
 	if (strict) console.log("For more forgiving test settings, use 'loose=true'");
 
-	var MOCHA_CONFIG = {
-		ui: "bdd",
-		reporter: "dot"
-	};
-
 	//*** DIRECTORIES
 
 	directory(paths.tempTestfileDir);
@@ -46,7 +41,7 @@
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
-		karma().serve(paths.karmaConfig, complete, fail);
+		karmaRunner().serve(paths.karmaConfig, complete, fail);
 	}, {async: true});
 
 	desc("Start localhost server for manual testing");
@@ -80,9 +75,9 @@
 	desc("Test server code");
 	task("testServer", [ paths.incrementalDir, paths.tempTestfileDir, paths.serverTestTarget ]);
 	file(paths.serverTestTarget, paths.serverFiles(), function() {
-		mocha().runTests({
+		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
-			options: MOCHA_CONFIG
+			options: mochaConfig()
 		}, succeed, fail);
 
 		function succeed() {
@@ -95,7 +90,7 @@
 	task("testClient", [ paths.incrementalDir, paths.clientTestTarget ]);
 	file(paths.clientTestTarget, paths.clientFiles(), function() {
 		console.log("Testing browser code: ");
-		karma().runTests({
+		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
 			browsers: require("./build/config/tested_browsers.js"),
 			strict: strict
@@ -109,11 +104,12 @@
 
 	desc("End-to-end smoke tests");
 	task("smoketest", [ "build" ], function() {
-		mocha().runTests({
+		mochaRunner().runTests({
 			files: paths.smokeTestFiles(),
-			options: MOCHA_CONFIG
+			options: mochaConfig()
 		}, complete, fail);
 	}, { async: true });
+
 
 	//*** BUILD
 
@@ -222,16 +218,22 @@
 	}
 
 
-	function karma() {
-		return require("./build/util/karma_runner.js");
-	}
+	//*** LAZY-LOADED MODULES
 
 	function fs() {
 		return require("fs");
 	}
 
-	function mocha() {
+	function karmaRunner() {
+		return require("./build/util/karma_runner.js");
+	}
+
+	function mochaRunner() {
 		return require("./build/util/mocha_runner.js");
+	}
+
+	function mochaConfig() {
+		return require("./build/config/mocha.conf.js");
 	}
 
 }());

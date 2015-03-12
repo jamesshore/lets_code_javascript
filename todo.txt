@@ -40,7 +40,7 @@ To Do on current task:
 - Use automatopia ideas
   - Make mocha.conf.js
   - Bring over Browserify runner
-  - more?
+  - Pretty build output
 - Factor out 'incrementalTask' logic
 - Clean up -T output
 - Fix duplicate 'BUILD OK' when running default build
