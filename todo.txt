@@ -37,8 +37,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Modify lint file paths to include config files
-- Use automatopia ideas
-  - Use Automatopia's version checker library
 - Factor out 'incrementalTask' logic
 - Clean up -T output
 - Fix duplicate 'BUILD OK' when running default build
