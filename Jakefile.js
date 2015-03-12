@@ -80,34 +80,24 @@
 	//*** TEST
 
 	desc("Test server code");
-	task("testServer", [ paths.incrementalDir, paths.tempTestfileDir, paths.serverTestTarget ]);
-	file(paths.serverTestTarget, paths.serverFiles(), function() {
+	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ],
+		paths.serverFiles(), function(complete, fail) {
 		console.log("Testing server code: ");
 		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
 			options: mochaConfig()
-		}, succeed, fail);
+		}, complete, fail);
+	});
 
-		function succeed() {
-			fs().writeFileSync(paths.serverTestTarget, "test ok");
-			complete();
-		}
-	}, { async: true });
 
 	desc("Test client code");
-	task("testClient", [ paths.incrementalDir, paths.clientTestTarget ]);
-	file(paths.clientTestTarget, paths.clientFiles(), function() {
+	incrementalTask("testClient", paths.clientTestTarget, [], paths.clientFiles(), function(complete, fail) {
 		console.log("Testing browser code: ");
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
 			browsers: require("./build/config/tested_browsers.js"),
 			strict: strict
-		}, succeed, fail);
-
-		function succeed() {
-			fs().writeFileSync(paths.clientTestTarget, "test ok");
-			complete();
-		}
+		}, complete, fail);
 	}, { async: true });
 
 	desc("End-to-end smoke tests");
@@ -230,6 +220,18 @@
 	function buildOk() {
 		var elapsedSeconds = (Date.now() - startTime) / 1000;
 		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
+	}
+
+	function incrementalTask(taskName, incrementalFile, otherDependencies, fileDependencies, action) {
+		task(taskName, otherDependencies.concat(paths.incrementalDir, incrementalFile));
+		file(incrementalFile, fileDependencies, function() {
+			action(succeed, fail);
+		}, {async: true});
+
+		function succeed() {
+			fs().writeFileSync(incrementalFile, "ok");
+			complete();
+		}
 	}
 
 	function createDirectoryDependencies(directories) {
