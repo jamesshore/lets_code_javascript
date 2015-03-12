@@ -176,11 +176,15 @@
 	//*** CHECK VERSIONS
 
 	task("nodeVersion", [], function() {
-		console.log("Checking Node version: .");
-		var versionChecker = require("./build/util/version_checker.js");
+		console.log("Checking Node.js version: .");
+		var version = require("./build/util/version_checker.js");
 
-		var deployedVersion = "v" + require("./package.json").engines.node;
-		versionChecker.check("Node", !process.env.loose, deployedVersion, process.version, fail);
+		version.check({
+			name: "Node",
+			expected: require("./package.json").engines.node,
+			actual: process.version,
+			strict: strict
+		}, complete, fail);
 	});
 
 

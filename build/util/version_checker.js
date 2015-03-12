@@ -2,36 +2,23 @@
 (function() {
 	"use strict";
 
-	exports.check = function(name, strict, expectedString, actualString, fail) {
-		function failWithQualifier(qualifier) {
-			fail("Incorrect " + name + " version. Expected " + qualifier +
-				" [" + expectedString + "], but was [" + actualString + "].");
-		}
+	var semver = require("semver");
 
-		var expected = parseNodeVersion("expected Node version", expectedString, fail);
-		var actual = parseNodeVersion("Node version", actualString, fail);
-
-		if (!process.env.loose) {
-			if (actual[0] !== expected[0] || actual[1] !== expected[1] || actual[2] !== expected[2]) {
-				failWithQualifier("exactly");
-			}
+	exports.check = function(options, success, fail) {
+		if (options.strict) {
+			if (semver.neq(options.actual, options.expected)) return failWithQualifier("exactly");
 		}
 		else {
-			if (actual[0] < expected[0]) failWithQualifier("at least");
-			if (actual[0] === expected[0] && actual[1] < expected[1]) failWithQualifier("at least");
-			if (actual[0] === expected[0] && actual[1] === expected[1] && actual[2] < expected[2]) failWithQualifier("at least");
+			if (semver.lt(options.actual, options.expected)) return failWithQualifier("at least");
+			if (semver.neq(options.actual, options.expected)) console.log("Warning: Newer " + options.name +
+				" version than expected. Expected " + options.expected + ", but was " + options.actual + ".");
+		}
+		return success();
+
+		function failWithQualifier(qualifier) {
+			return fail("Incorrect " + options.name + " version. Expected " + qualifier +
+				" " + options.expected + ", but was " + options.actual + ".");
 		}
 	};
-
-	function parseNodeVersion(description, versionString, fail) {
-		var versionMatcher = /^v(\d+)\.(\d+)\.(\d+)(\-|$)/;    // v[major].[minor].[bugfix]
-		var versionInfo = versionString.match(versionMatcher);
-		if (versionInfo === null) fail("Could not parse " + description + " (was '" + versionString + "')");
-
-		var major = parseInt(versionInfo[1], 10);
-		var minor = parseInt(versionInfo[2], 10);
-		var bugfix = parseInt(versionInfo[3], 10);
-		return [major, minor, bugfix];
-	}
 
 }());
