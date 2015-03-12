@@ -80,8 +80,8 @@
 	//*** TEST
 
 	desc("Test server code");
-	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ],
-		paths.serverFiles(), function(complete, fail) {
+	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ], paths.serverFiles(),
+		function(complete, fail) {
 		console.log("Testing server code: ");
 		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
@@ -144,6 +144,21 @@
 	}, {async: true});
 
 
+	//*** CHECK VERSIONS
+
+	task("nodeVersion", [], function() {
+		console.log("Checking Node.js version: .");
+		var version = require("./build/util/version_checker.js");
+
+		version.check({
+			name: "Node",
+			expected: require("./package.json").engines.node,
+			actual: process.version,
+			strict: strict
+		}, complete, fail);
+	});
+
+
 	//*** DEPLOY
 
 	desc("Deploy to Heroku");
@@ -160,21 +175,6 @@
 		console.log("1. Make sure 'git status' is clean.");
 		console.log("2. 'git push staging master");
 		console.log("3. Visit http://wwp-staging.herokuapp.com/");
-	});
-
-
-	//*** CHECK VERSIONS
-
-	task("nodeVersion", [], function() {
-		console.log("Checking Node.js version: .");
-		var version = require("./build/util/version_checker.js");
-
-		version.check({
-			name: "Node",
-			expected: require("./package.json").engines.node,
-			actual: process.version,
-			strict: strict
-		}, complete, fail);
 	});
 
 

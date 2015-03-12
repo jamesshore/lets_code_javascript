@@ -36,9 +36,6 @@ Engineering Tasks:
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-* Factor out 'incrementalTask' logic
-- Clean up -T output
-- Fix duplicate 'BUILD OK' when running default build
 - Move vendor directory to more convenient location?
 - Need better of dealing with shared and vendor files' dependency
   - currently, they're duplicated in clientFiles() & serverFiles()
