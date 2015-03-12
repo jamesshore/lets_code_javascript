@@ -17,6 +17,7 @@
     "mocha": "^1.21.4",
     "procfile": "^0.1.1",
     "selenium-webdriver": "^2.44.0",
+    "semver": "^4.3.1",
     "shelljs": "^0.3.0"
   },
   "dependencies": {
