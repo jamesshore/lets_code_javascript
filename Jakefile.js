@@ -114,10 +114,11 @@
 	//*** BUILD
 
 	desc("Bundle and build code");
-	task("build", [ paths.buildClientDir ], function() {
+	task("build", [ "collateClientFiles", "bundleClientJs" ]);
+
+	task("collateClientFiles", [ paths.buildClientDir ], function() {
 		var fs = require("fs");
 		var shell = require("shelljs");
-		var browserify = require("browserify");
 
 		shell.rm("-rf", paths.buildClientDir + "/*");
 		shell.cp(
@@ -125,7 +126,9 @@
 			"src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor",
 			paths.buildClientDir
 		);
+	});
 
+	task("bundleClientJs", [ paths.buildClientDir ], function() {
 		console.log("Bundling client files with Browserify...");
 		var browserifyRunner = require("./build/util/browserify_runner.js");
 		browserifyRunner.bundle({
