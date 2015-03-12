@@ -38,8 +38,6 @@ Engineering Tasks:
 To Do on current task:
 * Modify lint file paths to include config files
 - Use automatopia ideas
-  - Make mocha.conf.js
-  - Bring over Browserify runner
   - Pretty build output
 - Factor out 'incrementalTask' logic
 - Clean up -T output

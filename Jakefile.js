@@ -127,14 +127,15 @@
 		);
 
 		console.log("Bundling client files with Browserify...");
-		var b = browserify({ debug: true });
-		b.require("./src/client/client.js", {expose: "./client.js"} );
-		b.require("./src/client/html_element.js", {expose: "./html_element.js"} );
-		b.bundle(function(err, bundle) {
-			if (err) fail(err);
-			fs.writeFileSync(paths.buildClientDir + "/bundle.js", bundle);
-			complete();
-		});
+		var browserifyRunner = require("./build/util/browserify_runner.js");
+		browserifyRunner.bundle({
+			requires: [
+				{ path: "./src/client/client.js", expose: "./client.js" },
+				{ path: "./src/client/html_element.js", expose: "./html_element.js" }
+			],
+			outfile: paths.buildClientDir + "/bundle.js",
+			options: { debug: true }
+		}, complete, fail);
 	}, {async: true});
 
 
