@@ -31,17 +31,10 @@ User Stories to finish current MMF:
   - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
-* General cleanup of build script
 - Add HTML validation / linting?
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-- Move vendor directory to more convenient location?
-- Need better of dealing with shared and vendor files' dependency
-  - currently, they're duplicated in clientFiles() & serverFiles()
-- Clean up CI script?
-
-
 
 
 Potential future stories:
