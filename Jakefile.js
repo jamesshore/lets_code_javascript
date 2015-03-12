@@ -6,9 +6,10 @@
 
 	var startTime = Date.now();
 
-	// We've put our require statements in functions or the tasks that use them so we don't have the overhead
-	// of loading modules we don't need. At the time this refactoring was done, module loading took about half a
+	// We've put most of our require statements in functions (or tasks) so we don't have the overhead of
+	// loading modules we don't need. At the time this refactoring was done, module loading took about half a
 	// second, which was 10% of our desired maximum of five seconds for a quick build.
+	// The require statements here are just the ones that are used to set up the tasks.
 	var paths = require("./build/config/paths.js");
 
 	var strict = !process.env.loose;
@@ -24,20 +25,21 @@
 
 	//*** GENERAL
 
+	jake.addListener('complete', function () {
+		var elapsedSeconds = (Date.now() - startTime) / 1000;
+		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
+	});
+
 	desc("Delete all generated files");
 	task("clean", [], function() {
 		jake.rmRf(paths.generatedDir);
 	});
 
 	desc("Lint and test everything");
-	task("default", [ "clean", "quick", "smoketest" ], function() {
-		buildOk();
-	});
+	task("default", [ "clean", "quick", "smoketest" ]);
 
 	desc("Incrementally lint and test fast targets");
-	task("quick", [ "nodeVersion", "lint", "testServer", "testClient" ], function() {
-		buildOk();
-	});
+	task("quick", [ "nodeVersion", "lint", "testServer", "testClient" ]);
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
@@ -215,11 +217,6 @@
 	function determineLintDependency(name) {
 		var result = name.replace(/^generated\/incremental\/lint\//, "");
 		return result.replace(/\.lint$/, "");
-	}
-
-	function buildOk() {
-		var elapsedSeconds = (Date.now() - startTime) / 1000;
-		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
 	}
 
 	function incrementalTask(taskName, incrementalFile, otherDependencies, fileDependencies, action) {

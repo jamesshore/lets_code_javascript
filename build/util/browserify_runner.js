@@ -16,7 +16,7 @@ exports.bundle = function(config, success, failure) {
 	b.bundle(function(err, bundle) {
 		if (err) failure(err);
 		fs.writeFileSync(config.outfile, bundle);
-		console.log("\n");
+		console.log();
 		success();
 	});
 };
