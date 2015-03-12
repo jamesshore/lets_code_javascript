@@ -57,9 +57,16 @@
 	//*** LINT
 
 	desc("Lint everything");
-	task("lint", paths.lintDirectories());
-	task("lint", paths.lintOutput());
+	task("lint", [ "lintLog", "incrementalLint" ], function() {
+		console.log();
+	});
+
+	task("lintLog", function() { process.stdout.write("Linting JavaScript: "); });
+
+	task("incrementalLint", paths.lintDirectories());
+	task("incrementalLint", paths.lintOutput());
 	createDirectoryDependencies(paths.lintDirectories());
+
 	rule(".lint", determineLintDependency, function() {
 		var lint = require("./build/util/lint_runner.js");
 		var lintConfig = require("./build/config/jshint.conf.js");
@@ -75,6 +82,7 @@
 	desc("Test server code");
 	task("testServer", [ paths.incrementalDir, paths.tempTestfileDir, paths.serverTestTarget ]);
 	file(paths.serverTestTarget, paths.serverFiles(), function() {
+		console.log("Testing server code: ");
 		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
 			options: mochaConfig()
@@ -104,6 +112,7 @@
 
 	desc("End-to-end smoke tests");
 	task("smoketest", [ "build" ], function() {
+		console.log("Smoke testing app: ");
 		mochaRunner().runTests({
 			files: paths.smokeTestFiles(),
 			options: mochaConfig()
@@ -117,6 +126,8 @@
 	task("build", [ "collateClientFiles", "bundleClientJs" ]);
 
 	task("collateClientFiles", [ paths.buildClientDir ], function() {
+		console.log("Collating client files: .");
+
 		var fs = require("fs");
 		var shell = require("shelljs");
 
@@ -129,7 +140,8 @@
 	});
 
 	task("bundleClientJs", [ paths.buildClientDir ], function() {
-		console.log("Bundling client files with Browserify...");
+		process.stdout.write("Bundling client files with Browserify: ");
+
 		var browserifyRunner = require("./build/util/browserify_runner.js");
 		browserifyRunner.bundle({
 			requires: [
@@ -164,6 +176,7 @@
 	//*** CHECK VERSIONS
 
 	task("nodeVersion", [], function() {
+		console.log("Checking Node version: .");
 		var versionChecker = require("./build/util/version_checker.js");
 
 		var deployedVersion = "v" + require("./package.json").engines.node;
