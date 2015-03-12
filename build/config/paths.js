@@ -19,7 +19,7 @@
 
 	exports.serverTestFiles = function() {
 		return deglob("src/server/**/_*_test.js");
-	}
+	};
 
 	exports.clientFiles = function() {
 		return deglob([
@@ -29,7 +29,7 @@
 			"src/shared/**/*.js",
 			"src/client/vendor/**/*.js"
 		]);
-	}
+	};
 
 	exports.serverFiles = function() {
 		return deglob([
@@ -37,22 +37,22 @@
 			"src/shared/**/*.js",
 			"src/client/vendor/**/*.js"
 		]);
-	}
+	};
 
 	exports.smokeTestFiles = function() {
 		return deglob("src/_*_test.js");
-	}
+	};
 
 	exports.lintFiles = function() {
 		return deglob([
 			"*.js",
-			"build/util/*.js",
+			"build/**/*.js",
 			"src/client/*.js",
 			"src/server/**/*.js",
 			"src/shared/**/*.js",
 			"src/*.js"
 		]);
-	}
+	};
 
 	exports.lintOutput = function() {
 		return exports.lintFiles().map(function(pathname) {
