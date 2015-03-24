@@ -35,7 +35,9 @@ Engineering Tasks:
 - How do we not test Typekit when we're just testing CSS?
 
 To Do on current task:
-
+* AT START OF EPISODE:
+  - Extra `{ async: true }` in Jakefile line 103 (Martin Grandrath E302)
+  - Move Proclaim to `src/vendor/shared`? (Martin Grandrath E296)
 
 Potential future stories:
 - "Try me" text in drawing area
