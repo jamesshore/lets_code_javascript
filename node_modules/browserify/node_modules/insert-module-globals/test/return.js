@@ -12,7 +12,11 @@ test('early return', function (t) {
         .pipe(bpack({ raw: true }))
     ;
     s.pipe(concat(function (src) {
-        var c = { t: t, setTimeout: setTimeout };
+        var c = {
+            t: t,
+            setTimeout: setTimeout,
+            clearTimeout: clearTimeout
+        };
         vm.runInNewContext(src, c);
     }));
 });

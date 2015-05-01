@@ -11,6 +11,7 @@ The goal of this module is not to be a full-fledged alternative to the builtin p
 If you are looking to provide other process methods, I suggest you monkey patch them onto the process global in your app. A list of user created patches is below.
 
 * [hrtime](https://github.com/kumavis/browser-process-hrtime)
+* [stdout](https://github.com/kumavis/browser-stdout)
 
 ## package manager notes
 

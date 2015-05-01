@@ -36,8 +36,11 @@ Engineering Tasks:
 
 To Do on current task:
 * AT START OF EPISODE:
-  - Extra `{ async: true }` in Jakefile line 103 (Martin Grandrath E302)
-  - Move Proclaim to `src/vendor/shared`? (Martin Grandrath E296)
+  - Upgraded dependencies:
+    - Selenium WebDriverJS works with latest version of Firefox (2.44.0 --> 2.45.1)
+  - Consider:
+    - Extra `{ async: true }` in Jakefile line 103 (Martin Grandrath E302)
+    - Move Proclaim to `src/vendor/shared`? (Martin Grandrath E296)
 
 Potential future stories:
 - "Try me" text in drawing area

@@ -14,7 +14,7 @@
     function newRequire(name, jumped){
         if(!cache[name]) {
             if(!modules[name]) {
-                // if we cannot find the the module within our internal map or
+                // if we cannot find the module within our internal map or
                 // cache jump to the current global require ie. the last bundle
                 // that was added to the page.
                 var currentRequire = typeof require == "function" && require;
