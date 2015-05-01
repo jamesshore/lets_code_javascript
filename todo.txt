@@ -17,8 +17,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Web font
-- Polish:
+* Polish:
   - Clear button retains focus when drawing (IE8, 9, Chrome)
   - Remove body padding
   - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
@@ -32,12 +31,8 @@ User Stories to finish current MMF:
 - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
-* Upgrade to Node.js 0.12.x
-- Move Proclaim to `src/vendor/shared`? (Martin Grandrath E296)
 
 To Do on current task:
-* Fix any issues that arise
-- Integrate
 
 Potential future stories:
 - "Try me" text in drawing area

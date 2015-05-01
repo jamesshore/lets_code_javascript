@@ -4,7 +4,7 @@
 
 	// We use Proclaim rather than Chai because Chai doesn't support IE 8.
 	// But Proclaim error messages are terrible, so we end up doing a lot ourselves.
-	var assert = require("../client/vendor/proclaim-2.0.0.js");
+	var assert = require("./vendor/proclaim-2.0.0.js");
 
 	exports.fail = function(message) {
 		assert.fail(null, null, message);
