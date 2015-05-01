@@ -8,7 +8,7 @@
   "devDependencies": {
     "async": "^0.9.0",
     "browserify": "^10.0.0",
-    "glob": "^4.3.5",
+    "glob": "^5.0.5",
     "jake": "^8.0.9",
     "jshint": "^2.5.6",
     "karma": "^0.12.24",
