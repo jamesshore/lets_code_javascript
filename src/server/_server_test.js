@@ -102,9 +102,10 @@
 			});
 		});
 
-		it("stop throws exception when not running", function() {
-			assert.throws(function() {
-				server.stop();
+		it("stop() provides error parameter if the server isn't running", function(done) {
+			server.stop(function(err) {
+				assert.defined(err);
+				done();
 			});
 		});
 
