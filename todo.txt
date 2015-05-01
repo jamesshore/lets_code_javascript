@@ -27,8 +27,9 @@ User Stories to finish current MMF:
   - Manually confirm that styling works cross-platform
   - What about alt tags? Semantic markup?
   - Add HTML validation / linting?
-  - How do we not test Typekit when we're just testing CSS?- Release new design
-- Need to cache-bust stylesheet and bundle.js
+  - How do we not test Typekit when we're just testing CSS?
+- Release new design
+  - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
 
