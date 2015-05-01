@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="JSHintConfiguration">
+  <component name="JSHintConfiguration" version="2.5.6" use-config-file="false">
     <option bitwise="true" />
     <option curly="true" />
     <option eqeqeq="true" />
@@ -14,4 +14,3 @@
     <option maxerr="50" />
   </component>
 </project>
-

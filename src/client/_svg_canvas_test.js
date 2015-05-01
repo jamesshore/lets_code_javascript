@@ -6,6 +6,7 @@
 
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
+	var assert = require("../shared/_assert.js");
 
 	describe("SvgCanvas", function() {
 
@@ -30,8 +31,8 @@
 			try {
 				Raphael = SpyRaphael;
 				svgCanvas = new SvgCanvas(div);
-				expect(Raphael.width).to.equal(200);
-				expect(Raphael.height).to.equal(900);
+				assert.equal(Raphael.width, 200);
+				assert.equal(Raphael.height, 900);
 			}
 			finally {
 				Raphael = realRaphael;
@@ -44,19 +45,19 @@
 		});
 
 		it("returns zero line segments", function() {
-			expect(svgCanvas.lineSegments()).to.eql([]);
+			assert.deepEqual(svgCanvas.lineSegments(), []);
 		});
 
 		it("draws and returns one line segment", function() {
 			svgCanvas.drawLine(1, 2, 5, 10);
-			expect(svgCanvas.lineSegments()).to.eql([[1, 2, 5, 10]]);
+			assert.deepEqual(svgCanvas.lineSegments(), [[1, 2, 5, 10]]);
 		});
 
 		it("draws and returns multiple line segments", function() {
 			svgCanvas.drawLine(1, 2, 5, 10);
 			svgCanvas.drawLine(20, 60, 2, 3);
 			svgCanvas.drawLine(0, 0, 100, 200);
-			expect(svgCanvas.lineSegments()).to.eql([
+			assert.deepEqual(svgCanvas.lineSegments(), [
 				[1, 2, 5, 10],
 				[20, 60, 2, 3],
 				[0, 0, 100, 200]
@@ -67,30 +68,30 @@
 			svgCanvas.drawDot(5, 10);
 
 			var elements = svgCanvas.elementsForTestingOnly();
-			expect(elements.length).to.equal(1);
+			assert.equal(elements.length, 1);
 
-			expect(elements[0].type).to.equal("circle");
+			assert.equal(elements[0].type, "circle");
 
 			var attrs = elements[0].attrs;
-			expect(attrs.cx).to.equal(5);
-			expect(attrs.cy).to.equal(10);
-			expect(attrs.r).to.equal(SvgCanvas.STROKE_WIDTH / 2);
-			expect(attrs.stroke).to.equal(SvgCanvas.LINE_COLOR);
-			expect(attrs.fill).to.equal(SvgCanvas.LINE_COLOR);
+			assert.equal(attrs.cx, 5);
+			assert.equal(attrs.cy, 10);
+			assert.equal(attrs.r, SvgCanvas.STROKE_WIDTH / 2);
+			assert.equal(attrs.stroke, SvgCanvas.LINE_COLOR);
+			assert.equal(attrs.fill, SvgCanvas.LINE_COLOR);
 		});
 
 		it("styles lines nicely", function() {
 			svgCanvas.drawLine(3, 3, 4, 4);
 			var attrs = svgCanvas.elementsForTestingOnly()[0].attrs;
-			expect(attrs.stroke).to.equal(SvgCanvas.LINE_COLOR);
-			expect(attrs["stroke-width"]).to.equal(SvgCanvas.STROKE_WIDTH);
-			expect(attrs["stroke-linecap"]).to.equal(SvgCanvas.LINE_CAP);
+			assert.equal(attrs.stroke, SvgCanvas.LINE_COLOR);
+			assert.equal(attrs["stroke-width"], SvgCanvas.STROKE_WIDTH);
+			assert.equal(attrs["stroke-linecap"], SvgCanvas.LINE_CAP);
 		});
 
 		it("clears everything", function() {
 			svgCanvas.drawLine(3, 3, 4, 4);
 			svgCanvas.clear();
-			expect(svgCanvas.lineSegments()).to.eql([]);
+			assert.deepEqual(svgCanvas.lineSegments(), []);
 		});
 
 	});

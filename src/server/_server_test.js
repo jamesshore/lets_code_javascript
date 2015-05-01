@@ -5,8 +5,8 @@
 	var server = require("./server.js");
 	var http = require("http");
 	var fs = require("fs");
-	var assert = require("assert");
 	var async = require("async");
+	var assert = require("../shared/_assert.js");
 
 	var CONTENT_DIR = "generated/test";
 
@@ -27,80 +27,88 @@
 		[ CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA]
 	];
 
-	exports.setUp = function(done) {
-		async.each(TEST_FILES, createTestFile, done);
-	};
+	describe("Server", function() {
 
-	exports.tearDown = function(done) {
-		async.each(TEST_FILES, deleteTestFile, done);
-	};
-
-	exports.test_servesFilesFromDirectory = function(test) {
-		httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
-			test.equals(200, response.statusCode, "status code");
-			test.equals(INDEX_PAGE_DATA, responseData, "response text");
-			test.done();
+		beforeEach(function(done) {
+			async.each(TEST_FILES, createTestFile, done);
 		});
-	};
 
-	exports.test_supportsMultipleFiles = function(test) {
-		httpGet(BASE_URL + "/" + OTHER_PAGE, function(response, responseData) {
-			test.equals(200, response.statusCode, "status code");
-			test.equals(OTHER_PAGE_DATA, responseData, "response text");
-			test.done();
+		afterEach(function(done) {
+			async.each(TEST_FILES, deleteTestFile, done);
 		});
-	};
 
-	exports.test_servesIndexDotHtmlWhenAskedForHomePage = function(test) {
-		httpGet(BASE_URL, function(response, responseData) {
-			test.equals(200, response.statusCode, "status code");
-			test.equals(INDEX_PAGE_DATA, responseData, "response text");
-			test.done();
+		it("serves files from directory", function(done) {
+			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
+				assert.equal(200, response.statusCode, "status code");
+				assert.equal(INDEX_PAGE_DATA, responseData, "response text");
+				done();
+			});
 		});
-	};
 
-	exports.test_returns404WhenFileDoesNotExist = function(test) {
-		httpGet(BASE_URL + "/bargle", function(response, responseData) {
-			test.equals(404, response.statusCode, "status code");
-			test.equals(NOT_FOUND_DATA, responseData, "404 text");
-			test.done();
+		it("supports multiple files", function(done) {
+			httpGet(BASE_URL + "/" + OTHER_PAGE, function(response, responseData) {
+				assert.equal(200, response.statusCode, "status code");
+				assert.equal(OTHER_PAGE_DATA, responseData, "response text");
+				done();
+			});
 		});
-	};
 
-	exports.test_requiresHomePageParameter = function(test) {
-		test.throws(function() {
-			server.start();
+		it("supports multiple files", function(done) {
+			httpGet(BASE_URL + "/" + OTHER_PAGE, function(response, responseData) {
+				assert.equal(200, response.statusCode, "status code");
+				assert.equal(OTHER_PAGE_DATA, responseData, "response text");
+				done();
+			});
 		});
-		test.done();
-	};
 
-	exports.test_requires404PageParameter = function(test) {
-		test.throws(function() {
-			server.start(CONTENT_DIR);
+		it("serves index.html when asked for home page", function(done) {
+			httpGet(BASE_URL, function(response, responseData) {
+				assert.equal(200, response.statusCode, "status code");
+				assert.equal(INDEX_PAGE_DATA, responseData, "response text");
+				done();
+			});
 		});
-		test.done();
-	};
 
-	exports.test_requiresPortParameter = function(test) {
-		test.throws(function() {
-			server.start(CONTENT_DIR, NOT_FOUND_PAGE);
+		it("returns 404 when file doesn't exist", function(done) {
+			httpGet(BASE_URL + "/bargle", function(response, responseData) {
+				assert.equal(404, response.statusCode, "status code");
+				assert.equal(NOT_FOUND_DATA, responseData, "404 text");
+				done();
+			});
 		});
-		test.done();
-	};
 
-	exports.test_runsCallbackWhenStopCompletes = function(test) {
-		server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT);
-		server.stop(function() {
-			test.done();
+		it("requires home page parameter", function() {
+			assert.throws(function() {
+				server.start();
+			});
 		});
-	};
 
-	exports.test_stopThrowsExceptionWhenNotRunning = function(test) {
-		test.throws(function() {
-			server.stop();
+		it("requires 404 page parameter", function() {
+			assert.throws(function() {
+				server.start(CONTENT_DIR);
+			});
 		});
-		test.done();
-	};
+
+		it("requires port parameter", function() {
+			assert.throws(function() {
+				server.start(CONTENT_DIR, NOT_FOUND_PAGE);
+			});
+		});
+
+		it("runs callback when stop completes", function(done) {
+			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT);
+			server.stop(function() {
+				done();
+			});
+		});
+
+		it("stop throws exception when not running", function() {
+			assert.throws(function() {
+				server.stop();
+			});
+		});
+
+	});
 
 	function httpGet(url, callback) {
 		server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {

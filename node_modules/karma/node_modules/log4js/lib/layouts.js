@@ -71,11 +71,11 @@ function colorize (str, style) {
   return colorizeStart(style) + str + colorizeEnd(style);
 }
 
-function timestampLevelAndCategory(loggingEvent, colour) {
+function timestampLevelAndCategory(loggingEvent, colour, timezoneOffest) {
   var output = colorize(
     formatLogData(
       '[%s] [%s] %s - '
-      , dateFormat.asString(loggingEvent.startTime)
+      , dateFormat.asString(loggingEvent.startTime, timezoneOffest)
       , loggingEvent.level
       , loggingEvent.categoryName
     )
@@ -93,18 +93,19 @@ function timestampLevelAndCategory(loggingEvent, colour) {
  *
  * @author Stephan Strittmatter
  */
-function basicLayout (loggingEvent) {
-  return timestampLevelAndCategory(loggingEvent) + formatLogData(loggingEvent.data);
+function basicLayout (loggingEvent, timezoneOffset) {
+  return timestampLevelAndCategory(loggingEvent, undefined, timezoneOffset) + formatLogData(loggingEvent.data);
 }
 
 /**
  * colouredLayout - taken from masylum's fork.
  * same as basicLayout, but with colours.
  */
-function colouredLayout (loggingEvent) {
+function colouredLayout (loggingEvent, timezoneOffset) {
   return timestampLevelAndCategory(
     loggingEvent,
-    colours[loggingEvent.level.toString()]
+    colours[loggingEvent.level.toString()],
+    timezoneOffset
   ) + formatLogData(loggingEvent.data);
 }
 
@@ -139,13 +140,14 @@ function messagePassThroughLayout (loggingEvent) {
  * Takes a pattern string, array of tokens and returns a layout function.
  * @param {String} Log format pattern String
  * @param {object} map object of different tokens
+ * @param {number} timezone offset in minutes
  * @return {Function}
  * @author Stephan Strittmatter
  * @author Jan Schmidle
  */
-function patternLayout (pattern, tokens) {
+function patternLayout (pattern, tokens, timezoneOffset) {
   var TTCC_CONVERSION_PATTERN  = "%r %p %c - %m%n";
-  var regex = /%(-?[0-9]+)?(\.?[0-9]+)?([\[\]cdhmnprzx%])(\{([^\}]+)\})?|([^%]+)/;
+  var regex = /%(-?[0-9]+)?(\.?[0-9]+)?([\[\]cdhmnprzxy%])(\{([^\}]+)\})?|([^%]+)/;
   
   pattern = pattern || TTCC_CONVERSION_PATTERN;
 
@@ -177,7 +179,7 @@ function patternLayout (pattern, tokens) {
       }
     }
     // Format the date
-    return dateFormat.asString(format, loggingEvent.startTime);
+    return dateFormat.asString(format, loggingEvent.startTime, timezoneOffset);
   }
   
   function hostname() {
@@ -197,7 +199,7 @@ function patternLayout (pattern, tokens) {
   }
 
   function startTime(loggingEvent) {
-    return "" + loggingEvent.startTime.toLocaleTimeString();
+    return dateFormat.asString('hh:mm:ss', loggingEvent.startTime, timezoneOffset);
   }
 
   function startColour(loggingEvent) {
@@ -212,8 +214,25 @@ function patternLayout (pattern, tokens) {
     return '%';
   }
 
-  function pid() {
-    return process.pid;
+  function pid(loggingEvent) {
+    if (loggingEvent && loggingEvent.pid) {
+      return loggingEvent.pid;
+    } else {
+      return process.pid;
+    }
+  }
+  
+  function clusterInfo(loggingEvent, specifier) {
+    if (loggingEvent.cluster && specifier) {
+      return specifier
+        .replace('%m', loggingEvent.cluster.master)
+        .replace('%w', loggingEvent.cluster.worker)
+        .replace('%i', loggingEvent.cluster.workerId);
+    } else if (loggingEvent.cluster) {
+      return loggingEvent.cluster.worker+'@'+loggingEvent.cluster.master;
+    } else {
+      return pid();
+    }
   }
 
   function userDefined(loggingEvent, specifier) {
@@ -237,6 +256,7 @@ function patternLayout (pattern, tokens) {
     'r': startTime,
     '[': startColour,
     ']': endColour,
+    'y': clusterInfo,
     'z': pid,
     '%': percent,
     'x': userDefined
@@ -295,9 +315,7 @@ function patternLayout (pattern, tokens) {
       } else {
         // Create a raw replacement string based on the conversion
         // character and specifier
-        var replacement = 
-          replaceToken(conversionCharacter, loggingEvent, specifier) || 
-          matchedString;
+        var replacement = replaceToken(conversionCharacter, loggingEvent, specifier);
 
         // Format the replacement according to any padding or
         // truncation specified

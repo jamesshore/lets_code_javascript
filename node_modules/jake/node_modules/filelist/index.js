@@ -22,12 +22,12 @@ var fs = require('fs')
 , globSync;
 
 globSync = function (pat) {
-  var dirname = jake.basedir(pat)
+  var dirname = utils.file.basedir(pat)
     , files
     , matches;
 
   try {
-    files = jake.readdirR(dirname).map(function(file){
+    files = utils.file.readdirR(dirname).map(function(file){
       return file.replace(/\\/g, '/');
     });
   }

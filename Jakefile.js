@@ -1,108 +1,167 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global desc, task, jake, fail, complete, directory*/
+/*global desc, task, file, jake, rule, fail, complete, directory*/
 
 (function() {
 	"use strict";
 
-	if (!process.env.loose) console.log("For more forgiving test settings, use 'loose=true'");
+	var startTime = Date.now();
 
-	var fs = require("fs");
-	var shell = require("shelljs");
+	// We've put most of our require statements in functions (or tasks) so we don't have the overhead of
+	// loading modules we don't need. At the time this refactoring was done, module loading took about half a
+	// second, which was 10% of our desired maximum of five seconds for a quick build.
+	// The require statements here are just the ones that are used to set up the tasks.
+	var paths = require("./build/config/paths.js");
 
-	var browserify = require("browserify");
-	var lint = require("./build/util/lint_runner.js");
-	var nodeunit = require("./build/util/nodeunit_runner.js");
-	var karma = require("./build/util/karma_runner.js");
-	var versionChecker = require("./build/util/version_checker.js");
-	var runServer = require("./src/_run_server.js");
-	var path = require("path");
+	var strict = !process.env.loose;
+	if (strict) console.log("For more forgiving test settings, use 'loose=true'");
 
-	var REQUIRED_BROWSERS = [
-		"IE 8.0.0 (Windows 7)",
-		"IE 9.0.0 (Windows 7)",
-		"Firefox 33.0.0 (Mac OS X 10.8)",
-		"Chrome 38.0.2125 (Mac OS X 10.8.5)",
-		"Safari 6.2.0 (Mac OS X 10.8.5)",
-		"Mobile Safari 7.0.0 (iOS 7.1)"
-	];
+	//*** DIRECTORIES
 
-	var GENERATED_DIR = "generated";
-	var TEMP_TESTFILE_DIR = GENERATED_DIR + "/test";
-	var BUILD_DIR = GENERATED_DIR + "/build";
-	var BUILD_CLIENT_DIR = BUILD_DIR + "/client";
+	directory(paths.tempTestfileDir);
+	directory(paths.buildDir);
+	directory(paths.buildClientDir);
+	directory(paths.incrementalDir);
 
-	directory(TEMP_TESTFILE_DIR);
-	directory(BUILD_DIR);
-	directory(BUILD_CLIENT_DIR);
+
+	//*** GENERAL
+
+	jake.addListener('complete', function () {
+		var elapsedSeconds = (Date.now() - startTime) / 1000;
+		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
+	});
 
 	desc("Delete all generated files");
 	task("clean", [], function() {
-		jake.rmRf(GENERATED_DIR);
+		jake.rmRf(paths.generatedDir);
 	});
 
-	desc("Build and test");
-	task("default", ["lint", "test"], function() {
-		console.log("\n\nOK");
-	});
+	desc("Lint and test everything");
+	task("default", [ "clean", "quick", "smoketest" ]);
+
+	desc("Incrementally lint and test fast targets");
+	task("quick", [ "nodeVersion", "lint", "testServer", "testClient" ]);
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
-		karma.serve("build/karma.conf.js", complete, fail);
+		karmaRunner().serve(paths.karmaConfig, complete, fail);
 	}, {async: true});
 
-	desc("Start WeeWikiPaint server for manual testing");
-	task("run", ["build"], function() {
+	desc("Start localhost server for manual testing");
+	task("run", [ "build" ], function() {
+		var runServer = require("./src/_run_server.js");
+
 		console.log("Running server. Press Ctrl-C to stop.");
 		runServer.runInteractively();
 		// We never call complete() because we want the task to hang until the user presses 'Ctrl-C'.
 	}, {async: true});
 
+
+	//*** LINT
+
 	desc("Lint everything");
-	task("lint", ["lintNode", "lintClient"]);
-
-	task("lintNode", ["nodeVersion"], function() {
-		var passed = lint.validateFileList(nodeLintFiles(), nodeLintOptions(), {});
-		if (!passed) fail("Lint failed");
+	task("lint", [ "lintLog", "incrementalLint" ], function() {
+		console.log();
 	});
 
-	task("lintClient", function() {
-		var passed = lint.validateFileList(clientLintFiles(), clientLintOptions(), clientGlobals());
-		if (!passed) fail("Lint failed");
+	task("lintLog", function() { process.stdout.write("Linting JavaScript: "); });
+
+	task("incrementalLint", paths.lintDirectories());
+	task("incrementalLint", paths.lintOutput());
+	createDirectoryDependencies(paths.lintDirectories());
+
+	rule(".lint", determineLintDependency, function() {
+		var lint = require("./build/util/lint_runner.js");
+		var lintConfig = require("./build/config/jshint.conf.js");
+
+		var passed = lint.validateFile(this.source, lintConfig.options, lintConfig.globals);
+		if (passed) fs().writeFileSync(this.name, "lint ok");
+		else fail("Lint failed");
 	});
 
-	desc("Test everything");
-	task("test", ["testServer", "testClient", "testSmoke"]);
+
+	//*** TEST
 
 	desc("Test server code");
-	task("testServer", ["nodeVersion", TEMP_TESTFILE_DIR], function() {
-		nodeunit.runTests(serverTestFiles(), complete, fail);
-	}, {async: true});
+	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ], paths.serverFiles(),
+		function(complete, fail) {
+		console.log("Testing server code: ");
+		mochaRunner().runTests({
+			files: paths.serverTestFiles(),
+			options: mochaConfig()
+		}, complete, fail);
+	});
+
 
 	desc("Test client code");
-	task("testClient", [], function() {
-		karma.runTests(REQUIRED_BROWSERS, complete, fail);
-	}, {async: true});
+	incrementalTask("testClient", paths.clientTestTarget, [], paths.clientFiles(), function(complete, fail) {
+		console.log("Testing browser code: ");
+		karmaRunner().runTests({
+			configFile: paths.karmaConfig,
+			browsers: require("./build/config/tested_browsers.js"),
+			strict: strict
+		}, complete, fail);
+	}, { async: true });
 
 	desc("End-to-end smoke tests");
-	task("testSmoke", ["build"], function() {
-		nodeunit.runTests(smokeTestFiles(), complete, fail);
-	}, {async: true});
+	task("smoketest", [ "build" ], function() {
+		console.log("Smoke testing app: ");
+		mochaRunner().runTests({
+			files: paths.smokeTestFiles(),
+			options: mochaConfig()
+		}, complete, fail);
+	}, { async: true });
+
+
+	//*** BUILD
 
 	desc("Bundle and build code");
-	task("build", [BUILD_CLIENT_DIR], function() {
-		shell.rm("-rf", BUILD_CLIENT_DIR + "/*");
-		shell.cp("-R", "src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor", BUILD_CLIENT_DIR);
+	task("build", [ "collateClientFiles", "bundleClientJs" ]);
 
-		console.log("Bundling client files with Browserify...");
-		var b = browserify({ debug: true });
-		b.require("./src/client/client.js", {expose: "./client.js"} );
-		b.require("./src/client/html_element.js", {expose: "./html_element.js"} );
-		b.bundle(function(err, bundle) {
-			if (err) fail(err);
-			fs.writeFileSync(BUILD_CLIENT_DIR + "/bundle.js", bundle);
-			complete();
-		});
+	task("collateClientFiles", [ paths.buildClientDir ], function() {
+		console.log("Collating client files: .");
+
+		var fs = require("fs");
+		var shell = require("shelljs");
+
+		shell.rm("-rf", paths.buildClientDir + "/*");
+		shell.cp(
+			"-R",
+			"src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor",
+			paths.buildClientDir
+		);
+	});
+
+	task("bundleClientJs", [ paths.buildClientDir ], function() {
+		process.stdout.write("Bundling client files with Browserify: ");
+
+		var browserifyRunner = require("./build/util/browserify_runner.js");
+		browserifyRunner.bundle({
+			requires: [
+				{ path: "./src/client/client.js", expose: "./client.js" },
+				{ path: "./src/client/html_element.js", expose: "./html_element.js" }
+			],
+			outfile: paths.buildClientDir + "/bundle.js",
+			options: { debug: true }
+		}, complete, fail);
 	}, {async: true});
+
+
+	//*** CHECK VERSIONS
+
+	task("nodeVersion", [], function() {
+		console.log("Checking Node.js version: .");
+		var version = require("./build/util/version_checker.js");
+
+		version.check({
+			name: "Node",
+			expected: require("./package.json").engines.node,
+			actual: process.version,
+			strict: strict
+		}, complete, fail);
+	});
+
+
+	//*** DEPLOY
 
 	desc("Deploy to Heroku");
 	task("deploy", function() {
@@ -120,14 +179,11 @@
 		console.log("3. Visit http://wwp-staging.herokuapp.com/");
 	});
 
-//	desc("Ensure correct version of Node is present.");
-	task("nodeVersion", [], function() {
-		var deployedVersion = "v" + require("./package.json").engines.node;
-		versionChecker.check("Node", !process.env.loose, deployedVersion, process.version, fail);
-	});
+
+	//*** INTEGRATE
 
 	desc("Integration checklist");
-	task("integrate", ["default"], function() {
+	task("integrate", [ "default" ], function() {
 		console.log("1. Make sure 'git status' is clean.");
 		console.log("2. Build on the integration box.");
 		console.log("   a. Walk over to integration box.");
@@ -155,86 +211,49 @@
 		console.log("5. Tag episode: 'git tag -a episodeXX -m \"End of episode XX\"'");
 	});
 
-	function serverTestFiles() {
-		var testFiles = new jake.FileList();
-		testFiles.include("src/server/**/_*_test.js");
-		testFiles = testFiles.toArray();
-		return testFiles;
+
+	//*** UTILITY FUNCTIONS
+
+	function determineLintDependency(name) {
+		var result = name.replace(/^generated\/incremental\/lint\//, "");
+		return result.replace(/\.lint$/, "");
 	}
 
-	function smokeTestFiles() {
-		var testFiles = new jake.FileList();
-		testFiles.include("src/_*_test.js");
-		testFiles = testFiles.toArray();
-		return testFiles;
+	function incrementalTask(taskName, incrementalFile, otherDependencies, fileDependencies, action) {
+		task(taskName, otherDependencies.concat(paths.incrementalDir, incrementalFile));
+		file(incrementalFile, fileDependencies, function() {
+			action(succeed, fail);
+		}, {async: true});
+
+		function succeed() {
+			fs().writeFileSync(incrementalFile, "ok");
+			complete();
+		}
 	}
 
-	function nodeLintFiles() {
-		var javascriptFiles = new jake.FileList();
-		javascriptFiles.include("*.js");
-		javascriptFiles.include("build/util/*.js");
-		javascriptFiles.include("src/server/**/*.js");
-		javascriptFiles.include("src/*.js");
-		return javascriptFiles.toArray();
+	function createDirectoryDependencies(directories) {
+		directories.forEach(function(lintDirectory) {
+			directory(lintDirectory);
+		});
 	}
 
-	function clientLintFiles() {
-		var javascriptFiles = new jake.FileList();
-		javascriptFiles.include("src/client/*.js");
-		return javascriptFiles.toArray();
+
+	//*** LAZY-LOADED MODULES
+
+	function fs() {
+		return require("fs");
 	}
 
-	function nodeLintOptions() {
-		var options = sharedLintOptions();
-		options.node = true;
-		return options;
+	function karmaRunner() {
+		return require("./build/util/karma_runner.js");
 	}
 
-	function clientLintOptions() {
-		var options = sharedLintOptions();
-		options.browser = true;
-		return options;
+	function mochaRunner() {
+		return require("./build/util/mocha_runner.js");
 	}
 
-	function sharedLintOptions() {
-		return {
-			bitwise: true,
-			curly: false,
-			eqeqeq: true,
-			forin: true,
-			immed: true,
-			latedef: false,
-			newcap: true,
-			noarg: true,
-			noempty: true,
-			nonew: true,
-			regexp: true,
-			undef: true,
-			strict: true,
-			trailing: true
-		};
-	}
-
-	function clientGlobals() {
-		return {
-			// Browserify
-			require: false,
-			module: false,
-			exports: false,
-
-			// Mocha / expect.js
-			describe: false,
-			it: false,
-			expect: false,
-			dump: false,
-			beforeEach: false,
-			afterEach: false,
-			before: false,
-			after: false,
-
-			// Browser
-			console: false
-		};
+	function mochaConfig() {
+		return require("./build/config/mocha.conf.js");
 	}
 
 }());

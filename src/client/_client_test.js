@@ -7,6 +7,7 @@
 	var client = require("./client.js");
 	var browser = require("./browser.js");
 	var HtmlElement = require("./html_element.js");
+	var assert = require("../shared/_assert.js");
 
 	mocha.setup({ignoreLeaks: true});
 
@@ -39,15 +40,14 @@
 			client.drawingAreaHasBeenRemovedFromDom();
 		});
 
-
 		it("does not allow text to be selected or page to scroll when drag starts within drawing area", function() {
-			expect(drawingArea.isBrowserDragDefaultsPrevented()).to.be(true);
+			assert.equal(drawingArea.isBrowserDragDefaultsPrevented(), true);
 		});
 
 		it("clears drawing area when 'clear screen' button is clicked", function() {
 			dragMouse(10, 20, 40, 90);
 			clearButton.triggerMouseClick();
-			expect(lines()).to.eql([]);
+			assert.deepEqual(lines(), []);
 		});
 
 		describe("mouse drag events", function() {
@@ -56,7 +56,7 @@
 				drawingArea.triggerMouseUp(50, 60);
 				drawingArea.triggerMouseClick(50, 60);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[50, 60]
 				]);
 			});
@@ -66,7 +66,7 @@
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseUp(50, 60);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[20, 30, 50, 60]
 				]);
 			});
@@ -77,7 +77,7 @@
 				drawingArea.triggerMouseUp(50, 60);
 				drawingArea.triggerMouseClick(50, 60);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[20, 30, 50, 60]
 				]);
 			});
@@ -85,7 +85,7 @@
 			it("does not draw a dot if drag not started in drawing area", function() {
 				drawingArea.triggerMouseUp(20, 40);
 
-				expect(lines()).to.eql([]);
+				assert.deepEqual(lines(), []);
 			});
 
 			it("draws multiple line segments when mouse is dragged multiple places", function() {
@@ -95,7 +95,7 @@
 				drawingArea.triggerMouseMove(10, 15);
 				drawingArea.triggerMouseUp(10, 15);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[20, 30, 50, 60],
 					[50, 60, 40, 20],
 					[40, 20, 10, 15]
@@ -113,7 +113,7 @@
 				drawingArea.triggerMouseMove(10, 15);
 				drawingArea.triggerMouseUp(10, 15);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[20, 30, 50, 60],
 					[50, 60, 40, 20],
 					[40, 20, 10, 15]
@@ -132,7 +132,7 @@
 				drawingArea.triggerMouseMove(10, 15);
 				drawingArea.triggerMouseUp(10, 15);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[20, 30, 50, 60],
 					[30, 25, 10, 15]
 				]);
@@ -145,7 +145,7 @@
 
 				drawingArea.triggerMouseMove(10, 15);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[20, 30, 50, 60]
 				]);
 			});
@@ -154,7 +154,7 @@
 				drawingArea.triggerMouseMove(20, 30);
 				drawingArea.triggerMouseMove(50, 60);
 
-				expect(lines()).to.eql([]);
+				assert.deepEqual(lines(), []);
 			});
 
 			it("continues drawing if mouse leaves drawing area and comes back in", function() {
@@ -169,7 +169,7 @@
 				drawingArea.triggerMouseMove(90, 40);
 				drawingArea.triggerMouseUp(90, 40);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[20, 30, 50, 60],
 					[50, 60, 700, 70],
 					[700, 70, 90, 40]
@@ -188,7 +188,7 @@
 
 				drawingArea.triggerMouseMove(90, 40);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[20, 30, 50, 60],
 					[50, 60, 700, 70]
 				]);
@@ -208,7 +208,7 @@
 
 				drawingArea.triggerMouseMove(90, 40);
 
-				expect(lines()).to.eql([
+				assert.deepEqual(lines(), [
 					[20, 30, 50, 60],
 					[50, 60, 700, 70]
 				]);
@@ -219,7 +219,7 @@
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseUp(50, 60);
 
-				expect(lines()).to.eql([]);
+				assert.deepEqual(lines(), []);
 			});
 
 		});
@@ -231,7 +231,7 @@
 					drawingArea.triggerSingleTouchStart(3, 42);
 					drawingArea.triggerTouchEnd();
 
-					expect(lines()).to.eql([
+					assert.deepEqual(lines(), [
 						[3, 42]
 					]);
 				});
@@ -241,7 +241,7 @@
 					drawingArea.triggerSingleTouchMove(5, 20);
 					drawingArea.triggerTouchEnd(5, 20);
 
-					expect(lines()).to.eql([
+					assert.deepEqual(lines(), [
 						[10, 40, 5, 20]
 					]);
 				});
@@ -255,7 +255,7 @@
 					drawingArea.triggerSingleTouchMove(50, 60);
 					drawingArea.triggerTouchEnd(50, 60);
 
-					expect(lines()).to.eql([
+					assert.deepEqual(lines(), [
 						[10, 40, 5, 20],
 						[30, 40, 50, 60]
 					]);
@@ -266,7 +266,7 @@
 					drawingArea.triggerSingleTouchMove(5, 20);
 					drawingArea.triggerTouchCancel(5, 20);
 
-					expect(lines()).to.eql([
+					assert.deepEqual(lines(), [
 						[10, 40, 5, 20]
 					]);
 				});
@@ -279,7 +279,7 @@
 					drawingArea.triggerSingleTouchMove(1, 10, 7, 70);
 					drawingArea.triggerTouchEnd(1, 10, 7, 70);
 
-					expect(lines()).to.eql([
+					assert.deepEqual(lines(), [
 						[10, 40, 5, 20]
 					]);
 				});

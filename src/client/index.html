@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<!-- smoke test marker: WeeWikiPaint home page -->
+<html>
 <head>
+    <!-- smoke test marker: WeeWikiPaint home page -->
     <title>WeeWikiPaint</title>
 
     <link id="style" rel="stylesheet" type="text/css" href="./screen.css">
@@ -8,12 +9,60 @@
     <script src="vendor/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="vendor/raphael-2.1.2.min.js" type="text/javascript"></script>
     <script src="bundle.js" type="text/javascript"></script>
+
+    <script>
+        (function(d) {
+            window.wwp_loadedFonts = [];
+            window.wwp_typekitDone = false;
+
+            function done() {
+                window.wwp_typekitDone = true;
+            }
+
+            var config = {
+                kitId: 'qzr7zlc',
+                scriptTimeout: 3000,
+                active: done,
+                inactive: done,
+                fontactive: function(family, variant) {
+                    window.wwp_loadedFonts.push({
+                        family: family,
+                        variant: variant
+                    });
+                }
+            },
+            h = d.documentElement,
+            t = setTimeout(function() {
+                h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive";
+                done();
+            }, config.scriptTimeout),
+            tk = d.createElement("script"),
+            f = false,
+            s = d.getElementsByTagName("script")[0],
+            a;
+
+            h.className += " wf-loading";
+            tk.src = '//use.typekit.net/' + config.kitId + '.js';
+            tk.async = true;
+            tk.onload = tk.onreadystatechange = function() {
+                a = this.readyState;
+                if (f || a && a != "complete" && a != "loaded")return;
+                f = true;
+                clearTimeout(t);
+
+                try {Typekit.load(config)} catch(e) { console.log(e); }
+            };
+            s.parentNode.insertBefore(tk, s)
+        })(document);
+    </script>
+
+
 </head>
 
 <body>
     <h1 id="logo"><img src="/images/weewiki-logo.png" width="181" height="25" alt="WeeWikiPaint"></h1>
 
-    <p id="tagline">WeeWikiPaint is the web's premier collaborative site. Go on, give it a try!</p>
+    <p id="tagline">WeeWikiPaint is a nifty doodling tool. Go on, give it a try!</p>
 
     <div id="drawing-area-container">
         <div id="drawing-area"></div>
@@ -21,7 +70,7 @@
         <button id="clear-button" type="button">Clear</button>
     </div>
 
-    <p id="footer">You can watch this site be developed at Let's Code: Test-Driven JavaScript!</p>
+    <p id="footer">Watch this site be developed at Let’s Code: Test-Driven JavaScript!</p>
     <a id="join-us" href='http://www.letscodejavascript.com'>Join Us!</a>
 
     <script type="text/javascript">

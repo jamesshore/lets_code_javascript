@@ -4,6 +4,7 @@
 
 	var failFast = require("./fail_fast.js");
 	var FailFastException = failFast.FailFastException;
+	var assert = require("../shared/_assert.js");
 
 	describe("Fail Fast module", function() {
 
@@ -12,17 +13,17 @@
 				throw new FailFastException("foo");
 			}
 			catch (e) {
-				expect(e.name).to.equal("FailFastException");
-				expect(e.constructor).to.equal(FailFastException);
-				expect("" + e).to.equal("FailFastException");
+				assert.equal(e.name, "FailFastException");
+				assert.equal(e.constructor, FailFastException);
+				assert.equal("" + e, "FailFastException");
 			}
 		});
 
 		it("checks if variable is defined", function() {
-			expect(unlessDefined("foo")).to.not.throwException();
-			expect(unlessDefined(null)).to.not.throwException();
-			expect(unlessDefined(undefined)).to.throwException(/^Required variable was not defined$/);
-			expect(unlessDefined(undefined, "myVariable")).to.throwException(/^Required variable \[myVariable\] was not defined$/);
+			assert.doesNotThrow(unlessDefined("foo"));
+			assert.doesNotThrow(unlessDefined(null));
+			assert.throws(unlessDefined(undefined), /^Required variable was not defined$/);
+			assert.throws(unlessDefined(undefined, "myVariable"), /^Required variable \[myVariable\] was not defined$/);
 
 			function unlessDefined(variable, variableName) {
 				return function() {
@@ -32,11 +33,11 @@
 		});
 
 		it("checks if expression is true", function() {
-			expect(unlessTrue(true)).to.not.throwException();
-			expect(unlessTrue(false)).to.throwException(/^Expected condition to be true$/);
-			expect(unlessTrue(false, "a message")).to.throwException(/^a message$/);
-			expect(unlessTrue("foo")).to.throwException(/^Expected condition to be true or false$/);
-			expect(unlessTrue("foo", "ignoredMessage")).to.throwException(/^Expected condition to be true or false$/);
+			assert.doesNotThrow(unlessTrue(true));
+			assert.throws(unlessTrue(false), /^Expected condition to be true$/);
+			assert.throws(unlessTrue(false, "a message"), /^a message$/);
+			assert.throws(unlessTrue("foo"), /^Expected condition to be true or false$/);
+			assert.throws(unlessTrue("foo", "ignoredMessage"), /^Expected condition to be true or false$/);
 
 			function unlessTrue(variable, message) {
 				return function() {
@@ -46,8 +47,8 @@
 		});
 
 		it("fails when statement is unreachable", function() {
-			expect(unreachable()).to.throwException(/^Unreachable code executed$/);
-			expect(unreachable("foo")).to.throwException(/^foo$/);
+			assert.throws(unreachable(), /^Unreachable code executed$/);
+			assert.throws(unreachable("foo"), /^foo$/);
 
 			function unreachable(message) {
 				return function() {

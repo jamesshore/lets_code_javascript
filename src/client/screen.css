@@ -1,14 +1,17 @@
 body {
 	background-color: #41a9cc;
+	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
+	font-weight: 300;
 }
 
-h1#logo {
+#logo {
 	margin-top: 12px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 0px;
 	text-align: center;
 	font-size: 22px;
+	font-weight: 600;
 	color: white;
 }
 
@@ -47,6 +50,9 @@ h1#logo {
 }
 
 #clear-button {
+	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
+	font-weight: 600;
+	font-size: 12px;
 	position: absolute;
 	top: 15px;
 	right: 15px;
@@ -83,6 +89,8 @@ h1#logo {
 }
 
 #join-us {
+	font-weight: 400;
+	font-size: 16px;
 	display: block;
 	text-align: center;
 	margin-top: 13px;

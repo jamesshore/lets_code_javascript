@@ -4,18 +4,44 @@ Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 + single-user painting on home page (episodes 33-200)
 * replace home page with professional design (episodes 201+)
-- replace 404 page with professional design
-- multiple painting/erasing tools
 - support more browsers (Android, IE10, IE11)
+  - iOS 8.1 upgrade broke Mobile Safari tests
+  - Firefox and Chrome fail on Windows 8.1 with a touch screen (ref Mattias Åslund email, 2 Feb 2015)
+    - was not able to reproduce using http://modern.ie VM. Presumably due to lack of touch screen?
+- replace 404 page with professional design
+? multiple painting/erasing tools
 - collaborative painting
+- save the pages (persistence / databases)
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
 
 User Stories to finish current MMF:
 * Web font
-- Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
+- Polish:
+  - Clear button retains focus when drawing (IE8, 9, Chrome)
+  - Remove body padding
+  - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
+  - Need to test arrow's background elements--is there a clean way of doing this?
+    - Consider using :before pseudoelement rather than a separate div
+    - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
+  - Manually confirm that styling works cross-platform
+  - What about alt tags? Semantic markup?
 - Release new design
+  - Need to cache-bust stylesheet and bundle.js
+
+Engineering Tasks:
+- Add HTML validation / linting?
+- How do we not test Typekit when we're just testing CSS?
+
+To Do on current task:
+* AT START OF EPISODE:
+  - Upgraded Node to 0.10.37
+  - Upgraded dependencies:
+    - Selenium WebDriverJS works with latest version of Firefox (2.44.0 --> 2.45.1)
+  - Consider:
+    - Extra `{ async: true }` in Jakefile line 103 (Martin Grandrath E302)
+    - Move Proclaim to `src/vendor/shared`? (Martin Grandrath E296)
 
 Potential future stories:
 - "Try me" text in drawing area
@@ -27,23 +53,4 @@ Potential future stories:
 - Scalability
 - Deploy (including smoke test to ensure that div is in home page)
     (needs to depend on 'build'; just running foreman could give us outdated files)
-
-Engineering Tasks:
-* Implement each design element
-- Need to test arrow's background elements--is there a clean way of doing this?
-  - Consider using :before pseudoelement rather than a separate div
-  - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
-- Need to cache-bust stylesheet and bundle.js
-- Manually confirm that styling works cross-platform
-- What about alt tags? Semantic markup?
-- Need to isolate Safari problem that occurs with getBoundingClientRect and getComputedStyle()
-  - See 'create iOS Safari failure' test (ref E229)
-- Automatically convert psuedoclasses to regular classes in our tests?
-
-Goal: expect(css("myHeadline").isCentered()).to.be(true)
-
-To Do on current task:
-- Integrate
-
-Notes:
-- NodeUnit default reporter has minor display issue on Windows
+- Laurent Bourgalt-Roy, E263: fail-fast code (use in devops chapter?)

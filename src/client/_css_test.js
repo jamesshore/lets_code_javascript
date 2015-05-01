@@ -5,6 +5,7 @@
 	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
 	var failFast = require("./fail_fast.js");
+	var assert = require("../shared/_assert.js");
 
 	describe("Home page", function() {
 		if (browser.doesNotComputeStyles()) return;
@@ -20,7 +21,13 @@
 		var MEDIUM_BLUE = "rgb(0, 121, 156)";
 		var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
 
+		var BODY_TEXT_WEIGHT = "300";
+		var JOIN_US_BUTTON_WEIGHT = "400";
+		var CLEAR_BUTTON_WEIGHT = "600";
+		var HEADLINE_WEIGHT = "600";
+
 		var IOS_BROWSER_WIDTH = 980;
+		var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
 		var CORNER_ROUNDING = "2px";
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
@@ -61,14 +68,17 @@
 		}
 
 		it("has a blue background", function() {
-			expect(backgroundColorOf(frameDom.contentDocument.body)).to.be(BACKGROUND_BLUE);
+			var body = frameDom.contentDocument.body;
+			assert.equal(backgroundColorOf(body), BACKGROUND_BLUE);
 		});
 
 		it("centers logo at top of page", function() {
-			expect(isContentCenteredInPage(logo)).to.be(true);
-			expect(elementPixelsFromTopOfPage(logo)).to.be(12);
-			expect(fontSizeOf(logo)).to.be("22px");
-			expect(textColorOf(logo)).to.be(WHITE);
+			assert.equal(isContentCenteredInPage(logo), true);
+			assert.equal(elementPixelsFromTopOfPage(logo), 12);
+			assert.equal(fontFamilyOf(logo), STANDARD_FONT);
+			assert.equal(fontWeightOf(logo), HEADLINE_WEIGHT);
+			assert.equal(fontSizeOf(logo), "22px");
+			assert.equal(textColorOf(logo), WHITE);
 		});
 
 //		it("create iOS Safari failure", function() {
@@ -86,101 +96,113 @@
 //		});
 
 		it("centers tagline directly below logo", function() {
-			expect(isContentCenteredInPage(tagline)).to.be(true);
-			expect(elementPixelsBelowElement(tagline, logo)).to.be(5);
+			assert.equal(isContentCenteredInPage(tagline), true);
+			assert.equal(elementPixelsBelowElement(tagline, logo), 5);
 
-			expect(fontSizeOf(tagline)).to.be("14px");
-			expect(textColorOf(tagline)).to.be(DARK_BLUE);
+			assert.equal(fontFamilyOf(tagline), STANDARD_FONT);
+			assert.equal(fontWeightOf(tagline), BODY_TEXT_WEIGHT);
+			assert.equal(fontSizeOf(tagline), "14px");
+			assert.equal(textColorOf(tagline), DARK_BLUE);
 		});
 
 		it("centers drawing area below tagline", function() {
-			expect(isElementCenteredInPage(drawingArea)).to.be(true);
-			expect(elementPixelsBelowElement(drawingArea, tagline)).to.be(10);
+			assert.equal(isElementCenteredInPage(drawingArea), true);
+			assert.equal(elementPixelsBelowElement(drawingArea, tagline), 10);
 
-			expect(elementWidthInPixels(drawingArea)).to.equal(IOS_BROWSER_WIDTH);
-			expect(elementHeightInPixels(drawingArea)).to.equal(600);
-			expect(backgroundColorOf(drawingArea)).to.equal(WHITE);
-			expect(roundedCornersOf(drawingArea)).to.be(CORNER_ROUNDING);
+			assert.equal(elementWidthInPixels(drawingArea), IOS_BROWSER_WIDTH);
+			assert.equal(elementHeightInPixels(drawingArea), 600);
+			assert.equal(backgroundColorOf(drawingArea), WHITE);
+			assert.equal(roundedCornersOf(drawingArea), CORNER_ROUNDING);
 		});
 
 		it("centers an arrow at top of drawing area", function() {
-			expect(isElementCenteredInPage(drawingAreaArrow)).to.be(true);
+			assert.equal(isElementCenteredInPage(drawingAreaArrow), true);
 
-			expect(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea)).to.be(0);
+			assert.equal(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea), 0);
 			// TODO: haven't tested background image, position, or repeat
 
-			expect(isElementBehindElement(drawingAreaArrow, drawingArea)).to.be(false);
+			assert.equal(isElementBehindElement(drawingAreaArrow, drawingArea), false);
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
-			expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(15);
-			expect(elementPixelsOverlappingRightOfElement(clearButton, drawingArea)).to.be(15);
-			expect(isElementBehindElement(clearButton, drawingArea)).to.be(false);
+			assert.equal(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 15);
+			assert.equal(elementPixelsOverlappingRightOfElement(clearButton, drawingArea), 15);
+			assert.equal(isElementBehindElement(clearButton, drawingArea), false);
 
-			expect(textColorOf(clearButton)).to.be(DARK_GRAY);
-			expect(backgroundColorOf(clearButton)).to.be(GRAY);
-			expect(hasBorder(clearButton)).to.be(false);
+			assert.equal(textColorOf(clearButton), DARK_GRAY);
+			assert.equal(backgroundColorOf(clearButton), GRAY);
+			assert.equal(hasBorder(clearButton), false);
 
-			expect(elementHeightInPixels(clearButton)).to.equal(30);
-			expect(elementWidthInPixels(clearButton)).to.equal(70);
-			expect(isTextVerticallyCentered(clearButton)).to.be(true);
+			assert.equal(fontFamilyOf(clearButton), STANDARD_FONT);
+			assert.equal(fontWeightOf(clearButton), CLEAR_BUTTON_WEIGHT);
+			assert.equal(fontSizeOf(clearButton), "12px");
 
-			expect(roundedCornersOf(clearButton)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(clearButton)).to.be(MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+			assert.equal(elementHeightInPixels(clearButton), 30);
+			assert.equal(elementWidthInPixels(clearButton), 70);
+			assert.equal(isTextVerticallyCentered(clearButton), true);
 
-			expect(textIsUnderlined(clearButton)).to.be(false);
-			expect(textIsUppercase(clearButton)).to.be(true);
+			assert.equal(roundedCornersOf(clearButton), CORNER_ROUNDING);
+			assert.equal(dropShadowOf(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+
+			assert.equal(textIsUnderlined(clearButton), false);
+			assert.equal(textIsUppercase(clearButton), true);
 		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
 			applyClass(clearButton, "_hover_", function() {
-				expect(backgroundColorOf(clearButton)).to.be(DARKENED_GRAY);
+				assert.equal(backgroundColorOf(clearButton), DARKENED_GRAY);
 			});
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
 			applyClass(clearButton, "_active_", function() {
-				expect(elementPixelsOverlappingTopOfElement(clearButton, drawingArea)).to.be(16);
-				expect(dropShadowOf(clearButton)).to.be("none");
+				assert.equal(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 16);
+				assert.equal(dropShadowOf(clearButton), "none");
 			});
 		});
 
 		it("centers footer below the drawing area", function() {
-			expect(isContentCenteredInPage(footer)).to.be(true);
-			expect(elementPixelsBelowElement(footer, drawingArea)).to.be(13);
+			assert.equal(isContentCenteredInPage(footer), true);
+			assert.equal(elementPixelsBelowElement(footer, drawingArea), 13);
 
-			expect(fontSizeOf(footer)).to.be("15px");
-			expect(textColorOf(footer)).to.be(WHITE);
+			assert.equal(fontFamilyOf(footer), STANDARD_FONT);
+			assert.equal(fontWeightOf(footer), BODY_TEXT_WEIGHT);
+			assert.equal(fontSizeOf(footer), "15px");
+			assert.equal(textColorOf(footer), WHITE);
 		});
 
 		it("centers 'join us' button below footer", function() {
-			expect(isContentCenteredInPage(joinUs)).to.be(true);
-			expect(elementPixelsBelowElement(joinUs, footer)).to.be(13);
+			assert.equal(isContentCenteredInPage(joinUs), true);
+			assert.equal(elementPixelsBelowElement(joinUs, footer), 13);
 
-			expect(textColorOf(joinUs)).to.be(WHITE);
-			expect(backgroundColorOf(joinUs)).to.be(MEDIUM_BLUE);
+			assert.equal(textColorOf(joinUs), WHITE);
+			assert.equal(backgroundColorOf(joinUs), MEDIUM_BLUE);
 
-			expect(elementHeightInPixels(joinUs)).to.equal(35);
-			expect(elementWidthInPixels(joinUs)).to.equal(175);
-			expect(isTextVerticallyCentered(joinUs)).to.be(true);
+			assert.equal(fontFamilyOf(joinUs), STANDARD_FONT);
+			assert.equal(fontWeightOf(joinUs), JOIN_US_BUTTON_WEIGHT);
+			assert.equal(fontSizeOf(joinUs), "16px");
 
-			expect(roundedCornersOf(joinUs)).to.be(CORNER_ROUNDING);
-			expect(dropShadowOf(joinUs)).to.be(DARK_BLUE + BUTTON_DROP_SHADOW);
+			assert.equal(elementHeightInPixels(joinUs), 35);
+			assert.equal(elementWidthInPixels(joinUs), 175);
+			assert.equal(isTextVerticallyCentered(joinUs), true);
 
-			expect(textIsUnderlined(joinUs)).to.be(false);
-			expect(textIsUppercase(joinUs)).to.be(true);
+			assert.equal(roundedCornersOf(joinUs), CORNER_ROUNDING);
+			assert.equal(dropShadowOf(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW);
+
+			assert.equal(textIsUnderlined(joinUs), false);
+			assert.equal(textIsUppercase(joinUs), true);
 		});
 
 		it("darkens the 'join us' button when the user hovers over it", function() {
 			applyClass(joinUs, "_hover_", function() {
-				expect(backgroundColorOf(joinUs)).to.be(DARKENED_MEDIUM_BLUE);
+				assert.equal(backgroundColorOf(joinUs), DARKENED_MEDIUM_BLUE);
 			});
 		});
 
 		it("'join us' button appears to depress when user activates it", function() {
 			applyClass(joinUs, "_active_", function() {
-				expect(elementPixelsBelowElement(joinUs, footer)).to.be(14);
-				expect(dropShadowOf(joinUs)).to.be("none");
+				assert.equal(elementPixelsBelowElement(joinUs, footer), 14);
+				assert.equal(dropShadowOf(joinUs), "none");
 			});
 		});
 
@@ -290,6 +312,23 @@
 
 		function backgroundColorOf(domElement) {
 			return getComputedProperty(domElement, "background-color");
+		}
+
+		function fontFamilyOf(domElement) {
+			var family = getComputedProperty(domElement, "font-family");
+			family = family.replace(/\"/g, '');
+
+			var fonts = family.split(",").map(function(font) {
+				return font.trim();
+			});
+
+			return fonts.join(", ");
+		}
+
+		function fontWeightOf(domElement) {
+			var weight = getComputedProperty(domElement, "font-weight");
+			if (weight === "normal") weight = "400";
+			return weight;
 		}
 
 		function fontSizeOf(domElement) {

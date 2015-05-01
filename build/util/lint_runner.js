@@ -8,10 +8,10 @@ exports.validateSource = function(sourceCode, options, globals, description) {
 	description = description ? description + " " : "";
 	var pass = jshint(sourceCode, options, globals);
 	if (pass) {
-		console.log(description + "ok");
+		process.stdout.write(".");
 	}
 	else {
-		console.log(description + "failed");
+		console.log("\n" + description + "failed");
 		jshint.errors.forEach(function(error) {
 			console.log(error.line + ": " + error.evidence.trim());
 			console.log("   " + error.reason);
