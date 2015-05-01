@@ -18,7 +18,7 @@
     "procfile": "^0.1.1",
     "selenium-webdriver": "^2.45.1",
     "semver": "^4.3.3",
-    "shelljs": "^0.3.0"
+    "shelljs": "^0.4.0"
   },
   "dependencies": {
     "send": "^0.9.3"
