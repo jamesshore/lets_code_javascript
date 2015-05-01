@@ -51,7 +51,7 @@ Logger.prototype.removeLevel = function() {
 
 Logger.prototype.log = function() {
   var args = Array.prototype.slice.call(arguments)
-  , logLevel = levels.toLevel(args.shift())
+  , logLevel = levels.toLevel(args.shift(), levels.INFO)
   , loggingEvent;
   if (this.isLevelEnabled(logLevel)) {
     loggingEvent = new LoggingEvent(this.category, logLevel, args, this);
@@ -63,7 +63,7 @@ Logger.prototype.isLevelEnabled = function(otherLevel) {
   return this.level.isLessThanOrEqualTo(otherLevel);
 };
 
-['Trace','Debug','Info','Warn','Error','Fatal'].forEach(
+['Trace','Debug','Info','Warn','Error','Fatal', 'Mark'].forEach(
   function(levelString) {
     var level = levels.toLevel(levelString);
     Logger.prototype['is'+levelString+'Enabled'] = function() {

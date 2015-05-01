@@ -179,7 +179,7 @@ vows.describe('log4js layouts').addBatch({
     topic: function() {
       var event = {
         data: ['this is a test'],
-        startTime: new Date(2010, 11, 5, 14, 18, 30, 45),
+        startTime: new Date('2010-12-05T14:18:30.045Z'), //new Date(2010, 11, 5, 14, 18, 30, 45),
         categoryName: "multiple.levels.of.tests",
         level: {
           toString: function() { return "DEBUG"; }
@@ -282,14 +282,14 @@ vows.describe('log4js layouts').addBatch({
       test(args, '%x{testFunction}', 'testFunctionToken');
     },
     '%x{doesNotExist} should output the string stored in tokens': function(args) {
-      test(args, '%x{doesNotExist}', '%x{doesNotExist}');
+      test(args, '%x{doesNotExist}', 'null');
     },
     '%x{fnThatUsesLogEvent} should be able to use the logEvent': function(args) {
       test(args, '%x{fnThatUsesLogEvent}', 'DEBUG');
     },
     '%x should output the string stored in tokens': function(args) {
-      test(args, '%x', '%x');
-    },
+      test(args, '%x', 'null');
+    }
   },
   'layout makers': {
     topic: require('../lib/layouts'),
