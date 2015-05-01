@@ -100,7 +100,7 @@
 			browsers: require("./build/config/tested_browsers.js"),
 			strict: strict
 		}, complete, fail);
-	}, { async: true });
+	});
 
 	desc("End-to-end smoke tests");
 	task("smoketest", [ "build" ], function() {

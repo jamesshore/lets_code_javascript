@@ -27,23 +27,19 @@ User Stories to finish current MMF:
     - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
   - Manually confirm that styling works cross-platform
   - What about alt tags? Semantic markup?
-- Release new design
-  - Need to cache-bust stylesheet and bundle.js
+  - Add HTML validation / linting?
+  - How do we not test Typekit when we're just testing CSS?- Release new design
+- Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
 * Upgrade to Node.js 0.12.x
-- Add HTML validation / linting?
-- How do we not test Typekit when we're just testing CSS?
+- Move Proclaim to `src/vendor/shared`? (Martin Grandrath E296)
 
 To Do on current task:
-* AT START OF EPISODE:
-  - Upgraded Node to 0.10.37
-  - Upgraded dependencies:
-    - Selenium WebDriverJS works with latest version of Firefox (2.44.0 --> 2.45.1)
-  - Integrated
-  - Consider:
-    - Extra `{ async: true }` in Jakefile line 103 (Martin Grandrath E302)
-    - Move Proclaim to `src/vendor/shared`? (Martin Grandrath E296)
+- Install 'n' (Node version tool)
+- Upgrade to 0.12
+- Fix any issues that arise
+- Integrate
 
 Potential future stories:
 - "Try me" text in drawing area
