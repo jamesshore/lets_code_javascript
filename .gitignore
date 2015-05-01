@@ -11,7 +11,7 @@ generated/
 .bin/
 
 
-### npm modules ###
+### npm modules' build artifacts ###
 
 # Karma
 node_modules/karma/node_modules/chokidar/node_modules/fsevents/
