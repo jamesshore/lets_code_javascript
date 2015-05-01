@@ -36,6 +36,7 @@ Engineering Tasks:
 
 To Do on current task:
 * AT START OF EPISODE:
+  - Upgraded Node to 0.10.37
   - Upgraded dependencies:
     - Selenium WebDriverJS works with latest version of Firefox (2.44.0 --> 2.45.1)
   - Consider:
