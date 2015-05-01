@@ -36,9 +36,7 @@ Engineering Tasks:
 - Move Proclaim to `src/vendor/shared`? (Martin Grandrath E296)
 
 To Do on current task:
-- Install 'n' (Node version tool)
-- Upgrade to 0.12
-- Fix any issues that arise
+* Fix any issues that arise
 - Integrate
 
 Potential future stories:
