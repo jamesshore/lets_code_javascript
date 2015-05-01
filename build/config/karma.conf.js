@@ -18,7 +18,7 @@ module.exports = function(config) {
     files: [
       'src/client/**/*.js',
       'src/shared/**/*.js',
-	    'src/client/vendor/proclaim-2.0.0.js',
+	    'src/shared/vendor/proclaim-2.0.0.js',
 	    { pattern: 'src/client/screen.css', included: false },
 	    { pattern: 'src/client/index.html', included: false }
     ],
@@ -31,7 +31,7 @@ module.exports = function(config) {
 
 	  // preprocesors
 	  preprocessors: {
-		  'src/client/vendor/proclaim-2.0.0.js': ['commonjs'],
+		  'src/shared/vendor/proclaim-2.0.0.js': ['commonjs'],
 		  'src/client/*.js': ['commonjs'],
 		  'src/shared/*.js': ['commonjs']
 	  },

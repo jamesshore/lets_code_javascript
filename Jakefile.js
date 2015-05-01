@@ -126,7 +126,7 @@
 		shell.rm("-rf", paths.buildClientDir + "/*");
 		shell.cp(
 			"-R",
-			"src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor",
+			"src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor", "src/shared/vendor",
 			paths.buildClientDir
 		);
 	});
