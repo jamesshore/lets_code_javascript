@@ -1,13 +1,23 @@
-.idea/workspace.xml
+# Mac OS crap
 .DS_Store
+
+# WebStorm
+.idea/workspace.xml
+
+# Build artifacts
 generated/
-.bin
 
-node_modules/gaze/build
+# npm
+.bin/
 
+
+### npm modules ###
+
+# Karma
 node_modules/karma/node_modules/chokidar/node_modules/fsevents/
 node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws/build/
 node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws/builderror.log
 
+# Selenium WebDriverJS
 node_modules/selenium-webdriver/node_modules/ws/node_modules/bufferutil/build/
 node_modules/selenium-webdriver/node_modules/ws/node_modules/utf-8-validate/build/
