@@ -29,14 +29,17 @@ User Stories to finish current MMF:
   - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
-- Increase timeout for release test
-- Update our CSS tests for Quixote
+* Update our CSS tests for Quixote
   - As we modify each test, use iPad dimensions and remove body padding
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 
 To Do on current task:
+* Get Quixote installed and running a do-nothing test
+- Transform 'background' test to Quixote
+- 'logo centering' test
+- ...
 
 Potential future stories:
 - "Try me" text in drawing area
