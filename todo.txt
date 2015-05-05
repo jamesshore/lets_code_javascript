@@ -32,6 +32,7 @@ User Stories to finish current MMF:
   - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
+- Increase timeout for release test
 
 To Do on current task:
 
