@@ -70,6 +70,20 @@
 			assert.equal(backgroundColor(body), BACKGROUND_BLUE);
 		});
 
+		it("centers logo at top of page", function() {
+			logo.assert({
+				center: frame.viewport().center
+			});
+
+
+			//assert.equal(isContentCenteredInPage(oldLogo), true);
+			//assert.equal(elementPixelsFromTopOfPage(oldLogo), 12);
+			//assert.equal(fontFamilyOf(oldLogo), STANDARD_FONT);
+			//assert.equal(fontWeightOf(oldLogo), HEADLINE_WEIGHT);
+			//assert.equal(fontSizeOf(oldLogo), "22px");
+			//assert.equal(textColorOf(oldLogo), WHITE);
+		});
+
 		function backgroundColor(element) {
 			return normalizeColorString(element.getRawStyle("background-color"));
 		}
@@ -116,15 +130,6 @@
 			return oldFrameDom.contentDocument.getElementById(id);
 		}
 
-
-		it("centers logo at top of page", function() {
-			assert.equal(isContentCenteredInPage(oldLogo), true);
-			assert.equal(elementPixelsFromTopOfPage(oldLogo), 12);
-			assert.equal(fontFamilyOf(oldLogo), STANDARD_FONT);
-			assert.equal(fontWeightOf(oldLogo), HEADLINE_WEIGHT);
-			assert.equal(fontSizeOf(oldLogo), "22px");
-			assert.equal(textColorOf(oldLogo), WHITE);
-		});
 
 //		it("create iOS Safari failure", function() {
 //			newElement('<div><p id="tagline">tagline</p><p id="footer">footer</p></div>');

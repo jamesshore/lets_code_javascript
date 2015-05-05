@@ -36,9 +36,8 @@ Engineering Tasks:
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 
 To Do on current task:
-* Modify Quixote tests to support IE 8
-- 'logo centering' test
-- ...
+* Fix the size of the page (body padding?)
+- Modify logo test to center in *page*, not viewport
 
 Potential future stories:
 - "Try me" text in drawing area
