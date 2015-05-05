@@ -6,6 +6,7 @@
 	var browser = require("./browser.js");
 	var failFast = require("./fail_fast.js");
 	var assert = require("../shared/_assert.js");
+	var quixote = require("./vendor/quixote-0.6.1.js");
 
 	describe("Home page", function() {
 		if (browser.doesNotComputeStyles()) return;
