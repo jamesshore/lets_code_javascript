@@ -9,6 +9,7 @@ Minimum Marketable Features:
   - Firefox and Chrome fail on Windows 8.1 with a touch screen (ref Mattias Åslund email, 2 Feb 2015)
     - was not able to reproduce using http://modern.ie VM. Presumably due to lack of touch screen?
 - replace 404 page with professional design
+- responsive design?
 ? multiple painting/erasing tools
 - collaborative painting
 - save the pages (persistence / databases)
@@ -17,28 +18,28 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Polish:
-  - Clear button retains focus when drawing (IE8, 9, Chrome)
-  - Remove body padding
-  - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
-  - Need to test arrow's background elements--is there a clean way of doing this?
-    - Consider using :before pseudoelement rather than a separate div
-    - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
-  - Manually confirm that styling works cross-platform
-  - What about alt tags? Semantic markup?
-  - Add HTML validation / linting?
-  - How do we not test Typekit when we're just testing CSS?
+* Fit drawing area to work within standard iPad dimensions (980x661 landscape; 980x1208)
+- Remove body padding
+- Clear button retains focus when drawing (IE8, 9, Chrome)
+- Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
+- Manually confirm that styling works cross-platform
+- What about alt tags? Semantic markup? Accessibility?
+- Validate / lint our HTML?
 - Release new design
   - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
 - Increase timeout for release test
+- Update our CSS tests for Quixote
+  - As we modify each test, use iPad dimensions and remove body padding
+- Need to test arrow's background elements--is there a clean way of doing this?
+  - Consider using :before pseudoelement rather than a separate div
+  - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 
 To Do on current task:
 
 Potential future stories:
 - "Try me" text in drawing area
-- Responsive design
 - Accessibility
 - Site monitoring and logging
 - Performance
