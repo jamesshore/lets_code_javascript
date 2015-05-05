@@ -4,80 +4,67 @@
 module.exports = function(config) {
 	"use strict";
 
-  config.set({
+	config.set({
 
-    // base path, that will be used to resolve files and exclude
-    basePath: '../../',
+		// base path, that will be used to resolve files and exclude
+		basePath: '../../',
 
+		// frameworks to use
+		frameworks: ['mocha', 'commonjs'],
 
-    // frameworks to use
-    frameworks: ['mocha', 'commonjs' ],
+		// list of files / patterns to load in the browser
+		files: [
+			'src/client/**/*.js',
+			'src/client/vendor/quixote-0.6.1.js',
+			'src/shared/**/*.js',
+			'src/shared/vendor/proclaim-2.0.0.js',
+			{pattern: 'src/client/screen.css', included: false},
+			{pattern: 'src/client/index.html', included: false}
+		],
 
+		// list of files to exclude
+		exclude: [],
 
-    // list of files / patterns to load in the browser
-    files: [
-      'src/client/**/*.js',
-      'src/client/vendor/quixote-0.6.1.js',
-      'src/shared/**/*.js',
-	    'src/shared/vendor/proclaim-2.0.0.js',
-	    { pattern: 'src/client/screen.css', included: false },
-	    { pattern: 'src/client/index.html', included: false }
-    ],
+		// preprocesors
+		preprocessors: {
+			'src/client/vendor/quixote-0.6.1.js': ['commonjs'],
+			'src/shared/vendor/proclaim-2.0.0.js': ['commonjs'],
+			'src/client/*.js': ['commonjs'],
+			'src/shared/*.js': ['commonjs']
+		},
 
+		// test results reporter to use
+		// possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
+		reporters: ['dots'],
 
-    // list of files to exclude
-    exclude: [
-      
-    ],
+		// web server port
+		port: 9876,
 
-	  // preprocesors
-	  preprocessors: {
-		  'src/client/vendor/quixote-0.6.1.js': ['commonjs'],
-      'src/shared/vendor/proclaim-2.0.0.js': ['commonjs'],
-		  'src/client/*.js': ['commonjs'],
-		  'src/shared/*.js': ['commonjs']
-	  },
+		// enable / disable colors in the output (reporters and logs)
+		colors: true,
 
+		// level of logging
+		// possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+		logLevel: config.LOG_INFO,
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['dots'],
+		// enable / disable watching file and executing tests whenever any file changes
+		autoWatch: false,
 
+		// Start these browsers, currently available:
+		// - Chrome
+		// - ChromeCanary
+		// - Firefox
+		// - Opera
+		// - Safari (only Mac)
+		// - PhantomJS
+		// - IE (only Windows)
+		browsers: [],
 
-    // web server port
-    port: 9876,
+		// If browser does not capture in given timeout [ms], kill it
+		captureTimeout: 60000,
 
-
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
-
-
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
-
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
-
-
-    // Start these browsers, currently available:
-    // - Chrome
-    // - ChromeCanary
-    // - Firefox
-    // - Opera
-    // - Safari (only Mac)
-    // - PhantomJS
-    // - IE (only Windows)
-    browsers: [],
-
-
-    // If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 60000,
-
-
-    // Continuous Integration mode
-    // if true, it capture browsers, run tests and exit
-    singleRun: false
-  });
+		// Continuous Integration mode
+		// if true, it capture browsers, run tests and exit
+		singleRun: false
+	});
 };
