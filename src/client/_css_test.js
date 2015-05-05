@@ -8,29 +8,29 @@
 	var assert = require("../shared/_assert.js");
 	var quixote = require("./vendor/quixote-0.6.1.js");
 
+	var WHITE = "rgb(255, 255, 255)";
+	var DARK_GRAY = "rgb(89, 89, 89)";
+	var GRAY = "rgb(229, 229, 229)";
+	var DARKENED_GRAY = "rgb(217, 217, 217)";
+	var MEDIUM_GRAY = "rgb(167, 169, 171)";
+
+	var BACKGROUND_BLUE = "rgb(65, 169, 204)";
+	var DARK_BLUE = "rgb(13, 87, 109)";
+	var MEDIUM_BLUE = "rgb(0, 121, 156)";
+	var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
+
+	var BODY_TEXT_WEIGHT = "300";
+	var JOIN_US_BUTTON_WEIGHT = "400";
+	var CLEAR_BUTTON_WEIGHT = "600";
+	var HEADLINE_WEIGHT = "600";
+
+	var IOS_BROWSER_WIDTH = 980;
+	var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
+	var CORNER_ROUNDING = "2px";
+	var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
+
 	describe("Home page", function() {
 		if (browser.doesNotComputeStyles()) return;
-
-		var WHITE = "rgb(255, 255, 255)";
-		var DARK_GRAY = "rgb(89, 89, 89)";
-		var GRAY = "rgb(229, 229, 229)";
-		var DARKENED_GRAY = "rgb(217, 217, 217)";
-		var MEDIUM_GRAY = "rgb(167, 169, 171)";
-
-		var BACKGROUND_BLUE = "rgb(65, 169, 204)";
-		var DARK_BLUE = "rgb(13, 87, 109)";
-		var MEDIUM_BLUE = "rgb(0, 121, 156)";
-		var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
-
-		var BODY_TEXT_WEIGHT = "300";
-		var JOIN_US_BUTTON_WEIGHT = "400";
-		var CLEAR_BUTTON_WEIGHT = "600";
-		var HEADLINE_WEIGHT = "600";
-
-		var IOS_BROWSER_WIDTH = 980;
-		var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
-		var CORNER_ROUNDING = "2px";
-		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
 		var frame;
 
@@ -41,17 +41,6 @@
 		var clearButton;
 		var footer;
 		var joinUs;
-
-		var oldFrame;
-		var oldFrameDom;
-
-		var oldLogo;
-		var oldTagline;
-		var oldDrawingAreaArrow;
-		var oldDrawingArea;
-		var oldClearButton;
-		var oldFooter;
-		var oldJoinUs;
 
 		before(function(done) {
 			var options = {
@@ -78,9 +67,31 @@
 			joinUs = frame.get("#join-us");
 		});
 
+		it("has a blue background", function() {
+			var body = frame.body();
+			assert.equal(backgroundColor(body), BACKGROUND_BLUE);
+		});
 
+		function backgroundColor(qElement) {
+			return qElement.getRawStyle("background-color");
+		}
 
-		/** OLD SETUP **/
+	});
+
+	describe("Home page (old tests)", function() {
+		if (browser.doesNotComputeStyles()) return;
+
+		var oldFrame;
+		var oldFrameDom;
+
+		var oldLogo;
+		var oldTagline;
+		var oldDrawingAreaArrow;
+		var oldDrawingArea;
+		var oldClearButton;
+		var oldFooter;
+		var oldJoinUs;
+
 
 		before(function(done) {
 			oldFrame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
@@ -107,18 +118,6 @@
 			return oldFrameDom.contentDocument.getElementById(id);
 		}
 
-		/** END OLD SETUP **/
-
-
-		it("has a blue background", function() {
-			var body = frame.body();
-			assert.equal(backgroundColor(body), BACKGROUND_BLUE);
-		});
-
-
-
-
-		/** OLD TESTS **/
 
 		it("centers logo at top of page", function() {
 			assert.equal(isContentCenteredInPage(oldLogo), true);
@@ -356,10 +355,6 @@
 			var lineHeight = getComputedProperty(domElement, "line-height");
 
 			return elementHeight + "px" === lineHeight;
-		}
-
-		function backgroundColor(qElement) {
-			return qElement.getRawStyle("background-color");
 		}
 
 		function oldBackgroundColorOf(domElement) {

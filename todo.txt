@@ -36,8 +36,7 @@ Engineering Tasks:
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 
 To Do on current task:
-* Get Quixote installed and running a do-nothing test
-- Transform 'background' test to Quixote
+* Modify Quixote tests to support IE 8
 - 'logo centering' test
 - ...
 
