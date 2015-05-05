@@ -30,8 +30,6 @@
 	var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
 	describe("Home page", function() {
-		if (browser.doesNotComputeStyles()) return;
-
 		var frame;
 
 		var logo;
@@ -72,8 +70,8 @@
 			assert.equal(backgroundColor(body), BACKGROUND_BLUE);
 		});
 
-		function backgroundColor(qElement) {
-			return qElement.getRawStyle("background-color");
+		function backgroundColor(element) {
+			return normalizeColorString(element.getRawStyle("background-color"));
 		}
 
 	});
@@ -425,14 +423,10 @@
 			// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
 			// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
 			// BTW, we don't support multiple shadows yet
-			var groups = shadow.match(/^([^#]+) #(..)(..)(..)/);   // get everything before the '#' and the r, g, b
+			var groups = shadow.match(/^([^#]+) (#......)/);   // get everything before the '#' and the r, g, b
 			if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
 
-			var sizes = groups[1];
-			var r = parseInt(groups[2], 16);
-			var g = parseInt(groups[3], 16);
-			var b = parseInt(groups[4], 16);
-			return "rgb(" + r + ", " + g + ", " + b + ") " + sizes;
+			return normalizeColorString(groups[2]) + " " + groups[1];
 		}
 
 		function getBoundingBox(domElement) {
@@ -467,5 +461,15 @@
 		}
 
 	});
+
+	function normalizeColorString(color) {
+		var colorGroups = color.match(/^#(..)(..)(..)/);    // look for presence of #rrggbb string
+		if (colorGroups === null) return color;   // if doesn't match, assume we have rgb() string
+
+		var r = parseInt(colorGroups[1], 16);
+		var g = parseInt(colorGroups[2], 16);
+		var b = parseInt(colorGroups[3], 16);
+		return "rgb(" + r + ", " + g + ", " + b + ")";
+	}
 
 }());
