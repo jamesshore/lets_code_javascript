@@ -33,7 +33,6 @@
 		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
 		var frame;
-		var frameDom;
 
 		var logo;
 		var tagline;
@@ -43,43 +42,91 @@
 		var footer;
 		var joinUs;
 
-		before(function(done) {
-			frame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
-			frameDom = frame.toDomElement();
-			frameDom.addEventListener("load", function() {
-				logo = getElement("logo");
-				tagline = getElement("tagline");
-				drawingAreaArrow = getElement("drawing-area-arrow");
-				drawingArea = getElement("drawing-area");
-				clearButton = getElement("clear-button");
-				footer = getElement("footer");
-				joinUs = getElement("join-us");
+		var oldFrame;
+		var oldFrameDom;
 
-				done();
-			});
-			frame.appendSelfToBody();
+		var oldLogo;
+		var oldTagline;
+		var oldDrawingAreaArrow;
+		var oldDrawingArea;
+		var oldClearButton;
+		var oldFooter;
+		var oldJoinUs;
+
+		before(function(done) {
+			var options = {
+				src: "/base/src/client/index.html",
+				width: 980,
+				height: 661
+			};
+			frame = quixote.createFrame(options, done);
 		});
 
 		after(function() {
 			frame.remove();
 		});
 
-		function getElement(id) {
-			return frameDom.contentDocument.getElementById(id);
-		}
+		beforeEach(function() {
+			frame.reset();
 
-		it("has a blue background", function() {
-			var body = frameDom.contentDocument.body;
-			assert.equal(backgroundColorOf(body), BACKGROUND_BLUE);
+			logo = frame.get("#logo");
+			tagline = frame.get("#tagline");
+			drawingAreaArrow = frame.get("#drawing-area-arrow");
+			drawingArea = frame.get("#drawing-area");
+			clearButton = frame.get("#clear-button");
+			footer = frame.get("#footer");
+			joinUs = frame.get("#join-us");
 		});
 
+
+
+		/** OLD SETUP **/
+
+		before(function(done) {
+			oldFrame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
+			oldFrameDom = oldFrame.toDomElement();
+			oldFrameDom.addEventListener("load", function() {
+				oldLogo = getElement("logo");
+				oldTagline = getElement("tagline");
+				oldDrawingAreaArrow = getElement("drawing-area-arrow");
+				oldDrawingArea = getElement("drawing-area");
+				oldClearButton = getElement("clear-button");
+				oldFooter = getElement("footer");
+				oldJoinUs = getElement("join-us");
+
+				done();
+			});
+			oldFrame.appendSelfToBody();
+		});
+
+		after(function() {
+			oldFrame.remove();
+		});
+
+		function getElement(id) {
+			return oldFrameDom.contentDocument.getElementById(id);
+		}
+
+		/** END OLD SETUP **/
+
+
+		it("has a blue background", function() {
+			var body = frame.body();
+			assert.equal(backgroundColor(body), BACKGROUND_BLUE);
+		});
+
+
+
+
+		/** OLD TESTS **/
+
 		it("centers logo at top of page", function() {
-			assert.equal(isContentCenteredInPage(logo), true);
-			assert.equal(elementPixelsFromTopOfPage(logo), 12);
-			assert.equal(fontFamilyOf(logo), STANDARD_FONT);
-			assert.equal(fontWeightOf(logo), HEADLINE_WEIGHT);
-			assert.equal(fontSizeOf(logo), "22px");
-			assert.equal(textColorOf(logo), WHITE);
+			assert.equal(isContentCenteredInPage(oldLogo), true);
+			assert.equal(elementPixelsFromTopOfPage(oldLogo), 12);
+			assert.equal(fontFamilyOf(oldLogo), STANDARD_FONT);
+			assert.equal(fontWeightOf(oldLogo), HEADLINE_WEIGHT);
+			assert.equal(fontSizeOf(oldLogo), "22px");
+			assert.equal(textColorOf(oldLogo), WHITE);
 		});
 
 //		it("create iOS Safari failure", function() {
@@ -97,113 +144,113 @@
 //		});
 
 		it("centers tagline directly below logo", function() {
-			assert.equal(isContentCenteredInPage(tagline), true);
-			assert.equal(elementPixelsBelowElement(tagline, logo), 5);
+			assert.equal(isContentCenteredInPage(oldTagline), true);
+			assert.equal(elementPixelsBelowElement(oldTagline, oldLogo), 5);
 
-			assert.equal(fontFamilyOf(tagline), STANDARD_FONT);
-			assert.equal(fontWeightOf(tagline), BODY_TEXT_WEIGHT);
-			assert.equal(fontSizeOf(tagline), "14px");
-			assert.equal(textColorOf(tagline), DARK_BLUE);
+			assert.equal(fontFamilyOf(oldTagline), STANDARD_FONT);
+			assert.equal(fontWeightOf(oldTagline), BODY_TEXT_WEIGHT);
+			assert.equal(fontSizeOf(oldTagline), "14px");
+			assert.equal(textColorOf(oldTagline), DARK_BLUE);
 		});
 
 		it("centers drawing area below tagline", function() {
-			assert.equal(isElementCenteredInPage(drawingArea), true);
-			assert.equal(elementPixelsBelowElement(drawingArea, tagline), 10);
+			assert.equal(isElementCenteredInPage(oldDrawingArea), true);
+			assert.equal(elementPixelsBelowElement(oldDrawingArea, oldTagline), 10);
 
-			assert.equal(elementWidthInPixels(drawingArea), IOS_BROWSER_WIDTH);
-			assert.equal(elementHeightInPixels(drawingArea), 600);
-			assert.equal(backgroundColorOf(drawingArea), WHITE);
-			assert.equal(roundedCornersOf(drawingArea), CORNER_ROUNDING);
+			assert.equal(elementWidthInPixels(oldDrawingArea), IOS_BROWSER_WIDTH);
+			assert.equal(elementHeightInPixels(oldDrawingArea), 600);
+			assert.equal(oldBackgroundColorOf(oldDrawingArea), WHITE);
+			assert.equal(roundedCornersOf(oldDrawingArea), CORNER_ROUNDING);
 		});
 
 		it("centers an arrow at top of drawing area", function() {
-			assert.equal(isElementCenteredInPage(drawingAreaArrow), true);
+			assert.equal(isElementCenteredInPage(oldDrawingAreaArrow), true);
 
-			assert.equal(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea), 0);
+			assert.equal(elementPixelsOverlappingTopOfElement(oldDrawingAreaArrow, oldDrawingArea), 0);
 			// TODO: haven't tested background image, position, or repeat
 
-			assert.equal(isElementBehindElement(drawingAreaArrow, drawingArea), false);
+			assert.equal(isElementBehindElement(oldDrawingAreaArrow, oldDrawingArea), false);
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
-			assert.equal(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 15);
-			assert.equal(elementPixelsOverlappingRightOfElement(clearButton, drawingArea), 15);
-			assert.equal(isElementBehindElement(clearButton, drawingArea), false);
+			assert.equal(elementPixelsOverlappingTopOfElement(oldClearButton, oldDrawingArea), 15);
+			assert.equal(elementPixelsOverlappingRightOfElement(oldClearButton, oldDrawingArea), 15);
+			assert.equal(isElementBehindElement(oldClearButton, oldDrawingArea), false);
 
-			assert.equal(textColorOf(clearButton), DARK_GRAY);
-			assert.equal(backgroundColorOf(clearButton), GRAY);
-			assert.equal(hasBorder(clearButton), false);
+			assert.equal(textColorOf(oldClearButton), DARK_GRAY);
+			assert.equal(oldBackgroundColorOf(oldClearButton), GRAY);
+			assert.equal(hasBorder(oldClearButton), false);
 
-			assert.equal(fontFamilyOf(clearButton), STANDARD_FONT);
-			assert.equal(fontWeightOf(clearButton), CLEAR_BUTTON_WEIGHT);
-			assert.equal(fontSizeOf(clearButton), "12px");
+			assert.equal(fontFamilyOf(oldClearButton), STANDARD_FONT);
+			assert.equal(fontWeightOf(oldClearButton), CLEAR_BUTTON_WEIGHT);
+			assert.equal(fontSizeOf(oldClearButton), "12px");
 
-			assert.equal(elementHeightInPixels(clearButton), 30);
-			assert.equal(elementWidthInPixels(clearButton), 70);
-			assert.equal(isTextVerticallyCentered(clearButton), true);
+			assert.equal(elementHeightInPixels(oldClearButton), 30);
+			assert.equal(elementWidthInPixels(oldClearButton), 70);
+			assert.equal(isTextVerticallyCentered(oldClearButton), true);
 
-			assert.equal(roundedCornersOf(clearButton), CORNER_ROUNDING);
-			assert.equal(dropShadowOf(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+			assert.equal(roundedCornersOf(oldClearButton), CORNER_ROUNDING);
+			assert.equal(dropShadowOf(oldClearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW);
 
-			assert.equal(textIsUnderlined(clearButton), false);
-			assert.equal(textIsUppercase(clearButton), true);
+			assert.equal(textIsUnderlined(oldClearButton), false);
+			assert.equal(textIsUppercase(oldClearButton), true);
 		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
-			applyClass(clearButton, "_hover_", function() {
-				assert.equal(backgroundColorOf(clearButton), DARKENED_GRAY);
+			applyClass(oldClearButton, "_hover_", function() {
+				assert.equal(oldBackgroundColorOf(oldClearButton), DARKENED_GRAY);
 			});
 		});
 
 		it("'clear' button appears to depress when user activates it", function() {
-			applyClass(clearButton, "_active_", function() {
-				assert.equal(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 16);
-				assert.equal(dropShadowOf(clearButton), "none");
+			applyClass(oldClearButton, "_active_", function() {
+				assert.equal(elementPixelsOverlappingTopOfElement(oldClearButton, oldDrawingArea), 16);
+				assert.equal(dropShadowOf(oldClearButton), "none");
 			});
 		});
 
 		it("centers footer below the drawing area", function() {
-			assert.equal(isContentCenteredInPage(footer), true);
-			assert.equal(elementPixelsBelowElement(footer, drawingArea), 13);
+			assert.equal(isContentCenteredInPage(oldFooter), true);
+			assert.equal(elementPixelsBelowElement(oldFooter, oldDrawingArea), 13);
 
-			assert.equal(fontFamilyOf(footer), STANDARD_FONT);
-			assert.equal(fontWeightOf(footer), BODY_TEXT_WEIGHT);
-			assert.equal(fontSizeOf(footer), "15px");
-			assert.equal(textColorOf(footer), WHITE);
+			assert.equal(fontFamilyOf(oldFooter), STANDARD_FONT);
+			assert.equal(fontWeightOf(oldFooter), BODY_TEXT_WEIGHT);
+			assert.equal(fontSizeOf(oldFooter), "15px");
+			assert.equal(textColorOf(oldFooter), WHITE);
 		});
 
 		it("centers 'join us' button below footer", function() {
-			assert.equal(isContentCenteredInPage(joinUs), true);
-			assert.equal(elementPixelsBelowElement(joinUs, footer), 13);
+			assert.equal(isContentCenteredInPage(oldJoinUs), true);
+			assert.equal(elementPixelsBelowElement(oldJoinUs, oldFooter), 13);
 
-			assert.equal(textColorOf(joinUs), WHITE);
-			assert.equal(backgroundColorOf(joinUs), MEDIUM_BLUE);
+			assert.equal(textColorOf(oldJoinUs), WHITE);
+			assert.equal(oldBackgroundColorOf(oldJoinUs), MEDIUM_BLUE);
 
-			assert.equal(fontFamilyOf(joinUs), STANDARD_FONT);
-			assert.equal(fontWeightOf(joinUs), JOIN_US_BUTTON_WEIGHT);
-			assert.equal(fontSizeOf(joinUs), "16px");
+			assert.equal(fontFamilyOf(oldJoinUs), STANDARD_FONT);
+			assert.equal(fontWeightOf(oldJoinUs), JOIN_US_BUTTON_WEIGHT);
+			assert.equal(fontSizeOf(oldJoinUs), "16px");
 
-			assert.equal(elementHeightInPixels(joinUs), 35);
-			assert.equal(elementWidthInPixels(joinUs), 175);
-			assert.equal(isTextVerticallyCentered(joinUs), true);
+			assert.equal(elementHeightInPixels(oldJoinUs), 35);
+			assert.equal(elementWidthInPixels(oldJoinUs), 175);
+			assert.equal(isTextVerticallyCentered(oldJoinUs), true);
 
-			assert.equal(roundedCornersOf(joinUs), CORNER_ROUNDING);
-			assert.equal(dropShadowOf(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW);
+			assert.equal(roundedCornersOf(oldJoinUs), CORNER_ROUNDING);
+			assert.equal(dropShadowOf(oldJoinUs), DARK_BLUE + BUTTON_DROP_SHADOW);
 
-			assert.equal(textIsUnderlined(joinUs), false);
-			assert.equal(textIsUppercase(joinUs), true);
+			assert.equal(textIsUnderlined(oldJoinUs), false);
+			assert.equal(textIsUppercase(oldJoinUs), true);
 		});
 
 		it("darkens the 'join us' button when the user hovers over it", function() {
-			applyClass(joinUs, "_hover_", function() {
-				assert.equal(backgroundColorOf(joinUs), DARKENED_MEDIUM_BLUE);
+			applyClass(oldJoinUs, "_hover_", function() {
+				assert.equal(oldBackgroundColorOf(oldJoinUs), DARKENED_MEDIUM_BLUE);
 			});
 		});
 
 		it("'join us' button appears to depress when user activates it", function() {
-			applyClass(joinUs, "_active_", function() {
-				assert.equal(elementPixelsBelowElement(joinUs, footer), 14);
-				assert.equal(dropShadowOf(joinUs), "none");
+			applyClass(oldJoinUs, "_active_", function() {
+				assert.equal(elementPixelsBelowElement(oldJoinUs, oldFooter), 14);
+				assert.equal(dropShadowOf(oldJoinUs), "none");
 			});
 		});
 
@@ -217,9 +264,9 @@
 		}
 
 		function isElementCenteredInPage(domElement) {
-			var frameBody = frameDom.contentDocument.body;
+			var frameBody = oldFrameDom.contentDocument.body;
 
-			var bodyStyle = frameDom.contentWindow.getComputedStyle(frameBody);
+			var bodyStyle = oldFrameDom.contentWindow.getComputedStyle(frameBody);
 			var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
 			var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
 
@@ -311,7 +358,11 @@
 			return elementHeight + "px" === lineHeight;
 		}
 
-		function backgroundColorOf(domElement) {
+		function backgroundColor(qElement) {
+			return qElement.getRawStyle("background-color");
+		}
+
+		function oldBackgroundColorOf(domElement) {
 			return getComputedProperty(domElement, "background-color");
 		}
 
