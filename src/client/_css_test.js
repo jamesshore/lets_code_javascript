@@ -33,6 +33,7 @@
 
 	describe("Home page", function() {
 		var frame;
+		var page;
 
 		var logo;
 		var tagline;
@@ -58,6 +59,7 @@
 		beforeEach(function() {
 			frame.reset();
 
+			page = frame.page();
 			logo = frame.get("#logo");
 			tagline = frame.get("#tagline");
 			drawingAreaArrow = frame.get("#drawing-area-arrow");
@@ -68,7 +70,6 @@
 		});
 
 		it("fits perfectly within viewport", function() {
-			var page = frame.page();
 			var viewport = frame.viewport();
 
 			assert.equal(page.width.diff(viewport.width), "");
@@ -82,7 +83,7 @@
 
 		it("centers logo at top of page", function() {
 			logo.assert({
-				center: frame.page().center,
+				center: page.center,
 				top: 12
 			});
 
@@ -93,15 +94,25 @@
 
 		it("centers tagline directly below logo", function() {
 			tagline.assert({
-				center: frame.page().center,
+				center: page.center,
 				top: logo.bottom.plus(5)
 			});
 
 			assert.equal(fontFamily(tagline), STANDARD_FONT, "font family");
-
 			assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "font weight");
 			assert.equal(fontSize(tagline), "14px", "font size");
 			assert.equal(textColor(tagline), DARK_BLUE, "text color");
+		});
+
+		it("centers drawing area below tagline", function() {
+			drawingArea.assert({
+				center: page.center,
+				top: tagline.bottom.plus(10),
+				width: page.width
+			});
+
+			assert.equal(backgroundColor(drawingArea), WHITE, "background color");
+			assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "corners");
 		});
 
 		function backgroundColor(element) {
@@ -138,6 +149,17 @@
 
 		function textColor(element) {
 			return normalizeColorString(element.getRawStyle("color"));
+		}
+
+		function roundedCorners(element) {
+			// We can't just look at border-radius because it returns "" on Firefox and IE 9
+			var topLeft = element.getRawStyle("border-top-left-radius");
+			var topRight = element.getRawStyle("border-top-right-radius");
+			var bottomLeft = element.getRawStyle("border-bottom-left-radius");
+			var bottomRight = element.getRawStyle("border-bottom-right-radius");
+
+			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
+			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
 		}
 
 	});
@@ -181,31 +203,6 @@
 		function getElement(id) {
 			return oldFrameDom.contentDocument.getElementById(id);
 		}
-
-
-//		it("create iOS Safari failure", function() {
-//			newElement('<div><p id="tagline">tagline</p><p id="footer">footer</p></div>');
-//
-//
-//			var domElement = document.getElementById("tagline");
-//			var boundingBox = domElement.getBoundingClientRect();     // comment this line out to make test pass
-//
-//
-//			var style = window.getComputedStyle(domElement);
-//			var fontSize = style.getPropertyValue("font-size");
-//
-//			expect(fontSize).to.be("14px");
-//		});
-
-		it("centers drawing area below tagline", function() {
-			assert.equal(isElementCenteredInPage(oldDrawingArea), true);
-			assert.equal(elementPixelsBelowElement(oldDrawingArea, oldTagline), 10);
-
-			assert.equal(elementWidthInPixels(oldDrawingArea), IOS_BROWSER_WIDTH);
-			assert.equal(elementHeightInPixels(oldDrawingArea), 200);
-			assert.equal(oldBackgroundColorOf(oldDrawingArea), WHITE);
-			assert.equal(roundedCornersOf(oldDrawingArea), CORNER_ROUNDING);
-		});
 
 		it("centers an arrow at top of drawing area", function() {
 			assert.equal(isElementCenteredInPage(oldDrawingAreaArrow), true);

@@ -37,7 +37,8 @@ Engineering Tasks:
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 
 To Do on current task:
-* finish migrating logo test
+* Short-circuit round-corners test on IE 8 (or make it work)
+- migrate remaining tests
 - Fix height of drawing area
 
 Potential future stories:
