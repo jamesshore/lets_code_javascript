@@ -31,6 +31,7 @@ User Stories to finish current MMF:
 Engineering Tasks:
 * Update our CSS tests for Quixote
   - As we modify each test, use iPad dimensions and remove body padding
+- Move trim() polyfill to a polyfill module
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)

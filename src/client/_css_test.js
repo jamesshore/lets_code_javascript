@@ -86,23 +86,44 @@
 				top: 12
 			});
 
-			assert.equal(fontWeight(logo), HEADLINE_WEIGHT);
-			assert.equal(fontSize(logo), "22px");
-			assert.equal(textColor(logo), WHITE);
+			assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "font weight");
+			assert.equal(fontSize(logo), "22px", "font size");
+			assert.equal(textColor(logo), WHITE, "text color");
 		});
 
-		//it("centers tagline directly below logo", function() {
-		//	assert.equal(isContentCenteredInPage(oldTagline), true);
-		//	assert.equal(elementPixelsBelowElement(oldTagline, oldLogo), 5);
-		//
-		//	assert.equal(fontFamilyOf(oldTagline), STANDARD_FONT);
-		//	assert.equal(fontWeightOf(oldTagline), BODY_TEXT_WEIGHT);
-		//	assert.equal(fontSizeOf(oldTagline), "14px");
-		//	assert.equal(textColorOf(oldTagline), DARK_BLUE);
-		//});
+		it("centers tagline directly below logo", function() {
+			tagline.assert({
+				center: frame.page().center,
+				top: logo.bottom.plus(5)
+			});
+
+			assert.equal(fontFamily(tagline), STANDARD_FONT, "font family");
+
+			assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "font weight");
+			assert.equal(fontSize(tagline), "14px", "font size");
+			assert.equal(textColor(tagline), DARK_BLUE, "text color");
+		});
 
 		function backgroundColor(element) {
 			return normalizeColorString(element.getRawStyle("background-color"));
+		}
+
+		function fontFamily(element) {
+			var family = element.getRawStyle("font-family");
+			family = family.replace(/\"/g, '');
+
+			var fonts = family.split(",");
+			for (var i = 0; i < fonts.length; i++) {
+				fonts[i] = trim(fonts[i]);
+			}
+
+			return fonts.join(", ");
+		}
+
+		// Based on MDN code at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+		function trim(str) {
+			var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+		  return str.replace(rtrim, '');
 		}
 
 		function fontWeight(element) {
