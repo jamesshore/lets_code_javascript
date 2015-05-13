@@ -25,6 +25,8 @@
 	var HEADLINE_WEIGHT = "600";
 
 	var IOS_BROWSER_WIDTH = 980;
+	var IOS_BROWSER_LANDSCAPE_HEIGHT = 661;
+
 	var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
 	var CORNER_ROUNDING = "2px";
 	var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
@@ -43,8 +45,8 @@
 		before(function(done) {
 			var options = {
 				src: "/base/src/client/index.html",
-				width: 980,
-				height: 661
+				width: IOS_BROWSER_WIDTH,
+				height: IOS_BROWSER_LANDSCAPE_HEIGHT
 			};
 			frame = quixote.createFrame(options, done);
 		});
@@ -65,6 +67,14 @@
 			joinUs = frame.get("#join-us");
 		});
 
+		it("fits perfectly within viewport", function() {
+			var page = frame.page();
+			var viewport = frame.viewport();
+
+			assert.equal(page.width.diff(viewport.width), "");
+			assert.equal(page.height.diff(viewport.height), "");
+		});
+
 		it("has a blue background", function() {
 			var body = frame.body();
 			assert.equal(backgroundColor(body), BACKGROUND_BLUE);
@@ -72,7 +82,7 @@
 
 		it("centers logo at top of page", function() {
 			logo.assert({
-				center: frame.viewport().center
+				center: frame.page().center
 			});
 
 
@@ -160,7 +170,7 @@
 			assert.equal(elementPixelsBelowElement(oldDrawingArea, oldTagline), 10);
 
 			assert.equal(elementWidthInPixels(oldDrawingArea), IOS_BROWSER_WIDTH);
-			assert.equal(elementHeightInPixels(oldDrawingArea), 600);
+			assert.equal(elementHeightInPixels(oldDrawingArea), 200);
 			assert.equal(oldBackgroundColorOf(oldDrawingArea), WHITE);
 			assert.equal(roundedCornersOf(oldDrawingArea), CORNER_ROUNDING);
 		});

@@ -2,6 +2,8 @@ body {
 	background-color: #41a9cc;
 	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
 	font-weight: 300;
+	margin: 0;
+	padding: 0;
 }
 
 #logo {
@@ -24,7 +26,7 @@ body {
 }
 
 #drawing-area {
-	height: 600px;
+	height: 200px;
 	background-color: white;
 	border-radius: 2px;
 }

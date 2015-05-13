@@ -36,8 +36,8 @@ Engineering Tasks:
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 
 To Do on current task:
-* Fix the size of the page (body padding?)
-- Modify logo test to center in *page*, not viewport
+* finish migrating logo test
+- Fix height of drawing area
 
 Potential future stories:
 - "Try me" text in drawing area
