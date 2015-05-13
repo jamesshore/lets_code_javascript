@@ -82,20 +82,41 @@
 
 		it("centers logo at top of page", function() {
 			logo.assert({
-				center: frame.page().center
+				center: frame.page().center,
+				top: 12
 			});
 
-
-			//assert.equal(isContentCenteredInPage(oldLogo), true);
-			//assert.equal(elementPixelsFromTopOfPage(oldLogo), 12);
-			//assert.equal(fontFamilyOf(oldLogo), STANDARD_FONT);
-			//assert.equal(fontWeightOf(oldLogo), HEADLINE_WEIGHT);
-			//assert.equal(fontSizeOf(oldLogo), "22px");
-			//assert.equal(textColorOf(oldLogo), WHITE);
+			assert.equal(fontWeight(logo), HEADLINE_WEIGHT);
+			assert.equal(fontSize(logo), "22px");
+			assert.equal(textColor(logo), WHITE);
 		});
+
+		//it("centers tagline directly below logo", function() {
+		//	assert.equal(isContentCenteredInPage(oldTagline), true);
+		//	assert.equal(elementPixelsBelowElement(oldTagline, oldLogo), 5);
+		//
+		//	assert.equal(fontFamilyOf(oldTagline), STANDARD_FONT);
+		//	assert.equal(fontWeightOf(oldTagline), BODY_TEXT_WEIGHT);
+		//	assert.equal(fontSizeOf(oldTagline), "14px");
+		//	assert.equal(textColorOf(oldTagline), DARK_BLUE);
+		//});
 
 		function backgroundColor(element) {
 			return normalizeColorString(element.getRawStyle("background-color"));
+		}
+
+		function fontWeight(element) {
+			var weight = element.getRawStyle("font-weight");
+			if (weight === "normal") weight = "400";
+			return weight.toString();
+		}
+
+		function fontSize(element) {
+			return element.getRawStyle("font-size");
+		}
+
+		function textColor(element) {
+			return normalizeColorString(element.getRawStyle("color"));
 		}
 
 	});
@@ -154,16 +175,6 @@
 //
 //			expect(fontSize).to.be("14px");
 //		});
-
-		it("centers tagline directly below logo", function() {
-			assert.equal(isContentCenteredInPage(oldTagline), true);
-			assert.equal(elementPixelsBelowElement(oldTagline, oldLogo), 5);
-
-			assert.equal(fontFamilyOf(oldTagline), STANDARD_FONT);
-			assert.equal(fontWeightOf(oldTagline), BODY_TEXT_WEIGHT);
-			assert.equal(fontSizeOf(oldTagline), "14px");
-			assert.equal(textColorOf(oldTagline), DARK_BLUE);
-		});
 
 		it("centers drawing area below tagline", function() {
 			assert.equal(isElementCenteredInPage(oldDrawingArea), true);
@@ -478,6 +489,8 @@
 	});
 
 	function normalizeColorString(color) {
+		if (color === "white") return "rgb(255, 255, 255)";
+
 		var colorGroups = color.match(/^#(..)(..)(..)/);    // look for presence of #rrggbb string
 		if (colorGroups === null) return color;   // if doesn't match, assume we have rgb() string
 
