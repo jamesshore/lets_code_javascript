@@ -113,8 +113,17 @@
 			});
 
 			assert.equal(backgroundColor(drawingArea), WHITE, "background color");
-
 			if (browser.supportsBorderRadiusCss()) assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "corners");
+		});
+
+		it("centers an arrow at top of drawing area", function() {
+			drawingAreaArrow.assert({
+				center: page.center,
+				top: drawingArea.top
+			});
+			assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area should be under drawing area arrow");
+
+			// TODO: haven't tested background image, position, or repeat
 		});
 
 		function backgroundColor(element) {
@@ -164,6 +173,35 @@
 			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
 		}
 
+		function under(element, relativeToElement) {
+			var elementZ = getZIndex(element);
+			var relativeZ = getZIndex(relativeToElement);
+
+			if (elementZ === relativeZ) return !isElementAfterElementInDomTree();
+			else return (elementZ < relativeZ);
+
+			function getZIndex(element) {
+				var z = element.getRawStyle("z-index");
+				if (z === "auto") z = 0;
+				return z;
+			}
+
+			function isElementAfterElementInDomTree() {
+				var elementNode = element.toDomElement();
+				var relativeNode = relativeToElement.toDomElement();
+
+				var foundRelative = false;
+				var elementAfterRelative = false;
+				for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
+					if (child === elementNode) {
+						if (foundRelative) elementAfterRelative = true;
+					}
+					if (child === relativeNode) foundRelative = true;
+				}
+				failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
+				return elementAfterRelative;
+			}
+		}
 	});
 
 	describe("Home page (old tests)", function() {
@@ -205,15 +243,6 @@
 		function getElement(id) {
 			return oldFrameDom.contentDocument.getElementById(id);
 		}
-
-		it("centers an arrow at top of drawing area", function() {
-			assert.equal(isElementCenteredInPage(oldDrawingAreaArrow), true);
-
-			assert.equal(elementPixelsOverlappingTopOfElement(oldDrawingAreaArrow, oldDrawingArea), 0);
-			// TODO: haven't tested background image, position, or repeat
-
-			assert.equal(isElementBehindElement(oldDrawingAreaArrow, oldDrawingArea), false);
-		});
 
 		it("positions clear screen button at top right of drawing area", function() {
 			assert.equal(elementPixelsOverlappingTopOfElement(oldClearButton, oldDrawingArea), 15);
