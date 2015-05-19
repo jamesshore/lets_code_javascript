@@ -43,9 +43,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-* Short-circuit round-corners test on IE 8 (or make it work)
-- Eliminate duplication in Modernizr usage (browser.js)
-- Upgrade page size test to use Quixote 0.7.0 assertions
+* Upgrade page size test to use Quixote 0.7.0 assertions
 - migrate remaining tests
 - Fix height of drawing area
 - Reconsider test layout; should we use a different organizing scheme?
