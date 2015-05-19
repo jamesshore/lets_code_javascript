@@ -113,7 +113,7 @@
 
 			assert.equal(backgroundColor(drawingArea), WHITE, "background color");
 
-			/* if (browser.supportsBorderRadiusCss) */ assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "corners");
+			if (browser.supportsBorderRadiusCss()) assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "corners");
 		});
 
 		function backgroundColor(element) {

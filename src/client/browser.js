@@ -10,6 +10,12 @@
 		return Modernizr.touch;
 	};
 
+	exports.supportsBorderRadiusCss = function() {
+		if (Modernizr.borderradius === undefined) throw new Error("Modernizr.borderradius is not defined");
+
+		return Modernizr.borderradius;
+	};
+
 	exports.supportsCaptureApi = function() {
 		return document.body.setCapture && document.body.releaseCapture;
 	};
