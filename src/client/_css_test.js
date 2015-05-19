@@ -121,14 +121,11 @@
 				center: page.center,
 				top: drawingArea.top
 			});
+
 			assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area should be under drawing area arrow");
-
-
-
 			assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "background-image");
-
-			//background-image: url(/images/arrow.png);
-			//background-repeat: no-repeat;
+			assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "background-repeat");
+			assert.equal(backgroundPosition(drawingAreaArrow), "center", "background-position");
 			//background-position: center;
 		});
 
@@ -216,6 +213,13 @@
 			if (parsedUrl === null) throw new Error("could not parse URL: " + url);
 
 			return parsedUrl[2];
+		}
+
+		function backgroundPosition(element) {
+			var position = element.getRawStyle("background-position");
+
+			if (position === "" || position === "50%" || position === "50% 50%") return "center";
+			else return position;
 		}
 
 	});
