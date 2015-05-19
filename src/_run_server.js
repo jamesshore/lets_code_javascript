@@ -10,12 +10,19 @@
 		return run("inherit");
 	};
 
-	exports.runProgrammatically = function(callback) {
-		var serverProcess = run(["pipe", "pipe", process.stderr]);
+	exports.runProgrammatically = function(callback, errorCallback) {
+		var serverProcess = run(["pipe", "pipe", "pipe"]);
 
 		serverProcess.stdout.setEncoding("utf8");
 		serverProcess.stdout.on("data", function(chunk) {
 			if (chunk.trim().indexOf("Server started") !== -1) callback(serverProcess);
+		});
+
+		serverProcess.stderr.setEncoding("utf8");
+		serverProcess.stderr.on("data", function(chunk) {
+			var proc = parseProcFile();
+			var error = new Error("Spawning '" + proc.command + " " + proc.options + "' failed.");
+			errorCallback(error);
 		});
 	};
 
