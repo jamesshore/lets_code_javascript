@@ -30,21 +30,19 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Update our CSS tests for Quixote
-  - As we modify each test, use iPad dimensions and remove body padding
+  - As we modify each test, use iPad difmensions and remove body padding
 - Move trim() polyfill to a polyfill module
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
+- Selenium has broken again, revealing multiple problems.
+  - ref Mattias Åslund GitHub issue, https://github.com/jamesshore/lets_code_javascript/issues/7
+  - Selenium 2.45.1 doesn't work with Firefox 38
+  - The smoke tests don't report the expected browser version when Selenium fails to initialize
+  - When the smoke tests' setup fails, the server isn't shut down, leading to confusing error messages on subsequent test runs
 - Integrate
 
 To Do on current task:
-- AT START OF EPISODE:
-  - Upgraded Quixote to 0.7.0
-  - Selenium has broken again, revealing multiple problems.
-    - ref Mattias Åslund GitHub issue, https://github.com/jamesshore/lets_code_javascript/issues/7
-    - Selenium 2.45.1 doesn't work with Firefox 38
-    - The smoke tests don't report the expected browser version when Selenium fails to initialize
-    - When the smoke tests' setup fails, the server isn't shut down, leading to confusing error messages on subsequent test runs
 * Short-circuit round-corners test on IE 8 (or make it work)
 - Upgrade page size test to use Quixote 0.7.0 assertions
 - migrate remaining tests

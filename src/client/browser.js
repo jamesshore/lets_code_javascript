@@ -5,6 +5,8 @@
 	"use strict";
 
 	exports.supportsTouchEvents = function() {
+		if (Modernizr.touch === undefined) throw new Error("Modernizr.touch is not defined");
+
 		return Modernizr.touch;
 	};
 
