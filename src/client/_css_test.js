@@ -125,7 +125,7 @@
 
 
 
-			assert.equal(backgroundImage(drawingAreaArrow), "xxx", "background-image");
+			assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "background-image");
 
 			//background-image: url(/images/arrow.png);
 			//background-repeat: no-repeat;
@@ -212,7 +212,7 @@
 		function backgroundImage(element) {
 			var url = element.getRawStyle("background-image");
 
-			var parsedUrl = url.match(/^http:\/\/(\w+)(\/.*)$/);    // strip off domain
+			var parsedUrl = url.match(/^url\("?http:\/\/(.+?)(\/.*?)"?\)$/);    // strip off domain
 			if (parsedUrl === null) throw new Error("could not parse URL: " + url);
 
 			return parsedUrl[2];
