@@ -123,7 +123,13 @@
 			});
 			assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area should be under drawing area arrow");
 
-			// TODO: haven't tested background image, position, or repeat
+
+
+			assert.equal(backgroundImage(drawingAreaArrow), "xxx", "background-image");
+
+			//background-image: url(/images/arrow.png);
+			//background-repeat: no-repeat;
+			//background-position: center;
 		});
 
 		function backgroundColor(element) {
@@ -202,6 +208,16 @@
 				return elementAfterRelative;
 			}
 		}
+
+		function backgroundImage(element) {
+			var url = element.getRawStyle("background-image");
+
+			var parsedUrl = url.match(/^http:\/\/(\w+)(\/.*)$/);    // strip off domain
+			if (parsedUrl === null) throw new Error("could not parse URL: " + url);
+
+			return parsedUrl[2];
+		}
+
 	});
 
 	describe("Home page (old tests)", function() {

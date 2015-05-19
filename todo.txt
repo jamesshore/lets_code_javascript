@@ -43,7 +43,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-* Upgrade page size test to use Quixote 0.7.0 assertions
+* test background image
 - migrate remaining tests
 - Fix height of drawing area
 - Reconsider test layout; should we use a different organizing scheme?
