@@ -71,9 +71,10 @@
 
 		it("fits perfectly within viewport", function() {
 			var viewport = frame.viewport();
-
-			assert.equal(page.width.diff(viewport.width), "");
-			assert.equal(page.height.diff(viewport.height), "");
+			page.assert({
+				width: viewport.width,
+				height: viewport.height
+			});
 		});
 
 		it("has a blue background", function() {
