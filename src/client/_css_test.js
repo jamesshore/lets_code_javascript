@@ -121,12 +121,36 @@
 				center: page.center,
 				top: drawingArea.top
 			});
+			assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
 
-			assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area should be under drawing area arrow");
-			assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "background-image");
-			assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "background-repeat");
-			assert.equal(backgroundPosition(drawingAreaArrow), "center", "background-position");
-			//background-position: center;
+			assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "background image");
+			assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "background repeat");
+			assert.equal(backgroundPosition(drawingAreaArrow), "center", "background position");
+		});
+
+		it("positions clear screen button at top right of drawing area", function() {
+			clearButton.assert({
+				top: drawingArea.top.plus(15),
+				right: drawingArea.right.minus(15),
+				height: 30,
+				width: 70
+			});
+			assert.equal(under(clearButton, drawingArea), false, "clear button should be over drawing area");
+
+			assert.equal(textColor(clearButton), DARK_GRAY, "text color");
+			assert.equal(backgroundColor(clearButton), GRAY, "background color");
+			//assert.equal(hasBorder(oldClearButton), false);
+			//assert.equal(isTextVerticallyCentered(oldClearButton), true);
+
+			assert.equal(fontFamily(clearButton), STANDARD_FONT, "font family");
+			assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "font weight");
+			assert.equal(fontSize(clearButton), "12px", "font size");
+
+			if (browser.supportsBorderRadiusCss()) assert.equal(roundedCorners(clearButton), CORNER_ROUNDING);
+			//assert.equal(dropShadowOf(oldClearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+
+			//assert.equal(textIsUnderlined(oldClearButton), false);
+			//assert.equal(textIsUppercase(oldClearButton), true);
 		});
 
 		function backgroundColor(element) {
@@ -263,30 +287,6 @@
 		function getElement(id) {
 			return oldFrameDom.contentDocument.getElementById(id);
 		}
-
-		it("positions clear screen button at top right of drawing area", function() {
-			assert.equal(elementPixelsOverlappingTopOfElement(oldClearButton, oldDrawingArea), 15);
-			assert.equal(elementPixelsOverlappingRightOfElement(oldClearButton, oldDrawingArea), 15);
-			assert.equal(isElementBehindElement(oldClearButton, oldDrawingArea), false);
-
-			assert.equal(textColorOf(oldClearButton), DARK_GRAY);
-			assert.equal(oldBackgroundColorOf(oldClearButton), GRAY);
-			assert.equal(hasBorder(oldClearButton), false);
-
-			assert.equal(fontFamilyOf(oldClearButton), STANDARD_FONT);
-			assert.equal(fontWeightOf(oldClearButton), CLEAR_BUTTON_WEIGHT);
-			assert.equal(fontSizeOf(oldClearButton), "12px");
-
-			assert.equal(elementHeightInPixels(oldClearButton), 30);
-			assert.equal(elementWidthInPixels(oldClearButton), 70);
-			assert.equal(isTextVerticallyCentered(oldClearButton), true);
-
-			assert.equal(roundedCornersOf(oldClearButton), CORNER_ROUNDING);
-			assert.equal(dropShadowOf(oldClearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW);
-
-			assert.equal(textIsUnderlined(oldClearButton), false);
-			assert.equal(textIsUppercase(oldClearButton), true);
-		});
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
 			applyClass(oldClearButton, "_hover_", function() {

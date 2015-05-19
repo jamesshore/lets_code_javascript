@@ -43,7 +43,7 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-* test background image
+* port clear button assertions
 - migrate remaining tests
 - Fix height of drawing area
 - Reconsider test layout; should we use a different organizing scheme?
