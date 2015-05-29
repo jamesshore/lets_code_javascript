@@ -149,8 +149,8 @@
 			if (browser.supportsBorderRadiusCss()) assert.equal(roundedCorners(clearButton), CORNER_ROUNDING, "corners");
 			if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
 
-			//assert.equal(textIsUnderlined(oldClearButton), false);
-			//assert.equal(textIsUppercase(oldClearButton), true);
+			assert.equal(textIsUnderlined(clearButton), false, "text underline");
+			assert.equal(textIsUppercase(clearButton), true, "text uppercase");
 		});
 
 		function backgroundColor(element) {
@@ -276,6 +276,15 @@
 			if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
 
 			return normalizeColorString(groups[2]) + " " + groups[1];
+		}
+
+		function textIsUnderlined(element) {
+			var style = element.getRawStyle("text-decoration");
+			return style.indexOf("none") !== 0;
+		}
+
+		function textIsUppercase(element) {
+			return element.getRawStyle("text-transform") === "uppercase";
 		}
 
 	});
