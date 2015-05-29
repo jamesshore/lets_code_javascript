@@ -171,12 +171,26 @@
 			assert.equal(roundedCorners(joinUs), CORNER_ROUNDING, "join us button");
 		});
 
+		describe("buttons", function() {
+
+			standardButtonTests(clearButton, "clear button");
+			standardButtonTests(joinUs, "join us button");
+
+			function standardButtonTests(button, description) {
+
+				it(description + " has standard button typography", function() {
+					assert.equal(isTextVerticallyCentered(button), true, "text centering");
+					assert.equal(textIsUnderlined(button), false, "text underline");
+					assert.equal(textIsUppercase(button), true, "text uppercase");
+				});
+
+			}
+
+		});
+
 
 
 		it("positions clear screen button at top right of drawing area", function() {
-			assert.equal(isTextVerticallyCentered(clearButton), true, "text centering");
-			assert.equal(textIsUnderlined(clearButton), false, "text underline");
-			assert.equal(textIsUppercase(clearButton), true, "text uppercase");
 			if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
 
 
@@ -184,6 +198,12 @@
 
 
 		});
+
+		it("centers 'join us' button below footer", function() {
+			if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "drop shadow");
+		});
+
+
 
 		it("darkens the 'clear' button when the user hovers over it", function() {
 			applyClass(clearButton, "_hover_", function() {
@@ -198,14 +218,6 @@
 				});
 				if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(clearButton), "none");
 			});
-		});
-
-		it("centers 'join us' button below footer", function() {
-			assert.equal(isTextVerticallyCentered(joinUs), true, "text centering");
-			assert.equal(textIsUnderlined(joinUs), false, "text underline");
-			assert.equal(textIsUppercase(joinUs), true, "text uppercase");
-
-			if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "drop shadow");
 		});
 
 		it("darkens the 'join us' button when the user hovers over it", function() {
