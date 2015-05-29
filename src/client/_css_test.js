@@ -147,7 +147,7 @@
 			assert.equal(fontSize(clearButton), "12px", "font size");
 
 			if (browser.supportsBorderRadiusCss()) assert.equal(roundedCorners(clearButton), CORNER_ROUNDING, "corners");
-			assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
+			if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
 
 			//assert.equal(textIsUnderlined(oldClearButton), false);
 			//assert.equal(textIsUppercase(oldClearButton), true);

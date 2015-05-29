@@ -12,6 +12,10 @@
 		return askModernizr("borderradius");
 	};
 
+	exports.supportsBoxShadowCss = function() {
+		return askModernizr("boxshadow");
+	};
+
 	exports.supportsCaptureApi = function() {
 		return document.body.setCapture && document.body.releaseCapture;
 	};
