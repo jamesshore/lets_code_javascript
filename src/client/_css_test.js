@@ -139,15 +139,15 @@
 
 			assert.equal(textColor(clearButton), DARK_GRAY, "text color");
 			assert.equal(backgroundColor(clearButton), GRAY, "background color");
-			//assert.equal(hasBorder(oldClearButton), false);
-			//assert.equal(isTextVerticallyCentered(oldClearButton), true);
+			assert.equal(hasBorder(clearButton), false, "border");
+			assert.equal(isTextVerticallyCentered(clearButton), true, "text centering");
 
 			assert.equal(fontFamily(clearButton), STANDARD_FONT, "font family");
 			assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "font weight");
 			assert.equal(fontSize(clearButton), "12px", "font size");
 
-			if (browser.supportsBorderRadiusCss()) assert.equal(roundedCorners(clearButton), CORNER_ROUNDING);
-			//assert.equal(dropShadowOf(oldClearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW);
+			if (browser.supportsBorderRadiusCss()) assert.equal(roundedCorners(clearButton), CORNER_ROUNDING, "corners");
+			assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
 
 			//assert.equal(textIsUnderlined(oldClearButton), false);
 			//assert.equal(textIsUppercase(oldClearButton), true);
@@ -244,6 +244,38 @@
 
 			if (position === "" || position === "50%" || position === "50% 50%") return "center";
 			else return position;
+		}
+
+		function hasBorder(element) {
+			var top = element.getRawStyle("border-top-style");
+			var right = element.getRawStyle("border-right-style");
+			var bottom = element.getRawStyle("border-bottom-style");
+			var left = element.getRawStyle("border-left-style");
+			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
+		}
+
+		function isTextVerticallyCentered(element) {
+			var elementHeight = element.getRawPosition().height;
+			var lineHeight = element.getRawStyle("line-height");
+
+			return elementHeight + "px" === lineHeight;
+		}
+
+		function dropShadow(element) {
+			var shadow = element.getRawStyle("box-shadow");
+
+			// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
+			// We handle that case here.
+			if (shadow === "white") return "none";
+			if (shadow.match(/^#[0-9a-f]{6}$/)) return "none";      // look for '#' followed by six hex digits
+
+			// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
+			// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
+			// BTW, we don't support multiple shadows yet
+			var groups = shadow.match(/^([^#]+) (#......)/);   // get everything before the '#' and the r, g, b
+			if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
+
+			return normalizeColorString(groups[2]) + " " + groups[1];
 		}
 
 	});
@@ -477,14 +509,6 @@
 
 		function textColorOf(domElement) {
 			return getComputedProperty(domElement, "color");
-		}
-
-		function hasBorder(domElement) {
-			var top = getComputedProperty(domElement, "border-top-style");
-			var right = getComputedProperty(domElement, "border-right-style");
-			var bottom = getComputedProperty(domElement, "border-bottom-style");
-			var left = getComputedProperty(domElement, "border-left-style");
-			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
 		}
 
 		function textIsUnderlined(domElement) {
