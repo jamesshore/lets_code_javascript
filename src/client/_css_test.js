@@ -153,6 +153,21 @@
 			assert.equal(textIsUppercase(clearButton), true, "text uppercase");
 		});
 
+		it("darkens the 'clear' button when the user hovers over it", function() {
+			applyClass(clearButton, "_hover_", function() {
+				assert.equal(backgroundColor(clearButton), DARKENED_GRAY);
+			});
+		});
+
+		it("'clear' button appears to depress when user activates it", function() {
+			applyClass(clearButton, "_active_", function() {
+				clearButton.assert({
+					top: drawingArea.top.plus(16)
+				});
+				if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(clearButton), "none");
+			});
+		});
+
 		function backgroundColor(element) {
 			return normalizeColorString(element.getRawStyle("background-color"));
 		}
@@ -287,6 +302,21 @@
 			return element.getRawStyle("text-transform") === "uppercase";
 		}
 
+		function applyClass(element, className, fn) {
+			var domElement = element.toDomElement();
+			var oldClassName = domElement.className;
+			try {
+				domElement.className += className;
+				forceReflow(domElement);
+
+				fn();
+			}
+			finally {
+				domElement.className = oldClassName;
+				forceReflow(domElement);
+			}
+		}
+
 	});
 
 	describe("Home page (old tests)", function() {
@@ -328,19 +358,6 @@
 		function getElement(id) {
 			return oldFrameDom.contentDocument.getElementById(id);
 		}
-
-		it("darkens the 'clear' button when the user hovers over it", function() {
-			applyClass(oldClearButton, "_hover_", function() {
-				assert.equal(oldBackgroundColorOf(oldClearButton), DARKENED_GRAY);
-			});
-		});
-
-		it("'clear' button appears to depress when user activates it", function() {
-			applyClass(oldClearButton, "_active_", function() {
-				assert.equal(elementPixelsOverlappingTopOfElement(oldClearButton, oldDrawingArea), 16);
-				assert.equal(dropShadowOf(oldClearButton), "none");
-			});
-		});
 
 		it("centers footer below the drawing area", function() {
 			assert.equal(isContentCenteredInPage(oldFooter), true);
@@ -580,10 +597,6 @@
 			}
 		}
 
-		function forceReflow(domElement) {
-			var makeLintHappy = domElement.offsetHeight;
-		}
-
 		function pixelsToInt(pixels) {
 			return parseInt(pixels, 10);
 		}
@@ -600,6 +613,10 @@
 		var g = parseInt(colorGroups[2], 16);
 		var b = parseInt(colorGroups[3], 16);
 		return "rgb(" + r + ", " + g + ", " + b + ")";
+	}
+
+	function forceReflow(domElement) {
+		var makeLintHappy = domElement.offsetHeight;
 	}
 
 }());
