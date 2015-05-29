@@ -168,6 +168,18 @@
 			});
 		});
 
+		it("centers footer below the drawing area", function() {
+			footer.assert({
+				center: page.center,
+				top: drawingArea.bottom.plus(13)
+			});
+
+			assert.equal(fontFamily(footer), STANDARD_FONT, "font family");
+			assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "font weight");
+			assert.equal(fontSize(footer), "15px", "font size");
+			assert.equal(textColor(footer), WHITE, "text color");
+		});
+
 		function backgroundColor(element) {
 			return normalizeColorString(element.getRawStyle("background-color"));
 		}
@@ -358,16 +370,6 @@
 		function getElement(id) {
 			return oldFrameDom.contentDocument.getElementById(id);
 		}
-
-		it("centers footer below the drawing area", function() {
-			assert.equal(isContentCenteredInPage(oldFooter), true);
-			assert.equal(elementPixelsBelowElement(oldFooter, oldDrawingArea), 13);
-
-			assert.equal(fontFamilyOf(oldFooter), STANDARD_FONT);
-			assert.equal(fontWeightOf(oldFooter), BODY_TEXT_WEIGHT);
-			assert.equal(fontSizeOf(oldFooter), "15px");
-			assert.equal(textColorOf(oldFooter), WHITE);
-		});
 
 		it("centers 'join us' button below footer", function() {
 			assert.equal(isContentCenteredInPage(oldJoinUs), true);
