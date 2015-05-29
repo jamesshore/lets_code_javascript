@@ -180,6 +180,45 @@
 			assert.equal(textColor(footer), WHITE, "text color");
 		});
 
+		it("centers 'join us' button below footer", function() {
+			joinUs.assert({
+				center: page.center,
+				top: footer.bottom.plus(13),
+				height: 35,
+				width: 175
+			});
+
+			assert.equal(textColor(joinUs), WHITE, "text color");
+			assert.equal(backgroundColor(joinUs), MEDIUM_BLUE, "background color");
+
+			assert.equal(fontFamily(joinUs), STANDARD_FONT, "font family");
+			assert.equal(fontWeight(joinUs), JOIN_US_BUTTON_WEIGHT, "font weight");
+			assert.equal(fontSize(joinUs), "16px", "font size");
+
+			assert.equal(isTextVerticallyCentered(joinUs), true, "text centering");
+
+			if (browser.supportsBorderRadiusCss()) assert.equal(roundedCorners(joinUs), CORNER_ROUNDING, "rounded corners");
+			if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "drop shadow");
+
+			assert.equal(textIsUnderlined(joinUs), false, "text underline");
+			assert.equal(textIsUppercase(joinUs), true, "text uppercase");
+		});
+
+		it("darkens the 'join us' button when the user hovers over it", function() {
+			applyClass(joinUs, "_hover_", function() {
+				assert.equal(backgroundColor(joinUs), DARKENED_MEDIUM_BLUE);
+			});
+		});
+
+		it("'join us' button appears to depress when user activates it", function() {
+			applyClass(joinUs, "_active_", function() {
+				joinUs.assert({
+					top: footer.bottom.plus(14)
+				});
+				if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(joinUs), "none");
+			});
+		});
+
 		function backgroundColor(element) {
 			return normalizeColorString(element.getRawStyle("background-color"));
 		}
@@ -342,8 +381,8 @@
 		var oldDrawingAreaArrow;
 		var oldDrawingArea;
 		var oldClearButton;
-		var oldFooter;
-		var oldJoinUs;
+		var footer;
+		var joinUs;
 
 
 		before(function(done) {
@@ -355,8 +394,8 @@
 				oldDrawingAreaArrow = getElement("drawing-area-arrow");
 				oldDrawingArea = getElement("drawing-area");
 				oldClearButton = getElement("clear-button");
-				oldFooter = getElement("footer");
-				oldJoinUs = getElement("join-us");
+				footer = getElement("footer");
+				joinUs = getElement("join-us");
 
 				done();
 			});
@@ -370,41 +409,6 @@
 		function getElement(id) {
 			return oldFrameDom.contentDocument.getElementById(id);
 		}
-
-		it("centers 'join us' button below footer", function() {
-			assert.equal(isContentCenteredInPage(oldJoinUs), true);
-			assert.equal(elementPixelsBelowElement(oldJoinUs, oldFooter), 13);
-
-			assert.equal(textColorOf(oldJoinUs), WHITE);
-			assert.equal(oldBackgroundColorOf(oldJoinUs), MEDIUM_BLUE);
-
-			assert.equal(fontFamilyOf(oldJoinUs), STANDARD_FONT);
-			assert.equal(fontWeightOf(oldJoinUs), JOIN_US_BUTTON_WEIGHT);
-			assert.equal(fontSizeOf(oldJoinUs), "16px");
-
-			assert.equal(elementHeightInPixels(oldJoinUs), 35);
-			assert.equal(elementWidthInPixels(oldJoinUs), 175);
-			assert.equal(isTextVerticallyCentered(oldJoinUs), true);
-
-			assert.equal(roundedCornersOf(oldJoinUs), CORNER_ROUNDING);
-			assert.equal(dropShadowOf(oldJoinUs), DARK_BLUE + BUTTON_DROP_SHADOW);
-
-			assert.equal(textIsUnderlined(oldJoinUs), false);
-			assert.equal(textIsUppercase(oldJoinUs), true);
-		});
-
-		it("darkens the 'join us' button when the user hovers over it", function() {
-			applyClass(oldJoinUs, "_hover_", function() {
-				assert.equal(oldBackgroundColorOf(oldJoinUs), DARKENED_MEDIUM_BLUE);
-			});
-		});
-
-		it("'join us' button appears to depress when user activates it", function() {
-			applyClass(oldJoinUs, "_active_", function() {
-				assert.equal(elementPixelsBelowElement(oldJoinUs, oldFooter), 14);
-				assert.equal(dropShadowOf(oldJoinUs), "none");
-			});
-		});
 
 		function isContentCenteredInPage(domElement) {
 			if (!isElementCenteredInPage(domElement)) return false;
@@ -510,11 +514,11 @@
 			return elementHeight + "px" === lineHeight;
 		}
 
-		function oldBackgroundColorOf(domElement) {
+		function backgroundColor(domElement) {
 			return getComputedProperty(domElement, "background-color");
 		}
 
-		function fontFamilyOf(domElement) {
+		function fontFamily(domElement) {
 			var family = getComputedProperty(domElement, "font-family");
 			family = family.replace(/\"/g, '');
 
@@ -525,17 +529,17 @@
 			return fonts.join(", ");
 		}
 
-		function fontWeightOf(domElement) {
+		function fontWeight(domElement) {
 			var weight = getComputedProperty(domElement, "font-weight");
 			if (weight === "normal") weight = "400";
 			return weight;
 		}
 
-		function fontSizeOf(domElement) {
+		function fontSize(domElement) {
 			return getComputedProperty(domElement, "font-size");
 		}
 
-		function textColorOf(domElement) {
+		function textColor(domElement) {
 			return getComputedProperty(domElement, "color");
 		}
 
@@ -548,7 +552,7 @@
 			return getComputedProperty(domElement, "text-transform") === "uppercase";
 		}
 
-		function roundedCornersOf(domElement) {
+		function roundedCorners(domElement) {
 			// We can't just look at border-radius because it returns "" on Firefox and IE 9
 			var topLeft = getComputedProperty(domElement, "border-top-left-radius");
 			var topRight = getComputedProperty(domElement, "border-top-right-radius");
@@ -559,7 +563,7 @@
 			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
 		}
 
-		function dropShadowOf(domElement) {
+		function dropShadow(domElement) {
 			var shadow = getComputedProperty(domElement, "box-shadow");
 
 			// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
