@@ -2,7 +2,6 @@
 (function() {
 	"use strict";
 
-	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
 	var failFast = require("./fail_fast.js");
 	var assert = require("../shared/_assert.js");
@@ -77,28 +76,62 @@
 			});
 		});
 
+		it("has an overall layout", function() {
+			logo.assert({
+				center: page.center,
+				top: 12
+			}, "logo should be centered at top of page");
+
+			tagline.assert({
+				center: page.center,
+				top: logo.bottom.plus(5)
+			}, "tagline should be centered directly below logo");
+
+			drawingArea.assert({
+				center: page.center,
+				top: tagline.bottom.plus(10),
+				width: page.width
+			}, "drawing area should be centered below tagline");
+
+			footer.assert({
+				center: page.center,
+				top: drawingArea.bottom.plus(13)
+			}, "footer should be centered below drawing area");
+
+			joinUs.assert({
+				center: page.center,
+				top: footer.bottom.plus(13),
+				height: 35,
+				width: 175
+			});
+		});
+
+		it("has flourishes inside drawing area", function() {
+			drawingAreaArrow.assert({
+				center: drawingArea.center,
+				top: drawingArea.top
+			}, "drawing area should have an arrow centered at the top");
+
+			clearButton.assert({
+				top: drawingArea.top.plus(15),
+				right: drawingArea.right.minus(15),
+				height: 30,
+				width: 70
+			}, "clear screen button should be centered at top-right of drawing area");
+		});
+
 		it("has a blue background", function() {
 			var body = frame.body();
 			assert.equal(backgroundColor(body), BACKGROUND_BLUE);
 		});
 
 		it("centers logo at top of page", function() {
-			logo.assert({
-				center: page.center,
-				top: 12
-			});
-
 			assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "font weight");
 			assert.equal(fontSize(logo), "22px", "font size");
 			assert.equal(textColor(logo), WHITE, "text color");
 		});
 
 		it("centers tagline directly below logo", function() {
-			tagline.assert({
-				center: page.center,
-				top: logo.bottom.plus(5)
-			});
-
 			assert.equal(fontFamily(tagline), STANDARD_FONT, "font family");
 			assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "font weight");
 			assert.equal(fontSize(tagline), "14px", "font size");
@@ -106,21 +139,11 @@
 		});
 
 		it("centers drawing area below tagline", function() {
-			drawingArea.assert({
-				center: page.center,
-				top: tagline.bottom.plus(10),
-				width: page.width
-			});
-
 			assert.equal(backgroundColor(drawingArea), WHITE, "background color");
 			if (browser.supportsBorderRadiusCss()) assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "corners");
 		});
 
 		it("centers an arrow at top of drawing area", function() {
-			drawingAreaArrow.assert({
-				center: page.center,
-				top: drawingArea.top
-			});
 			assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
 
 			assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "background image");
@@ -129,12 +152,6 @@
 		});
 
 		it("positions clear screen button at top right of drawing area", function() {
-			clearButton.assert({
-				top: drawingArea.top.plus(15),
-				right: drawingArea.right.minus(15),
-				height: 30,
-				width: 70
-			});
 			assert.equal(under(clearButton, drawingArea), false, "clear button should be over drawing area");
 
 			assert.equal(textColor(clearButton), DARK_GRAY, "text color");
@@ -169,11 +186,6 @@
 		});
 
 		it("centers footer below the drawing area", function() {
-			footer.assert({
-				center: page.center,
-				top: drawingArea.bottom.plus(13)
-			});
-
 			assert.equal(fontFamily(footer), STANDARD_FONT, "font family");
 			assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "font weight");
 			assert.equal(fontSize(footer), "15px", "font size");
@@ -181,13 +193,6 @@
 		});
 
 		it("centers 'join us' button below footer", function() {
-			joinUs.assert({
-				center: page.center,
-				top: footer.bottom.plus(13),
-				height: 35,
-				width: 175
-			});
-
 			assert.equal(textColor(joinUs), WHITE, "text color");
 			assert.equal(backgroundColor(joinUs), MEDIUM_BLUE, "background color");
 

@@ -35,6 +35,8 @@ Engineering Tasks:
 - Need to test arrow's background elements--is there a clean way of doing this?
   - Consider using :before pseudoelement rather than a separate div
   - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
+- Fix hard-coded dependency on drawing area position in HtmlElement test
+  - "coordinate conversion converts relative coordinates into page coordinates"
 - Selenium has broken again, revealing multiple problems.
   - ref Mattias Åslund GitHub issue, https://github.com/jamesshore/lets_code_javascript/issues/7
   - Selenium 2.45.1 doesn't work with Firefox 38
@@ -43,10 +45,8 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-* port clear button assertions
-- migrate remaining tests
+* Reconsider test layout; should we use a different organizing scheme?
 - Fix height of drawing area
-- Reconsider test layout; should we use a different organizing scheme?
 
 
 Potential future stories:
