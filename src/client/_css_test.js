@@ -238,7 +238,7 @@
 		// Based on MDN code at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
 		function trim(str) {
 			var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-		  return str.replace(rtrim, '');
+			return str.replace(rtrim, '');
 		}
 
 		function fontWeight(element) {
@@ -262,16 +262,24 @@
 			var bottomLeft = element.getRawStyle("border-bottom-left-radius");
 			var bottomRight = element.getRawStyle("border-bottom-right-radius");
 
-			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
-			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
+			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) {
+				return topLeft;
+			}
+			else {
+				return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
+			}
 		}
 
 		function under(element, relativeToElement) {
 			var elementZ = getZIndex(element);
 			var relativeZ = getZIndex(relativeToElement);
 
-			if (elementZ === relativeZ) return !isElementAfterElementInDomTree();
-			else return (elementZ < relativeZ);
+			if (elementZ === relativeZ) {
+				return !isElementAfterElementInDomTree();
+			}
+			else {
+				return (elementZ < relativeZ);
+			}
 
 			function getZIndex(element) {
 				var z = element.getRawStyle("z-index");
@@ -308,8 +316,12 @@
 		function backgroundPosition(element) {
 			var position = element.getRawStyle("background-position");
 
-			if (position === "" || position === "50%" || position === "50% 50%") return "center";
-			else return position;
+			if (position === "" || position === "50%" || position === "50% 50%") {
+				return "center";
+			}
+			else {
+				return position;
+			}
 		}
 
 		function hasBorder(element) {
@@ -368,261 +380,22 @@
 			}
 		}
 
-	});
+		function normalizeColorString(color) {
+			if (color === "white") return "rgb(255, 255, 255)";
 
-	describe("Home page (old tests)", function() {
-		if (browser.doesNotComputeStyles()) return;
+			var colorGroups = color.match(/^#(..)(..)(..)/);    // look for presence of #rrggbb string
+			if (colorGroups === null) return color;   // if doesn't match, assume we have rgb() string
 
-		var oldFrame;
-		var oldFrameDom;
-
-		var oldLogo;
-		var oldTagline;
-		var oldDrawingAreaArrow;
-		var oldDrawingArea;
-		var oldClearButton;
-		var footer;
-		var joinUs;
-
-
-		before(function(done) {
-			oldFrame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
-			oldFrameDom = oldFrame.toDomElement();
-			oldFrameDom.addEventListener("load", function() {
-				oldLogo = getElement("logo");
-				oldTagline = getElement("tagline");
-				oldDrawingAreaArrow = getElement("drawing-area-arrow");
-				oldDrawingArea = getElement("drawing-area");
-				oldClearButton = getElement("clear-button");
-				footer = getElement("footer");
-				joinUs = getElement("join-us");
-
-				done();
-			});
-			oldFrame.appendSelfToBody();
-		});
-
-		after(function() {
-			oldFrame.remove();
-		});
-
-		function getElement(id) {
-			return oldFrameDom.contentDocument.getElementById(id);
+			var r = parseInt(colorGroups[1], 16);
+			var g = parseInt(colorGroups[2], 16);
+			var b = parseInt(colorGroups[3], 16);
+			return "rgb(" + r + ", " + g + ", " + b + ")";
 		}
 
-		function isContentCenteredInPage(domElement) {
-			if (!isElementCenteredInPage(domElement)) return false;
-
-			var style = window.getComputedStyle(domElement);
-			var textAlign = style.getPropertyValue("text-align");
-
-			return textAlign === "center";
-		}
-
-		function isElementCenteredInPage(domElement) {
-			var frameBody = oldFrameDom.contentDocument.body;
-
-			var bodyStyle = oldFrameDom.contentWindow.getComputedStyle(frameBody);
-			var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
-			var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
-
-			// We can't just base the document width on the frame width because that doesn't account for scroll bars.
-			var bodyBoundingBox = frameBody.getBoundingClientRect();
-			var documentLeft = bodyBoundingBox.left - bodyLeftMarginWidth;
-			var documentRight = bodyBoundingBox.right + bodyRightMarginWidth;
-
-			var elementBoundingBox = getBoundingBox(domElement);
-			var elementLeft = elementBoundingBox.left;
-			var elementRight = elementBoundingBox.right;
-
-			var documentCenter = (documentRight - documentLeft) / 2;
-			var elementCenter = elementLeft + ((elementRight - elementLeft) / 2);
-
-//			console.log("*** CENTER: element width", elementBoundingBox.width);
-//			console.log("documentLeft", documentLeft);
-//			console.log("documentRight", documentRight);
-//			console.log("elementLeft", elementLeft);
-//			console.log("elementRight", elementRight);
-//			console.log("documentCenter", documentCenter);
-//			console.log("elementCenter", elementCenter);
-
-			var offset = Math.abs(documentCenter - elementCenter);
-			var success = (offset <= 0.5);
-
-//			console.log(success ? "✔ SUCCESS" : "✘ FAILURE");
-
-			return success;
-		}
-
-		function elementPixelsFromTopOfPage(domElement) {
-			return getBoundingBox(domElement).top;
-		}
-
-		function elementHeightInPixels(domElement) {
-			return getBoundingBox(domElement).height;
-		}
-
-		function elementWidthInPixels(domElement) {
-			return getBoundingBox(domElement).width;
-		}
-
-		function elementPixelsBelowElement(domElement, domRelativeToElement) {
-			return Math.round(getBoundingBox(domElement).top - getBoundingBox(domRelativeToElement).bottom);
-		}
-
-		function elementPixelsOverlappingTopOfElement(domElement, domRelativeToElement) {
-			return Math.round(getBoundingBox(domElement).top - getBoundingBox(domRelativeToElement).top);
-		}
-
-		function elementPixelsOverlappingRightOfElement(domElement, domRelativeToElement) {
-			return Math.round(getBoundingBox(domRelativeToElement).right - getBoundingBox(domElement).right);
-		}
-
-		function isElementBehindElement(domElement, domRelativeToElement) {
-			var elementZ = getZIndex(domElement);
-			var relativeZ = getZIndex(domRelativeToElement);
-
-			if (elementZ === relativeZ) return !isElementAfterElementInDomTree();
-			else return (elementZ < relativeZ);
-
-			function getZIndex(domElement) {
-				var z = getComputedProperty(domElement, "z-index");
-				if (z === "auto") z = 0;
-				return z;
-			}
-
-			function isElementAfterElementInDomTree() {
-				var elementNode = domElement;
-				var relativeNode = domRelativeToElement;
-				var foundRelative = false;
-				var elementAfterRelative = false;
-				for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
-					if (child === elementNode) {
-						if (foundRelative) elementAfterRelative = true;
-					}
-					if (child === relativeNode) foundRelative = true;
-				}
-				failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
-				return elementAfterRelative;
-			}
-		}
-
-		function isTextVerticallyCentered(domElement) {
-			var elementHeight = getBoundingBox(domElement).height;
-			var lineHeight = getComputedProperty(domElement, "line-height");
-
-			return elementHeight + "px" === lineHeight;
-		}
-
-		function backgroundColor(domElement) {
-			return getComputedProperty(domElement, "background-color");
-		}
-
-		function fontFamily(domElement) {
-			var family = getComputedProperty(domElement, "font-family");
-			family = family.replace(/\"/g, '');
-
-			var fonts = family.split(",").map(function(font) {
-				return font.trim();
-			});
-
-			return fonts.join(", ");
-		}
-
-		function fontWeight(domElement) {
-			var weight = getComputedProperty(domElement, "font-weight");
-			if (weight === "normal") weight = "400";
-			return weight;
-		}
-
-		function fontSize(domElement) {
-			return getComputedProperty(domElement, "font-size");
-		}
-
-		function textColor(domElement) {
-			return getComputedProperty(domElement, "color");
-		}
-
-		function textIsUnderlined(domElement) {
-			var style = getComputedProperty(domElement, "text-decoration");
-			return style.indexOf("none") !== 0;
-		}
-
-		function textIsUppercase(domElement) {
-			return getComputedProperty(domElement, "text-transform") === "uppercase";
-		}
-
-		function roundedCorners(domElement) {
-			// We can't just look at border-radius because it returns "" on Firefox and IE 9
-			var topLeft = getComputedProperty(domElement, "border-top-left-radius");
-			var topRight = getComputedProperty(domElement, "border-top-right-radius");
-			var bottomLeft = getComputedProperty(domElement, "border-bottom-left-radius");
-			var bottomRight = getComputedProperty(domElement, "border-bottom-right-radius");
-
-			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
-			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
-		}
-
-		function dropShadow(domElement) {
-			var shadow = getComputedProperty(domElement, "box-shadow");
-
-			// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
-			// We handle that case here.
-			if (shadow === "white") return "none";
-			if (shadow.match(/^#[0-9a-f]{6}$/)) return "none";      // look for '#' followed by six hex digits
-
-			// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
-			// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
-			// BTW, we don't support multiple shadows yet
-			var groups = shadow.match(/^([^#]+) (#......)/);   // get everything before the '#' and the r, g, b
-			if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
-
-			return normalizeColorString(groups[2]) + " " + groups[1];
-		}
-
-		function getBoundingBox(domElement) {
-			return domElement.getBoundingClientRect();
-		}
-
-		function getComputedProperty(domElement, propertyName) {
-			var style = window.getComputedStyle(domElement);
-			return style.getPropertyValue(propertyName);
-		}
-
-		function applyClass(domElement, className, fn) {
-			var oldClassName = domElement.className;
-			try {
-				domElement.className += className;
-				forceReflow(domElement);
-
-				fn();
-			}
-			finally {
-				domElement.className = oldClassName;
-				forceReflow(domElement);
-			}
-		}
-
-		function pixelsToInt(pixels) {
-			return parseInt(pixels, 10);
+		function forceReflow(domElement) {
+			var makeLintHappy = domElement.offsetHeight;
 		}
 
 	});
-
-	function normalizeColorString(color) {
-		if (color === "white") return "rgb(255, 255, 255)";
-
-		var colorGroups = color.match(/^#(..)(..)(..)/);    // look for presence of #rrggbb string
-		if (colorGroups === null) return color;   // if doesn't match, assume we have rgb() string
-
-		var r = parseInt(colorGroups[1], 16);
-		var g = parseInt(colorGroups[2], 16);
-		var b = parseInt(colorGroups[3], 16);
-		return "rgb(" + r + ", " + g + ", " + b + ")";
-	}
-
-	function forceReflow(domElement) {
-		var makeLintHappy = domElement.offsetHeight;
-	}
 
 }());
