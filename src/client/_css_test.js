@@ -173,66 +173,50 @@
 
 		describe("buttons", function() {
 
-			standardButtonTests(clearButton, "clear button");
-			standardButtonTests(joinUs, "join us button");
+			it("have common styling", function() {
+				assertStandardButtonStyling(clearButton, "clear button");
+				assertStandardButtonStyling(joinUs, "'join us' button");
 
-			function standardButtonTests(button, description) {
-
-				it(description + " has standard button typography", function() {
-					assert.equal(isTextVerticallyCentered(button), true, "text centering");
-					assert.equal(textIsUnderlined(button), false, "text underline");
-					assert.equal(textIsUppercase(button), true, "text uppercase");
-				});
-
-			}
-
-		});
-
-
-
-		it("positions clear screen button at top right of drawing area", function() {
-			if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
-
-
-			assert.equal(hasBorder(clearButton), false, "border");
-
-
-		});
-
-		it("centers 'join us' button below footer", function() {
-			if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "drop shadow");
-		});
-
-
-
-		it("darkens the 'clear' button when the user hovers over it", function() {
-			applyClass(clearButton, "_hover_", function() {
-				assert.equal(backgroundColor(clearButton), DARKENED_GRAY);
+				function assertStandardButtonStyling(button, description) {
+					assert.equal(isTextVerticallyCentered(button), true, description + " text centering");
+					assert.equal(textIsUnderlined(button), false, description + " text underline");
+					assert.equal(textIsUppercase(button), true, description + " text uppercase");
+					assert.equal(hasBorder(button), false, description + " border");
+				}
 			});
-		});
 
-		it("'clear' button appears to depress when user activates it", function() {
-			applyClass(clearButton, "_active_", function() {
-				clearButton.assert({
-					top: drawingArea.top.plus(16)
-				});
-				if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(clearButton), "none");
-			});
-		});
+			it("have a drop shadow", function() {
+				if (!browser.supportsBoxShadowCss()) return;
 
-		it("darkens the 'join us' button when the user hovers over it", function() {
-			applyClass(joinUs, "_hover_", function() {
-				assert.equal(backgroundColor(joinUs), DARKENED_MEDIUM_BLUE);
+				assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "clear button drop shadow");
+				assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "'join us' button drop shadow");
 			});
-		});
 
-		it("'join us' button appears to depress when user activates it", function() {
-			applyClass(joinUs, "_active_", function() {
-				joinUs.assert({
-					top: footer.bottom.plus(14)
-				});
-				if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(joinUs), "none");
+			it("darken when user hovers over them", function() {
+				assertHoverStyle(clearButton, DARKENED_GRAY, "clear button");
+				assertHoverStyle(joinUs, DARKENED_MEDIUM_BLUE, "'join us' button");
+
+				function assertHoverStyle(button, expectedColor, description) {
+					applyClass(button, "_hover_", function() {
+						assert.equal(backgroundColor(button), expectedColor, description + " hover state background color");
+					});
+				}
 			});
+
+			it("appear to depress when user activates them", function() {
+				assertActiveStyle(clearButton, drawingArea.top.plus(16), "clear button");
+				assertActiveStyle(joinUs, footer.bottom.plus(14), "'join us' button");
+
+				function assertActiveStyle(button, expectedDescriptor, description) {
+					applyClass(button, "_active_", function() {
+						button.assert({
+							top: expectedDescriptor
+						});
+						if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(button), "none");
+					});
+				}
+			});
+
 		});
 
 		function backgroundColor(element) {
