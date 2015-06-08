@@ -73,7 +73,11 @@
 			page.assert({
 				width: viewport.width,
 				height: viewport.height
-			});
+			}, "page should not be larger than viewport");
+
+			joinUs.assert({
+				bottom: viewport.bottom.minus(13)
+			}, "bottom element should fit against bottom of viewport");
 		});
 
 		it("has an overall layout", function() {

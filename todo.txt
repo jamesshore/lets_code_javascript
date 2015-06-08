@@ -45,9 +45,8 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-* Reconsider test layout; should we use a different organizing scheme?
 - Discuss: Why not use a describe block and one test per assertion? (Laurent Bourgalt-Roy, E313)
-- Fix height of drawing area
+* Fix height of drawing area
 
 
 Potential future stories:
