@@ -29,12 +29,7 @@ User Stories to finish current MMF:
   - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
-* Update our CSS tests for Quixote
-  - As we modify each test, use iPad difmensions and remove body padding
 - Move trim() polyfill to a polyfill module
-- Need to test arrow's background elements--is there a clean way of doing this?
-  - Consider using :before pseudoelement rather than a separate div
-  - Consider using Martin Grandrath's CSS triangle trick (see comments E225)
 - Fix hard-coded dependency on drawing area position in HtmlElement test
   - "coordinate conversion converts relative coordinates into page coordinates"
 - Selenium has broken again, revealing multiple problems.
@@ -45,9 +40,6 @@ Engineering Tasks:
 - Integrate
 
 To Do on current task:
-- Discuss: Why not use a describe block and one test per assertion? (Laurent Bourgalt-Roy, E313)
-* Fix height of drawing area
-
 
 Potential future stories:
 - "Try me" text in drawing area

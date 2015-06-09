@@ -24,7 +24,7 @@
 	var HEADLINE_WEIGHT = "600";
 
 	var IOS_BROWSER_WIDTH = 980;
-	var IOS_BROWSER_LANDSCAPE_HEIGHT = 661;
+	var IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS = 641;
 
 	var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
 	var CORNER_ROUNDING = "2px";
@@ -46,7 +46,7 @@
 			var options = {
 				src: "/base/src/client/index.html",
 				width: IOS_BROWSER_WIDTH,
-				height: IOS_BROWSER_LANDSCAPE_HEIGHT
+				height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
 			};
 			frame = quixote.createFrame(options, done);
 		});
@@ -148,23 +148,23 @@
 		it("has a typographic scheme", function() {
 			assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
 			assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
-			assert.equal(fontSize(logo), "22px", "logo size");
+			assert.equal(fontSize(logo), "30px", "logo font size");
 
 			assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
 			assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
-			assert.equal(fontSize(tagline), "14px", "tagline size");
+			assert.equal(fontSize(tagline), "14px", "tagline font size");
 
 			assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
 			assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "clear button weight");
-			assert.equal(fontSize(clearButton), "12px", "clearn button size");
+			assert.equal(fontSize(clearButton), "12px", "clearn button font size");
 
 			assert.equal(fontFamily(footer), STANDARD_FONT, "footer family");
 			assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "footer weight");
-			assert.equal(fontSize(footer), "15px", "footer size");
+			assert.equal(fontSize(footer), "15px", "footer font size");
 
 			assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
 			assert.equal(fontWeight(joinUs), JOIN_US_BUTTON_WEIGHT, "join us button weight");
-			assert.equal(fontSize(joinUs), "16px", "join us button size");
+			assert.equal(fontSize(joinUs), "16px", "join us button font size");
 		});
 
 		it("rounds the corners of all rectangles", function() {
