@@ -1,21 +1,24 @@
-var arrayMin = require('../internal/arrayMin'),
-    createExtremum = require('../internal/createExtremum');
+var createExtremum = require('../internal/createExtremum'),
+    lt = require('../lang/lt');
+
+/** Used as references for `-Infinity` and `Infinity`. */
+var POSITIVE_INFINITY = Number.POSITIVE_INFINITY;
 
 /**
  * Gets the minimum value of `collection`. If `collection` is empty or falsey
  * `Infinity` is returned. If an iteratee function is provided it is invoked
  * for each value in `collection` to generate the criterion by which the value
  * is ranked. The `iteratee` is bound to `thisArg` and invoked with three
- * arguments; (value, index, collection).
+ * arguments: (value, index, collection).
  *
- * If a property name is provided for `predicate` the created `_.property`
+ * If a property name is provided for `iteratee` the created `_.property`
  * style callback returns the property value of the given element.
  *
  * If a value is also provided for `thisArg` the created `_.matchesProperty`
  * style callback returns `true` for elements that have a matching property
  * value, else `false`.
  *
- * If an object is provided for `predicate` the created `_.matches` style
+ * If an object is provided for `iteratee` the created `_.matches` style
  * callback returns `true` for elements that have the properties of the given
  * object, else `false`.
  *
@@ -42,12 +45,12 @@ var arrayMin = require('../internal/arrayMin'),
  * _.min(users, function(chr) {
  *   return chr.age;
  * });
- * // => { 'user': 'barney', 'age': 36 };
+ * // => { 'user': 'barney', 'age': 36 }
  *
  * // using the `_.property` callback shorthand
  * _.min(users, 'age');
- * // => { 'user': 'barney', 'age': 36 };
+ * // => { 'user': 'barney', 'age': 36 }
  */
-var min = createExtremum(arrayMin, true);
+var min = createExtremum(lt, POSITIVE_INFINITY);
 
 module.exports = min;

@@ -1,22 +1,25 @@
-// Copyright 2014 Software Freedom Conservancy. All Rights Reserved.
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 
 goog.require('goog.array');
 goog.require('goog.string');
 goog.require('goog.testing.jsunit');
 goog.require('goog.userAgent');
-goog.require('webdriver.promise.ControlFlow');
+goog.require('webdriver.promise');
 goog.require('webdriver.stacktrace.Snapshot');
 goog.require('webdriver.stacktrace');
 goog.require('webdriver.test.testutil');
@@ -1114,12 +1117,43 @@ function testWaiting_pollingLoopWaitsForAllScheduledTasksInCondition() {
 }
 
 
-function testWaiting_timesOut_zeroTimeout() {
-  scheduleWait(function() { return false; }, 0, 'always false');
-  return waitForAbort().then(function(e) {
-    assertRegExp(/^always false\nWait timed out after \d+ms$/, e.message);
+function testWaiting_waitsForeverOnAZeroTimeout() {
+  var done = false;
+  setTimeout(function() {
+    done = true;
+  }, 500);
+  var waitResult = scheduleWait(function() {
+    return done;
+  }, 0);
+
+  return timeout(250).then(function() {
+    assertFalse(done);
+    return timeout(300);
+  }).then(function() {
+    assertTrue(done);
+    return waitResult;
   });
 }
+
+
+function testWaiting_waitsForeverIfTimeoutOmitted() {
+  var done = false;
+  setTimeout(function() {
+    done = true;
+  }, 500);
+  var waitResult = scheduleWait(function() {
+    return done;
+  });
+
+  return timeout(250).then(function() {
+    assertFalse(done);
+    return timeout(300);
+  }).then(function() {
+    assertTrue(done);
+    return waitResult;
+  });
+}
+
 
 function testWaiting_timesOut_nonZeroTimeout() {
   var count = 0;
@@ -1845,4 +1879,79 @@ function testDoesNotModifyRejectionErrorIfPromiseNotInsideAFlow() {
 
   webdriver.promise.rejected(error).then(pair.callback, pair.errback);
   return waitForIdle().then(pair.assertErrback);
+}
+
+
+/** See https://github.com/SeleniumHQ/selenium/issues/444 */
+function testMaintainsOrderWithPromiseChainsCreatedWithinAForeach_1() {
+  var messages = [];
+  flow.execute(function() {
+    return webdriver.promise.fulfilled(['a', 'b', 'c', 'd']);
+  }, 'start').then(function(steps) {
+    steps.forEach(function(step) {
+      webdriver.promise.fulfilled(step)
+      .then(function() {
+        messages.push(step + '.1');
+      }).then(function() {
+        messages.push(step + '.2');
+      });
+    })
+  });
+  return waitForIdle().then(function() {
+    assertArrayEquals(
+        ['a.1', 'b.1', 'c.1', 'd.1', 'a.2', 'b.2', 'c.2', 'd.2'],
+        messages);
+  });
+}
+
+
+/** See https://github.com/SeleniumHQ/selenium/issues/444 */
+function testMaintainsOrderWithPromiseChainsCreatedWithinAForeach_2() {
+  var messages = [];
+  flow.execute(function() {
+    return webdriver.promise.fulfilled(['a', 'b', 'c', 'd']);
+  }, 'start').then(function(steps) {
+    steps.forEach(function(step) {
+      webdriver.promise.fulfilled(step)
+      .then(function() {
+        messages.push(step + '.1');
+      }).then(function() {
+        flow.execute(function() {}, step + '.2').then(function(text) {
+          messages.push(step + '.2');
+        });
+      });
+    })
+  });
+  return waitForIdle().then(function() {
+    assertArrayEquals(
+        ['a.1', 'b.1', 'c.1', 'd.1', 'a.2', 'b.2', 'c.2', 'd.2'],
+        messages);
+  });
+}
+
+
+/** See https://github.com/SeleniumHQ/selenium/issues/444 */
+function testMaintainsOrderWithPromiseChainsCreatedWithinAForeach_3() {
+  var messages = [];
+  flow.execute(function() {
+    return webdriver.promise.fulfilled(['a', 'b', 'c', 'd']);
+  }, 'start').then(function(steps) {
+    steps.forEach(function(step) {
+      webdriver.promise.fulfilled(step)
+      .then(function(){})
+      .then(function() {
+        messages.push(step + '.1');
+        return flow.execute(function() {}, step + '.1');
+      }).then(function() {
+        flow.execute(function() {}, step + '.2').then(function(text) {
+          messages.push(step + '.2');
+        });
+      });
+    })
+  });
+  return waitForIdle().then(function() {
+    assertArrayEquals(
+        ['a.1', 'b.1', 'c.1', 'd.1', 'a.2', 'b.2', 'c.2', 'd.2'],
+        messages);
+  });
 }

@@ -1,17 +1,19 @@
-// Copyright 2014 Selenium committers
-// Copyright 2014 Software Freedom Conservancy
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-//     You may obtain a copy of the License at
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 
 /**
  * @fileoverview Manages Firefox binaries. This module is considered internal;
@@ -131,28 +133,6 @@ function installNoFocusLibs(profileDir) {
 
 
 /**
- * Silently runs Firefox to install a profile directory (which is assumed to be
- * defined in the given environment variables).
- * @param {string} firefox Path to the Firefox executable.
- * @param {!Object.<string, string>} env The environment variables to use.
- * @return {!promise.Promise} A promise for when the profile has been installed.
- */
-function installProfile(firefox, env) {
-  var installed = promise.defer();
-  child.exec(firefox + ' -silent', {env: env, timeout: 180 * 1000},
-      function(err) {
-        if (err) {
-          installed.reject(new Error(
-              'Failed to install Firefox profile: ' + err));
-          return;
-        }
-        installed.fulfill();
-      });
-  return installed.promise;
-}
-
-
-/**
  * Manages a Firefox subprocess configured for use with WebDriver.
  *
  * @param {string=} opt_exe Path to the Firefox binary to use. If not
@@ -220,25 +200,13 @@ Binary.prototype.launch = function(profile) {
 
   var args = ['-foreground'].concat(this.args_);
 
-  var self = this;
-
   this.command_ = promise.when(this.exe_ || findFirefox(), function(firefox) {
     if (process.platform === 'win32' || process.platform === 'darwin') {
-      return firefox;
+      return exec(firefox, {args: args, env: env});
     }
     return installNoFocusLibs(profile).then(function(ldLibraryPath) {
       env['LD_LIBRARY_PATH'] = ldLibraryPath + ':' + env['LD_LIBRARY_PATH'];
       env['LD_PRELOAD'] = X_IGNORE_NO_FOCUS_LIB;
-      return firefox;
-    });
-  }).then(function(firefox) {
-    var install = exec(firefox, {args: ['-silent'], env: env});
-    return install.result().then(function(result) {
-      if (result.code !== 0) {
-        throw Error(
-            'Failed to install profile; firefox terminated with ' + result);
-      }
-
       return exec(firefox, {args: args, env: env});
     });
   });

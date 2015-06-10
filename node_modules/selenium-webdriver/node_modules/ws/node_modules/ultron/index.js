@@ -1,5 +1,7 @@
 'use strict';
 
+var has = Object.prototype.hasOwnProperty;
+
 /**
  * An auto incrementing id which we can use to create "unique" Ultron instances
  * so we can track the event emitters that are added through the Ultron
@@ -77,9 +79,7 @@ Ultron.prototype.remove = function remove() {
     args = [];
 
     for (event in this.ee._events) {
-      if (this.ee._events.hasOwnProperty(event)) {
-        args.push(event);
-      }
+      if (has.call(this.ee._events, event)) args.push(event);
     }
   }
 
@@ -89,6 +89,10 @@ Ultron.prototype.remove = function remove() {
     for (var j = 0; j < listeners.length; j++) {
       event = listeners[j];
 
+      //
+      // Once listeners have a `listener` property that stores the real listener
+      // in the EventEmitter that ships with Node.js.
+      //
       if (event.listener) {
         if (event.listener.__ultron !== this.id) continue;
         delete event.listener.__ultron;
