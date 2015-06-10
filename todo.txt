@@ -29,15 +29,18 @@ User Stories to finish current MMF:
   - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
+- Update dependencies
 - Move trim() polyfill to a polyfill module
 - Fix hard-coded dependency on drawing area position in HtmlElement test
   - "coordinate conversion converts relative coordinates into page coordinates"
 - Selenium has broken again, revealing multiple problems.
   - ref Mattias Åslund GitHub issue, https://github.com/jamesshore/lets_code_javascript/issues/7
   - Selenium 2.45.1 doesn't work with Firefox 38
+    - Fixed by upgrading to 2.46.0, but it crashes on Windows :-/
   - The smoke tests don't report the expected browser version when Selenium fails to initialize
   - When the smoke tests' setup fails, the server isn't shut down, leading to confusing error messages on subsequent test runs
 - Integrate
+  - Need to wait for version of Selenium that doesn't crash on Windows
 
 To Do on current task:
 
