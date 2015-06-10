@@ -33,6 +33,8 @@ Engineering Tasks:
 
 To Do on current task:
 - AT BEGINNING OF NEXT EPISODE: Windows fix for hashcat runner
+- Fix smoke test failure
+- Remove extraneous files left over by hashcat
 
 Potential future stories:
 - "Try me" text in drawing area
