@@ -63,13 +63,14 @@ var errors = {
   E045: "Invalid for each loop.",
   E046: "A yield statement shall be within a generator function (with syntax: `function*`)",
   E047: null, // Vacant
-  E048: "Let declaration not directly within block.",
+  E048: "{a} declaration not directly within block.",
   E049: "A {a} cannot be named '{b}'.",
   E050: "Mozilla requires the yield expression to be parenthesized here.",
   E051: "Regular parameters cannot come after default parameters.",
   E052: "Unclosed template literal.",
   E053: "Export declaration must be in global scope.",
-  E054: "Class properties must be methods. Expected '(' but instead saw '{a}'."
+  E054: "Class properties must be methods. Expected '(' but instead saw '{a}'.",
+  E055: "The '{a}' option cannot be set after any executable code."
 };
 
 var warnings = {
@@ -207,7 +208,9 @@ var warnings = {
     "different variable name to avoid migration issues.",
   W130: "Invalid element after rest element.",
   W131: "Invalid parameter after rest parameter.",
-  W132: "`var` declarations are forbidden. Use `let` or `const` instead."
+  W132: "`var` declarations are forbidden. Use `let` or `const` instead.",
+  W133: "Invalid for-{a} loop left-hand-side: {b}.",
+  W134: "The '{a}' option is only available when linting ECMAScript {b} code."
 };
 
 var info = {
