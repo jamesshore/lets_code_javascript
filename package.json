@@ -6,18 +6,18 @@
   },
   "devDependencies": {
     "async": "^0.9.0",
-    "browserify": "^10.0.0",
-    "glob": "^5.0.5",
+    "browserify": "^10.2.4",
+    "glob": "^5.0.10",
     "jake": "^8.0.12",
-    "jshint": "^2.7.0",
-    "karma": "^0.12.31",
+    "jshint": "^2.8.0",
+    "karma": "^0.12.36",
     "karma-commonjs": "0.0.13",
     "karma-mocha": "^0.1.10",
-    "mocha": "^2.2.4",
+    "mocha": "^2.2.5",
     "procfile": "^0.1.1",
-    "selenium-webdriver": "^2.45.1",
-    "semver": "^4.3.3",
-    "shelljs": "^0.4.0"
+    "selenium-webdriver": "^2.46.0",
+    "semver": "^4.3.6",
+    "shelljs": "^0.5.1"
   },
   "dependencies": {
     "send": "^0.9.3"
