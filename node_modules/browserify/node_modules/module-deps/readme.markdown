@@ -146,12 +146,12 @@ If the transform is a string, it is treated as a module name that will resolve
 to a module that is expected to follow this format:
 
 ``` js
-var through = require('through');
+var through = require('through2');
 module.exports = function (file) { return through() };
 ```
 
 You don't necessarily need to use the
-[through](https://github.com/dominictarr/through) module to create a
+[through2](https://github.com/rvagg/through2) module to create a
 readable/writable filter stream for transforming file contents, but this is an
 easy way to do it.
 

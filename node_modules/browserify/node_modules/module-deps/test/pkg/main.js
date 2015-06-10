@@ -1,1 +1,2 @@
-console.log(555)
+require('pkga');
+require('pkgb');
