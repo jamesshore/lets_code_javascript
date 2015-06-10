@@ -224,12 +224,34 @@
 			if (familyDeclaration === "") return;
 
 			var families = familyDeclaration.split(",");
+
 			families.forEach(function(family) {
 				family = family.trim();
-				if (family === '"Helvetica"' || family === "sans-serif" || family === "") return;
+				if (family === "") return;
+				if (isGenericName(family)) return;
+
+				family = normalizeQuotes(family);
+				if (isBuiltInFont(family)) return;
 
 				styleSheetFonts.families[family] = true;
 			});
+
+			function isGenericName(family) {
+				return family === "sans-serif" || family === "serif" ||
+					family === "monospace" || family === "cursive" || family === "fantasy";
+			}
+
+			function isBuiltInFont(family) {
+				return family === '"Helvetica"' || family === '"Arial"' || family === '"Courier New"';
+			}
+		}
+
+		function normalizeQuotes(family) {
+			// remove quotes if present; courtesy of peterpengnz, http://stackoverflow.com/a/19156197
+			family = family.replace(/"([^"]+(?="))"/g, '$1');
+			// put them back
+			family = '"' + family + '"';
+			return family;
 		}
 
 		function processFontWeight(weightDeclaration) {
