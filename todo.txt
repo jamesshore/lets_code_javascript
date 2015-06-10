@@ -32,6 +32,7 @@ Engineering Tasks:
 - Deploy
 
 To Do on current task:
+- Automate hashcat
 
 Potential future stories:
 - "Try me" text in drawing area
