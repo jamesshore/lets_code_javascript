@@ -9,6 +9,4 @@
 		sh.run("node node_modules/hashcat/bin/hashcat.js " + config.indexFile, success, failure);
 	};
 
-
-
 }());
