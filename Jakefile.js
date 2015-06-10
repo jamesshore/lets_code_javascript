@@ -120,10 +120,11 @@
 	task("cacheBust", [ "collateClientFiles", "bundleClientJs" ], function() {
 		console.log("Cache-busting CSS and JavaScript: .");
 
-		var hashcat = require("hashcat/lib/libhashcat.js");
+		var hashCatRunner = require("./build/util/hashcat_runner.js");
+		hashCatRunner.go({
+			indexFile: paths.buildClientIndexHtml
+		}, complete, fail);
 
-		var sh = require("./build/util/sh.js");
-		sh.run("node_modules/hashcat/bin/hashcat.js " + paths.buildClientIndexHtml, complete, fail);
 	}, { async: true });
 
 	task("collateClientFiles", [ paths.buildClientDir ], function() {
