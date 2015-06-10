@@ -22,8 +22,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-- Manually confirm that styling works cross-platform (OFF-CAMERA)
-- Release new design
+* Release new design
 
 Engineering Tasks:
 * Need to cache-bust stylesheet and bundle.js
@@ -32,7 +31,7 @@ Engineering Tasks:
 - Deploy
 
 To Do on current task:
-- Automate hashcat
+* Automate hashcat
 
 Potential future stories:
 - "Try me" text in drawing area

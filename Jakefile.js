@@ -115,7 +115,16 @@
 	//*** BUILD
 
 	desc("Bundle and build code");
-	task("build", [ "collateClientFiles", "bundleClientJs" ]);
+	task("build", [ "cacheBust" ]);
+
+	task("cacheBust", [ "collateClientFiles", "bundleClientJs" ], function() {
+		console.log("Cache-busting CSS and JavaScript: .");
+
+		var hashcat = require("hashcat/lib/libhashcat.js");
+
+		var sh = require("./build/util/sh.js");
+		sh.run("node_modules/hashcat/bin/hashcat.js " + paths.buildClientIndexHtml, complete, fail);
+	}, { async: true });
 
 	task("collateClientFiles", [ paths.buildClientDir ], function() {
 		console.log("Collating client files: .");
