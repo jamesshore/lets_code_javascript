@@ -10,6 +10,10 @@ Minimum Marketable Features:
     - was not able to reproduce using http://modern.ie VM. Presumably due to lack of touch screen?
 - replace 404 page with professional design
 - responsive design?
+- Accessibility?
+- Polish
+  - Clear button retains focus when drawing (IE8, 9, Chrome)
+  - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
 ? multiple painting/erasing tools
 - collaborative painting
 - save the pages (persistence / databases)
@@ -18,29 +22,14 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Fit drawing area to work within standard iPad dimensions (980x661 landscape; 980x1208)
-- Remove body padding
-- Clear button retains focus when drawing (IE8, 9, Chrome)
-- Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
-- Manually confirm that styling works cross-platform
-- What about alt tags? Semantic markup? Accessibility?
-- Validate / lint our HTML?
+- Manually confirm that styling works cross-platform (OFF-CAMERA)
 - Release new design
-  - Need to cache-bust stylesheet and bundle.js
 
 Engineering Tasks:
-- Update dependencies
-- Move trim() polyfill to a polyfill module
-- Fix hard-coded dependency on drawing area position in HtmlElement test
-  - "coordinate conversion converts relative coordinates into page coordinates"
-- Selenium has broken again, revealing multiple problems.
-  - ref Mattias Åslund GitHub issue, https://github.com/jamesshore/lets_code_javascript/issues/7
-  - Selenium 2.45.1 doesn't work with Firefox 38
-    - Fixed by upgrading to 2.46.0, but it crashes on Windows :-/
-  - The smoke tests don't report the expected browser version when Selenium fails to initialize
-  - When the smoke tests' setup fails, the server isn't shut down, leading to confusing error messages on subsequent test runs
+* Need to cache-bust stylesheet and bundle.js
 - Integrate
   - Need to wait for version of Selenium that doesn't crash on Windows
+- Deploy
 
 To Do on current task:
 
