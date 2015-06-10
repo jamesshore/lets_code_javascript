@@ -32,7 +32,7 @@ Engineering Tasks:
 - Deploy
 
 To Do on current task:
-* Automate hashcat
+- AT BEGINNING OF NEXT EPISODE: Windows fix for hashcat runner
 
 Potential future stories:
 - "Try me" text in drawing area

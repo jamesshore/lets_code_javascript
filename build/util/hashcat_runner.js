@@ -6,7 +6,7 @@
 	var sh = require("./sh.js");
 
 	exports.go = function(config, success, failure) {
-		sh.run("node_modules/hashcat/bin/hashcat.js " + config.indexFile, success, failure);
+		sh.run("node node_modules/hashcat/bin/hashcat.js " + config.indexFile, success, failure);
 	};
 
 
