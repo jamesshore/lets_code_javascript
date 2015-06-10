@@ -13,32 +13,50 @@ var path = require('path')
 var request = require('request')
   , yaml = require('yamlparser');
 
+/**
+ * Update the regexp.js file
+ *
+ * @param {Function} callback Completion callback.
+ * @api public
+ */
 exports.update = function update(callback) {
-  // Fetch the remote resource as that is frequently updated
-  request(exports.remote, function downloading(err, res, remote) {
+  // Prepend local additions that are missing from the source
+  fs.readFile(exports.before, 'utf8', function reading(err, before) {
     if (err) return callback(err);
-    if (res.statusCode !== 200) return callback(new Error('Invalid statusCode returned'));
 
-    // Also get some local additions that are missing from the source
-    fs.readFile(exports.local, 'utf8', function reading(err, local) {
+    // Fetch the remote resource as that is frequently updated
+    request(exports.remote, function downloading(err, res, remote) {
       if (err) return callback(err);
+      if (res.statusCode !== 200) return callback(new Error('Invalid statusCode returned'));
 
-      // Parse the contents
-      exports.parse([ remote, local ], function parsing(err, results, source) {
-        callback(err, results);
+      // Append get some local additions that are missing from the source
+      fs.readFile(exports.after, 'utf8', function reading(err, after) {
+        if (err) return callback(err);
 
-        if (source && !err) {
-          fs.writeFile(exports.output, source, function idk(err) {
-            if (err) {
-              console.error('Failed to save the generated file due to reasons', err);
-            }
-          });
-        }
+        // Parse the contents
+        exports.parse([ before, remote, after ], function parsing(err, results, source) {
+          callback(err, results);
+
+          if (source && !err) {
+            fs.writeFile(exports.output, source, function idk(err) {
+              if (err) {
+                console.error('Failed to save the generated file due to reasons', err);
+              }
+            });
+          }
+        });
       });
     });
   });
 };
 
+/**
+ * Parse the given sources.
+ *
+ * @param {Array} sources String versions of the source
+ * @param {Function} callback completion callback
+ * @api public
+ */
 exports.parse = function parse(sources, callback) {
   var results = {};
 
@@ -146,9 +164,18 @@ exports.parse = function parse(sources, callback) {
   exports.generate(results, callback);
 };
 
+/**
+ * Generate the regular expressions file source code.
+ *
+ * @param {Object} results The parsed result of the regexp.yaml.
+ * @param {Function} callback Completion callback
+ * @api public
+ */
 exports.generate = function generate(results, callback) {
   var regexps  = [
-      'var parser;'
+      '"use strict";'
+    , exports.LEADER
+    , 'var parser;'
     , 'exports.browser = Object.create(null);'
     , results.user_agent_parsers.join('\n')
     , 'exports.browser.length = '+ results.user_agent_parsers.length +';'
@@ -183,15 +210,16 @@ exports.generate = function generate(results, callback) {
  * @type {String}
  * @api private
  */
-exports.remote = 'https://raw.github.com/tobie/ua-parser/master/regexes.yaml';
+exports.remote = 'https://raw.githubusercontent.com/ua-parser/uap-core/master/regexes.yaml';
 
 /**
- * The location of our local regexes yaml file.
+ * The locations of our local regexes yaml files.
  *
  * @type {String}
  * @api private
  */
-exports.local = path.resolve(__dirname, '..', 'static', 'user_agent.after.yaml');
+exports.before = path.resolve(__dirname, '..', 'static', 'user_agent.before.yaml');
+exports.after = path.resolve(__dirname, '..', 'static', 'user_agent.after.yaml');
 
 /**
  * The the output location for the generated regexps file
@@ -200,3 +228,12 @@ exports.local = path.resolve(__dirname, '..', 'static', 'user_agent.after.yaml')
  * @api private
  */
 exports.output = path.resolve(__dirname, '..', 'lib', 'regexps.js');
+
+/**
+ * The leader that needs to be added so people know they shouldn't touch all the
+ * things.
+ *
+ * @type {String}
+ * @api private
+ */
+exports.LEADER = fs.readFileSync(path.join(__dirname, 'donotedit'), 'UTF-8');
