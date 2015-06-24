@@ -4,11 +4,9 @@ Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 + single-user painting on home page (episodes 33-200)
 + replace home page with professional design (episodes 201-321)
-- support more browsers (Android, IE10, IE11)
-	- stop supporting IE 8?
-  - iOS 8.1 upgrade broke Mobile Safari tests
-  - Firefox and Chrome fail on Windows 8.1 with a touch screen (ref Mattias Åslund email, 2 Feb 2015)
-    - was not able to reproduce using http://modern.ie VM. Presumably due to lack of touch screen?
+* IE 11 support (get rid of IE 8?) (episodes 322+)
+- iOS 8 support
+- Android support
 - replace 404 page with professional design
   - remember to cache-bust it
 - responsive design?
@@ -24,10 +22,13 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
--
+* Support IE 11
+- Remove support for IE 8
 
 Engineering Tasks:
--
+* Add to supported browser list
+- Manually verify
+- Integrate
 
 To Do on current task:
 -
