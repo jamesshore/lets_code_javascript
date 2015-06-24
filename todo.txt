@@ -3,7 +3,7 @@ WeeWikiPaint
 Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 + single-user painting on home page (episodes 33-200)
-* replace home page with professional design (episodes 201+)
++ replace home page with professional design (episodes 201-321)
 - support more browsers (Android, IE10, IE11)
 	- stop supporting IE 8?
   - iOS 8.1 upgrade broke Mobile Safari tests
@@ -24,12 +24,10 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Release new design
+-
 
 Engineering Tasks:
-* Deploy
+-
 
 To Do on current task:
-* Upgrade staging to cedar-14
-- Deploy to production
-- Upgrade production to cedar-14
+-
