@@ -43,6 +43,7 @@
 		var joinUs;
 
 		before(function(done) {
+			this.timeout(10 * 1000);
 			var options = {
 				src: "/base/src/client/index.html",
 				width: IOS_BROWSER_WIDTH,

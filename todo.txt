@@ -12,6 +12,7 @@ Minimum Marketable Features:
 - responsive design?
 - Accessibility?
 - Polish
+  - 'Join Us' button is flush against bottom of window when window is shorter than content
   - Clear button retains focus when drawing (IE8, 9, Chrome)
   - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
 ? multiple painting/erasing tools
@@ -22,12 +23,10 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Support IE 11
-- Remove support for IE 8
+* Remove support for IE 8
 
 Engineering Tasks:
-* Add to supported browser list
-- Manually verify
+* Remove all code that checks for IE 8
 - Integrate
 
 To Do on current task:
