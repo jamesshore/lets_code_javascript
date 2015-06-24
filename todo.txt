@@ -32,8 +32,7 @@ Engineering Tasks:
 - Deploy
 
 To Do on current task:
-* Remove extraneous files left over by hashcat
-- Clean up build output and put in error-handling
+* Clean up build output and put in error-handling
 
 Potential future stories:
 - "Try me" text in drawing area
