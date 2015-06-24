@@ -16,7 +16,7 @@
     "karma-mocha": "^0.1.10",
     "mocha": "^2.2.5",
     "procfile": "^0.1.1",
-    "selenium-webdriver": "^2.46.0",
+    "selenium-webdriver": "^2.46.1",
     "semver": "^4.3.6",
     "shelljs": "^0.5.1"
   },
