@@ -32,7 +32,9 @@ Engineering Tasks:
 - Deploy
 
 To Do on current task:
-- AT BEGINNING OF NEXT EPISODE: Windows fix for hashcat runner
+- AT BEGINNING OF NEXT EPISODE:
+  - Windows fix for hashcat runner
+  - Weird browser version issue
 - Fix smoke test failure
 - Remove extraneous files left over by hashcat
 
