@@ -1,17 +1,19 @@
-// Copyright 2013 Selenium committers
-// Copyright 2013 Software Freedom Conservancy
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-//     You may obtain a copy of the License at
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 
 /**
  * @fileoverview Defines a {@linkplain Driver WebDriver} client for the Chrome
@@ -100,7 +102,7 @@
  *             .androidActivity('com.example.Activity'))
  *         .build();
  *
- * Refer to the ChromeDriver site] for more information on using the
+ * [Refer to the ChromeDriver site] for more information on using the
  * [ChromeDriver with Android][android].
  *
  * [ChromeDriver]: https://sites.google.com/a/chromium.org/chromedriver/
@@ -163,6 +165,9 @@ var ServiceBuilder = function(opt_exe) {
   this.stdio_ = 'ignore';
 };
 
+
+/** @private {string} */
+ServiceBuilder.prototype.path_ = null;
 
 /** @private {number} */
 ServiceBuilder.prototype.port_ = 0;
@@ -247,6 +252,7 @@ ServiceBuilder.prototype.setNumHttpThreads = function(n) {
  */
 ServiceBuilder.prototype.setUrlBasePath = function(path) {
   this.args_.push('--url-base=' + path);
+  this.path_ = path;
   return this;
 };
 
@@ -289,6 +295,7 @@ ServiceBuilder.prototype.build = function() {
 
   return new remote.DriverService(this.exe_, {
     loopback: true,
+    path: this.path_,
     port: port,
     args: webdriver.promise.when(port, function(port) {
       return args.concat('--port=' + port);
@@ -608,7 +615,7 @@ Options.prototype.androidPackage = function(pkg) {
  * @return {!Options} A self reference.
  */
 Options.prototype.androidProcess = function(processName) {
-  this.options_.androidProcess = pkg;
+  this.options_.androidProcess = processName;
   return this;
 };
 
@@ -754,21 +761,6 @@ Options.prototype.serialize = function() {
 
 
 /**
- * Creates a new ChromeDriver session.
- * @param {(webdriver.Capabilities|Options)=} opt_options The session options.
- * @param {remote.DriverService=} opt_service The session to use; will use
- *     the {@linkplain #getDefaultService default service} by default.
- * @param {webdriver.promise.ControlFlow=} opt_flow The control flow to use, or
- *     {@code null} to use the currently active flow.
- * @return {!webdriver.WebDriver} A new WebDriver instance.
- * @deprecated Use {@link Driver new Driver()}.
- */
-function createDriver(opt_options, opt_service, opt_flow) {
-  return new Driver(opt_options, opt_service, opt_flow);
-}
-
-
-/**
  * Creates a new WebDriver client for Chrome.
  *
  * @param {(webdriver.Capabilities|Options)=} opt_config The configuration
@@ -812,6 +804,5 @@ Driver.prototype.setFileDetector = function() {
 exports.Driver = Driver;
 exports.Options = Options;
 exports.ServiceBuilder = ServiceBuilder;
-exports.createDriver = createDriver;
 exports.getDefaultService = getDefaultService;
 exports.setDefaultService = setDefaultService;

@@ -12,6 +12,7 @@
 	var assert = require("./shared/_assert.js");
 
 	describe("Release", function() {
+		this.timeout(10 * 1000);
 
 		it("is on web", function(done) {
 			httpGet("http://weewikipaint.herokuapp.com", function(response, receivedData) {

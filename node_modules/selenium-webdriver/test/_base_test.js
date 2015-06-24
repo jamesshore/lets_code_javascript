@@ -1,16 +1,19 @@
-// Copyright 2014 Software Freedom Conservancy. All Rights Reserved.
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 
 var assert = require('assert'),
     fs = require('fs'),
@@ -58,7 +61,11 @@ function runClosureTest(file) {
   describe(name, function() {
     var context = new base.Context(true);
     context.closure.document.title = name;
-    if (process.env.VERBOSE != '1') {
+    if (process.env.VERBOSE == '1') {
+      context.closure.goog.require('webdriver.logging');
+      context.closure.goog.module.get('webdriver.logging')
+          .installConsoleHandler();
+    } else {
       // Null out console so everything loads silently.
       context.closure.console = null;
     }
@@ -86,7 +93,8 @@ function runClosureTest(file) {
           }
           var results = tc.getTestResults();
           done(Error('\n' + Object.keys(results).map(function(name) {
-            var msg = [name + ': ' + (results[name].length ? 'FAILED' : 'PASSED')];
+            var msg =
+                [name + ': ' + (results[name].length ? 'FAILED' : 'PASSED')];
             if (results[name].length) {
               msg = msg.concat(results[name]);
             }

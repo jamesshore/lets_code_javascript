@@ -27,7 +27,7 @@ console.log(result.toString('hex'))
 // => 108f07b8382412612c048d07d13f814118445acd
 ```
 
-** example 2**:
+**example 2**:
 
 ```js
 var ripemd16 = require('ripemd160')
@@ -39,12 +39,12 @@ console.log(result.toString('hex'))
 ```
 
 
-#### converting Buffers
+#### Converting Buffers
 
 If you're not familiar with the Node.js ecosystem, type `Buffer` is a common way that a developer can pass around
 binary data. `Buffer` also exists in the [Browserify](http://browserify.org/) environment. Converting to and from Buffers is very easy.
 
-##### to buffer
+##### To buffer
 
 ```js
 // from string
@@ -57,7 +57,7 @@ var buf = new Buffer('3f5a4c22', 'hex')
 var buf = new Buffer([1, 2, 3, 4])
 ```
 
-#### from buffer
+#### From buffer
 
 ```js
 // to string

@@ -1,3 +1,7 @@
+1.0.1 / 2015-05-05
+------------------
+- standard formatting
+
 1.0.0 / 2015-01-14
 ------------------
 - updated dev deps
@@ -20,7 +24,7 @@
 
 0.1.0 / 2013-11-20
 ------------------
-* changed package name 
+* changed package name
 * removed AMD support
 
 0.0.2 / 2013-11-06

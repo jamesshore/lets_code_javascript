@@ -11,17 +11,17 @@ function sign (hash, key, hashType, signType) {
   var priv = parseKeys(key)
   if (priv.curve) {
     if (signType !== 'ecdsa') {
-      throw new Error('wrong public key type')
+      throw new Error('wrong private key type')
     }
     return ecSign(hash, priv)
   } else if (priv.type === 'dsa') {
     return dsaSign(hash, priv, hashType)
     if (signType !== 'dsa') {
-      throw new Error('wrong public key type')
+      throw new Error('wrong private key type')
     }
   } else {
     if (signType !== 'rsa') {
-      throw new Error('wrong public key type')
+      throw new Error('wrong private key type')
     }
   }
   var len = priv.modulus.byteLength()

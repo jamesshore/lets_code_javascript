@@ -29,7 +29,7 @@ fixtures.valid.rsa.forEach(function (f) {
   if (f.passphrase && isNode10()) return
 
   test(f.message, function (t) {
-    t.plan(5)
+    t.plan(7)
 
     var mySign = myCrypto.createSign(f.scheme)
     var nodeSign = nodeCrypto.createSign(f.scheme)
@@ -38,12 +38,16 @@ fixtures.valid.rsa.forEach(function (f) {
 
     t.equals(mySig.length, nodeSig.length, 'correct length')
     t.equals(mySig.toString('hex'), nodeSig.toString('hex'), 'equal sigs')
-    t.equals(mySig.toString('hex'), f.signature)
+    t.equals(mySig.toString('hex'), f.signature, 'compare to known')
 
     var myVer = myCrypto.createVerify(f.scheme)
     var nodeVer = nodeCrypto.createVerify(f.scheme)
     t.ok(nodeVer.update(message).verify(pub, mySig), 'node validate my sig')
     t.ok(myVer.update(message).verify(pub, nodeSig), 'me validate node sig')
+    myVer = myCrypto.createVerify(f.scheme)
+    nodeVer = nodeCrypto.createVerify(f.scheme)
+    t.ok(nodeVer.update(message).verify(pub, nodeSig), 'node validate node sig')
+    t.ok(myVer.update(message).verify(pub, mySig), 'me validate my sig')
   })
 })
 

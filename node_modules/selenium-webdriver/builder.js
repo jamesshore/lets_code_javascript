@@ -1,16 +1,19 @@
-// Copyright 2011 Software Freedom Conservancy. All Rights Reserved.
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 
 var base = require('./_base'),
     executors = require('./executors');
@@ -92,6 +95,9 @@ var Builder = function() {
   /** @private {string} */
   this.url_ = '';
 
+  /** @private {?string} */
+  this.proxy_ = null;
+
   /** @private {!webdriver.Capabilities} */
   this.capabilities_ = new Capabilities();
 
@@ -150,6 +156,29 @@ Builder.prototype.usingServer = function(url) {
  */
 Builder.prototype.getServerUrl = function() {
   return this.url_;
+};
+
+
+/**
+ * Sets the URL of the proxy to use for the WebDriver's HTTP connections.
+ * If this method is never called, the Builder will create a connection without
+ * a proxy.
+ *
+ * @param {string} proxy The URL of a proxy to use.
+ * @return {!Builder} A self reference.
+ */
+Builder.prototype.usingWebDriverProxy = function(proxy) {
+  this.proxy_ = proxy;
+  return this;
+};
+
+
+/**
+ * @return {string} The URL of the proxy server to use for the WebDriver's HTTP
+ *    connections.
+ */
+Builder.prototype.getWebDriverProxy = function() {
+  return this.proxy_;
 };
 
 
@@ -412,7 +441,7 @@ Builder.prototype.build = function() {
   }
 
   if (url) {
-    var executor = executors.createExecutor(url);
+    var executor = executors.createExecutor(url, this.proxy_);
     return WebDriver.createSession(executor, capabilities, this.flow_);
   }
 

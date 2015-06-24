@@ -115,16 +115,29 @@
 	//*** BUILD
 
 	desc("Bundle and build code");
-	task("build", [ "collateClientFiles", "bundleClientJs" ]);
+	task("build", [ "cacheBust" ]);
+
+	task("cacheBust", [ "collateClientFiles", "bundleClientJs" ], function() {
+		console.log("Cache-busting CSS and JavaScript: .");
+
+		var hashCatRunner = require("./build/util/hashcat_runner.js");
+		hashCatRunner.go({
+			indexFile: paths.buildClientIndexHtml
+		}, removeHashCatIntermediateFiles, fail);
+
+
+		function removeHashCatIntermediateFiles() {
+			shell().rm(paths.buildIntermediateFilesToErase);
+			complete();
+		}
+
+	}, { async: true });
 
 	task("collateClientFiles", [ paths.buildClientDir ], function() {
 		console.log("Collating client files: .");
 
-		var fs = require("fs");
-		var shell = require("shelljs");
-
-		shell.rm("-rf", paths.buildClientDir + "/*");
-		shell.cp(
+		shell().rm("-rf", paths.buildClientDir + "/*");
+		shell().cp(
 			"-R",
 			"src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor", "src/shared/vendor",
 			paths.buildClientDir
@@ -254,6 +267,10 @@
 
 	function mochaConfig() {
 		return require("./build/config/mocha.conf.js");
+	}
+
+	function shell() {
+		return require("shelljs");
 	}
 
 }());

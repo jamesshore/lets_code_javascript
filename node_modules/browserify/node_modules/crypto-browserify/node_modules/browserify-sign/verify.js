@@ -65,7 +65,7 @@ function ecVerify (sig, hash, pub) {
   var curve = new elliptic.ec(curveId)
 
   var pubkey = pub.data.subjectPrivateKey.data
-  return curve.verify(hash.toString('hex'), sig.toString('hex'), pubkey.toString('hex'))
+  return curve.verify(hash, sig, pubkey)
 }
 function dsaVerify (sig, hash, pub) {
   var p = pub.data.p

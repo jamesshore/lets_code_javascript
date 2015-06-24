@@ -7,8 +7,7 @@ var vm = require('vm');
 
 test('always insert', function (t) {
     t.plan(6);
-    var files = [ __dirname + '/always/main.js' ];
-    var s = mdeps(files, {
+    var s = mdeps({
         transform: inserter,
         modules: {
             buffer: require.resolve('buffer/')
@@ -21,6 +20,7 @@ test('always insert', function (t) {
         };
         vm.runInNewContext(src, c);
     }));
+    s.end(__dirname + '/always/main.js');
 });
 
 function inserter (file) {

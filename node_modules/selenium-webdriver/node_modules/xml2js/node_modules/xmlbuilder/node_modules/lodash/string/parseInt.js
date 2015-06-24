@@ -2,7 +2,7 @@ var isIterateeCall = require('../internal/isIterateeCall'),
     trim = require('./trim');
 
 /** Used to detect hexadecimal string values. */
-var reHexPrefix = /^0[xX]/;
+var reHasHexPrefix = /^0[xX]/;
 
 /** Used to detect and test for whitespace. */
 var whitespace = (
@@ -24,8 +24,8 @@ var nativeParseInt = global.parseInt;
  * `undefined` or `0`, a `radix` of `10` is used unless `value` is a hexadecimal,
  * in which case a `radix` of `16` is used.
  *
- * **Note:** This method aligns with the ES5 implementation of `parseInt`.
- * See the [ES5 spec](https://es5.github.io/#E) for more details.
+ * **Note:** This method aligns with the [ES5 implementation](https://es5.github.io/#E)
+ * of `parseInt`.
  *
  * @static
  * @memberOf _
@@ -60,7 +60,7 @@ if (nativeParseInt(whitespace + '08') != 8) {
       radix = +radix;
     }
     string = trim(string);
-    return nativeParseInt(string, radix || (reHexPrefix.test(string) ? 16 : 10));
+    return nativeParseInt(string, radix || (reHasHexPrefix.test(string) ? 16 : 10));
   };
 }
 

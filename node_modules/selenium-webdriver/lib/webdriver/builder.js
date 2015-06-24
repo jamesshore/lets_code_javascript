@@ -1,16 +1,19 @@
-// Copyright 2011 Software Freedom Conservancy. All Rights Reserved.
+// Licensed to the Software Freedom Conservancy (SFC) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The SFC licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+//   http://www.apache.org/licenses/LICENSE-2.0
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
 
 goog.provide('webdriver.Builder');
 
@@ -55,11 +58,15 @@ webdriver.Builder = function(opt_window) {
   /** @private {string} */
   this.serverUrl_ =
       /** @type {string} */ (data.get(webdriver.Builder.SERVER_URL_PARAM,
-      webdriver.Builder.DEFAULT_SERVER_URL));
+      webdriver.Builder.DEFAULT_SERVER_URL)).replace(/\/$/, "");
 
   /** @private {string} */
   this.sessionId_ =
       /** @type {string} */ (data.get(webdriver.Builder.SESSION_ID_PARAM));
+
+  /** @private {boolean} */
+  this.useBrowserCors_ =
+      /** @type {boolean} */ (data.containsKey(webdriver.Builder.USE_BROWSER_CORS));
 
   /** @private {!webdriver.Capabilities} */
   this.capabilities_ = new webdriver.Capabilities();
@@ -91,12 +98,30 @@ webdriver.Builder.DEFAULT_SERVER_URL = 'http://localhost:4444/wd/hub';
 
 
 /**
+ * Query parameter that defines whether browser CORS support should be used,
+ * if available.
+ * @type {string}
+ * @const
+ */
+webdriver.Builder.USE_BROWSER_CORS = 'wdcors';
+
+
+/**
+ * Configures the WebDriver to use browser's CORS, if available.
+ * @return {!webdriver.Builder} This Builder instance for chain calling.
+ */
+webdriver.Builder.prototype.useBrowserCors = function() {
+  this.useBrowserCors_ = true;
+  return this;
+};
+
+/**
  * Configures which WebDriver server should be used for new sessions.
  * @param {string} url URL of the server to use.
  * @return {!webdriver.Builder} This Builder instance for chain calling.
  */
 webdriver.Builder.prototype.usingServer = function(url) {
-  this.serverUrl_ = url;
+  this.serverUrl_ = url.replace(/\/$/, "");
   return this;
 };
 
@@ -162,7 +187,9 @@ webdriver.Builder.prototype.build = function() {
   } else {
     var url = this.serverUrl_;
     var client;
-    if (url[0] == '/') {
+    if (this.useBrowserCors_ && webdriver.http.CorsClient.isAvailable()) {
+      client = new webdriver.http.XhrClient(url);
+    } else if (url[0] == '/') {
       var origin = window.location.origin ||
           (window.location.protocol + '//' + window.location.host);
       client = new webdriver.http.XhrClient(origin + url);

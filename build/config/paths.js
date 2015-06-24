@@ -10,6 +10,13 @@
 
 	exports.buildDir = "generated/build";
 	exports.buildClientDir = "generated/build/client";
+	exports.buildClientIndexHtml = "generated/build/client/index.html";
+	exports.buildIntermediateFilesToErase = [
+		"./generated/build/client/app.min.js",
+		"./generated/build/client/bundle.js",
+		"./generated/build/client/screen.css",
+		"./generated/build/client/min.css"
+	];
 
 	exports.incrementalDir = "generated/incremental";
 	exports.serverTestTarget = "generated/incremental/server.test";

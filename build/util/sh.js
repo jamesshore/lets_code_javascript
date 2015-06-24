@@ -20,11 +20,14 @@
 		serializedSh(commands.shift());
 	};
 
-	var run = exports.run = function(oneCommand, successCallback, failureCallback) {
+	var run = exports.run = function(oneCommand, successCallback, failureCallback, options) {
+		options = options || {};
+		var suppressOutput = (options.suppressOutput === true);
+
 		var stdout = "";
 		var child = jake.createExec(oneCommand);
 		child.on("stdout", function(data) {
-			process.stdout.write(data);
+			if (!suppressOutput) process.stdout.write(data);
 			stdout += data;
 		});
 		child.on("stderr", function(data) {
@@ -37,7 +40,7 @@
 			failureCallback(stdout);
 		});
 
-		console.log("> " + oneCommand);
+		if (!suppressOutput) console.log("> " + oneCommand);
 		child.run();
 	};
 

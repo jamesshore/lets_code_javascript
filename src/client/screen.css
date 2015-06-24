@@ -2,20 +2,24 @@ body {
 	background-color: #41a9cc;
 	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
 	font-weight: 300;
+	margin: 0;
+	padding: 0;
 }
 
 #logo {
+	line-height: 1;
 	margin-top: 12px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 0px;
 	text-align: center;
-	font-size: 22px;
+	font-size: 30px;
 	font-weight: 600;
 	color: white;
 }
 
 #tagline {
+	line-height: 17px;
 	margin-top: 5px;
 	margin-bottom: 0px;
 	text-align: center;
@@ -24,7 +28,7 @@ body {
 }
 
 #drawing-area {
-	height: 600px;
+	height: 475px;
 	background-color: white;
 	border-radius: 2px;
 }
@@ -79,6 +83,7 @@ body {
 }
 
 #footer {
+	line-height: 1.2;
 	text-align: center;
 	margin-top: 13px;
 	margin-left: auto;

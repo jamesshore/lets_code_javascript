@@ -2,37 +2,37 @@
 (function() {
 	"use strict";
 
-	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
 	var failFast = require("./fail_fast.js");
 	var assert = require("../shared/_assert.js");
+	var quixote = require("./vendor/quixote-0.7.0.js");
+
+	var WHITE = "rgb(255, 255, 255)";
+	var DARK_GRAY = "rgb(89, 89, 89)";
+	var GRAY = "rgb(229, 229, 229)";
+	var DARKENED_GRAY = "rgb(217, 217, 217)";
+	var MEDIUM_GRAY = "rgb(167, 169, 171)";
+
+	var BACKGROUND_BLUE = "rgb(65, 169, 204)";
+	var DARK_BLUE = "rgb(13, 87, 109)";
+	var MEDIUM_BLUE = "rgb(0, 121, 156)";
+	var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
+
+	var BODY_TEXT_WEIGHT = "300";
+	var JOIN_US_BUTTON_WEIGHT = "400";
+	var CLEAR_BUTTON_WEIGHT = "600";
+	var HEADLINE_WEIGHT = "600";
+
+	var IOS_BROWSER_WIDTH = 980;
+	var IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS = 641;
+
+	var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
+	var CORNER_ROUNDING = "2px";
+	var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
 	describe("Home page", function() {
-		if (browser.doesNotComputeStyles()) return;
-
-		var WHITE = "rgb(255, 255, 255)";
-		var DARK_GRAY = "rgb(89, 89, 89)";
-		var GRAY = "rgb(229, 229, 229)";
-		var DARKENED_GRAY = "rgb(217, 217, 217)";
-		var MEDIUM_GRAY = "rgb(167, 169, 171)";
-
-		var BACKGROUND_BLUE = "rgb(65, 169, 204)";
-		var DARK_BLUE = "rgb(13, 87, 109)";
-		var MEDIUM_BLUE = "rgb(0, 121, 156)";
-		var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
-
-		var BODY_TEXT_WEIGHT = "300";
-		var JOIN_US_BUTTON_WEIGHT = "400";
-		var CLEAR_BUTTON_WEIGHT = "600";
-		var HEADLINE_WEIGHT = "600";
-
-		var IOS_BROWSER_WIDTH = 980;
-		var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
-		var CORNER_ROUNDING = "2px";
-		var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
-
 		var frame;
-		var frameDom;
+		var page;
 
 		var logo;
 		var tagline;
@@ -43,253 +43,258 @@
 		var joinUs;
 
 		before(function(done) {
-			frame = HtmlElement.fromHtml("<iframe width='1200px' height='1000px' src='/base/src/client/index.html'></iframe>");
-			frameDom = frame.toDomElement();
-			frameDom.addEventListener("load", function() {
-				logo = getElement("logo");
-				tagline = getElement("tagline");
-				drawingAreaArrow = getElement("drawing-area-arrow");
-				drawingArea = getElement("drawing-area");
-				clearButton = getElement("clear-button");
-				footer = getElement("footer");
-				joinUs = getElement("join-us");
-
-				done();
-			});
-			frame.appendSelfToBody();
+			var options = {
+				src: "/base/src/client/index.html",
+				width: IOS_BROWSER_WIDTH,
+				height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
+			};
+			frame = quixote.createFrame(options, done);
 		});
 
 		after(function() {
 			frame.remove();
 		});
 
-		function getElement(id) {
-			return frameDom.contentDocument.getElementById(id);
-		}
+		beforeEach(function() {
+			frame.reset();
 
-		it("has a blue background", function() {
-			var body = frameDom.contentDocument.body;
-			assert.equal(backgroundColorOf(body), BACKGROUND_BLUE);
+			page = frame.page();
+			logo = frame.get("#logo");
+			tagline = frame.get("#tagline");
+			drawingAreaArrow = frame.get("#drawing-area-arrow");
+			drawingArea = frame.get("#drawing-area");
+			clearButton = frame.get("#clear-button");
+			footer = frame.get("#footer");
+			joinUs = frame.get("#join-us");
 		});
 
-		it("centers logo at top of page", function() {
-			assert.equal(isContentCenteredInPage(logo), true);
-			assert.equal(elementPixelsFromTopOfPage(logo), 12);
-			assert.equal(fontFamilyOf(logo), STANDARD_FONT);
-			assert.equal(fontWeightOf(logo), HEADLINE_WEIGHT);
-			assert.equal(fontSizeOf(logo), "22px");
-			assert.equal(textColorOf(logo), WHITE);
+		it("fits perfectly within viewport", function() {
+			var viewport = frame.viewport();
+			page.assert({
+				width: viewport.width,
+				height: viewport.height
+			}, "page should not be larger than viewport");
+
+			joinUs.assert({
+				bottom: viewport.bottom.minus(13)
+			}, "bottom element should fit against bottom of viewport");
 		});
 
-//		it("create iOS Safari failure", function() {
-//			newElement('<div><p id="tagline">tagline</p><p id="footer">footer</p></div>');
-//
-//
-//			var domElement = document.getElementById("tagline");
-//			var boundingBox = domElement.getBoundingClientRect();     // comment this line out to make test pass
-//
-//
-//			var style = window.getComputedStyle(domElement);
-//			var fontSize = style.getPropertyValue("font-size");
-//
-//			expect(fontSize).to.be("14px");
-//		});
+		it("has an overall layout", function() {
+			logo.assert({
+				center: page.center,
+				top: 12
+			}, "logo should be centered at top of page");
 
-		it("centers tagline directly below logo", function() {
-			assert.equal(isContentCenteredInPage(tagline), true);
-			assert.equal(elementPixelsBelowElement(tagline, logo), 5);
+			tagline.assert({
+				center: page.center,
+				top: logo.bottom.plus(5)
+			}, "tagline should be centered directly below logo");
 
-			assert.equal(fontFamilyOf(tagline), STANDARD_FONT);
-			assert.equal(fontWeightOf(tagline), BODY_TEXT_WEIGHT);
-			assert.equal(fontSizeOf(tagline), "14px");
-			assert.equal(textColorOf(tagline), DARK_BLUE);
+			drawingArea.assert({
+				center: page.center,
+				top: tagline.bottom.plus(10),
+				width: page.width
+			}, "drawing area should be centered below tagline");
+
+			footer.assert({
+				center: page.center,
+				top: drawingArea.bottom.plus(13)
+			}, "footer should be centered below drawing area");
+
+			joinUs.assert({
+				center: page.center,
+				top: footer.bottom.plus(13),
+				height: 35,
+				width: 175
+			}, "join us button should be centered below footer");
 		});
 
-		it("centers drawing area below tagline", function() {
-			assert.equal(isElementCenteredInPage(drawingArea), true);
-			assert.equal(elementPixelsBelowElement(drawingArea, tagline), 10);
+		it("has flourishes inside drawing area", function() {
+			drawingAreaArrow.assert({
+				center: drawingArea.center,
+				top: drawingArea.top
+			}, "drawing area should have an arrow centered at the top");
 
-			assert.equal(elementWidthInPixels(drawingArea), IOS_BROWSER_WIDTH);
-			assert.equal(elementHeightInPixels(drawingArea), 600);
-			assert.equal(backgroundColorOf(drawingArea), WHITE);
-			assert.equal(roundedCornersOf(drawingArea), CORNER_ROUNDING);
+			assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
+			assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "drawing area arrow is an image");
+			assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "drawing arrow is drawn once");
+			assert.equal(backgroundPosition(drawingAreaArrow), "center", "drawing area arrow image is centered");
+
+			clearButton.assert({
+				top: drawingArea.top.plus(15),
+				right: drawingArea.right.minus(15),
+				height: 30,
+				width: 70
+			}, "clear screen button should be centered at top-right of drawing area");
+
+			assert.equal(under(clearButton, drawingArea), false, "clear button should be over drawing area");
 		});
 
-		it("centers an arrow at top of drawing area", function() {
-			assert.equal(isElementCenteredInPage(drawingAreaArrow), true);
+		it("has a color scheme", function() {
+			assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
+			assert.equal(textColor(logo), WHITE, "logo text should be white");
+			assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
+			assert.equal(backgroundColor(drawingArea), WHITE, "drawing area should be white");
+			assert.equal(textColor(footer), WHITE, "footer should be white");
 
-			assert.equal(elementPixelsOverlappingTopOfElement(drawingAreaArrow, drawingArea), 0);
-			// TODO: haven't tested background image, position, or repeat
+			assert.equal(textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
+			assert.equal(backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
 
-			assert.equal(isElementBehindElement(drawingAreaArrow, drawingArea), false);
+			assert.equal(backgroundColor(joinUs), MEDIUM_BLUE, "join us button background should be medium blue");
+			assert.equal(textColor(joinUs), WHITE, "join us button text should be white");
 		});
 
-		it("positions clear screen button at top right of drawing area", function() {
-			assert.equal(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 15);
-			assert.equal(elementPixelsOverlappingRightOfElement(clearButton, drawingArea), 15);
-			assert.equal(isElementBehindElement(clearButton, drawingArea), false);
+		it("has a typographic scheme", function() {
+			assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
+			assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
+			assert.equal(fontSize(logo), "30px", "logo font size");
 
-			assert.equal(textColorOf(clearButton), DARK_GRAY);
-			assert.equal(backgroundColorOf(clearButton), GRAY);
-			assert.equal(hasBorder(clearButton), false);
+			assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
+			assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
+			assert.equal(fontSize(tagline), "14px", "tagline font size");
 
-			assert.equal(fontFamilyOf(clearButton), STANDARD_FONT);
-			assert.equal(fontWeightOf(clearButton), CLEAR_BUTTON_WEIGHT);
-			assert.equal(fontSizeOf(clearButton), "12px");
+			assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
+			assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "clear button weight");
+			assert.equal(fontSize(clearButton), "12px", "clearn button font size");
 
-			assert.equal(elementHeightInPixels(clearButton), 30);
-			assert.equal(elementWidthInPixels(clearButton), 70);
-			assert.equal(isTextVerticallyCentered(clearButton), true);
+			assert.equal(fontFamily(footer), STANDARD_FONT, "footer family");
+			assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "footer weight");
+			assert.equal(fontSize(footer), "15px", "footer font size");
 
-			assert.equal(roundedCornersOf(clearButton), CORNER_ROUNDING);
-			assert.equal(dropShadowOf(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW);
-
-			assert.equal(textIsUnderlined(clearButton), false);
-			assert.equal(textIsUppercase(clearButton), true);
+			assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
+			assert.equal(fontWeight(joinUs), JOIN_US_BUTTON_WEIGHT, "join us button weight");
+			assert.equal(fontSize(joinUs), "16px", "join us button font size");
 		});
 
-		it("darkens the 'clear' button when the user hovers over it", function() {
-			applyClass(clearButton, "_hover_", function() {
-				assert.equal(backgroundColorOf(clearButton), DARKENED_GRAY);
+		it("rounds the corners of all rectangles", function() {
+			if (!browser.supportsBorderRadiusCss()) return;
+
+			assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "drawing area");
+			assert.equal(roundedCorners(clearButton), CORNER_ROUNDING, "clear button");
+			assert.equal(roundedCorners(joinUs), CORNER_ROUNDING, "join us button");
+		});
+
+		describe("buttons", function() {
+
+			it("have common styling", function() {
+				assertStandardButtonStyling(clearButton, "clear button");
+				assertStandardButtonStyling(joinUs, "'join us' button");
+
+				function assertStandardButtonStyling(button, description) {
+					assert.equal(isTextVerticallyCentered(button), true, description + " text centering");
+					assert.equal(textIsUnderlined(button), false, description + " text underline");
+					assert.equal(textIsUppercase(button), true, description + " text uppercase");
+					assert.equal(hasBorder(button), false, description + " border");
+				}
 			});
-		});
 
-		it("'clear' button appears to depress when user activates it", function() {
-			applyClass(clearButton, "_active_", function() {
-				assert.equal(elementPixelsOverlappingTopOfElement(clearButton, drawingArea), 16);
-				assert.equal(dropShadowOf(clearButton), "none");
+			it("have a drop shadow", function() {
+				if (!browser.supportsBoxShadowCss()) return;
+
+				assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "clear button drop shadow");
+				assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "'join us' button drop shadow");
 			});
-		});
 
-		it("centers footer below the drawing area", function() {
-			assert.equal(isContentCenteredInPage(footer), true);
-			assert.equal(elementPixelsBelowElement(footer, drawingArea), 13);
+			it("darken when user hovers over them", function() {
+				assertHoverStyle(clearButton, DARKENED_GRAY, "clear button");
+				assertHoverStyle(joinUs, DARKENED_MEDIUM_BLUE, "'join us' button");
 
-			assert.equal(fontFamilyOf(footer), STANDARD_FONT);
-			assert.equal(fontWeightOf(footer), BODY_TEXT_WEIGHT);
-			assert.equal(fontSizeOf(footer), "15px");
-			assert.equal(textColorOf(footer), WHITE);
-		});
-
-		it("centers 'join us' button below footer", function() {
-			assert.equal(isContentCenteredInPage(joinUs), true);
-			assert.equal(elementPixelsBelowElement(joinUs, footer), 13);
-
-			assert.equal(textColorOf(joinUs), WHITE);
-			assert.equal(backgroundColorOf(joinUs), MEDIUM_BLUE);
-
-			assert.equal(fontFamilyOf(joinUs), STANDARD_FONT);
-			assert.equal(fontWeightOf(joinUs), JOIN_US_BUTTON_WEIGHT);
-			assert.equal(fontSizeOf(joinUs), "16px");
-
-			assert.equal(elementHeightInPixels(joinUs), 35);
-			assert.equal(elementWidthInPixels(joinUs), 175);
-			assert.equal(isTextVerticallyCentered(joinUs), true);
-
-			assert.equal(roundedCornersOf(joinUs), CORNER_ROUNDING);
-			assert.equal(dropShadowOf(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW);
-
-			assert.equal(textIsUnderlined(joinUs), false);
-			assert.equal(textIsUppercase(joinUs), true);
-		});
-
-		it("darkens the 'join us' button when the user hovers over it", function() {
-			applyClass(joinUs, "_hover_", function() {
-				assert.equal(backgroundColorOf(joinUs), DARKENED_MEDIUM_BLUE);
+				function assertHoverStyle(button, expectedColor, description) {
+					applyClass(button, "_hover_", function() {
+						assert.equal(backgroundColor(button), expectedColor, description + " hover state background color");
+					});
+				}
 			});
-		});
 
-		it("'join us' button appears to depress when user activates it", function() {
-			applyClass(joinUs, "_active_", function() {
-				assert.equal(elementPixelsBelowElement(joinUs, footer), 14);
-				assert.equal(dropShadowOf(joinUs), "none");
+			it("appear to depress when user activates them", function() {
+				assertActiveStyle(clearButton, drawingArea.top.plus(16), "clear button");
+				assertActiveStyle(joinUs, footer.bottom.plus(14), "'join us' button");
+
+				function assertActiveStyle(button, expectedDescriptor, description) {
+					applyClass(button, "_active_", function() {
+						button.assert({
+							top: expectedDescriptor
+						});
+						if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(button), "none");
+					});
+				}
 			});
+
 		});
 
-		function isContentCenteredInPage(domElement) {
-			if (!isElementCenteredInPage(domElement)) return false;
-
-			var style = window.getComputedStyle(domElement);
-			var textAlign = style.getPropertyValue("text-align");
-
-			return textAlign === "center";
+		function backgroundColor(element) {
+			return normalizeColorString(element.getRawStyle("background-color"));
 		}
 
-		function isElementCenteredInPage(domElement) {
-			var frameBody = frameDom.contentDocument.body;
+		function fontFamily(element) {
+			var family = element.getRawStyle("font-family");
+			family = family.replace(/\"/g, '');
 
-			var bodyStyle = frameDom.contentWindow.getComputedStyle(frameBody);
-			var bodyLeftMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-left"));
-			var bodyRightMarginWidth = pixelsToInt(bodyStyle.getPropertyValue("margin-right"));
+			var fonts = family.split(",");
+			for (var i = 0; i < fonts.length; i++) {
+				fonts[i] = trim(fonts[i]);
+			}
 
-			// We can't just base the document width on the frame width because that doesn't account for scroll bars.
-			var bodyBoundingBox = frameBody.getBoundingClientRect();
-			var documentLeft = bodyBoundingBox.left - bodyLeftMarginWidth;
-			var documentRight = bodyBoundingBox.right + bodyRightMarginWidth;
-
-			var elementBoundingBox = getBoundingBox(domElement);
-			var elementLeft = elementBoundingBox.left;
-			var elementRight = elementBoundingBox.right;
-
-			var documentCenter = (documentRight - documentLeft) / 2;
-			var elementCenter = elementLeft + ((elementRight - elementLeft) / 2);
-
-//			console.log("*** CENTER: element width", elementBoundingBox.width);
-//			console.log("documentLeft", documentLeft);
-//			console.log("documentRight", documentRight);
-//			console.log("elementLeft", elementLeft);
-//			console.log("elementRight", elementRight);
-//			console.log("documentCenter", documentCenter);
-//			console.log("elementCenter", elementCenter);
-
-			var offset = Math.abs(documentCenter - elementCenter);
-			var success = (offset <= 0.5);
-
-//			console.log(success ? "✔ SUCCESS" : "✘ FAILURE");
-
-			return success;
+			return fonts.join(", ");
 		}
 
-		function elementPixelsFromTopOfPage(domElement) {
-			return getBoundingBox(domElement).top;
+		// Based on MDN code at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+		function trim(str) {
+			var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+			return str.replace(rtrim, '');
 		}
 
-		function elementHeightInPixels(domElement) {
-			return getBoundingBox(domElement).height;
+		function fontWeight(element) {
+			var weight = element.getRawStyle("font-weight");
+			if (weight === "normal") weight = "400";
+			return weight.toString();
 		}
 
-		function elementWidthInPixels(domElement) {
-			return getBoundingBox(domElement).width;
+		function fontSize(element) {
+			return element.getRawStyle("font-size");
 		}
 
-		function elementPixelsBelowElement(domElement, domRelativeToElement) {
-			return Math.round(getBoundingBox(domElement).top - getBoundingBox(domRelativeToElement).bottom);
+		function textColor(element) {
+			return normalizeColorString(element.getRawStyle("color"));
 		}
 
-		function elementPixelsOverlappingTopOfElement(domElement, domRelativeToElement) {
-			return Math.round(getBoundingBox(domElement).top - getBoundingBox(domRelativeToElement).top);
+		function roundedCorners(element) {
+			// We can't just look at border-radius because it returns "" on Firefox and IE 9
+			var topLeft = element.getRawStyle("border-top-left-radius");
+			var topRight = element.getRawStyle("border-top-right-radius");
+			var bottomLeft = element.getRawStyle("border-bottom-left-radius");
+			var bottomRight = element.getRawStyle("border-bottom-right-radius");
+
+			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) {
+				return topLeft;
+			}
+			else {
+				return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
+			}
 		}
 
-		function elementPixelsOverlappingRightOfElement(domElement, domRelativeToElement) {
-			return Math.round(getBoundingBox(domRelativeToElement).right - getBoundingBox(domElement).right);
-		}
+		function under(element, relativeToElement) {
+			var elementZ = getZIndex(element);
+			var relativeZ = getZIndex(relativeToElement);
 
-		function isElementBehindElement(domElement, domRelativeToElement) {
-			var elementZ = getZIndex(domElement);
-			var relativeZ = getZIndex(domRelativeToElement);
+			if (elementZ === relativeZ) {
+				return !isElementAfterElementInDomTree();
+			}
+			else {
+				return (elementZ < relativeZ);
+			}
 
-			if (elementZ === relativeZ) return !isElementAfterElementInDomTree();
-			else return (elementZ < relativeZ);
-
-			function getZIndex(domElement) {
-				var z = getComputedProperty(domElement, "z-index");
+			function getZIndex(element) {
+				var z = element.getRawStyle("z-index");
 				if (z === "auto") z = 0;
 				return z;
 			}
 
 			function isElementAfterElementInDomTree() {
-				var elementNode = domElement;
-				var relativeNode = domRelativeToElement;
+				var elementNode = element.toDomElement();
+				var relativeNode = relativeToElement.toDomElement();
+
 				var foundRelative = false;
 				var elementAfterRelative = false;
 				for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
@@ -303,72 +308,43 @@
 			}
 		}
 
-		function isTextVerticallyCentered(domElement) {
-			var elementHeight = getBoundingBox(domElement).height;
-			var lineHeight = getComputedProperty(domElement, "line-height");
+		function backgroundImage(element) {
+			var url = element.getRawStyle("background-image");
+
+			var parsedUrl = url.match(/^url\("?http:\/\/(.+?)(\/.*?)"?\)$/);    // strip off domain
+			if (parsedUrl === null) throw new Error("could not parse URL: " + url);
+
+			return parsedUrl[2];
+		}
+
+		function backgroundPosition(element) {
+			var position = element.getRawStyle("background-position");
+
+			if (position === "" || position === "50%" || position === "50% 50%") {
+				return "center";
+			}
+			else {
+				return position;
+			}
+		}
+
+		function hasBorder(element) {
+			var top = element.getRawStyle("border-top-style");
+			var right = element.getRawStyle("border-right-style");
+			var bottom = element.getRawStyle("border-bottom-style");
+			var left = element.getRawStyle("border-left-style");
+			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
+		}
+
+		function isTextVerticallyCentered(element) {
+			var elementHeight = element.getRawPosition().height;
+			var lineHeight = element.getRawStyle("line-height");
 
 			return elementHeight + "px" === lineHeight;
 		}
 
-		function backgroundColorOf(domElement) {
-			return getComputedProperty(domElement, "background-color");
-		}
-
-		function fontFamilyOf(domElement) {
-			var family = getComputedProperty(domElement, "font-family");
-			family = family.replace(/\"/g, '');
-
-			var fonts = family.split(",").map(function(font) {
-				return font.trim();
-			});
-
-			return fonts.join(", ");
-		}
-
-		function fontWeightOf(domElement) {
-			var weight = getComputedProperty(domElement, "font-weight");
-			if (weight === "normal") weight = "400";
-			return weight;
-		}
-
-		function fontSizeOf(domElement) {
-			return getComputedProperty(domElement, "font-size");
-		}
-
-		function textColorOf(domElement) {
-			return getComputedProperty(domElement, "color");
-		}
-
-		function hasBorder(domElement) {
-			var top = getComputedProperty(domElement, "border-top-style");
-			var right = getComputedProperty(domElement, "border-right-style");
-			var bottom = getComputedProperty(domElement, "border-bottom-style");
-			var left = getComputedProperty(domElement, "border-left-style");
-			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
-		}
-
-		function textIsUnderlined(domElement) {
-			var style = getComputedProperty(domElement, "text-decoration");
-			return style.indexOf("none") !== 0;
-		}
-
-		function textIsUppercase(domElement) {
-			return getComputedProperty(domElement, "text-transform") === "uppercase";
-		}
-
-		function roundedCornersOf(domElement) {
-			// We can't just look at border-radius because it returns "" on Firefox and IE 9
-			var topLeft = getComputedProperty(domElement, "border-top-left-radius");
-			var topRight = getComputedProperty(domElement, "border-top-right-radius");
-			var bottomLeft = getComputedProperty(domElement, "border-bottom-left-radius");
-			var bottomRight = getComputedProperty(domElement, "border-bottom-right-radius");
-
-			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) return topLeft;
-			else return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
-		}
-
-		function dropShadowOf(domElement) {
-			var shadow = getComputedProperty(domElement, "box-shadow");
+		function dropShadow(element) {
+			var shadow = element.getRawStyle("box-shadow");
 
 			// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
 			// We handle that case here.
@@ -378,26 +354,23 @@
 			// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
 			// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
 			// BTW, we don't support multiple shadows yet
-			var groups = shadow.match(/^([^#]+) #(..)(..)(..)/);   // get everything before the '#' and the r, g, b
+			var groups = shadow.match(/^([^#]+) (#......)/);   // get everything before the '#' and the r, g, b
 			if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
 
-			var sizes = groups[1];
-			var r = parseInt(groups[2], 16);
-			var g = parseInt(groups[3], 16);
-			var b = parseInt(groups[4], 16);
-			return "rgb(" + r + ", " + g + ", " + b + ") " + sizes;
+			return normalizeColorString(groups[2]) + " " + groups[1];
 		}
 
-		function getBoundingBox(domElement) {
-			return domElement.getBoundingClientRect();
+		function textIsUnderlined(element) {
+			var style = element.getRawStyle("text-decoration");
+			return style.indexOf("none") !== 0;
 		}
 
-		function getComputedProperty(domElement, propertyName) {
-			var style = window.getComputedStyle(domElement);
-			return style.getPropertyValue(propertyName);
+		function textIsUppercase(element) {
+			return element.getRawStyle("text-transform") === "uppercase";
 		}
 
-		function applyClass(domElement, className, fn) {
+		function applyClass(element, className, fn) {
+			var domElement = element.toDomElement();
 			var oldClassName = domElement.className;
 			try {
 				domElement.className += className;
@@ -411,12 +384,20 @@
 			}
 		}
 
-		function forceReflow(domElement) {
-			var makeLintHappy = domElement.offsetHeight;
+		function normalizeColorString(color) {
+			if (color === "white") return "rgb(255, 255, 255)";
+
+			var colorGroups = color.match(/^#(..)(..)(..)/);    // look for presence of #rrggbb string
+			if (colorGroups === null) return color;   // if doesn't match, assume we have rgb() string
+
+			var r = parseInt(colorGroups[1], 16);
+			var g = parseInt(colorGroups[2], 16);
+			var b = parseInt(colorGroups[3], 16);
+			return "rgb(" + r + ", " + g + ", " + b + ")";
 		}
 
-		function pixelsToInt(pixels) {
-			return parseInt(pixels, 10);
+		function forceReflow(domElement) {
+			var makeLintHappy = domElement.offsetHeight;
 		}
 
 	});

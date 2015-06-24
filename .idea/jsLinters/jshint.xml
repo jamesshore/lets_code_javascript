@@ -2,15 +2,15 @@
 <project version="4">
   <component name="JSHintConfiguration" version="2.5.6" use-config-file="false">
     <option bitwise="true" />
+    <option browser="true" />
     <option curly="true" />
     <option eqeqeq="true" />
     <option forin="true" />
+    <option maxerr="50" />
     <option noarg="true" />
     <option noempty="true" />
     <option nonew="true" />
     <option strict="true" />
     <option undef="true" />
-    <option browser="true" />
-    <option maxerr="50" />
   </component>
 </project>

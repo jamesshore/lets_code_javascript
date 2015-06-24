@@ -5,7 +5,15 @@
 	"use strict";
 
 	exports.supportsTouchEvents = function() {
-		return Modernizr.touch;
+		return askModernizr("touch");
+	};
+
+	exports.supportsBorderRadiusCss = function() {
+		return askModernizr("borderradius");
+	};
+
+	exports.supportsBoxShadowCss = function() {
+		return askModernizr("boxshadow");
 	};
 
 	exports.supportsCaptureApi = function() {
@@ -23,6 +31,13 @@
 	exports.doesNotComputeStyles = function() {
 		return isIe8();
 	};
+
+	function askModernizr(feature) {
+		var result = Modernizr[feature];
+		if (result === undefined) throw new Error(feature + " is not checked by the installed version of Modernizr");
+
+		return result;
+	}
 
 	function isIe8() {
 		return $.browser.msie && $.browser.version === "8.0";
