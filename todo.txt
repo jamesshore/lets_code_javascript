@@ -26,13 +26,11 @@ User Stories to finish current MMF:
 * Release new design
 
 Engineering Tasks:
-* Need to cache-bust stylesheet and bundle.js
-- Clean up to-do
+* Clean up to-do
 - Integrate
 - Deploy
 
 To Do on current task:
-* Clean up build output and put in error-handling
 
 Potential future stories:
 - "Try me" text in drawing area

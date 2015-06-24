@@ -5,14 +5,15 @@
 	var sh = require("./sh.js");
 
 	exports.go = function(config, success, failure) {
-		sh.run("node node_modules/hashcat/bin/hashcat.js " + config.indexFile, checkHashcatOutput, failure);
+		var options = { suppressOutput: true };
+		sh.run("node node_modules/hashcat/bin/hashcat.js " + config.indexFile, checkHashcatOutput, failure, options);
 
 		function checkHashcatOutput(stdout) {
 			if (stdout.indexOf("Hashcat complete") !== -1) {
 				return success();
 			}
 			else {
-				//console.log(stdout);
+				console.log(stdout);
 				return failure("Hashcat failed");
 			}
 		}
