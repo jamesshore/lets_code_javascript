@@ -30,9 +30,6 @@ Engineering Tasks:
 * Deploy
 
 To Do on current task:
-* Deploy to staging
-- Document staging steps better
-- Upgrade staging to cedar-14
+* Upgrade staging to cedar-14
 - Deploy to production
 - Upgrade production to cedar-14
-- Document production steps better
