@@ -27,7 +27,12 @@ User Stories to finish current MMF:
 * Release new design
 
 Engineering Tasks:
-* Integrate
-- Deploy
+* Deploy
 
 To Do on current task:
+* Deploy to staging
+- Document staging steps better
+- Upgrade staging to cedar-14
+- Deploy to production
+- Upgrade production to cedar-14
+- Document production steps better
