@@ -27,16 +27,13 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Need to cache-bust stylesheet and bundle.js
+- Clean up to-do
 - Integrate
-  - Need to wait for version of Selenium that doesn't crash on Windows
 - Deploy
 
 To Do on current task:
-- AT BEGINNING OF NEXT EPISODE:
-  - Windows fix for hashcat runner
-  - Weird browser version issue
-- Fix smoke test failure
-- Remove extraneous files left over by hashcat
+* Remove extraneous files left over by hashcat
+- Clean up build output and put in error-handling
 
 Potential future stories:
 - "Try me" text in drawing area
