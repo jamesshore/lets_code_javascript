@@ -3,12 +3,10 @@ WeeWikiPaint
 Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 + single-user painting on home page (episodes 33-200)
-* replace home page with professional design (episodes 201+)
-- support more browsers (Android, IE10, IE11)
-	- stop supporting IE 8?
-  - iOS 8.1 upgrade broke Mobile Safari tests
-  - Firefox and Chrome fail on Windows 8.1 with a touch screen (ref Mattias Åslund email, 2 Feb 2015)
-    - was not able to reproduce using http://modern.ie VM. Presumably due to lack of touch screen?
++ replace home page with professional design (episodes 201-321)
+* IE 11 support (get rid of IE 8?) (episodes 322+)
+- iOS 8 support
+- Android support
 - replace 404 page with professional design
   - remember to cache-bust it
 - responsive design?
@@ -24,12 +22,10 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Release new design
+* Remove support for IE 8
+- 'Join Us' button is flush against bottom of window when window is shorter than content
 
 Engineering Tasks:
-* Deploy
+* Integrate
 
 To Do on current task:
-* Upgrade staging to cedar-14
-- Deploy to production
-- Upgrade production to cedar-14

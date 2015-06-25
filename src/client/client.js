@@ -16,7 +16,6 @@
 	var clearScreenButton;
 	var documentBody;
 	var windowElement;
-	var useSetCaptureApi = false;
 
 	exports.initializeDrawingArea = function(elements) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
@@ -54,11 +53,6 @@
 		drawingArea.onMouseDown(startDrag);
 		documentBody.onMouseMove(continueDrag);
 		windowElement.onMouseUp(endDrag);
-
-		if (browser.doesNotHandlesUserEventsOnWindow()) {
-			drawingArea.onMouseUp(endDrag);
-			useSetCaptureApi = true;
-		}
 	}
 
 	function handleTouchDragEvents() {
@@ -72,7 +66,6 @@
 
 	function startDrag(pageOffset) {
 		start = drawingArea.relativeOffset(pageOffset);
-    if (useSetCaptureApi) drawingArea.setCapture();
 	}
 
 	function continueDrag(pageOffset) {
@@ -91,7 +84,6 @@
 
 		if (!lineDrawn) svgCanvas.drawDot(start.x, start.y);
 
-		if (useSetCaptureApi) drawingArea.releaseCapture();
 		start = null;
 		lineDrawn = false;
 	}

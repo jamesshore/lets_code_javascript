@@ -69,15 +69,9 @@
 	}
 
 	function normalizePath(element) {
-		if (Raphael.svg) {
-			return normalizeSvgPath(element);
-		}
-		else if (Raphael.vml) {
-			return normalizeVmlPath(element);
-		}
-		else {
-			throw new Error("Unknown Raphael rendering engine");
-		}
+		if (!Raphael.svg) throw new Error("Unknown Raphael rendering engine");
+
+		return normalizeSvgPath(element);
 	}
 
 	function normalizeSvgPath(element) {
@@ -100,28 +94,6 @@
 			pathComponents[2],
 			pathComponents[3],
 			pathComponents[4]
-		];
-	}
-
-	function normalizeVmlPath(element) {
-		// We're in IE 8, which uses format "m432000,648000 l648000,67456800 e"
-		var VML_MAGIC_NUMBER = 21600;
-
-		var path = element.node.path.value;
-
-		var ie8PathRegex = /m(\d+),(\d+) l(\d+),(\d+) e/;
-		var ie8 = path.match(ie8PathRegex);
-
-		var startX = ie8[1] / VML_MAGIC_NUMBER;
-		var startY = ie8[2] / VML_MAGIC_NUMBER;
-		var endX = ie8[3] / VML_MAGIC_NUMBER;
-		var endY = ie8[4] / VML_MAGIC_NUMBER;
-
-		return [
-			startX,
-			startY,
-			endX,
-			endY
 		];
 	}
 

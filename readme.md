@@ -96,10 +96,10 @@ Before deploying for the first time:
 3. Sign up for a [Heroku account](https://id.heroku.com/signup)
 4. Run `heroku create <app_name>` (requires git repository and Heroku account)
 5. Search codebase for `weewikipaint.herokuapp.com` URLs and change them to refer to `<app_name>`
-6. Push known-good deploy to Heroku: `git push heroku episode200:master`
+6. Push known-good deploy to Heroku: `git push heroku episode321:master`
 
 Then, to deploy:
 
 1. Run `./jake.sh deploy` (Unix/Mac) or `jake deploy` (Windows) for instructions
 
-*Note:* The master and integration branches are not guaranteed to deploy successfully. The last known-good deploy was commit 85c35e5ce5387d2814ceeb849e39eee8e5c1847e. We'll establish better deployment practices in a future chapter of the screencast.
+*Note:* The master and integration branches are not guaranteed to deploy successfully. The last known-good deploy was commit 7aa303d2e92769234b9006a126bb1d0dbf3b089d. We'll establish better deployment practices in a future chapter of the screencast.

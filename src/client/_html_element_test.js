@@ -19,7 +19,6 @@
 		});
 
 		afterEach(function() {
-			if (browser.supportsCaptureApi()) htmlElement.releaseCapture();
 			windowElement.removeAllEventHandlers();
 			bodyElement.removeAllEventHandlers();
 			htmlElement.removeAllEventHandlers();
@@ -116,13 +115,6 @@
 					}
 				});
 
-				it("simulates buggy IE 8 behavior (where mouse events on window aren't sent to window object)", function() {
-					if (!browser.doesNotHandlesUserEventsOnWindow()) return;
-
-					var monitor = monitorEventHandler(windowElement, windowElement.onMouseUp);
-					windowElement.triggerMouseUp();
-					assert.equal(monitor.eventTriggered, false);
-				});
 			});
 
 			describe("touch events", function() {
@@ -215,39 +207,6 @@
 						assert.equal(monitor.eventTriggeredAt, undefined);
 					}
 				});
-			});
-
-			describe("Capture API", function() {
-				if (!browser.supportsCaptureApi()) return;
-
-				afterEach(function() {
-					htmlElement.releaseCapture();
-				});
-
-				it("emulates behavior of setCapture() (on browsers that support it)", function() {
-					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
-					htmlElement.setCapture();
-					bodyElement.triggerMouseMove();
-					assert.equal(monitor.eventTriggered, true);
-				});
-
-				it("emulates behavior of releaseCapture() (on browsers that support it)", function() {
-					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
-					htmlElement.setCapture();
-					htmlElement.releaseCapture();
-					bodyElement.triggerMouseMove();
-					assert.equal(monitor.eventTriggered, false);
-				});
-
-				it("when event triggered, event coordinates are relative to triggering element, not capturing element", function() {
-					var expectedPageCoordinates = bodyElement.pageOffset({ x: 30, y: 20 });
-
-					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
-					htmlElement.setCapture();
-					bodyElement.triggerMouseMove(30, 20);
-					assert.deepEqual(monitor.eventTriggeredAt, expectedPageCoordinates);
-				});
-
 			});
 
 			function monitorEvent(event) {
@@ -436,30 +395,12 @@
 			}
 
 			function assertRelativeOffsetEquals(actualOffset, expectedX, expectedY) {
-				if (browser.reportsElementPositionOffByOneSometimes()) {
-					// compensate for off-by-one error in IE 8
-					assert.equal(actualOffset.x, expectedX);
-					if (actualOffset.y !== expectedY - 1) {
-						assert.equal(actualOffset.y, expectedY);
-					}
-				}
-				else {
-					assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
-				}
+				assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
 			}
 		});
 
 		function assertPageOffsetEquals(actualOffset, expectedX, expectedY) {
-			if (browser.reportsElementPositionOffByOneSometimes()) {
-				// compensate for off-by-one error in IE 8
-				assert.equal(actualOffset.x, expectedX);
-				if (actualOffset.y !== expectedY + 1) {
-					assert.equal(actualOffset.y, expectedY);
-				}
-			}
-			else {
-				assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
-			}
+			assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
 		}
 
 

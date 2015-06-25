@@ -43,6 +43,7 @@
 		var joinUs;
 
 		before(function(done) {
+			this.timeout(10 * 1000);
 			var options = {
 				src: "/base/src/client/index.html",
 				width: IOS_BROWSER_WIDTH,
@@ -168,8 +169,6 @@
 		});
 
 		it("rounds the corners of all rectangles", function() {
-			if (!browser.supportsBorderRadiusCss()) return;
-
 			assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "drawing area");
 			assert.equal(roundedCorners(clearButton), CORNER_ROUNDING, "clear button");
 			assert.equal(roundedCorners(joinUs), CORNER_ROUNDING, "join us button");
@@ -190,8 +189,6 @@
 			});
 
 			it("have a drop shadow", function() {
-				if (!browser.supportsBoxShadowCss()) return;
-
 				assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "clear button drop shadow");
 				assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "'join us' button drop shadow");
 			});
@@ -216,7 +213,7 @@
 						button.assert({
 							top: expectedDescriptor
 						});
-						if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(button), "none");
+						assert.equal(dropShadow(button), "none");
 					});
 				}
 			});
