@@ -180,7 +180,7 @@
 	task("deploy", function() {
 		console.log("To deploy to production:");
 		console.log("1. Make sure `git status` is clean");
-		console.log("2. Check in `generated/build/client`");
+		console.log("2. Check in release code: `git add generated/build/client -f && git commit`");
 		console.log("2. Deploy HEAD to staging server: `git push staging master`");
 		console.log("3. Verify by visiting http://www-staging.herokuapp.com");
 		console.log("4. Integrate");
