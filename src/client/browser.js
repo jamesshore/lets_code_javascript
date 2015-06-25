@@ -20,10 +20,6 @@
 		return document.body.setCapture && document.body.releaseCapture;
 	};
 
-	exports.doesNotComputeStyles = function() {
-		return isIe8();
-	};
-
 	function askModernizr(feature) {
 		var result = Modernizr[feature];
 		if (result === undefined) throw new Error(feature + " is not checked by the installed version of Modernizr");

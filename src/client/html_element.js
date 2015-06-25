@@ -267,10 +267,6 @@
 
 		function failFastIfBorderPresent(side) {
 			var css = self._element.css("border-" + side + "-width");
-			if (browser.doesNotComputeStyles()) {
-				if (self._element.css("border-" + side + "-style") === "none") css = "0px";
-			}
-
 			if (css !== "0px") throw new Error("Do not apply border to elements used with relativeOffset() (expected 0px but was " + css + ")");
 		}
 	}
