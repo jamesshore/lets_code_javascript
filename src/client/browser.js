@@ -20,10 +20,6 @@
 		return document.body.setCapture && document.body.releaseCapture;
 	};
 
-	exports.reportsElementPositionOffByOneSometimes = function() {
-		return isIe8();
-	};
-
 	exports.doesNotHandlesUserEventsOnWindow = function() {
 		return isIe8();
 	};
@@ -40,7 +36,7 @@
 	}
 
 	function isIe8() {
-		return $.browser.msie && $.browser.version === "8.0";
+		return false;
 	}
 
 }());

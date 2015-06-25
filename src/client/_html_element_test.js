@@ -436,30 +436,12 @@
 			}
 
 			function assertRelativeOffsetEquals(actualOffset, expectedX, expectedY) {
-				if (browser.reportsElementPositionOffByOneSometimes()) {
-					// compensate for off-by-one error in IE 8
-					assert.equal(actualOffset.x, expectedX);
-					if (actualOffset.y !== expectedY - 1) {
-						assert.equal(actualOffset.y, expectedY);
-					}
-				}
-				else {
-					assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
-				}
+				assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
 			}
 		});
 
 		function assertPageOffsetEquals(actualOffset, expectedX, expectedY) {
-			if (browser.reportsElementPositionOffByOneSometimes()) {
-				// compensate for off-by-one error in IE 8
-				assert.equal(actualOffset.x, expectedX);
-				if (actualOffset.y !== expectedY + 1) {
-					assert.equal(actualOffset.y, expectedY);
-				}
-			}
-			else {
-				assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
-			}
+			assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
 		}
 
 
