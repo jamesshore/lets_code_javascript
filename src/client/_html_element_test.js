@@ -19,7 +19,6 @@
 		});
 
 		afterEach(function() {
-			if (browser.supportsCaptureApi()) htmlElement.releaseCapture();
 			windowElement.removeAllEventHandlers();
 			bodyElement.removeAllEventHandlers();
 			htmlElement.removeAllEventHandlers();
@@ -208,39 +207,6 @@
 						assert.equal(monitor.eventTriggeredAt, undefined);
 					}
 				});
-			});
-
-			describe("Capture API", function() {
-				if (!browser.supportsCaptureApi()) return;
-
-				afterEach(function() {
-					htmlElement.releaseCapture();
-				});
-
-				it("emulates behavior of setCapture() (on browsers that support it)", function() {
-					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
-					htmlElement.setCapture();
-					bodyElement.triggerMouseMove();
-					assert.equal(monitor.eventTriggered, true);
-				});
-
-				it("emulates behavior of releaseCapture() (on browsers that support it)", function() {
-					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
-					htmlElement.setCapture();
-					htmlElement.releaseCapture();
-					bodyElement.triggerMouseMove();
-					assert.equal(monitor.eventTriggered, false);
-				});
-
-				it("when event triggered, event coordinates are relative to triggering element, not capturing element", function() {
-					var expectedPageCoordinates = bodyElement.pageOffset({ x: 30, y: 20 });
-
-					var monitor = monitorEventHandler(htmlElement, htmlElement.onMouseMove);
-					htmlElement.setCapture();
-					bodyElement.triggerMouseMove(30, 20);
-					assert.deepEqual(monitor.eventTriggeredAt, expectedPageCoordinates);
-				});
-
 			});
 
 			function monitorEvent(event) {

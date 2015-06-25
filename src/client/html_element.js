@@ -7,8 +7,6 @@
 	var browser = require("./browser.js");
 	var failFast = require("./fail_fast.js");
 
-	var capturedElement = null;
-
 
 	/* Constructors */
 
@@ -28,18 +26,6 @@
 		var domElement = document.getElementById(id);
 		failFast.unlessTrue(domElement !== null, "could not find element with id '" + id + "'");
 		return new HtmlElement(domElement);
-	};
-
-	/* Capture API */
-
-	HtmlElement.prototype.setCapture = function() {
-		capturedElement = this;
-		this._domElement.setCapture();
-	};
-
-	HtmlElement.prototype.releaseCapture = function() {
-		capturedElement = null;
-		this._domElement.releaseCapture();
 	};
 
 
@@ -80,8 +66,6 @@
 
 	function triggerMouseEventFn(event) {
 		return function(relativeX, relativeY) {
-			var targetElement = capturedElement || this;
-
 			var pageCoords;
 			if (relativeX === undefined || relativeY === undefined) {
 				pageCoords = { x: 0, y: 0 };
@@ -90,7 +74,7 @@
 				pageCoords = pageOffset(this, relativeX, relativeY);
 			}
 
-			sendMouseEvent(targetElement, event, pageCoords);
+			sendMouseEvent(this, event, pageCoords);
 		};
 	}
 
