@@ -4,8 +4,8 @@ Minimum Marketable Features:
 + marketing home page (episodes 1-32)
 + single-user painting on home page (episodes 33-200)
 + replace home page with professional design (episodes 201-321)
-+ IE 11 support (get rid of IE 8?) (episodes 322-323)
-- Android support
++ IE 11 support (and get rid of IE 8) (episodes 322-323)
+* Android support (episodes 324+)
 - iOS 8 support
 - replace 404 page with professional design
   - remember to cache-bust it
@@ -28,4 +28,4 @@ Engineering Tasks:
 -
 
 To Do on current task:
--
+- What version of Chrome Mobile do we want to test against?
