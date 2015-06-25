@@ -22,10 +22,10 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* Remove support for IE 8
-- 'Join Us' button is flush against bottom of window when window is shorter than content
+-
 
 Engineering Tasks:
-* Integrate
+-
 
 To Do on current task:
+-

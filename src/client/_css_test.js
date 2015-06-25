@@ -33,6 +33,7 @@
 	describe("Home page", function() {
 		var frame;
 		var page;
+		var viewport;
 
 		var logo;
 		var tagline;
@@ -60,6 +61,8 @@
 			frame.reset();
 
 			page = frame.page();
+			viewport = frame.viewport();
+
 			logo = frame.get("#logo");
 			tagline = frame.get("#tagline");
 			drawingAreaArrow = frame.get("#drawing-area-arrow");
@@ -70,7 +73,6 @@
 		});
 
 		it("fits perfectly within viewport", function() {
-			var viewport = frame.viewport();
 			page.assert({
 				width: viewport.width,
 				height: viewport.height
@@ -79,6 +81,14 @@
 			joinUs.assert({
 				bottom: viewport.bottom.minus(13)
 			}, "bottom element should fit against bottom of viewport");
+		});
+
+		it("has a nice margin when viewport is smaller than the page", function() {
+			frame.resize(100, 100);
+
+			joinUs.assert({
+				bottom: page.bottom.minus(13)
+			}, "bottom element should have a nice margin before the bottom of the page");
 		});
 
 		it("has an overall layout", function() {
