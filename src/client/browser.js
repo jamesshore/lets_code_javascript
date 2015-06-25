@@ -12,10 +12,6 @@
 		return askModernizr("borderradius");
 	};
 
-	exports.supportsBoxShadowCss = function() {
-		return askModernizr("boxshadow");
-	};
-
 	function askModernizr(feature) {
 		var result = Modernizr[feature];
 		if (result === undefined) throw new Error(feature + " is not checked by the installed version of Modernizr");

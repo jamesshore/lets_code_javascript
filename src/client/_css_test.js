@@ -191,8 +191,6 @@
 			});
 
 			it("have a drop shadow", function() {
-				if (!browser.supportsBoxShadowCss()) return;
-
 				assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "clear button drop shadow");
 				assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "'join us' button drop shadow");
 			});
@@ -217,7 +215,7 @@
 						button.assert({
 							top: expectedDescriptor
 						});
-						if (browser.supportsBoxShadowCss()) assert.equal(dropShadow(button), "none");
+						assert.equal(dropShadow(button), "none");
 					});
 				}
 			});
