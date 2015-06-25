@@ -20,10 +20,6 @@
 		return document.body.setCapture && document.body.releaseCapture;
 	};
 
-	exports.doesNotHandlesUserEventsOnWindow = function() {
-		return isIe8();
-	};
-
 	exports.doesNotComputeStyles = function() {
 		return isIe8();
 	};

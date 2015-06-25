@@ -96,8 +96,6 @@
 
 	function onMouseEventFn(event) {
 		return function(callback) {
-			if (browser.doesNotHandlesUserEventsOnWindow() && this._domElement === window) return;
-
 			this._element.on(event, function(event) {
 				var pageOffset = { x: event.pageX, y: event.pageY };
 				callback(pageOffset);

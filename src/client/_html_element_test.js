@@ -116,13 +116,6 @@
 					}
 				});
 
-				it("simulates buggy IE 8 behavior (where mouse events on window aren't sent to window object)", function() {
-					if (!browser.doesNotHandlesUserEventsOnWindow()) return;
-
-					var monitor = monitorEventHandler(windowElement, windowElement.onMouseUp);
-					windowElement.triggerMouseUp();
-					assert.equal(monitor.eventTriggered, false);
-				});
 			});
 
 			describe("touch events", function() {

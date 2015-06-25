@@ -32,3 +32,4 @@ Engineering Tasks:
 To Do on current task:
 * browser.js
 - Raphael
+- setCapture

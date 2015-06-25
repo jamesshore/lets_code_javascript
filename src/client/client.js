@@ -54,11 +54,6 @@
 		drawingArea.onMouseDown(startDrag);
 		documentBody.onMouseMove(continueDrag);
 		windowElement.onMouseUp(endDrag);
-
-		if (browser.doesNotHandlesUserEventsOnWindow()) {
-			drawingArea.onMouseUp(endDrag);
-			useSetCaptureApi = true;
-		}
 	}
 
 	function handleTouchDragEvents() {
