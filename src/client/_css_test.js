@@ -169,8 +169,6 @@
 		});
 
 		it("rounds the corners of all rectangles", function() {
-			if (!browser.supportsBorderRadiusCss()) return;
-
 			assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "drawing area");
 			assert.equal(roundedCorners(clearButton), CORNER_ROUNDING, "clear button");
 			assert.equal(roundedCorners(joinUs), CORNER_ROUNDING, "join us button");
