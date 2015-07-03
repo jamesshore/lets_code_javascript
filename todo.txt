@@ -5,7 +5,7 @@ Minimum Marketable Features:
 + single-user painting on home page (episodes 33-200)
 + replace home page with professional design (episodes 201-321)
 + IE 11 support (and get rid of IE 8) (episodes 322-323)
-* Android support (episodes 324+)
++ Android support (episodes 324-327)
 - iOS 8 support
 - replace 404 page with professional design
   - remember to cache-bust it
@@ -22,10 +22,9 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-- Android support (test against Nexus 5)
+-
 
 Engineering Tasks:
-* Update dependencies / integrate / deploy
 - Race condition in Quixote?
 
 To Do on current task:
