@@ -1,5 +1,5 @@
 // Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-/*global $, jQuery, TouchList, Touch */
+/*global $, jQuery */
 
 (function() {
 	"use strict";
@@ -114,14 +114,14 @@
 
 	function triggerZeroTouchEventFn(event) {
 		return function() {
-			sendTouchEvent(this, event, new TouchList());
+			sendTouchEvent(this, event, document.createTouchList());
 		};
 	}
 
 	function triggerSingleTouchEventFn(event) {
 		return function(relativeX, relativeY) {
 			var touch = createTouch(this, relativeX, relativeY);
-			sendTouchEvent(this, event, new TouchList(touch));
+			sendTouchEvent(this, event, document.createTouchList(touch));
 		};
 	}
 
@@ -129,7 +129,7 @@
 		return function(relative1X, relative1Y, relative2X, relative2Y) {
 			var touch1 = createTouch(this, relative1X, relative1Y);
 			var touch2 = createTouch(this, relative2X, relative2Y);
-			sendTouchEvent(this, event, new TouchList(touch1, touch2));
+			sendTouchEvent(this, event, document.createTouchList(touch1, touch2));
 		};
 	}
 
@@ -167,22 +167,52 @@
 		};
 	}
 
-	function sendTouchEvent(self, event, touchList) {
+	function sendTouchEvent(self, eventType, touchList) {
 		var touchEvent = document.createEvent("TouchEvent");
+
+		var canBubble = true;
+		var cancelable = true;
+		var view = window;
+		var detail = null;    // not sure what this is
+		var screenX = 0;
+		var screenY = 0;
+		var clientX = 0;
+		var clientY = 0;
+		var ctrlKey = false;
+		var altKey = false;
+		var shiftKey = false;
+		var metaKey = false;
+		var touches = touchList;
+		var targetTouches = touchList;
+		var changedTouches = touchList;
+		var scale;
+		var rotation;
+
 		touchEvent.initTouchEvent(
-			event, // event type
-			true, // canBubble
-			true, // cancelable
-			window, // DOM window
-			null, // detail (not sure what this is)
-			0, 0, // screenX/Y
-			0, 0, // clientX/Y
-			false, false, false, false, // meta keys (shift etc.)
-			touchList, touchList, touchList
+			touches, targetTouches, changedTouches,
+			eventType,
+			view,
+			screenX, screenY,
+			clientX, clientY,
+			ctrlKey, altKey, shiftKey, metaKey
 		);
 
+		//param.touchItem, param.touchItem, param.touchItem, param.type, param.view, param.screenX, param.screenY, param.clientX, param.clientY, param.ctrlKey, param.altKey, param.shiftKey, param.metaKey
+		//touchEvent.initTouchEvent(
+		//	eventType,
+		//	canBubble,
+		//	cancelable,
+		//	view,
+		//	detail,
+		//	screenX, screenY,
+		//	clientX, clientY,
+		//	ctrlKey, altKey, shiftKey, metaKey,
+		//	touches, targetTouches, changedTouches,
+		//	scale, rotation
+		//);
+
 		var eventData = new jQuery.Event("event");
-		eventData.type = event;
+		eventData.type = eventType;
 		eventData.originalEvent = touchEvent;
 		self._element.trigger(eventData);
 	}
@@ -190,6 +220,7 @@
 	function createTouch(self, relativeX, relativeY) {
 		var offset = pageOffset(self, relativeX, relativeY);
 
+		var view = window;
 		var target = self._element[0];
 		var identifier = 0;
 		var pageX = offset.x;
@@ -197,7 +228,7 @@
 		var screenX = 0;
 		var screenY = 0;
 
-		return new Touch(undefined, target, identifier, pageX, pageY, screenX, screenY);
+		return document.createTouch(view, target, identifier, pageX, pageY, screenX, screenY);
 	}
 
 

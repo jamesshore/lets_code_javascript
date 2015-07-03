@@ -22,10 +22,13 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
--
+- Android support (test against Nexus 5)
 
 Engineering Tasks:
--
+* Get tests to pass
+- Update dependencies / integrate / deploy
+- Race condition in Quixote?
 
 To Do on current task:
-- What version of Chrome Mobile do we want to test against?
+* Feature detection for Android vs. iOS initTouchEvent
+- Fix CSS test on Android
