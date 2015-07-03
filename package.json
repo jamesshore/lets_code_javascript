@@ -21,6 +21,6 @@
     "shelljs": "^0.5.1"
   },
   "dependencies": {
-    "send": "^0.12.3"
+    "send": "^0.13.0"
   }
 }
