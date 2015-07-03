@@ -26,10 +26,8 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Get tests to pass
-- Add Android to list of supported browsers
 - Update dependencies / integrate / deploy
 - Race condition in Quixote?
 
 To Do on current task:
-* Feature detection for Android vs. iOS initTouchEvent
-- Fix CSS test on Android
+* Fix CSS test on Android

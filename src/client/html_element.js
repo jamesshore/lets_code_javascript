@@ -185,8 +185,6 @@
 		var touches = touchList;
 		var targetTouches = touchList;
 		var changedTouches = touchList;
-		var scale;
-		var rotation;
 
 		if (browser.usesAndroidInitTouchEventParameterOrder()) {
 			touchEvent.initTouchEvent(
@@ -208,8 +206,7 @@
 				screenX, screenY,
 				clientX, clientY,
 				ctrlKey, altKey, shiftKey, metaKey,
-				touches, targetTouches, changedTouches,
-				scale, rotation
+				touches, targetTouches, changedTouches
 			);
 		}
 
