@@ -26,6 +26,7 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Get tests to pass
+- Add Android to list of supported browsers
 - Update dependencies / integrate / deploy
 - Race condition in Quixote?
 

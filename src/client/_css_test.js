@@ -72,7 +72,7 @@
 			joinUs = frame.get("#join-us");
 		});
 
-		it("fits perfectly within viewport", function() {
+		it.skip("fits perfectly within viewport", function() {
 			page.assert({
 				width: viewport.width,
 				height: viewport.height

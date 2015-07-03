@@ -188,28 +188,30 @@
 		var scale;
 		var rotation;
 
-		touchEvent.initTouchEvent(
-			touches, targetTouches, changedTouches,
-			eventType,
-			view,
-			screenX, screenY,
-			clientX, clientY,
-			ctrlKey, altKey, shiftKey, metaKey
-		);
-
-		//param.touchItem, param.touchItem, param.touchItem, param.type, param.view, param.screenX, param.screenY, param.clientX, param.clientY, param.ctrlKey, param.altKey, param.shiftKey, param.metaKey
-		//touchEvent.initTouchEvent(
-		//	eventType,
-		//	canBubble,
-		//	cancelable,
-		//	view,
-		//	detail,
-		//	screenX, screenY,
-		//	clientX, clientY,
-		//	ctrlKey, altKey, shiftKey, metaKey,
-		//	touches, targetTouches, changedTouches,
-		//	scale, rotation
-		//);
+		if (browser.usesAndroidInitTouchEventParameterOrder()) {
+			touchEvent.initTouchEvent(
+				touches, targetTouches, changedTouches,
+				eventType,
+				view,
+				screenX, screenY,
+				clientX, clientY,
+				ctrlKey, altKey, shiftKey, metaKey
+			);
+		}
+		else {
+			touchEvent.initTouchEvent(
+				eventType,
+				canBubble,
+				cancelable,
+				view,
+				detail,
+				screenX, screenY,
+				clientX, clientY,
+				ctrlKey, altKey, shiftKey, metaKey,
+				touches, targetTouches, changedTouches,
+				scale, rotation
+			);
+		}
 
 		var eventData = new jQuery.Event("event");
 		eventData.type = eventType;
