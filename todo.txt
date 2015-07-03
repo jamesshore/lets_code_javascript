@@ -6,7 +6,7 @@ Minimum Marketable Features:
 + replace home page with professional design (episodes 201-321)
 + IE 11 support (and get rid of IE 8) (episodes 322-323)
 + Android support (episodes 324-327)
-- iOS 8 support
++ iOS 8 support (episode 328)
 - replace 404 page with professional design
   - remember to cache-bust it
 - responsive design?
@@ -25,13 +25,7 @@ User Stories to finish current MMF:
 -
 
 Engineering Tasks:
-- Race condition in Quixote?
+-
 
 To Do on current task:
-- AT START OF EPISODE:
-	- Fixed CSS issue on Android
-		- genuine cross-browser issue
-		- didn't show up in "device mode" on Chrome
-		- hardcoded height of logo element
-		- added height tests to typography tests
-		- added width and height tests for buttons
+-

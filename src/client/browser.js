@@ -12,9 +12,14 @@
 		var touchEvent = document.createEvent("TouchEvent");
 		var touches = document.createTouchList();
 
-		touchEvent.initTouchEvent(touches);
-
-		return touchEvent.touches === touches;
+		try {
+			touchEvent.initTouchEvent(touches);
+			return touchEvent.touches === touches;
+		}
+		catch (err) {
+			if (!(err instanceof TypeError)) throw err;
+			return false;
+		}
 	};
 
 	function askModernizr(feature) {
