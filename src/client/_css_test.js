@@ -72,7 +72,7 @@
 			joinUs = frame.get("#join-us");
 		});
 
-		it.skip("fits perfectly within viewport", function() {
+		it("fits perfectly within viewport", function() {
 			page.assert({
 				width: viewport.width,
 				height: viewport.height
@@ -160,18 +160,21 @@
 			assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
 			assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
 			assert.equal(fontSize(logo), "30px", "logo font size");
+			logo.assert({ height: 30 }, "logo height");
 
 			assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
 			assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
 			assert.equal(fontSize(tagline), "14px", "tagline font size");
+			tagline.assert({ height: 17 }, "tagline height");
 
 			assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
 			assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "clear button weight");
-			assert.equal(fontSize(clearButton), "12px", "clearn button font size");
+			assert.equal(fontSize(clearButton), "12px", "clear button font size");
 
 			assert.equal(fontFamily(footer), STANDARD_FONT, "footer family");
 			assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "footer weight");
 			assert.equal(fontSize(footer), "15px", "footer font size");
+			footer.assert({ height: 18 }, "footer height");
 
 			assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
 			assert.equal(fontWeight(joinUs), JOIN_US_BUTTON_WEIGHT, "join us button weight");
@@ -195,6 +198,18 @@
 					assert.equal(textIsUnderlined(button), false, description + " text underline");
 					assert.equal(textIsUppercase(button), true, description + " text uppercase");
 					assert.equal(hasBorder(button), false, description + " border");
+				}
+			});
+
+			it("have specific sizes", function() {
+				assertButtonSize(clearButton, 70, 30);
+				assertButtonSize(joinUs, 175, 35);
+
+				function assertButtonSize(button, width, height) {
+					button.assert({
+						width: width,
+						height: height
+					});
 				}
 			});
 

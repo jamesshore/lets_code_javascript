@@ -25,9 +25,14 @@ User Stories to finish current MMF:
 - Android support (test against Nexus 5)
 
 Engineering Tasks:
-* Get tests to pass
-- Update dependencies / integrate / deploy
+* Update dependencies / integrate / deploy
 - Race condition in Quixote?
 
 To Do on current task:
-* Fix CSS test on Android
+- AT START OF EPISODE:
+	- Fixed CSS issue on Android
+		- genuine cross-browser issue
+		- didn't show up in "device mode" on Chrome
+		- hardcoded height of logo element
+		- added height tests to typography tests
+		- added width and height tests for buttons
