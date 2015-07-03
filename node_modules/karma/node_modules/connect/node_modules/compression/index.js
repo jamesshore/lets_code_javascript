@@ -3,9 +3,11 @@
  * Copyright(c) 2010 Sencha Inc.
  * Copyright(c) 2011 TJ Holowaychuk
  * Copyright(c) 2014 Jonathan Ong
- * Copyright(c) 2014 Douglas Christopher Wilson
+ * Copyright(c) 2014-2015 Douglas Christopher Wilson
  * MIT Licensed
  */
+
+'use strict'
 
 /**
  * Module dependencies.
@@ -38,64 +40,66 @@ module.exports.filter = shouldCompress
 function compression(options) {
   var opts = options || {}
 
+  // options
   var filter = opts.filter || shouldCompress
-  var threshold = typeof opts.threshold === 'string'
-    ? bytes(opts.threshold)
-    : opts.threshold
+  var threshold = bytes.parse(opts.threshold)
 
   if (threshold == null) {
     threshold = 1024
   }
 
   return function compression(req, res, next){
-    var compress = true
+    var ended = false
+    var length
     var listeners = []
     var write = res.write
     var on = res.on
     var end = res.end
     var stream
 
-    // see #8
-    req.on('close', function(){
-      res.write = res.end = noop
-    });
-
-    // flush is noop by default
-    res.flush = noop;
+    // flush
+    res.flush = function flush() {
+      if (stream) {
+        stream.flush()
+      }
+    }
 
     // proxy
 
     res.write = function(chunk, encoding){
-      if (!this._header) {
-        // if content-length is set and is lower
-        // than the threshold, don't compress
-        var len = Number(res.getHeader('Content-Length'))
-        checkthreshold(len)
-        this._implicitHeader();
+      if (ended) {
+        return false
       }
+
+      if (!this._header) {
+        this._implicitHeader()
+      }
+
       return stream
         ? stream.write(new Buffer(chunk, encoding))
-        : write.call(res, chunk, encoding);
+        : write.call(this, chunk, encoding)
     };
 
     res.end = function(chunk, encoding){
-      var len
-
-      if (chunk) {
-        len = Buffer.isBuffer(chunk)
-          ? chunk.length
-          : Buffer.byteLength(chunk, encoding)
+      if (ended) {
+        return false
       }
 
       if (!this._header) {
-        len = Number(this.getHeader('Content-Length')) || len
-        checkthreshold(len)
+        // estimate the length
+        if (!this.getHeader('Content-Length')) {
+          length = chunkLength(chunk, encoding)
+        }
+
         this._implicitHeader()
       }
 
       if (!stream) {
-        return end.call(res, chunk, encoding)
+        return end.call(this, chunk, encoding)
       }
+
+      // mark ended
+      ended = true
 
       // write Buffer for Node.js 0.8
       return chunk
@@ -118,15 +122,8 @@ function compression(options) {
       return this
     }
 
-    function checkthreshold(len) {
-      if (compress && len < threshold) {
-        debug('size below threshold')
-        compress = false
-      }
-    }
-
     function nocompress(msg) {
-      debug('no compression' + (msg ? ': ' + msg : ''))
+      debug('no compression: %s', msg)
       addListeners(res, on, listeners)
       listeners = null
     }
@@ -141,8 +138,9 @@ function compression(options) {
       // vary
       vary(res, 'Accept-Encoding')
 
-      if (!compress) {
-        nocompress()
+      // content-length below threshold
+      if (Number(res.getHeader('Content-Length')) < threshold || length < threshold) {
+        nocompress('size below threshold')
         return
       }
 
@@ -184,11 +182,6 @@ function compression(options) {
       // add bufferred listeners to stream
       addListeners(stream, stream.on, listeners)
 
-      // overwrite the flush method
-      res.flush = function(){
-        stream.flush();
-      }
-
       // header fields
       res.setHeader('Content-Encoding', method);
       res.removeHeader('Content-Length');
@@ -225,11 +218,18 @@ function addListeners(stream, on, listeners) {
 }
 
 /**
- * No-operation function
- * @private
+ * Get the length of a given chunk
  */
 
-function noop(){}
+function chunkLength(chunk, encoding) {
+  if (!chunk) {
+    return 0
+  }
+
+  return !Buffer.isBuffer(chunk)
+    ? Buffer.byteLength(chunk, encoding)
+    : chunk.length
+}
 
 /**
  * Default filter function.
