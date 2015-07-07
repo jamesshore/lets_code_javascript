@@ -27,6 +27,7 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * update design
+- speed up CSS tests by resetting less
 - update our server to specify UTF-8
 - update our smoke tests to check fonts on 404 page
 - refactor our CSS

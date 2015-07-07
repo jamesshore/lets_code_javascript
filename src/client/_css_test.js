@@ -245,183 +245,312 @@
 
 		});
 
-		function backgroundColor(element) {
-			return normalizeColorString(element.getRawStyle("background-color"));
-		}
-
-		function fontFamily(element) {
-			var family = element.getRawStyle("font-family");
-			family = family.replace(/\"/g, '');
-
-			var fonts = family.split(",");
-			for (var i = 0; i < fonts.length; i++) {
-				fonts[i] = trim(fonts[i]);
-			}
-
-			return fonts.join(", ");
-		}
-
-		// Based on MDN code at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
-		function trim(str) {
-			var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-			return str.replace(rtrim, '');
-		}
-
-		function fontWeight(element) {
-			var weight = element.getRawStyle("font-weight");
-			if (weight === "normal") weight = "400";
-			return weight.toString();
-		}
-
-		function fontSize(element) {
-			return element.getRawStyle("font-size");
-		}
-
-		function textColor(element) {
-			return normalizeColorString(element.getRawStyle("color"));
-		}
-
-		function roundedCorners(element) {
-			// We can't just look at border-radius because it returns "" on Firefox and IE 9
-			var topLeft = element.getRawStyle("border-top-left-radius");
-			var topRight = element.getRawStyle("border-top-right-radius");
-			var bottomLeft = element.getRawStyle("border-bottom-left-radius");
-			var bottomRight = element.getRawStyle("border-bottom-right-radius");
-
-			if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) {
-				return topLeft;
-			}
-			else {
-				return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
-			}
-		}
-
-		function under(element, relativeToElement) {
-			var elementZ = getZIndex(element);
-			var relativeZ = getZIndex(relativeToElement);
-
-			if (elementZ === relativeZ) {
-				return !isElementAfterElementInDomTree();
-			}
-			else {
-				return (elementZ < relativeZ);
-			}
-
-			function getZIndex(element) {
-				var z = element.getRawStyle("z-index");
-				if (z === "auto") z = 0;
-				return z;
-			}
-
-			function isElementAfterElementInDomTree() {
-				var elementNode = element.toDomElement();
-				var relativeNode = relativeToElement.toDomElement();
-
-				var foundRelative = false;
-				var elementAfterRelative = false;
-				for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
-					if (child === elementNode) {
-						if (foundRelative) elementAfterRelative = true;
-					}
-					if (child === relativeNode) foundRelative = true;
-				}
-				failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
-				return elementAfterRelative;
-			}
-		}
-
-		function backgroundImage(element) {
-			var url = element.getRawStyle("background-image");
-
-			var parsedUrl = url.match(/^url\("?http:\/\/(.+?)(\/.*?)"?\)$/);    // strip off domain
-			if (parsedUrl === null) throw new Error("could not parse URL: " + url);
-
-			return parsedUrl[2];
-		}
-
-		function backgroundPosition(element) {
-			var position = element.getRawStyle("background-position");
-
-			if (position === "" || position === "50%" || position === "50% 50%") {
-				return "center";
-			}
-			else {
-				return position;
-			}
-		}
-
-		function hasBorder(element) {
-			var top = element.getRawStyle("border-top-style");
-			var right = element.getRawStyle("border-right-style");
-			var bottom = element.getRawStyle("border-bottom-style");
-			var left = element.getRawStyle("border-left-style");
-			return !(top === "none" && right === "none" && bottom === "none" && left === "none");
-		}
-
-		function isTextVerticallyCentered(element) {
-			var elementHeight = element.getRawPosition().height;
-			var lineHeight = element.getRawStyle("line-height");
-
-			return elementHeight + "px" === lineHeight;
-		}
-
-		function dropShadow(element) {
-			var shadow = element.getRawStyle("box-shadow");
-
-			// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
-			// We handle that case here.
-			if (shadow === "white") return "none";
-			if (shadow.match(/^#[0-9a-f]{6}$/)) return "none";      // look for '#' followed by six hex digits
-
-			// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
-			// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
-			// BTW, we don't support multiple shadows yet
-			var groups = shadow.match(/^([^#]+) (#......)/);   // get everything before the '#' and the r, g, b
-			if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
-
-			return normalizeColorString(groups[2]) + " " + groups[1];
-		}
-
-		function textIsUnderlined(element) {
-			var style = element.getRawStyle("text-decoration");
-			return style.indexOf("none") !== 0;
-		}
-
-		function textIsUppercase(element) {
-			return element.getRawStyle("text-transform") === "uppercase";
-		}
-
-		function applyClass(element, className, fn) {
-			var domElement = element.toDomElement();
-			var oldClassName = domElement.className;
-			try {
-				domElement.className += className;
-				forceReflow(domElement);
-
-				fn();
-			}
-			finally {
-				domElement.className = oldClassName;
-				forceReflow(domElement);
-			}
-		}
-
-		function normalizeColorString(color) {
-			if (color === "white") return "rgb(255, 255, 255)";
-
-			var colorGroups = color.match(/^#(..)(..)(..)/);    // look for presence of #rrggbb string
-			if (colorGroups === null) return color;   // if doesn't match, assume we have rgb() string
-
-			var r = parseInt(colorGroups[1], 16);
-			var g = parseInt(colorGroups[2], 16);
-			var b = parseInt(colorGroups[3], 16);
-			return "rgb(" + r + ", " + g + ", " + b + ")";
-		}
-
-		function forceReflow(domElement) {
-			var makeLintHappy = domElement.offsetHeight;
-		}
-
 	});
+
+	describe("404 page", function() {
+
+		var frame;
+		var page;
+		var viewport;
+
+		before(function(done) {
+			this.timeout(10 * 1000);
+			var options = {
+				src: "/base/src/client/404.html",
+				width: IOS_BROWSER_WIDTH,
+				height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
+			};
+			frame = quixote.createFrame(options, done);
+		});
+
+		after(function() {
+			frame.remove();
+		});
+
+		beforeEach(function() {
+			frame.reset();
+
+			page = frame.page();
+			viewport = frame.viewport();
+
+			//logo = frame.get("#logo");
+			//tagline = frame.get("#tagline");
+			//drawingAreaArrow = frame.get("#drawing-area-arrow");
+			//drawingArea = frame.get("#drawing-area");
+			//clearButton = frame.get("#clear-button");
+			//footer = frame.get("#footer");
+			//joinUs = frame.get("#join-us");
+		});
+
+
+		it("fits perfectly within viewport", function() {
+			page.assert({
+				width: viewport.width,
+				height: viewport.height
+			}, "page should not be larger than viewport");
+
+			//joinUs.assert({
+			//	bottom: viewport.bottom.minus(13)
+			//}, "bottom element should fit against bottom of viewport");
+		});
+
+		//it("has a nice margin when viewport is smaller than the page", function() {
+		//	frame.resize(100, 100);
+		//
+		//	joinUs.assert({
+		//		bottom: page.bottom.minus(13)
+		//	}, "bottom element should have a nice margin before the bottom of the page");
+		//});
+
+		//it("has an overall layout", function() {
+		//	logo.assert({
+		//		center: page.center,
+		//		top: 12
+		//	}, "logo should be centered at top of page");
+		//
+		//	tagline.assert({
+		//		center: page.center,
+		//		top: logo.bottom.plus(5)
+		//	}, "tagline should be centered directly below logo");
+		//
+		//	drawingArea.assert({
+		//		center: page.center,
+		//		top: tagline.bottom.plus(10),
+		//		width: page.width
+		//	}, "drawing area should be centered below tagline");
+		//
+		//	footer.assert({
+		//		center: page.center,
+		//		top: drawingArea.bottom.plus(13)
+		//	}, "footer should be centered below drawing area");
+		//
+		//	joinUs.assert({
+		//		center: page.center,
+		//		top: footer.bottom.plus(13),
+		//		height: 35,
+		//		width: 175
+		//	}, "join us button should be centered below footer");
+		//});
+
+		//it("has a color scheme", function() {
+		//	assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
+		//	assert.equal(textColor(logo), WHITE, "logo text should be white");
+		//	assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
+		//	assert.equal(backgroundColor(drawingArea), WHITE, "drawing area should be white");
+		//	assert.equal(textColor(footer), WHITE, "footer should be white");
+		//
+		//	assert.equal(textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
+		//	assert.equal(backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
+		//
+		//	assert.equal(backgroundColor(joinUs), MEDIUM_BLUE, "join us button background should be medium blue");
+		//	assert.equal(textColor(joinUs), WHITE, "join us button text should be white");
+		//});
+
+		//it("has a typographic scheme", function() {
+		//	assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
+		//	assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
+		//	assert.equal(fontSize(logo), "30px", "logo font size");
+		//	logo.assert({ height: 30 }, "logo height");
+		//
+		//	assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
+		//	assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
+		//	assert.equal(fontSize(tagline), "14px", "tagline font size");
+		//	tagline.assert({ height: 17 }, "tagline height");
+		//
+		//	assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
+		//	assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "clear button weight");
+		//	assert.equal(fontSize(clearButton), "12px", "clear button font size");
+		//
+		//	assert.equal(fontFamily(footer), STANDARD_FONT, "footer family");
+		//	assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "footer weight");
+		//	assert.equal(fontSize(footer), "15px", "footer font size");
+		//	footer.assert({ height: 18 }, "footer height");
+		//
+		//	assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
+		//	assert.equal(fontWeight(joinUs), JOIN_US_BUTTON_WEIGHT, "join us button weight");
+		//	assert.equal(fontSize(joinUs), "16px", "join us button font size");
+		//});
+
+		//describe("buttons", function() {
+		//
+		//});
+	});
+
+	function backgroundColor(element) {
+		return normalizeColorString(element.getRawStyle("background-color"));
+	}
+
+	function fontFamily(element) {
+		var family = element.getRawStyle("font-family");
+		family = family.replace(/\"/g, '');
+
+		var fonts = family.split(",");
+		for (var i = 0; i < fonts.length; i++) {
+			fonts[i] = trim(fonts[i]);
+		}
+
+		return fonts.join(", ");
+	}
+
+	// Based on MDN code at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
+	function trim(str) {
+		var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+		return str.replace(rtrim, '');
+	}
+
+	function fontWeight(element) {
+		var weight = element.getRawStyle("font-weight");
+		if (weight === "normal") weight = "400";
+		return weight.toString();
+	}
+
+	function fontSize(element) {
+		return element.getRawStyle("font-size");
+	}
+
+	function textColor(element) {
+		return normalizeColorString(element.getRawStyle("color"));
+	}
+
+	function roundedCorners(element) {
+		// We can't just look at border-radius because it returns "" on Firefox and IE 9
+		var topLeft = element.getRawStyle("border-top-left-radius");
+		var topRight = element.getRawStyle("border-top-right-radius");
+		var bottomLeft = element.getRawStyle("border-bottom-left-radius");
+		var bottomRight = element.getRawStyle("border-bottom-right-radius");
+
+		if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) {
+			return topLeft;
+		}
+		else {
+			return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
+		}
+	}
+
+	function under(element, relativeToElement) {
+		var elementZ = getZIndex(element);
+		var relativeZ = getZIndex(relativeToElement);
+
+		if (elementZ === relativeZ) {
+			return !isElementAfterElementInDomTree();
+		}
+		else {
+			return (elementZ < relativeZ);
+		}
+
+		function getZIndex(element) {
+			var z = element.getRawStyle("z-index");
+			if (z === "auto") z = 0;
+			return z;
+		}
+
+		function isElementAfterElementInDomTree() {
+			var elementNode = element.toDomElement();
+			var relativeNode = relativeToElement.toDomElement();
+
+			var foundRelative = false;
+			var elementAfterRelative = false;
+			for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
+				if (child === elementNode) {
+					if (foundRelative) elementAfterRelative = true;
+				}
+				if (child === relativeNode) foundRelative = true;
+			}
+			failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
+			return elementAfterRelative;
+		}
+	}
+
+	function backgroundImage(element) {
+		var url = element.getRawStyle("background-image");
+
+		var parsedUrl = url.match(/^url\("?http:\/\/(.+?)(\/.*?)"?\)$/);    // strip off domain
+		if (parsedUrl === null) throw new Error("could not parse URL: " + url);
+
+		return parsedUrl[2];
+	}
+
+	function backgroundPosition(element) {
+		var position = element.getRawStyle("background-position");
+
+		if (position === "" || position === "50%" || position === "50% 50%") {
+			return "center";
+		}
+		else {
+			return position;
+		}
+	}
+
+	function hasBorder(element) {
+		var top = element.getRawStyle("border-top-style");
+		var right = element.getRawStyle("border-right-style");
+		var bottom = element.getRawStyle("border-bottom-style");
+		var left = element.getRawStyle("border-left-style");
+		return !(top === "none" && right === "none" && bottom === "none" && left === "none");
+	}
+
+	function isTextVerticallyCentered(element) {
+		var elementHeight = element.getRawPosition().height;
+		var lineHeight = element.getRawStyle("line-height");
+
+		return elementHeight + "px" === lineHeight;
+	}
+
+	function dropShadow(element) {
+		var shadow = element.getRawStyle("box-shadow");
+
+		// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
+		// We handle that case here.
+		if (shadow === "white") return "none";
+		if (shadow.match(/^#[0-9a-f]{6}$/)) return "none";      // look for '#' followed by six hex digits
+
+		// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
+		// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
+		// BTW, we don't support multiple shadows yet
+		var groups = shadow.match(/^([^#]+) (#......)/);   // get everything before the '#' and the r, g, b
+		if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
+
+		return normalizeColorString(groups[2]) + " " + groups[1];
+	}
+
+	function textIsUnderlined(element) {
+		var style = element.getRawStyle("text-decoration");
+		return style.indexOf("none") !== 0;
+	}
+
+	function textIsUppercase(element) {
+		return element.getRawStyle("text-transform") === "uppercase";
+	}
+
+	function applyClass(element, className, fn) {
+		var domElement = element.toDomElement();
+		var oldClassName = domElement.className;
+		try {
+			domElement.className += className;
+			forceReflow(domElement);
+
+			fn();
+		}
+		finally {
+			domElement.className = oldClassName;
+			forceReflow(domElement);
+		}
+	}
+
+	function normalizeColorString(color) {
+		if (color === "white") return "rgb(255, 255, 255)";
+
+		var colorGroups = color.match(/^#(..)(..)(..)/);    // look for presence of #rrggbb string
+		if (colorGroups === null) return color;   // if doesn't match, assume we have rgb() string
+
+		var r = parseInt(colorGroups[1], 16);
+		var g = parseInt(colorGroups[2], 16);
+		var b = parseInt(colorGroups[3], 16);
+		return "rgb(" + r + ", " + g + ", " + b + ")";
+	}
+
+	function forceReflow(domElement) {
+		var makeLintHappy = domElement.offsetHeight;
+	}
 
 }());
