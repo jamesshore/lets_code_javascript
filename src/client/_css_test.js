@@ -301,10 +301,12 @@
 		//});
 
 		it("has an overall layout", function() {
-			//header404.assert({
-			//	middle: viewport.middle,
-			//	height: viewport.height.times(1/4)
-			//});
+			header.assert({
+				center: viewport.center,
+				middle: viewport.middle,
+				//height: viewport.height.times(1/4)
+			});
+			assert.equal(textAlign(header), "center", "header text should be centered");
 
 
 			//assert.equal(fontSize(tagline), "14px", "tagline font size");
@@ -394,6 +396,10 @@
 	function trim(str) {
 		var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
 		return str.replace(rtrim, '');
+	}
+
+	function textAlign(element) {
+		return element.getRawStyle("text-align");
 	}
 
 	function fontWeight(element) {
