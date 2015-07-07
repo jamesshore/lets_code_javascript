@@ -253,6 +253,11 @@
 		var page;
 		var viewport;
 
+		var logo404;
+		var header404;
+		var text404;
+		var drawSomething404;
+
 		before(function(done) {
 			this.timeout(10 * 1000);
 			var options = {
@@ -273,36 +278,29 @@
 			page = frame.page();
 			viewport = frame.viewport();
 
-			//logo = frame.get("#logo");
-			//tagline = frame.get("#tagline");
-			//drawingAreaArrow = frame.get("#drawing-area-arrow");
-			//drawingArea = frame.get("#drawing-area");
-			//clearButton = frame.get("#clear-button");
-			//footer = frame.get("#footer");
-			//joinUs = frame.get("#join-us");
+			logo404 = frame.get("#logo-404");
+			header404 = frame.get("#header-404");
+			text404 = frame.get("#text-404");
+			drawSomething404 = frame.get("#draw-something-404");
 		});
 
 
 		it("fits perfectly within viewport", function() {
-			//page.assert({
-			//	width: viewport.width,
-			//	height: viewport.height
-			//}, "page should not be larger than viewport");
-			//
-			//joinUs.assert({
-			//	bottom: viewport.bottom.minus(13)
-			//}, "bottom element should fit against bottom of viewport");
+			page.assert({
+				width: viewport.width,
+				height: viewport.height
+			}, "page should not be larger than viewport");
 		});
 
 		//it("has a nice margin when viewport is smaller than the page", function() {
-		//	frame.resize(100, 100);
+		//	frame.resize(50, 50);
 		//
-		//	joinUs.assert({
+		//	drawSomething404.assert({
 		//		bottom: page.bottom.minus(13)
 		//	}, "bottom element should have a nice margin before the bottom of the page");
 		//});
 
-		//it("has an overall layout", function() {
+		it("has an overall layout", function() {
 		//	logo.assert({
 		//		center: page.center,
 		//		top: 12
@@ -330,7 +328,7 @@
 		//		height: 35,
 		//		width: 175
 		//	}, "join us button should be centered below footer");
-		//});
+		});
 
 		//it("has a color scheme", function() {
 		//	assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");

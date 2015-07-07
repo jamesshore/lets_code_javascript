@@ -23,7 +23,6 @@ Minimum Marketable Features:
 User Stories to finish current MMF:
 * update design
 - release
-  - remember to cache-bust it
 
 Engineering Tasks:
 * update design
@@ -31,6 +30,7 @@ Engineering Tasks:
 - update our server to specify UTF-8
 - update our smoke tests to check fonts on 404 page
 - refactor our CSS
+- improve cache-bust code in Jakefile
 
 To Do on current task:
 * rewrite HTML for the page
