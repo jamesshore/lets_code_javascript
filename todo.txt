@@ -7,13 +7,12 @@ Minimum Marketable Features:
 + IE 11 support (and get rid of IE 8) (episodes 322-323)
 + Android support (episodes 324-327)
 + iOS 8 support (episode 328)
-- replace 404 page with professional design
-  - remember to cache-bust it
-- responsive design?
-- Accessibility?
-- Polish
-  - Clear button retains focus when drawing (IE8, 9, Chrome)
-  - Fix: drawing glitches that occur exiting drawing area that is flush against side of browser
+* replace 404 page with professional design
+- responsive design
+- accessibility
+- polish
+  - clear button retains focus when drawing (IE8, 9, Chrome)
+  - drawing glitches occur when exiting drawing area that is flush against side of browser
 ? multiple painting/erasing tools
 - collaborative painting
 - save the pages (persistence / databases)
@@ -22,10 +21,16 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
--
+* update design
+- release
+  - remember to cache-bust it
 
 Engineering Tasks:
--
+* update design
+- update our server to specify UTF-8
+- update our smoke tests to check fonts on 404 page
+- refactor our CSS
 
 To Do on current task:
--
+* rewrite HTML for the page
+- test-drive CSS
