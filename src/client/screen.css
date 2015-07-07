@@ -132,6 +132,10 @@ body {
 /* 404 Page */
 
 #logo-404 {
+	line-height: 1;
+	height: 30px;
+	font-size: 30px;
+	font-weight: 600;
 	color: white;
 }
 
@@ -139,6 +143,7 @@ body {
 	line-height: 1;
 	margin-top: 241px;
 	font-size: 160px;
+	font-weight: 600;
 	color: #0d576d;
 }
 
@@ -149,4 +154,5 @@ body {
 #draw-something-404 {
 	color: white;
 	background-color: #00799c;
+	font-weight: 400;
 }

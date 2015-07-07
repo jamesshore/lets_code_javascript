@@ -19,7 +19,7 @@
 	var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
 
 	var BODY_TEXT_WEIGHT = "300";
-	var JOIN_US_BUTTON_WEIGHT = "400";
+	var LINK_BUTTON_WEIGHT = "400";
 	var CLEAR_BUTTON_WEIGHT = "600";
 	var HEADLINE_WEIGHT = "600";
 
@@ -177,7 +177,7 @@
 			footer.assert({ height: 18 }, "footer height");
 
 			assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
-			assert.equal(fontWeight(joinUs), JOIN_US_BUTTON_WEIGHT, "join us button weight");
+			assert.equal(fontWeight(joinUs), LINK_BUTTON_WEIGHT, "join us button weight");
 			assert.equal(fontSize(joinUs), "16px", "join us button font size");
 		});
 
@@ -253,10 +253,10 @@
 		var page;
 		var viewport;
 
-		var logo404;
-		var header404;
-		var tagline404;
-		var drawSomething404;
+		var logo;
+		var header;
+		var tagline;
+		var drawSomething;
 
 		before(function(done) {
 			this.timeout(10 * 1000);
@@ -278,10 +278,10 @@
 			page = frame.page();
 			viewport = frame.viewport();
 
-			logo404 = frame.get("#logo-404");
-			header404 = frame.get("#header-404");
-			tagline404 = frame.get("#tagline-404");
-			drawSomething404 = frame.get("#draw-something-404");
+			logo = frame.get("#logo-404");
+			header = frame.get("#header-404");
+			tagline = frame.get("#tagline-404");
+			drawSomething = frame.get("#draw-something-404");
 		});
 
 
@@ -307,10 +307,19 @@
 			//});
 
 
+			//assert.equal(fontSize(tagline), "14px", "tagline font size");
+			//tagline.assert({ height: 17 }, "tagline height");
+
+			//assert.equal(fontSize(joinUs), "16px", "join us button font size");
+
+
+
 		//	logo.assert({
 		//		center: page.center,
 		//		top: 12
 		//	}, "logo should be centered at top of page");
+		//	assert.equal(fontSize(logo), "30px", "logo font size");
+		//	logo.assert({ height: 30 }, "logo height");
 		//
 		//	tagline.assert({
 		//		center: page.center,
@@ -338,38 +347,27 @@
 
 		it("has a color scheme", function() {
 			assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
-			assert.equal(textColor(logo404), WHITE, "logo text should be white");
-			assert.equal(textColor(header404), DARK_BLUE, "header should be dark blue");
-			assert.equal(textColor(tagline404), DARK_BLUE, "tagline should be dark blue");
+			assert.equal(textColor(logo), WHITE, "logo text should be white");
+			assert.equal(textColor(header), DARK_BLUE, "header should be dark blue");
+			assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
 
-			assert.equal(backgroundColor(drawSomething404), MEDIUM_BLUE, "button background should be medium blue");
-			assert.equal(textColor(drawSomething404), WHITE, "button text should be white");
+			assert.equal(backgroundColor(drawSomething), MEDIUM_BLUE, "button background should be medium blue");
+			assert.equal(textColor(drawSomething), WHITE, "button text should be white");
 		});
 
-		//it("has a typographic scheme", function() {
-		//	assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
-		//	assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
-		//	assert.equal(fontSize(logo), "30px", "logo font size");
-		//	logo.assert({ height: 30 }, "logo height");
-		//
-		//	assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
-		//	assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
-		//	assert.equal(fontSize(tagline), "14px", "tagline font size");
-		//	tagline.assert({ height: 17 }, "tagline height");
-		//
-		//	assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
-		//	assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "clear button weight");
-		//	assert.equal(fontSize(clearButton), "12px", "clear button font size");
-		//
-		//	assert.equal(fontFamily(footer), STANDARD_FONT, "footer family");
-		//	assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "footer weight");
-		//	assert.equal(fontSize(footer), "15px", "footer font size");
-		//	footer.assert({ height: 18 }, "footer height");
-		//
-		//	assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
-		//	assert.equal(fontWeight(joinUs), JOIN_US_BUTTON_WEIGHT, "join us button weight");
-		//	assert.equal(fontSize(joinUs), "16px", "join us button font size");
-		//});
+		it("has a typographic scheme", function() {
+			assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
+			assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
+
+			assert.equal(fontFamily(header), STANDARD_FONT, "header font");
+			assert.equal(fontWeight(header), HEADLINE_WEIGHT, "header weight");
+			
+			assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
+			assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
+
+			assert.equal(fontFamily(drawSomething), STANDARD_FONT, "draw something button family");
+			assert.equal(fontWeight(drawSomething), LINK_BUTTON_WEIGHT, "draw something button weight");
+		});
 
 		//describe("buttons", function() {
 		//
