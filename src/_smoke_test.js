@@ -12,7 +12,7 @@
 	var assert = require("./shared/_assert.js");
 
 	var HOME_PAGE_URL = "http://localhost:5000";
-	var EXPECTED_BROWSER = "firefox 38.0.5";
+	var EXPECTED_BROWSER = "firefox 39.0";
 
 	var serverProcess;
 	var driver;
