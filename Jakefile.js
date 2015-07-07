@@ -123,7 +123,13 @@
 		var hashCatRunner = require("./build/util/hashcat_runner.js");
 		hashCatRunner.go({
 			indexFile: paths.buildClientIndexHtml
-		}, removeHashCatIntermediateFiles, fail);
+		}, hashCat404Page, fail);
+
+		function hashCat404Page() {
+			hashCatRunner.go({
+				indexFile: paths.buildClient404Html
+			}, removeHashCatIntermediateFiles, fail);
+		}
 
 
 		function removeHashCatIntermediateFiles() {
