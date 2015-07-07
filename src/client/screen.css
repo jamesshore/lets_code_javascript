@@ -7,6 +7,9 @@ body {
 	padding: 0;
 }
 
+
+/* Home page */
+
 #logo {
 	line-height: 1;
 	height: 30px;
@@ -123,4 +126,27 @@ body {
 	box-shadow: none;
 	position: relative;
 	top: 1px;
+}
+
+
+/* 404 Page */
+
+#logo-404 {
+	color: white;
+}
+
+#header-404 {
+	line-height: 1;
+	margin-top: 241px;
+	font-size: 160px;
+	color: #0d576d;
+}
+
+#tagline-404 {
+	color: #0d576d;
+}
+
+#draw-something-404 {
+	color: white;
+	background-color: #00799c;
 }

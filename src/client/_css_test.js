@@ -255,7 +255,7 @@
 
 		var logo404;
 		var header404;
-		var text404;
+		var tagline404;
 		var drawSomething404;
 
 		before(function(done) {
@@ -280,17 +280,17 @@
 
 			logo404 = frame.get("#logo-404");
 			header404 = frame.get("#header-404");
-			text404 = frame.get("#text-404");
+			tagline404 = frame.get("#tagline-404");
 			drawSomething404 = frame.get("#draw-something-404");
 		});
 
 
-		it("fits perfectly within viewport", function() {
-			page.assert({
-				width: viewport.width,
-				height: viewport.height
-			}, "page should not be larger than viewport");
-		});
+		//it("fits perfectly within viewport", function() {
+		//	page.assert({
+		//		width: viewport.width,
+		//		height: viewport.height
+		//	}, "page should not be larger than viewport");
+		//});
 
 		//it("has a nice margin when viewport is smaller than the page", function() {
 		//	frame.resize(50, 50);
@@ -301,6 +301,12 @@
 		//});
 
 		it("has an overall layout", function() {
+			//header404.assert({
+			//	middle: viewport.middle,
+			//	height: viewport.height.times(1/4)
+			//});
+
+
 		//	logo.assert({
 		//		center: page.center,
 		//		top: 12
@@ -330,19 +336,15 @@
 		//	}, "join us button should be centered below footer");
 		});
 
-		//it("has a color scheme", function() {
-		//	assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
-		//	assert.equal(textColor(logo), WHITE, "logo text should be white");
-		//	assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
-		//	assert.equal(backgroundColor(drawingArea), WHITE, "drawing area should be white");
-		//	assert.equal(textColor(footer), WHITE, "footer should be white");
-		//
-		//	assert.equal(textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
-		//	assert.equal(backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
-		//
-		//	assert.equal(backgroundColor(joinUs), MEDIUM_BLUE, "join us button background should be medium blue");
-		//	assert.equal(textColor(joinUs), WHITE, "join us button text should be white");
-		//});
+		it("has a color scheme", function() {
+			assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
+			assert.equal(textColor(logo404), WHITE, "logo text should be white");
+			assert.equal(textColor(header404), DARK_BLUE, "header should be dark blue");
+			assert.equal(textColor(tagline404), DARK_BLUE, "tagline should be dark blue");
+
+			assert.equal(backgroundColor(drawSomething404), MEDIUM_BLUE, "button background should be medium blue");
+			assert.equal(textColor(drawSomething404), WHITE, "button text should be white");
+		});
 
 		//it("has a typographic scheme", function() {
 		//	assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
