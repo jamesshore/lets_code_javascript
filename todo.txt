@@ -7,12 +7,14 @@ Minimum Marketable Features:
 + IE 11 support (and get rid of IE 8) (episodes 322-324)
 + Android support (episodes 325-327)
 + iOS 8 support (episode 328)
-* replace 404 page with professional design
+* replace 404 page with professional design (episodes 329+)
 - responsive design
 - accessibility
 - polish
   - clear button retains focus when drawing (IE8, 9, Chrome)
   - drawing glitches occur when exiting drawing area that is flush against side of browser
+  - one-pixel gap on right side of drawing area (Firefox, others unknown)
+  - favicon
 ? multiple painting/erasing tools
 - collaborative painting
 - save the pages (persistence / databases)
