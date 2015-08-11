@@ -8,7 +8,7 @@
 		"Firefox 39.0.0 (Mac OS X 10.10.0)",
 		"Chrome 44.0.2403 (Mac OS X 10.10.4)",
 		"Safari 8.0.7 (Mac OS X 10.10.4)",
-		"Mobile Safari 8.0.0 (iOS 8.3.0)",
+		"Mobile Safari 8.0.0 (iOS 8.4.0)",
 		"Chrome Mobile 39.0.0 (Android 5.1.0)"
 	];
 
