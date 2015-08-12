@@ -284,13 +284,12 @@
 			drawSomething = frame.get("#draw-something-404");
 		});
 
-
-		//it("fits perfectly within viewport", function() {
-		//	page.assert({
-		//		width: viewport.width,
-		//		height: viewport.height
-		//	}, "page should not be larger than viewport");
-		//});
+		it("fits perfectly within viewport", function() {
+			page.assert({
+				width: viewport.width,
+				height: viewport.height
+			}, "page should not be larger than viewport");
+		});
 
 		//it("has a nice margin when viewport is smaller than the page", function() {
 		//	frame.resize(50, 50);
@@ -301,27 +300,39 @@
 		//});
 
 		it("has an overall layout", function() {
+			logo.assert({
+				center: page.center,
+				height: 30
+			}, "logo should be centered at top of page");
+			assert.equal(fontSize(logo), "30px", "logo font size");
+			assert.equal(textAlign(logo), "center", "logo text should be centered");
+
 			header.assert({
 				center: viewport.center,
-				middle: viewport.middle,
-				//height: viewport.height.times(1/4)
-			});
+				height: viewport.height.times(1/4)
+			}, "404 header should be centered under logo");
+			assert.equal(fontSize(header), "160px", "header font size");
 			assert.equal(textAlign(header), "center", "header text should be centered");
 
+			tagline.assert({
+				center: viewport.center,
+				height: 17
+			}, "tagline should be centered under 404 header");
+			assert.equal(fontSize(tagline), "14px", "tagline font size");
+			assert.equal(textAlign(tagline), "center", "tagline text should be centered");
 
-			//assert.equal(fontSize(tagline), "14px", "tagline font size");
-			//tagline.assert({ height: 17 }, "tagline height");
+			drawSomething.assert({
+				center: page.center,
+				height: 35,
+				width: 175
+			}, "button should be centered below tagline");
+			assert.equal(textAlign(drawSomething), "center", "button text should be centered");
+
 
 			//assert.equal(fontSize(joinUs), "16px", "join us button font size");
 
 
 
-		//	logo.assert({
-		//		center: page.center,
-		//		top: 12
-		//	}, "logo should be centered at top of page");
-		//	assert.equal(fontSize(logo), "30px", "logo font size");
-		//	logo.assert({ height: 30 }, "logo height");
 		//
 		//	tagline.assert({
 		//		center: page.center,

@@ -137,11 +137,13 @@ body {
 	font-size: 30px;
 	font-weight: 600;
 	color: white;
+	text-align: center;
 }
 
 #header-404 {
 	line-height: 1;
-	margin-top: 241px;
+	margin-top: 0;
+	margin-bottom: 0;
 	font-size: 160px;
 	font-weight: 600;
 	color: #0d576d;
@@ -150,10 +152,21 @@ body {
 
 #tagline-404 {
 	color: #0d576d;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
 }
 
 #draw-something-404 {
 	color: white;
 	background-color: #00799c;
 	font-weight: 400;
+	line-height: 35px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+
+	display: block;
+	height: 35px;
+	width: 175px;
 }
