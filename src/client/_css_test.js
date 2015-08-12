@@ -96,11 +96,13 @@
 				center: page.center,
 				top: 12
 			}, "logo should be centered at top of page");
+			assert.equal(textAlign(logo), "center", "logo text should be centered");
 
 			tagline.assert({
 				center: page.center,
 				top: logo.bottom.plus(5)
 			}, "tagline should be centered directly below logo");
+			assert.equal(textAlign(tagline), "center", "tagline text should be centered");
 
 			drawingArea.assert({
 				center: page.center,
@@ -112,6 +114,7 @@
 				center: page.center,
 				top: drawingArea.bottom.plus(13)
 			}, "footer should be centered below drawing area");
+			assert.equal(textAlign(footer), "center", "footer text should be centered");
 
 			joinUs.assert({
 				center: page.center,
@@ -362,7 +365,8 @@
 	});
 
 	function assertStandardButtonStyling(button, description) {
-		assert.equal(isTextVerticallyCentered(button), true, description + " text centering");
+		assert.equal(textAlign(button), "center", description + "text horizontal centering");
+		assert.equal(isTextVerticallyCentered(button), true, description + " text vertical centering");
 		assert.equal(textIsUnderlined(button), false, description + " text underline");
 		assert.equal(textIsUppercase(button), true, description + " text uppercase");
 		assert.equal(hasBorder(button), false, description + " border");
