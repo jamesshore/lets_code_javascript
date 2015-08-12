@@ -168,5 +168,21 @@ body {
 
 	display: block;
 	height: 35px;
-	width: 175px;
+	width: 225px;
+
+	text-decoration: none;
+	text-transform: uppercase;
+	box-shadow: 0 1px 0 0 #0d576d;
+	border-radius: 2px;
+}
+
+
+#draw-something-404:hover, #draw-something-404._hover_ {
+	background-color: #006f8f;
+}
+
+#draw-something-404:active, #draw-something-404._active_ {
+	box-shadow: none;
+	position: relative;
+	top: 1px;
 }

@@ -28,7 +28,9 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * update design
-- modify home page tests to check text-align: center
+- modify home page tests with latest test approach
+  - check text-align: center
+  - put sizes in layout test
 - update our server to specify UTF-8
 - update our smoke tests to check fonts on 404 page
 - refactor our CSS

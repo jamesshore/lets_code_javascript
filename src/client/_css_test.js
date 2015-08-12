@@ -192,13 +192,6 @@
 			it("have common styling", function() {
 				assertStandardButtonStyling(clearButton, "clear button");
 				assertStandardButtonStyling(joinUs, "'join us' button");
-
-				function assertStandardButtonStyling(button, description) {
-					assert.equal(isTextVerticallyCentered(button), true, description + " text centering");
-					assert.equal(textIsUnderlined(button), false, description + " text underline");
-					assert.equal(textIsUppercase(button), true, description + " text uppercase");
-					assert.equal(hasBorder(button), false, description + " border");
-				}
 			});
 
 			it("have specific sizes", function() {
@@ -221,26 +214,11 @@
 			it("darken when user hovers over them", function() {
 				assertHoverStyle(clearButton, DARKENED_GRAY, "clear button");
 				assertHoverStyle(joinUs, DARKENED_MEDIUM_BLUE, "'join us' button");
-
-				function assertHoverStyle(button, expectedColor, description) {
-					applyClass(button, "_hover_", function() {
-						assert.equal(backgroundColor(button), expectedColor, description + " hover state background color");
-					});
-				}
 			});
 
 			it("appear to depress when user activates them", function() {
 				assertActiveStyle(clearButton, drawingArea.top.plus(16), "clear button");
 				assertActiveStyle(joinUs, footer.bottom.plus(14), "'join us' button");
-
-				function assertActiveStyle(button, expectedDescriptor, description) {
-					applyClass(button, "_active_", function() {
-						button.assert({
-							top: expectedDescriptor
-						});
-						assert.equal(dropShadow(button), "none");
-					});
-				}
 			});
 
 		});
@@ -324,7 +302,7 @@
 			drawSomething.assert({
 				center: page.center,
 				height: 35,
-				width: 175
+				width: 225
 			}, "button should be centered below tagline");
 			assert.equal(textAlign(drawSomething), "center", "button text should be centered");
 
@@ -382,10 +360,53 @@
 			assert.equal(fontWeight(drawSomething), LINK_BUTTON_WEIGHT, "draw something button weight");
 		});
 
-		//describe("buttons", function() {
-		//
-		//});
+
+		describe("button", function() {
+
+			it("has common styling", function() {
+				assertStandardButtonStyling(drawSomething, "draw something button");
+			});
+
+			it("has rounded corners", function() {
+				assert.equal(roundedCorners(drawSomething), CORNER_ROUNDING, "draw something button");
+			});
+
+			it("has a drop shadow", function() {
+				assert.equal(dropShadow(drawSomething), DARK_BLUE + BUTTON_DROP_SHADOW, "draw something button drop shadow");
+			});
+
+			it("darkens when user hovers over them", function() {
+				assertHoverStyle(drawSomething, DARKENED_MEDIUM_BLUE, "draw something button");
+			});
+
+			it("appears to depress when user activates them", function() {
+				assertActiveStyle(drawSomething, tagline.bottom.plus(15), "draw something button");
+			});
+
+		});
 	});
+
+	function assertStandardButtonStyling(button, description) {
+		assert.equal(isTextVerticallyCentered(button), true, description + " text centering");
+		assert.equal(textIsUnderlined(button), false, description + " text underline");
+		assert.equal(textIsUppercase(button), true, description + " text uppercase");
+		assert.equal(hasBorder(button), false, description + " border");
+	}
+
+	function assertHoverStyle(button, expectedColor, description) {
+		applyClass(button, "_hover_", function() {
+			assert.equal(backgroundColor(button), expectedColor, description + " hover state background color");
+		});
+	}
+
+	function assertActiveStyle(button, expectedDescriptor, description) {
+		applyClass(button, "_active_", function() {
+			button.assert({
+				top: expectedDescriptor
+			});
+			assert.equal(dropShadow(button), "none");
+		});
+	}
 
 	function backgroundColor(element) {
 		return normalizeColorString(element.getRawStyle("background-color"));
