@@ -27,14 +27,12 @@ User Stories to finish current MMF:
 - release
 
 Engineering Tasks:
-* update design
-- modify home page tests with latest test approach
-  - check text-align: center
-  - put sizes in layout test
+* modify home page tests with latest test approach
 - update our server to specify UTF-8
 - update our smoke tests to check fonts on 404 page
 - refactor our CSS
 - improve cache-bust code in Jakefile
 
 To Do on current task:
-- uncomment 'nice margin' test
+* check text-align: center
+- put sizes in layout test

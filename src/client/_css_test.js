@@ -269,13 +269,13 @@
 			}, "page should not be larger than viewport");
 		});
 
-		//it("has a nice margin when viewport is smaller than the page", function() {
-		//	frame.resize(50, 50);
-		//
-		//	drawSomething404.assert({
-		//		bottom: page.bottom.minus(13)
-		//	}, "bottom element should have a nice margin before the bottom of the page");
-		//});
+		it("has a nice margin when viewport is smaller than the page", function() {
+			frame.resize(50, 50);
+
+			drawSomething.assert({
+				bottom: page.bottom.minus(13)
+			}, "bottom element should have a nice margin before the bottom of the page");
+		});
 
 		it("has an overall layout", function() {
 			logo.assert({
