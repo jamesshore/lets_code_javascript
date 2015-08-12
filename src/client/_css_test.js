@@ -355,7 +355,7 @@
 			});
 
 			it("appears to depress when user activates them", function() {
-				assertActiveStyle(drawSomething, tagline.bottom.plus(15), "draw something button");
+				assertActiveStyle(drawSomething, tagline.bottom.plus(18), "draw something button");
 			});
 
 		});
