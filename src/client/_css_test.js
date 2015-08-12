@@ -279,6 +279,7 @@
 
 		it("has an overall layout", function() {
 			logo.assert({
+				top: logo.height.times(2),
 				center: page.center,
 				height: 30
 			}, "logo should be centered at top of page");
@@ -286,13 +287,15 @@
 			assert.equal(textAlign(logo), "center", "logo text should be centered");
 
 			header.assert({
+				top: logo.bottom,
 				center: viewport.center,
-				height: viewport.height.times(1/4)
+				height: 200
 			}, "404 header should be centered under logo");
-			assert.equal(fontSize(header), "160px", "header font size");
+			assert.equal(fontSize(header), "200px", "header font size");
 			assert.equal(textAlign(header), "center", "header text should be centered");
 
 			tagline.assert({
+				top: header.bottom.plus(tagline.height),
 				center: viewport.center,
 				height: 17
 			}, "tagline should be centered under 404 header");
@@ -300,40 +303,12 @@
 			assert.equal(textAlign(tagline), "center", "tagline text should be centered");
 
 			drawSomething.assert({
+				top: tagline.bottom.plus(tagline.height),
 				center: page.center,
 				height: 35,
 				width: 225
 			}, "button should be centered below tagline");
 			assert.equal(textAlign(drawSomething), "center", "button text should be centered");
-
-
-			//assert.equal(fontSize(joinUs), "16px", "join us button font size");
-
-
-
-		//
-		//	tagline.assert({
-		//		center: page.center,
-		//		top: logo.bottom.plus(5)
-		//	}, "tagline should be centered directly below logo");
-		//
-		//	drawingArea.assert({
-		//		center: page.center,
-		//		top: tagline.bottom.plus(10),
-		//		width: page.width
-		//	}, "drawing area should be centered below tagline");
-		//
-		//	footer.assert({
-		//		center: page.center,
-		//		top: drawingArea.bottom.plus(13)
-		//	}, "footer should be centered below drawing area");
-		//
-		//	joinUs.assert({
-		//		center: page.center,
-		//		top: footer.bottom.plus(13),
-		//		height: 35,
-		//		width: 175
-		//	}, "join us button should be centered below footer");
 		});
 
 		it("has a color scheme", function() {

@@ -132,6 +132,7 @@ body {
 /* 404 Page */
 
 #logo-404 {
+	margin-top: 60px;
 	line-height: 1;
 	height: 30px;
 	font-size: 30px;
@@ -144,7 +145,7 @@ body {
 	line-height: 1;
 	margin-top: 0;
 	margin-bottom: 0;
-	font-size: 160px;
+	font-size: 200px;
 	font-weight: 600;
 	color: #0d576d;
 	text-align: center;
@@ -152,6 +153,7 @@ body {
 
 #tagline-404 {
 	color: #0d576d;
+	margin-top: 17px;
 	font-size: 14px;
 	line-height: 17px;
 	text-align: center;

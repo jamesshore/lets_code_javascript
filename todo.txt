@@ -37,6 +37,5 @@ Engineering Tasks:
 - improve cache-bust code in Jakefile
 
 To Do on current task:
-* rewrite HTML for the page
-- test-drive CSS
-- add vertical spacing to layout test
+* add vertical spacing to layout test
+- uncomment 'nice margin' test
