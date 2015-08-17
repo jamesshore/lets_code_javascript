@@ -5,7 +5,7 @@
 	module.exports = [
 		"IE 9.0.0 (Windows 7 0.0.0)",
 		"IE 11.0.0 (Windows 7 0.0.0)",
-		"Firefox 39.0.0 (Mac OS X 10.10.0)",
+		"Firefox 40.0.0 (Mac OS X 10.10.0)",
 		"Chrome 44.0.2403 (Mac OS X 10.10.4)",
 		"Safari 8.0.7 (Mac OS X 10.10.4)",
 		"Mobile Safari 8.0.0 (iOS 8.4.0)",
