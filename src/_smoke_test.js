@@ -12,6 +12,7 @@
 	var assert = require("./shared/_assert.js");
 
 	var HOME_PAGE_URL = "http://localhost:5000";
+	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
 	var EXPECTED_BROWSER = "firefox 40.0.2";
 
 	var serverProcess;
@@ -78,74 +79,81 @@
 			driver.controlFlow().execute(done);
 		});
 
+		it("home page fonts are loaded", function(done) {
+			assertWebFontsLoaded(HOME_PAGE_URL, done);
+		});
 
-		it("web fonts are loaded", function(done) {
-			var TIMEOUT = 10 * 1000;
-
-			driver.get(HOME_PAGE_URL);
-
-			// wait for fonts to load
-			driver.wait(function() {
-				return driver.executeScript(function() {
-					return window.wwp_typekitDone;
-				});
-			}, TIMEOUT, "Timed out waiting for web fonts to load");
-
-			// get fonts from style sheet
-			var expectedFonts;
-			driver.executeScript(browser_getStyleSheetFonts)
-			.then(function(returnValue) {
-				expectedFonts = normalizeExpectedFonts(returnValue);
-			});
-
-			// get loaded fonts
-			var actualFonts;
-			driver.executeScript(function() {
-				return window.wwp_loadedFonts;
-			}).then(function(returnValue) {
-				actualFonts = returnValue;
-			});
-
-			// check fonts
-			driver.controlFlow().execute(function() {
-				var fontsNotPresent = expectedFonts.filter(function(expectedFont) {
-					var fontPresent = actualFonts.some(function(actualFont) {
-						return ('"' + actualFont.family + '"' === expectedFont.family) && (actualFont.variant === expectedFont.variant);
-					});
-					return !fontPresent;
-				});
-
-				if (fontsNotPresent.length !== 0) {
-					console.log("Expected these fonts to be loaded, but they weren't:\n", fontsNotPresent);
-					console.log("All expected fonts:\n", expectedFonts);
-					console.log("All loaded fonts:\n", actualFonts);
-					assert.fail("Required fonts weren't loaded");
-				}
-
-				done();
-			});
-
-			function normalizeExpectedFonts(styleSheetFonts) {
-				var expectedFonts = [];
-
-				Object.keys(styleSheetFonts.families).forEach(function(family) {
-					Object.keys(styleSheetFonts.styles).forEach(function(style) {
-						Object.keys(styleSheetFonts.weights).forEach(function(weight) {
-							style = style[0];
-							weight = weight[0];
-
-							expectedFonts.push({
-								family: family,
-								variant: style + weight
-							});
-						});
-					});
-				});
-				return expectedFonts;
-			}
+		it("404 page fonts are loaded", function(done) {
+			assertWebFontsLoaded(NOT_FOUND_PAGE_URL, done);
 		});
 
 	});
+
+	function assertWebFontsLoaded(url, done) {
+		var TIMEOUT = 10 * 1000;
+
+		driver.get(url);
+
+		// wait for fonts to load
+		driver.wait(function() {
+			return driver.executeScript(function() {
+				return window.wwp_typekitDone;
+			});
+		}, TIMEOUT, "Timed out waiting for web fonts to load");
+
+		// get fonts from style sheet
+		var expectedFonts;
+		driver.executeScript(browser_getStyleSheetFonts)
+		.then(function(returnValue) {
+			expectedFonts = normalizeExpectedFonts(returnValue);
+		});
+
+		// get loaded fonts
+		var actualFonts;
+		driver.executeScript(function() {
+			return window.wwp_loadedFonts;
+		}).then(function(returnValue) {
+			actualFonts = returnValue;
+		});
+
+		// check fonts
+		driver.controlFlow().execute(function() {
+			var fontsNotPresent = expectedFonts.filter(function(expectedFont) {
+				var fontPresent = actualFonts.some(function(actualFont) {
+					return ('"' + actualFont.family + '"' === expectedFont.family) && (actualFont.variant === expectedFont.variant);
+				});
+				return !fontPresent;
+			});
+
+			if (fontsNotPresent.length !== 0) {
+				console.log("Expected these fonts to be loaded, but they weren't:\n", fontsNotPresent);
+				console.log("All expected fonts:\n", expectedFonts);
+				console.log("All loaded fonts:\n", actualFonts);
+				assert.fail("Required fonts weren't loaded");
+			}
+
+			done();
+		});
+
+		function normalizeExpectedFonts(styleSheetFonts) {
+			var expectedFonts = [];
+
+			Object.keys(styleSheetFonts.families).forEach(function(family) {
+				Object.keys(styleSheetFonts.styles).forEach(function(style) {
+					Object.keys(styleSheetFonts.weights).forEach(function(weight) {
+						style = style[0];
+						weight = weight[0];
+
+						expectedFonts.push({
+							family: family,
+							variant: style + weight
+						});
+					});
+				});
+			});
+			return expectedFonts;
+		}
+	}
 
 	function httpGet(url, callback) {
 		var request = http.get(url);

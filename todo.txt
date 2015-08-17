@@ -27,8 +27,7 @@ User Stories to finish current MMF:
 - release
 
 Engineering Tasks:
-* update our smoke tests to check fonts on 404 page
-- improve cache-bust code in Jakefile
+* improve cache-bust code in Jakefile
 - refactor our CSS
 
 To Do on current task:
