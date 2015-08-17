@@ -30,6 +30,7 @@
 
 	function serveErrorFile(response, statusCode, file) {
 		response.statusCode = statusCode;
+		response.setHeader("Content-Type", "text/html; charset=UTF-8");
 		fs.readFile(file, function(err, data) {
 			if (err) throw err;
 			response.end(data);

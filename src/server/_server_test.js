@@ -45,6 +45,13 @@
 			});
 		});
 
+		it("sets content-type and charset for HTML files", function(done) {
+			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
+				assert.equal(response.headers["content-type"], "text/html; charset=UTF-8", "content-type header");
+				done();
+			});
+		});
+
 		it("supports multiple files", function(done) {
 			httpGet(BASE_URL + "/" + OTHER_PAGE, function(response, responseData) {
 				assert.equal(200, response.statusCode, "status code");
@@ -73,6 +80,13 @@
 			httpGet(BASE_URL + "/bargle", function(response, responseData) {
 				assert.equal(404, response.statusCode, "status code");
 				assert.equal(NOT_FOUND_DATA, responseData, "404 text");
+				done();
+			});
+		});
+
+		it("sets content-type and charset for 404 page", function(done) {
+			httpGet(BASE_URL + "/bargle", function(response, responseData) {
+				assert.equal(response.headers["content-type"], "text/html; charset=UTF-8", "content-type header");
 				done();
 			});
 		});

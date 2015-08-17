@@ -29,7 +29,8 @@ User Stories to finish current MMF:
 Engineering Tasks:
 * update our server to specify UTF-8
 - update our smoke tests to check fonts on 404 page
-- refactor our CSS
 - improve cache-bust code in Jakefile
+- refactor our CSS
 
 To Do on current task:
+- flip around expected and actual on _server_test.js
