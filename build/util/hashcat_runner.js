@@ -7,29 +7,19 @@
 
 	exports.go = function(config, success, failure) {
 		try {
-			hashcat.hashcatify({
-				htmlFile: config.indexFile,
-				outputHtmlFile: config.indexFile
+			config.files.forEach(function(file) {
+				process.stdout.write(".");
+				hashcat.hashcatify({
+					htmlFile: file,
+					outputHtmlFile: file
+				});
 			});
+			process.stdout.write("\n");
 			return success();
 		}
 		catch(err) {
 			return failure(err);
 		}
 	};
-
-		//var options = { suppressOutput: true };
-		//sh.run("node node_modules/hashcat/bin/hashcat.js " + config.indexFile, checkHashcatOutput, failure, options);
-		//
-		//function checkHashcatOutput(stdout) {
-		//	if (stdout.indexOf("Hashcat complete") !== -1) {
-		//		return success();
-		//	}
-		//	else {
-		//		console.log(stdout);
-		//		return failure("Hashcat failed");
-		//	}
-		//}
-	//};
 
 }());
