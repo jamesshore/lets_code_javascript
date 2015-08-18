@@ -1,4 +1,4 @@
-hashcat
+hashcat [![Build Status](https://travis-ci.org/mendhak/node-hashcat.svg?branch=master)](https://travis-ci.org/mendhak/node-hashcat)
 ============
 
 A commandline utility to concatenate, minify and cache-bust your Javascript and CSS references in HTML.

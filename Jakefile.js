@@ -128,11 +128,11 @@
 		function hashCat404Page() {
 			hashCatRunner.go({
 				indexFile: paths.buildClient404Html
-			}, removeHashCatIntermediateFiles, fail);
+			}, removeOriginalFiles, fail);
 		}
 
 
-		function removeHashCatIntermediateFiles() {
+		function removeOriginalFiles() {
 			shell().rm(paths.buildIntermediateFilesToErase);
 			complete();
 		}

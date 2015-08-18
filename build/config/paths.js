@@ -13,10 +13,8 @@
 	exports.buildClientIndexHtml = "generated/build/client/index.html";
 	exports.buildClient404Html = "generated/build/client/404.html";
 	exports.buildIntermediateFilesToErase = [
-		"./generated/build/client/app.min.js",
 		"./generated/build/client/bundle.js",
 		"./generated/build/client/screen.css",
-		"./generated/build/client/min.css"
 	];
 
 	exports.incrementalDir = "generated/incremental";
