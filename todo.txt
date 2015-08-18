@@ -27,7 +27,6 @@ User Stories to finish current MMF:
 - release
 
 Engineering Tasks:
-* improve cache-bust code in Jakefile
-- refactor our CSS
+* refactor our CSS
 
 To Do on current task:

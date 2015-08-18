@@ -118,6 +118,10 @@
 
 		// check fonts
 		driver.controlFlow().execute(function() {
+			if (expectedFonts.length === 0) {
+				assert.fail("No web fonts found in CSS, but expected at least one.");
+			}
+
 			var fontsNotPresent = expectedFonts.filter(function(expectedFont) {
 				var fontPresent = actualFonts.some(function(actualFont) {
 					return ('"' + actualFont.family + '"' === expectedFont.family) && (actualFont.variant === expectedFont.variant);
