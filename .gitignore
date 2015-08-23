@@ -21,3 +21,9 @@ node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_mod
 # Selenium WebDriverJS: Optional dependencies that don't build on vanilla Windows
 node_modules/selenium-webdriver/node_modules/ws/node_modules/bufferutil/
 node_modules/selenium-webdriver/node_modules/ws/node_modules/utf-8-validate/
+
+
+
+# Maas Sublime ignores
+*.sublime-project
+*.sublime-workspace

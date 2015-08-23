@@ -24,7 +24,6 @@
 		before(function (done) {
 			runServer.runProgrammatically(function(process) {
 				serverProcess = process;
-
 				driver = new firefox.Driver();
 				driver.getCapabilities().then(function(capabilities) {
 					var version = capabilities.get("browserName") + " " + capabilities.get("version");
@@ -33,10 +32,12 @@
 					}
 					done();
 				});
-			});
+			}, done);
 		});
 
 		after(function(done) {
+			if (serverProcess === undefined)
+				return done();
 			serverProcess.on("exit", function(code, signal) {
 				driver.quit().then(done);
 			});
