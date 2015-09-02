@@ -13,7 +13,7 @@
 
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
-	var EXPECTED_BROWSER = "firefox 40.0.2";
+	var EXPECTED_BROWSER = "firefox 40.0.3";
 
 	var serverProcess;
 	var driver;
