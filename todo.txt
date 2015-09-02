@@ -30,3 +30,6 @@ Engineering Tasks:
 * refactor our CSS
 
 To Do on current task:
+- AT START OF EPISODE
+  - Upgraded dependencies
+  - Integrated
