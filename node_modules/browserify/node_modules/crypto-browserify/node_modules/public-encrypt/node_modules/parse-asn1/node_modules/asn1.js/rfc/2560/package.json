@@ -1,6 +1,6 @@
 {
   "name": "asn1.js-rfc2560",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "RFC2560 structures for asn1.js",
   "main": "index.js",
   "repository": {

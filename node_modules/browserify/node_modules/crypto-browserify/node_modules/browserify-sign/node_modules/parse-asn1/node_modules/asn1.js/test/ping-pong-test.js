@@ -37,6 +37,10 @@ describe('asn1.js ping/pong', function() {
       this.ia5str();
     }, 'hello');
 
+    test('utf8str', function() {
+      this.utf8str();
+    }, 'hello');
+
     test('gentime', function() {
       this.gentime();
     }, 1385921175000);
