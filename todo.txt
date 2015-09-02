@@ -30,8 +30,7 @@ Engineering Tasks:
 * refactor our CSS
 
 To Do on current task:
-- apply normalize.css
-- factor out blocks (with TDD)
+* factor out blocks (with TDD)
   - factor out theme
   - factor out button
   - factor out drawing area
