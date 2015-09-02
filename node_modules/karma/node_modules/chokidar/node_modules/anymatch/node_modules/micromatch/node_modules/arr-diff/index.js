@@ -7,13 +7,8 @@
 
 'use strict';
 
+var flatten = require('arr-flatten');
 var slice = require('array-slice');
-
-/**
- * Expose `diff`
- */
-
-module.exports = diff;
 
 /**
  * Return the difference between the first array and
@@ -35,25 +30,29 @@ module.exports = diff;
  * @api public
  */
 
-function diff(a, b, c) {
-  var len = a.length;
-  var arr = [];
-  var rest;
+function diff(arr, arrays) {
+  var argsLen = arguments.length;
+  var len = arr.length, i = -1;
+  var res = [], arrays;
 
-  if (!b) {
-    return a;
+  if (argsLen === 1) {
+    return arr;
   }
 
-  if (!c) {
-    rest = b;
-  } else {
-    rest = [].concat.apply([], slice(arguments, 1));
+  if (argsLen > 2) {
+    arrays = flatten(slice(arguments, 1));
   }
 
-  while (len--) {
-    if (rest.indexOf(a[len]) === -1) {
-      arr.unshift(a[len]);
+  while (++i < len) {
+    if (!~arrays.indexOf(arr[i])) {
+      res.push(arr[i]);
     }
   }
-  return arr;
+  return res;
 }
+
+/**
+ * Expose `diff`
+ */
+
+module.exports = diff;
