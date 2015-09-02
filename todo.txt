@@ -30,6 +30,14 @@ Engineering Tasks:
 * refactor our CSS
 
 To Do on current task:
-- AT START OF EPISODE
-  - Upgraded dependencies
-  - Integrated
+- apply normalize.css
+- factor out blocks (with TDD)
+  - factor out theme
+  - factor out button
+  - factor out drawing area
+  - factor out header
+  - factor out subheader
+  - factor out tagline
+  - factor out 404 headline
+- factor out layout (with TDD?)
+- Improve our client directory structure
