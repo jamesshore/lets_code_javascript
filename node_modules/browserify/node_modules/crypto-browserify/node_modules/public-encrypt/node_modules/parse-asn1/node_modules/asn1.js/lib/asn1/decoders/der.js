@@ -129,7 +129,7 @@ DERNode.prototype._decodeStr = function decodeStr(buffer, tag) {
       return unused;
 
     return { unused: unused, data: buffer.raw() };
-  } else if (tag === 'ia5str') {
+  } else if (tag === 'ia5str' || tag === 'utf8str') {
     return buffer.raw().toString();
   } else {
     return this.error('Decoding of string type: ' + tag + ' unsupported');

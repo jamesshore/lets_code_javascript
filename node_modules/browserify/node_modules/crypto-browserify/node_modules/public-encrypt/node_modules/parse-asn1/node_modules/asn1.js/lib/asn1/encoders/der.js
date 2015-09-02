@@ -65,7 +65,7 @@ DERNode.prototype._encodeStr = function encodeStr(str, tag) {
     return this._createEncoderBuffer(str);
   else if (tag === 'bitstr')
     return this._createEncoderBuffer([ str.unused | 0, str.data ]);
-  else if (tag === 'ia5str')
+  else if (tag === 'ia5str' || tag === 'utf8str')
     return this._createEncoderBuffer(str);
   return this.reporter.error('Encoding of string type: ' + tag +
                              ' unsupported');
@@ -77,11 +77,13 @@ DERNode.prototype._encodeObjid = function encodeObjid(id, values, relative) {
       return this.reporter.error('string objid given, but no values map found');
     if (!values.hasOwnProperty(id))
       return this.reporter.error('objid not found in values map');
-    id = values[id].split(/\s+/g);
+    id = values[id].split(/[\s\.]+/g);
     for (var i = 0; i < id.length; i++)
       id[i] |= 0;
   } else if (Array.isArray(id)) {
     id = id.slice();
+    for (var i = 0; i < id.length; i++)
+      id[i] |= 0;
   }
 
   if (!Array.isArray(id)) {

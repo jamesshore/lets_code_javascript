@@ -7,6 +7,9 @@ body {
 	padding: 0;
 }
 
+
+/* Home page */
+
 #logo {
 	line-height: 1;
 	height: 30px;
@@ -120,6 +123,68 @@ body {
 }
 
 #join-us:active, #join-us._active_ {
+	box-shadow: none;
+	position: relative;
+	top: 1px;
+}
+
+
+/* 404 Page */
+
+#logo-404 {
+	margin-top: 60px;
+	line-height: 1;
+	height: 30px;
+	font-size: 30px;
+	font-weight: 600;
+	color: white;
+	text-align: center;
+}
+
+#header-404 {
+	line-height: 1;
+	margin-top: 0;
+	margin-bottom: 0;
+	font-size: 200px;
+	font-weight: 600;
+	color: #0d576d;
+	text-align: center;
+}
+
+#tagline-404 {
+	color: #0d576d;
+	margin-top: 17px;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+}
+
+#draw-something-404 {
+	color: white;
+	background-color: #00799c;
+	font-weight: 400;
+	line-height: 35px;
+	margin-top: 17px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+
+	display: block;
+	height: 35px;
+	width: 225px;
+
+	text-decoration: none;
+	text-transform: uppercase;
+	box-shadow: 0 1px 0 0 #0d576d;
+	border-radius: 2px;
+}
+
+
+#draw-something-404:hover, #draw-something-404._hover_ {
+	background-color: #006f8f;
+}
+
+#draw-something-404:active, #draw-something-404._active_ {
 	box-shadow: none;
 	position: relative;
 	top: 1px;

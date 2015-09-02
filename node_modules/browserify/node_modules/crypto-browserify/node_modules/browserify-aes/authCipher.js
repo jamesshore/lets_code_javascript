@@ -2,7 +2,7 @@ var aes = require('./aes')
 var Transform = require('./cipherBase')
 var inherits = require('inherits')
 var GHASH = require('./ghash')
-var xor = require('./xor')
+var xor = require('buffer-xor')
 inherits(StreamCipher, Transform)
 module.exports = StreamCipher
 

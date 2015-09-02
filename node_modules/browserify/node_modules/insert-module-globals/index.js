@@ -35,7 +35,9 @@ module.exports = function (file, opts) {
     
     var basedir = opts.basedir || '/';
     var vars = merge(defaultVars, opts.vars);
-    var varNames = Object.keys(vars);
+    var varNames = Object.keys(vars).filter(function(name) {
+        return typeof vars[name] === 'function';
+    });
     
     var quick = RegExp(varNames.map(function (name) {
         return '\\b' + name + '\\b';

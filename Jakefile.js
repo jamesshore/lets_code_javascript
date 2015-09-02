@@ -118,15 +118,14 @@
 	task("build", [ "cacheBust" ]);
 
 	task("cacheBust", [ "collateClientFiles", "bundleClientJs" ], function() {
-		console.log("Cache-busting CSS and JavaScript: .");
+		process.stdout.write("Cache-busting CSS and JavaScript: ");
 
 		var hashCatRunner = require("./build/util/hashcat_runner.js");
 		hashCatRunner.go({
-			indexFile: paths.buildClientIndexHtml
-		}, removeHashCatIntermediateFiles, fail);
+			files: [ paths.buildClientIndexHtml, paths.buildClient404Html ]
+		}, removeOriginalFiles, fail);
 
-
-		function removeHashCatIntermediateFiles() {
+		function removeOriginalFiles() {
 			shell().rm(paths.buildIntermediateFilesToErase);
 			complete();
 		}

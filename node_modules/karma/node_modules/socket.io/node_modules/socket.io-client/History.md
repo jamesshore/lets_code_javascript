@@ -1,14 +1,168 @@
 
-0.9.16 / 2013-06-06
-===================
+1.3.6 / 2015-07-14
+==================
 
-  * transports: fix escaping for tests
+  * package: bump `engine.io-client` to fix build on windows
 
-0.9.15 / 2013-06-06
-===================
+1.3.5 / 2015-03-03
+==================
 
-  * transports: added unescaping for escaped htmlfile
-  * skipped 12-14 to match socket.io server version
+ * package: bump parser
+
+1.3.4 / 2015-02-14
+==================
+
+ * build `socket.io.js` with `engine.io-client` `1.5.1`
+
+1.3.3 / 2015-02-03
+==================
+
+ * package: bump parser
+
+1.3.2 / 2015-01-19
+==================
+
+ * build `socket.io.js`
+
+1.3.1 / 2015-01-19
+==================
+
+ * no change on this release
+ * package: bump `engine.io-client` to not depend on `git(1)` for a dep
+
+1.3.0 / 2015-01-19
+==================
+
+ * package: bump `engine.io-client`
+ * added `socket.id` property pointing to session id [rase-]
+ * fix url parsing when uri string is undefined [defunctzombie]
+ * implemented `backo` for exponential backoff with randomization [mokesmokes]
+ * reset reconnection attempts state after a successul connection [mokesmokes]
+
+1.2.1 / 2014-11-21
+==================
+
+ * package: bump `engine.io-client`
+ * README: fixes to prevent duplicate events [nkzawa]
+ * fix reconnection after reconnecting manually [nkzawa]
+ * make ACK callbacks idempotent [thexeos]
+ * package: bump `uglify-js`
+
+1.2.0 / 2014-10-27
+==================
+
+ * bump `engine.io-client`.
+ * set `readyState` before engine.io close event
+ * fix reconnection after reconnecting manually
+ * enable to stop reconnecting
+ * downloads badge
+ * support no schema relative url
+ * enable to reconnect manually
+
+1.1.0 / 2014-09-04
+==================
+
+ * socket: fix in `has-binary`
+ * package: bump `socket.io-parser`
+ * package: bump `engine.io-client`
+ * further increase test timeout.
+ * double to singly quotes in tests.
+ * extend timeout and remember to close everything in each test case
+ * fix travis
+ * add travis + zuul matrix
+ * use svg instead of png to get better image quality in readme
+ * make CI build faster
+ * removed unnecessary code from try block. Only decode packet is needed.
+ * package: bump `browserify`
+ * package: bump `engine.io-client`
+ * fix autoConnect option
+ * npmignore: ignore `.gitignore`
+ * package: update `browserify`
+ * don't fire an extra reconnect when we're not reconnecting
+   after a failed initial connect attempt
+ * package: bump `socket.io-parser` for `component-emitter` dep fix
+ * updated tests to reflect `autoConnect` option
+ * add `autoConnect` option to wait with connecting
+
+1.0.6 / 2014-06-19
+==================
+
+ * test fixes on internet explorer
+ * fixes for duplicate event propagation from manager instance [Rase-]
+
+1.0.5 / 2014-06-16
+==================
+
+ * package: bump `engine.io-client` for better deps and smaller build
+ * handle io.connect(null, opts) correctly [audreyt]
+ * url: fix incorrect ports in certain connections [holic]
+ * manager: propagate all reconnection events to sockets [Rase-]
+ * index: added BC for `force new connection`
+ * socket: fix event buffering while in disconnected state [kevin-roark]
+ * package: stop using tarballs in dependencies [reid]
+ * manager: relay `connect_error` and `connect_timeout` to sockets
+
+1.0.4 / 2014-06-02
+==================
+
+ * update build
+
+1.0.3 / 2014-05-31
+==================
+
+ * package; bump `socket.io-parser` for binary ACK fix
+ * package: bump `engine.io-client` for binary UTF8 fix
+
+1.0.2 / 2014-05-28
+==================
+
+ * package: bump `socket.io-parser` for windows fix
+
+1.0.1 / 2014-05-28
+==================
+
+ * override npm tag
+
+1.0.0 / 2014-05-28
+==================
+
+ * stable release
+
+1.0.0-pre5 / 2014-05-22
+=======================
+
+ * package: bump `engine.io-client` for parser fixes
+
+1.0.0-pre4 / 2014-05-19
+=======================
+
+ * build
+
+1.0.0-pre3 / 2014-05-17
+=======================
+
+ * package: bump parser
+ * package: bump engine.io-client
+
+1.0.0-pre2 / 2014-04-27
+=======================
+
+ * package: bump `engine.io-client`
+ * package: bump `zuul`
+ * allows user-level query string parameters to be in socket.request
+ * package: bump `socket.io-parser`
+ * package: bump `engine.io-client` for android fix
+ * tidy up .gitignore
+
+1.0.0-pre / 2014-03-14
+======================
+
+ * implemented `engine.io-client`
+ * implemented `socket.io-parser`
+ * implemented `json3` to avoid env pollution
+ * implemented `debug`
+ * added binary support
+ * added `browserify` support
 
 0.9.11 / 2012-11-02
 ===================

@@ -1,23 +1,25 @@
-# Mac OS crap
+# Mac OS X
 .DS_Store
 
 # WebStorm
 .idea/workspace.xml
 
+# npm
+node_modules/**/.bin/
+
 # Build artifacts
 generated/
-
-# npm
-.bin/
 
 
 ### npm modules' build artifacts ###
 
-# Karma
-node_modules/karma/node_modules/chokidar/node_modules/fsevents/
-node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws/build/
-node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws/builderror.log
-
 # Selenium WebDriverJS: Optional dependencies that don't build on vanilla Windows
 node_modules/selenium-webdriver/node_modules/ws/node_modules/bufferutil/
 node_modules/selenium-webdriver/node_modules/ws/node_modules/utf-8-validate/
+
+# Karma: Optional dependencies that don't build on vanilla Windows
+node_modules/karma/node_modules/chokidar/node_modules/fsevents/
+node_modules/karma/node_modules/socket.io/node_modules/engine.io/node_modules/ws/node_modules/bufferutil/
+node_modules/karma/node_modules/socket.io/node_modules/engine.io/node_modules/ws/node_modules/utf-8-validate/
+node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/node_modules/bufferutil/
+node_modules/karma/node_modules/socket.io/node_modules/socket.io-client/node_modules/engine.io-client/node_modules/ws/node_modules/utf-8-validate/

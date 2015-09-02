@@ -57,4 +57,16 @@ describe('asn1.js DER decoder', function() {
     });
   }, '0101ff', { 'type': 'apple', 'value': true });
 
+  it('should decode optional and use', function() {
+    var B = asn1.define('B', function() {
+      this.int();
+    });
+
+    var A = asn1.define('A', function() {
+      this.optional().use(B);
+    });
+
+    var out = A.decode(new Buffer('020101', 'hex'), 'der');
+    assert.equal(out.toString(10), '1');
+  });
 });
