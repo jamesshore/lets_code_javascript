@@ -35,7 +35,8 @@
 		describe("Button block", function() {
 
 			var frame;
-			var button;
+			var linkTag;
+			var buttonTag;
 
 			before(function(done) {
 				frame = quixote.createFrame({
@@ -50,12 +51,47 @@
 			beforeEach(function() {
 				frame.reset();
 
-				button = frame.add("<a class='button'></a>", "button");
+				linkTag = frame.add("<a class='button'>foo</a>", "<a> button");
+				buttonTag = frame.add("<button class='button'>foo</button>", "<button> button");
 			});
 
-			it("text is centered", function() {
-				assert.equal(textAlign(button), "center", "horizontal centering");
-				//assert.equal(isTextVerticallyCentered(button), true, "vertical centering");
+			it("is big and pressable", function() {
+				linkTag.assert({
+					height: 35
+				});
+			});
+
+			it("fills its container", function() {
+				linkTag.assert({
+					width: frame.body().width
+				});
+				buttonTag.assert({
+					width: frame.body().width
+				});
+			});
+
+			it("text", function() {
+				assert.equal(textAlign(linkTag), "center", "should be horizontally centered");
+				assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
+				assert.equal(textIsUnderlined(linkTag), false, "text should not be underlined");
+				assert.equal(textIsUppercase(linkTag), true, "text should be uppercase");
+			});
+
+			it("has no border", function() {
+				assert.equal(hasBorder(linkTag), false, "standard link button");
+				assert.equal(hasBorder(buttonTag), false, "button tag button");
+			});
+
+			it("has a drop shadow", function() {
+				assert.equal(dropShadow(linkTag), DARK_BLUE + BUTTON_DROP_SHADOW);
+			});
+
+			it("darkens when user hovers over it", function() {
+				assertHoverStyle(linkTag, DARKENED_MEDIUM_BLUE);
+			});
+
+			it("appear to depress when user activates it", function() {
+				assertActivateDepresses(linkTag, 1);
 			});
 
 		});
@@ -256,8 +292,8 @@
 				});
 
 				it("appear to depress when user activates them", function() {
-					assertActiveStyle(clearButton, drawingArea.top.plus(16), "clear button");
-					assertActiveStyle(joinUs, footer.bottom.plus(14), "'join us' button");
+					assertActivateDepresses(clearButton, drawingArea.top.plus(16), "clear button");
+					assertActivateDepresses(joinUs, footer.bottom.plus(14), "'join us' button");
 				});
 
 			});
@@ -394,7 +430,7 @@
 				});
 
 				it("appears to depress when user activates them", function() {
-					assertActiveStyle(drawSomething, tagline.bottom.plus(18), "draw something button");
+					assertActivateDepresses(drawSomething, tagline.bottom.plus(18), "draw something button");
 				});
 
 			});
@@ -417,7 +453,7 @@
 		});
 	}
 
-	function assertActiveStyle(button, expectedDescriptor, description) {
+	function assertActivateDepresses(button, expectedDescriptor, description) {
 		applyClass(button, "_active_", function() {
 			button.assert({
 				top: expectedDescriptor

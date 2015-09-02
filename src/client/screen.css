@@ -11,10 +11,30 @@ body {
 /* Button block */
 
 .button {
+	/* size */
+	display: block;
+	height: 35px;
+	width: 100%;
+
+	/* text */
+	line-height: 35px;
 	text-align: center;
+	text-transform: uppercase;
+
+	/* decorations */
+	border: none;
+	box-shadow: 0 1px 0 0 #0d576d;
 }
 
+.button:hover, .button._hover_ {
+	background-color: #006f8f;
+}
 
+.button:active, .button._active_ {
+	box-shadow: none;
+	position: relative;
+	top: 1px;
+}
 
 
 
