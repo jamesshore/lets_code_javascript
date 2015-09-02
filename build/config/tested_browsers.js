@@ -6,8 +6,8 @@
 		"IE 9.0.0 (Windows 7 0.0.0)",
 		"IE 11.0.0 (Windows 7 0.0.0)",
 		"Firefox 40.0.0 (Mac OS X 10.10.0)",
-		"Chrome 45.0.2454 (Mac OS X 10.10.4)",
-		"Safari 8.0.7 (Mac OS X 10.10.4)",
+		"Chrome 45.0.2454 (Mac OS X 10.10.5)",
+		"Safari 8.0.7 (Mac OS X 10.10.5)",
 		"Mobile Safari 8.0.0 (iOS 8.4.0)",
 		"Chrome Mobile 39.0.0 (Android 5.1.0)"
 	];
