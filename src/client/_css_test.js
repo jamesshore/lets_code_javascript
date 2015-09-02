@@ -40,18 +40,19 @@
 
 			before(function(done) {
 				frame = quixote.createFrame({
+					width: 500,
 					stylesheet: "/base/src/client/screen.css"
 				}, done);
 			});
 
 			after(function() {
-				frame.remove();
+				//frame.remove();
 			});
 
 			beforeEach(function() {
 				frame.reset();
 
-				linkTag = frame.add("<a class='button'>foo</a>", "<a> button");
+				linkTag = frame.add("<a class='button' href='#createUnderline'>foo</a>", "<a> button");
 				buttonTag = frame.add("<button class='button'>foo</button>", "<button> button");
 			});
 
@@ -75,11 +76,22 @@
 				assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
 				assert.equal(textIsUnderlined(linkTag), false, "text should not be underlined");
 				assert.equal(textIsUppercase(linkTag), true, "text should be uppercase");
+				assert.equal(fontSize(linkTag), "16px", "font size");
+				assert.equal(fontWeight(linkTag), LINK_BUTTON_WEIGHT, "button weight");
+			});
+
+			it("colors", function() {
+				assert.equal(backgroundColor(linkTag), MEDIUM_BLUE, "button background");
+				assert.equal(textColor(linkTag), WHITE, "button text");
 			});
 
 			it("has no border", function() {
 				assert.equal(hasBorder(linkTag), false, "standard link button");
 				assert.equal(hasBorder(buttonTag), false, "button tag button");
+			});
+
+			it.only("has rounded corners", function() {
+				assert.equal(roundedCorners(linkTag), CORNER_ROUNDING);
 			});
 
 			it("has a drop shadow", function() {
