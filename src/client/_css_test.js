@@ -541,7 +541,7 @@
 		var domElement = element.toDomElement();
 		var oldClassName = domElement.className;
 		try {
-			domElement.className += className;
+			domElement.className += " " + className;
 			forceReflow(domElement);
 
 			fn();
