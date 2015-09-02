@@ -30,339 +30,378 @@
 	var CORNER_ROUNDING = "2px";
 	var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
-	describe("Home page", function() {
-		var frame;
-		var page;
-		var viewport;
+	describe("CSS Unit Tests:", function() {
 
-		var logo;
-		var tagline;
-		var drawingAreaArrow;
-		var drawingArea;
-		var clearButton;
-		var footer;
-		var joinUs;
+		describe("Button block", function() {
 
-		before(function(done) {
-			this.timeout(10 * 1000);
-			var options = {
-				src: "/base/src/client/index.html",
-				width: IOS_BROWSER_WIDTH,
-				height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
-			};
-			frame = quixote.createFrame(options, done);
-		});
+			var frame;
+			var button;
 
-		after(function() {
-			frame.remove();
-		});
-
-		beforeEach(function() {
-			frame.reset();
-
-			page = frame.page();
-			viewport = frame.viewport();
-
-			logo = frame.get("#logo");
-			tagline = frame.get("#tagline");
-			drawingAreaArrow = frame.get("#drawing-area-arrow");
-			drawingArea = frame.get("#drawing-area");
-			clearButton = frame.get("#clear-button");
-			footer = frame.get("#footer");
-			joinUs = frame.get("#join-us");
-		});
-
-		it("fits perfectly within viewport", function() {
-			page.assert({
-				width: viewport.width,
-				height: viewport.height
-			}, "page should not be larger than viewport");
-
-			joinUs.assert({
-				bottom: viewport.bottom.minus(13)
-			}, "bottom element should fit against bottom of viewport");
-		});
-
-		it("has a nice margin when viewport is smaller than the page", function() {
-			frame.resize(100, 100);
-
-			joinUs.assert({
-				bottom: page.bottom.minus(13)
-			}, "bottom element should have a nice margin before the bottom of the page");
-		});
-
-		it("has an overall layout", function() {
-			logo.assert({
-				center: page.center,
-				top: 12
-			}, "logo should be centered at top of page");
-			assert.equal(textAlign(logo), "center", "logo text should be centered");
-
-			tagline.assert({
-				center: page.center,
-				top: logo.bottom.plus(5)
-			}, "tagline should be centered directly below logo");
-			assert.equal(textAlign(tagline), "center", "tagline text should be centered");
-
-			drawingArea.assert({
-				center: page.center,
-				top: tagline.bottom.plus(10),
-				width: page.width
-			}, "drawing area should be centered below tagline");
-
-			footer.assert({
-				center: page.center,
-				top: drawingArea.bottom.plus(13)
-			}, "footer should be centered below drawing area");
-			assert.equal(textAlign(footer), "center", "footer text should be centered");
-
-			joinUs.assert({
-				center: page.center,
-				top: footer.bottom.plus(13),
-				height: 35,
-				width: 175
-			}, "join us button should be centered below footer");
-		});
-
-		it("has flourishes inside drawing area", function() {
-			drawingAreaArrow.assert({
-				center: drawingArea.center,
-				top: drawingArea.top
-			}, "drawing area should have an arrow centered at the top");
-
-			assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
-			assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "drawing area arrow is an image");
-			assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "drawing arrow is drawn once");
-			assert.equal(backgroundPosition(drawingAreaArrow), "center", "drawing area arrow image is centered");
-
-			clearButton.assert({
-				top: drawingArea.top.plus(15),
-				right: drawingArea.right.minus(15),
-				height: 30,
-				width: 70
-			}, "clear screen button should be centered at top-right of drawing area");
-
-			assert.equal(under(clearButton, drawingArea), false, "clear button should be over drawing area");
-		});
-
-		it("has a color scheme", function() {
-			assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
-			assert.equal(textColor(logo), WHITE, "logo text should be white");
-			assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
-			assert.equal(backgroundColor(drawingArea), WHITE, "drawing area should be white");
-			assert.equal(textColor(footer), WHITE, "footer should be white");
-
-			assert.equal(textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
-			assert.equal(backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
-
-			assert.equal(backgroundColor(joinUs), MEDIUM_BLUE, "join us button background should be medium blue");
-			assert.equal(textColor(joinUs), WHITE, "join us button text should be white");
-		});
-
-		it("has a typographic scheme", function() {
-			assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
-			assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
-			assert.equal(fontSize(logo), "30px", "logo font size");
-			logo.assert({ height: 30 }, "logo height");
-
-			assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
-			assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
-			assert.equal(fontSize(tagline), "14px", "tagline font size");
-			tagline.assert({ height: 17 }, "tagline height");
-
-			assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
-			assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "clear button weight");
-			assert.equal(fontSize(clearButton), "12px", "clear button font size");
-
-			assert.equal(fontFamily(footer), STANDARD_FONT, "footer family");
-			assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "footer weight");
-			assert.equal(fontSize(footer), "15px", "footer font size");
-			footer.assert({ height: 18 }, "footer height");
-
-			assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
-			assert.equal(fontWeight(joinUs), LINK_BUTTON_WEIGHT, "join us button weight");
-			assert.equal(fontSize(joinUs), "16px", "join us button font size");
-		});
-
-		it("rounds the corners of all rectangles", function() {
-			assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "drawing area");
-			assert.equal(roundedCorners(clearButton), CORNER_ROUNDING, "clear button");
-			assert.equal(roundedCorners(joinUs), CORNER_ROUNDING, "join us button");
-		});
-
-		describe("buttons", function() {
-
-			it("have common styling", function() {
-				assertStandardButtonStyling(clearButton, "clear button");
-				assertStandardButtonStyling(joinUs, "'join us' button");
+			before(function(done) {
+				frame = quixote.createFrame({
+					stylesheet: "/base/src/client/screen.css"
+				}, done);
 			});
 
-			it("have specific sizes", function() {
-				assertButtonSize(clearButton, 70, 30);
-				assertButtonSize(joinUs, 175, 35);
-
-				function assertButtonSize(button, width, height) {
-					button.assert({
-						width: width,
-						height: height
-					});
-				}
+			after(function() {
+				frame.remove();
 			});
 
-			it("have a drop shadow", function() {
-				assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "clear button drop shadow");
-				assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "'join us' button drop shadow");
+			beforeEach(function() {
+				frame.reset();
+
+				button = frame.add("<a class='button'></a>", "button");
 			});
 
-			it("darken when user hovers over them", function() {
-				assertHoverStyle(clearButton, DARKENED_GRAY, "clear button");
-				assertHoverStyle(joinUs, DARKENED_MEDIUM_BLUE, "'join us' button");
-			});
-
-			it("appear to depress when user activates them", function() {
-				assertActiveStyle(clearButton, drawingArea.top.plus(16), "clear button");
-				assertActiveStyle(joinUs, footer.bottom.plus(14), "'join us' button");
+			it("text is centered", function() {
+				assert.equal(textAlign(button), "center", "horizontal centering");
+				//assert.equal(isTextVerticallyCentered(button), true, "vertical centering");
 			});
 
 		});
 
 	});
 
-	describe("404 page", function() {
-
-		var frame;
-		var page;
-		var viewport;
-
-		var logo;
-		var header;
-		var tagline;
-		var drawSomething;
-
-		before(function(done) {
-			this.timeout(10 * 1000);
-			var options = {
-				src: "/base/src/client/404.html",
-				width: IOS_BROWSER_WIDTH,
-				height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
-			};
-			frame = quixote.createFrame(options, done);
-		});
-
-		after(function() {
-			frame.remove();
-		});
-
-		beforeEach(function() {
-			frame.reset();
-
-			page = frame.page();
-			viewport = frame.viewport();
-
-			logo = frame.get("#logo-404");
-			header = frame.get("#header-404");
-			tagline = frame.get("#tagline-404");
-			drawSomething = frame.get("#draw-something-404");
-		});
-
-		it("fits perfectly within viewport", function() {
-			page.assert({
-				width: viewport.width,
-				height: viewport.height
-			}, "page should not be larger than viewport");
-		});
-
-		it("has a nice margin when viewport is smaller than the page", function() {
-			frame.resize(50, 50);
-
-			drawSomething.assert({
-				bottom: page.bottom.minus(13)
-			}, "bottom element should have a nice margin before the bottom of the page");
-		});
-
-		it("has an overall layout", function() {
-			logo.assert({
-				top: logo.height.times(2),
-				center: page.center,
-				height: 30
-			}, "logo should be centered at top of page");
-			assert.equal(fontSize(logo), "30px", "logo font size");
-			assert.equal(textAlign(logo), "center", "logo text should be centered");
-
-			header.assert({
-				top: logo.bottom,
-				center: viewport.center,
-				height: 200
-			}, "404 header should be centered under logo");
-			assert.equal(fontSize(header), "200px", "header font size");
-			assert.equal(textAlign(header), "center", "header text should be centered");
-
-			tagline.assert({
-				top: header.bottom.plus(tagline.height),
-				center: viewport.center,
-				height: 17
-			}, "tagline should be centered under 404 header");
-			assert.equal(fontSize(tagline), "14px", "tagline font size");
-			assert.equal(textAlign(tagline), "center", "tagline text should be centered");
-
-			drawSomething.assert({
-				top: tagline.bottom.plus(tagline.height),
-				center: page.center,
-				height: 35,
-				width: 225
-			}, "button should be centered below tagline");
-			assert.equal(textAlign(drawSomething), "center", "button text should be centered");
-		});
-
-		it("has a color scheme", function() {
-			assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
-			assert.equal(textColor(logo), WHITE, "logo text should be white");
-			assert.equal(textColor(header), DARK_BLUE, "header should be dark blue");
-			assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
-
-			assert.equal(backgroundColor(drawSomething), MEDIUM_BLUE, "button background should be medium blue");
-			assert.equal(textColor(drawSomething), WHITE, "button text should be white");
-		});
-
-		it("has a typographic scheme", function() {
-			assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
-			assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
-
-			assert.equal(fontFamily(header), STANDARD_FONT, "header font");
-			assert.equal(fontWeight(header), HEADLINE_WEIGHT, "header weight");
-			
-			assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
-			assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
-
-			assert.equal(fontFamily(drawSomething), STANDARD_FONT, "draw something button family");
-			assert.equal(fontWeight(drawSomething), LINK_BUTTON_WEIGHT, "draw something button weight");
-		});
 
 
-		describe("button", function() {
+	describe("CSS Integration Tests:", function() {
 
-			it("has common styling", function() {
-				assertStandardButtonStyling(drawSomething, "draw something button");
+		describe("Home page", function() {
+			var frame;
+			var page;
+			var viewport;
+
+			var logo;
+			var tagline;
+			var drawingAreaArrow;
+			var drawingArea;
+			var clearButton;
+			var footer;
+			var joinUs;
+
+			before(function(done) {
+				this.timeout(10 * 1000);
+				var options = {
+					src: "/base/src/client/index.html",
+					width: IOS_BROWSER_WIDTH,
+					height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
+				};
+				frame = quixote.createFrame(options, done);
 			});
 
-			it("has rounded corners", function() {
-				assert.equal(roundedCorners(drawSomething), CORNER_ROUNDING, "draw something button");
+			after(function() {
+				frame.remove();
 			});
 
-			it("has a drop shadow", function() {
-				assert.equal(dropShadow(drawSomething), DARK_BLUE + BUTTON_DROP_SHADOW, "draw something button drop shadow");
+			beforeEach(function() {
+				frame.reset();
+
+				page = frame.page();
+				viewport = frame.viewport();
+
+				logo = frame.get("#logo");
+				tagline = frame.get("#tagline");
+				drawingAreaArrow = frame.get("#drawing-area-arrow");
+				drawingArea = frame.get("#drawing-area");
+				clearButton = frame.get("#clear-button");
+				footer = frame.get("#footer");
+				joinUs = frame.get("#join-us");
 			});
 
-			it("darkens when user hovers over them", function() {
-				assertHoverStyle(drawSomething, DARKENED_MEDIUM_BLUE, "draw something button");
+			it("fits perfectly within viewport", function() {
+				page.assert({
+					width: viewport.width,
+					height: viewport.height
+				}, "page should not be larger than viewport");
+
+				joinUs.assert({
+					bottom: viewport.bottom.minus(13)
+				}, "bottom element should fit against bottom of viewport");
 			});
 
-			it("appears to depress when user activates them", function() {
-				assertActiveStyle(drawSomething, tagline.bottom.plus(18), "draw something button");
+			it("has a nice margin when viewport is smaller than the page", function() {
+				frame.resize(100, 100);
+
+				joinUs.assert({
+					bottom: page.bottom.minus(13)
+				}, "bottom element should have a nice margin before the bottom of the page");
+			});
+
+			it("has an overall layout", function() {
+				logo.assert({
+					center: page.center,
+					top: 12
+				}, "logo should be centered at top of page");
+				assert.equal(textAlign(logo), "center", "logo text should be centered");
+
+				tagline.assert({
+					center: page.center,
+					top: logo.bottom.plus(5)
+				}, "tagline should be centered directly below logo");
+				assert.equal(textAlign(tagline), "center", "tagline text should be centered");
+
+				drawingArea.assert({
+					center: page.center,
+					top: tagline.bottom.plus(10),
+					width: page.width
+				}, "drawing area should be centered below tagline");
+
+				footer.assert({
+					center: page.center,
+					top: drawingArea.bottom.plus(13)
+				}, "footer should be centered below drawing area");
+				assert.equal(textAlign(footer), "center", "footer text should be centered");
+
+				joinUs.assert({
+					center: page.center,
+					top: footer.bottom.plus(13),
+					height: 35,
+					width: 175
+				}, "join us button should be centered below footer");
+			});
+
+			it("has flourishes inside drawing area", function() {
+				drawingAreaArrow.assert({
+					center: drawingArea.center,
+					top: drawingArea.top
+				}, "drawing area should have an arrow centered at the top");
+
+				assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
+				assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "drawing area arrow is an image");
+				assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "drawing arrow is drawn once");
+				assert.equal(backgroundPosition(drawingAreaArrow), "center", "drawing area arrow image is centered");
+
+				clearButton.assert({
+					top: drawingArea.top.plus(15),
+					right: drawingArea.right.minus(15),
+					height: 30,
+					width: 70
+				}, "clear screen button should be centered at top-right of drawing area");
+
+				assert.equal(under(clearButton, drawingArea), false, "clear button should be over drawing area");
+			});
+
+			it("has a color scheme", function() {
+				assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
+				assert.equal(textColor(logo), WHITE, "logo text should be white");
+				assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
+				assert.equal(backgroundColor(drawingArea), WHITE, "drawing area should be white");
+				assert.equal(textColor(footer), WHITE, "footer should be white");
+
+				assert.equal(textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
+				assert.equal(backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
+
+				assert.equal(backgroundColor(joinUs), MEDIUM_BLUE, "join us button background should be medium blue");
+				assert.equal(textColor(joinUs), WHITE, "join us button text should be white");
+			});
+
+			it("has a typographic scheme", function() {
+				assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
+				assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
+				assert.equal(fontSize(logo), "30px", "logo font size");
+				logo.assert({ height: 30 }, "logo height");
+
+				assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
+				assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
+				assert.equal(fontSize(tagline), "14px", "tagline font size");
+				tagline.assert({ height: 17 }, "tagline height");
+
+				assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
+				assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "clear button weight");
+				assert.equal(fontSize(clearButton), "12px", "clear button font size");
+
+				assert.equal(fontFamily(footer), STANDARD_FONT, "footer family");
+				assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "footer weight");
+				assert.equal(fontSize(footer), "15px", "footer font size");
+				footer.assert({ height: 18 }, "footer height");
+
+				assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
+				assert.equal(fontWeight(joinUs), LINK_BUTTON_WEIGHT, "join us button weight");
+				assert.equal(fontSize(joinUs), "16px", "join us button font size");
+			});
+
+			it("rounds the corners of all rectangles", function() {
+				assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "drawing area");
+				assert.equal(roundedCorners(clearButton), CORNER_ROUNDING, "clear button");
+				assert.equal(roundedCorners(joinUs), CORNER_ROUNDING, "join us button");
+			});
+
+			describe("buttons", function() {
+
+				it("have common styling", function() {
+					assertStandardButtonStyling(clearButton, "clear button");
+					assertStandardButtonStyling(joinUs, "'join us' button");
+				});
+
+				it("have specific sizes", function() {
+					assertButtonSize(clearButton, 70, 30);
+					assertButtonSize(joinUs, 175, 35);
+
+					function assertButtonSize(button, width, height) {
+						button.assert({
+							width: width,
+							height: height
+						});
+					}
+				});
+
+				it("have a drop shadow", function() {
+					assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "clear button drop shadow");
+					assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "'join us' button drop shadow");
+				});
+
+				it("darken when user hovers over them", function() {
+					assertHoverStyle(clearButton, DARKENED_GRAY, "clear button");
+					assertHoverStyle(joinUs, DARKENED_MEDIUM_BLUE, "'join us' button");
+				});
+
+				it("appear to depress when user activates them", function() {
+					assertActiveStyle(clearButton, drawingArea.top.plus(16), "clear button");
+					assertActiveStyle(joinUs, footer.bottom.plus(14), "'join us' button");
+				});
+
 			});
 
 		});
+
+		describe("404 page", function() {
+
+			var frame;
+			var page;
+			var viewport;
+
+			var logo;
+			var header;
+			var tagline;
+			var drawSomething;
+
+			before(function(done) {
+				this.timeout(10 * 1000);
+				var options = {
+					src: "/base/src/client/404.html",
+					width: IOS_BROWSER_WIDTH,
+					height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
+				};
+				frame = quixote.createFrame(options, done);
+			});
+
+			after(function() {
+				frame.remove();
+			});
+
+			beforeEach(function() {
+				frame.reset();
+
+				page = frame.page();
+				viewport = frame.viewport();
+
+				logo = frame.get("#logo-404");
+				header = frame.get("#header-404");
+				tagline = frame.get("#tagline-404");
+				drawSomething = frame.get("#draw-something-404");
+			});
+
+			it("fits perfectly within viewport", function() {
+				page.assert({
+					width: viewport.width,
+					height: viewport.height
+				}, "page should not be larger than viewport");
+			});
+
+			it("has a nice margin when viewport is smaller than the page", function() {
+				frame.resize(50, 50);
+
+				drawSomething.assert({
+					bottom: page.bottom.minus(13)
+				}, "bottom element should have a nice margin before the bottom of the page");
+			});
+
+			it("has an overall layout", function() {
+				logo.assert({
+					top: logo.height.times(2),
+					center: page.center,
+					height: 30
+				}, "logo should be centered at top of page");
+				assert.equal(fontSize(logo), "30px", "logo font size");
+				assert.equal(textAlign(logo), "center", "logo text should be centered");
+
+				header.assert({
+					top: logo.bottom,
+					center: viewport.center,
+					height: 200
+				}, "404 header should be centered under logo");
+				assert.equal(fontSize(header), "200px", "header font size");
+				assert.equal(textAlign(header), "center", "header text should be centered");
+
+				tagline.assert({
+					top: header.bottom.plus(tagline.height),
+					center: viewport.center,
+					height: 17
+				}, "tagline should be centered under 404 header");
+				assert.equal(fontSize(tagline), "14px", "tagline font size");
+				assert.equal(textAlign(tagline), "center", "tagline text should be centered");
+
+				drawSomething.assert({
+					top: tagline.bottom.plus(tagline.height),
+					center: page.center,
+					height: 35,
+					width: 225
+				}, "button should be centered below tagline");
+				assert.equal(textAlign(drawSomething), "center", "button text should be centered");
+			});
+
+			it("has a color scheme", function() {
+				assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
+				assert.equal(textColor(logo), WHITE, "logo text should be white");
+				assert.equal(textColor(header), DARK_BLUE, "header should be dark blue");
+				assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
+
+				assert.equal(backgroundColor(drawSomething), MEDIUM_BLUE, "button background should be medium blue");
+				assert.equal(textColor(drawSomething), WHITE, "button text should be white");
+			});
+
+			it("has a typographic scheme", function() {
+				assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
+				assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
+
+				assert.equal(fontFamily(header), STANDARD_FONT, "header font");
+				assert.equal(fontWeight(header), HEADLINE_WEIGHT, "header weight");
+
+				assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
+				assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
+
+				assert.equal(fontFamily(drawSomething), STANDARD_FONT, "draw something button family");
+				assert.equal(fontWeight(drawSomething), LINK_BUTTON_WEIGHT, "draw something button weight");
+			});
+
+
+			describe("button", function() {
+
+				it("has common styling", function() {
+					assertStandardButtonStyling(drawSomething, "draw something button");
+				});
+
+				it("has rounded corners", function() {
+					assert.equal(roundedCorners(drawSomething), CORNER_ROUNDING, "draw something button");
+				});
+
+				it("has a drop shadow", function() {
+					assert.equal(dropShadow(drawSomething), DARK_BLUE + BUTTON_DROP_SHADOW, "draw something button drop shadow");
+				});
+
+				it("darkens when user hovers over them", function() {
+					assertHoverStyle(drawSomething, DARKENED_MEDIUM_BLUE, "draw something button");
+				});
+
+				it("appears to depress when user activates them", function() {
+					assertActiveStyle(drawSomething, tagline.bottom.plus(18), "draw something button");
+				});
+
+			});
+		});
+
 	});
+
 
 	function assertStandardButtonStyling(button, description) {
 		assert.equal(textAlign(button), "center", description + "text horizontal centering");
