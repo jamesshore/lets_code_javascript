@@ -28,6 +28,7 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * refactor our CSS
+- install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
 
 To Do on current task:
 * factor out blocks (with TDD)
