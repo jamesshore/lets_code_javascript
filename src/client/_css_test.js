@@ -46,7 +46,7 @@
 			});
 
 			after(function() {
-				//frame.remove();
+				frame.remove();
 			});
 
 			beforeEach(function() {
@@ -90,7 +90,7 @@
 				assert.equal(hasBorder(buttonTag), false, "button tag button");
 			});
 
-			it.only("has rounded corners", function() {
+			it("has rounded corners", function() {
 				assert.equal(roundedCorners(linkTag), CORNER_ROUNDING);
 			});
 
