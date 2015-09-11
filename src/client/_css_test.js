@@ -5,7 +5,7 @@
 	var browser = require("./browser.js");
 	var failFast = require("./fail_fast.js");
 	var assert = require("../shared/_assert.js");
-	var quixote = require("./vendor/quixote-0.7.0.js");
+	var quixote = require("./vendor/quixote-0.7.1.js");
 
 	var WHITE = "rgb(255, 255, 255)";
 	var DARK_GRAY = "rgb(89, 89, 89)";
