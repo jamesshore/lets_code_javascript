@@ -9,7 +9,7 @@
 		"Chrome 45.0.2454 (Mac OS X 10.10.5)",
 		"Safari 8.0.8 (Mac OS X 10.10.5)",
 		"Mobile Safari 8.0.0 (iOS 8.4.0)",
-		"Chrome Mobile 44.0.2403 (Android 5.1.0)"
+		"Chrome Mobile 44.0.2403 (Android 6.0.0)"
 	];
 
 }());
