@@ -32,8 +32,8 @@ Engineering Tasks:
 
 To Do on current task:
 * factor out blocks (with TDD)
-  - factor out button
-  - factor out drawing area
+  * factor out drawing area
+    - uncomment 'under()' tests in 'has flourishes inside drawing area'
   - factor out header
   - factor out subheader
   - factor out tagline

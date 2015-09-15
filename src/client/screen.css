@@ -47,9 +47,16 @@ body {
 /* Drawing Area block */
 
 .drawing-area {
+	border-radius: 2px;
+}
+
+.drawing-area__canvas {
 	height: 475px;
 	background-color: white;
-	border-radius: 2px;
+}
+
+.drawing-area__arrow {
+
 }
 
 
@@ -90,11 +97,6 @@ body {
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 9px;
-
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
 }
 
 #clear-button {
