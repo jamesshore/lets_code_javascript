@@ -32,26 +32,29 @@
 
 	describe("CSS Unit Tests:", function() {
 
-		describe("Button block", function() {
+		var frame;
 
-			var frame;
+		before(function(done) {
+			frame = quixote.createFrame({
+				width: 500,
+				stylesheet: "/base/src/client/screen.css"
+			}, done);
+		});
+
+		after(function() {
+			frame.remove();
+		});
+
+		beforeEach(function() {
+			frame.reset();
+		});
+
+		describe("Button", function() {
+
 			var linkTag;
 			var buttonTag;
 
-			before(function(done) {
-				frame = quixote.createFrame({
-					width: 500,
-					stylesheet: "/base/src/client/screen.css"
-				}, done);
-			});
-
-			after(function() {
-				frame.remove();
-			});
-
 			beforeEach(function() {
-				frame.reset();
-
 				linkTag = frame.add("<a class='button' href='#createUnderline'>foo</a>", "<a> button");
 				buttonTag = frame.add("<button class='button'>foo</button>", "<button> button");
 			});
@@ -104,6 +107,37 @@
 
 			it("appear to depress when user activates it", function() {
 				assertActivateDepresses(linkTag, 1);
+			});
+
+		});
+
+
+		describe("Drawing area", function() {
+
+			var drawingArea;
+
+			beforeEach(function() {
+				drawingArea = frame.add("<div class='drawing-area'></div>", "drawing area");
+			});
+
+			it("fills its container", function() {
+				drawingArea.assert({
+					width: frame.body().width
+				});
+			});
+
+			it("has a fixed height", function() {
+				drawingArea.assert({
+					height: 475
+				});
+			});
+
+			it("has a white background", function() {
+				assert.equal(backgroundColor(drawingArea), WHITE);
+			});
+
+			it("has rounded corners", function() {
+				assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING);
 			});
 
 		});

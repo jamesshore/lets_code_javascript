@@ -44,6 +44,14 @@ body {
 }
 
 
+/* Drawing Area block */
+
+.drawing-area {
+	height: 475px;
+	background-color: white;
+	border-radius: 2px;
+}
+
 
 /* Home page */
 
@@ -67,12 +75,6 @@ body {
 	text-align: center;
 	font-size: 14px;
 	color: #0d576d;
-}
-
-#drawing-area {
-	height: 475px;
-	background-color: white;
-	border-radius: 2px;
 }
 
 #drawing-area-container {
