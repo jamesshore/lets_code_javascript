@@ -119,6 +119,7 @@
 			var canvas;
 
 			beforeEach(function() {
+				frame.add("<div style='height: 100px;'>spacer</div>");    // force positioning tests to be meaningful
 				drawingArea = frame.add("" +
 					"<div class='drawing-area'>" +
 					" <div id='drawing-area-canvas' class='drawing-area__canvas'></div>" +
@@ -132,17 +133,16 @@
 				drawingArea.assert({
 					width: frame.body().width
 				});
-
-				it("has rounded corners", function() {
-					assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING);
-				});
 			});
 
 			describe("canvas", function() {
 
-				it("fills its container", function() {
+				it("completely fills its container", function() {
 					canvas.assert({
-						width: drawingArea.width
+						top: drawingArea.top,
+						right: drawingArea.right,
+						bottom: drawingArea.bottom,
+						left: drawingArea.left
 					});
 				});
 
@@ -150,6 +150,10 @@
 					canvas.assert({
 						height: 475
 					});
+				});
+
+				it("has rounded corners", function() {
+					assert.equal(roundedCorners(canvas), CORNER_ROUNDING);
 				});
 
 				it("has a white background", function() {
@@ -160,23 +164,26 @@
 
 			describe("arrow", function() {
 
-				it("centered at the top of the drawing area, overlapping JavaScript drawing area", function() {
+				it("is centered at the top of the drawing area, overlapping JavaScript drawing area", function() {
 					arrow.assert({
 						center: drawingArea.center,
 						top: drawingArea.top
-					}, "arrow should be centered at top of drawing area");
-					arrow.assert({
-						center: canvas.center,
-						top: canvas.top
-					}, "arrow should overlap JavaScript drawing area");
+					});
 				});
 
+				it("is over canvas", function() {
+					assert.equal(under(arrow, canvas), false);
+				});
 
-				//
-				//assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
-				//assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "drawing area arrow is an image");
-				//assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "drawing arrow is drawn once");
-				//assert.equal(backgroundPosition(drawingAreaArrow), "center", "drawing area arrow image is centered");
+				it("has an arrow image", function() {
+					arrow.assert({
+						height: 9
+					}, "arrow should be same height as arrow gif");
+
+					assert.equal(backgroundImage(arrow), "/images/arrow.png", "arrow should be an image");
+					assert.equal(arrow.getRawStyle("background-repeat"), "no-repeat", "arrow should be drawn once");
+					assert.equal(backgroundPosition(arrow), "center", "arrow image is centered");
+				});
 
 			});
 
@@ -289,7 +296,11 @@
 					top: drawingArea.top
 				}, "drawing area should have an arrow centered at the top");
 
-				//assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
+				drawingAreaArrow.assert({
+					height: 9
+				}, "drawing area arrow should be same height as arrow gif");
+
+				assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
 				assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "drawing area arrow is an image");
 				assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "drawing arrow is drawn once");
 				assert.equal(backgroundPosition(drawingAreaArrow), "center", "drawing area arrow image is centered");
@@ -301,7 +312,7 @@
 					width: 70
 				}, "clear screen button should be centered at top-right of drawing area");
 
-				//assert.equal(under(clearButton, drawingArea), false, "clear button should be over drawing area");
+				assert.equal(under(clearButton, drawingArea), false, "clear button should be over drawing area");
 			});
 
 			it("has a color scheme", function() {

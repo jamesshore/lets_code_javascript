@@ -47,16 +47,27 @@ body {
 /* Drawing Area block */
 
 .drawing-area {
-	border-radius: 2px;
+	position: relative;
 }
 
 .drawing-area__canvas {
 	height: 475px;
 	background-color: white;
+	border-radius: 2px;
 }
 
 .drawing-area__arrow {
+	/* image */
+	background-image: url(/images/arrow.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 9px;
 
+	/* position */
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
 }
 
 
@@ -89,14 +100,6 @@ body {
 	margin-top: 10px;
 	margin-left: auto;
 	margin-right: auto;
-	position: relative;
-}
-
-#drawing-area-arrow {
-	background-image: url(/images/arrow.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	height: 9px;
 }
 
 #clear-button {
