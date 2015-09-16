@@ -70,6 +70,17 @@ body {
 	right: 0px;
 }
 
+.drawing-area__button {
+	/* position */
+	position: absolute;
+	top: 15px;
+	right: 15px;
+
+	/* layout */
+	width: 70px;
+
+}
+
 
 /* Home page */
 
@@ -106,9 +117,6 @@ body {
 	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
 	font-weight: 600;
 	font-size: 12px;
-	position: absolute;
-	top: 15px;
-	right: 15px;
 	border: none;
 	padding: 0;
 	margin: 0;
@@ -116,7 +124,6 @@ body {
 	background-color: #e5e5e5;
 	height: 30px;
 	line-height: 30px;
-	width: 70px;
 	border-radius: 2px;
 	box-shadow: 0 1px 0 0 #a7a9ab;
 	text-transform: uppercase;
@@ -127,6 +134,7 @@ body {
 }
 
 #clear-button:active, #clear-button._active_ {
+	position: absolute;
 	top: 16px;
 	box-shadow: none;
 }

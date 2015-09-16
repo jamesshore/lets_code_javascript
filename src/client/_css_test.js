@@ -117,6 +117,7 @@
 			var drawingArea;
 			var arrow;
 			var canvas;
+			var button;
 
 			beforeEach(function() {
 				frame.add("<div style='height: 100px;'>spacer</div>");    // force positioning tests to be meaningful
@@ -124,9 +125,11 @@
 					"<div class='drawing-area'>" +
 					" <div id='drawing-area-canvas' class='drawing-area__canvas'></div>" +
 					" <div id='arrow' class='drawing-area__arrow'></div>" +
+					" <div id='button' class='drawing-area__button'></div>" +
 					"</div>", "drawing area");
 				canvas = frame.get("#drawing-area-canvas");
 				arrow = frame.get("#arrow");
+				button = frame.get("#button");
 			});
 
 			it("fills its container", function() {
@@ -164,7 +167,7 @@
 
 			describe("arrow", function() {
 
-				it("is centered at the top of the drawing area, overlapping JavaScript drawing area", function() {
+				it("is centered at the top of the drawing area, overlapping the canvas", function() {
 					arrow.assert({
 						center: drawingArea.center,
 						top: drawingArea.top
@@ -183,6 +186,23 @@
 					assert.equal(backgroundImage(arrow), "/images/arrow.png", "arrow should be an image");
 					assert.equal(arrow.getRawStyle("background-repeat"), "no-repeat", "arrow should be drawn once");
 					assert.equal(backgroundPosition(arrow), "center", "arrow image is centered");
+				});
+
+			});
+
+			describe("button", function() {
+
+				it("is positioned at the top-right of the drawing area, overlapping the canvas", function() {
+					button.assert({
+						top: drawingArea.top.plus(15),
+						right: drawingArea.right.minus(15)
+					});
+				});
+
+				it("has a hardcoded width", function() {
+					button.assert({
+						width: 70
+					});
 				});
 
 			});
