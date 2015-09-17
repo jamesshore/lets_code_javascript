@@ -20,7 +20,7 @@
 
 	var BODY_TEXT_WEIGHT = "300";
 	var LINK_BUTTON_WEIGHT = "400";
-	var CLEAR_BUTTON_WEIGHT = "600";
+	var DRAWING_BUTTON_WEIGHT = "600";
 	var HEADLINE_WEIGHT = "600";
 
 	var IOS_BROWSER_WIDTH = 980;
@@ -123,10 +123,16 @@
 				buttonTag = frame.add("<button class='button button--drawing'>foo</button>", "<button> button");
 			});
 
-			it("has its own text formatting", function() {
+			it("is a bit smaller", function() {
+				linkTag.assert({
+					height: 30
+				});
+			});
+
+			it("has smaller, bolder text", function() {
 				assert.equal(fontSize(linkTag), "12px", "font size");
-				//assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
-				//assert.equal(fontWeight(linkTag), LINK_BUTTON_WEIGHT, "button weight");
+				assert.equal(fontWeight(linkTag), DRAWING_BUTTON_WEIGHT, "font weight");
+				assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
 			});
 
 		});
@@ -386,7 +392,7 @@
 				tagline.assert({ height: 17 }, "tagline height");
 
 				assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
-				assert.equal(fontWeight(clearButton), CLEAR_BUTTON_WEIGHT, "clear button weight");
+				assert.equal(fontWeight(clearButton), DRAWING_BUTTON_WEIGHT, "clear button weight");
 				assert.equal(fontSize(clearButton), "12px", "clear button font size");
 
 				assert.equal(fontFamily(footer), STANDARD_FONT, "footer family");
