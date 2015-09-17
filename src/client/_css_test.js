@@ -59,12 +59,6 @@
 				buttonTag = frame.add("<button class='button'>foo</button>", "<button> button");
 			});
 
-			it("is big and pressable", function() {
-				linkTag.assert({
-					height: 35
-				});
-			});
-
 			it("fills its container", function() {
 				linkTag.assert({
 					width: frame.body().width
@@ -76,18 +70,9 @@
 
 			it("text", function() {
 				assert.equal(textAlign(linkTag), "center", "should be horizontally centered");
-				assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
 				assert.equal(textIsUnderlined(linkTag), false, "text should not be underlined");
 				assert.equal(textIsUppercase(linkTag), true, "text should be uppercase");
-				assert.equal(fontSize(linkTag), "16px", "font size");
-				assert.equal(fontWeight(linkTag), LINK_BUTTON_WEIGHT, "button weight");
-
 				assert.equal(fontFamily(buttonTag), STANDARD_FONT, "<button> should inherit standard font");
-			});
-
-			it("colors", function() {
-				assert.equal(backgroundColor(linkTag), MEDIUM_BLUE, "button background");
-				assert.equal(textColor(linkTag), WHITE, "button text");
 			});
 
 			it("has no border", function() {
@@ -104,19 +89,45 @@
 				assert.equal(roundedCorners(linkTag), CORNER_ROUNDING);
 			});
 
-			it("has a drop shadow", function() {
-				assert.equal(dropShadow(linkTag), DARK_BLUE + BUTTON_DROP_SHADOW);
-			});
-
-			it("darkens when user hovers over it", function() {
-				assertHoverStyle(linkTag, DARKENED_MEDIUM_BLUE);
-			});
-
 			it("appear to depress when user activates it", function() {
 				assertActivateDepresses(linkTag, 1);
 			});
 
 		});
+
+		describe("Action button variant", function() {
+
+			var linkTag;
+			var buttonTag;
+
+			beforeEach(function() {
+				linkTag = frame.add("<a class='button button--action' href='#createUnderline'>foo</a>", "<a> button");
+				buttonTag = frame.add("<button class='button button--action'>foo</button>", "<button> button");
+			});
+
+			it("is big and pressable", function() {
+				linkTag.assert({
+					height: 35
+				});
+			});
+
+			it("has large text", function() {
+				assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
+				assert.equal(fontSize(linkTag), "16px", "font size");
+				assert.equal(fontWeight(linkTag), LINK_BUTTON_WEIGHT, "button weight");
+			});
+
+			it("uses bright colors", function() {
+				assert.equal(backgroundColor(linkTag), MEDIUM_BLUE, "background");
+				assert.equal(textColor(linkTag), WHITE, "text");
+				assert.equal(dropShadow(linkTag), DARK_BLUE + BUTTON_DROP_SHADOW, "drop shadow");
+
+				assertHoverStyle(linkTag, DARKENED_MEDIUM_BLUE, "hover background");
+			});
+
+
+		});
+
 
 		describe("Drawing button variant", function() {
 
