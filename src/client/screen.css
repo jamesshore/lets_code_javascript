@@ -78,7 +78,11 @@ body {
 
 	/* layout */
 	width: 70px;
+}
 
+.drawing-area__button:active, .drawing-area__button._active_ {
+	position: absolute;
+	top: 16px;
 }
 
 
@@ -117,16 +121,11 @@ body {
 	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
 	font-weight: 600;
 	font-size: 12px;
-	border: none;
-	padding: 0;
-	margin: 0;
 	color: #595959;
 	background-color: #e5e5e5;
 	height: 30px;
 	line-height: 30px;
-	border-radius: 2px;
 	box-shadow: 0 1px 0 0 #a7a9ab;
-	text-transform: uppercase;
 }
 
 #clear-button:hover, #clear-button._hover_ {
@@ -134,8 +133,6 @@ body {
 }
 
 #clear-button:active, #clear-button._active_ {
-	position: absolute;
-	top: 16px;
 	box-shadow: none;
 }
 

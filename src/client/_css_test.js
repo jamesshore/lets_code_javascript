@@ -125,7 +125,7 @@
 					"<div class='drawing-area'>" +
 					" <div id='drawing-area-canvas' class='drawing-area__canvas'></div>" +
 					" <div id='arrow' class='drawing-area__arrow'></div>" +
-					" <div id='button' class='drawing-area__button'></div>" +
+					" <div id='button' class='drawing-area__button button'></div>" +
 					"</div>", "drawing area");
 				canvas = frame.get("#drawing-area-canvas");
 				arrow = frame.get("#arrow");
@@ -203,6 +203,10 @@
 					button.assert({
 						width: 70
 					});
+				});
+
+				it("positioning does not conflict with the standard button block activation", function() {
+					assertActivateDepresses(button, drawingArea.top.plus(16));
 				});
 
 			});
