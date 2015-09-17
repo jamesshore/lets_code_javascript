@@ -81,6 +81,8 @@
 				assert.equal(textIsUppercase(linkTag), true, "text should be uppercase");
 				assert.equal(fontSize(linkTag), "16px", "font size");
 				assert.equal(fontWeight(linkTag), LINK_BUTTON_WEIGHT, "button weight");
+
+				assert.equal(fontFamily(buttonTag), STANDARD_FONT, "<button> should inherit standard font");
 			});
 
 			it("colors", function() {
@@ -110,6 +112,25 @@
 			});
 
 		});
+
+		describe("Drawing button variant", function() {
+
+			var linkTag;
+			var buttonTag;
+
+			beforeEach(function() {
+				linkTag = frame.add("<a class='button button--drawing' href='#createUnderline'>foo</a>", "<a> button");
+				buttonTag = frame.add("<button class='button button--drawing'>foo</button>", "<button> button");
+			});
+
+			it("has its own text formatting", function() {
+				assert.equal(fontSize(linkTag), "12px", "font size");
+				//assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
+				//assert.equal(fontWeight(linkTag), LINK_BUTTON_WEIGHT, "button weight");
+			});
+
+		});
+
 
 
 		describe("Drawing area", function() {
