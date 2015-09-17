@@ -115,19 +115,30 @@ body {
 }
 
 
+/* Logo block */
+
+.logo {
+	/* size */
+	height: 30px;
+
+	/* text */
+	text-align: center;
+	line-height: 30px;     /* vertical centering */
+	font-size: 30px;
+	font-weight: 600;
+
+	/* color */
+	color: white;
+}
+
+
 /* Home page */
 
 #logo {
-	line-height: 1;
-	height: 30px;
 	margin-top: 12px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 0px;
-	text-align: center;
-	font-size: 30px;
-	font-weight: 600;
-	color: white;
 }
 
 #tagline {

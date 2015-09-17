@@ -7,6 +7,7 @@
 	var assert = require("../shared/_assert.js");
 	var quixote = require("./vendor/quixote-0.7.1.js");
 
+	var TRANSPARENT = "rgba(0, 0, 0, 0)";
 	var WHITE = "rgb(255, 255, 255)";
 	var DARK_GRAY = "rgb(89, 89, 89)";
 	var GRAY = "rgb(229, 229, 229)";
@@ -82,7 +83,7 @@
 
 			it("has no padding or margins", function() {
 				assert.equal(margin(buttonTag), "0px", "margin");
-				assert.equal(padding (buttonTag), "0px", "margin");
+				assert.equal(padding(buttonTag), "0px", "padding");
 			});
 
 			it("has rounded corners", function() {
@@ -125,7 +126,6 @@
 				assertHoverStyle(linkTag, DARKENED_MEDIUM_BLUE, "hover background");
 			});
 
-
 		});
 
 
@@ -160,6 +160,42 @@
 			});
 
 		});
+
+
+		describe("Logo", function() {
+
+			var logo;
+
+			beforeEach(function() {
+				logo = frame.add("<div class='logo'>logo</a>", "logo");
+			});
+
+			it("fills its container", function() {
+				logo.assert({
+					width: frame.body().width
+				});
+			});
+
+			it("is nice and big", function() {
+				logo.assert({
+					height: 30
+				});
+			});
+
+			it("text", function() {
+				assert.equal(textAlign(logo), "center", "should be horizontally centered");
+				assert.equal(isTextVerticallyCentered(logo), true, "should be vertically centered");
+				assert.equal(fontSize(logo), "30px", "font size");
+				assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "font weight");
+			});
+
+			it("color", function() {
+				assert.equal(backgroundColor(logo), TRANSPARENT, "background color");
+				assert.equal(textColor(logo), WHITE, "text color");
+			});
+
+		});
+
 
 
 
@@ -822,6 +858,7 @@
 
 	function normalizeColorString(color) {
 		if (color === "white") return "rgb(255, 255, 255)";
+		if (color === "transparent") return "rgba(0, 0, 0, 0)";
 
 		var colorGroups = color.match(/^#(..)(..)(..)/);    // look for presence of #rrggbb string
 		if (colorGroups === null) return color;   // if doesn't match, assume we have rgb() string

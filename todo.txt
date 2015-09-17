@@ -32,11 +32,12 @@ Engineering Tasks:
 
 To Do on current task:
 * factor out blocks (with TDD)
-  * factor out header
-  - factor out subheader
-  - factor out tagline
+  * factor out logo
   - factor out 404 headline
 - factor out theme
+  - factor out subheader
+  - factor out tagline
 - factor out layout (with TDD?)
+  - should each block have a 'fill its container' test?
 - Improve our client directory structure
 - Split our CSS tests into multiple files
