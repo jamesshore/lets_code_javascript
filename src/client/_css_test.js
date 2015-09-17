@@ -95,6 +95,11 @@
 				assert.equal(hasBorder(buttonTag), false, "button tag button");
 			});
 
+			it("has no padding or margins", function() {
+				assert.equal(margin(buttonTag), "0px", "margin");
+				assert.equal(padding (buttonTag), "0px", "margin");
+			});
+
 			it("has rounded corners", function() {
 				assert.equal(roundedCorners(linkTag), CORNER_ROUNDING);
 			});
@@ -660,19 +665,39 @@
 	}
 
 	function roundedCorners(element) {
-		// We can't just look at border-radius because it returns "" on Firefox and IE 9
-		var topLeft = element.getRawStyle("border-top-left-radius");
-		var topRight = element.getRawStyle("border-top-right-radius");
-		var bottomLeft = element.getRawStyle("border-bottom-left-radius");
-		var bottomRight = element.getRawStyle("border-bottom-right-radius");
+		return getCompoundStyle(element,
+			"border-top-left-radius",
+			"border-top-right-radius",
+			"border-bottom-left-radius",
+			"border-bottom-right-radius"
+		);
+	}
 
-		if (topLeft === topRight && topLeft === bottomLeft && topLeft === bottomRight) {
-			return topLeft;
+	function margin(element) {
+		return getCompoundStyle(element, "margin-top", "margin-right", "margin-bottom", "margin-left");
+	}
+
+	function padding(element) {
+		return getCompoundStyle(element, "padding-top", "padding-right", "padding-bottom", "padding-left");
+	}
+
+	function getCompoundStyle(element, subStyle1, subStyle2, subStyle3, subStyle4) {
+		// We can't look at compound properties directly because they return "" on Firefox and IE 9
+		var one = element.getRawStyle(subStyle1);
+		var two = element.getRawStyle(subStyle2);
+		var three = element.getRawStyle(subStyle3);
+		var four = element.getRawStyle(subStyle4);
+
+		var result;
+		if (one === two && one === three && one === four) {
+			result = one;
 		}
 		else {
-			return topLeft + " " + topRight + " " + bottomRight + " " + bottomLeft;
+			result = one + " " + two + " " + four + " " + three;
 		}
+		return result;
 	}
+
 
 	function under(element, relativeToElement) {
 		var elementZ = getZIndex(element);

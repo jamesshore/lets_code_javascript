@@ -15,6 +15,7 @@ body {
 	display: block;
 	height: 35px;
 	width: 100%;
+	padding: 0;
 
 	/* color */
 	color: white;
@@ -63,8 +64,6 @@ body {
 .button--drawing:hover, .button--drawing._hover_ {
 	background-color: #d9d9d9;
 }
-
-
 
 
 /* Drawing Area block */
