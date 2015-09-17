@@ -52,7 +52,19 @@ body {
 	font-size: 12px;
 	font-weight: 600;
 	line-height: 30px;    /* vertical centering */
+
+	/* color */
+	background-color: #e5e5e5;
+	color: #595959;
+	box-shadow: 0 1px 0 0 #a7a9ab;
+
 }
+
+.button--drawing:hover, .button--drawing._hover_ {
+	background-color: #d9d9d9;
+}
+
+
 
 
 /* Drawing Area block */
@@ -126,20 +138,6 @@ body {
 	margin-top: 10px;
 	margin-left: auto;
 	margin-right: auto;
-}
-
-#clear-button {
-	color: #595959;
-	background-color: #e5e5e5;
-	box-shadow: 0 1px 0 0 #a7a9ab;
-}
-
-#clear-button:hover, #clear-button._hover_ {
-	background-color: #d9d9d9;
-}
-
-#clear-button:active, #clear-button._active_ {
-	box-shadow: none;
 }
 
 #footer {

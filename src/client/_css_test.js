@@ -135,6 +135,14 @@
 				assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
 			});
 
+			it("uses muted colors", function() {
+				assert.equal(backgroundColor(linkTag), GRAY, "button background");
+				assert.equal(textColor(linkTag), DARK_GRAY, "button text");
+				assert.equal(dropShadow(linkTag), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
+
+				assertHoverStyle(linkTag, DARKENED_GRAY, "hover background");
+			});
+
 		});
 
 
