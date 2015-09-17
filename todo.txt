@@ -32,8 +32,7 @@ Engineering Tasks:
 
 To Do on current task:
 * factor out blocks (with TDD)
-  * factor out logo
-  - factor out 404 headline
+  * factor out 404 headline
 - factor out theme
   - factor out subheader
   - factor out tagline

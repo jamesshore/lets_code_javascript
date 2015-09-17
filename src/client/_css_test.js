@@ -197,8 +197,6 @@
 		});
 
 
-
-
 		describe("Drawing area", function() {
 
 			var drawingArea;
