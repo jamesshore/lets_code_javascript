@@ -4,6 +4,7 @@ body {
 	margin-bottom: 13px;
 }
 
+
 /* "Let's Code" theme (our only theme) */
 
 .theme-lets-code {
@@ -13,6 +14,12 @@ body {
 
 	/* colors */
 	background-color: #41a9cc;
+}
+
+p {
+	/* text */
+	font-size: 15px;
+	line-height: 18px;
 }
 
 
@@ -88,7 +95,7 @@ body {
 }
 
 .drawing-area__canvas {
-	height: 475px;
+	height: 474px;
 	background-color: white;
 	border-radius: 2px;
 }
@@ -164,11 +171,9 @@ body {
 }
 
 #tagline {
-	line-height: 17px;
 	margin-top: 5px;
 	margin-bottom: 0px;
 	text-align: center;
-	font-size: 14px;
 	color: #0d576d;
 }
 
@@ -186,7 +191,6 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 0;
-	font-size: 15px;
 	color: white;
 }
 
@@ -211,14 +215,12 @@ body {
 
 #tagline-404 {
 	color: #0d576d;
-	margin-top: 17px;
-	font-size: 14px;
-	line-height: 17px;
+	margin-top: 18px;
 	text-align: center;
 }
 
 #draw-something-404 {
-	margin-top: 17px;
+	margin-top: 18px;
 	margin-left: auto;
 	margin-right: auto;
 	width: 225px;

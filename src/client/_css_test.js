@@ -55,10 +55,19 @@
 
 			var page;
 			var theme;
+			var p;
+			var strong;
 
 			beforeEach(function() {
 				page = frame.page();
-				theme = frame.add("<div class='theme-lets-code'>foo</div>", "theme");
+				theme = frame.add(
+					"<div class='theme-lets-code'>" +
+					" <p id='p'>normal paragraph</p>" +
+					" <p id='strong'><strong>strong paragraph</strong></p>" +
+					"</div>", "theme");
+
+				p = frame.get("#p");
+				strong = frame.get("#strong");
 			});
 
 			it("text", function() {
@@ -68,6 +77,11 @@
 
 			it("colors", function() {
 				assert.equal(backgroundColor(theme), BACKGROUND_BLUE, "background color");
+			});
+
+			it("normal paragraphs", function() {
+				assert.equal(fontSize(p), "15px", "font size");
+				assert.equal(lineHeight(p), "18px", "line height");
 			});
 
 		});
@@ -303,7 +317,7 @@
 
 				it("has a fixed height", function() {
 					canvas.assert({
-						height: 475
+						height: 474
 					});
 				});
 
@@ -512,8 +526,8 @@
 
 				assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
 				assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
-				assert.equal(fontSize(tagline), "14px", "tagline font size");
-				tagline.assert({ height: 17 }, "tagline height");
+				assert.equal(fontSize(tagline), "15px", "tagline font size");
+				tagline.assert({ height: 18 }, "tagline height");
 
 				assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
 				assert.equal(fontWeight(clearButton), DRAWING_BUTTON_WEIGHT, "clear button weight");
@@ -645,9 +659,9 @@
 				tagline.assert({
 					top: header.bottom.plus(tagline.height),
 					center: viewport.center,
-					height: 17
+					height: 18
 				}, "tagline should be centered under 404 header");
-				assert.equal(fontSize(tagline), "14px", "tagline font size");
+				assert.equal(fontSize(tagline), "15px", "tagline font size");
 				assert.equal(textAlign(tagline), "center", "tagline text should be centered");
 
 				drawSomething.assert({
@@ -703,7 +717,7 @@
 				});
 
 				it("appears to depress when user activates them", function() {
-					assertActivateDepresses(drawSomething, tagline.bottom.plus(18), "draw something button");
+					assertActivateDepresses(drawSomething, tagline.bottom.plus(19), "draw something button");
 				});
 
 			});
@@ -874,9 +888,11 @@
 
 	function isTextVerticallyCentered(element) {
 		var elementHeight = element.getRawPosition().height;
-		var lineHeight = element.getRawStyle("line-height");
+		return elementHeight + "px" === lineHeight(element);
+	}
 
-		return elementHeight + "px" === lineHeight;
+	function lineHeight(element) {
+		return element.getRawStyle("line-height");
 	}
 
 	function dropShadow(element) {
