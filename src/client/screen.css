@@ -137,7 +137,7 @@ body {
 .not-found {
 	/* text */
 	text-align: center;
-	line-height: 1;     /* vertical centering */
+	line-height: 200px;     /* vertical centering */
 	font-size: 200px;
 	font-weight: 600;
 
@@ -189,16 +189,6 @@ body {
 	width: 175px;
 }
 
-#join-us:hover, #join-us._hover_ {
-	background-color: #006f8f;
-}
-
-#join-us:active, #join-us._active_ {
-	box-shadow: none;
-	position: relative;
-	top: 1px;
-}
-
 
 /* 404 Page */
 
@@ -224,15 +214,4 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	width: 225px;
-}
-
-
-#draw-something-404:hover, #draw-something-404._hover_ {
-	background-color: #006f8f;
-}
-
-#draw-something-404:active, #draw-something-404._active_ {
-	box-shadow: none;
-	position: relative;
-	top: 1px;
 }
