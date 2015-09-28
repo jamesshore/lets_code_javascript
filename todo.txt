@@ -35,7 +35,6 @@ Engineering Tasks:
 
 To Do on current task:
 * factor out theme
-  - factor out subheader
-  - factor out tagline
+  - Mobile Safari gives us strange result when we take line-height property in '#tagline' rule
 - factor out layout (with TDD?)
   - should each block have a 'fill its container' test?

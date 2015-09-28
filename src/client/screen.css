@@ -10,7 +10,6 @@ body {
 .theme-lets-code {
 	/* text */
 	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
-	font-weight: 300;
 
 	/* colors */
 	background-color: #41a9cc;
@@ -19,10 +18,16 @@ body {
 p {
 	/* text */
 	font-size: 15px;
+	font-weight: 300;
 	line-height: 18px;
 
 	/* colors */
 	color: #0d576d;
+}
+
+strong {
+	font-weight: 300;
+	color: white;
 }
 
 
@@ -193,7 +198,6 @@ p {
 	margin-left: auto;
 	margin-right: auto;
 	margin-bottom: 0;
-	color: white;
 }
 
 #join-us {

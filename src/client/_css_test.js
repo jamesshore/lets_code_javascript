@@ -63,7 +63,7 @@
 				theme = frame.add(
 					"<div class='theme-lets-code'>" +
 					" <p id='p'>normal paragraph</p>" +
-					" <p id='strong'><strong>strong paragraph</strong></p>" +
+					" <p><strong id='strong'>strong paragraph</strong></p>" +
 					"</div>", "theme");
 
 				p = frame.get("#p");
@@ -72,7 +72,6 @@
 
 			it("text", function() {
 				assert.equal(fontFamily(theme), STANDARD_FONT, "font family");
-				assert.equal(fontWeight(theme), BODY_TEXT_WEIGHT, "font weight");
 			});
 
 			it("colors", function() {
@@ -81,9 +80,16 @@
 
 			it("normal paragraphs", function() {
 				assert.equal(fontSize(p), "15px", "font size");
+				assert.equal(fontWeight(p), BODY_TEXT_WEIGHT, "font weight");
 				assert.equal(lineHeight(p), "18px", "line height");
 				assert.equal(backgroundColor(p), TRANSPARENT, "background color");
 				assert.equal(textColor(p), DARK_BLUE, "text color");
+			});
+
+			it("strong paragraphs", function() {
+				assert.equal(fontSize(strong), "15px", "font size");
+				assert.equal(fontWeight(strong), BODY_TEXT_WEIGHT, "font weight");
+				assert.equal(textColor(strong), WHITE, "text color");
 			});
 
 		});
@@ -398,6 +404,7 @@
 			var drawingArea;
 			var clearButton;
 			var footer;
+			var footerText;
 			var joinUs;
 
 			before(function(done) {
@@ -426,6 +433,7 @@
 				drawingArea = frame.get("#drawing-area");
 				clearButton = frame.get("#clear-button");
 				footer = frame.get("#footer");
+				footerText = frame.get("#footer-text");
 				joinUs = frame.get("#join-us");
 			});
 
@@ -511,7 +519,7 @@
 				assert.equal(textColor(logo), WHITE, "logo text should be white");
 				assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
 				assert.equal(backgroundColor(drawingArea), WHITE, "drawing area should be white");
-				assert.equal(textColor(footer), WHITE, "footer should be white");
+				assert.equal(textColor(footerText), WHITE, "footer should be white");
 
 				assert.equal(textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
 				assert.equal(backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
@@ -535,9 +543,9 @@
 				assert.equal(fontWeight(clearButton), DRAWING_BUTTON_WEIGHT, "clear button weight");
 				assert.equal(fontSize(clearButton), "12px", "clear button font size");
 
-				assert.equal(fontFamily(footer), STANDARD_FONT, "footer family");
-				assert.equal(fontWeight(footer), BODY_TEXT_WEIGHT, "footer weight");
-				assert.equal(fontSize(footer), "15px", "footer font size");
+				assert.equal(fontFamily(footerText), STANDARD_FONT, "footer family");
+				assert.equal(fontWeight(footerText), BODY_TEXT_WEIGHT, "footer weight");
+				assert.equal(fontSize(footerText), "15px", "footer font size");
 				footer.assert({ height: 18 }, "footer height");
 
 				assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
