@@ -167,7 +167,7 @@
 			var logo;
 
 			beforeEach(function() {
-				logo = frame.add("<div class='logo'>logo</a>", "logo");
+				logo = frame.add("<div class='logo'>logo</div>", "logo");
 			});
 
 			it("fills its container", function() {
@@ -192,6 +192,41 @@
 			it("color", function() {
 				assert.equal(backgroundColor(logo), TRANSPARENT, "background color");
 				assert.equal(textColor(logo), WHITE, "text color");
+			});
+
+		});
+
+
+		describe("'Not found' block", function() {
+
+			var notFound;
+
+			beforeEach(function() {
+				notFound = frame.add("<div class='not-found'>404</div>", "not found");
+			});
+
+			it("fills its container", function() {
+				notFound.assert({
+					width: frame.body().width
+				});
+			});
+
+			it("is very large", function() {
+				notFound.assert({
+					height: 200
+				});
+			});
+
+			it("text", function() {
+				assert.equal(textAlign(notFound), "center", "should be horizontally centered");
+				assert.equal(isTextVerticallyCentered(notFound), true, "should be vertically centered");
+				assert.equal(fontSize(notFound), "200px", "font size");
+				assert.equal(fontWeight(notFound), HEADLINE_WEIGHT, "font weight");
+			});
+
+			it("color", function() {
+				assert.equal(backgroundColor(notFound), TRANSPARENT, "background color");
+				assert.equal(textColor(notFound), DARK_BLUE, "text color");
 			});
 
 		});
@@ -295,7 +330,6 @@
 				});
 
 			});
-
 
 		});
 

@@ -28,16 +28,14 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * refactor our CSS
+- Load normalize.css in test frame (ref Laurent Bourgault-Roy E344 http://www.letscodejavascript.com/v3/comments/live/344#comment-2264149684)
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
+- Improve our client directory structure
+- Split our CSS tests into multiple files
 
 To Do on current task:
-* factor out blocks (with TDD)
-  * factor out 404 headline
-- Load normalize.css in test frame (ref Laurent Bourgault-Roy E344 http://www.letscodejavascript.com/v3/comments/live/344#comment-2264149684)
-- factor out theme
+* factor out theme
   - factor out subheader
   - factor out tagline
 - factor out layout (with TDD?)
   - should each block have a 'fill its container' test?
-- Improve our client directory structure
-- Split our CSS tests into multiple files

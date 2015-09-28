@@ -132,6 +132,20 @@ body {
 }
 
 
+/* 'Not Found' block */
+
+.not-found {
+	/* text */
+	text-align: center;
+	line-height: 1;     /* vertical centering */
+	font-size: 200px;
+	font-weight: 600;
+
+	/* color */
+	color: #0d576d;
+}
+
+
 /* Home page */
 
 #logo {
@@ -193,13 +207,8 @@ body {
 }
 
 #header-404 {
-	line-height: 1;
 	margin-top: 0;
 	margin-bottom: 0;
-	font-size: 200px;
-	font-weight: 600;
-	color: #0d576d;
-	text-align: center;
 }
 
 #tagline-404 {
