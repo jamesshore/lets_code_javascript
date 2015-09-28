@@ -82,6 +82,8 @@
 			it("normal paragraphs", function() {
 				assert.equal(fontSize(p), "15px", "font size");
 				assert.equal(lineHeight(p), "18px", "line height");
+				assert.equal(backgroundColor(p), TRANSPARENT, "background color");
+				assert.equal(textColor(p), DARK_BLUE, "text color");
 			});
 
 		});

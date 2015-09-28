@@ -20,6 +20,9 @@ p {
 	/* text */
 	font-size: 15px;
 	line-height: 18px;
+
+	/* colors */
+	color: #0d576d;
 }
 
 
@@ -174,7 +177,6 @@ p {
 	margin-top: 5px;
 	margin-bottom: 0px;
 	text-align: center;
-	color: #0d576d;
 }
 
 #drawing-area-container {
@@ -214,7 +216,6 @@ p {
 }
 
 #tagline-404 {
-	color: #0d576d;
 	margin-top: 18px;
 	text-align: center;
 }
