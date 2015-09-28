@@ -35,6 +35,7 @@ Engineering Tasks:
 
 To Do on current task:
 * factor out theme
+  - factor out body tag
   - factor out subheader
   - factor out tagline
 - factor out layout (with TDD?)

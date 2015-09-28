@@ -1,10 +1,18 @@
 body {
-	background-color: #41a9cc;
+	margin: 0;
+	padding: 0;
+	margin-bottom: 13px;
+}
+
+/* "Let's Code" theme (our only theme) */
+
+.theme-lets-code {
+	/* text */
 	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
 	font-weight: 300;
-	margin: 0;
-	margin-bottom: 13px;
-	padding: 0;
+
+	/* colors */
+	background-color: #41a9cc;
 }
 
 

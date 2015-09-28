@@ -50,14 +50,46 @@
 			frame.reset();
 		});
 
-		describe("Button", function() {
+
+		describe("'Let's Code' theme", function() {
+
+			var page;
+			var theme;
+
+			beforeEach(function() {
+				page = frame.page();
+				theme = frame.add("<div class='theme-lets-code'>foo</div>", "theme");
+			});
+
+			it("text", function() {
+				assert.equal(fontFamily(theme), STANDARD_FONT, "font family");
+				assert.equal(fontWeight(theme), BODY_TEXT_WEIGHT, "font weight");
+			});
+
+			it("colors", function() {
+				assert.equal(backgroundColor(theme), BACKGROUND_BLUE, "background color");
+			});
+
+		});
+
+
+		describe("Button block", function() {
+
+			var INHERITED_FONT = "inherit-this-font";
 
 			var linkTag;
 			var buttonTag;
 
 			beforeEach(function() {
-				linkTag = frame.add("<a class='button' href='#createUnderline'>foo</a>", "<a> button");
-				buttonTag = frame.add("<button class='button'>foo</button>", "<button> button");
+				frame.add(
+					"<div style='font-family: " + INHERITED_FONT + "'>" +
+					" <a id='a_tag' class='button' href='#createUnderline'>foo</a>" +
+					" <button id='button_tag' class='button'>foo</button>" +
+					"</div>"
+				);
+
+				linkTag = frame.get("#a_tag");
+				buttonTag = frame.get("#button_tag");
 			});
 
 			it("fills its container", function() {
@@ -73,7 +105,7 @@
 				assert.equal(textAlign(linkTag), "center", "should be horizontally centered");
 				assert.equal(textIsUnderlined(linkTag), false, "text should not be underlined");
 				assert.equal(textIsUppercase(linkTag), true, "text should be uppercase");
-				assert.equal(fontFamily(buttonTag), STANDARD_FONT, "<button> should inherit standard font");
+				assert.equal(fontFamily(buttonTag), INHERITED_FONT, "<button> should inherit container's font");
 			});
 
 			it("has no border", function() {
@@ -96,7 +128,7 @@
 
 		});
 
-		describe("Action button variant", function() {
+		describe("Action button block variant", function() {
 
 			var linkTag;
 			var buttonTag;
@@ -129,7 +161,7 @@
 		});
 
 
-		describe("Drawing button variant", function() {
+		describe("Drawing button block variant", function() {
 
 			var linkTag;
 			var buttonTag;
@@ -162,7 +194,7 @@
 		});
 
 
-		describe("Logo", function() {
+		describe("Logo block", function() {
 
 			var logo;
 
@@ -232,7 +264,7 @@
 		});
 
 
-		describe("Drawing area", function() {
+		describe("Drawing area block", function() {
 
 			var drawingArea;
 			var arrow;
