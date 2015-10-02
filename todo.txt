@@ -32,6 +32,7 @@ Engineering Tasks:
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
 - Improve our client directory structure
 - Split our CSS tests into multiple files
+- Double-check manually, cross-browser
 
 To Do on current task:
 * factor out theme
