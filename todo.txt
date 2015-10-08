@@ -28,6 +28,8 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * refactor our CSS
+- integrate
+- upgrade to iOS 9
 - Load normalize.css in test frame (ref Laurent Bourgault-Roy E344 http://www.letscodejavascript.com/v3/comments/live/344#comment-2264149684)
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
 - Improve our client directory structure
@@ -37,5 +39,6 @@ Engineering Tasks:
 To Do on current task:
 * factor out theme
   - Mobile Safari gives us strange result when we take line-height property in '#tagline' rule
+- In drawing area tests, use `frame.get` in nested describe blocks to reduce typos (ref Martin Grandrath E346 http://www.letscodejavascript.com/v3/comments/live/346#comment-2295085386)
 - factor out layout (with TDD?)
   - should each block have a 'fill its container' test?
