@@ -31,6 +31,16 @@ strong {
 }
 
 
+/* Layout */
+
+.layout-center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+
 /* Button block */
 
 .button {
@@ -173,8 +183,6 @@ strong {
 
 #logo {
 	margin-top: 12px;
-	margin-left: auto;
-	margin-right: auto;
 	margin-bottom: 0px;
 }
 
@@ -187,22 +195,16 @@ strong {
 #drawing-area-container {
 	width: 980px;
 	margin-top: 10px;
-	margin-left: auto;
-	margin-right: auto;
 }
 
 #footer {
 	text-align: center;
 	margin-top: 13px;
-	margin-left: auto;
-	margin-right: auto;
 	margin-bottom: 0;
 }
 
 #join-us {
 	margin-top: 13px;
-	margin-left: auto;
-	margin-right: auto;
 	width: 175px;
 }
 

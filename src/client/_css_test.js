@@ -95,6 +95,29 @@
 		});
 
 
+		describe("Centered layout", function() {
+
+			var container;
+			var element;
+
+			beforeEach(function() {
+				container = frame.add(
+					"<div style='width: 200px'>" +
+					" <span id='layout' class='layout-center'>lay out this span</span>" +
+					"</div>", "container"
+				);
+				element = frame.get("#layout");
+			});
+
+			it("is centered in its container", function() {
+				element.assert({
+					center: container.center
+				});
+			});
+
+		});
+
+
 		describe("Button block", function() {
 
 			var INHERITED_FONT = "inherit-this-font";

@@ -31,16 +31,10 @@ Engineering Tasks:
 - Double-check manually, cross-browser
 - integrate
 - upgrade to iOS 9
-- Load normalize.css in test frame (ref Laurent Bourgault-Roy E344 http://www.letscodejavascript.com/v3/comments/live/344#comment-2264149684)
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
 - Improve our client directory structure
 - Split our CSS tests into multiple files
 
 To Do on current task:
-* factor out theme
-  - Mobile Safari gives us strange result when we take out line-height property in '#tagline' rule
-    - This is the result of font inflation and can be fixed with -ios-text-size-adjust: 100%
-    - The normalize stylesheet already includes text-size-adjust
-- In drawing area tests, use `frame.get` in nested describe blocks to reduce typos (ref Martin Grandrath E346 http://www.letscodejavascript.com/v3/comments/live/346#comment-2295085386)
-- factor out layout (with TDD?)
+* factor out layout
   - should each block have a 'fill its container' test?
