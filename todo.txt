@@ -38,7 +38,9 @@ Engineering Tasks:
 
 To Do on current task:
 * factor out theme
-  - Mobile Safari gives us strange result when we take line-height property in '#tagline' rule
+  - Mobile Safari gives us strange result when we take out line-height property in '#tagline' rule
+    - This is the result of font inflation and can be fixed with -ios-text-size-adjust: 100%
+    - The normalize stylesheet already includes text-size-adjust
 - In drawing area tests, use `frame.get` in nested describe blocks to reduce typos (ref Martin Grandrath E346 http://www.letscodejavascript.com/v3/comments/live/346#comment-2295085386)
 - factor out layout (with TDD?)
   - should each block have a 'fill its container' test?
