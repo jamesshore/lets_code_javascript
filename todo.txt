@@ -37,7 +37,5 @@ Engineering Tasks:
 
 To Do on current task:
 * factor out layout
-  - width
   - vertical spacing
-  - should each block have a 'fill its container' test?
   - is layout-text-vertical-center possible? (line-height: 1)

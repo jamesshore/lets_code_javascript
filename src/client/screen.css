@@ -37,6 +37,10 @@ strong {
 	width: 980px;
 }
 
+.layout-width-button {
+	width: 225px;
+}
+
 .layout-center {
 	display: block;
 	margin-left: auto;
@@ -54,7 +58,6 @@ strong {
 .button {
 	/* size */
 	display: block;
-	width: 100%;
 	padding: 0;
 
 	/* text */
@@ -209,7 +212,6 @@ strong {
 
 #join-us {
 	margin-top: 13px;
-	width: 175px;
 }
 
 
@@ -230,5 +232,4 @@ strong {
 
 #draw-something-404 {
 	margin-top: 18px;
-	width: 225px;
 }

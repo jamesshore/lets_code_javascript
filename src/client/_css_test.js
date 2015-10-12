@@ -113,6 +113,23 @@
 
 			});
 
+			describe("Button width", function() {
+
+				var element;
+
+				beforeEach(function() {
+					element = frame.add("<div class='layout-width-button'></div>", "element");
+				});
+
+				it("is actually a bit more than 1/4 of full width", function() {
+					element.assert({
+						width: 225
+					});
+				});
+
+			});
+
+
 			describe("Center", function() {
 
 				var container;
@@ -169,15 +186,6 @@
 
 				linkTag = frame.get("#a_tag");
 				buttonTag = frame.get("#button_tag");
-			});
-
-			it("fills its container", function() {
-				linkTag.assert({
-					width: frame.body().width
-				});
-				buttonTag.assert({
-					width: frame.body().width
-				});
 			});
 
 			it("text", function() {
@@ -281,12 +289,6 @@
 				logo = frame.add("<div class='logo'>logo</div>", "logo");
 			});
 
-			it("fills its container", function() {
-				logo.assert({
-					width: frame.body().width
-				});
-			});
-
 			it("is nice and big", function() {
 				logo.assert({
 					height: 30
@@ -314,12 +316,6 @@
 
 			beforeEach(function() {
 				notFound = frame.add("<div class='not-found'>404</div>", "not found");
-			});
-
-			it("fills its container", function() {
-				notFound.assert({
-					width: frame.body().width
-				});
 			});
 
 			it("is very large", function() {
@@ -361,12 +357,6 @@
 				canvas = frame.get("#drawing-area-canvas");
 				arrow = frame.get("#arrow");
 				button = frame.get("#button");
-			});
-
-			it("fills its container", function() {
-				drawingArea.assert({
-					width: frame.body().width
-				});
 			});
 
 			describe("canvas", function() {
@@ -541,8 +531,7 @@
 				joinUs.assert({
 					center: page.center,
 					top: footer.bottom.plus(13),
-					height: 35,
-					width: 175
+					height: 35
 				}, "join us button should be centered below footer");
 			});
 
@@ -625,7 +614,7 @@
 
 				it("have specific sizes", function() {
 					assertButtonSize(clearButton, 70, 30);
-					assertButtonSize(joinUs, 175, 35);
+					assertButtonSize(joinUs, 225, 35);
 
 					function assertButtonSize(button, width, height) {
 						button.assert({
