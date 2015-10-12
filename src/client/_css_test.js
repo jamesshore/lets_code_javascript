@@ -38,7 +38,7 @@
 		before(function(done) {
 			frame = quixote.createFrame({
 				width: 500,
-				stylesheet: "/base/src/client/screen.css"
+				stylesheet: [ "/base/src/client/vendor/normalize-3.0.2.css", "/base/src/client/screen.css" ]
 			}, done);
 		});
 

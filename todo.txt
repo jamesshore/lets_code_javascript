@@ -28,13 +28,13 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * refactor our CSS
+- Double-check manually, cross-browser
 - integrate
 - upgrade to iOS 9
 - Load normalize.css in test frame (ref Laurent Bourgault-Roy E344 http://www.letscodejavascript.com/v3/comments/live/344#comment-2264149684)
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
 - Improve our client directory structure
 - Split our CSS tests into multiple files
-- Double-check manually, cross-browser
 
 To Do on current task:
 * factor out theme
