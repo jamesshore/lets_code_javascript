@@ -95,24 +95,58 @@
 		});
 
 
-		describe("Centered layout", function() {
+		describe("Layout", function() {
 
-			var container;
-			var element;
+			describe("Full width", function() {
 
-			beforeEach(function() {
-				container = frame.add(
-					"<div style='width: 200px'>" +
-					" <span id='layout' class='layout-center'>lay out this span</span>" +
-					"</div>", "container"
-				);
-				element = frame.get("#layout");
+				var element;
+
+				beforeEach(function() {
+					element = frame.add("<div class='layout-width-full'></div>", "element");
+				});
+
+				it("is the width of the iPad", function() {
+					element.assert({
+						width: IOS_BROWSER_WIDTH
+					});
+				});
+
 			});
 
-			it("is centered in its container", function() {
-				element.assert({
-					center: container.center
+			describe("Center", function() {
+
+				var container;
+				var element;
+
+				beforeEach(function() {
+					container = frame.add(
+						"<div style='width: 200px'>" +
+						" <span id='layout' class='layout-center'>lay out this span</span>" +
+						"</div>", "container"
+					);
+					element = frame.get("#layout");
 				});
+
+				it("is centered in its container", function() {
+					element.assert({
+						center: container.center
+					});
+				});
+
+			});
+
+			describe("Text center", function() {
+
+				var element;
+
+				beforeEach(function() {
+					element = frame.add("<div class='layout-center-text'>text</div>", element);
+				});
+
+				it("has centered text", function() {
+					assert.equal(textAlign(element), "center");
+				});
+
 			});
 
 		});

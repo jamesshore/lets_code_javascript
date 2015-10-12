@@ -33,10 +33,18 @@ strong {
 
 /* Layout */
 
+.layout-width-full {
+	width: 980px;
+}
+
 .layout-center {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.layout-center-text {
+	text-align: center;
 }
 
 
@@ -48,7 +56,6 @@ strong {
 	display: block;
 	width: 100%;
 	padding: 0;
-	margin: 0;
 
 	/* text */
 	font-family: inherit;
@@ -189,16 +196,13 @@ strong {
 #tagline {
 	margin-top: 5px;
 	margin-bottom: 0px;
-	text-align: center;
 }
 
 #drawing-area-container {
-	width: 980px;
 	margin-top: 10px;
 }
 
 #footer {
-	text-align: center;
 	margin-top: 13px;
 	margin-bottom: 0;
 }
@@ -222,12 +226,9 @@ strong {
 
 #tagline-404 {
 	margin-top: 18px;
-	text-align: center;
 }
 
 #draw-something-404 {
 	margin-top: 18px;
-	margin-left: auto;
-	margin-right: auto;
 	width: 225px;
 }
