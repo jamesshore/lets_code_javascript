@@ -674,10 +674,10 @@
 				page = frame.page();
 				viewport = frame.viewport();
 
-				logo = frame.get("#logo-404");
-				header = frame.get("#header-404");
-				tagline = frame.get("#tagline-404");
-				drawSomething = frame.get("#draw-something-404");
+				logo = frame.get("#logo");
+				header = frame.get("#header");
+				tagline = frame.get("#tagline");
+				drawSomething = frame.get("#draw-something");
 			});
 
 			it("fits perfectly within viewport", function() {

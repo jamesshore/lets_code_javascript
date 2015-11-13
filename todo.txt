@@ -25,10 +25,11 @@ Minimum Marketable Features:
 User Stories to finish current MMF:
 * update design
 - release
+- CSS polish
+	- iOS buttons flash rather depressing
+	- IE 9 and IE 11, button goes diagonally rather than vertically (but only for button, not for links)
 
 Engineering Tasks:
-* refactor our CSS
-- Double-check manually, cross-browser
 - integrate
 - upgrade to iOS 9
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
@@ -36,6 +37,4 @@ Engineering Tasks:
 - Split our CSS tests into multiple files
 
 To Do on current task:
-* factor out layout
-  - vertical spacing
-  - is layout-text-vertical-center possible? (line-height: 1)
+*

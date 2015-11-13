@@ -8,20 +8,15 @@ body {
 /* "Let's Code" theme (our only theme) */
 
 .theme-lets-code {
-	/* text */
 	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
-
-	/* colors */
 	background-color: #41a9cc;
 }
 
 p {
-	/* text */
 	font-size: 15px;
 	font-weight: 300;
 	line-height: 18px;
 
-	/* colors */
 	color: #0d576d;
 }
 
@@ -56,17 +51,14 @@ strong {
 /* Button block */
 
 .button {
-	/* size */
 	display: block;
 	padding: 0;
 
-	/* text */
 	font-family: inherit;
 	text-align: center;
 	text-transform: uppercase;
 	text-decoration: none;
 
-	/* decorations */
 	border: none;
 	border-radius: 2px;
 }
@@ -78,15 +70,12 @@ strong {
 }
 
 .button--action {
-	/* size */
 	height: 35px;
 
-	/* text */
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 35px;    /* vertical centering */
 
-	/* color */
 	color: white;
 	background-color: #00799c;
 	box-shadow: 0 1px 0 0 #0d576d;
@@ -97,15 +86,12 @@ strong {
 }
 
 .button--drawing {
-	/* size */
 	height: 30px;
 
-	/* text */
 	font-size: 12px;
 	font-weight: 600;
 	line-height: 30px;    /* vertical centering */
 
-	/* color */
 	background-color: #e5e5e5;
 	color: #595959;
 	box-shadow: 0 1px 0 0 #a7a9ab;
@@ -129,13 +115,11 @@ strong {
 }
 
 .drawing-area__arrow {
-	/* image */
 	background-image: url(/images/arrow.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	height: 9px;
 
-	/* position */
 	position: absolute;
 	top: 0px;
 	left: 0px;
@@ -143,12 +127,10 @@ strong {
 }
 
 .drawing-area__button {
-	/* position */
 	position: absolute;
 	top: 15px;
 	right: 15px;
 
-	/* layout */
 	width: 70px;
 }
 
@@ -161,16 +143,13 @@ strong {
 /* Logo block */
 
 .logo {
-	/* size */
 	height: 30px;
 
-	/* text */
 	text-align: center;
 	line-height: 30px;     /* vertical centering */
 	font-size: 30px;
 	font-weight: 600;
 
-	/* color */
 	color: white;
 }
 
@@ -178,12 +157,10 @@ strong {
 /* 'Not Found' block */
 
 .not-found {
-	/* text */
 	text-align: center;
 	line-height: 200px;     /* vertical centering */
 	font-size: 200px;
 	font-weight: 600;
 
-	/* color */
 	color: #0d576d;
 }
