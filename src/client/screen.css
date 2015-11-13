@@ -187,24 +187,3 @@ strong {
 	/* color */
 	color: #0d576d;
 }
-
-
-
-/* 404 Page */
-
-#logo-404 {
-	margin-top: 60px;
-}
-
-#header-404 {
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
-#tagline-404 {
-	margin-top: 18px;
-}
-
-#draw-something-404 {
-	margin-top: 18px;
-}
