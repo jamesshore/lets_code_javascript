@@ -1,23 +1,23 @@
-# parse-glob [![NPM version](https://badge.fury.io/js/parse-glob.svg)](http://badge.fury.io/js/parse-glob)  [![Build Status](https://travis-ci.org/jonschlinkert/parse-glob.svg)](https://travis-ci.org/jonschlinkert/parse-glob) 
+# parse-glob [![NPM version](https://badge.fury.io/js/parse-glob.svg)](http://badge.fury.io/js/parse-glob)  [![Build Status](https://travis-ci.org/jonschlinkert/parse-glob.svg)](https://travis-ci.org/jonschlinkert/parse-glob)
 
 > Parse a glob pattern into an object of tokens.
 
-**Changes from v1.0.0 to v3.0.2** 
+**Changes from v1.0.0 to v3.0.4**
 
-- all path-related properties are now on the `path` object
-- all boolean properties are now on the `is` object
-- adds `base` property
+* all path-related properties are now on the `path` object
+* all boolean properties are now on the `is` object
+* adds `base` property
 
 See the [properties](#properties) section for details.
 
-## Install with [npm](npmjs.org)
+Install with [npm](https://www.npmjs.com/)
 
-```bash
-npm i parse-glob --save
+```sh
+$ npm i parse-glob --save
 ```
 
-- parses 1,000+ glob patterns in 29ms (2.3 GHz Intel Core i7)
-- Extensive [unit tests](./test.js) (more than 1,000 lines), covering wildcards, globstars, character classes, brace patterns, extglobs, dotfiles and other complex patterns.
+* parses 1,000+ glob patterns in 29ms (2.3 GHz Intel Core i7)
+* Extensive [unit tests](./test.js) (more than 1,000 lines), covering wildcards, globstars, character classes, brace patterns, extglobs, dotfiles and other complex patterns.
 
 See the tests for [hundreds of examples](./test.js).
 
@@ -60,43 +60,42 @@ parseGlob('a/b/c/**/*.{yml,json}');
 
 The object returned by parseGlob has the following properties:
 
-- `orig`: a copy of the original, unmodified glob pattern
-- `is`: an object with boolean information about the glob:
-  + `glob`: true if the pattern actually a glob pattern
-  + `negated`: true if it's a negation pattern (`!**/foo.js`)
-  + `extglob`: true if it has extglobs (`@(foo|bar)`)
-  + `braces`: true if it has braces (`{1..2}` or `.{txt,md}`)
-  + `brackets`: true if it has POSIX brackets (`[[:alpha:]]`)
-  + `globstar`: true if the pattern has a globstar (double star, `**`)
-  + `dotfile`: true if the pattern should match dotfiles 
-  + `dotdir`: true if the pattern should match dot-directories (like `.git`)
-- `glob`: the glob pattern part of the string, if any
-- `base`: the non-glob part of the string, if any
-- `path`: file path segments
-  + `dirname`: directory
-  + `basename`: file name with extension
-  + `filename`: file name without extension
-  + `extname`: file extension with dot
-  + `ext`: file extension without dot
+* `orig`: a copy of the original, unmodified glob pattern
+* `is`: an object with boolean information about the glob:
+  - `glob`: true if the pattern actually a glob pattern
+  - `negated`: true if it's a negation pattern (`!**/foo.js`)
+  - `extglob`: true if it has extglobs (`@(foo|bar)`)
+  - `braces`: true if it has braces (`{1..2}` or `.{txt,md}`)
+  - `brackets`: true if it has POSIX brackets (`[[:alpha:]]`)
+  - `globstar`: true if the pattern has a globstar (double star, `**`)
+  - `dotfile`: true if the pattern should match dotfiles
+  - `dotdir`: true if the pattern should match dot-directories (like `.git`)
+* `glob`: the glob pattern part of the string, if any
+* `base`: the non-glob part of the string, if any
+* `path`: file path segments
+  - `dirname`: directory
+  - `basename`: file name with extension
+  - `filename`: file name without extension
+  - `extname`: file extension with dot
+  - `ext`: file extension without dot
 
 ## Related
-
-* [glob-base](https://github.com/jonschlinkert/glob-base): Returns an object with the (non-glob) base path and the… [more](https://github.com/jonschlinkert/glob-base)
-* [glob-parent](https://github.com/es128/glob-parent): Strips glob magic from a string to provide the parent… [more](https://github.com/es128/glob-parent)
-* [glob-path-regex](https://github.com/regexps/glob-path-regex): Regular expression for matching the parts of glob pattern.
-* [is-glob](https://github.com/jonschlinkert/is-glob): Returns `true` if the given string looks like a glob… [more](https://github.com/jonschlinkert/is-glob)
-* [micromatch](https://github.com/jonschlinkert/micromatch): Glob matching for javascript/node.js. A drop-in replacement and faster alternative… [more](https://github.com/jonschlinkert/micromatch)
+* [glob-base](https://www.npmjs.com/package/glob-base): Returns an object with the (non-glob) base path and the actual pattern. | [homepage](https://github.com/jonschlinkert/glob-base)
+* [glob-parent](https://www.npmjs.com/package/glob-parent): Strips glob magic from a string to provide the parent path | [homepage](https://github.com/es128/glob-parent)
+* [glob-path-regex](https://www.npmjs.com/package/glob-path-regex): Regular expression for matching the parts of glob pattern. | [homepage](https://github.com/regexps/glob-path-regex)
+* [is-glob](https://www.npmjs.com/package/is-glob): Returns `true` if the given string looks like a glob pattern. | [homepage](https://github.com/jonschlinkert/is-glob)
+* [micromatch](https://www.npmjs.com/package/micromatch): Glob matching for javascript/node.js. A drop-in replacement and faster alternative to minimatch and multimatch. Just… [more](https://www.npmjs.com/package/micromatch) | [homepage](https://github.com/jonschlinkert/micromatch)
 
 ## Contributing
 
-Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/jonschlinkert/parse-glob/issues)
+Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/jonschlinkert/parse-glob/issues/new).
 
 ## Tests
 
 Install dev dependencies:
 
-```bash
-npm i -d && npm test
+```sh
+$ npm i -d && npm test
 ```
 
 ## Author
@@ -108,15 +107,9 @@ npm i -d && npm test
 
 ## License
 
-Copyright (c) 2014-2015 Jon Schlinkert
+Copyright © 2014-2015 Jon Schlinkert
 Released under the MIT license.
 
 ***
 
-_This file was generated by [verb-cli](https://github.com/assemble/verb-cli) on April 25, 2015._
-
-<!-- reflinks generated by verb-reflinks plugin -->
-
-[verb]: https://github.com/assemble/verb
-[template]: https://github.com/jonschlinkert/template
-[assemble]: http://assemble.io
+_This file was generated by [verb-cli](https://github.com/assemble/verb-cli) on September 22, 2015._

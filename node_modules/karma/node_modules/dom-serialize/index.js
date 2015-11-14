@@ -6,10 +6,7 @@
 var extend = require('extend');
 var encode = require('ent/encode');
 var CustomEvent = require('custom-event');
-var voidElements = require('void-elements').reduce(function (obj, name) {
-  obj[name] = true;
-  return obj;
-}, {});
+var voidElements = require('void-elements');
 
 /**
  * Module exports.
