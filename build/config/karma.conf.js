@@ -10,17 +10,16 @@ module.exports = function(config) {
 		basePath: '../../',
 
 		// frameworks to use
-		frameworks: ['mocha', 'commonjs'],
+		frameworks: [ 'mocha', 'commonjs' ],
 
 		// list of files / patterns to load in the browser
 		files: [
 			'src/client/**/*.js',
-			'src/client/vendor/quixote-0.7.0.js',
 			'src/shared/**/*.js',
-			'src/shared/vendor/proclaim-2.0.0.js',
-			{pattern: 'src/client/screen.css', included: false},
-			{pattern: 'src/client/index.html', included: false},
-			{pattern: 'src/client/404.html', included: false}
+			{ pattern: 'src/client/vendor/normalize-3.0.2.css', included: false },
+			{ pattern: 'src/client/screen.css', included: false },
+			{ pattern: 'src/client/index.html', included: false },
+			{ pattern: 'src/client/404.html', included: false }
 		],
 
 		// list of files to exclude
@@ -28,15 +27,15 @@ module.exports = function(config) {
 
 		// preprocesors
 		preprocessors: {
-			'src/client/vendor/quixote-0.7.0.js': ['commonjs'],
-			'src/shared/vendor/proclaim-2.0.0.js': ['commonjs'],
-			'src/client/*.js': ['commonjs'],
-			'src/shared/*.js': ['commonjs']
+			'src/client/vendor/quixote-0.9.0.js': [ 'commonjs' ],
+			'src/shared/vendor/proclaim-2.0.0.js': [ 'commonjs' ],
+			'src/client/*.js': [ 'commonjs' ],
+			'src/shared/*.js': [ 'commonjs' ]
 		},
 
 		// test results reporter to use
 		// possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-		reporters: ['dots'],
+		reporters: [ 'dots' ],
 
 		// web server port
 		port: 9876,

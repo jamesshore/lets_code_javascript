@@ -5,11 +5,11 @@
 	module.exports = [
 		"IE 9.0.0 (Windows 7 0.0.0)",
 		"IE 11.0.0 (Windows 7 0.0.0)",
-		"Firefox 40.0.0 (Mac OS X 10.10.0)",
-		"Chrome 45.0.2454 (Mac OS X 10.10.5)",
-		"Safari 8.0.8 (Mac OS X 10.10.5)",
+		"Firefox 42.0.0 (Mac OS X 10.10.0)",
+		"Chrome 46.0.2490 (Mac OS X 10.10.5)",
+		"Safari 9.0.1 (Mac OS X 10.10.5)",
 		"Mobile Safari 8.0.0 (iOS 8.4.0)",
-		"Chrome Mobile 39.0.0 (Android 5.1.0)"
+		"Chrome Mobile 44.0.2403 (Android 6.0.0)"
 	];
 
 }());

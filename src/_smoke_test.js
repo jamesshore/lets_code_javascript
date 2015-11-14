@@ -13,7 +13,7 @@
 
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
-	var EXPECTED_BROWSER = "firefox 40.0.3";
+	var EXPECTED_BROWSER = "firefox 42.0";
 
 	var serverProcess;
 	var driver;
@@ -249,7 +249,7 @@
 			});
 
 			function isGenericName(family) {
-				return family === "sans-serif" || family === "serif" ||
+				return family === "inherit" || family === "sans-serif" || family === "serif" ||
 					family === "monospace" || family === "cursive" || family === "fantasy";
 			}
 
@@ -267,13 +267,13 @@
 		}
 
 		function processFontWeight(weightDeclaration) {
-			if (weightDeclaration === "") return;
+			if (weightDeclaration === "" || weightDeclaration === "inherit") return;
 
 			styleSheetFonts.weights[weightDeclaration + ""] = true;
 		}
 
 		function processFontStyle(styleDeclaration) {
-			if (styleDeclaration === "") return;
+			if (styleDeclaration === "" || styleDeclaration === "inherit") return;
 
 			styleSheetFonts.styles[styleDeclaration] = true;
 		}

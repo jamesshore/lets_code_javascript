@@ -1,52 +1,120 @@
 body {
-	background-color: #41a9cc;
-	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
-	font-weight: 300;
 	margin: 0;
-	margin-bottom: 13px;
 	padding: 0;
+	margin-bottom: 13px;
 }
 
 
-/* Home page */
+/* "Let's Code" theme (our only theme) */
 
-#logo {
-	line-height: 1;
-	height: 30px;
-	margin-top: 12px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 0px;
-	text-align: center;
-	font-size: 30px;
-	font-weight: 600;
-	color: white;
+.theme-lets-code {
+	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
+	background-color: #41a9cc;
 }
 
-#tagline {
-	line-height: 17px;
-	margin-top: 5px;
-	margin-bottom: 0px;
-	text-align: center;
-	font-size: 14px;
+p {
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 18px;
+
 	color: #0d576d;
 }
 
-#drawing-area {
-	height: 475px;
+strong {
+	font-weight: 300;
+	color: white;
+}
+
+
+/* Layout */
+
+.layout-width-full {
+	width: 980px;
+}
+
+.layout-width-button {
+	width: 225px;
+}
+
+.layout-center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.layout-center-text {
+	text-align: center;
+}
+
+
+
+/* Button block */
+
+.button {
+	display: block;
+	padding: 0;
+
+	font-family: inherit;
+	text-align: center;
+	text-transform: uppercase;
+	text-decoration: none;
+
+	border: none;
+	border-radius: 2px;
+}
+
+.button:active, .button._active_ {
+	box-shadow: none;
+	position: relative;
+	top: 1px;
+}
+
+.button--action {
+	height: 35px;
+
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 35px;    /* vertical centering */
+
+	color: white;
+	background-color: #00799c;
+	box-shadow: 0 1px 0 0 #0d576d;
+}
+
+.button--action:hover, .button--action._hover_ {
+	background-color: #006f8f;
+}
+
+.button--drawing {
+	height: 30px;
+
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 30px;    /* vertical centering */
+
+	background-color: #e5e5e5;
+	color: #595959;
+	box-shadow: 0 1px 0 0 #a7a9ab;
+}
+
+.button--drawing:hover, .button--drawing._hover_ {
+	background-color: #d9d9d9;
+}
+
+
+/* Drawing Area block */
+
+.drawing-area {
+	position: relative;
+}
+
+.drawing-area__canvas {
+	height: 474px;
 	background-color: white;
 	border-radius: 2px;
 }
 
-#drawing-area-container {
-	width: 980px;
-	margin-top: 10px;
-	margin-left: auto;
-	margin-right: auto;
-	position: relative;
-}
-
-#drawing-area-arrow {
+.drawing-area__arrow {
 	background-image: url(/images/arrow.png);
 	background-repeat: no-repeat;
 	background-position: center;
@@ -58,134 +126,41 @@ body {
 	right: 0px;
 }
 
-#clear-button {
-	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
-	font-weight: 600;
-	font-size: 12px;
+.drawing-area__button {
 	position: absolute;
 	top: 15px;
 	right: 15px;
-	border: none;
-	padding: 0;
-	margin: 0;
-	color: #595959;
-	background-color: #e5e5e5;
-	height: 30px;
-	line-height: 30px;
+
 	width: 70px;
-	border-radius: 2px;
-	box-shadow: 0 1px 0 0 #a7a9ab;
-	text-transform: uppercase;
 }
 
-#clear-button:hover, #clear-button._hover_ {
-	background-color: #d9d9d9;
-}
-
-#clear-button:active, #clear-button._active_ {
+.drawing-area__button:active, .drawing-area__button._active_ {
+	position: absolute;
 	top: 16px;
-	box-shadow: none;
-}
-
-#footer {
-	line-height: 1.2;
-	text-align: center;
-	margin-top: 13px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 0;
-	font-size: 15px;
-	color: white;
-}
-
-#join-us {
-	font-weight: 400;
-	font-size: 16px;
-	display: block;
-	text-align: center;
-	margin-top: 13px;
-	margin-left: auto;
-	margin-right: auto;
-	color: white;
-	background-color: #00799c;
-	height: 35px;
-	line-height: 35px;
-	width: 175px;
-	border-radius: 2px;
-	box-shadow: 0 1px 0 0 #0d576d;
-	vertical-align: middle;
-	text-decoration: none;
-	text-transform: uppercase;
-}
-
-#join-us:hover, #join-us._hover_ {
-	background-color: #006f8f;
-}
-
-#join-us:active, #join-us._active_ {
-	box-shadow: none;
-	position: relative;
-	top: 1px;
 }
 
 
-/* 404 Page */
+/* Logo block */
 
-#logo-404 {
-	margin-top: 60px;
-	line-height: 1;
+.logo {
 	height: 30px;
+
+	text-align: center;
+	line-height: 30px;     /* vertical centering */
 	font-size: 30px;
 	font-weight: 600;
+
 	color: white;
-	text-align: center;
 }
 
-#header-404 {
-	line-height: 1;
-	margin-top: 0;
-	margin-bottom: 0;
+
+/* 'Not Found' block */
+
+.not-found {
+	text-align: center;
+	line-height: 200px;     /* vertical centering */
 	font-size: 200px;
 	font-weight: 600;
+
 	color: #0d576d;
-	text-align: center;
-}
-
-#tagline-404 {
-	color: #0d576d;
-	margin-top: 17px;
-	font-size: 14px;
-	line-height: 17px;
-	text-align: center;
-}
-
-#draw-something-404 {
-	color: white;
-	background-color: #00799c;
-	font-weight: 400;
-	line-height: 35px;
-	margin-top: 17px;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-
-	display: block;
-	height: 35px;
-	width: 225px;
-
-	text-decoration: none;
-	text-transform: uppercase;
-	box-shadow: 0 1px 0 0 #0d576d;
-	border-radius: 2px;
-}
-
-
-#draw-something-404:hover, #draw-something-404._hover_ {
-	background-color: #006f8f;
-}
-
-#draw-something-404:active, #draw-something-404._active_ {
-	box-shadow: none;
-	position: relative;
-	top: 1px;
 }
