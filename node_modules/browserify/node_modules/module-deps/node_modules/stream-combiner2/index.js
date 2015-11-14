@@ -1,5 +1,6 @@
+var PassThrough = require('readable-stream').PassThrough
+var Readable = require('readable-stream').Readable
 var duplexer = require('duplexer2')
-var through = require('through2')
 
 module.exports = function () {
   var streams
@@ -28,13 +29,13 @@ function combine (streams, opts) {
     streams[i] = wrap(streams[i], opts)
 
   if(streams.length == 0)
-    return through(opts)
+    return new PassThrough(opts)
   else if(streams.length == 1)
     return streams[0]
 
   var first = streams[0]
     , last = streams[streams.length - 1]
-    , thepipe = duplexer(first, last)
+    , thepipe = duplexer(opts, first, last)
 
   //pipe all the streams together
 
@@ -63,10 +64,5 @@ function combine (streams, opts) {
 
 function wrap (tr, opts) {
   if (typeof tr.read === 'function') return tr
-  if (!opts) opts = tr._options || {}
-  var input = through(opts), output = through(opts)
-  input.pipe(tr).pipe(output)
-  var dup = duplexer(input, output)
-  tr.on('error', function (err) { dup.emit('error', err) });
-  return dup;
+  return new Readable(opts).wrap(tr)
 }

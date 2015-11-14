@@ -119,4 +119,11 @@ describe('asn1.js RFC3280', function() {
 
     assert(info[0].accessMethod);
   });
+
+  it('should decode directoryName in GeneralName', function() {
+    var data = new Buffer('a411300f310d300b06022a03160568656c6c6f', 'hex');
+
+    var name = rfc3280.GeneralName.decode(data, 'der');
+    assert.equal(name.type, 'directoryName');
+  });
 });

@@ -5,3 +5,5 @@ node_js:
   - 0.10
   - 0.12
   - io.js
+before_install:
+  - npm install --global npm

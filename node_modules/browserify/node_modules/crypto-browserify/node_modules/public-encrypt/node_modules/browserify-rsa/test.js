@@ -46,7 +46,7 @@ function testMessage(key, run) {
         key: key
       }, buf).toString('hex');
       var myEncrypt = crt(buf, priv).toString('hex');
-      t.equals(nodeEncrypt, myEncrypt, 'equal encrypts');
+      t.equals(myEncrypt, nodeEncrypt, 'equal encrypts');
     });
   }
 }

@@ -1,7 +1,5 @@
 var pipeline = require('../');
 var through = require('through2');
-var split = require('split');
-var concat = require('concat-stream');
 var test = require('tape');
 
 test('unshift', function (t) {

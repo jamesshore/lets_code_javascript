@@ -161,7 +161,10 @@ var GeneralName = asn1.define('GeneralName', function() {
     otherName: this.implicit(0).use(AnotherName),
     rfc822Name: this.implicit(1).ia5str(),
     dNSName: this.implicit(2).ia5str(),
-    directoryName: this.implicit(4).use(Name),
+
+    // OpenSSL says:
+    // X509_NAME is a CHOICE type so use EXPLICIT
+    directoryName: this.explicit(4).use(Name),
 
     // TODO(indutny): requires DirectoryString, ORAddress
     // ediPartyName: this.implicit(5).use(EDIPartyName),

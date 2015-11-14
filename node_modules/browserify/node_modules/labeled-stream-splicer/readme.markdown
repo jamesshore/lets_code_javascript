@@ -2,8 +2,6 @@
 
 [stream splicer](https://npmjs.org/package/stream-splicer) with labels
 
-[![testling badge](https://ci.testling.com/substack/labeled-stream-splicer.png)](https://ci.testling.com/substack/labeled-stream-splicer)
-
 [![build status](https://secure.travis-ci.org/substack/labeled-stream-splicer.png)](http://travis-ci.org/substack/labeled-stream-splicer)
 
 # example

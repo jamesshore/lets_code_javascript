@@ -1,6 +1,5 @@
 var pipeline = require('../');
 var through = require('through2');
-var stringify = require('JSONStream').stringify;
 var split = require('split');
 var concat = require('concat-stream');
 var test = require('tape');

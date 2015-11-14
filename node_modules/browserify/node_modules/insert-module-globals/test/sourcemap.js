@@ -1,4 +1,4 @@
-var test = require('tap').test;
+var test = require('tape');
 var convert = require('convert-source-map');
 var insert = require('../');
 var mdeps = require('module-deps');
@@ -8,7 +8,7 @@ test('sourcemap', function (t) {
     t.plan(6);
     
     var file = __dirname + '/sourcemap/main.js';
-    var deps = mdeps({ transform: inserter });
+    var deps = mdeps()
     
     deps.on('data', function(row) {
         var src = row.source;
@@ -31,6 +31,7 @@ test('sourcemap', function (t) {
         vm.runInNewContext(src, c);
     });
     
+    deps.write({ transform: inserter, global: true });
     deps.end(file);
 });
 

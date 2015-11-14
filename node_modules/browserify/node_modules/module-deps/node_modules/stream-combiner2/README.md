@@ -2,7 +2,7 @@
 
 This is a sequel to
 [stream-combiner](https://npmjs.org/package/stream-combiner)
-for streams2.
+for streams3.
 
 ``` js
 var combine = require('stream-combiner2')
@@ -13,7 +13,7 @@ var combine = require('stream-combiner2')
 Turn a pipeline into a single stream. `Combine` returns a stream that writes to the first stream
 and reads from the last stream. 
 
-Streams1 streams are automatically upgraded to be streams2 streams.
+Streams1 streams are automatically upgraded to be streams3 streams.
 
 Listening for 'error' will recieve errors from all streams inside the pipe.
 

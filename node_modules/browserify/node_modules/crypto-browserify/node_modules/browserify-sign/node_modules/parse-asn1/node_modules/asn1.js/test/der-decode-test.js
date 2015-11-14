@@ -69,4 +69,10 @@ describe('asn1.js DER decoder', function() {
     var out = A.decode(new Buffer('020101', 'hex'), 'der');
     assert.equal(out.toString(10), '1');
   });
+
+  test('should decode indefinite length', function() {
+    this.seq().obj(
+      this.key('key').bool()
+    );
+  }, '30800101ff0000', { 'key': true });
 });

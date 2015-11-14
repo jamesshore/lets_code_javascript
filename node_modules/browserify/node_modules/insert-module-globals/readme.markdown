@@ -67,6 +67,11 @@ Use `opts.vars` to override the default inserted variables, or set
 `opts.vars[name]` to `undefined` to not insert a variable which would otherwise
 be inserted.
 
+`opts.vars` properties with a `.` in their name will be executed instead of the
+parent object if ONLY that property is used. For example, `"Buffer.isBuffer"`
+will mask `"Buffer"` only when there is a `Buffer.isBuffer()` call in a file and
+no other references to `Buffer`.
+
 If `opts.debug` is true, an inline source map will be generated to compensate
 for the extra lines.
 
