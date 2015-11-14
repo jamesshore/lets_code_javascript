@@ -42,3 +42,12 @@ To Do on current task:
 	- updated dependencies
 	- ran into Windows+npm path length problem (Karma's fault)
 	- upgraded Node 0.12.4 --> 5.0.0
+	- flattened npm modules:
+		- `rm -rf node_modules`
+		- `npm install --ignore-scripts`
+		- commit
+		- `npm rebuild`
+		- `git status`
+		- update .gitignore (mostly just stripping out nesting)
+		- `git commit -a --amend`
+		- git was smart enough to rename the majority of files!

@@ -108,7 +108,7 @@ goog.testing.GlobalFunctionMock = function(functionName, opt_strictness) {
  *     set to '[anonymous mocked function]' if not passed in.
  * @param {number=} opt_strictness One of goog.testing.Mock.LOOSE or
  *     goog.testing.Mock.STRICT. The default is STRICT.
- * @return {goog.testing.MockInterface} The mocked function.
+ * @return {!goog.testing.MockInterface} The mocked function.
  */
 goog.testing.createFunctionMock = function(opt_functionName, opt_strictness) {
   return goog.testing.FunctionMock(opt_functionName, opt_strictness);
@@ -152,7 +152,6 @@ goog.testing.createConstructorMock = function(scope, constructorName,
   // Copy class members from the real constructor to the mock. Do not copy
   // the closure superClass_ property (see goog.inherits), the built-in
   // prototype property, or properties added to Function.prototype
-  // (see goog.MODIFY_FUNCTION_PROTOTYPES in closure/base.js).
   for (var property in realConstructor) {
     if (property != 'superClass_' &&
         property != 'prototype' &&

@@ -6,7 +6,8 @@ interaction with the browser.
 
 ## Installation
 
-Install via npm with
+Selenium supports Node `0.12.x` and `4.x`. Users on Node `0.12.x` must run with
+the --harmony flag. Selenium may be installed via npm with
 
     npm install selenium-webdriver
 
@@ -163,7 +164,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 
-[api]: http://selenium.googlecode.com/git/docs/api/javascript/index.html
+[api]: http://seleniumhq.github.io/selenium/docs/api/javascript/
 [cla]: http://goo.gl/qC50R
 [chrome]: http://chromedriver.storage.googleapis.com/index.html
 [gh]: https://github.com/SeleniumHQ/selenium/
