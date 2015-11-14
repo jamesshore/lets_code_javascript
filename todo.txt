@@ -39,4 +39,5 @@ To Do on current task:
 * AT START OF NEXT EPISODE:
 	- integrated
 	- deployed
-	
+	- updated dependencies
+	- ran into Windows+npm path length problem (Karma's fault)
