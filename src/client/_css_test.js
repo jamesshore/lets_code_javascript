@@ -38,7 +38,7 @@
 		before(function(done) {
 			frame = quixote.createFrame({
 				width: 500,
-				stylesheet: [ "/base/src/client/vendor/normalize-3.0.2.css", "/base/src/client/screen.css" ]
+				stylesheet: [ "/base/src/client/vendor/normalize-3.0.2.css", "/base/src/client/content/screen.css" ]
 			}, done);
 		});
 
@@ -457,7 +457,7 @@
 			before(function(done) {
 				this.timeout(10 * 1000);
 				var options = {
-					src: "/base/src/client/index.html",
+					src: "/base/src/client/content/index.html",
 					width: IOS_BROWSER_WIDTH,
 					height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
 				};
@@ -657,7 +657,7 @@
 			before(function(done) {
 				this.timeout(10 * 1000);
 				var options = {
-					src: "/base/src/client/404.html",
+					src: "/base/src/client/content/404.html",
 					width: IOS_BROWSER_WIDTH,
 					height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
 				};

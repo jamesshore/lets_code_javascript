@@ -17,9 +17,9 @@ module.exports = function(config) {
 			'src/client/**/*.js',
 			'src/shared/**/*.js',
 			{ pattern: 'src/client/vendor/normalize-3.0.2.css', included: false },
-			{ pattern: 'src/client/screen.css', included: false },
-			{ pattern: 'src/client/index.html', included: false },
-			{ pattern: 'src/client/404.html', included: false }
+			{ pattern: 'src/client/content/screen.css', included: false },
+			{ pattern: 'src/client/content/index.html', included: false },
+			{ pattern: 'src/client/content/404.html', included: false }
 		],
 
 		// list of files to exclude

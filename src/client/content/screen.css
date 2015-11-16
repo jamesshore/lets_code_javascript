@@ -1,0 +1,166 @@
+body {
+	margin: 0;
+	padding: 0;
+	margin-bottom: 13px;
+}
+
+
+/* "Let's Code" theme (our only theme) */
+
+.theme-lets-code {
+	font-family: "alwyn-new-rounded-web", "Helvetica", sans-serif;
+	background-color: #41a9cc;
+}
+
+p {
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 18px;
+
+	color: #0d576d;
+}
+
+strong {
+	font-weight: 300;
+	color: white;
+}
+
+
+/* Layout */
+
+.layout-width-full {
+	width: 980px;
+}
+
+.layout-width-button {
+	width: 225px;
+}
+
+.layout-center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.layout-center-text {
+	text-align: center;
+}
+
+
+
+/* Button block */
+
+.button {
+	display: block;
+	padding: 0;
+
+	font-family: inherit;
+	text-align: center;
+	text-transform: uppercase;
+	text-decoration: none;
+
+	border: none;
+	border-radius: 2px;
+}
+
+.button:active, .button._active_ {
+	box-shadow: none;
+	position: relative;
+	top: 1px;
+}
+
+.button--action {
+	height: 35px;
+
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 35px;    /* vertical centering */
+
+	color: white;
+	background-color: #00799c;
+	box-shadow: 0 1px 0 0 #0d576d;
+}
+
+.button--action:hover, .button--action._hover_ {
+	background-color: #006f8f;
+}
+
+.button--drawing {
+	height: 30px;
+
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 30px;    /* vertical centering */
+
+	background-color: #e5e5e5;
+	color: #595959;
+	box-shadow: 0 1px 0 0 #a7a9ab;
+}
+
+.button--drawing:hover, .button--drawing._hover_ {
+	background-color: #d9d9d9;
+}
+
+
+/* Drawing Area block */
+
+.drawing-area {
+	position: relative;
+}
+
+.drawing-area__canvas {
+	height: 474px;
+	background-color: white;
+	border-radius: 2px;
+}
+
+.drawing-area__arrow {
+	background-image: url(/images/arrow.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 9px;
+
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+}
+
+.drawing-area__button {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+
+	width: 70px;
+}
+
+.drawing-area__button:active, .drawing-area__button._active_ {
+	position: absolute;
+	top: 16px;
+}
+
+
+/* Logo block */
+
+.logo {
+	height: 30px;
+
+	text-align: center;
+	line-height: 30px;     /* vertical centering */
+	font-size: 30px;
+	font-weight: 600;
+
+	color: white;
+}
+
+
+/* 'Not Found' block */
+
+.not-found {
+	text-align: center;
+	line-height: 200px;     /* vertical centering */
+	font-size: 200px;
+	font-weight: 600;
+
+	color: #0d576d;
+}
