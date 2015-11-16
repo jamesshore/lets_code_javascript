@@ -30,8 +30,6 @@ User Stories to finish current MMF:
 	- IE 9 and IE 11, button goes diagonally rather than vertically (but only for button, not for links)
 
 Engineering Tasks:
-
-- upgrade to iOS 9
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
 - Improve our client directory structure
 - Split our CSS tests into multiple files
@@ -41,6 +39,7 @@ To Do on current task:
 	- integrated
 	- deployed
 	- updated dependencies
+	- upgraded Mobile Safari & iOS from v8 to v9
 	- ran into Windows+npm path length problem (Karma's fault)
 	- upgraded Node 0.12.4 --> 5.0.0
 	- flattened npm modules:
@@ -53,4 +52,3 @@ To Do on current task:
 		- remove optional modules
 		- `git commit -a --amend`
 		- git was smart enough to rename the majority of files!
-	- upgrade to simplebuild-karma
