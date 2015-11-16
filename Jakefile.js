@@ -112,7 +112,7 @@
 	}, { async: true });
 
 
-	//*** BUILD
+	//*** BUILD DISTRIBUTION DIRECTORY
 
 	desc("Bundle and build code");
 	task("build", [ "cacheBust" ]);

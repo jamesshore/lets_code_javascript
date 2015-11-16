@@ -8,13 +8,13 @@
 	exports.generatedDir = "generated";
 	exports.tempTestfileDir = "generated/test";
 
-	exports.buildDir = "generated/build";
-	exports.buildClientDir = "generated/build/client";
-	exports.buildClientIndexHtml = "generated/build/client/index.html";
-	exports.buildClient404Html = "generated/build/client/404.html";
+	exports.buildDir = "generated/dist";
+	exports.buildClientDir = "generated/dist/client";
+	exports.buildClientIndexHtml = "generated/dist/client/index.html";
+	exports.buildClient404Html = "generated/dist/client/404.html";
 	exports.buildIntermediateFilesToErase = [
-		"./generated/build/client/bundle.js",
-		"./generated/build/client/screen.css",
+		"./generated/dist/client/bundle.js",
+		"./generated/dist/client/screen.css",
 	];
 
 	exports.incrementalDir = "generated/incremental";
