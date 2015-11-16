@@ -4,7 +4,7 @@
 
 	var failFast = require("./fail_fast.js");
 	var FailFastException = failFast.FailFastException;
-	var assert = require("../shared/_assert.js");
+	var assert = require("../../shared/_assert.js");
 
 	describe("Fail Fast module", function() {
 

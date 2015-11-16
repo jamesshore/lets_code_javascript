@@ -14,7 +14,7 @@ module.exports = function(config) {
 
 		// list of files / patterns to load in the browser
 		files: [
-			'src/client/**/*.js',
+			'src/client/js/**/*.js',
 			'src/shared/**/*.js',
 			{ pattern: 'src/client/content/vendor/normalize-3.0.2.css', included: false },
 			{ pattern: 'src/client/content/screen.css', included: false },
@@ -27,9 +27,9 @@ module.exports = function(config) {
 
 		// preprocesors
 		preprocessors: {
-			'src/client/vendor/quixote-0.9.0.js': [ 'commonjs' ],
+			'src/client/js/vendor/quixote-0.9.0.js': [ 'commonjs' ],
+			'src/client/js/*.js': [ 'commonjs' ],
 			'src/shared/vendor/proclaim-2.0.0.js': [ 'commonjs' ],
-			'src/client/*.js': [ 'commonjs' ],
 			'src/shared/*.js': [ 'commonjs' ]
 		},
 

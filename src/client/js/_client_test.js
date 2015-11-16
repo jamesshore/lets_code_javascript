@@ -7,7 +7,7 @@
 	var client = require("./client.js");
 	var browser = require("./browser.js");
 	var HtmlElement = require("./html_element.js");
-	var assert = require("../shared/_assert.js");
+	var assert = require("../../shared/_assert.js");
 
 	mocha.setup({ignoreLeaks: true});
 
