@@ -32,10 +32,11 @@ User Stories to finish current MMF:
 Engineering Tasks:
 - Improve our client directory structure
 - Split our CSS tests into multiple files
+- Run server code out of generated/dist as well (fix hardcoded path in weewikipaint.js)
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
 
 To Do on current task:
-- Rename generated/build/ to generated/dist/
-- Make a content/ directory and move our content into it
+* Make a content/ directory and move our content into it
+- Make JS build into a client/js/ directory
 - Move CSS tests into content directory
 - Move remaining client JavaScript into code/ directory?
