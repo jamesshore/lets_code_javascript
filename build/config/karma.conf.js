@@ -16,7 +16,7 @@ module.exports = function(config) {
 		files: [
 			'src/client/**/*.js',
 			'src/shared/**/*.js',
-			{ pattern: 'src/client/vendor/normalize-3.0.2.css', included: false },
+			{ pattern: 'src/client/content/vendor/normalize-3.0.2.css', included: false },
 			{ pattern: 'src/client/content/screen.css', included: false },
 			{ pattern: 'src/client/content/index.html', included: false },
 			{ pattern: 'src/client/content/404.html', included: false }
