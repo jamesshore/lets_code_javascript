@@ -4,6 +4,7 @@
 
 	var assert = require("../../shared/_assert.js");
 	var quixote = require("./vendor/quixote-0.9.0.js");
+	var cssInfo = require("./_css_info.js");
 
 	var TRANSPARENT = "rgba(0, 0, 0, 0)";
 	var WHITE = "rgb(255, 255, 255)";
@@ -72,18 +73,18 @@
 			});
 
 			it("text", function() {
-				assert.equal(fontFamily(theme), STANDARD_FONT, "font family");
+				assert.equal(cssInfo.fontFamily(theme), STANDARD_FONT, "font family");
 			});
 
 			it("colors", function() {
-				assert.equal(backgroundColor(theme), BACKGROUND_BLUE, "background color");
+				assert.equal(cssInfo.backgroundColor(theme), BACKGROUND_BLUE, "background color");
 			});
 
 			it("normal paragraphs", function() {
 				assert.equal(fontSize(p), "15px", "font size");
 				assert.equal(fontWeight(p), BODY_TEXT_WEIGHT, "font weight");
 				assert.equal(lineHeight(p), "18px", "line height");
-				assert.equal(backgroundColor(p), TRANSPARENT, "background color");
+				assert.equal(cssInfo.backgroundColor(p), TRANSPARENT, "background color");
 				assert.equal(textColor(p), DARK_BLUE, "text color");
 			});
 
@@ -193,7 +194,7 @@
 				assert.equal(textAlign(linkTag), "center", "should be horizontally centered");
 				assert.equal(textIsUnderlined(linkTag), false, "text should not be underlined");
 				assert.equal(textIsUppercase(linkTag), true, "text should be uppercase");
-				assert.equal(fontFamily(buttonTag), INHERITED_FONT, "<button> should inherit container's font");
+				assert.equal(cssInfo.fontFamily(buttonTag), INHERITED_FONT, "<button> should inherit container's font");
 			});
 
 			it("has no border", function() {
@@ -239,7 +240,7 @@
 			});
 
 			it("uses bright colors", function() {
-				assert.equal(backgroundColor(linkTag), MEDIUM_BLUE, "background");
+				assert.equal(cssInfo.backgroundColor(linkTag), MEDIUM_BLUE, "background");
 				assert.equal(textColor(linkTag), WHITE, "text");
 				assert.equal(dropShadow(linkTag), DARK_BLUE + BUTTON_DROP_SHADOW, "drop shadow");
 
@@ -272,7 +273,7 @@
 			});
 
 			it("uses muted colors", function() {
-				assert.equal(backgroundColor(linkTag), GRAY, "button background");
+				assert.equal(cssInfo.backgroundColor(linkTag), GRAY, "button background");
 				assert.equal(textColor(linkTag), DARK_GRAY, "button text");
 				assert.equal(dropShadow(linkTag), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
 
@@ -304,7 +305,7 @@
 			});
 
 			it("color", function() {
-				assert.equal(backgroundColor(logo), TRANSPARENT, "background color");
+				assert.equal(cssInfo.backgroundColor(logo), TRANSPARENT, "background color");
 				assert.equal(textColor(logo), WHITE, "text color");
 			});
 
@@ -333,7 +334,7 @@
 			});
 
 			it("color", function() {
-				assert.equal(backgroundColor(notFound), TRANSPARENT, "background color");
+				assert.equal(cssInfo.backgroundColor(notFound), TRANSPARENT, "background color");
 				assert.equal(textColor(notFound), DARK_BLUE, "text color");
 			});
 
@@ -382,7 +383,7 @@
 				});
 
 				it("has a white background", function() {
-					assert.equal(backgroundColor(canvas), WHITE);
+					assert.equal(cssInfo.backgroundColor(canvas), WHITE);
 				});
 
 			});
@@ -562,40 +563,39 @@
 			});
 
 			it("has a color scheme", function() {
-				assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
+				assert.equal(cssInfo.backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
 				assert.equal(textColor(logo), WHITE, "logo text should be white");
 				assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
-				assert.equal(backgroundColor(drawingArea), WHITE, "drawing area should be white");
+				assert.equal(cssInfo.backgroundColor(drawingArea), WHITE, "drawing area should be white");
 				assert.equal(textColor(footerText), WHITE, "footer should be white");
 
 				assert.equal(textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
-				assert.equal(backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
-
-				assert.equal(backgroundColor(joinUs), MEDIUM_BLUE, "join us button background should be medium blue");
+				assert.equal(cssInfo.backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
+				assert.equal(cssInfo.backgroundColor(joinUs), MEDIUM_BLUE, "join us button background should be medium blue");
 				assert.equal(textColor(joinUs), WHITE, "join us button text should be white");
 			});
 
 			it("has a typographic scheme", function() {
-				assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
+				assert.equal(cssInfo.fontFamily(logo), STANDARD_FONT, "logo font");
 				assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
 				assert.equal(fontSize(logo), "30px", "logo font size");
 				logo.assert({ height: 30 }, "logo height");
 
-				assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
+				assert.equal(cssInfo.fontFamily(tagline), STANDARD_FONT, "tagline font");
 				assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
 				assert.equal(fontSize(tagline), "15px", "tagline font size");
 				tagline.assert({ height: 18 }, "tagline height");
 
-				assert.equal(fontFamily(clearButton), STANDARD_FONT, "clear button family");
+				assert.equal(cssInfo.fontFamily(clearButton), STANDARD_FONT, "clear button family");
 				assert.equal(fontWeight(clearButton), DRAWING_BUTTON_WEIGHT, "clear button weight");
 				assert.equal(fontSize(clearButton), "12px", "clear button font size");
 
-				assert.equal(fontFamily(footerText), STANDARD_FONT, "footer family");
+				assert.equal(cssInfo.fontFamily(footerText), STANDARD_FONT, "footer family");
 				assert.equal(fontWeight(footerText), BODY_TEXT_WEIGHT, "footer weight");
 				assert.equal(fontSize(footerText), "15px", "footer font size");
 				footer.assert({ height: 18 }, "footer height");
 
-				assert.equal(fontFamily(joinUs), STANDARD_FONT, "join us button family");
+				assert.equal(cssInfo.fontFamily(joinUs), STANDARD_FONT, "join us button family");
 				assert.equal(fontWeight(joinUs), LINK_BUTTON_WEIGHT, "join us button weight");
 				assert.equal(fontSize(joinUs), "16px", "join us button font size");
 			});
@@ -731,26 +731,26 @@
 			});
 
 			it("has a color scheme", function() {
-				assert.equal(backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
+				assert.equal(cssInfo.backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
 				assert.equal(textColor(logo), WHITE, "logo text should be white");
 				assert.equal(textColor(header), DARK_BLUE, "header should be dark blue");
 				assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
 
-				assert.equal(backgroundColor(drawSomething), MEDIUM_BLUE, "button background should be medium blue");
+				assert.equal(cssInfo.backgroundColor(drawSomething), MEDIUM_BLUE, "button background should be medium blue");
 				assert.equal(textColor(drawSomething), WHITE, "button text should be white");
 			});
 
 			it("has a typographic scheme", function() {
-				assert.equal(fontFamily(logo), STANDARD_FONT, "logo font");
+				assert.equal(cssInfo.fontFamily(logo), STANDARD_FONT, "logo font");
 				assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
 
-				assert.equal(fontFamily(header), STANDARD_FONT, "header font");
+				assert.equal(cssInfo.fontFamily(header), STANDARD_FONT, "header font");
 				assert.equal(fontWeight(header), HEADLINE_WEIGHT, "header weight");
 
-				assert.equal(fontFamily(tagline), STANDARD_FONT, "tagline font");
+				assert.equal(cssInfo.fontFamily(tagline), STANDARD_FONT, "tagline font");
 				assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
 
-				assert.equal(fontFamily(drawSomething), STANDARD_FONT, "draw something button family");
+				assert.equal(cssInfo.fontFamily(drawSomething), STANDARD_FONT, "draw something button family");
 				assert.equal(fontWeight(drawSomething), LINK_BUTTON_WEIGHT, "draw something button weight");
 			});
 
@@ -793,7 +793,7 @@
 
 	function assertHoverStyle(button, expectedColor, description) {
 		applyClass(button, "_hover_", function() {
-			assert.equal(backgroundColor(button), expectedColor, description + " hover state background color");
+			assert.equal(cssInfo.backgroundColor(button), expectedColor, description + " hover state background color");
 		});
 	}
 
@@ -804,28 +804,6 @@
 			});
 			assert.equal(dropShadow(button), "none");
 		});
-	}
-
-	function backgroundColor(element) {
-		return normalizeColorString(element.getRawStyle("background-color"));
-	}
-
-	function fontFamily(element) {
-		var family = element.getRawStyle("font-family");
-		family = family.replace(/\"/g, '');
-
-		var fonts = family.split(",");
-		for (var i = 0; i < fonts.length; i++) {
-			fonts[i] = trim(fonts[i]);
-		}
-
-		return fonts.join(", ");
-	}
-
-	// Based on MDN code at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim
-	function trim(str) {
-		var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
-		return str.replace(rtrim, '');
 	}
 
 	function textAlign(element) {

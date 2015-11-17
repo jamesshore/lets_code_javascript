@@ -38,3 +38,13 @@ Engineering Tasks:
 - Move hard-coded paths in Jakefile.js to paths.js?
 
 To Do on current task:
+- Fix lint
+- Factor out common CSS test functions
+- _index_test.js
+- _404_test.js
+- _theme_css_test.js
+- _layout_css_test.js
+- _button_css_test.js
+- _logo_css_test.js
+- _not_found_css_test.js
+- _drawing_area_css_test.js
