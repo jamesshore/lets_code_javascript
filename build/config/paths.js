@@ -58,7 +58,8 @@
 		return deglob([
 			"*.js",
 			"build/**/*.js",
-			"src/client/*.js",
+			"src/client/js/*.js",
+			"src/client/content/*.js",
 			"src/server/**/*.js",
 			"src/shared/**/*.js",
 			"src/*.js"
