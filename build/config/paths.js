@@ -28,19 +28,17 @@
 		return deglob("src/server/**/_*_test.js");
 	};
 
-	exports.clientFiles = function() {
+	exports.clientJsTestDependencies = function() {
 		return deglob([
-			"src/client/**/*.js",
-			"src/client/**/*.html",
-			"src/client/**/*.css",
-			"src/shared/**/*.js",
-			"src/client/vendor/**/*.js"
+			"src/client/js/**/*",
+			"src/shared/**/*"
 		]);
 	};
 
 	exports.cssTestDependencies = function() {
 		return deglob([
-			"src/client/content/**/*"
+			"src/client/content/**/*",
+			"src/shared/**/*"
 		]);
 	};
 
@@ -81,7 +79,10 @@
 
 	function deglob(patterns) {
 		var globPattern = patterns;
-		if (Array.isArray(patterns)) globPattern = "{" + patterns.join(",") + "}";
+		if (Array.isArray(patterns)) {
+			if (patterns.length === 1) globPattern = patterns[0];
+			else globPattern = "{" + patterns.join(",") + "}";
+		}
 
 		return glob.sync(globPattern);
 	}

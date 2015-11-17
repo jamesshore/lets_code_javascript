@@ -95,7 +95,7 @@
 	desc("Test client code");
 	task("testClient", [ "testClientJavaScript", "testClientCss" ]);
 
-	incrementalTask("testClientJavaScript", paths.clientTestTarget, [], paths.clientFiles(), function(complete, fail) {
+	incrementalTask("testClientJavaScript", paths.clientTestTarget, [], paths.clientJsTestDependencies(), function(complete, fail) {
 		console.log("Testing browser code: ");
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
