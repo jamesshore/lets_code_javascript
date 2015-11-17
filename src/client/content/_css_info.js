@@ -2,6 +2,54 @@
 (function() {
 	"use strict";
 
+	var quixote = require("./vendor/quixote-0.9.0.js");
+
+	exports.TRANSPARENT = "rgba(0, 0, 0, 0)";
+	exports.WHITE = "rgb(255, 255, 255)";
+	exports.DARK_GRAY = "rgb(89, 89, 89)";
+	exports.GRAY = "rgb(229, 229, 229)";
+	exports.DARKENED_GRAY = "rgb(217, 217, 217)";
+	exports.MEDIUM_GRAY = "rgb(167, 169, 171)";
+
+	exports.BACKGROUND_BLUE = "rgb(65, 169, 204)";
+	exports.DARK_BLUE = "rgb(13, 87, 109)";
+	exports.MEDIUM_BLUE = "rgb(0, 121, 156)";
+	exports.DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
+
+	exports.BODY_TEXT_WEIGHT = "300";
+	exports.LINK_BUTTON_WEIGHT = "400";
+	exports.DRAWING_BUTTON_WEIGHT = "600";
+	exports.HEADLINE_WEIGHT = "600";
+
+	exports.IOS_BROWSER_WIDTH = 980;
+	exports.IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS = 641;
+
+	exports.STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
+	exports.CORNER_ROUNDING = "2px";
+	exports.BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
+
+
+	exports.setupUnitTests = function setupUnitTests() {
+
+		before(function(done) {
+			exports.frame = quixote.createFrame({
+				width: 500,
+				stylesheet: [
+					"/base/src/client/content/vendor/normalize-3.0.2.css",
+					"/base/src/client/content/screen.css"
+				]
+			}, done);
+		});
+
+		after(function() {
+			exports.frame.remove();
+		});
+
+		beforeEach(function() {
+			exports.frame.reset();
+		});
+	};
+
 	exports.backgroundColor = function backgroundColor(element) {
 		return normalizeColorString(element.getRawStyle("background-color"));
 	};

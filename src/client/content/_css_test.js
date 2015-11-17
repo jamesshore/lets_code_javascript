@@ -32,69 +32,7 @@
 
 	describe("CSS: Unit Tests:", function() {
 
-		var frame;
-
-		before(function(done) {
-			frame = quixote.createFrame({
-				width: 500,
-				stylesheet: [
-					"/base/src/client/content/vendor/normalize-3.0.2.css",
-					"/base/src/client/content/screen.css"
-				]
-			}, done);
-		});
-
-		after(function() {
-			frame.remove();
-		});
-
-		beforeEach(function() {
-			frame.reset();
-		});
-
-
-		describe("'Let's Code' theme", function() {
-
-			var page;
-			var theme;
-			var p;
-			var strong;
-
-			beforeEach(function() {
-				page = frame.page();
-				theme = frame.add(
-					"<div class='theme-lets-code'>" +
-					" <p id='p'>normal paragraph</p>" +
-					" <p><strong id='strong'>strong paragraph</strong></p>" +
-					"</div>", "theme");
-
-				p = frame.get("#p");
-				strong = frame.get("#strong");
-			});
-
-			it("text", function() {
-				assert.equal(cssInfo.fontFamily(theme), STANDARD_FONT, "font family");
-			});
-
-			it("colors", function() {
-				assert.equal(cssInfo.backgroundColor(theme), BACKGROUND_BLUE, "background color");
-			});
-
-			it("normal paragraphs", function() {
-				assert.equal(cssInfo.fontSize(p), "15px", "font size");
-				assert.equal(cssInfo.fontWeight(p), BODY_TEXT_WEIGHT, "font weight");
-				assert.equal(cssInfo.lineHeight(p), "18px", "line height");
-				assert.equal(cssInfo.backgroundColor(p), TRANSPARENT, "background color");
-				assert.equal(cssInfo.textColor(p), DARK_BLUE, "text color");
-			});
-
-			it("strong paragraphs", function() {
-				assert.equal(cssInfo.fontSize(strong), "15px", "font size");
-				assert.equal(cssInfo.fontWeight(strong), BODY_TEXT_WEIGHT, "font weight");
-				assert.equal(cssInfo.textColor(strong), WHITE, "text color");
-			});
-
-		});
+		cssInfo.setupUnitTests();
 
 
 		describe("Layout", function() {
@@ -104,7 +42,7 @@
 				var element;
 
 				beforeEach(function() {
-					element = frame.add("<div class='layout-width-full'></div>", "element");
+					element = cssInfo.frame.add("<div class='layout-width-full'></div>", "element");
 				});
 
 				it("is the width of the iPad", function() {
@@ -120,7 +58,7 @@
 				var element;
 
 				beforeEach(function() {
-					element = frame.add("<div class='layout-width-button'></div>", "element");
+					element = cssInfo.frame.add("<div class='layout-width-button'></div>", "element");
 				});
 
 				it("is actually a bit more than 1/4 of full width", function() {
@@ -138,12 +76,12 @@
 				var element;
 
 				beforeEach(function() {
-					container = frame.add(
+					container = cssInfo.frame.add(
 						"<div style='width: 200px'>" +
 						" <span id='layout' class='layout-center'>lay out this span</span>" +
 						"</div>", "container"
 					);
-					element = frame.get("#layout");
+					element = cssInfo.frame.get("#layout");
 				});
 
 				it("is centered in its container", function() {
@@ -159,7 +97,7 @@
 				var element;
 
 				beforeEach(function() {
-					element = frame.add("<div class='layout-center-text'>text</div>", element);
+					element = cssInfo.frame.add("<div class='layout-center-text'>text</div>", element);
 				});
 
 				it("has centered text", function() {
@@ -179,15 +117,15 @@
 			var buttonTag;
 
 			beforeEach(function() {
-				frame.add(
+				cssInfo.frame.add(
 					"<div style='font-family: " + INHERITED_FONT + "'>" +
 					" <a id='a_tag' class='button' href='#createUnderline'>foo</a>" +
 					" <button id='button_tag' class='button'>foo</button>" +
 					"</div>"
 				);
 
-				linkTag = frame.get("#a_tag");
-				buttonTag = frame.get("#button_tag");
+				linkTag = cssInfo.frame.get("#a_tag");
+				buttonTag = cssInfo.frame.get("#button_tag");
 			});
 
 			it("text", function() {
@@ -223,8 +161,8 @@
 			var buttonTag;
 
 			beforeEach(function() {
-				linkTag = frame.add("<a class='button button--action' href='#createUnderline'>foo</a>", "<a> button");
-				buttonTag = frame.add("<button class='button button--action'>foo</button>", "<button> button");
+				linkTag = cssInfo.frame.add("<a class='button button--action' href='#createUnderline'>foo</a>", "<a> button");
+				buttonTag = cssInfo.frame.add("<button class='button button--action'>foo</button>", "<button> button");
 			});
 
 			it("is big and pressable", function() {
@@ -255,8 +193,8 @@
 			var buttonTag;
 
 			beforeEach(function() {
-				linkTag = frame.add("<a class='button button--drawing' href='#createUnderline'>foo</a>", "<a> button");
-				buttonTag = frame.add("<button class='button button--drawing'>foo</button>", "<button> button");
+				linkTag = cssInfo.frame.add("<a class='button button--drawing' href='#createUnderline'>foo</a>", "<a> button");
+				buttonTag = cssInfo.frame.add("<button class='button button--drawing'>foo</button>", "<button> button");
 			});
 
 			it("is a bit smaller", function() {
@@ -286,7 +224,7 @@
 			var logo;
 
 			beforeEach(function() {
-				logo = frame.add("<div class='logo'>logo</div>", "logo");
+				logo = cssInfo.frame.add("<div class='logo'>logo</div>", "logo");
 			});
 
 			it("is nice and big", function() {
@@ -315,7 +253,7 @@
 			var notFound;
 
 			beforeEach(function() {
-				notFound = frame.add("<div class='not-found'>404</div>", "not found");
+				notFound = cssInfo.frame.add("<div class='not-found'>404</div>", "not found");
 			});
 
 			it("is very large", function() {
@@ -347,16 +285,16 @@
 			var button;
 
 			beforeEach(function() {
-				frame.add("<div style='height: 100px;'>spacer</div>");    // force positioning tests to be meaningful
-				drawingArea = frame.add("" +
+				cssInfo.frame.add("<div style='height: 100px;'>spacer</div>");    // force positioning tests to be meaningful
+				drawingArea = cssInfo.frame.add("" +
 					"<div class='drawing-area'>" +
 					" <div id='drawing-area-canvas' class='drawing-area__canvas'></div>" +
 					" <div id='arrow' class='drawing-area__arrow'></div>" +
 					" <div id='button' class='drawing-area__button button'></div>" +
 					"</div>", "drawing area");
-				canvas = frame.get("#drawing-area-canvas");
-				arrow = frame.get("#arrow");
-				button = frame.get("#button");
+				canvas = cssInfo.frame.get("#drawing-area-canvas");
+				arrow = cssInfo.frame.get("#arrow");
+				button = cssInfo.frame.get("#button");
 			});
 
 			describe("canvas", function() {
