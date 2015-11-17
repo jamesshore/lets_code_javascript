@@ -29,7 +29,7 @@
 	var CORNER_ROUNDING = "2px";
 	var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
 
-	describe("CSS Unit Tests:", function() {
+	describe("CSS: Unit Tests:", function() {
 
 		var frame;
 
@@ -439,7 +439,7 @@
 
 
 
-	describe("CSS Integration Tests:", function() {
+	describe("CSS: Integration Tests:", function() {
 
 		describe("Home page", function() {
 			var frame;

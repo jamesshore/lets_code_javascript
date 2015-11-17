@@ -7,7 +7,7 @@
 	var browser = require("./browser.js");
 	var assert = require("../../shared/_assert.js");
 
-	describe("HtmlElement", function() {
+	describe("JS: HtmlElement", function() {
 		var windowElement;
 		var bodyElement;
 		var htmlElement;

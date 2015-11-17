@@ -11,7 +11,7 @@
 
 	mocha.setup({ignoreLeaks: true});
 
-	describe("Drawing area", function() {
+	describe("JS: Drawing area", function() {
 		var drawingArea;
 		var clearButton;
 		var documentBody;

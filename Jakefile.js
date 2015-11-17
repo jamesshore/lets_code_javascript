@@ -84,23 +84,23 @@
 	desc("Test server code");
 	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ], paths.serverFiles(),
 		function(complete, fail) {
-		console.log("Testing server code: ");
+		console.log("Testing server JavaScript: ");
 		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
 			options: mochaConfig()
 		}, complete, fail);
 	});
 
-
 	desc("Test client code");
 	task("testClient", [ "testClientJavaScript", "testClientCss" ]);
 
 	incrementalTask("testClientJavaScript", paths.clientTestTarget, [], paths.clientJsTestDependencies(), function(complete, fail) {
-		console.log("Testing browser code: ");
+		console.log("Testing browser JavaScript: ");
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
 			browsers: testedBrowsers(),
-			strict: strict
+			strict: strict,
+			clientArgs: [ "--grep=JS:" ]
 		}, complete, fail);
 	});
 
@@ -110,7 +110,7 @@
 			configFile: paths.karmaConfig,
 			browsers: testedBrowsers(),
 			strict: strict,
-			clientArgs: [ "--grep=CSS" ]
+			clientArgs: [ "--grep=CSS:" ]
 		}, complete, fail);
 	});
 

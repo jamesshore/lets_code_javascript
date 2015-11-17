@@ -8,7 +8,7 @@
 	var HtmlElement = require("./html_element.js");
 	var assert = require("../../shared/_assert.js");
 
-	describe("SvgCanvas", function() {
+	describe("JS: SvgCanvas", function() {
 
 		var div;
 		var svgCanvas;
