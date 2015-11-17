@@ -20,6 +20,7 @@
 	exports.incrementalDir = "generated/incremental";
 	exports.serverTestTarget = "generated/incremental/server.test";
 	exports.clientTestTarget = "generated/incremental/client.test";
+	exports.cssTestTarget = "generated/incremental/css.test";
 
 	exports.karmaConfig = "./build/config/karma.conf.js";
 
@@ -34,6 +35,12 @@
 			"src/client/**/*.css",
 			"src/shared/**/*.js",
 			"src/client/vendor/**/*.js"
+		]);
+	};
+
+	exports.cssTestDependencies = function() {
+		return deglob([
+			"src/client/content/**/*"
 		]);
 	};
 

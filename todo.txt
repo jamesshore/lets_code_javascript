@@ -39,6 +39,7 @@ Engineering Tasks:
 - Move hard-coded paths in Jakefile.js to paths.js?
 
 To Do on current task:
-- Run non-CSS subset of tests in build
-- Run CSS tests incrementally
+* Run CSS tests incrementally
+- Rename paths.clientFiles to paths.clientJavaScriptTestDependencies (or something)
 - Properly tag our tests as CSS or client
+	- Run non-CSS subset of tests in build

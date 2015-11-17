@@ -104,7 +104,7 @@
 		}, complete, fail);
 	});
 
-	task("testClientCss", function() {
+	incrementalTask("testClientCss", paths.cssTestTarget, [], paths.cssTestDependencies(), function(complete, fail) {
 		console.log("Testing CSS:");
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
@@ -112,7 +112,7 @@
 			strict: strict,
 			clientArgs: [ "--grep=CSS" ]
 		}, complete, fail);
-	}, { async: true });
+	});
 
 	desc("End-to-end smoke tests");
 	task("smoketest", [ "build" ], function() {
