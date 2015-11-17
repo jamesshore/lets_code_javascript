@@ -39,7 +39,6 @@ Engineering Tasks:
 - Move hard-coded paths in Jakefile.js to paths.js?
 
 To Do on current task:
-- Move over CSS test constants
 - Rename _css_info --> _css_test_helper?
 * Factor out common CSS test functions
 - _theme_css_test.js

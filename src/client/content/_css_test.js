@@ -4,12 +4,12 @@
 
 	var assert = require("../../shared/_assert.js");
 	var quixote = require("./vendor/quixote-0.9.0.js");
-	var cssInfo = require("./_css_info.js");
+	var cssHelper = require("./_css_test_helper.js");
 
 	describe("CSS: Unit Tests:", function() {
 
-		cssInfo.setupUnitTests();
-		
+		cssHelper.setupUnitTests();
+
 		describe("Layout", function() {
 
 			describe("Full width", function() {
@@ -17,12 +17,12 @@
 				var element;
 
 				beforeEach(function() {
-					element = cssInfo.frame.add("<div class='layout-width-full'></div>", "element");
+					element = cssHelper.frame.add("<div class='layout-width-full'></div>", "element");
 				});
 
 				it("is the width of the iPad", function() {
 					element.assert({
-						width: cssInfo.IOS_BROWSER_WIDTH
+						width: cssHelper.IOS_BROWSER_WIDTH
 					});
 				});
 
@@ -33,7 +33,7 @@
 				var element;
 
 				beforeEach(function() {
-					element = cssInfo.frame.add("<div class='layout-width-button'></div>", "element");
+					element = cssHelper.frame.add("<div class='layout-width-button'></div>", "element");
 				});
 
 				it("is actually a bit more than 1/4 of full width", function() {
@@ -51,12 +51,12 @@
 				var element;
 
 				beforeEach(function() {
-					container = cssInfo.frame.add(
+					container = cssHelper.frame.add(
 						"<div style='width: 200px'>" +
 						" <span id='layout' class='layout-center'>lay out this span</span>" +
 						"</div>", "container"
 					);
-					element = cssInfo.frame.get("#layout");
+					element = cssHelper.frame.get("#layout");
 				});
 
 				it("is centered in its container", function() {
@@ -72,11 +72,11 @@
 				var element;
 
 				beforeEach(function() {
-					element = cssInfo.frame.add("<div class='layout-center-text'>text</div>", element);
+					element = cssHelper.frame.add("<div class='layout-center-text'>text</div>", element);
 				});
 
 				it("has centered text", function() {
-					assert.equal(cssInfo.textAlign(element), "center");
+					assert.equal(cssHelper.textAlign(element), "center");
 				});
 
 			});
@@ -92,36 +92,36 @@
 			var buttonTag;
 
 			beforeEach(function() {
-				cssInfo.frame.add(
+				cssHelper.frame.add(
 					"<div style='font-family: " + INHERITED_FONT + "'>" +
 					" <a id='a_tag' class='button' href='#createUnderline'>foo</a>" +
 					" <button id='button_tag' class='button'>foo</button>" +
 					"</div>"
 				);
 
-				linkTag = cssInfo.frame.get("#a_tag");
-				buttonTag = cssInfo.frame.get("#button_tag");
+				linkTag = cssHelper.frame.get("#a_tag");
+				buttonTag = cssHelper.frame.get("#button_tag");
 			});
 
 			it("text", function() {
-				assert.equal(cssInfo.textAlign(linkTag), "center", "should be horizontally centered");
-				assert.equal(cssInfo.textIsUnderlined(linkTag), false, "text should not be underlined");
-				assert.equal(cssInfo.textIsUppercase(linkTag), true, "text should be uppercase");
-				assert.equal(cssInfo.fontFamily(buttonTag), INHERITED_FONT, "<button> should inherit container's font");
+				assert.equal(cssHelper.textAlign(linkTag), "center", "should be horizontally centered");
+				assert.equal(cssHelper.textIsUnderlined(linkTag), false, "text should not be underlined");
+				assert.equal(cssHelper.textIsUppercase(linkTag), true, "text should be uppercase");
+				assert.equal(cssHelper.fontFamily(buttonTag), INHERITED_FONT, "<button> should inherit container's font");
 			});
 
 			it("has no border", function() {
-				assert.equal(cssInfo.hasBorder(linkTag), false, "standard link button");
-				assert.equal(cssInfo.hasBorder(buttonTag), false, "button tag button");
+				assert.equal(cssHelper.hasBorder(linkTag), false, "standard link button");
+				assert.equal(cssHelper.hasBorder(buttonTag), false, "button tag button");
 			});
 
 			it("has no padding or margins", function() {
-				assert.equal(cssInfo.margin(buttonTag), "0px", "margin");
-				assert.equal(cssInfo.padding(buttonTag), "0px", "padding");
+				assert.equal(cssHelper.margin(buttonTag), "0px", "margin");
+				assert.equal(cssHelper.padding(buttonTag), "0px", "padding");
 			});
 
 			it("has rounded corners", function() {
-				assert.equal(cssInfo.roundedCorners(linkTag), cssInfo.CORNER_ROUNDING);
+				assert.equal(cssHelper.roundedCorners(linkTag), cssHelper.CORNER_ROUNDING);
 			});
 
 			it("appear to depress when user activates it", function() {
@@ -136,8 +136,8 @@
 			var buttonTag;
 
 			beforeEach(function() {
-				linkTag = cssInfo.frame.add("<a class='button button--action' href='#createUnderline'>foo</a>", "<a> button");
-				buttonTag = cssInfo.frame.add("<button class='button button--action'>foo</button>", "<button> button");
+				linkTag = cssHelper.frame.add("<a class='button button--action' href='#createUnderline'>foo</a>", "<a> button");
+				buttonTag = cssHelper.frame.add("<button class='button button--action'>foo</button>", "<button> button");
 			});
 
 			it("is big and pressable", function() {
@@ -147,16 +147,16 @@
 			});
 
 			it("has large text", function() {
-				assert.equal(cssInfo.isTextVerticallyCentered(linkTag), true, "should be vertically centered");
-				assert.equal(cssInfo.fontSize(linkTag), "16px", "font size");
-				assert.equal(cssInfo.fontWeight(linkTag), cssInfo.LINK_BUTTON_WEIGHT, "button weight");
+				assert.equal(cssHelper.isTextVerticallyCentered(linkTag), true, "should be vertically centered");
+				assert.equal(cssHelper.fontSize(linkTag), "16px", "font size");
+				assert.equal(cssHelper.fontWeight(linkTag), cssHelper.LINK_BUTTON_WEIGHT, "button weight");
 			});
 
 			it("uses bright colors", function() {
-				assert.equal(cssInfo.backgroundColor(linkTag), cssInfo.MEDIUM_BLUE, "background");
-				assert.equal(cssInfo.textColor(linkTag), cssInfo.WHITE, "text");
-				assert.equal(cssInfo.dropShadow(linkTag), cssInfo.DARK_BLUE + cssInfo.BUTTON_DROP_SHADOW, "drop shadow");
-				assertHoverStyle(linkTag, cssInfo.DARKENED_MEDIUM_BLUE, "hover background");
+				assert.equal(cssHelper.backgroundColor(linkTag), cssHelper.MEDIUM_BLUE, "background");
+				assert.equal(cssHelper.textColor(linkTag), cssHelper.WHITE, "text");
+				assert.equal(cssHelper.dropShadow(linkTag), cssHelper.DARK_BLUE + cssHelper.BUTTON_DROP_SHADOW, "drop shadow");
+				assertHoverStyle(linkTag, cssHelper.DARKENED_MEDIUM_BLUE, "hover background");
 			});
 
 		});
@@ -168,8 +168,8 @@
 			var buttonTag;
 
 			beforeEach(function() {
-				linkTag = cssInfo.frame.add("<a class='button button--drawing' href='#createUnderline'>foo</a>", "<a> button");
-				buttonTag = cssInfo.frame.add("<button class='button button--drawing'>foo</button>", "<button> button");
+				linkTag = cssHelper.frame.add("<a class='button button--drawing' href='#createUnderline'>foo</a>", "<a> button");
+				buttonTag = cssHelper.frame.add("<button class='button button--drawing'>foo</button>", "<button> button");
 			});
 
 			it("is a bit smaller", function() {
@@ -179,16 +179,16 @@
 			});
 
 			it("has smaller, bolder text", function() {
-				assert.equal(cssInfo.fontSize(linkTag), "12px", "font size");
-				assert.equal(cssInfo.fontWeight(linkTag), cssInfo.DRAWING_BUTTON_WEIGHT, "font weight");
-				assert.equal(cssInfo.isTextVerticallyCentered(linkTag), true, "should be vertically centered");
+				assert.equal(cssHelper.fontSize(linkTag), "12px", "font size");
+				assert.equal(cssHelper.fontWeight(linkTag), cssHelper.DRAWING_BUTTON_WEIGHT, "font weight");
+				assert.equal(cssHelper.isTextVerticallyCentered(linkTag), true, "should be vertically centered");
 			});
 
 			it("uses muted colors", function() {
-				assert.equal(cssInfo.backgroundColor(linkTag), cssInfo.GRAY, "button background");
-				assert.equal(cssInfo.textColor(linkTag), cssInfo.DARK_GRAY, "button text");
-				assert.equal(cssInfo.dropShadow(linkTag), cssInfo.MEDIUM_GRAY + cssInfo.BUTTON_DROP_SHADOW, "drop shadow");
-				assertHoverStyle(linkTag, cssInfo.DARKENED_GRAY, "hover background");
+				assert.equal(cssHelper.backgroundColor(linkTag), cssHelper.GRAY, "button background");
+				assert.equal(cssHelper.textColor(linkTag), cssHelper.DARK_GRAY, "button text");
+				assert.equal(cssHelper.dropShadow(linkTag), cssHelper.MEDIUM_GRAY + cssHelper.BUTTON_DROP_SHADOW, "drop shadow");
+				assertHoverStyle(linkTag, cssHelper.DARKENED_GRAY, "hover background");
 			});
 
 		});
@@ -199,7 +199,7 @@
 			var logo;
 
 			beforeEach(function() {
-				logo = cssInfo.frame.add("<div class='logo'>logo</div>", "logo");
+				logo = cssHelper.frame.add("<div class='logo'>logo</div>", "logo");
 			});
 
 			it("is nice and big", function() {
@@ -209,15 +209,15 @@
 			});
 
 			it("text", function() {
-				assert.equal(cssInfo.textAlign(logo), "center", "should be horizontally centered");
-				assert.equal(cssInfo.isTextVerticallyCentered(logo), true, "should be vertically centered");
-				assert.equal(cssInfo.fontSize(logo), "30px", "font size");
-				assert.equal(cssInfo.fontWeight(logo), cssInfo.HEADLINE_WEIGHT, "font weight");
+				assert.equal(cssHelper.textAlign(logo), "center", "should be horizontally centered");
+				assert.equal(cssHelper.isTextVerticallyCentered(logo), true, "should be vertically centered");
+				assert.equal(cssHelper.fontSize(logo), "30px", "font size");
+				assert.equal(cssHelper.fontWeight(logo), cssHelper.HEADLINE_WEIGHT, "font weight");
 			});
 
 			it("color", function() {
-				assert.equal(cssInfo.backgroundColor(logo), cssInfo.TRANSPARENT, "background color");
-				assert.equal(cssInfo.textColor(logo), cssInfo.WHITE, "text color");
+				assert.equal(cssHelper.backgroundColor(logo), cssHelper.TRANSPARENT, "background color");
+				assert.equal(cssHelper.textColor(logo), cssHelper.WHITE, "text color");
 			});
 
 		});
@@ -228,7 +228,7 @@
 			var notFound;
 
 			beforeEach(function() {
-				notFound = cssInfo.frame.add("<div class='not-found'>404</div>", "not found");
+				notFound = cssHelper.frame.add("<div class='not-found'>404</div>", "not found");
 			});
 
 			it("is very large", function() {
@@ -238,15 +238,15 @@
 			});
 
 			it("text", function() {
-				assert.equal(cssInfo.textAlign(notFound), "center", "should be horizontally centered");
-				assert.equal(cssInfo.isTextVerticallyCentered(notFound), true, "should be vertically centered");
-				assert.equal(cssInfo.fontSize(notFound), "200px", "font size");
-				assert.equal(cssInfo.fontWeight(notFound), cssInfo.HEADLINE_WEIGHT, "font weight");
+				assert.equal(cssHelper.textAlign(notFound), "center", "should be horizontally centered");
+				assert.equal(cssHelper.isTextVerticallyCentered(notFound), true, "should be vertically centered");
+				assert.equal(cssHelper.fontSize(notFound), "200px", "font size");
+				assert.equal(cssHelper.fontWeight(notFound), cssHelper.HEADLINE_WEIGHT, "font weight");
 			});
 
 			it("color", function() {
-				assert.equal(cssInfo.backgroundColor(notFound), cssInfo.TRANSPARENT, "background color");
-				assert.equal(cssInfo.textColor(notFound), cssInfo.DARK_BLUE, "text color");
+				assert.equal(cssHelper.backgroundColor(notFound), cssHelper.TRANSPARENT, "background color");
+				assert.equal(cssHelper.textColor(notFound), cssHelper.DARK_BLUE, "text color");
 			});
 
 		});
@@ -260,16 +260,16 @@
 			var button;
 
 			beforeEach(function() {
-				cssInfo.frame.add("<div style='height: 100px;'>spacer</div>");    // force positioning tests to be meaningful
-				drawingArea = cssInfo.frame.add("" +
+				cssHelper.frame.add("<div style='height: 100px;'>spacer</div>");    // force positioning tests to be meaningful
+				drawingArea = cssHelper.frame.add("" +
 					"<div class='drawing-area'>" +
 					" <div id='drawing-area-canvas' class='drawing-area__canvas'></div>" +
 					" <div id='arrow' class='drawing-area__arrow'></div>" +
 					" <div id='button' class='drawing-area__button button'></div>" +
 					"</div>", "drawing area");
-				canvas = cssInfo.frame.get("#drawing-area-canvas");
-				arrow = cssInfo.frame.get("#arrow");
-				button = cssInfo.frame.get("#button");
+				canvas = cssHelper.frame.get("#drawing-area-canvas");
+				arrow = cssHelper.frame.get("#arrow");
+				button = cssHelper.frame.get("#button");
 			});
 
 			describe("canvas", function() {
@@ -290,11 +290,11 @@
 				});
 
 				it("has rounded corners", function() {
-					assert.equal(cssInfo.roundedCorners(canvas), cssInfo.CORNER_ROUNDING);
+					assert.equal(cssHelper.roundedCorners(canvas), cssHelper.CORNER_ROUNDING);
 				});
 
 				it("has a white background", function() {
-					assert.equal(cssInfo.backgroundColor(canvas), cssInfo.WHITE);
+					assert.equal(cssHelper.backgroundColor(canvas), cssHelper.WHITE);
 				});
 
 			});
@@ -309,7 +309,7 @@
 				});
 
 				it("is over canvas", function() {
-					assert.equal(cssInfo.under(arrow, canvas), false);
+					assert.equal(cssHelper.under(arrow, canvas), false);
 				});
 
 				it("has an arrow image", function() {
@@ -317,9 +317,9 @@
 						height: 9
 					}, "arrow should be same height as arrow gif");
 
-					assert.equal(cssInfo.backgroundImage(arrow), "/images/arrow.png", "arrow should be an image");
+					assert.equal(cssHelper.backgroundImage(arrow), "/images/arrow.png", "arrow should be an image");
 					assert.equal(arrow.getRawStyle("background-repeat"), "no-repeat", "arrow should be drawn once");
-					assert.equal(cssInfo.backgroundPosition(arrow), "center", "arrow image is centered");
+					assert.equal(cssHelper.backgroundPosition(arrow), "center", "arrow image is centered");
 				});
 
 			});
@@ -371,8 +371,8 @@
 				this.timeout(10 * 1000);
 				var options = {
 					src: "/base/src/client/content/index.html",
-					width: cssInfo.IOS_BROWSER_WIDTH,
-					height: cssInfo.IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
+					width: cssHelper.IOS_BROWSER_WIDTH,
+					height: cssHelper.IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
 				};
 				frame = quixote.createFrame(options, done);
 			});
@@ -421,12 +421,12 @@
 					center: page.center,
 					top: 12
 				}, "logo should be centered at top of page");
-				assert.equal(cssInfo.textAlign(logo), "center", "logo text should be centered");
+				assert.equal(cssHelper.textAlign(logo), "center", "logo text should be centered");
 				tagline.assert({
 					center: page.center,
 					top: logo.bottom.plus(5)
 				}, "tagline should be centered directly below logo");
-				assert.equal(cssInfo.textAlign(tagline), "center", "tagline text should be centered");
+				assert.equal(cssHelper.textAlign(tagline), "center", "tagline text should be centered");
 				drawingArea.assert({
 					center: page.center,
 					top: tagline.bottom.plus(10),
@@ -437,7 +437,7 @@
 					center: page.center,
 					top: drawingArea.bottom.plus(13)
 				}, "footer should be centered below drawing area");
-				assert.equal(cssInfo.textAlign(footer), "center", "footer text should be centered");
+				assert.equal(cssHelper.textAlign(footer), "center", "footer text should be centered");
 				joinUs.assert({
 					center: page.center,
 					top: footer.bottom.plus(13),
@@ -455,10 +455,10 @@
 					height: 9
 				}, "drawing area arrow should be same height as arrow gif");
 
-				assert.equal(cssInfo.under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
-				assert.equal(cssInfo.backgroundImage(drawingAreaArrow), "/images/arrow.png", "drawing area arrow is an image");
+				assert.equal(cssHelper.under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
+				assert.equal(cssHelper.backgroundImage(drawingAreaArrow), "/images/arrow.png", "drawing area arrow is an image");
 				assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "drawing arrow is drawn once");
-				assert.equal(cssInfo.backgroundPosition(drawingAreaArrow), "center", "drawing area arrow image is centered");
+				assert.equal(cssHelper.backgroundPosition(drawingAreaArrow), "center", "drawing area arrow image is centered");
 				clearButton.assert({
 					top: drawingArea.top.plus(15),
 					right: drawingArea.right.minus(15),
@@ -466,49 +466,49 @@
 					width: 70
 				}, "clear screen button should be centered at top-right of drawing area");
 
-				assert.equal(cssInfo.under(clearButton, drawingArea), false, "clear button should be over drawing area");
+				assert.equal(cssHelper.under(clearButton, drawingArea), false, "clear button should be over drawing area");
 			});
 
 			it("has a color scheme", function() {
-				assert.equal(cssInfo.backgroundColor(frame.body()), cssInfo.BACKGROUND_BLUE, "page background should be light blue");
-				assert.equal(cssInfo.textColor(logo), cssInfo.WHITE, "logo text should be white");
-				assert.equal(cssInfo.textColor(tagline), cssInfo.DARK_BLUE, "tagline should be dark blue");
-				assert.equal(cssInfo.backgroundColor(drawingArea), cssInfo.WHITE, "drawing area should be white");
-				assert.equal(cssInfo.textColor(footerText), cssInfo.WHITE, "footer should be white");
-				assert.equal(cssInfo.textColor(clearButton), cssInfo.DARK_GRAY, "clear button background should be dark gray");
-				assert.equal(cssInfo.backgroundColor(clearButton), cssInfo.GRAY, "clear button text should be medium gray");
-				assert.equal(cssInfo.backgroundColor(joinUs), cssInfo.MEDIUM_BLUE, "join us button background should be medium blue");
-				assert.equal(cssInfo.textColor(joinUs), cssInfo.WHITE, "join us button text should be white");
+				assert.equal(cssHelper.backgroundColor(frame.body()), cssHelper.BACKGROUND_BLUE, "page background should be light blue");
+				assert.equal(cssHelper.textColor(logo), cssHelper.WHITE, "logo text should be white");
+				assert.equal(cssHelper.textColor(tagline), cssHelper.DARK_BLUE, "tagline should be dark blue");
+				assert.equal(cssHelper.backgroundColor(drawingArea), cssHelper.WHITE, "drawing area should be white");
+				assert.equal(cssHelper.textColor(footerText), cssHelper.WHITE, "footer should be white");
+				assert.equal(cssHelper.textColor(clearButton), cssHelper.DARK_GRAY, "clear button background should be dark gray");
+				assert.equal(cssHelper.backgroundColor(clearButton), cssHelper.GRAY, "clear button text should be medium gray");
+				assert.equal(cssHelper.backgroundColor(joinUs), cssHelper.MEDIUM_BLUE, "join us button background should be medium blue");
+				assert.equal(cssHelper.textColor(joinUs), cssHelper.WHITE, "join us button text should be white");
 			});
 
 			it("has a typographic scheme", function() {
-				assert.equal(cssInfo.fontFamily(logo), cssInfo.STANDARD_FONT, "logo font");
-				assert.equal(cssInfo.fontWeight(logo), cssInfo.HEADLINE_WEIGHT, "logo weight");
-				assert.equal(cssInfo.fontSize(logo), "30px", "logo font size");
+				assert.equal(cssHelper.fontFamily(logo), cssHelper.STANDARD_FONT, "logo font");
+				assert.equal(cssHelper.fontWeight(logo), cssHelper.HEADLINE_WEIGHT, "logo weight");
+				assert.equal(cssHelper.fontSize(logo), "30px", "logo font size");
 				logo.assert({ height: 30 }, "logo height");
 
-				assert.equal(cssInfo.fontFamily(tagline), cssInfo.STANDARD_FONT, "tagline font");
-				assert.equal(cssInfo.fontWeight(tagline), cssInfo.BODY_TEXT_WEIGHT, "tagline weight");
-				assert.equal(cssInfo.fontSize(tagline), "15px", "tagline font size");
+				assert.equal(cssHelper.fontFamily(tagline), cssHelper.STANDARD_FONT, "tagline font");
+				assert.equal(cssHelper.fontWeight(tagline), cssHelper.BODY_TEXT_WEIGHT, "tagline weight");
+				assert.equal(cssHelper.fontSize(tagline), "15px", "tagline font size");
 				tagline.assert({ height: 18 }, "tagline height");
 
-				assert.equal(cssInfo.fontFamily(clearButton), cssInfo.STANDARD_FONT, "clear button family");
-				assert.equal(cssInfo.fontWeight(clearButton), cssInfo.DRAWING_BUTTON_WEIGHT, "clear button weight");
-				assert.equal(cssInfo.fontSize(clearButton), "12px", "clear button font size");
-				assert.equal(cssInfo.fontFamily(footerText), cssInfo.STANDARD_FONT, "footer family");
-				assert.equal(cssInfo.fontWeight(footerText), cssInfo.BODY_TEXT_WEIGHT, "footer weight");
-				assert.equal(cssInfo.fontSize(footerText), "15px", "footer font size");
+				assert.equal(cssHelper.fontFamily(clearButton), cssHelper.STANDARD_FONT, "clear button family");
+				assert.equal(cssHelper.fontWeight(clearButton), cssHelper.DRAWING_BUTTON_WEIGHT, "clear button weight");
+				assert.equal(cssHelper.fontSize(clearButton), "12px", "clear button font size");
+				assert.equal(cssHelper.fontFamily(footerText), cssHelper.STANDARD_FONT, "footer family");
+				assert.equal(cssHelper.fontWeight(footerText), cssHelper.BODY_TEXT_WEIGHT, "footer weight");
+				assert.equal(cssHelper.fontSize(footerText), "15px", "footer font size");
 				footer.assert({ height: 18 }, "footer height");
 
-				assert.equal(cssInfo.fontFamily(joinUs), cssInfo.STANDARD_FONT, "join us button family");
-				assert.equal(cssInfo.fontWeight(joinUs), cssInfo.LINK_BUTTON_WEIGHT, "join us button weight");
-				assert.equal(cssInfo.fontSize(joinUs), "16px", "join us button font size");
+				assert.equal(cssHelper.fontFamily(joinUs), cssHelper.STANDARD_FONT, "join us button family");
+				assert.equal(cssHelper.fontWeight(joinUs), cssHelper.LINK_BUTTON_WEIGHT, "join us button weight");
+				assert.equal(cssHelper.fontSize(joinUs), "16px", "join us button font size");
 			});
 
 			it("rounds the corners of all rectangles", function() {
-				assert.equal(cssInfo.roundedCorners(drawingArea), cssInfo.CORNER_ROUNDING, "drawing area");
-				assert.equal(cssInfo.roundedCorners(clearButton), cssInfo.CORNER_ROUNDING, "clear button");
-				assert.equal(cssInfo.roundedCorners(joinUs), cssInfo.CORNER_ROUNDING, "join us button");
+				assert.equal(cssHelper.roundedCorners(drawingArea), cssHelper.CORNER_ROUNDING, "drawing area");
+				assert.equal(cssHelper.roundedCorners(clearButton), cssHelper.CORNER_ROUNDING, "clear button");
+				assert.equal(cssHelper.roundedCorners(joinUs), cssHelper.CORNER_ROUNDING, "join us button");
 			});
 
 			describe("buttons", function() {
@@ -531,13 +531,13 @@
 				});
 
 				it("have a drop shadow", function() {
-					assert.equal(cssInfo.dropShadow(clearButton), cssInfo.MEDIUM_GRAY + cssInfo.BUTTON_DROP_SHADOW, "clear button drop shadow");
-					assert.equal(cssInfo.dropShadow(joinUs), cssInfo.DARK_BLUE + cssInfo.BUTTON_DROP_SHADOW, "'join us' button drop shadow");
+					assert.equal(cssHelper.dropShadow(clearButton), cssHelper.MEDIUM_GRAY + cssHelper.BUTTON_DROP_SHADOW, "clear button drop shadow");
+					assert.equal(cssHelper.dropShadow(joinUs), cssHelper.DARK_BLUE + cssHelper.BUTTON_DROP_SHADOW, "'join us' button drop shadow");
 				});
 
 				it("darken when user hovers over them", function() {
-					assertHoverStyle(clearButton, cssInfo.DARKENED_GRAY, "clear button");
-					assertHoverStyle(joinUs, cssInfo.DARKENED_MEDIUM_BLUE, "'join us' button");
+					assertHoverStyle(clearButton, cssHelper.DARKENED_GRAY, "clear button");
+					assertHoverStyle(joinUs, cssHelper.DARKENED_MEDIUM_BLUE, "'join us' button");
 				});
 
 				it("appear to depress when user activates them", function() {
@@ -564,8 +564,8 @@
 				this.timeout(10 * 1000);
 				var options = {
 					src: "/base/src/client/content/404.html",
-					width: cssInfo.IOS_BROWSER_WIDTH,
-					height: cssInfo.IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
+					width: cssHelper.IOS_BROWSER_WIDTH,
+					height: cssHelper.IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
 				};
 				frame = quixote.createFrame(options, done);
 			});
@@ -607,49 +607,49 @@
 					center: page.center,
 					height: 30
 				}, "logo should be centered at top of page");
-				assert.equal(cssInfo.fontSize(logo), "30px", "logo font size");
-				assert.equal(cssInfo.textAlign(logo), "center", "logo text should be centered");
+				assert.equal(cssHelper.fontSize(logo), "30px", "logo font size");
+				assert.equal(cssHelper.textAlign(logo), "center", "logo text should be centered");
 				header.assert({
 					top: logo.bottom,
 					center: viewport.center,
 					height: 200
 				}, "404 header should be centered under logo");
-				assert.equal(cssInfo.fontSize(header), "200px", "header font size");
-				assert.equal(cssInfo.textAlign(header), "center", "header text should be centered");
+				assert.equal(cssHelper.fontSize(header), "200px", "header font size");
+				assert.equal(cssHelper.textAlign(header), "center", "header text should be centered");
 				tagline.assert({
 					top: header.bottom.plus(tagline.height),
 					center: viewport.center,
 					height: 18
 				}, "tagline should be centered under 404 header");
-				assert.equal(cssInfo.fontSize(tagline), "15px", "tagline font size");
-				assert.equal(cssInfo.textAlign(tagline), "center", "tagline text should be centered");
+				assert.equal(cssHelper.fontSize(tagline), "15px", "tagline font size");
+				assert.equal(cssHelper.textAlign(tagline), "center", "tagline text should be centered");
 				drawSomething.assert({
 					top: tagline.bottom.plus(tagline.height),
 					center: page.center,
 					height: 35,
 					width: 225
 				}, "button should be centered below tagline");
-				assert.equal(cssInfo.textAlign(drawSomething), "center", "button text should be centered");
+				assert.equal(cssHelper.textAlign(drawSomething), "center", "button text should be centered");
 			});
 
 			it("has a color scheme", function() {
-				assert.equal(cssInfo.backgroundColor(frame.body()), cssInfo.BACKGROUND_BLUE, "page background should be light blue");
-				assert.equal(cssInfo.textColor(logo), cssInfo.WHITE, "logo text should be white");
-				assert.equal(cssInfo.textColor(header), cssInfo.DARK_BLUE, "header should be dark blue");
-				assert.equal(cssInfo.textColor(tagline), cssInfo.DARK_BLUE, "tagline should be dark blue");
-				assert.equal(cssInfo.backgroundColor(drawSomething), cssInfo.MEDIUM_BLUE, "button background should be medium blue");
-				assert.equal(cssInfo.textColor(drawSomething), cssInfo.WHITE, "button text should be white");
+				assert.equal(cssHelper.backgroundColor(frame.body()), cssHelper.BACKGROUND_BLUE, "page background should be light blue");
+				assert.equal(cssHelper.textColor(logo), cssHelper.WHITE, "logo text should be white");
+				assert.equal(cssHelper.textColor(header), cssHelper.DARK_BLUE, "header should be dark blue");
+				assert.equal(cssHelper.textColor(tagline), cssHelper.DARK_BLUE, "tagline should be dark blue");
+				assert.equal(cssHelper.backgroundColor(drawSomething), cssHelper.MEDIUM_BLUE, "button background should be medium blue");
+				assert.equal(cssHelper.textColor(drawSomething), cssHelper.WHITE, "button text should be white");
 			});
 
 			it("has a typographic scheme", function() {
-				assert.equal(cssInfo.fontFamily(logo), cssInfo.STANDARD_FONT, "logo font");
-				assert.equal(cssInfo.fontWeight(logo), cssInfo.HEADLINE_WEIGHT, "logo weight");
-				assert.equal(cssInfo.fontFamily(header), cssInfo.STANDARD_FONT, "header font");
-				assert.equal(cssInfo.fontWeight(header), cssInfo.HEADLINE_WEIGHT, "header weight");
-				assert.equal(cssInfo.fontFamily(tagline), cssInfo.STANDARD_FONT, "tagline font");
-				assert.equal(cssInfo.fontWeight(tagline), cssInfo.BODY_TEXT_WEIGHT, "tagline weight");
-				assert.equal(cssInfo.fontFamily(drawSomething), cssInfo.STANDARD_FONT, "draw something button family");
-				assert.equal(cssInfo.fontWeight(drawSomething), cssInfo.LINK_BUTTON_WEIGHT, "draw something button weight");
+				assert.equal(cssHelper.fontFamily(logo), cssHelper.STANDARD_FONT, "logo font");
+				assert.equal(cssHelper.fontWeight(logo), cssHelper.HEADLINE_WEIGHT, "logo weight");
+				assert.equal(cssHelper.fontFamily(header), cssHelper.STANDARD_FONT, "header font");
+				assert.equal(cssHelper.fontWeight(header), cssHelper.HEADLINE_WEIGHT, "header weight");
+				assert.equal(cssHelper.fontFamily(tagline), cssHelper.STANDARD_FONT, "tagline font");
+				assert.equal(cssHelper.fontWeight(tagline), cssHelper.BODY_TEXT_WEIGHT, "tagline weight");
+				assert.equal(cssHelper.fontFamily(drawSomething), cssHelper.STANDARD_FONT, "draw something button family");
+				assert.equal(cssHelper.fontWeight(drawSomething), cssHelper.LINK_BUTTON_WEIGHT, "draw something button weight");
 			});
 
 
@@ -660,15 +660,15 @@
 				});
 
 				it("has rounded corners", function() {
-					assert.equal(cssInfo.roundedCorners(drawSomething), cssInfo.CORNER_ROUNDING, "draw something button");
+					assert.equal(cssHelper.roundedCorners(drawSomething), cssHelper.CORNER_ROUNDING, "draw something button");
 				});
 
 				it("has a drop shadow", function() {
-					assert.equal(cssInfo.dropShadow(drawSomething), cssInfo.DARK_BLUE + cssInfo.BUTTON_DROP_SHADOW, "draw something button drop shadow");
+					assert.equal(cssHelper.dropShadow(drawSomething), cssHelper.DARK_BLUE + cssHelper.BUTTON_DROP_SHADOW, "draw something button drop shadow");
 				});
 
 				it("darkens when user hovers over them", function() {
-					assertHoverStyle(drawSomething, cssInfo.DARKENED_MEDIUM_BLUE, "draw something button");
+					assertHoverStyle(drawSomething, cssHelper.DARKENED_MEDIUM_BLUE, "draw something button");
 				});
 
 				it("appears to depress when user activates them", function() {
@@ -682,16 +682,16 @@
 
 
 	function assertStandardButtonStyling(button, description) {
-		assert.equal(cssInfo.textAlign(button), "center", description + "text horizontal centering");
-		assert.equal(cssInfo.isTextVerticallyCentered(button), true, description + " text vertical centering");
-		assert.equal(cssInfo.textIsUnderlined(button), false, description + " text underline");
-		assert.equal(cssInfo.textIsUppercase(button), true, description + " text uppercase");
-		assert.equal(cssInfo.hasBorder(button), false, description + " border");
+		assert.equal(cssHelper.textAlign(button), "center", description + "text horizontal centering");
+		assert.equal(cssHelper.isTextVerticallyCentered(button), true, description + " text vertical centering");
+		assert.equal(cssHelper.textIsUnderlined(button), false, description + " text underline");
+		assert.equal(cssHelper.textIsUppercase(button), true, description + " text uppercase");
+		assert.equal(cssHelper.hasBorder(button), false, description + " border");
 	}
 
 	function assertHoverStyle(button, expectedColor, description) {
 		applyClass(button, "_hover_", function() {
-			assert.equal(cssInfo.backgroundColor(button), expectedColor, description + " hover state background color");
+			assert.equal(cssHelper.backgroundColor(button), expectedColor, description + " hover state background color");
 		});
 	}
 
@@ -700,7 +700,7 @@
 			button.assert({
 				top: expectedDescriptor
 			});
-			assert.equal(cssInfo.dropShadow(button), "none");
+			assert.equal(cssHelper.dropShadow(button), "none");
 		});
 	}
 
