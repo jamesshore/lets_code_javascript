@@ -109,7 +109,8 @@
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
 			browsers: testedBrowsers(),
-			strict: strict
+			strict: strict,
+			clientArgs: [ "--grep=CSS" ]
 		}, complete, fail);
 	}, { async: true });
 
