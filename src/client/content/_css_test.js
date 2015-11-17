@@ -81,17 +81,17 @@
 			});
 
 			it("normal paragraphs", function() {
-				assert.equal(fontSize(p), "15px", "font size");
-				assert.equal(fontWeight(p), BODY_TEXT_WEIGHT, "font weight");
-				assert.equal(lineHeight(p), "18px", "line height");
+				assert.equal(cssInfo.fontSize(p), "15px", "font size");
+				assert.equal(cssInfo.fontWeight(p), BODY_TEXT_WEIGHT, "font weight");
+				assert.equal(cssInfo.lineHeight(p), "18px", "line height");
 				assert.equal(cssInfo.backgroundColor(p), TRANSPARENT, "background color");
-				assert.equal(textColor(p), DARK_BLUE, "text color");
+				assert.equal(cssInfo.textColor(p), DARK_BLUE, "text color");
 			});
 
 			it("strong paragraphs", function() {
-				assert.equal(fontSize(strong), "15px", "font size");
-				assert.equal(fontWeight(strong), BODY_TEXT_WEIGHT, "font weight");
-				assert.equal(textColor(strong), WHITE, "text color");
+				assert.equal(cssInfo.fontSize(strong), "15px", "font size");
+				assert.equal(cssInfo.fontWeight(strong), BODY_TEXT_WEIGHT, "font weight");
+				assert.equal(cssInfo.textColor(strong), WHITE, "text color");
 			});
 
 		});
@@ -163,7 +163,7 @@
 				});
 
 				it("has centered text", function() {
-					assert.equal(textAlign(element), "center");
+					assert.equal(cssInfo.textAlign(element), "center");
 				});
 
 			});
@@ -191,24 +191,24 @@
 			});
 
 			it("text", function() {
-				assert.equal(textAlign(linkTag), "center", "should be horizontally centered");
-				assert.equal(textIsUnderlined(linkTag), false, "text should not be underlined");
-				assert.equal(textIsUppercase(linkTag), true, "text should be uppercase");
+				assert.equal(cssInfo.textAlign(linkTag), "center", "should be horizontally centered");
+				assert.equal(cssInfo.textIsUnderlined(linkTag), false, "text should not be underlined");
+				assert.equal(cssInfo.textIsUppercase(linkTag), true, "text should be uppercase");
 				assert.equal(cssInfo.fontFamily(buttonTag), INHERITED_FONT, "<button> should inherit container's font");
 			});
 
 			it("has no border", function() {
-				assert.equal(hasBorder(linkTag), false, "standard link button");
-				assert.equal(hasBorder(buttonTag), false, "button tag button");
+				assert.equal(cssInfo.hasBorder(linkTag), false, "standard link button");
+				assert.equal(cssInfo.hasBorder(buttonTag), false, "button tag button");
 			});
 
 			it("has no padding or margins", function() {
-				assert.equal(margin(buttonTag), "0px", "margin");
-				assert.equal(padding(buttonTag), "0px", "padding");
+				assert.equal(cssInfo.margin(buttonTag), "0px", "margin");
+				assert.equal(cssInfo.padding(buttonTag), "0px", "padding");
 			});
 
 			it("has rounded corners", function() {
-				assert.equal(roundedCorners(linkTag), CORNER_ROUNDING);
+				assert.equal(cssInfo.roundedCorners(linkTag), CORNER_ROUNDING);
 			});
 
 			it("appear to depress when user activates it", function() {
@@ -234,16 +234,15 @@
 			});
 
 			it("has large text", function() {
-				assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
-				assert.equal(fontSize(linkTag), "16px", "font size");
-				assert.equal(fontWeight(linkTag), LINK_BUTTON_WEIGHT, "button weight");
+				assert.equal(cssInfo.isTextVerticallyCentered(linkTag), true, "should be vertically centered");
+				assert.equal(cssInfo.fontSize(linkTag), "16px", "font size");
+				assert.equal(cssInfo.fontWeight(linkTag), LINK_BUTTON_WEIGHT, "button weight");
 			});
 
 			it("uses bright colors", function() {
 				assert.equal(cssInfo.backgroundColor(linkTag), MEDIUM_BLUE, "background");
-				assert.equal(textColor(linkTag), WHITE, "text");
-				assert.equal(dropShadow(linkTag), DARK_BLUE + BUTTON_DROP_SHADOW, "drop shadow");
-
+				assert.equal(cssInfo.textColor(linkTag), WHITE, "text");
+				assert.equal(cssInfo.dropShadow(linkTag), DARK_BLUE + BUTTON_DROP_SHADOW, "drop shadow");
 				assertHoverStyle(linkTag, DARKENED_MEDIUM_BLUE, "hover background");
 			});
 
@@ -267,16 +266,15 @@
 			});
 
 			it("has smaller, bolder text", function() {
-				assert.equal(fontSize(linkTag), "12px", "font size");
-				assert.equal(fontWeight(linkTag), DRAWING_BUTTON_WEIGHT, "font weight");
-				assert.equal(isTextVerticallyCentered(linkTag), true, "should be vertically centered");
+				assert.equal(cssInfo.fontSize(linkTag), "12px", "font size");
+				assert.equal(cssInfo.fontWeight(linkTag), DRAWING_BUTTON_WEIGHT, "font weight");
+				assert.equal(cssInfo.isTextVerticallyCentered(linkTag), true, "should be vertically centered");
 			});
 
 			it("uses muted colors", function() {
 				assert.equal(cssInfo.backgroundColor(linkTag), GRAY, "button background");
-				assert.equal(textColor(linkTag), DARK_GRAY, "button text");
-				assert.equal(dropShadow(linkTag), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
-
+				assert.equal(cssInfo.textColor(linkTag), DARK_GRAY, "button text");
+				assert.equal(cssInfo.dropShadow(linkTag), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
 				assertHoverStyle(linkTag, DARKENED_GRAY, "hover background");
 			});
 
@@ -298,15 +296,15 @@
 			});
 
 			it("text", function() {
-				assert.equal(textAlign(logo), "center", "should be horizontally centered");
-				assert.equal(isTextVerticallyCentered(logo), true, "should be vertically centered");
-				assert.equal(fontSize(logo), "30px", "font size");
-				assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "font weight");
+				assert.equal(cssInfo.textAlign(logo), "center", "should be horizontally centered");
+				assert.equal(cssInfo.isTextVerticallyCentered(logo), true, "should be vertically centered");
+				assert.equal(cssInfo.fontSize(logo), "30px", "font size");
+				assert.equal(cssInfo.fontWeight(logo), HEADLINE_WEIGHT, "font weight");
 			});
 
 			it("color", function() {
 				assert.equal(cssInfo.backgroundColor(logo), TRANSPARENT, "background color");
-				assert.equal(textColor(logo), WHITE, "text color");
+				assert.equal(cssInfo.textColor(logo), WHITE, "text color");
 			});
 
 		});
@@ -327,15 +325,15 @@
 			});
 
 			it("text", function() {
-				assert.equal(textAlign(notFound), "center", "should be horizontally centered");
-				assert.equal(isTextVerticallyCentered(notFound), true, "should be vertically centered");
-				assert.equal(fontSize(notFound), "200px", "font size");
-				assert.equal(fontWeight(notFound), HEADLINE_WEIGHT, "font weight");
+				assert.equal(cssInfo.textAlign(notFound), "center", "should be horizontally centered");
+				assert.equal(cssInfo.isTextVerticallyCentered(notFound), true, "should be vertically centered");
+				assert.equal(cssInfo.fontSize(notFound), "200px", "font size");
+				assert.equal(cssInfo.fontWeight(notFound), HEADLINE_WEIGHT, "font weight");
 			});
 
 			it("color", function() {
 				assert.equal(cssInfo.backgroundColor(notFound), TRANSPARENT, "background color");
-				assert.equal(textColor(notFound), DARK_BLUE, "text color");
+				assert.equal(cssInfo.textColor(notFound), DARK_BLUE, "text color");
 			});
 
 		});
@@ -379,7 +377,7 @@
 				});
 
 				it("has rounded corners", function() {
-					assert.equal(roundedCorners(canvas), CORNER_ROUNDING);
+					assert.equal(cssInfo.roundedCorners(canvas), CORNER_ROUNDING);
 				});
 
 				it("has a white background", function() {
@@ -398,7 +396,7 @@
 				});
 
 				it("is over canvas", function() {
-					assert.equal(under(arrow, canvas), false);
+					assert.equal(cssInfo.under(arrow, canvas), false);
 				});
 
 				it("has an arrow image", function() {
@@ -406,9 +404,9 @@
 						height: 9
 					}, "arrow should be same height as arrow gif");
 
-					assert.equal(backgroundImage(arrow), "/images/arrow.png", "arrow should be an image");
+					assert.equal(cssInfo.backgroundImage(arrow), "/images/arrow.png", "arrow should be an image");
 					assert.equal(arrow.getRawStyle("background-repeat"), "no-repeat", "arrow should be drawn once");
-					assert.equal(backgroundPosition(arrow), "center", "arrow image is centered");
+					assert.equal(cssInfo.backgroundPosition(arrow), "center", "arrow image is centered");
 				});
 
 			});
@@ -510,14 +508,12 @@
 					center: page.center,
 					top: 12
 				}, "logo should be centered at top of page");
-				assert.equal(textAlign(logo), "center", "logo text should be centered");
-
+				assert.equal(cssInfo.textAlign(logo), "center", "logo text should be centered");
 				tagline.assert({
 					center: page.center,
 					top: logo.bottom.plus(5)
 				}, "tagline should be centered directly below logo");
-				assert.equal(textAlign(tagline), "center", "tagline text should be centered");
-
+				assert.equal(cssInfo.textAlign(tagline), "center", "tagline text should be centered");
 				drawingArea.assert({
 					center: page.center,
 					top: tagline.bottom.plus(10),
@@ -528,8 +524,7 @@
 					center: page.center,
 					top: drawingArea.bottom.plus(13)
 				}, "footer should be centered below drawing area");
-				assert.equal(textAlign(footer), "center", "footer text should be centered");
-
+				assert.equal(cssInfo.textAlign(footer), "center", "footer text should be centered");
 				joinUs.assert({
 					center: page.center,
 					top: footer.bottom.plus(13),
@@ -547,11 +542,10 @@
 					height: 9
 				}, "drawing area arrow should be same height as arrow gif");
 
-				assert.equal(under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
-				assert.equal(backgroundImage(drawingAreaArrow), "/images/arrow.png", "drawing area arrow is an image");
+				assert.equal(cssInfo.under(drawingAreaArrow, drawingArea), false, "drawing area arrow should be over drawing area");
+				assert.equal(cssInfo.backgroundImage(drawingAreaArrow), "/images/arrow.png", "drawing area arrow is an image");
 				assert.equal(drawingAreaArrow.getRawStyle("background-repeat"), "no-repeat", "drawing arrow is drawn once");
-				assert.equal(backgroundPosition(drawingAreaArrow), "center", "drawing area arrow image is centered");
-
+				assert.equal(cssInfo.backgroundPosition(drawingAreaArrow), "center", "drawing area arrow image is centered");
 				clearButton.assert({
 					top: drawingArea.top.plus(15),
 					right: drawingArea.right.minus(15),
@@ -559,51 +553,49 @@
 					width: 70
 				}, "clear screen button should be centered at top-right of drawing area");
 
-				assert.equal(under(clearButton, drawingArea), false, "clear button should be over drawing area");
+				assert.equal(cssInfo.under(clearButton, drawingArea), false, "clear button should be over drawing area");
 			});
 
 			it("has a color scheme", function() {
 				assert.equal(cssInfo.backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
-				assert.equal(textColor(logo), WHITE, "logo text should be white");
-				assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
+				assert.equal(cssInfo.textColor(logo), WHITE, "logo text should be white");
+				assert.equal(cssInfo.textColor(tagline), DARK_BLUE, "tagline should be dark blue");
 				assert.equal(cssInfo.backgroundColor(drawingArea), WHITE, "drawing area should be white");
-				assert.equal(textColor(footerText), WHITE, "footer should be white");
-
-				assert.equal(textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
+				assert.equal(cssInfo.textColor(footerText), WHITE, "footer should be white");
+				assert.equal(cssInfo.textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
 				assert.equal(cssInfo.backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
 				assert.equal(cssInfo.backgroundColor(joinUs), MEDIUM_BLUE, "join us button background should be medium blue");
-				assert.equal(textColor(joinUs), WHITE, "join us button text should be white");
+				assert.equal(cssInfo.textColor(joinUs), WHITE, "join us button text should be white");
 			});
 
 			it("has a typographic scheme", function() {
 				assert.equal(cssInfo.fontFamily(logo), STANDARD_FONT, "logo font");
-				assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
-				assert.equal(fontSize(logo), "30px", "logo font size");
+				assert.equal(cssInfo.fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
+				assert.equal(cssInfo.fontSize(logo), "30px", "logo font size");
 				logo.assert({ height: 30 }, "logo height");
 
 				assert.equal(cssInfo.fontFamily(tagline), STANDARD_FONT, "tagline font");
-				assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
-				assert.equal(fontSize(tagline), "15px", "tagline font size");
+				assert.equal(cssInfo.fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
+				assert.equal(cssInfo.fontSize(tagline), "15px", "tagline font size");
 				tagline.assert({ height: 18 }, "tagline height");
 
 				assert.equal(cssInfo.fontFamily(clearButton), STANDARD_FONT, "clear button family");
-				assert.equal(fontWeight(clearButton), DRAWING_BUTTON_WEIGHT, "clear button weight");
-				assert.equal(fontSize(clearButton), "12px", "clear button font size");
-
+				assert.equal(cssInfo.fontWeight(clearButton), DRAWING_BUTTON_WEIGHT, "clear button weight");
+				assert.equal(cssInfo.fontSize(clearButton), "12px", "clear button font size");
 				assert.equal(cssInfo.fontFamily(footerText), STANDARD_FONT, "footer family");
-				assert.equal(fontWeight(footerText), BODY_TEXT_WEIGHT, "footer weight");
-				assert.equal(fontSize(footerText), "15px", "footer font size");
+				assert.equal(cssInfo.fontWeight(footerText), BODY_TEXT_WEIGHT, "footer weight");
+				assert.equal(cssInfo.fontSize(footerText), "15px", "footer font size");
 				footer.assert({ height: 18 }, "footer height");
 
 				assert.equal(cssInfo.fontFamily(joinUs), STANDARD_FONT, "join us button family");
-				assert.equal(fontWeight(joinUs), LINK_BUTTON_WEIGHT, "join us button weight");
-				assert.equal(fontSize(joinUs), "16px", "join us button font size");
+				assert.equal(cssInfo.fontWeight(joinUs), LINK_BUTTON_WEIGHT, "join us button weight");
+				assert.equal(cssInfo.fontSize(joinUs), "16px", "join us button font size");
 			});
 
 			it("rounds the corners of all rectangles", function() {
-				assert.equal(roundedCorners(drawingArea), CORNER_ROUNDING, "drawing area");
-				assert.equal(roundedCorners(clearButton), CORNER_ROUNDING, "clear button");
-				assert.equal(roundedCorners(joinUs), CORNER_ROUNDING, "join us button");
+				assert.equal(cssInfo.roundedCorners(drawingArea), CORNER_ROUNDING, "drawing area");
+				assert.equal(cssInfo.roundedCorners(clearButton), CORNER_ROUNDING, "clear button");
+				assert.equal(cssInfo.roundedCorners(joinUs), CORNER_ROUNDING, "join us button");
 			});
 
 			describe("buttons", function() {
@@ -626,8 +618,8 @@
 				});
 
 				it("have a drop shadow", function() {
-					assert.equal(dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "clear button drop shadow");
-					assert.equal(dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "'join us' button drop shadow");
+					assert.equal(cssInfo.dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "clear button drop shadow");
+					assert.equal(cssInfo.dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "'join us' button drop shadow");
 				});
 
 				it("darken when user hovers over them", function() {
@@ -702,56 +694,49 @@
 					center: page.center,
 					height: 30
 				}, "logo should be centered at top of page");
-				assert.equal(fontSize(logo), "30px", "logo font size");
-				assert.equal(textAlign(logo), "center", "logo text should be centered");
-
+				assert.equal(cssInfo.fontSize(logo), "30px", "logo font size");
+				assert.equal(cssInfo.textAlign(logo), "center", "logo text should be centered");
 				header.assert({
 					top: logo.bottom,
 					center: viewport.center,
 					height: 200
 				}, "404 header should be centered under logo");
-				assert.equal(fontSize(header), "200px", "header font size");
-				assert.equal(textAlign(header), "center", "header text should be centered");
-
+				assert.equal(cssInfo.fontSize(header), "200px", "header font size");
+				assert.equal(cssInfo.textAlign(header), "center", "header text should be centered");
 				tagline.assert({
 					top: header.bottom.plus(tagline.height),
 					center: viewport.center,
 					height: 18
 				}, "tagline should be centered under 404 header");
-				assert.equal(fontSize(tagline), "15px", "tagline font size");
-				assert.equal(textAlign(tagline), "center", "tagline text should be centered");
-
+				assert.equal(cssInfo.fontSize(tagline), "15px", "tagline font size");
+				assert.equal(cssInfo.textAlign(tagline), "center", "tagline text should be centered");
 				drawSomething.assert({
 					top: tagline.bottom.plus(tagline.height),
 					center: page.center,
 					height: 35,
 					width: 225
 				}, "button should be centered below tagline");
-				assert.equal(textAlign(drawSomething), "center", "button text should be centered");
+				assert.equal(cssInfo.textAlign(drawSomething), "center", "button text should be centered");
 			});
 
 			it("has a color scheme", function() {
 				assert.equal(cssInfo.backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
-				assert.equal(textColor(logo), WHITE, "logo text should be white");
-				assert.equal(textColor(header), DARK_BLUE, "header should be dark blue");
-				assert.equal(textColor(tagline), DARK_BLUE, "tagline should be dark blue");
-
+				assert.equal(cssInfo.textColor(logo), WHITE, "logo text should be white");
+				assert.equal(cssInfo.textColor(header), DARK_BLUE, "header should be dark blue");
+				assert.equal(cssInfo.textColor(tagline), DARK_BLUE, "tagline should be dark blue");
 				assert.equal(cssInfo.backgroundColor(drawSomething), MEDIUM_BLUE, "button background should be medium blue");
-				assert.equal(textColor(drawSomething), WHITE, "button text should be white");
+				assert.equal(cssInfo.textColor(drawSomething), WHITE, "button text should be white");
 			});
 
 			it("has a typographic scheme", function() {
 				assert.equal(cssInfo.fontFamily(logo), STANDARD_FONT, "logo font");
-				assert.equal(fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
-
+				assert.equal(cssInfo.fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
 				assert.equal(cssInfo.fontFamily(header), STANDARD_FONT, "header font");
-				assert.equal(fontWeight(header), HEADLINE_WEIGHT, "header weight");
-
+				assert.equal(cssInfo.fontWeight(header), HEADLINE_WEIGHT, "header weight");
 				assert.equal(cssInfo.fontFamily(tagline), STANDARD_FONT, "tagline font");
-				assert.equal(fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
-
+				assert.equal(cssInfo.fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
 				assert.equal(cssInfo.fontFamily(drawSomething), STANDARD_FONT, "draw something button family");
-				assert.equal(fontWeight(drawSomething), LINK_BUTTON_WEIGHT, "draw something button weight");
+				assert.equal(cssInfo.fontWeight(drawSomething), LINK_BUTTON_WEIGHT, "draw something button weight");
 			});
 
 
@@ -762,11 +747,11 @@
 				});
 
 				it("has rounded corners", function() {
-					assert.equal(roundedCorners(drawSomething), CORNER_ROUNDING, "draw something button");
+					assert.equal(cssInfo.roundedCorners(drawSomething), CORNER_ROUNDING, "draw something button");
 				});
 
 				it("has a drop shadow", function() {
-					assert.equal(dropShadow(drawSomething), DARK_BLUE + BUTTON_DROP_SHADOW, "draw something button drop shadow");
+					assert.equal(cssInfo.dropShadow(drawSomething), DARK_BLUE + BUTTON_DROP_SHADOW, "draw something button drop shadow");
 				});
 
 				it("darkens when user hovers over them", function() {
@@ -784,11 +769,11 @@
 
 
 	function assertStandardButtonStyling(button, description) {
-		assert.equal(textAlign(button), "center", description + "text horizontal centering");
-		assert.equal(isTextVerticallyCentered(button), true, description + " text vertical centering");
-		assert.equal(textIsUnderlined(button), false, description + " text underline");
-		assert.equal(textIsUppercase(button), true, description + " text uppercase");
-		assert.equal(hasBorder(button), false, description + " border");
+		assert.equal(cssInfo.textAlign(button), "center", description + "text horizontal centering");
+		assert.equal(cssInfo.isTextVerticallyCentered(button), true, description + " text vertical centering");
+		assert.equal(cssInfo.textIsUnderlined(button), false, description + " text underline");
+		assert.equal(cssInfo.textIsUppercase(button), true, description + " text uppercase");
+		assert.equal(cssInfo.hasBorder(button), false, description + " border");
 	}
 
 	function assertHoverStyle(button, expectedColor, description) {
@@ -802,158 +787,8 @@
 			button.assert({
 				top: expectedDescriptor
 			});
-			assert.equal(dropShadow(button), "none");
+			assert.equal(cssInfo.dropShadow(button), "none");
 		});
-	}
-
-	function textAlign(element) {
-		return element.getRawStyle("text-align");
-	}
-
-	function fontWeight(element) {
-		var weight = element.getRawStyle("font-weight");
-		if (weight === "normal") weight = "400";
-		return weight.toString();
-	}
-
-	function fontSize(element) {
-		return element.getRawStyle("font-size");
-	}
-
-	function textColor(element) {
-		return normalizeColorString(element.getRawStyle("color"));
-	}
-
-	function roundedCorners(element) {
-		return getCompoundStyle(element,
-			"border-top-left-radius",
-			"border-top-right-radius",
-			"border-bottom-left-radius",
-			"border-bottom-right-radius"
-		);
-	}
-
-	function margin(element) {
-		return getCompoundStyle(element, "margin-top", "margin-right", "margin-bottom", "margin-left");
-	}
-
-	function padding(element) {
-		return getCompoundStyle(element, "padding-top", "padding-right", "padding-bottom", "padding-left");
-	}
-
-	function getCompoundStyle(element, subStyle1, subStyle2, subStyle3, subStyle4) {
-		// We can't look at compound properties directly because they return "" on Firefox and IE 9
-		var one = element.getRawStyle(subStyle1);
-		var two = element.getRawStyle(subStyle2);
-		var three = element.getRawStyle(subStyle3);
-		var four = element.getRawStyle(subStyle4);
-
-		var result;
-		if (one === two && one === three && one === four) {
-			result = one;
-		}
-		else {
-			result = one + " " + two + " " + four + " " + three;
-		}
-		return result;
-	}
-
-
-	function under(element, relativeToElement) {
-		var elementZ = getZIndex(element);
-		var relativeZ = getZIndex(relativeToElement);
-
-		if (elementZ === relativeZ) {
-			return !isElementAfterElementInDomTree();
-		}
-		else {
-			return (elementZ < relativeZ);
-		}
-
-		function getZIndex(element) {
-			var z = element.getRawStyle("z-index");
-			if (z === "auto") z = 0;
-			return z;
-		}
-
-		function isElementAfterElementInDomTree() {
-			var elementNode = element.toDomElement();
-			var relativeNode = relativeToElement.toDomElement();
-
-			var foundRelative = false;
-			var elementAfterRelative = false;
-			for (var child = elementNode.parentNode.firstChild; child !== null; child = child.nextSibling) {
-				if (child === elementNode) {
-					if (foundRelative) elementAfterRelative = true;
-				}
-				if (child === relativeNode) foundRelative = true;
-			}
-			if (!foundRelative) throw new Error("can't yet compare elements that have same z-index and are not siblings");
-			return elementAfterRelative;
-		}
-	}
-
-	function backgroundImage(element) {
-		var url = element.getRawStyle("background-image");
-
-		var parsedUrl = url.match(/^url\("?http:\/\/(.+?)(\/.*?)"?\)$/);    // strip off domain
-		if (parsedUrl === null) throw new Error("could not parse URL: " + url);
-
-		return parsedUrl[2];
-	}
-
-	function backgroundPosition(element) {
-		var position = element.getRawStyle("background-position");
-
-		if (position === "" || position === "50%" || position === "50% 50%") {
-			return "center";
-		}
-		else {
-			return position;
-		}
-	}
-
-	function hasBorder(element) {
-		var top = element.getRawStyle("border-top-style");
-		var right = element.getRawStyle("border-right-style");
-		var bottom = element.getRawStyle("border-bottom-style");
-		var left = element.getRawStyle("border-left-style");
-		return !(top === "none" && right === "none" && bottom === "none" && left === "none");
-	}
-
-	function isTextVerticallyCentered(element) {
-		var elementHeight = element.getRawPosition().height;
-		return elementHeight + "px" === lineHeight(element);
-	}
-
-	function lineHeight(element) {
-		return element.getRawStyle("line-height");
-	}
-
-	function dropShadow(element) {
-		var shadow = element.getRawStyle("box-shadow");
-
-		// When there is no drop shadow, most browsers say 'none', but IE 9 gives a color and nothing else.
-		// We handle that case here.
-		if (shadow === "white") return "none";
-		if (shadow.match(/^#[0-9a-f]{6}$/)) return "none";      // look for '#' followed by six hex digits
-
-		// The standard value seems to be "rgb(r, g, b) Wpx Xpx Ypx Zpx",
-		// but IE 9 gives us "Wpx Xpx Ypx Zpx #rrggbb". We need to normalize it.
-		// BTW, we don't support multiple shadows yet
-		var groups = shadow.match(/^([^#]+) (#......)/);   // get everything before the '#' and the r, g, b
-		if (groups === null) return shadow;   // There was no '#', so we assume we're not on IE 9 and everything's fine
-
-		return normalizeColorString(groups[2]) + " " + groups[1];
-	}
-
-	function textIsUnderlined(element) {
-		var style = element.getRawStyle("text-decoration");
-		return style.indexOf("none") !== 0;
-	}
-
-	function textIsUppercase(element) {
-		return element.getRawStyle("text-transform") === "uppercase";
 	}
 
 	function applyClass(element, className, fn) {
@@ -969,19 +804,6 @@
 			domElement.className = oldClassName;
 			forceReflow(domElement);
 		}
-	}
-
-	function normalizeColorString(color) {
-		if (color === "white") return "rgb(255, 255, 255)";
-		if (color === "transparent") return "rgba(0, 0, 0, 0)";
-
-		var colorGroups = color.match(/^#(..)(..)(..)/);    // look for presence of #rrggbb string
-		if (colorGroups === null) return color;   // if doesn't match, assume we have rgb() string
-
-		var r = parseInt(colorGroups[1], 16);
-		var g = parseInt(colorGroups[2], 16);
-		var b = parseInt(colorGroups[3], 16);
-		return "rgb(" + r + ", " + g + ", " + b + ")";
 	}
 
 	function forceReflow(domElement) {

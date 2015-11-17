@@ -31,6 +31,7 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Split our CSS tests into multiple files
+- Erase test files (starting with underscore) from dist/client
 - Run server code out of generated/dist as well (fix hardcoded path in weewikipaint.js)
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
 - Is there a better of handling cross-directory requires (e.g., `require("../shared/_assert.js")` broke)?
