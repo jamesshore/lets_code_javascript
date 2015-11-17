@@ -93,13 +93,19 @@
 
 
 	desc("Test client code");
-	incrementalTask("testClient", paths.clientTestTarget, [], paths.clientFiles(), function(complete, fail) {
+	task("testClient", [ "testClientJavaScript", "testClientCss" ]);
+
+	incrementalTask("testClientJavaScript", paths.clientTestTarget, [], paths.clientFiles(), function(complete, fail) {
 		console.log("Testing browser code: ");
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
 			browsers: require("./build/config/tested_browsers.js"),
 			strict: strict
 		}, complete, fail);
+	});
+
+	task("testClientCss", function() {
+		console.log("Testing CSS: TBD");
 	});
 
 	desc("End-to-end smoke tests");
