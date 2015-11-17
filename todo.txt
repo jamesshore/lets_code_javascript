@@ -39,3 +39,6 @@ Engineering Tasks:
 - Move hard-coded paths in Jakefile.js to paths.js?
 
 To Do on current task:
+* Run CSS subset of tests in build
+- Run non-CSS subset of tests in build
+- Run CSS tests incrementally
