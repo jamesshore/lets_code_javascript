@@ -2,8 +2,6 @@
 (function() {
 	"use strict";
 
-	var browser = require("./browser.js");
-	var failFast = require("./fail_fast.js");
 	var assert = require("../../shared/_assert.js");
 	var quixote = require("./vendor/quixote-0.9.0.js");
 
@@ -912,7 +910,7 @@
 				}
 				if (child === relativeNode) foundRelative = true;
 			}
-			failFast.unlessTrue(foundRelative, "can't yet compare elements that have same z-index and are not siblings");
+			if (!foundRelative) throw new Error("can't yet compare elements that have same z-index and are not siblings");
 			return elementAfterRelative;
 		}
 	}

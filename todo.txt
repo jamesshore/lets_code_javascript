@@ -30,14 +30,13 @@ User Stories to finish current MMF:
 	- IE 9 and IE 11, button goes diagonally rather than vertically (but only for button, not for links)
 
 Engineering Tasks:
-- Improve our client directory structure
+* Improve our client directory structure
 - Split our CSS tests into multiple files
 - Run server code out of generated/dist as well (fix hardcoded path in weewikipaint.js)
 - install csslint (ref Laurent Bourgault-Roy E339 http://www.letscodejavascript.com/v3/comments/live/339#comment-2240636858)
-
-To Do on current task:
-* Move CSS tests into content directory
-- Move remaining client JavaScript into code/ directory?
 - Is there a better of handling cross-directory requires (e.g., `require("../shared/_assert.js")` broke)?
 - Where do we want our vendor files to live?
 - Move hard-coded paths in Jakefile.js to paths.js?
+
+To Do on current task:
+* Move CSS tests into content directory
