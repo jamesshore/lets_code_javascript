@@ -6,35 +6,10 @@
 	var quixote = require("./vendor/quixote-0.9.0.js");
 	var cssInfo = require("./_css_info.js");
 
-	var TRANSPARENT = "rgba(0, 0, 0, 0)";
-	var WHITE = "rgb(255, 255, 255)";
-	var DARK_GRAY = "rgb(89, 89, 89)";
-	var GRAY = "rgb(229, 229, 229)";
-	var DARKENED_GRAY = "rgb(217, 217, 217)";
-	var MEDIUM_GRAY = "rgb(167, 169, 171)";
-
-	var BACKGROUND_BLUE = "rgb(65, 169, 204)";
-	var DARK_BLUE = "rgb(13, 87, 109)";
-	var MEDIUM_BLUE = "rgb(0, 121, 156)";
-	var DARKENED_MEDIUM_BLUE = "rgb(0, 111, 143)";
-
-	var BODY_TEXT_WEIGHT = "300";
-	var LINK_BUTTON_WEIGHT = "400";
-	var DRAWING_BUTTON_WEIGHT = "600";
-	var HEADLINE_WEIGHT = "600";
-
-	var IOS_BROWSER_WIDTH = 980;
-	var IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS = 641;
-
-	var STANDARD_FONT = "alwyn-new-rounded-web, Helvetica, sans-serif";
-	var CORNER_ROUNDING = "2px";
-	var BUTTON_DROP_SHADOW = " 0px 1px 0px 0px";
-
 	describe("CSS: Unit Tests:", function() {
 
 		cssInfo.setupUnitTests();
-
-
+		
 		describe("Layout", function() {
 
 			describe("Full width", function() {
@@ -47,7 +22,7 @@
 
 				it("is the width of the iPad", function() {
 					element.assert({
-						width: IOS_BROWSER_WIDTH
+						width: cssInfo.IOS_BROWSER_WIDTH
 					});
 				});
 
@@ -146,7 +121,7 @@
 			});
 
 			it("has rounded corners", function() {
-				assert.equal(cssInfo.roundedCorners(linkTag), CORNER_ROUNDING);
+				assert.equal(cssInfo.roundedCorners(linkTag), cssInfo.CORNER_ROUNDING);
 			});
 
 			it("appear to depress when user activates it", function() {
@@ -174,14 +149,14 @@
 			it("has large text", function() {
 				assert.equal(cssInfo.isTextVerticallyCentered(linkTag), true, "should be vertically centered");
 				assert.equal(cssInfo.fontSize(linkTag), "16px", "font size");
-				assert.equal(cssInfo.fontWeight(linkTag), LINK_BUTTON_WEIGHT, "button weight");
+				assert.equal(cssInfo.fontWeight(linkTag), cssInfo.LINK_BUTTON_WEIGHT, "button weight");
 			});
 
 			it("uses bright colors", function() {
-				assert.equal(cssInfo.backgroundColor(linkTag), MEDIUM_BLUE, "background");
-				assert.equal(cssInfo.textColor(linkTag), WHITE, "text");
-				assert.equal(cssInfo.dropShadow(linkTag), DARK_BLUE + BUTTON_DROP_SHADOW, "drop shadow");
-				assertHoverStyle(linkTag, DARKENED_MEDIUM_BLUE, "hover background");
+				assert.equal(cssInfo.backgroundColor(linkTag), cssInfo.MEDIUM_BLUE, "background");
+				assert.equal(cssInfo.textColor(linkTag), cssInfo.WHITE, "text");
+				assert.equal(cssInfo.dropShadow(linkTag), cssInfo.DARK_BLUE + cssInfo.BUTTON_DROP_SHADOW, "drop shadow");
+				assertHoverStyle(linkTag, cssInfo.DARKENED_MEDIUM_BLUE, "hover background");
 			});
 
 		});
@@ -205,15 +180,15 @@
 
 			it("has smaller, bolder text", function() {
 				assert.equal(cssInfo.fontSize(linkTag), "12px", "font size");
-				assert.equal(cssInfo.fontWeight(linkTag), DRAWING_BUTTON_WEIGHT, "font weight");
+				assert.equal(cssInfo.fontWeight(linkTag), cssInfo.DRAWING_BUTTON_WEIGHT, "font weight");
 				assert.equal(cssInfo.isTextVerticallyCentered(linkTag), true, "should be vertically centered");
 			});
 
 			it("uses muted colors", function() {
-				assert.equal(cssInfo.backgroundColor(linkTag), GRAY, "button background");
-				assert.equal(cssInfo.textColor(linkTag), DARK_GRAY, "button text");
-				assert.equal(cssInfo.dropShadow(linkTag), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "drop shadow");
-				assertHoverStyle(linkTag, DARKENED_GRAY, "hover background");
+				assert.equal(cssInfo.backgroundColor(linkTag), cssInfo.GRAY, "button background");
+				assert.equal(cssInfo.textColor(linkTag), cssInfo.DARK_GRAY, "button text");
+				assert.equal(cssInfo.dropShadow(linkTag), cssInfo.MEDIUM_GRAY + cssInfo.BUTTON_DROP_SHADOW, "drop shadow");
+				assertHoverStyle(linkTag, cssInfo.DARKENED_GRAY, "hover background");
 			});
 
 		});
@@ -237,12 +212,12 @@
 				assert.equal(cssInfo.textAlign(logo), "center", "should be horizontally centered");
 				assert.equal(cssInfo.isTextVerticallyCentered(logo), true, "should be vertically centered");
 				assert.equal(cssInfo.fontSize(logo), "30px", "font size");
-				assert.equal(cssInfo.fontWeight(logo), HEADLINE_WEIGHT, "font weight");
+				assert.equal(cssInfo.fontWeight(logo), cssInfo.HEADLINE_WEIGHT, "font weight");
 			});
 
 			it("color", function() {
-				assert.equal(cssInfo.backgroundColor(logo), TRANSPARENT, "background color");
-				assert.equal(cssInfo.textColor(logo), WHITE, "text color");
+				assert.equal(cssInfo.backgroundColor(logo), cssInfo.TRANSPARENT, "background color");
+				assert.equal(cssInfo.textColor(logo), cssInfo.WHITE, "text color");
 			});
 
 		});
@@ -266,12 +241,12 @@
 				assert.equal(cssInfo.textAlign(notFound), "center", "should be horizontally centered");
 				assert.equal(cssInfo.isTextVerticallyCentered(notFound), true, "should be vertically centered");
 				assert.equal(cssInfo.fontSize(notFound), "200px", "font size");
-				assert.equal(cssInfo.fontWeight(notFound), HEADLINE_WEIGHT, "font weight");
+				assert.equal(cssInfo.fontWeight(notFound), cssInfo.HEADLINE_WEIGHT, "font weight");
 			});
 
 			it("color", function() {
-				assert.equal(cssInfo.backgroundColor(notFound), TRANSPARENT, "background color");
-				assert.equal(cssInfo.textColor(notFound), DARK_BLUE, "text color");
+				assert.equal(cssInfo.backgroundColor(notFound), cssInfo.TRANSPARENT, "background color");
+				assert.equal(cssInfo.textColor(notFound), cssInfo.DARK_BLUE, "text color");
 			});
 
 		});
@@ -315,11 +290,11 @@
 				});
 
 				it("has rounded corners", function() {
-					assert.equal(cssInfo.roundedCorners(canvas), CORNER_ROUNDING);
+					assert.equal(cssInfo.roundedCorners(canvas), cssInfo.CORNER_ROUNDING);
 				});
 
 				it("has a white background", function() {
-					assert.equal(cssInfo.backgroundColor(canvas), WHITE);
+					assert.equal(cssInfo.backgroundColor(canvas), cssInfo.WHITE);
 				});
 
 			});
@@ -396,8 +371,8 @@
 				this.timeout(10 * 1000);
 				var options = {
 					src: "/base/src/client/content/index.html",
-					width: IOS_BROWSER_WIDTH,
-					height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
+					width: cssInfo.IOS_BROWSER_WIDTH,
+					height: cssInfo.IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
 				};
 				frame = quixote.createFrame(options, done);
 			});
@@ -495,45 +470,45 @@
 			});
 
 			it("has a color scheme", function() {
-				assert.equal(cssInfo.backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
-				assert.equal(cssInfo.textColor(logo), WHITE, "logo text should be white");
-				assert.equal(cssInfo.textColor(tagline), DARK_BLUE, "tagline should be dark blue");
-				assert.equal(cssInfo.backgroundColor(drawingArea), WHITE, "drawing area should be white");
-				assert.equal(cssInfo.textColor(footerText), WHITE, "footer should be white");
-				assert.equal(cssInfo.textColor(clearButton), DARK_GRAY, "clear button background should be dark gray");
-				assert.equal(cssInfo.backgroundColor(clearButton), GRAY, "clear button text should be medium gray");
-				assert.equal(cssInfo.backgroundColor(joinUs), MEDIUM_BLUE, "join us button background should be medium blue");
-				assert.equal(cssInfo.textColor(joinUs), WHITE, "join us button text should be white");
+				assert.equal(cssInfo.backgroundColor(frame.body()), cssInfo.BACKGROUND_BLUE, "page background should be light blue");
+				assert.equal(cssInfo.textColor(logo), cssInfo.WHITE, "logo text should be white");
+				assert.equal(cssInfo.textColor(tagline), cssInfo.DARK_BLUE, "tagline should be dark blue");
+				assert.equal(cssInfo.backgroundColor(drawingArea), cssInfo.WHITE, "drawing area should be white");
+				assert.equal(cssInfo.textColor(footerText), cssInfo.WHITE, "footer should be white");
+				assert.equal(cssInfo.textColor(clearButton), cssInfo.DARK_GRAY, "clear button background should be dark gray");
+				assert.equal(cssInfo.backgroundColor(clearButton), cssInfo.GRAY, "clear button text should be medium gray");
+				assert.equal(cssInfo.backgroundColor(joinUs), cssInfo.MEDIUM_BLUE, "join us button background should be medium blue");
+				assert.equal(cssInfo.textColor(joinUs), cssInfo.WHITE, "join us button text should be white");
 			});
 
 			it("has a typographic scheme", function() {
-				assert.equal(cssInfo.fontFamily(logo), STANDARD_FONT, "logo font");
-				assert.equal(cssInfo.fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
+				assert.equal(cssInfo.fontFamily(logo), cssInfo.STANDARD_FONT, "logo font");
+				assert.equal(cssInfo.fontWeight(logo), cssInfo.HEADLINE_WEIGHT, "logo weight");
 				assert.equal(cssInfo.fontSize(logo), "30px", "logo font size");
 				logo.assert({ height: 30 }, "logo height");
 
-				assert.equal(cssInfo.fontFamily(tagline), STANDARD_FONT, "tagline font");
-				assert.equal(cssInfo.fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
+				assert.equal(cssInfo.fontFamily(tagline), cssInfo.STANDARD_FONT, "tagline font");
+				assert.equal(cssInfo.fontWeight(tagline), cssInfo.BODY_TEXT_WEIGHT, "tagline weight");
 				assert.equal(cssInfo.fontSize(tagline), "15px", "tagline font size");
 				tagline.assert({ height: 18 }, "tagline height");
 
-				assert.equal(cssInfo.fontFamily(clearButton), STANDARD_FONT, "clear button family");
-				assert.equal(cssInfo.fontWeight(clearButton), DRAWING_BUTTON_WEIGHT, "clear button weight");
+				assert.equal(cssInfo.fontFamily(clearButton), cssInfo.STANDARD_FONT, "clear button family");
+				assert.equal(cssInfo.fontWeight(clearButton), cssInfo.DRAWING_BUTTON_WEIGHT, "clear button weight");
 				assert.equal(cssInfo.fontSize(clearButton), "12px", "clear button font size");
-				assert.equal(cssInfo.fontFamily(footerText), STANDARD_FONT, "footer family");
-				assert.equal(cssInfo.fontWeight(footerText), BODY_TEXT_WEIGHT, "footer weight");
+				assert.equal(cssInfo.fontFamily(footerText), cssInfo.STANDARD_FONT, "footer family");
+				assert.equal(cssInfo.fontWeight(footerText), cssInfo.BODY_TEXT_WEIGHT, "footer weight");
 				assert.equal(cssInfo.fontSize(footerText), "15px", "footer font size");
 				footer.assert({ height: 18 }, "footer height");
 
-				assert.equal(cssInfo.fontFamily(joinUs), STANDARD_FONT, "join us button family");
-				assert.equal(cssInfo.fontWeight(joinUs), LINK_BUTTON_WEIGHT, "join us button weight");
+				assert.equal(cssInfo.fontFamily(joinUs), cssInfo.STANDARD_FONT, "join us button family");
+				assert.equal(cssInfo.fontWeight(joinUs), cssInfo.LINK_BUTTON_WEIGHT, "join us button weight");
 				assert.equal(cssInfo.fontSize(joinUs), "16px", "join us button font size");
 			});
 
 			it("rounds the corners of all rectangles", function() {
-				assert.equal(cssInfo.roundedCorners(drawingArea), CORNER_ROUNDING, "drawing area");
-				assert.equal(cssInfo.roundedCorners(clearButton), CORNER_ROUNDING, "clear button");
-				assert.equal(cssInfo.roundedCorners(joinUs), CORNER_ROUNDING, "join us button");
+				assert.equal(cssInfo.roundedCorners(drawingArea), cssInfo.CORNER_ROUNDING, "drawing area");
+				assert.equal(cssInfo.roundedCorners(clearButton), cssInfo.CORNER_ROUNDING, "clear button");
+				assert.equal(cssInfo.roundedCorners(joinUs), cssInfo.CORNER_ROUNDING, "join us button");
 			});
 
 			describe("buttons", function() {
@@ -556,13 +531,13 @@
 				});
 
 				it("have a drop shadow", function() {
-					assert.equal(cssInfo.dropShadow(clearButton), MEDIUM_GRAY + BUTTON_DROP_SHADOW, "clear button drop shadow");
-					assert.equal(cssInfo.dropShadow(joinUs), DARK_BLUE + BUTTON_DROP_SHADOW, "'join us' button drop shadow");
+					assert.equal(cssInfo.dropShadow(clearButton), cssInfo.MEDIUM_GRAY + cssInfo.BUTTON_DROP_SHADOW, "clear button drop shadow");
+					assert.equal(cssInfo.dropShadow(joinUs), cssInfo.DARK_BLUE + cssInfo.BUTTON_DROP_SHADOW, "'join us' button drop shadow");
 				});
 
 				it("darken when user hovers over them", function() {
-					assertHoverStyle(clearButton, DARKENED_GRAY, "clear button");
-					assertHoverStyle(joinUs, DARKENED_MEDIUM_BLUE, "'join us' button");
+					assertHoverStyle(clearButton, cssInfo.DARKENED_GRAY, "clear button");
+					assertHoverStyle(joinUs, cssInfo.DARKENED_MEDIUM_BLUE, "'join us' button");
 				});
 
 				it("appear to depress when user activates them", function() {
@@ -589,8 +564,8 @@
 				this.timeout(10 * 1000);
 				var options = {
 					src: "/base/src/client/content/404.html",
-					width: IOS_BROWSER_WIDTH,
-					height: IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
+					width: cssInfo.IOS_BROWSER_WIDTH,
+					height: cssInfo.IPAD_LANDSCAPE_HEIGHT_WITH_BROWSER_TABS
 				};
 				frame = quixote.createFrame(options, done);
 			});
@@ -658,23 +633,23 @@
 			});
 
 			it("has a color scheme", function() {
-				assert.equal(cssInfo.backgroundColor(frame.body()), BACKGROUND_BLUE, "page background should be light blue");
-				assert.equal(cssInfo.textColor(logo), WHITE, "logo text should be white");
-				assert.equal(cssInfo.textColor(header), DARK_BLUE, "header should be dark blue");
-				assert.equal(cssInfo.textColor(tagline), DARK_BLUE, "tagline should be dark blue");
-				assert.equal(cssInfo.backgroundColor(drawSomething), MEDIUM_BLUE, "button background should be medium blue");
-				assert.equal(cssInfo.textColor(drawSomething), WHITE, "button text should be white");
+				assert.equal(cssInfo.backgroundColor(frame.body()), cssInfo.BACKGROUND_BLUE, "page background should be light blue");
+				assert.equal(cssInfo.textColor(logo), cssInfo.WHITE, "logo text should be white");
+				assert.equal(cssInfo.textColor(header), cssInfo.DARK_BLUE, "header should be dark blue");
+				assert.equal(cssInfo.textColor(tagline), cssInfo.DARK_BLUE, "tagline should be dark blue");
+				assert.equal(cssInfo.backgroundColor(drawSomething), cssInfo.MEDIUM_BLUE, "button background should be medium blue");
+				assert.equal(cssInfo.textColor(drawSomething), cssInfo.WHITE, "button text should be white");
 			});
 
 			it("has a typographic scheme", function() {
-				assert.equal(cssInfo.fontFamily(logo), STANDARD_FONT, "logo font");
-				assert.equal(cssInfo.fontWeight(logo), HEADLINE_WEIGHT, "logo weight");
-				assert.equal(cssInfo.fontFamily(header), STANDARD_FONT, "header font");
-				assert.equal(cssInfo.fontWeight(header), HEADLINE_WEIGHT, "header weight");
-				assert.equal(cssInfo.fontFamily(tagline), STANDARD_FONT, "tagline font");
-				assert.equal(cssInfo.fontWeight(tagline), BODY_TEXT_WEIGHT, "tagline weight");
-				assert.equal(cssInfo.fontFamily(drawSomething), STANDARD_FONT, "draw something button family");
-				assert.equal(cssInfo.fontWeight(drawSomething), LINK_BUTTON_WEIGHT, "draw something button weight");
+				assert.equal(cssInfo.fontFamily(logo), cssInfo.STANDARD_FONT, "logo font");
+				assert.equal(cssInfo.fontWeight(logo), cssInfo.HEADLINE_WEIGHT, "logo weight");
+				assert.equal(cssInfo.fontFamily(header), cssInfo.STANDARD_FONT, "header font");
+				assert.equal(cssInfo.fontWeight(header), cssInfo.HEADLINE_WEIGHT, "header weight");
+				assert.equal(cssInfo.fontFamily(tagline), cssInfo.STANDARD_FONT, "tagline font");
+				assert.equal(cssInfo.fontWeight(tagline), cssInfo.BODY_TEXT_WEIGHT, "tagline weight");
+				assert.equal(cssInfo.fontFamily(drawSomething), cssInfo.STANDARD_FONT, "draw something button family");
+				assert.equal(cssInfo.fontWeight(drawSomething), cssInfo.LINK_BUTTON_WEIGHT, "draw something button weight");
 			});
 
 
@@ -685,15 +660,15 @@
 				});
 
 				it("has rounded corners", function() {
-					assert.equal(cssInfo.roundedCorners(drawSomething), CORNER_ROUNDING, "draw something button");
+					assert.equal(cssInfo.roundedCorners(drawSomething), cssInfo.CORNER_ROUNDING, "draw something button");
 				});
 
 				it("has a drop shadow", function() {
-					assert.equal(cssInfo.dropShadow(drawSomething), DARK_BLUE + BUTTON_DROP_SHADOW, "draw something button drop shadow");
+					assert.equal(cssInfo.dropShadow(drawSomething), cssInfo.DARK_BLUE + cssInfo.BUTTON_DROP_SHADOW, "draw something button drop shadow");
 				});
 
 				it("darkens when user hovers over them", function() {
-					assertHoverStyle(drawSomething, DARKENED_MEDIUM_BLUE, "draw something button");
+					assertHoverStyle(drawSomething, cssInfo.DARKENED_MEDIUM_BLUE, "draw something button");
 				});
 
 				it("appears to depress when user activates them", function() {
