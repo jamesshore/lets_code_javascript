@@ -99,14 +99,19 @@
 		console.log("Testing browser code: ");
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
-			browsers: require("./build/config/tested_browsers.js"),
+			browsers: testedBrowsers(),
 			strict: strict
 		}, complete, fail);
 	});
 
 	task("testClientCss", function() {
-		console.log("Testing CSS: TBD");
-	});
+		console.log("Testing CSS:");
+		karmaRunner().runTests({
+			configFile: paths.karmaConfig,
+			browsers: testedBrowsers(),
+			strict: strict
+		}, complete, fail);
+	}, { async: true });
 
 	desc("End-to-end smoke tests");
 	task("smoketest", [ "build" ], function() {
@@ -269,6 +274,10 @@
 
 	function shell() {
 		return require("shelljs");
+	}
+
+	function testedBrowsers() {
+		return require("./build/config/tested_browsers.js");
 	}
 
 }());
