@@ -3,6 +3,7 @@
 	"use strict";
 
 	var quixote = require("./vendor/quixote-0.9.0.js");
+	var assert = require("../../shared/_assert.js");
 
 	exports.TRANSPARENT = "rgba(0, 0, 0, 0)";
 	exports.WHITE = "rgb(255, 255, 255)";
@@ -198,9 +199,39 @@
 		return element.getRawStyle("text-transform") === "uppercase";
 	};
 
+	exports.assertHoverStyle = function assertHoverStyle(button, expectedColor, description) {
+		applyClass(button, "_hover_", function() {
+			assert.equal(exports.backgroundColor(button), expectedColor, description + " hover state background color");
+		});
+	};
 
+	exports.assertActivateDepresses = function assertActivateDepresses(button, expectedDescriptor, description) {
+		applyClass(button, "_active_", function() {
+			button.assert({
+				top: expectedDescriptor
+			}, description);
+			assert.equal(exports.dropShadow(button), "none", description);
+		});
+	};
 
+	function applyClass(element, className, fn) {
+		var domElement = element.toDomElement();
+		var oldClassName = domElement.className;
+		try {
+			domElement.className += " " + className;
+			forceReflow(domElement);
 
+			fn();
+		}
+		finally {
+			domElement.className = oldClassName;
+			forceReflow(domElement);
+		}
+	}
+
+	function forceReflow(domElement) {
+		var makeLintHappy = domElement.offsetHeight;
+	}
 
 	function getCompoundStyle(element, subStyle1, subStyle2, subStyle3, subStyle4) {
 		// We can't look at compound properties directly because they return "" on Firefox and IE 9
