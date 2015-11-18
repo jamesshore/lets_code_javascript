@@ -165,7 +165,7 @@
 	};
 
 	exports.isTextVerticallyCentered = function isTextVerticallyCentered(element) {
-		var elementHeight = element.getRawPosition().height;
+		var elementHeight = Math.round(element.getRawPosition().height);
 		return elementHeight + "px" === exports.lineHeight(element);
 	};
 
