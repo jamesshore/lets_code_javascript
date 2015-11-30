@@ -15,10 +15,14 @@
 	var strict = !process.env.loose;
 	if (strict) console.log("For more forgiving test settings, use 'loose=true'");
 
+	var itonly = process.env.itonly;
+
 	//*** DIRECTORIES
 
 	directory(paths.tempTestfileDir);
 	directory(paths.buildDir);
+	directory(paths.buildServerDir);
+	directory(paths.buildSharedDir);
 	directory(paths.buildClientDir);
 	directory(paths.incrementalDir);
 
@@ -84,23 +88,43 @@
 	desc("Test server code");
 	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ], paths.serverFiles(),
 		function(complete, fail) {
-		console.log("Testing server code: ");
+		console.log("Testing server JavaScript: ");
 		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
 			options: mochaConfig()
 		}, complete, fail);
 	});
 
-
 	desc("Test client code");
-	incrementalTask("testClient", paths.clientTestTarget, [], paths.clientFiles(), function(complete, fail) {
-		console.log("Testing browser code: ");
+	task("testClient", [ "testClientJavaScript", "testClientCss" ]);
+
+	incrementalTask("testClientJavaScript", paths.clientTestTarget, [], paths.clientJsTestDependencies(), function(complete, fail) {
+		console.log("Testing browser JavaScript: ");
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
-			browsers: require("./build/config/tested_browsers.js"),
-			strict: strict
+			browsers: testedBrowsers(),
+			strict: strict,
+			clientArgs: testSubsetArgs("JS")
 		}, complete, fail);
 	});
+
+	incrementalTask("testClientCss", paths.cssTestTarget, [], paths.cssTestDependencies(), function(complete, fail) {
+		console.log("Testing CSS:");
+		karmaRunner().runTests({
+			configFile: paths.karmaConfig,
+			browsers: testedBrowsers(),
+			strict: strict,
+			clientArgs: testSubsetArgs("CSS")
+		}, complete, fail);
+	});
+
+	function testSubsetArgs(tag) {
+		// We use Mocha's "grep" feature as a poor-man's substitute for proper test tagging and subsetting
+		// (which Mocha doesn't have at the time of this writing). However, Mocha's grep option disables
+		// Mocha's "it.only()" feature. So we don't use grep if the "itonly" option is set on the command
+		// line.
+		return itonly ? [] : [ "--grep=" + tag + ":" ];
+	}
 
 	desc("End-to-end smoke tests");
 	task("smoketest", [ "build" ], function() {
@@ -112,10 +136,25 @@
 	}, { async: true });
 
 
-	//*** BUILD
+	//*** BUILD DISTRIBUTION DIRECTORY
 
 	desc("Bundle and build code");
-	task("build", [ "cacheBust" ]);
+	task("build", [ "server", "client" ]);
+
+	task("server", [ paths.buildServerDir, paths.buildSharedDir ], function() {
+		console.log("Collating server files: .");
+
+		shell().rm("-rf", paths.buildDir + "/server/*");
+		shell().rm("-rf", paths.buildDir + "/shared/*");
+		shell().cp(
+			"-R",
+			"src/server",
+			"src/shared",
+			paths.buildDir
+		);
+	});
+
+	task("client", [ "cacheBust" ]);
 
 	task("cacheBust", [ "collateClientFiles", "bundleClientJs" ], function() {
 		process.stdout.write("Cache-busting CSS and JavaScript: ");
@@ -123,10 +162,10 @@
 		var hashCatRunner = require("./build/util/hashcat_runner.js");
 		hashCatRunner.go({
 			files: [ paths.buildClientIndexHtml, paths.buildClient404Html ]
-		}, removeOriginalFiles, fail);
+		}, removeUnwantedFiles, fail);
 
-		function removeOriginalFiles() {
-			shell().rm(paths.buildIntermediateFilesToErase);
+		function removeUnwantedFiles() {
+			shell().rm(paths.buildIntermediateFilesToErase());
 			complete();
 		}
 
@@ -138,7 +177,7 @@
 		shell().rm("-rf", paths.buildClientDir + "/*");
 		shell().cp(
 			"-R",
-			"src/client/*.html", "src/client/*.css", "src/client/images", "src/client/vendor", "src/shared/vendor",
+			"src/client/content/*", "src/client/js/vendor", "src/shared/vendor",
 			paths.buildClientDir
 		);
 	});
@@ -149,8 +188,8 @@
 		var browserifyRunner = require("./build/util/browserify_runner.js");
 		browserifyRunner.bundle({
 			requires: [
-				{ path: "./src/client/client.js", expose: "./client.js" },
-				{ path: "./src/client/html_element.js", expose: "./html_element.js" }
+				{ path: "./src/client/js/client.js", expose: "./client.js" },
+				{ path: "./src/client/js/html_element.js", expose: "./html_element.js" }
 			],
 			outfile: paths.buildClientDir + "/bundle.js",
 			options: { debug: true }
@@ -194,12 +233,13 @@
 	task("deploy", function() {
 		console.log("To deploy to production:");
 		console.log("1. Make sure `git status` is clean");
-		console.log("2. Check in release code: `git add generated/build/client -f && git commit`");
+		console.log("2. Run full build (`jake`) and make sure it builds okay");
+		console.log("3. Check in release code: `git add generated/dist -f && git commit`");
 		console.log("4. Integrate");
 		console.log("5. Deploy integrated code to staging: `git push staging integration:master`");
-		console.log("3. Verify by visiting http://wwp-staging.herokuapp.com");
-		console.log("6. Deploy integrated to production: `git push heroku integration:master`");
-		console.log("7. Remove `generated/build/client` from git");
+		console.log("6. Verify by visiting http://wwp-staging.herokuapp.com");
+		console.log("7. Deploy integrated to production: `git push heroku integration:master`");
+		console.log("8. Remove `generated/dist` from git");
 	});
 
 	desc("End-of-episode checklist");
@@ -263,6 +303,10 @@
 
 	function shell() {
 		return require("shelljs");
+	}
+
+	function testedBrowsers() {
+		return require("./build/config/tested_browsers.js");
 	}
 
 }());

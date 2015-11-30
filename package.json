@@ -2,19 +2,19 @@
   "name": "weewikipaint",
   "version": "0.0.1",
   "engines": {
-    "node": "0.12.4"
+    "node": "5.0.0"
   },
   "devDependencies": {
-    "async": "^0.9.0",
-    "browserify": "^11.0.1",
+    "async": "^0.9.2",
+    "browserify": "^12.0.1",
     "glob": "^5.0.14",
     "hashcat": "^0.3.1",
     "jake": "^8.0.12",
     "jshint": "^2.8.0",
-    "karma": "^0.13.9",
+    "karma": "^0.13.15",
     "karma-commonjs": "0.0.13",
-    "karma-mocha": "^0.2.0",
-    "mocha": "^2.3.0",
+    "karma-mocha": "^0.2.1",
+    "mocha": "^2.3.3",
     "procfile": "^0.1.1",
     "selenium-webdriver": "^2.46.1",
     "semver": "^4.3.6",

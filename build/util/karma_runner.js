@@ -24,7 +24,8 @@
 		var config = {
 			configFile: path.resolve(options.configFile),
 			browsers: options.capture,
-			singleRun: options.capture.length > 0
+			singleRun: options.capture.length > 0,
+			clientArgs: options.clientArgs
 		};
 
 		var runKarma = runner.run.bind(runner);

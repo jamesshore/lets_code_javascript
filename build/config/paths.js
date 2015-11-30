@@ -8,18 +8,24 @@
 	exports.generatedDir = "generated";
 	exports.tempTestfileDir = "generated/test";
 
-	exports.buildDir = "generated/build";
-	exports.buildClientDir = "generated/build/client";
-	exports.buildClientIndexHtml = "generated/build/client/index.html";
-	exports.buildClient404Html = "generated/build/client/404.html";
-	exports.buildIntermediateFilesToErase = [
-		"./generated/build/client/bundle.js",
-		"./generated/build/client/screen.css",
-	];
+	exports.buildDir = "generated/dist";
+	exports.buildServerDir = "generated/dist/server";
+	exports.buildSharedDir = "generated/dist/shared";
+	exports.buildClientDir = "generated/dist/client";
+	exports.buildClientIndexHtml = "generated/dist/client/index.html";
+	exports.buildClient404Html = "generated/dist/client/404.html";
+	exports.buildIntermediateFilesToErase = function() {
+		return deglob([
+			"./generated/dist/client/_*",
+			"./generated/dist/client/bundle.js",
+			"./generated/dist/client/screen.css"
+		]);
+	};
 
 	exports.incrementalDir = "generated/incremental";
 	exports.serverTestTarget = "generated/incremental/server.test";
 	exports.clientTestTarget = "generated/incremental/client.test";
+	exports.cssTestTarget = "generated/incremental/css.test";
 
 	exports.karmaConfig = "./build/config/karma.conf.js";
 
@@ -27,13 +33,17 @@
 		return deglob("src/server/**/_*_test.js");
 	};
 
-	exports.clientFiles = function() {
+	exports.clientJsTestDependencies = function() {
 		return deglob([
-			"src/client/**/*.js",
-			"src/client/**/*.html",
-			"src/client/**/*.css",
-			"src/shared/**/*.js",
-			"src/client/vendor/**/*.js"
+			"src/client/js/**/*",
+			"src/shared/**/*"
+		]);
+	};
+
+	exports.cssTestDependencies = function() {
+		return deglob([
+			"src/client/content/**/*",
+			"src/shared/**/*"
 		]);
 	};
 
@@ -53,7 +63,8 @@
 		return deglob([
 			"*.js",
 			"build/**/*.js",
-			"src/client/*.js",
+			"src/client/js/*.js",
+			"src/client/content/*.js",
 			"src/server/**/*.js",
 			"src/shared/**/*.js",
 			"src/*.js"
@@ -74,7 +85,10 @@
 
 	function deglob(patterns) {
 		var globPattern = patterns;
-		if (Array.isArray(patterns)) globPattern = "{" + patterns.join(",") + "}";
+		if (Array.isArray(patterns)) {
+			if (patterns.length === 1) globPattern = patterns[0];
+			else globPattern = "{" + patterns.join(",") + "}";
+		}
 
 		return glob.sync(globPattern);
 	}

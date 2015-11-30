@@ -74,6 +74,8 @@ To build and test this episode:
 
 You can also run `./jake.sh quick loose=true` for a faster but less thorough set of tests.
 
+If you want to use Mocha's `it.only()` feature to run just one test, pass `itonly=true` as well.
+
 *Note:* The master branch is not guaranteed to build successfully. For a known-good build (tested on Mac and Windows, and assumed to work on Linux), use the integration branch. To change branches, follow the steps under "Running old episodes" (above), but replace `episodeXX` with `integration` (for the known-good integration branch) or `master` (for the latest code).
 
 
