@@ -7,7 +7,8 @@ Minimum Marketable Features:
 + IE 11 support (and get rid of IE 8) (episodes 322-324)
 + Android support (episodes 325-327)
 + iOS 8 support (episode 328)
-* replace 404 page with professional design (episodes 329+)
++ replace 404 page with professional design (episodes 329-369)
+- collaborative painting (episode 370+)
 - responsive design
 - accessibility
 - polish
@@ -18,20 +19,14 @@ Minimum Marketable Features:
 	- iOS buttons flash rather than depressing
 	- IE 9 and IE 11, button goes diagonally rather than vertically (but only for button, not for links)
 ? multiple painting/erasing tools
-- collaborative painting
 - save the pages (persistence / databases)
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
 
 User Stories to finish current MMF:
-* update design
-- release
+* release
 
 Engineering Tasks:
-* Restore 'it.only()' functionality of client test build (conflicts with grep-based test subsetting)
-- Is there a better of handling cross-directory requires (e.g., `require("../shared/_assert.js")` broke)?
-- Where do we want our vendor files to live?
-- Move hard-coded paths in Jakefile.js to paths.js?
 
 To Do on current task:
