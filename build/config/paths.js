@@ -9,6 +9,8 @@
 	exports.tempTestfileDir = "generated/test";
 
 	exports.buildDir = "generated/dist";
+	exports.buildServerDir = "generated/dist/server";
+	exports.buildSharedDir = "generated/dist/shared";
 	exports.buildClientDir = "generated/dist/client";
 	exports.buildClientIndexHtml = "generated/dist/client/index.html";
 	exports.buildClient404Html = "generated/dist/client/404.html";
@@ -16,7 +18,7 @@
 		return deglob([
 			"./generated/dist/client/_*",
 			"./generated/dist/client/bundle.js",
-			"./generated/dist/client/screen.css",
+			"./generated/dist/client/screen.css"
 		]);
 	};
 

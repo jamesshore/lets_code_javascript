@@ -19,6 +19,8 @@
 
 	directory(paths.tempTestfileDir);
 	directory(paths.buildDir);
+	directory(paths.buildServerDir);
+	directory(paths.buildSharedDir);
 	directory(paths.buildClientDir);
 	directory(paths.incrementalDir);
 
@@ -127,7 +129,22 @@
 	//*** BUILD DISTRIBUTION DIRECTORY
 
 	desc("Bundle and build code");
-	task("build", [ "cacheBust" ]);
+	task("build", [ "server", "client" ]);
+
+	task("server", [ paths.buildServerDir, paths.buildSharedDir ], function() {
+		console.log("Collating server files: .");
+
+		shell().rm("-rf", paths.buildDir + "/server/*");
+		shell().rm("-rf", paths.buildDir + "/shared/*");
+		shell().cp(
+			"-R",
+			"src/server",
+			"src/shared",
+			paths.buildDir
+		);
+	});
+
+	task("client", [ "cacheBust" ]);
 
 	task("cacheBust", [ "collateClientFiles", "bundleClientJs" ], function() {
 		process.stdout.write("Cache-busting CSS and JavaScript: ");
@@ -206,12 +223,12 @@
 	task("deploy", function() {
 		console.log("To deploy to production:");
 		console.log("1. Make sure `git status` is clean");
-		console.log("2. Check in release code: `git add generated/build/client -f && git commit`");
+		console.log("2. Check in release code: `git add generated/dist -f && git commit`");
 		console.log("4. Integrate");
 		console.log("5. Deploy integrated code to staging: `git push staging integration:master`");
 		console.log("3. Verify by visiting http://wwp-staging.herokuapp.com");
 		console.log("6. Deploy integrated to production: `git push heroku integration:master`");
-		console.log("7. Remove `generated/build/client` from git");
+		console.log("7. Remove `generated/dist` from git");
 	});
 
 	desc("End-of-episode checklist");
