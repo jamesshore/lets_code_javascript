@@ -233,12 +233,13 @@
 	task("deploy", function() {
 		console.log("To deploy to production:");
 		console.log("1. Make sure `git status` is clean");
-		console.log("2. Check in release code: `git add generated/dist -f && git commit`");
+		console.log("2. Run full build (`jake`) and make sure it builds okay");
+		console.log("3. Check in release code: `git add generated/dist -f && git commit`");
 		console.log("4. Integrate");
 		console.log("5. Deploy integrated code to staging: `git push staging integration:master`");
-		console.log("3. Verify by visiting http://wwp-staging.herokuapp.com");
-		console.log("6. Deploy integrated to production: `git push heroku integration:master`");
-		console.log("7. Remove `generated/dist` from git");
+		console.log("6. Verify by visiting http://wwp-staging.herokuapp.com");
+		console.log("7. Deploy integrated to production: `git push heroku integration:master`");
+		console.log("8. Remove `generated/dist` from git");
 	});
 
 	desc("End-of-episode checklist");
