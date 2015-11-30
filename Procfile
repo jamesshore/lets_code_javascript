@@ -1,1 +1,1 @@
-web: node generated/dist/server/weewikipaint.js $PORT
+web: node generated/dist/server/run.js $PORT

@@ -36,8 +36,4 @@ Engineering Tasks:
 - Move hard-coded paths in Jakefile.js to paths.js?
 
 To Do on current task:
-- Copy server code into dist directory
-- Modify runners to run out of the distribution directory
-	- Procfile
-	- weewikipaint.js
 - Rename weewikipaint.js --> run.js?
