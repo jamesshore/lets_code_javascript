@@ -12,10 +12,13 @@
 	exports.buildClientDir = "generated/dist/client";
 	exports.buildClientIndexHtml = "generated/dist/client/index.html";
 	exports.buildClient404Html = "generated/dist/client/404.html";
-	exports.buildIntermediateFilesToErase = [
-		"./generated/dist/client/bundle.js",
-		"./generated/dist/client/screen.css",
-	];
+	exports.buildIntermediateFilesToErase = function() {
+		return deglob([
+			"./generated/dist/client/_*",
+			"./generated/dist/client/bundle.js",
+			"./generated/dist/client/screen.css",
+		]);
+	};
 
 	exports.incrementalDir = "generated/incremental";
 	exports.serverTestTarget = "generated/incremental/server.test";

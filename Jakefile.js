@@ -135,10 +135,10 @@
 		var hashCatRunner = require("./build/util/hashcat_runner.js");
 		hashCatRunner.go({
 			files: [ paths.buildClientIndexHtml, paths.buildClient404Html ]
-		}, removeOriginalFiles, fail);
+		}, removeUnwantedFiles, fail);
 
-		function removeOriginalFiles() {
-			shell().rm(paths.buildIntermediateFilesToErase);
+		function removeUnwantedFiles() {
+			shell().rm(paths.buildIntermediateFilesToErase());
 			complete();
 		}
 
