@@ -29,11 +29,9 @@ User Stories to finish current MMF:
 - release
 
 Engineering Tasks:
-* Run server code out of generated/dist as well (fix hardcoded path in weewikipaint.js)
-- Restore 'it.only()' functionality of client test build (conflicts with grep-based test subsetting)
+* Restore 'it.only()' functionality of client test build (conflicts with grep-based test subsetting)
 - Is there a better of handling cross-directory requires (e.g., `require("../shared/_assert.js")` broke)?
 - Where do we want our vendor files to live?
 - Move hard-coded paths in Jakefile.js to paths.js?
 
 To Do on current task:
-- Rename weewikipaint.js --> run.js?

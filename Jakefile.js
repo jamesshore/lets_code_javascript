@@ -15,6 +15,8 @@
 	var strict = !process.env.loose;
 	if (strict) console.log("For more forgiving test settings, use 'loose=true'");
 
+	var itonly = process.env.itonly;
+
 	//*** DIRECTORIES
 
 	directory(paths.tempTestfileDir);
@@ -102,7 +104,7 @@
 			configFile: paths.karmaConfig,
 			browsers: testedBrowsers(),
 			strict: strict,
-			clientArgs: [ "--grep=JS:" ]
+			clientArgs: testSubsetArgs("JS")
 		}, complete, fail);
 	});
 
@@ -112,9 +114,17 @@
 			configFile: paths.karmaConfig,
 			browsers: testedBrowsers(),
 			strict: strict,
-			clientArgs: [ "--grep=CSS:" ]
+			clientArgs: testSubsetArgs("CSS")
 		}, complete, fail);
 	});
+
+	function testSubsetArgs(tag) {
+		// We use Mocha's "grep" feature as a poor-man's substitute for proper test tagging and subsetting
+		// (which Mocha doesn't have at the time of this writing). However, Mocha's grep option disables
+		// Mocha's "it.only()" feature. So we don't use grep if the "itonly" option is set on the command
+		// line.
+		return itonly ? [] : [ "--grep=" + tag + ":" ];
+	}
 
 	desc("End-to-end smoke tests");
 	task("smoketest", [ "build" ], function() {
