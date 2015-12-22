@@ -36,7 +36,7 @@ User Stories to finish current MMF:
 - collision-handling / conflicts / race conditions
 - load management
 - server monitoring / error handling
-- security (handling bad data)
+- security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
 * Spike it locally
