@@ -9,6 +9,7 @@ Minimum Marketable Features:
 + iOS 8 support (episode 328)
 + replace 404 page with professional design (episodes 329-369)
 * collaborative painting (episode 370+)
+- multiple servers
 - responsive design
 - accessibility
 - polish
@@ -25,8 +26,22 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* release
+* figure out what libraries we're going to use for real-time collaboration
+	- get them to work with Heroku
+- see other users' mouse pointers
+- multi-user clear button
+- multi-user line drawing
+- version synchronization across client/server
+- offline handling
+- collision-handling / conflicts / race conditions
+- load management
+- server monitoring / error handling
+- security (handling bad data)
 
 Engineering Tasks:
+- Choose a real-time library
+- Spike it locally
+- Test that it works with Heroku
 
 To Do on current task:
+-
