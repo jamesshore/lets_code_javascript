@@ -39,9 +39,9 @@ User Stories to finish current MMF:
 - security (handling bad data)
 
 Engineering Tasks:
-- Choose a real-time library
-- Spike it locally
+* Spike it locally
 - Test that it works with Heroku
 
 To Do on current task:
--
+* Re-create example app
+- Make a little chat app
