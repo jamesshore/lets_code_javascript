@@ -1,16 +1,29 @@
-<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
-<script>
-	console.log("Client started");
+<!DOCTYPE html>
+<html lang="en">
 
-  var socket = io('http://localhost:8080');
-	console.log("Socket created");
+<head>
+	<title>socket.io spike</title>
 
-  socket.on('news', function (data) {
-	  console.log("'news' event received");
+	<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+	<script>
+		console.log("Client started");
 
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
+	  var socket = io('http://localhost:8080');
+		console.log("Socket created");
 
-	  console.log("'my other event' emitted");
-  });
-</script>
+	  socket.on('news', function (data) {
+		  console.log("'news' event received");
+
+	    console.log(data);
+	    socket.emit('my other event', { my: 'data' });
+
+		  console.log("'my other event' emitted");
+	  });
+	</script>
+</head>
+
+<body>
+
+</body>
+
+</html>

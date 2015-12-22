@@ -42,6 +42,7 @@ Engineering Tasks:
 * Spike it locally
 - Test that it works with Heroku
 - Figure out bundling and distribution for socket.io client (in the next story)
+- Check IE 9
 
 To Do on current task:
 * Re-create example app

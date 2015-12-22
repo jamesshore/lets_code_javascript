@@ -6,6 +6,7 @@ app.listen(8080);
 
 console.log("Server started");
 function handler (req, res) {
+	console.log("Request received");
 
   fs.readFile(__dirname + '/index.html',
   function (err, data) {
