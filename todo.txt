@@ -45,5 +45,6 @@ Engineering Tasks:
 - Check IE 9
 
 To Do on current task:
+- AT START OF NEXT EPISODE: Consider Faye
 * Re-create example app
 - Make a little chat app
