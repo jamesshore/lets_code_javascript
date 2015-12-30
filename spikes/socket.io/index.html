@@ -5,6 +5,18 @@
 	<title>socket.io spike</title>
 
 	<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+</head>
+
+<body>
+
+	<div id="messages">
+		Server messages go here
+	</div>
+
+	<input id="myMessage" type="text" />
+
+	<input id="post" type="submit" value="Post" />
+
 	<script>
 		console.log("Client started");
 
@@ -19,10 +31,25 @@
 
 		  console.log("'my other event' emitted");
 	  });
-	</script>
-</head>
 
-<body>
+		var postButton = document.getElementById("post");
+		var myMessage = document.getElementById("myMessage");
+		var messages = document.getElementById("messages");
+
+		postButton.addEventListener("click", function() {
+			var message = myMessage.value;
+
+			console.log("POST: " + message);
+			socket.emit("message", message);
+		});
+
+		socket.on("serverMessage", function(message) {
+			console.log("RECEIVED: " + message);
+			messages.innerHTML += "<br>" + message;
+		});
+
+	</script>
+
 
 </body>
 

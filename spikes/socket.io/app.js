@@ -32,4 +32,10 @@ io.on('connection', function (socket) {
 
     console.log(data);
   });
+
+	socket.on("message", function(message) {
+		console.log("Message posted: " + message);
+		socket.emit("serverMessage", message);
+	});
+
 });
