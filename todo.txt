@@ -8,7 +8,8 @@ Minimum Marketable Features:
 + Android support (episodes 325-327)
 + iOS 8 support (episode 328)
 + replace 404 page with professional design (episodes 329-369)
-- collaborative painting (episode 370+)
+* collaborative painting (episode 370+)
+- multiple servers
 - responsive design
 - accessibility
 - polish
@@ -16,16 +17,28 @@ Minimum Marketable Features:
   - drawing glitches occur when exiting drawing area that is flush against side of browser
   - one-pixel gap on right side of drawing area (Firefox, others unknown)
   - favicon
-	- iOS buttons flash rather than depressing
-	- IE 9 and IE 11, button goes diagonally rather than vertically (but only for button, not for links)
-? multiple painting/erasing tools
+	- 'clear' button flashes rather than depressing (iOS)
+	- 'clear' button depresses diagonally rather than vertically (IE 9, IE 11)
+- multiple painting/erasing tools
 - save the pages (persistence / databases)
 - wiki-fy the pages
 - more complex painting?
 - more collaborative features?
 
 User Stories to finish current MMF:
-* release
+* figure out what libraries we're going to use for real-time collaboration
+	- get them to work with Heroku
+- Drop IE 9 support and add MS Edge instead
+- see other users' mouse pointers
+	- Figure out bundling and distribution for socket.io client (in the next story)
+- multi-user clear button
+- multi-user line drawing
+- version synchronization across client/server
+- offline handling
+- collision-handling / conflicts / race conditions
+- load management
+- server monitoring / error handling
+- security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
 
