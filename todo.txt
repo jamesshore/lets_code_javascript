@@ -45,6 +45,9 @@ Engineering Tasks:
 - Check IE 9
 
 To Do on current task:
-- AT START OF NEXT EPISODE: Consider Faye
+- AT START OF NEXT EPISODE:
+ 	- Figured out IE9 issue: wrong URL in client (d'oh!)
+	- Consider Faye
+	- Discuss dropping IE 9 support, adding IE Edge
 * Re-create example app
 - Make a little chat app
