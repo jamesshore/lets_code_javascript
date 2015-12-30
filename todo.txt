@@ -28,6 +28,7 @@ Minimum Marketable Features:
 User Stories to finish current MMF:
 * figure out what libraries we're going to use for real-time collaboration
 	- get them to work with Heroku
+- Drop IE 9 support and add MS Edge instead
 - see other users' mouse pointers
 - multi-user clear button
 - multi-user line drawing
@@ -39,15 +40,14 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Spike it locally
+* Make a little chat app
 - Test that it works with Heroku
 - Figure out bundling and distribution for socket.io client (in the next story)
+- Figure out how to not hardcode socket.io URL in the client
 - Check IE 9
 
 To Do on current task:
-- AT START OF NEXT EPISODE:
- 	- Figured out IE9 issue: wrong URL in client (d'oh!)
-	- Consider Faye
-	- Discuss dropping IE 9 support, adding IE Edge
-* Re-create example app
-- Make a little chat app
+* Create index.html with text field and submit
+- Send event when text field is posted
+- Listen for server events and update some sort of chat div
+- Server: reflect text field submissions back to clients
