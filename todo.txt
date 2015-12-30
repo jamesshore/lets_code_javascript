@@ -30,6 +30,7 @@ User Stories to finish current MMF:
 	- get them to work with Heroku
 - Drop IE 9 support and add MS Edge instead
 - see other users' mouse pointers
+	- Figure out bundling and distribution for socket.io client (in the next story)
 - multi-user clear button
 - multi-user line drawing
 - version synchronization across client/server
@@ -40,9 +41,5 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Test that it works with Heroku
-- Figure out bundling and distribution for socket.io client (in the next story)
 
 To Do on current task:
-* Deploy it to staging server
-- Test it out

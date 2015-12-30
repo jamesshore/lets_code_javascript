@@ -1,1 +1,1 @@
-web: node spikes/socket.io/app.js $PORT
+web: node generated/dist/server/run.js $PORT
