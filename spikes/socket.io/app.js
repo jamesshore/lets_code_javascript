@@ -24,18 +24,9 @@ function handler (req, res) {
 io.on('connection', function (socket) {
 	console.log("Connection created");
 
-  socket.emit('news', { hello: 'world' });
-	console.log("'news' event emitted");
-
-  socket.on('my other event', function (data) {
-	  console.log("event received");
-
-    console.log(data);
-  });
-
 	socket.on("message", function(message) {
 		console.log("Message posted: " + message);
-		socket.emit("serverMessage", message);
+		io.emit("serverMessage", message);
 	});
 
 });

@@ -40,14 +40,10 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Make a little chat app
+* Figure out how to not hardcode socket.io URL in the client
 - Test that it works with Heroku
 - Figure out bundling and distribution for socket.io client (in the next story)
-- Figure out how to not hardcode socket.io URL in the client
 - Check IE 9
 
 To Do on current task:
-* Create index.html with text field and submit
-- Send event when text field is posted
-- Listen for server events and update some sort of chat div
-- Server: reflect text field submissions back to clients
+-

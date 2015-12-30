@@ -20,18 +20,6 @@
 	<script>
 		console.log("Client started");
 
-	  var socket = io('http://localhost:8080');
-		console.log("Socket created");
-
-	  socket.on('news', function (data) {
-		  console.log("'news' event received");
-
-	    console.log(data);
-	    socket.emit('my other event', { my: 'data' });
-
-		  console.log("'my other event' emitted");
-	  });
-
 		var postButton = document.getElementById("post");
 		var myMessage = document.getElementById("myMessage");
 		var messages = document.getElementById("messages");
@@ -41,6 +29,17 @@
 
 			console.log("POST: " + message);
 			socket.emit("message", message);
+		});
+
+		var origin = window.location.protocol + "//" + window.location.host;
+
+		console.log("Opening socket to origin: " + origin);
+
+		var socket = io(origin);
+		console.log("Socket created");
+
+		socket.on("connect", function() {
+			console.log("Connection established");
 		});
 
 		socket.on("serverMessage", function(message) {
