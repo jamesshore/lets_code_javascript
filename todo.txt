@@ -40,10 +40,9 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Figure out how to not hardcode socket.io URL in the client
-- Test that it works with Heroku
+* Test that it works with Heroku
 - Figure out bundling and distribution for socket.io client (in the next story)
-- Check IE 9
 
 To Do on current task:
--
+* Deploy it to staging server
+- Test it out
