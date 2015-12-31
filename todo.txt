@@ -45,3 +45,4 @@ Engineering Tasks:
 To Do on current task:
 - AT START OF NEXT EPISODE:
 	- Integrated
+	- Replaced IE 9 with MS Edge
