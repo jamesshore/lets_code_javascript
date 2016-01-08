@@ -7,6 +7,7 @@
 	var fs = require("fs");
 	var async = require("async");
 	var assert = require("../shared/_assert.js");
+	var io = require("socket.io-client");
 
 	var CONTENT_DIR = "generated/test";
 
@@ -141,9 +142,12 @@
 
 	describe("Socket.io Server", function() {
 
-		it("does something", function() {
+		it("does something", function(done) {
 
-			
+			var socket = io('http://localhost:8080');
+	    socket.on('connect', function() {
+		    done();
+	    });
 
 		});
 
