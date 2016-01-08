@@ -18,7 +18,8 @@
     "procfile": "^0.1.1",
     "selenium-webdriver": "^2.46.1",
     "semver": "^5.1.0",
-    "shelljs": "^0.5.3"
+    "shelljs": "^0.5.3",
+    "socket.io-client": "^1.4.3"
   },
   "dependencies": {
     "send": "^0.13.0",
