@@ -21,6 +21,10 @@
 				else throw err;
 			}
 		});
+
+
+		var io = require('socket.io')(server);
+
 		server.listen(portNumber, callback);
 	};
 

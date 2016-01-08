@@ -142,13 +142,13 @@
 
 	describe("Socket.io Server", function() {
 
-		it("does something", function(done) {
-
-			var socket = io('http://localhost:8080');
-	    socket.on('connect', function() {
-		    done();
-	    });
-
+		it("test connects to the server", function(done) {
+			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {
+				var socket = io("http://localhost:" + PORT);
+				socket.on('connect', function() {
+					server.stop(done);
+				});
+			});
 		});
 
 	});
