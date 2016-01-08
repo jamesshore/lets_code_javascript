@@ -27,7 +27,7 @@
 		[ CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA]
 	];
 
-	describe("Server", function() {
+	describe("HTTP Server", function() {
 
 		beforeEach(function(done) {
 			async.each(TEST_FILES, createTestFile, done);
@@ -48,14 +48,6 @@
 		it("sets content-type and charset for HTML files", function(done) {
 			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
 				assert.equal(response.headers["content-type"], "text/html; charset=UTF-8", "content-type header");
-				done();
-			});
-		});
-
-		it("supports multiple files", function(done) {
-			httpGet(BASE_URL + "/" + OTHER_PAGE, function(response, responseData) {
-				assert.equal(response.statusCode, 200, "status code");
-				assert.equal(responseData, OTHER_PAGE_DATA, "response text");
 				done();
 			});
 		});
@@ -123,28 +115,40 @@
 			});
 		});
 
-	});
+		function httpGet(url, callback) {
+			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {
+				http.get(url, function(response) {
+					var receivedData = "";
+					response.setEncoding("utf8");
 
-	function httpGet(url, callback) {
-		server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {
-			http.get(url, function(response) {
-				var receivedData = "";
-				response.setEncoding("utf8");
-
-				response.on("data", function(chunk) {
-					receivedData += chunk;
-				});
-				response.on("error", function(err) {
-					console.log("ERROR", err);
-				});
-				response.on("end", function() {
-					server.stop(function() {
-						callback(response, receivedData);
+					response.on("data", function(chunk) {
+						receivedData += chunk;
+					});
+					response.on("error", function(err) {
+						console.log("ERROR", err);
+					});
+					response.on("end", function() {
+						server.stop(function() {
+							callback(response, receivedData);
+						});
 					});
 				});
 			});
+		}
+
+	});
+
+
+	describe("Socket.io Server", function() {
+
+		it("does something", function() {
+
+			
+
 		});
-	}
+
+	});
+
 
 	function createTestFile(fileAndData, done) {
 		// Note: writeFile() MUST be called asynchronously in order for this code to work on Windows 7.
