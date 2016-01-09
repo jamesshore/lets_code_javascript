@@ -142,10 +142,12 @@
 
 	describe("Socket.io Server", function() {
 
-		it("connects", function(done) {
+		it("sends an event upon connection", function(done) {
 			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {
 				var socket = io("http://localhost:" + PORT);
-				socket.on("connect", function() {
+
+				socket.on("message", function(data) {
+					assert.equal(data, "something");
 					// timeout is necessary due to apparent race condition in socket.io-client
 					// see https://github.com/socketio/socket.io-client/issues/935
 					setTimeout(function() {

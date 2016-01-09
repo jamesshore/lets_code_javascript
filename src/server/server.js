@@ -27,6 +27,11 @@
 
 		ioServer = io(httpServer);
 		httpServer.listen(portNumber, callback);
+
+		ioServer.on("connect", function(socket) {
+			socket.emit("message", "something");
+		});
+
 	};
 
 	exports.stop = function(callback) {
