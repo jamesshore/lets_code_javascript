@@ -29,7 +29,9 @@
 		httpServer.listen(portNumber, callback);
 
 		ioServer.on("connect", function(socket) {
-			socket.emit("message", "something");
+			socket.on("mouse", function(data) {
+				socket.emit("mouse", data);
+			});
 		});
 
 	};

@@ -159,11 +159,14 @@
 			}, 50);
 		});
 
-		it("sends an event upon connection", function(done) {
-			socket.on("message", function(data) {
-				assert.equal(data, "something");
+		it("reflect mouse messages back", function(done) {
+			var EXPECTED_DATA = "mouse data";
+
+			socket.on("mouse", function(data) {
+				assert.equal(data, EXPECTED_DATA);
 				done();
 			});
+			socket.emit("mouse", EXPECTED_DATA);
 		});
 
 	});

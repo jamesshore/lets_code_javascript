@@ -44,6 +44,5 @@ Engineering Tasks:
 - Figure out bundling and distribution for socket.io client
 
 To Do on current task:
-* Test-drive a simple server-side emit
-- Test-drive most basic version of client/server reflection
+* Test-drive most basic version of client/server reflection
 - ???
