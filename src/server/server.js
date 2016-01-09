@@ -5,13 +5,16 @@
 	var http = require("http");
 	var fs = require("fs");
 	var send = require("send");
-	var server;
+	var io = require('socket.io');
+
+	var httpServer;
+	var ioServer;
 
 	exports.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
 		if (!portNumber) throw "port number is required";
 
-		server = http.createServer();
-		server.on("request", function(request, response) {
+		httpServer = http.createServer();
+		httpServer.on("request", function(request, response) {
 			send(request, request.url, { root: contentDir }).
 				on("error", handleError).
 				pipe(response);
@@ -22,14 +25,12 @@
 			}
 		});
 
-
-		var io = require('socket.io')(server);
-
-		server.listen(portNumber, callback);
+		ioServer = io(httpServer);
+		httpServer.listen(portNumber, callback);
 	};
 
 	exports.stop = function(callback) {
-		server.close(callback);
+		httpServer.close(callback);
 	};
 
 	function serveErrorFile(response, statusCode, file) {
