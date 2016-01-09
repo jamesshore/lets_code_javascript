@@ -44,5 +44,6 @@ Engineering Tasks:
 - Figure out bundling and distribution for socket.io client
 
 To Do on current task:
-* Test-drive most basic version of client/server reflection
+- broadcast events to all clients (spin up multiple clients in our tests)
+- exclude original emitter from receiving broadcasted events
 - Convert server.js to be object-oriented rather than a monostate?

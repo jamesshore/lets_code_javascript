@@ -145,18 +145,13 @@
 
 		beforeEach(function(done) {
 			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {
-				socket = io("http://localhost:" + PORT);
+				socket = createSocket();
 				done();
 			});
 		});
 
 		afterEach(function(done) {
-			// timeout is necessary due to apparent race condition in socket.io-client
-			// see https://github.com/socketio/socket.io-client/issues/935
-			setTimeout(function() {
-				socket.disconnect();
-				server.stop(done);
-			}, 50);
+			closeSocket(socket, done);
 		});
 
 		it("reflect mouse messages back", function(done) {
@@ -168,6 +163,23 @@
 			});
 			socket.emit("mouse", EXPECTED_DATA);
 		});
+
+		it("broadcasts mouse messages to all clients", function(done) {
+			done();
+		});
+
+		function createSocket() {
+			return io("http://localhost:" + PORT);
+		}
+
+		function closeSocket(socket, callback) {
+			// timeout is necessary due to apparent race condition in socket.io-client
+			// see https://github.com/socketio/socket.io-client/issues/935
+			setTimeout(function() {
+				socket.disconnect();
+				server.stop(callback);
+			}, 50);
+		}
 
 	});
 
