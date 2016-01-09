@@ -10,35 +10,41 @@
 	var httpServer;
 	var ioServer;
 
+
 	exports.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
 		if (!portNumber) throw "port number is required";
 
 		httpServer = http.createServer();
+		handleHttpRequests(contentDir, notFoundPageToServe);
+
+		ioServer = io(httpServer);
+		handleSocketIoEvents();
+
+		httpServer.listen(portNumber, callback);
+	};
+
+	exports.stop = function(callback) {
+		httpServer.close(callback);
+	};
+
+	function handleHttpRequests(contentDir, notFoundPageToServe) {
 		httpServer.on("request", function(request, response) {
-			send(request, request.url, { root: contentDir }).
-				on("error", handleError).
-				pipe(response);
+			send(request, request.url, { root: contentDir }).on("error", handleError).pipe(response);
 
 			function handleError(err) {
 				if (err.status === 404) serveErrorFile(response, 404, contentDir + "/" + notFoundPageToServe);
 				else throw err;
 			}
 		});
+	}
 
-		ioServer = io(httpServer);
-		httpServer.listen(portNumber, callback);
-
+	function handleSocketIoEvents() {
 		ioServer.on("connect", function(socket) {
 			socket.on("mouse", function(data) {
 				socket.emit("mouse", data);
 			});
 		});
-
-	};
-
-	exports.stop = function(callback) {
-		httpServer.close(callback);
-	};
+	}
 
 	function serveErrorFile(response, statusCode, file) {
 		response.statusCode = statusCode;

@@ -45,4 +45,4 @@ Engineering Tasks:
 
 To Do on current task:
 * Test-drive most basic version of client/server reflection
-- ???
+- Convert server.js to be object-oriented rather than a monostate?
