@@ -144,22 +144,20 @@
 		var socket;
 
 		beforeEach(function(done) {
-			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {
-				socket = createSocket();
-				done();
-			});
+			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, done);
 		});
 
 		afterEach(function(done) {
-			closeSocket(socket, done);
+			server.stop(done);
 		});
 
 		it("reflect mouse messages back", function(done) {
 			var EXPECTED_DATA = "mouse data";
 
+			socket = createSocket();
 			socket.on("mouse", function(data) {
 				assert.equal(data, EXPECTED_DATA);
-				done();
+				closeSocket(socket, done);
 			});
 			socket.emit("mouse", EXPECTED_DATA);
 		});
@@ -177,7 +175,7 @@
 			// see https://github.com/socketio/socket.io-client/issues/935
 			setTimeout(function() {
 				socket.disconnect();
-				server.stop(callback);
+				callback();
 			}, 50);
 		}
 
