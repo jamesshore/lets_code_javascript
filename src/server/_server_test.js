@@ -141,7 +141,6 @@
 
 
 	describe("Socket.io Server", function() {
-		var socket;
 
 		beforeEach(function(done) {
 			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, done);
@@ -151,19 +150,27 @@
 			server.stop(done);
 		});
 
-		it("reflect mouse messages back", function(done) {
+		it("broadcasts mouse message from one client to another", function(done) {
 			var EXPECTED_DATA = "mouse data";
 
-			socket = createSocket();
-			socket.on("mouse", function(data) {
-				assert.equal(data, EXPECTED_DATA);
-				closeSocket(socket, done);
-			});
-			socket.emit("mouse", EXPECTED_DATA);
-		});
+			var emitterClient = createSocket();
+			var receiverClient = createSocket();
 
-		it("broadcasts mouse messages to all clients", function(done) {
-			done();
+			emitterClient.on("mouse", function() {
+				assert.fail("emitter should not receive its own events");
+			});
+			receiverClient.on("mouse", function(data) {
+				assert.equal(data, EXPECTED_DATA);
+				end();
+			});
+
+			emitterClient.emit("mouse", EXPECTED_DATA);
+
+			function end() {
+				closeSocket(emitterClient, function() {
+					closeSocket(receiverClient, done);
+				});
+			}
 		});
 
 		function createSocket() {
