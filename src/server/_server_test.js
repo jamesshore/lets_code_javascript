@@ -150,25 +150,39 @@
 			server.stop(done);
 		});
 
-		it("broadcasts mouse message from one client to another", function(done) {
+		it("broadcasts mouse message from one client to all others", function(done) {
 			var EXPECTED_DATA = "mouse data";
+			var client1ReceivedMessage = false;
+			var client2ReceivedMessage = false;
 
 			var emitterClient = createSocket();
-			var receiverClient = createSocket();
+			var receiverClient1 = createSocket();
+			var receiverClient2 = createSocket();
 
 			emitterClient.on("mouse", function() {
 				assert.fail("emitter should not receive its own events");
 			});
-			receiverClient.on("mouse", function(data) {
-				assert.equal(data, EXPECTED_DATA);
-				end();
+			receiverClient1.on("mouse", function(data) {
+				assert.equal(data, EXPECTED_DATA, "receiver client 1");
+				client1ReceivedMessage = true;
+				tryToEnd();
+			});
+			receiverClient2.on("mouse", function(data) {
+				assert.equal(data, EXPECTED_DATA, "receiver client 2");
+				client2ReceivedMessage = true;
+				tryToEnd();
 			});
 
 			emitterClient.emit("mouse", EXPECTED_DATA);
 
-			function end() {
+
+			function tryToEnd() {
+				if (!client1ReceivedMessage || !client2ReceivedMessage) return;
+
 				closeSocket(emitterClient, function() {
-					closeSocket(receiverClient, done);
+					closeSocket(receiverClient1, function() {
+						closeSocket(receiverClient2, done);
+					});
 				});
 			}
 		});
