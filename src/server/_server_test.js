@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var server = require("./server.js");
+	var Server = require("./server.js");
 	var http = require("http");
 	var fs = require("fs");
 	var async = require("async");
@@ -30,7 +30,10 @@
 
 	describe("HTTP Server", function() {
 
+		var server;
+
 		beforeEach(function(done) {
+			server = new Server();
 			async.each(TEST_FILES, createTestFile, done);
 		});
 
@@ -142,7 +145,10 @@
 
 	describe("Socket.io Server", function() {
 
+		var server;
+
 		beforeEach(function(done) {
+			server = new Server();
 			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, done);
 		});
 

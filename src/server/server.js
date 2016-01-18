@@ -7,27 +7,27 @@
 	var send = require("send");
 	var io = require('socket.io');
 
-	var httpServer;
-	var ioServer;
+	var Server = module.exports = function Server() {};
 
-
-	exports.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
+	Server.prototype.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
 		if (!portNumber) throw "port number is required";
 
-		httpServer = http.createServer();
-		handleHttpRequests(contentDir, notFoundPageToServe);
+		this._httpServer = http.createServer();
+		handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
 
-		ioServer = io(httpServer);
-		handleSocketIoEvents();
+		this._ioServer = io(this._httpServer);
+		handleSocketIoEvents(this._ioServer);
 
-		httpServer.listen(portNumber, callback);
+		this._httpServer.listen(portNumber, callback);
 	};
 
-	exports.stop = function(callback) {
-		httpServer.close(callback);
+	Server.prototype.stop = function(callback) {
+		if (this._httpServer === undefined) return callback(new Error("stop() called before server started"));
+
+		this._httpServer.close(callback);
 	};
 
-	function handleHttpRequests(contentDir, notFoundPageToServe) {
+	function handleHttpRequests(httpServer, contentDir, notFoundPageToServe) {
 		httpServer.on("request", function(request, response) {
 			send(request, request.url, { root: contentDir }).on("error", handleError).pipe(response);
 
@@ -38,7 +38,7 @@
 		});
 	}
 
-	function handleSocketIoEvents() {
+	function handleSocketIoEvents(ioServer) {
 		ioServer.on("connect", function(socket) {
 			socket.on("mouse", function(data) {
 				socket.broadcast.emit("mouse", data);
