@@ -152,38 +152,28 @@
 
 		it("broadcasts mouse message from one client to all others", function(done) {
 			var EXPECTED_DATA = "mouse data";
-			var client1ReceivedMessage = false;
-			var client2ReceivedMessage = false;
 
-			var emitterClient = createSocket();
-			var receiverClient1 = createSocket();
-			var receiverClient2 = createSocket();
+			var emitter = createSocket();
+			var receiver1 = createSocket();
+			var receiver2 = createSocket();
 
-			emitterClient.on("mouse", function() {
+			emitter.on("mouse", function() {
 				assert.fail("emitter should not receive its own events");
 			});
-			receiverClient1.on("mouse", function(data) {
-				assert.equal(data, EXPECTED_DATA, "receiver client 1");
-				client1ReceivedMessage = true;
-				tryToEnd();
-			});
-			receiverClient2.on("mouse", function(data) {
-				assert.equal(data, EXPECTED_DATA, "receiver client 2");
-				client2ReceivedMessage = true;
-				tryToEnd();
-			});
 
-			emitterClient.emit("mouse", EXPECTED_DATA);
-
-
-			function tryToEnd() {
-				if (!client1ReceivedMessage || !client2ReceivedMessage) return;
-
-				closeSocket(emitterClient, function() {
-					closeSocket(receiverClient1, function() {
-						closeSocket(receiverClient2, done);
-					});
+			async.each([ receiver1, receiver2 ], function(client, next) {
+				client.on("mouse", function(data) {
+					assert.equal(data, EXPECTED_DATA);
+					next();
 				});
+			}, end);
+
+			emitter.emit("mouse", EXPECTED_DATA);
+
+			function end() {
+				async.each([ emitter, receiver1, receiver2 ], function(socket, next) {
+					closeSocket(socket, next);
+				}, done);
 			}
 		});
 
