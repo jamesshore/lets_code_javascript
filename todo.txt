@@ -44,4 +44,7 @@ Engineering Tasks:
 - Figure out bundling and distribution for socket.io client
 
 To Do on current task:
-* Convert server.js to be object-oriented rather than a monostate?
+- AT START OF EPISODE:
+	- Integrated
+	- Upgraded dependencies
+	- Couldn't upgrade socket.io due to recurrence of hanging problem
