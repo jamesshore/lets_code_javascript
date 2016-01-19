@@ -44,14 +44,13 @@ Engineering Tasks:
 - Figure out bundling and distribution for socket.io client
 
 To Do on current task:
-* Figure out how to have focused integration test of socket.io client
-	- Write client test to use server
-	- Create socket.io simulation server
-	- Set up the tests to start and stop server
 - De-hackify incremental socket.io target in Jakefile
 	- Update incrementalTask() in Jakefile: automatically generate incremental target from the task name
 	- Make socket.io test dependencies more robust (note that they're listed in clientJsTestDependencies too)
 	- Get rid of duplication in Jakefile code that runs Karma
+- Test something real
+
+
 - Create simple method for sending mouse pointer location
 - OFF CAMERA:
 	- Look into lack of coloring in Karma tests

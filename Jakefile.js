@@ -108,7 +108,12 @@
 			browsers: testedBrowsers(),
 			strict: strict,
 			clientArgs: testSubsetArgs("Socket.IO")
-		}, complete, fail);
+		}, shutdownServer, fail);
+
+		function shutdownServer() {
+			io.close();
+			complete();
+		}
 	});
 
 	desc("Test client code");

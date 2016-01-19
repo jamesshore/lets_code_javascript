@@ -10,7 +10,8 @@
 	describe("Socket.IO: Real Time Network", function() {
 
 		it("connects to Socket.IO server", function(done) {
-			var socket = io("http://localhost:5030");
+			var origin = window.location.protocol + "//" + window.location.host;
+			var socket = io(origin);
 
 			socket.on("connect", function() {
 				done();
