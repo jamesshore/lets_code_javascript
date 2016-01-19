@@ -5,28 +5,46 @@
 	var http = require("http");
 	var fs = require("fs");
 	var send = require("send");
-	var server;
+	var io = require('socket.io');
 
-	exports.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
+	var Server = module.exports = function Server() {};
+
+	Server.prototype.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
 		if (!portNumber) throw "port number is required";
 
-		server = http.createServer();
-		server.on("request", function(request, response) {
-			send(request, request.url, { root: contentDir }).
-				on("error", handleError).
-				pipe(response);
+		this._httpServer = http.createServer();
+		handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
+
+		this._ioServer = io(this._httpServer);
+		handleSocketIoEvents(this._ioServer);
+
+		this._httpServer.listen(portNumber, callback);
+	};
+
+	Server.prototype.stop = function(callback) {
+		if (this._httpServer === undefined) return callback(new Error("stop() called before server started"));
+
+		this._httpServer.close(callback);
+	};
+
+	function handleHttpRequests(httpServer, contentDir, notFoundPageToServe) {
+		httpServer.on("request", function(request, response) {
+			send(request, request.url, { root: contentDir }).on("error", handleError).pipe(response);
 
 			function handleError(err) {
 				if (err.status === 404) serveErrorFile(response, 404, contentDir + "/" + notFoundPageToServe);
 				else throw err;
 			}
 		});
-		server.listen(portNumber, callback);
-	};
+	}
 
-	exports.stop = function(callback) {
-		server.close(callback);
-	};
+	function handleSocketIoEvents(ioServer) {
+		ioServer.on("connect", function(socket) {
+			socket.on("mouse", function(data) {
+				socket.broadcast.emit("mouse", data);
+			});
+		});
+	}
 
 	function serveErrorFile(response, statusCode, file) {
 		response.statusCode = statusCode;

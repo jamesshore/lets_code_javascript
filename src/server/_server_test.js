@@ -2,11 +2,12 @@
 (function() {
 	"use strict";
 
-	var server = require("./server.js");
+	var Server = require("./server.js");
 	var http = require("http");
 	var fs = require("fs");
 	var async = require("async");
 	var assert = require("../shared/_assert.js");
+	var io = require("socket.io-client");
 
 	var CONTENT_DIR = "generated/test";
 
@@ -27,9 +28,12 @@
 		[ CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA]
 	];
 
-	describe("Server", function() {
+	describe("HTTP Server", function() {
+
+		var server;
 
 		beforeEach(function(done) {
+			server = new Server();
 			async.each(TEST_FILES, createTestFile, done);
 		});
 
@@ -48,14 +52,6 @@
 		it("sets content-type and charset for HTML files", function(done) {
 			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
 				assert.equal(response.headers["content-type"], "text/html; charset=UTF-8", "content-type header");
-				done();
-			});
-		});
-
-		it("supports multiple files", function(done) {
-			httpGet(BASE_URL + "/" + OTHER_PAGE, function(response, responseData) {
-				assert.equal(response.statusCode, 200, "status code");
-				assert.equal(responseData, OTHER_PAGE_DATA, "response text");
 				done();
 			});
 		});
@@ -123,28 +119,85 @@
 			});
 		});
 
-	});
+		function httpGet(url, callback) {
+			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {
+				http.get(url, function(response) {
+					var receivedData = "";
+					response.setEncoding("utf8");
 
-	function httpGet(url, callback) {
-		server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, function() {
-			http.get(url, function(response) {
-				var receivedData = "";
-				response.setEncoding("utf8");
-
-				response.on("data", function(chunk) {
-					receivedData += chunk;
-				});
-				response.on("error", function(err) {
-					console.log("ERROR", err);
-				});
-				response.on("end", function() {
-					server.stop(function() {
-						callback(response, receivedData);
+					response.on("data", function(chunk) {
+						receivedData += chunk;
+					});
+					response.on("error", function(err) {
+						console.log("ERROR", err);
+					});
+					response.on("end", function() {
+						server.stop(function() {
+							callback(response, receivedData);
+						});
 					});
 				});
 			});
+		}
+
+	});
+
+
+	describe("Socket.io Server", function() {
+
+		var server;
+
+		beforeEach(function(done) {
+			server = new Server();
+			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, done);
 		});
-	}
+
+		afterEach(function(done) {
+			server.stop(done);
+		});
+
+		it("broadcasts mouse message from one client to all others", function(done) {
+			var EXPECTED_DATA = "mouse data";
+
+			var emitter = createSocket();
+			var receiver1 = createSocket();
+			var receiver2 = createSocket();
+
+			emitter.on("mouse", function() {
+				assert.fail("emitter should not receive its own events");
+			});
+
+			async.each([ receiver1, receiver2 ], function(client, next) {
+				client.on("mouse", function(data) {
+					assert.equal(data, EXPECTED_DATA);
+					next();
+				});
+			}, end);
+
+			emitter.emit("mouse", EXPECTED_DATA);
+
+			function end() {
+				async.each([ emitter, receiver1, receiver2 ], function(socket, next) {
+					closeSocket(socket, next);
+				}, done);
+			}
+		});
+
+		function createSocket() {
+			return io("http://localhost:" + PORT);
+		}
+
+		function closeSocket(socket, callback) {
+			// timeout is necessary due to apparent race condition in socket.io-client
+			// see https://github.com/socketio/socket.io-client/issues/935
+			setTimeout(function() {
+				socket.disconnect();
+				callback();
+			}, 50);
+		}
+
+	});
+
 
 	function createTestFile(fileAndData, done) {
 		// Note: writeFile() MUST be called asynchronously in order for this code to work on Windows 7.

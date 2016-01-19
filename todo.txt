@@ -26,11 +26,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* figure out what libraries we're going to use for real-time collaboration
-	- get them to work with Heroku
-- Drop IE 9 support and add MS Edge instead
-- see other users' mouse pointers
-	- Figure out bundling and distribution for socket.io client (in the next story)
+* see other users' mouse pointers
 - multi-user clear button
 - multi-user line drawing
 - version synchronization across client/server
@@ -41,5 +37,11 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
+* Server: Reflect all messages back to other clients except the originator
+- Client: Communicate pointer status to server
+- Client: Receive pointer status from server
+- Client: Make client display "ghost" pointers for other users
+- Figure out bundling and distribution for socket.io client
 
 To Do on current task:
+* Convert server.js to be object-oriented rather than a monostate?

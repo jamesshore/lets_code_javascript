@@ -10,7 +10,6 @@ module.exports = function normalizePath(str, stripTrailing) {
     throw new TypeError('expected a string');
   }
   str = str.replace(/[\\\/]+/g, '/');
-  str = str.replace(/^\.\//, '');
   if (stripTrailing !== false) {
     str = str.replace(/\/$/, '');
   }

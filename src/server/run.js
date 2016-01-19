@@ -2,11 +2,12 @@
 (function() {
 	"use strict";
 
+	var Server = require("./server.js");
+
 	var CONTENT_DIR = "./generated/dist/client";
 
-	var server = require("./server.js");
 	var port = process.argv[2];
-	server.start(CONTENT_DIR, "404.html", port, function() {
+	new Server().start(CONTENT_DIR, "404.html", port, function() {
 		console.log("Server started");
 	});
 }());
