@@ -24,6 +24,7 @@
 
 	exports.incrementalDir = "generated/incremental";
 	exports.serverTestTarget = "generated/incremental/server.test";
+	exports.socketIoTestTarget = "generated/incremental/socketio.test";
 	exports.clientTestTarget = "generated/incremental/client.test";
 	exports.cssTestTarget = "generated/incremental/css.test";
 
@@ -36,7 +37,9 @@
 	exports.clientJsTestDependencies = function() {
 		return deglob([
 			"src/client/js/**/*",
-			"src/shared/**/*"
+			"src/shared/**/*",
+			"!src/client/js/*real_time_network*.js",
+			"!src/client/js/vendor/socket.io*.js"
 		]);
 	};
 
@@ -50,8 +53,15 @@
 	exports.serverFiles = function() {
 		return deglob([
 			"src/server/**/*.js",
-			"src/shared/**/*.js",
-			"src/client/vendor/**/*.js"
+			"src/shared/**/*.js"
+		]);
+	};
+
+	exports.socketIoFiles = function() {
+		return deglob([
+			"src/client/js/*real_time_network*.js",
+			"src/client/js/vendor/socket.io*.js",
+
 		]);
 	};
 

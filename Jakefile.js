@@ -43,7 +43,7 @@
 	task("default", [ "clean", "quick", "smoketest" ]);
 
 	desc("Incrementally lint and test fast targets");
-	task("quick", [ "nodeVersion", "lint", "testServer", "testClient" ]);
+	task("quick", [ "nodeVersion", "lint", "test" ]);
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
@@ -85,13 +85,26 @@
 
 	//*** TEST
 
+	desc("Test everything (except smoke tests)");
+	task("test", [ "testServer", "testSocketIo", "testClient" ]);
+
 	desc("Test server code");
-	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ], paths.serverFiles(),
-		function(complete, fail) {
+	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ], paths.serverFiles(), function(complete, fail) {
 		console.log("Testing server JavaScript: ");
 		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
 			options: mochaConfig()
+		}, complete, fail);
+	});
+
+	desc("Test socket.io client integration");
+	incrementalTask("testSocketIo", paths.socketIoTestTarget, [], paths.socketIoFiles(), function(complete, fail) {
+		console.log("Integration testing client socket.io wrapper: ");
+		karmaRunner().runTests({
+			configFile: paths.karmaConfig,
+			browsers: testedBrowsers(),
+			strict: strict,
+			clientArgs: testSubsetArgs("Socket.IO")
 		}, complete, fail);
 	});
 
