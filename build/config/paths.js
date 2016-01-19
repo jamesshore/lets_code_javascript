@@ -37,9 +37,10 @@
 	exports.clientJsTestDependencies = function() {
 		return deglob([
 			"src/client/js/**/*",
-			"src/shared/**/*",
-			"!src/client/js/*real_time_network*.js",
-			"!src/client/js/vendor/socket.io*.js"
+			"src/shared/**/*"
+		], [
+			"src/client/js/*real_time_network*.js",
+			"src/client/js/vendor/socket.io*.js"
 		]);
 	};
 
@@ -93,14 +94,18 @@
 		});
 	};
 
-	function deglob(patterns) {
-		var globPattern = patterns;
-		if (Array.isArray(patterns)) {
-			if (patterns.length === 1) globPattern = patterns[0];
-			else globPattern = "{" + patterns.join(",") + "}";
+	function deglob(patternsToFind, patternsToIgnore) {
+		var globPattern = patternsToFind;
+		if (Array.isArray(patternsToFind)) {
+			if (patternsToFind.length === 1) {
+				globPattern = patternsToFind[0];
+			}
+			else {
+				globPattern = "{" + patternsToFind.join(",") + "}";
+			}
 		}
 
-		return glob.sync(globPattern);
+		return glob.sync(globPattern, { ignore: patternsToIgnore });
 	}
 
 }());

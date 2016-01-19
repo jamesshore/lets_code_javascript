@@ -100,6 +100,9 @@
 	desc("Test socket.io client integration");
 	incrementalTask("testSocketIo", paths.socketIoTestTarget, [], paths.socketIoFiles(), function(complete, fail) {
 		console.log("Integration testing client socket.io wrapper: ");
+
+		var io = require('socket.io')(5030);
+
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
 			browsers: testedBrowsers(),

@@ -10,14 +10,12 @@
 	describe("Socket.IO: Real Time Network", function() {
 
 		it("connects to Socket.IO server", function(done) {
-			//var socket = io("http://localhost:5030");
-			//
-			//socket.on("connect", function() {
-			//	console.log("Connection established");
-				done();
-			//});
-		});
+			var socket = io("http://localhost:5030");
 
+			socket.on("connect", function() {
+				done();
+			});
+		});
 
 	});
 
