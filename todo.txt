@@ -37,14 +37,18 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Server: Reflect all messages back to other clients except the originator
+* Client: Create an abstraction of the socket.io client
 - Client: Communicate pointer status to server
 - Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
 - Figure out bundling and distribution for socket.io client
 
 To Do on current task:
-- AT START OF EPISODE:
-	- Integrated
-	- Upgraded dependencies
-	- Couldn't upgrade socket.io due to recurrence of hanging problem
+* Figure out how to have focused integration test of socket.io client
+	- Write client test to use server
+	- Create socket.io simulation server
+	- Set up the tests to start and stop server
+- Create simple method for sending mouse pointer location
+- OFF CAMERA:
+	- Look into lack of coloring in Karma tests
+	- Clear up extraneous modules (`npm list --depth=0`)
