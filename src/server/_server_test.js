@@ -159,15 +159,14 @@
 		it("broadcasts mouse message from one client to all others", function(done) {
 			var EXPECTED_DATA = "mouse data";
 
-			var emitter = createSocket();
-			var receiver1 = createSocket();
-			var receiver2 = createSocket();
+			var clients = createSockets(3);
+			var emitter = clients[0];
+			var receivers = clients.slice().splice(1);
 
 			emitter.on("mouse", function() {
 				assert.fail("emitter should not receive its own events");
 			});
-
-			async.each([ receiver1, receiver2 ], function(client, next) {
+			async.each(receivers, function(client, next) {
 				client.on("mouse", function(data) {
 					assert.equal(data, EXPECTED_DATA);
 					next();
@@ -177,11 +176,14 @@
 			emitter.emit("mouse", EXPECTED_DATA);
 
 			function end() {
-				async.each([ emitter, receiver1, receiver2 ], function(socket, next) {
-					closeSocket(socket, next);
-				}, done);
+				async.each(clients, closeSocket, done);
 			}
 		});
+
+		function createSockets(count){
+			return Array.from({length: count}, createSocket);
+			//Or without ES6: return Array.apply(null, Array(count)).map(createSocket);
+		}
 
 		function createSocket() {
 			return io("http://localhost:" + PORT);
