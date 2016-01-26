@@ -177,6 +177,8 @@
 			emitter.emit("mouse", EXPECTED_DATA);
 
 			function end() {
+				// Note from Martin Grandrath, http://www.letscodejavascript.com/v3/comments/live/380#comment-2468557689
+				// Can replace this with `async.each([...], closeSocket, done);`
 				async.each([ emitter, receiver1, receiver2 ], function(socket, next) {
 					closeSocket(socket, next);
 				}, done);
