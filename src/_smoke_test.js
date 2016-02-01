@@ -2,6 +2,10 @@
 /*global document, window, CSSRule */
 /*jshint regexp:false*/
 
+// CONSIDER THESE ALTERNATIVES TO SELENIUM:
+// http://www.letscodejavascript.com/v3/comments/live/242#comment-2483111382
+
+
 (function() {
 	"use strict";
 

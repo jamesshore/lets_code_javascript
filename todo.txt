@@ -42,9 +42,12 @@ Engineering Tasks:
 - Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
 - Figure out bundling and distribution for socket.io client
+- Figure out how to de-dupe require paths for common files (such as "_assert.js")
+	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
 - De-hackify incremental socket.io target in Jakefile
+	- Make 'testNetwork' a dependency of 'testClient,' not 'test'.
 	- Update incrementalTask() in Jakefile: automatically generate incremental target from the task name
 	- Make socket.io test dependencies more robust (note that they're listed in clientJsTestDependencies too)
 	- Get rid of duplication in Jakefile code that runs Karma
