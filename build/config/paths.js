@@ -7,6 +7,7 @@
 
 	exports.generatedDir = "generated";
 	exports.tempTestfileDir = "generated/test";
+	exports.incrementalDir = "generated/incremental";
 
 	exports.buildDir = "generated/dist";
 	exports.buildServerDir = "generated/dist/server";
@@ -21,12 +22,6 @@
 			"./generated/dist/client/screen.css"
 		]);
 	};
-
-	exports.incrementalDir = "generated/incremental";
-	exports.serverTestTarget = "generated/incremental/server.test";
-	exports.socketIoTestTarget = "generated/incremental/socketio.test";
-	exports.clientTestTarget = "generated/incremental/client.test";
-	exports.cssTestTarget = "generated/incremental/css.test";
 
 	exports.karmaConfig = "./build/config/karma.conf.js";
 

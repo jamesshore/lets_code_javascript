@@ -92,7 +92,7 @@
 	task("testClient", [ "testClientJavaScript", "testSocketIo", "testClientCss" ]);
 
 	desc("Test server code");
-	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ], paths.serverFiles(), function(complete, fail) {
+	incrementalTask("testServer", [ paths.tempTestfileDir ], paths.serverFiles(), function(complete, fail) {
 		console.log("Testing server JavaScript: ");
 		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
@@ -100,7 +100,7 @@
 		}, complete, fail);
 	});
 
-	incrementalTask("testSocketIo", paths.socketIoTestTarget, [], paths.socketIoFiles(), function(complete, fail) {
+	incrementalTask("testSocketIo", [], paths.socketIoFiles(), function(complete, fail) {
 		console.log("Integration testing client socket.io wrapper: ");
 
 		var io = require('socket.io')(5030);
@@ -112,12 +112,12 @@
 		}
 	});
 
-	incrementalTask("testClientJavaScript", paths.clientTestTarget, [], paths.clientJsTestDependencies(), function(complete, fail) {
+	incrementalTask("testClientJavaScript", [], paths.clientJsTestDependencies(), function(complete, fail) {
 		console.log("Testing browser JavaScript: ");
 		runKarmaOnTaggedSubsetOfTests("JS", complete, fail);
 	});
 
-	incrementalTask("testClientCss", paths.cssTestTarget, [], paths.cssTestDependencies(), function(complete, fail) {
+	incrementalTask("testClientCss", [], paths.cssTestDependencies(), function(complete, fail) {
 		console.log("Testing CSS:");
 		runKarmaOnTaggedSubsetOfTests("CSS", complete, fail);
 	});
@@ -273,8 +273,10 @@
 		return result.replace(/\.lint$/, "");
 	}
 
-	function incrementalTask(taskName, incrementalFile, otherDependencies, fileDependencies, action) {
-		task(taskName, otherDependencies.concat(paths.incrementalDir, incrementalFile));
+	function incrementalTask(taskName, taskDependencies, fileDependencies, action) {
+		var incrementalFile = paths.incrementalDir + "/" + taskName + ".task";
+
+		task(taskName, taskDependencies.concat(paths.incrementalDir, incrementalFile));
 		file(incrementalFile, fileDependencies, function() {
 			action(succeed, fail);
 		}, {async: true});
