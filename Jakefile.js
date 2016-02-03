@@ -186,7 +186,7 @@
 		shell().rm("-rf", paths.buildClientDir + "/*");
 		shell().cp(
 			"-R",
-			"src/client/content/*", "src/client/ui/vendor", "src/shared/vendor",
+			"src/client/content/*", "src/client/ui/vendor", "src/client/network/vendor", "src/shared/vendor",
 			paths.buildClientDir
 		);
 	});
