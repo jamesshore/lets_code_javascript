@@ -86,7 +86,10 @@
 	//*** TEST
 
 	desc("Test everything (except smoke tests)");
-	task("test", [ "testServer", "testSocketIo", "testClient" ]);
+	task("test", [ "testServer", "testClient" ]);
+
+	desc("Test client code");
+	task("testClient", [ "testClientJavaScript", "testSocketIo", "testClientCss" ]);
 
 	desc("Test server code");
 	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ], paths.serverFiles(), function(complete, fail) {
@@ -97,18 +100,11 @@
 		}, complete, fail);
 	});
 
-	desc("Test socket.io client integration");
 	incrementalTask("testSocketIo", paths.socketIoTestTarget, [], paths.socketIoFiles(), function(complete, fail) {
 		console.log("Integration testing client socket.io wrapper: ");
 
 		var io = require('socket.io')(5030);
-
-		karmaRunner().runTests({
-			configFile: paths.karmaConfig,
-			browsers: testedBrowsers(),
-			strict: strict,
-			clientArgs: testSubsetArgs("Socket.IO")
-		}, shutdownServer, fail);
+		runKarmaOnTaggedSubsetOfTests("Socket.IO", shutdownServer, fail);
 
 		function shutdownServer() {
 			io.close();
@@ -116,35 +112,27 @@
 		}
 	});
 
-	desc("Test client code");
-	task("testClient", [ "testClientJavaScript", "testClientCss" ]);
-
 	incrementalTask("testClientJavaScript", paths.clientTestTarget, [], paths.clientJsTestDependencies(), function(complete, fail) {
 		console.log("Testing browser JavaScript: ");
-		karmaRunner().runTests({
-			configFile: paths.karmaConfig,
-			browsers: testedBrowsers(),
-			strict: strict,
-			clientArgs: testSubsetArgs("JS")
-		}, complete, fail);
+		runKarmaOnTaggedSubsetOfTests("JS", complete, fail);
 	});
 
 	incrementalTask("testClientCss", paths.cssTestTarget, [], paths.cssTestDependencies(), function(complete, fail) {
 		console.log("Testing CSS:");
+		runKarmaOnTaggedSubsetOfTests("CSS", complete, fail);
+	});
+
+	function runKarmaOnTaggedSubsetOfTests(tag, complete, fail) {
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
 			browsers: testedBrowsers(),
 			strict: strict,
-			clientArgs: testSubsetArgs("CSS")
+			// We use Mocha's "grep" feature as a poor-man's substitute for proper test tagging and subsetting
+			// (which Mocha doesn't have at the time of this writing). However, Mocha's grep option disables
+			// Mocha's "it.only()" feature. So we don't use grep if the "itonly" option is set on the command
+			// line.
+			clientArgs: itonly ? [] : [ "--grep=" + tag + ":" ]
 		}, complete, fail);
-	});
-
-	function testSubsetArgs(tag) {
-		// We use Mocha's "grep" feature as a poor-man's substitute for proper test tagging and subsetting
-		// (which Mocha doesn't have at the time of this writing). However, Mocha's grep option disables
-		// Mocha's "it.only()" feature. So we don't use grep if the "itonly" option is set on the command
-		// line.
-		return itonly ? [] : [ "--grep=" + tag + ":" ];
 	}
 
 	desc("End-to-end smoke tests");

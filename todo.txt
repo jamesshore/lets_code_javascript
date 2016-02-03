@@ -47,10 +47,10 @@ Engineering Tasks:
 
 To Do on current task:
 - De-hackify incremental socket.io target in Jakefile
-	- Make 'testNetwork' a dependency of 'testClient,' not 'test'.
 	- Update incrementalTask() in Jakefile: automatically generate incremental target from the task name
+	- Move socket.io startup and shutdown into test file
 	- Make socket.io test dependencies more robust (note that they're listed in clientJsTestDependencies too)
-	- Get rid of duplication in Jakefile code that runs Karma
+		- Split client/js into client/ui and client/network directories
 - Test something real
 
 
