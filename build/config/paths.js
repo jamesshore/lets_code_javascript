@@ -65,11 +65,9 @@
 		return deglob([
 			"*.js",
 			"build/**/*.js",
-			"src/client/ui/*.js",
-			"src/client/content/*.js",
-			"src/server/**/*.js",
-			"src/shared/**/*.js",
-			"src/*.js"
+			"src/**/*.js"
+		], [
+			"**/vendor/*.js"
 		]);
 	};
 
