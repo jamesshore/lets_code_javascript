@@ -46,10 +46,9 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-
-
-- Create simple method for sending mouse pointer location
 - OFF CAMERA:
+	- Integrate
 	- Look into lack of coloring in Karma tests
 	- Clear up extraneous modules (`npm list --depth=0`)
 	- Investigate Morten Poulsen solution to socket.io race condition: http://www.letscodejavascript.com/v3/comments/live/377#comment-2466061078
+	- Alternatively, new version of socket.io is supposed to fix it
