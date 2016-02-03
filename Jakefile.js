@@ -186,7 +186,7 @@
 		shell().rm("-rf", paths.buildClientDir + "/*");
 		shell().cp(
 			"-R",
-			"src/client/content/*", "src/client/js/vendor", "src/shared/vendor",
+			"src/client/content/*", "src/client/ui/vendor", "src/shared/vendor",
 			paths.buildClientDir
 		);
 	});
@@ -197,8 +197,8 @@
 		var browserifyRunner = require("./build/util/browserify_runner.js");
 		browserifyRunner.bundle({
 			requires: [
-				{ path: "./src/client/js/client.js", expose: "./client.js" },
-				{ path: "./src/client/js/html_element.js", expose: "./html_element.js" }
+				{ path: "./src/client/ui/client.js", expose: "./client.js" },
+				{ path: "./src/client/ui/html_element.js", expose: "./html_element.js" }
 			],
 			outfile: paths.buildClientDir + "/bundle.js",
 			options: { debug: true }

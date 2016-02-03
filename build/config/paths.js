@@ -38,14 +38,15 @@
 
 	exports.clientJsTestDependencies = function() {
 		return deglob([
-			"src/client/js/**/*",
+			"src/client/ui/**/*",
 			"src/shared/**/*"
 		]);
 	};
 
 	exports.clientNetworkTestDependencies = function() {
 		return deglob([
-			"src/client/network/**/*.js"
+			"src/client/network/**/*.js",
+			"src/shared/**/*"
 		]);
 	};
 
@@ -64,7 +65,7 @@
 		return deglob([
 			"*.js",
 			"build/**/*.js",
-			"src/client/js/*.js",
+			"src/client/ui/*.js",
 			"src/client/content/*.js",
 			"src/server/**/*.js",
 			"src/shared/**/*.js",
