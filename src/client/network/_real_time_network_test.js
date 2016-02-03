@@ -2,7 +2,6 @@
 /* global io:false */
 
 (function() {
-
 	"use strict";
 
 	var assert = require("../../shared/_assert.js");

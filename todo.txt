@@ -37,7 +37,7 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Client: Create an abstraction of the socket.io client
+* Client: Figure out how to test socket.io client
 - Client: Communicate pointer status to server
 - Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
@@ -46,9 +46,6 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-- De-hackify incremental socket.io target in Jakefile
-	- Move socket.io startup and shutdown into test file
-- Test something real
 
 
 - Create simple method for sending mouse pointer location

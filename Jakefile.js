@@ -113,13 +113,10 @@
 	incrementalTask("testClientNetwork", [], paths.clientNetworkTestDependencies(), function(complete, fail) {
 		console.log("Testing browser networking code: ");
 
-		var io = require('socket.io')(5030);
-		runKarmaOnTaggedSubsetOfTests("NET", shutdownServer, fail);
+		var networkHarness = require("./src/client/network/_network_test_harness.js");
 
-		function shutdownServer() {
-			io.close();
-			complete();
-		}
+		var io = networkHarness.startTestServer();
+		runKarmaOnTaggedSubsetOfTests("NET", networkHarness.stopTestServerFn(io, complete), fail);
 	});
 
 	function runKarmaOnTaggedSubsetOfTests(tag, complete, fail) {
