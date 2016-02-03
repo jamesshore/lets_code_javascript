@@ -47,9 +47,8 @@ Engineering Tasks:
 
 To Do on current task:
 - AT START OF NEXT EPISODE:
-	- Integrate
-	- Clear up extraneous modules (`npm list --depth=0`)
+	- Integrated
+	- Cleared up extraneous modules (`npm list --depth=0`)
+	- socket.io hanging problem fixed in v1.4.5 (issue #935, https://github.com/socketio/socket.io-client/issues/935)
 - OFF CAMERA:
 	- Look into lack of coloring in Karma tests
-	- Investigate Morten Poulsen solution to socket.io race condition: http://www.letscodejavascript.com/v3/comments/live/377#comment-2466061078
-	- Alternatively, new version of socket.io is supposed to fix it
