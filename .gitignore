@@ -15,5 +15,7 @@ generated/
 
 # Selenium WebDriverJS & Karma: Optional dependencies that don't build on vanilla Windows
 node_modules/bufferutil/
+node_modules/selenium-webdriver/node_modules/ws/node_modules/bufferutil/
+node_modules/selenium-webdriver/node_modules/ws/node_modules/utf-8-validate/
 node_modules/utf-8-validate/
 node_modules/fsevents/
