@@ -41,6 +41,18 @@ describe('asn1.js ping/pong', function() {
       this.utf8str();
     }, 'hello');
 
+    test('bmpstr', function() {
+      this.bmpstr();
+    }, 'hello');
+
+    test('numstr', function() {
+      this.numstr();
+    }, '1234 5678 90');
+
+    test('printstr', function() {
+      this.printstr();
+    }, 'hello');
+
     test('gentime', function() {
       this.gentime();
     }, 1385921175000);

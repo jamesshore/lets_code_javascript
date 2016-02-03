@@ -13,13 +13,14 @@ exports.register = function(linter) {
       linter.warn("W103", {
         line: data.line,
         char: data.char,
-        data: [ data.name ]
+        data: [ data.name, "6" ]
       });
     }
   });
 
   // Check for properties named __iterator__. This is a special property
-  // available only in browsers with JavaScript 1.7 implementation.
+  // available only in browsers with JavaScript 1.7 implementation, but
+  // it is deprecated for ES6
 
   linter.on("Identifier", function style_scanIterator(data) {
     if (linter.getOption("iterator")) {
@@ -27,7 +28,7 @@ exports.register = function(linter) {
     }
 
     if (data.name === "__iterator__") {
-      linter.warn("W104", {
+      linter.warn("W103", {
         line: data.line,
         char: data.char,
         data: [ data.name ]

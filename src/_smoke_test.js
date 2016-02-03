@@ -2,6 +2,10 @@
 /*global document, window, CSSRule */
 /*jshint regexp:false*/
 
+// CONSIDER THESE ALTERNATIVES TO SELENIUM:
+// http://www.letscodejavascript.com/v3/comments/live/242#comment-2483111382
+
+
 (function() {
 	"use strict";
 
@@ -13,7 +17,7 @@
 
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
-	var EXPECTED_BROWSER = "firefox 43.0.4";
+	var EXPECTED_BROWSER = "firefox 44.0";
 
 	var serverProcess;
 	var driver;

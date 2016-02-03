@@ -43,7 +43,7 @@
 	task("default", [ "clean", "quick", "smoketest" ]);
 
 	desc("Incrementally lint and test fast targets");
-	task("quick", [ "nodeVersion", "lint", "testServer", "testClient" ]);
+	task("quick", [ "nodeVersion", "lint", "test" ]);
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
@@ -85,9 +85,14 @@
 
 	//*** TEST
 
+	desc("Test everything (except smoke tests)");
+	task("test", [ "testServer", "testClient" ]);
+
+	desc("Test client code");
+	task("testClient", [ "testClientJavaScript", "testClientNetwork", "testClientCss" ]);
+
 	desc("Test server code");
-	incrementalTask("testServer", paths.serverTestTarget, [ paths.tempTestfileDir ], paths.serverFiles(),
-		function(complete, fail) {
+	incrementalTask("testServer", [ paths.tempTestfileDir ], paths.serverFiles(), function(complete, fail) {
 		console.log("Testing server JavaScript: ");
 		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
@@ -95,35 +100,36 @@
 		}, complete, fail);
 	});
 
-	desc("Test client code");
-	task("testClient", [ "testClientJavaScript", "testClientCss" ]);
-
-	incrementalTask("testClientJavaScript", paths.clientTestTarget, [], paths.clientJsTestDependencies(), function(complete, fail) {
+	incrementalTask("testClientJavaScript", [], paths.clientJsTestDependencies(), function(complete, fail) {
 		console.log("Testing browser JavaScript: ");
-		karmaRunner().runTests({
-			configFile: paths.karmaConfig,
-			browsers: testedBrowsers(),
-			strict: strict,
-			clientArgs: testSubsetArgs("JS")
-		}, complete, fail);
+		runKarmaOnTaggedSubsetOfTests("UI", complete, fail);
 	});
 
-	incrementalTask("testClientCss", paths.cssTestTarget, [], paths.cssTestDependencies(), function(complete, fail) {
+	incrementalTask("testClientCss", [], paths.cssTestDependencies(), function(complete, fail) {
 		console.log("Testing CSS:");
+		runKarmaOnTaggedSubsetOfTests("CSS", complete, fail);
+	});
+
+	incrementalTask("testClientNetwork", [], paths.clientNetworkTestDependencies(), function(complete, fail) {
+		console.log("Testing browser networking code: ");
+
+		var networkHarness = require("./src/client/network/_network_test_harness.js");
+
+		var io = networkHarness.startTestServer();
+		runKarmaOnTaggedSubsetOfTests("NET", networkHarness.stopTestServerFn(io, complete), fail);
+	});
+
+	function runKarmaOnTaggedSubsetOfTests(tag, complete, fail) {
 		karmaRunner().runTests({
 			configFile: paths.karmaConfig,
 			browsers: testedBrowsers(),
 			strict: strict,
-			clientArgs: testSubsetArgs("CSS")
+			// We use Mocha's "grep" feature as a poor-man's substitute for proper test tagging and subsetting
+			// (which Mocha doesn't have at the time of this writing). However, Mocha's grep option disables
+			// Mocha's "it.only()" feature. So we don't use grep if the "itonly" option is set on the command
+			// line.
+			clientArgs: itonly ? [] : [ "--grep=" + tag + ":" ]
 		}, complete, fail);
-	});
-
-	function testSubsetArgs(tag) {
-		// We use Mocha's "grep" feature as a poor-man's substitute for proper test tagging and subsetting
-		// (which Mocha doesn't have at the time of this writing). However, Mocha's grep option disables
-		// Mocha's "it.only()" feature. So we don't use grep if the "itonly" option is set on the command
-		// line.
-		return itonly ? [] : [ "--grep=" + tag + ":" ];
 	}
 
 	desc("End-to-end smoke tests");
@@ -177,7 +183,7 @@
 		shell().rm("-rf", paths.buildClientDir + "/*");
 		shell().cp(
 			"-R",
-			"src/client/content/*", "src/client/js/vendor", "src/shared/vendor",
+			"src/client/content/*", "src/client/ui/vendor", "src/client/network/vendor", "src/shared/vendor",
 			paths.buildClientDir
 		);
 	});
@@ -188,8 +194,8 @@
 		var browserifyRunner = require("./build/util/browserify_runner.js");
 		browserifyRunner.bundle({
 			requires: [
-				{ path: "./src/client/js/client.js", expose: "./client.js" },
-				{ path: "./src/client/js/html_element.js", expose: "./html_element.js" }
+				{ path: "./src/client/ui/client.js", expose: "./client.js" },
+				{ path: "./src/client/ui/html_element.js", expose: "./html_element.js" }
 			],
 			outfile: paths.buildClientDir + "/bundle.js",
 			options: { debug: true }
@@ -264,8 +270,10 @@
 		return result.replace(/\.lint$/, "");
 	}
 
-	function incrementalTask(taskName, incrementalFile, otherDependencies, fileDependencies, action) {
-		task(taskName, otherDependencies.concat(paths.incrementalDir, incrementalFile));
+	function incrementalTask(taskName, taskDependencies, fileDependencies, action) {
+		var incrementalFile = paths.incrementalDir + "/" + taskName + ".task";
+
+		task(taskName, taskDependencies.concat(paths.incrementalDir, incrementalFile));
 		file(incrementalFile, fileDependencies, function() {
 			action(succeed, fail);
 		}, {async: true});

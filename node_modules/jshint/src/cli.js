@@ -15,6 +15,13 @@ var defReporter       = require("./reporters/default").reporter;
 var OPTIONS = {
   "config": ["c", "Custom configuration file", "string", false ],
   "reporter": ["reporter", "Custom reporter (<PATH>|jslint|checkstyle|unix)", "string", undefined ],
+  "prereq": [
+    "prereq",
+    "Comma-separate list of prerequisite (paths). E.g. files which include" +
+    "definitions of global variabls used throughout your project",
+    "string",
+    null
+  ],
   "exclude": ["exclude",
     "Exclude files matching the given filename pattern (same as .jshintignore)", "string", null],
   "exclude-path": ["exclude-path", "Pass in a custom jshintignore file path", "string", null],
@@ -74,18 +81,18 @@ function deprecated(text, alt) {
 function findConfig(file) {
   var dir  = path.dirname(path.resolve(file));
   var envs = getHomeDir();
-
-  if (!envs)
-    return home;
-
-  var home = path.normalize(path.join(envs, ".jshintrc"));
-
   var proj = findFile(".jshintrc", dir);
+  var home;
+
   if (proj)
     return proj;
 
-  if (shjs.test("-e", home))
-    return home;
+  else if (envs) {
+    home = path.normalize(path.join(envs, ".jshintrc"));
+
+    if (shjs.test("-e", home))
+      return home;
+  }
 
   return null;
 }
@@ -198,7 +205,8 @@ function loadIgnores(params) {
   }
 
   var lines = (file ? shjs.cat(file) : "").split("\n");
-  lines.unshift(params.exclude || "");
+  var exclude = params.exclude || "";
+  lines.unshift.apply(lines, exclude.split(","));
 
   return lines
     .filter(function(line) {
@@ -596,6 +604,12 @@ var exports = {
     var results = [];
     var data = [];
 
+    function mergeCLIPrereq(config) {
+      if (opts.prereq) {
+        config.prereq = (config.prereq || []).concat(opts.prereq.split(/\s*,\s*/));
+      }
+    }
+
     if (opts.useStdin) {
       cli.withStdin(function(code) {
         var config = opts.config;
@@ -610,11 +624,12 @@ var exports = {
         }
 
         if (filename && !config) {
-          config = loadNpmConfig(filename) ||
-            exports.loadConfig(findConfig(filename));
+          config = exports.getConfig(filename);
         }
 
         config = config || {};
+
+        mergeCLIPrereq(config);
 
         lint(extract(code, opts.extract), results, config, data, filename);
         (opts.reporter || defReporter)(results, data, { verbose: opts.verbose });
@@ -634,6 +649,8 @@ var exports = {
         cli.error("Can't open " + file);
         exports.exit(1);
       }
+
+      mergeCLIPrereq(config);
 
       lint(extract(code, opts.extract), results, config, data, file);
 
@@ -743,6 +760,7 @@ var exports = {
       verbose:    options.verbose,
       extract:    options.extract,
       filename:   options.filename,
+      prereq:     options.prereq,
       useStdin:   { "-": true, "/dev/stdin": true }[args[args.length - 1]]
     }, done));
   }

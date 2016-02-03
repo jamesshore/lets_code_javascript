@@ -91,4 +91,13 @@ describe('asn1.js DER encoder', function() {
   test('should properly encode objid as array of strings', function() {
     this.objid();
   }, '1.2.398.3.10.1.1.1.2.2'.split('.'), '060a2a830e030a0101010202');
+
+  test('should properly encode bmpstr', function() {
+    this.bmpstr();
+  }, 'CertificateTemplate', '1e26004300650072007400690066006900630061' +
+                            '0074006500540065006d0070006c006100740065');
+
+  test('should properly encode bmpstr with cyrillic chars', function() {
+    this.bmpstr();
+  }, 'Привет', '1e0c041f04400438043204350442');
 });

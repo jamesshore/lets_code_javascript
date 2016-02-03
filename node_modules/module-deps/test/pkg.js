@@ -11,7 +11,7 @@ test('pkg', function (t) {
     var d = mdeps();
     d.on('package', function (pkg_) {
         var pkg = JSON.parse(fs.readFileSync(dirname + pkg_.dir + '/package.json'));
-        pkg.__dirname = dirname + pkg_.dir;
+        pkg.__dirname = path.join(dirname, pkg_.dir);
 
         t.deepEqual(pkg_, pkg);
     });

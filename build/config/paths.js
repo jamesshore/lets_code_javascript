@@ -7,6 +7,7 @@
 
 	exports.generatedDir = "generated";
 	exports.tempTestfileDir = "generated/test";
+	exports.incrementalDir = "generated/incremental";
 
 	exports.buildDir = "generated/dist";
 	exports.buildServerDir = "generated/dist/server";
@@ -22,22 +23,10 @@
 		]);
 	};
 
-	exports.incrementalDir = "generated/incremental";
-	exports.serverTestTarget = "generated/incremental/server.test";
-	exports.clientTestTarget = "generated/incremental/client.test";
-	exports.cssTestTarget = "generated/incremental/css.test";
-
 	exports.karmaConfig = "./build/config/karma.conf.js";
 
 	exports.serverTestFiles = function() {
 		return deglob("src/server/**/_*_test.js");
-	};
-
-	exports.clientJsTestDependencies = function() {
-		return deglob([
-			"src/client/js/**/*",
-			"src/shared/**/*"
-		]);
 	};
 
 	exports.cssTestDependencies = function() {
@@ -47,11 +36,24 @@
 		]);
 	};
 
+	exports.clientJsTestDependencies = function() {
+		return deglob([
+			"src/client/ui/**/*",
+			"src/shared/**/*"
+		]);
+	};
+
+	exports.clientNetworkTestDependencies = function() {
+		return deglob([
+			"src/client/network/**/*.js",
+			"src/shared/**/*"
+		]);
+	};
+
 	exports.serverFiles = function() {
 		return deglob([
 			"src/server/**/*.js",
-			"src/shared/**/*.js",
-			"src/client/vendor/**/*.js"
+			"src/shared/**/*.js"
 		]);
 	};
 
@@ -63,11 +65,9 @@
 		return deglob([
 			"*.js",
 			"build/**/*.js",
-			"src/client/js/*.js",
-			"src/client/content/*.js",
-			"src/server/**/*.js",
-			"src/shared/**/*.js",
-			"src/*.js"
+			"src/**/*.js"
+		], [
+			"**/vendor/*.js"
 		]);
 	};
 
@@ -83,14 +83,18 @@
 		});
 	};
 
-	function deglob(patterns) {
-		var globPattern = patterns;
-		if (Array.isArray(patterns)) {
-			if (patterns.length === 1) globPattern = patterns[0];
-			else globPattern = "{" + patterns.join(",") + "}";
+	function deglob(patternsToFind, patternsToIgnore) {
+		var globPattern = patternsToFind;
+		if (Array.isArray(patternsToFind)) {
+			if (patternsToFind.length === 1) {
+				globPattern = patternsToFind[0];
+			}
+			else {
+				globPattern = "{" + patternsToFind.join(",") + "}";
+			}
 		}
 
-		return glob.sync(globPattern);
+		return glob.sync(globPattern, { ignore: patternsToIgnore });
 	}
 
 }());

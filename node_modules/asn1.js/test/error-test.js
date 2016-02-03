@@ -40,6 +40,14 @@ describe('asn1.js error', function() {
       test('objid', function() {
         this.objid();
       }, 1, /objid\(\) should be either array or string, got: 1/);
+
+      test('numstr', function() {
+        this.numstr();
+      }, 'hello', /only digits and space/);
+
+      test('printstr', function() {
+        this.printstr();
+      }, 'hello!', /only latin upper and lower case letters/);
     });
 
     describe('composite', function() {
@@ -122,6 +130,18 @@ describe('asn1.js error', function() {
       test('int', function() {
         this.int();
       }, '', /tag of "int"/);
+
+      test('bmpstr invalid length', function() {
+        this.bmpstr();
+      }, '1e0b041f04400438043204350442', /bmpstr length mismatch/);
+
+      test('numstr unsupported characters', function() {
+        this.numstr();
+      }, '12024141', /numstr unsupported characters/);
+
+      test('printstr unsupported characters', function() {
+        this.printstr();
+      }, '13024121', /printstr unsupported characters/);
     });
 
     describe('composite', function() {
