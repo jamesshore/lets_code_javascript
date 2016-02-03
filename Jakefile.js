@@ -89,7 +89,7 @@
 	task("test", [ "testServer", "testClient" ]);
 
 	desc("Test client code");
-	task("testClient", [ "testClientJavaScript", "testSocketIo", "testClientCss" ]);
+	task("testClient", [ "testClientJavaScript", "testClientNetwork", "testClientCss" ]);
 
 	desc("Test server code");
 	incrementalTask("testServer", [ paths.tempTestfileDir ], paths.serverFiles(), function(complete, fail) {
@@ -100,18 +100,6 @@
 		}, complete, fail);
 	});
 
-	incrementalTask("testSocketIo", [], paths.socketIoFiles(), function(complete, fail) {
-		console.log("Integration testing client socket.io wrapper: ");
-
-		var io = require('socket.io')(5030);
-		runKarmaOnTaggedSubsetOfTests("Socket.IO", shutdownServer, fail);
-
-		function shutdownServer() {
-			io.close();
-			complete();
-		}
-	});
-
 	incrementalTask("testClientJavaScript", [], paths.clientJsTestDependencies(), function(complete, fail) {
 		console.log("Testing browser JavaScript: ");
 		runKarmaOnTaggedSubsetOfTests("JS", complete, fail);
@@ -120,6 +108,18 @@
 	incrementalTask("testClientCss", [], paths.cssTestDependencies(), function(complete, fail) {
 		console.log("Testing CSS:");
 		runKarmaOnTaggedSubsetOfTests("CSS", complete, fail);
+	});
+
+	incrementalTask("testClientNetwork", [], paths.clientNetworkTestDependencies(), function(complete, fail) {
+		console.log("Testing browser networking code: ");
+
+		var io = require('socket.io')(5030);
+		runKarmaOnTaggedSubsetOfTests("Socket.IO", shutdownServer, fail);
+
+		function shutdownServer() {
+			io.close();
+			complete();
+		}
 	});
 
 	function runKarmaOnTaggedSubsetOfTests(tag, complete, fail) {

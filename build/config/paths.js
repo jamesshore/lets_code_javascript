@@ -29,16 +29,6 @@
 		return deglob("src/server/**/_*_test.js");
 	};
 
-	exports.clientJsTestDependencies = function() {
-		return deglob([
-			"src/client/js/**/*",
-			"src/shared/**/*"
-		], [
-			"src/client/js/*real_time_network*.js",
-			"src/client/js/vendor/socket.io*.js"
-		]);
-	};
-
 	exports.cssTestDependencies = function() {
 		return deglob([
 			"src/client/content/**/*",
@@ -46,18 +36,23 @@
 		]);
 	};
 
+	exports.clientJsTestDependencies = function() {
+		return deglob([
+			"src/client/js/**/*",
+			"src/shared/**/*"
+		]);
+	};
+
+	exports.clientNetworkTestDependencies = function() {
+		return deglob([
+			"src/client/network/**/*.js"
+		]);
+	};
+
 	exports.serverFiles = function() {
 		return deglob([
 			"src/server/**/*.js",
 			"src/shared/**/*.js"
-		]);
-	};
-
-	exports.socketIoFiles = function() {
-		return deglob([
-			"src/client/js/*real_time_network*.js",
-			"src/client/js/vendor/socket.io*.js",
-
 		]);
 	};
 
