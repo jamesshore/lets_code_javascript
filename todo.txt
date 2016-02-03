@@ -47,9 +47,6 @@ Engineering Tasks:
 
 To Do on current task:
 - De-hackify incremental socket.io target in Jakefile
-	- Make sure network directory is collated
-	- Make socket.io test dependencies more robust (note that they're listed in clientJsTestDependencies too)
-		- Split client/js into client/ui and client/network directories
 	- Move socket.io startup and shutdown into test file
 - Test something real
 

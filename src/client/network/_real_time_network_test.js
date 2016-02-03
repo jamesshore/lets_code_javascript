@@ -7,7 +7,7 @@
 
 	var assert = require("../../shared/_assert.js");
 
-	describe("Socket.IO: Real Time Network", function() {
+	describe("NET: Real Time Network", function() {
 
 		it("connects to Socket.IO server", function(done) {
 			var origin = window.location.protocol + "//" + window.location.host;

@@ -102,7 +102,7 @@
 
 	incrementalTask("testClientJavaScript", [], paths.clientJsTestDependencies(), function(complete, fail) {
 		console.log("Testing browser JavaScript: ");
-		runKarmaOnTaggedSubsetOfTests("JS", complete, fail);
+		runKarmaOnTaggedSubsetOfTests("UI", complete, fail);
 	});
 
 	incrementalTask("testClientCss", [], paths.cssTestDependencies(), function(complete, fail) {
@@ -114,7 +114,7 @@
 		console.log("Testing browser networking code: ");
 
 		var io = require('socket.io')(5030);
-		runKarmaOnTaggedSubsetOfTests("Socket.IO", shutdownServer, fail);
+		runKarmaOnTaggedSubsetOfTests("NET", shutdownServer, fail);
 
 		function shutdownServer() {
 			io.close();
