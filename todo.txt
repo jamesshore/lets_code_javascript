@@ -52,3 +52,5 @@ To Do on current task:
 	- socket.io hanging problem fixed in v1.4.5 (issue #935, https://github.com/socketio/socket.io-client/issues/935)
 - OFF CAMERA:
 	- Look into lack of coloring in Karma tests
+	- Update dependencies
+	- Update Node version
