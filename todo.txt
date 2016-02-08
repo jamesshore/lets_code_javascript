@@ -48,9 +48,7 @@ Engineering Tasks:
 To Do on current task:
 - AT START OF NEXT EPISODE:
 	- Integrated
+	- Updated Node (5.5.0) and dependencies
 	- Fixed Karma coloring by using simplebuild-karma
 	- Cleared up extraneous modules (`npm list --depth=0`)
 	- socket.io hanging problem fixed in v1.4.5 (issue #935, https://github.com/socketio/socket.io-client/issues/935)
-- OFF CAMERA:
-	- Update dependencies
-	- Update Node version
