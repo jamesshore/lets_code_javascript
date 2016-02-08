@@ -19,6 +19,7 @@
     "selenium-webdriver": "^2.46.1",
     "semver": "^5.1.0",
     "shelljs": "^0.5.3",
+    "simplebuild-karma": "^1.0.0",
     "socket.io-client": "^1.4.5"
   },
   "dependencies": {
