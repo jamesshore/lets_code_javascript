@@ -45,9 +45,9 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-* fix port issue
-- Create a bare-bones real_time_network.js
+* Create a bare-bones real_time_network.js
 - Create pointer status abstraction
 
 - OFF-CAMERA:
 	- more extraneous node modules (`npm list --depth=0`)
+	- Report socket.io race condition involving multiple browsers (ref episode 386)
