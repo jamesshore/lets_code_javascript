@@ -9,10 +9,11 @@
 	describe("NET: Real Time Network", function() {
 
 		it("connects to Socket.IO server", function(done) {
-			var origin = window.location.protocol + "//" + window.location.host;
+			var origin = window.location.protocol + "//" + window.location.hostname + ":" + 5030;
 			var socket = io(origin);
 
 			socket.on("connect", function() {
+				socket.disconnect();
 				done();
 			});
 		});

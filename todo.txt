@@ -37,8 +37,7 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Client: Figure out how to test socket.io client
-- Client: Communicate pointer status to server
+* Client: Communicate pointer status to server
 - Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
 - Figure out bundling and distribution for socket.io client
@@ -46,9 +45,9 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-- AT START OF NEXT EPISODE:
-	- Integrated
-	- Updated Node (5.5.0) and dependencies
-	- Fixed Karma coloring by using simplebuild-karma
-	- Cleared up extraneous modules (`npm list --depth=0`)
-	- socket.io hanging problem fixed in v1.4.5 (issue #935, https://github.com/socketio/socket.io-client/issues/935)
+* fix port issue
+- Create a bare-bones real_time_network.js
+- Create pointer status abstraction
+
+- OFF-CAMERA:
+	- more extraneous node modules (`npm list --depth=0`)
