@@ -51,28 +51,16 @@
 
 	var client = exports.client = {};
 
-	client.isConnected = function isConnected(callback) {
+	client.isConnected = function isConnected() {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var url = origin + "/connected-clients";
-		var request = $.get(url);
-		request.done(function(data, status) {
-			console.log("GET succeeded", data, status);
-			callback();
+		var request = $.ajax({
+			type: "GET",
+			url: url,
+			async: false
 		});
-		request.fail(function(_, status, error) {
-			console.log("GET failed", status, error);
-		});
-
-		//var request = new XMLHttpRequest();
-		//request.open("GET", url, false);
-		//request.send(null);
-		//
-		//if (request.status === 200) {
-		//  console.log(request.responseText);
-		//}
-		//else {
-		//	throw new Error("Did not work: " + request.status);
-		//}
+		console.log(request.responseText);
+		return true;
 	};
 
 }());
