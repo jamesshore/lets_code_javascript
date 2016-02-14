@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Server won't exit</title>
+	<meta charset="utf-8">
+
+	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+</head>
+
+<body>
+
+<p>Look at the console!</p>
+
+<script>
+	console.log("Client started");
+
+	console.log("Connecting...");
+	var origin = "http://localhost:5020";
+	var socket = io(origin);
+
+	socket.on("connect", function() {
+		console.log("Server connected");
+		socket.disconnect();
+		console.log("disconnect() called");
+	});
+</script>
+
+
+</body>
+
+</html>
