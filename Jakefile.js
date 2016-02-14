@@ -54,7 +54,7 @@
 		karmaRunner().start({
 			configFile: paths.karmaConfig
 		}, complete, fail);
-	}, {async: true});
+	}, { async: true });
 
 	desc("Start localhost server for manual testing");
 	task("run", [ "build" ], function() {
@@ -63,7 +63,7 @@
 		console.log("Running server. Press Ctrl-C to stop.");
 		runServer.runInteractively();
 		// We never call complete() because we want the task to hang until the user presses 'Ctrl-C'.
-	}, {async: true});
+	}, { async: true });
 
 
 	//*** LINT
@@ -206,7 +206,7 @@
 			outfile: paths.buildClientDir + "/bundle.js",
 			options: { debug: true }
 		}, complete, fail);
-	}, {async: true});
+	}, { async: true });
 
 
 	//*** CHECK VERSIONS
@@ -221,7 +221,7 @@
 			actual: process.version,
 			strict: strict
 		}, complete, fail);
-	});
+	}, { async: true });
 
 
 	//*** CHECKLISTS
