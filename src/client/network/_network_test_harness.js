@@ -6,7 +6,7 @@
 	exports.PORT = 5030;
 
 	exports.startTestServer = function() {
-		var io = require('socket.io')(5030);
+		var io = require('socket.io')(exports.PORT);
 		return io;
 	};
 
