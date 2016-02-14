@@ -46,6 +46,6 @@ Engineering Tasks:
 
 To Do on current task:
 - AT START OF EPISODE:
-	- Reported socket.io server hang: https://github.com/socketio/socket.io/issues/1602
+	- Figured out socket.io server hang: https://github.com/socketio/socket.io/issues/1602
 * Create a bare-bones real_time_network.js
 - Create pointer status abstraction

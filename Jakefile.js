@@ -32,10 +32,6 @@
 	jake.addListener('complete', function () {
 		var elapsedSeconds = (Date.now() - startTime) / 1000;
 		console.log("\n\nBUILD OK (" + elapsedSeconds.toFixed(2) + "s)");
-
-		// Force process exit here due to socket.io race condition:
-		// See bug #1602: https://github.com/socketio/socket.io/issues/1602
-		process.exit(0);
 	});
 
 	desc("Delete all generated files");
