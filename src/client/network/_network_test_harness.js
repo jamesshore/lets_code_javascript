@@ -3,6 +3,7 @@
 (function() {
 	"use strict";
 
+	var CONNECTED_CLIENTS = "/connected-clients";
 	exports.PORT = 5030;
 
 	var server = exports.server = {};
@@ -13,11 +14,12 @@
 	server.connections = [];
 
 	server.start = function() {
+		var socketIoConnections = [];
+
 		var http = require('http');
 		var socketIo = require('socket.io');
 
 		var httpServer = http.createServer();
-		var io = socketIo(httpServer);
 
 		httpServer.on("connection", function(socket) {
 			server.connections.push(socket);
@@ -25,13 +27,27 @@
 
 
 
-
 		httpServer.on("request", function(request, response) {
 			response.setHeader("Access-Control-Allow-Origin", "*");
-			response.end("hi, this is the test harness server!");
+
+			if (request.url === CONNECTED_CLIENTS) {
+				response.end(JSON.stringify(socketIoConnections));
+			}
+			else {
+				response.statusCode = 404;
+				response.end("Not Found");
+			}
+
 		});
 
 
+
+
+		var io = socketIo(httpServer);
+		io.on("connection", function(socket) {
+			var userAgent = socket.request.headers["user-agent"];
+			socketIoConnections.push(userAgent);
+		});
 
 
 		httpServer.listen(exports.PORT);
@@ -53,14 +69,16 @@
 
 	client.isConnected = function isConnected() {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
-		var url = origin + "/connected-clients";
+		var url = origin + CONNECTED_CLIENTS;
 		var request = $.ajax({
 			type: "GET",
 			url: url,
 			async: false
 		});
-		console.log(request.responseText);
-		return true;
+		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
+
+		var userAgents = JSON.parse(request.responseText);
+		return userAgents.indexOf(navigator.userAgent) !== -1;
 	};
 
 }());

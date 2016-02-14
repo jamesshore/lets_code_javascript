@@ -46,4 +46,7 @@ Engineering Tasks:
 
 To Do on current task:
 - Figure out how to make assertions about the connected clients
+	- MS Edge and IE 11 are caching results of AJAX request
+	- Take socket.io connections out of connected list if they close
+- Clean up test harness code
 - Create pointer status abstraction

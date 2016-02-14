@@ -9,10 +9,10 @@
 	describe("NET: Real Time Network", function() {
 
 		it("connects to Socket.IO server", function(done) {
-			//network.connect(harness.PORT, function() {
+			network.connect(harness.PORT, function() {
 				assert.equal(harness.client.isConnected(), true, "client should have connected to server");
 				done();
-			//});
+			});
 
 		});
 
