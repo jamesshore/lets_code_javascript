@@ -16,8 +16,9 @@
 	server.start = function() {
 		var socketIoConnections = [];
 
-		var http = require('http');
-		var socketIo = require('socket.io');
+		var http = require("http");
+		var socketIo = require("socket.io");
+		var url = require("url");
 
 		var httpServer = http.createServer();
 
@@ -30,7 +31,8 @@
 		httpServer.on("request", function(request, response) {
 			response.setHeader("Access-Control-Allow-Origin", "*");
 
-			if (request.url === CONNECTED_CLIENTS) {
+			var path = url.parse(request.url).pathname;
+			if (path === CONNECTED_CLIENTS) {
 				response.end(JSON.stringify(socketIoConnections));
 			}
 			else {
@@ -73,7 +75,8 @@
 		var request = $.ajax({
 			type: "GET",
 			url: url,
-			async: false
+			async: false,
+			cache: false
 		});
 		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
 
