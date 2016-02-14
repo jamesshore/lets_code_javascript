@@ -45,7 +45,5 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-- AT START OF EPISODE:
-	- Figured out socket.io server hang: https://github.com/socketio/socket.io/issues/1602
 * Create a bare-bones real_time_network.js
 - Create pointer status abstraction
