@@ -4,12 +4,12 @@
 	"use strict";
 
 	exports.connect = function(port, callback) {
-		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
-		var socket = io(origin);
-
-		socket.on("connect", function() {
+		//var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
+		//var socket = io(origin);
+		//
+		//socket.on("connect", function() {
 			callback();
-		});
+		//});
 	};
 
 }());

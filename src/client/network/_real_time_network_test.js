@@ -11,19 +11,10 @@
 		it("connects to Socket.IO server", function(done) {
 
 			network.connect(harness.PORT, function() {
+				assert.equal(harness.client.isConnected(), true, "client should have connected to server");
 				done();
 			});
 
-
-
-
-			//var origin = window.location.protocol + "//" + window.location.hostname + ":" + harness.PORT;
-			//var socket = io(origin);
-			//
-			//socket.on("connect", function() {
-			//	socket.disconnect();
-			//	done();
-			//});
 		});
 
 	});
