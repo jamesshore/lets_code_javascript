@@ -49,5 +49,4 @@ To Do on current task:
 - Create pointer status abstraction
 
 - OFF-CAMERA:
-	- more extraneous node modules (`npm list --depth=0`)
 	- Report socket.io race condition involving multiple browsers (ref episode 386)
