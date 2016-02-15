@@ -5,6 +5,8 @@
 
 	var CONNECTED_CLIENTS = "/connected-clients";
 	var WAIT_FOR_DISCONNECT = "/wait-for-disconnect";
+	var POINTER_LOCATION = "/pointer-location";
+
 	exports.PORT = 5030;
 
 	var server = exports.server = {};
@@ -33,6 +35,7 @@
 			switch(path) {
 				case CONNECTED_CLIENTS: return connectedClientsEndpoint(parsedUrl, request, response);
 				case WAIT_FOR_DISCONNECT: return waitForDisconnectEndpoint(parsedUrl, request, response);
+				case POINTER_LOCATION: return pointerLocationEndpoint(parsedUrl, request, response);
 				default:
 					response.statusCode = 404;
 					response.end("Not Found");
@@ -61,6 +64,10 @@
 			socket.on("disconnect", function() {
 				return response.end("disconnected");
 			});
+		}
+
+		function pointerLocationEndpoint(parsedUrl, request, response) {
+			response.end(JSON.stringify({ x: 0, y: 10 }));
 		}
 	};
 
@@ -109,6 +116,20 @@
 
 		var connectedIds = JSON.parse(request.responseText);
 		return connectedIds.indexOf(socketId) !== -1;
+	};
+
+	client.lastPointerLocation = function lastPointerLocation() {
+		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
+		var url = origin + POINTER_LOCATION;
+		var request = $.ajax({
+			type: "GET",
+			url: url,
+			async: false,
+			cache: false
+		});
+		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
+
+		return JSON.parse(request.responseText);
 	};
 
 }());

@@ -21,4 +21,8 @@
 		socket.close();
 	};
 
+	exports.sendPointerLocation = function(x, y) {
+
+	};
+
 }());
