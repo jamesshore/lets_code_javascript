@@ -40,14 +40,10 @@
 			else if (path === WAIT_FOR_DISCONNECT) {
 				var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
 
-				console.log(Object.keys(io.sockets.connected), socketId);
-
 				var socket = io.sockets.sockets[socketId];
 
 				if (socket === undefined || socket.disconnected) return response.end("disconnected");
-				console.log("Not disconnected");
 				socket.on("disconnect", function() {
-					console.log("Disconnect event");
 					return response.end("disconnected");
 				});
 			}
@@ -75,20 +71,23 @@
 
 	var client = exports.client = {};
 
-	client.waitForServerDisconnect = function waitForServerDisconnect(socketId) {
-		console.log("Waiting for disconnect", socketId);
+	client.waitForServerDisconnect = function waitForServerDisconnect(socketId, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var url = origin + WAIT_FOR_DISCONNECT;
 		var request = $.ajax({
 			type: "GET",
 			url: url,
 			data: { socketId: socketId },
-			async: false,
+			async: true,
 			cache: false
 		});
-		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
-
-		console.log(request.responseText);
+		request.done(function() {
+			if (request.status !== 200) throw new Error("Invalid status: " + request.status);
+			callback();
+		});
+		request.fail(function(_, errorText) {
+			throw new Error(errorText);
+		});
 	};
 
 	client.isConnected = function isConnected(socketId) {

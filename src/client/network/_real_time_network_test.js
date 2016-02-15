@@ -13,8 +13,7 @@
 				assert.equal(harness.client.isConnected(socketId), true, "client should have connected to server");
 
 				network.disconnect(function() {
-					harness.client.waitForServerDisconnect(socketId);   // will timeout if disconnect doesn't work
-					done();
+					harness.client.waitForServerDisconnect(socketId, done);   // will timeout if disconnect doesn't work
 				});
 			});
 		});
