@@ -48,7 +48,8 @@
 		var io = socketIo(httpServer);
 		io.on("connection", function(socket) {
 			var userAgent = socket.request.headers["user-agent"];
-			socketIoConnections.push(userAgent);
+
+			socketIoConnections.push(socket.id.substring(2));
 		});
 
 
@@ -69,7 +70,7 @@
 
 	var client = exports.client = {};
 
-	client.isConnected = function isConnected() {
+	client.isConnected = function isConnected(socketId) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var url = origin + CONNECTED_CLIENTS;
 		var request = $.ajax({
@@ -80,8 +81,8 @@
 		});
 		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
 
-		var userAgents = JSON.parse(request.responseText);
-		return userAgents.indexOf(navigator.userAgent) !== -1;
+		var connectedIds = JSON.parse(request.responseText);
+		return connectedIds.indexOf(socketId) !== -1;
 	};
 
 }());

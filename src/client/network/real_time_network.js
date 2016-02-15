@@ -8,7 +8,7 @@
 		var socket = io(origin);
 
 		socket.on("connect", function() {
-			callback();
+			callback(socket.id);
 		});
 	};
 
