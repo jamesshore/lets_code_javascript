@@ -4,6 +4,7 @@
 	"use strict";
 
 	var CONNECTED_CLIENTS = "/connected-clients";
+	var WAIT_FOR_DISCONNECT = "/wait-for-disconnect";
 	exports.PORT = 5030;
 
 	var server = exports.server = {};
@@ -27,13 +28,17 @@
 		httpServer.on("request", function(request, response) {
 			response.setHeader("Access-Control-Allow-Origin", "*");
 
-			var path = url.parse(request.url).pathname;
+			var parsedUrl = url.parse(request.url);
+			var path = parsedUrl.pathname;
 			if (path === CONNECTED_CLIENTS) {
 				var socketIds = Object.keys(io.sockets.connected).map(function(id) {
 					return id.substring(2);
 				});
-
 				response.end(JSON.stringify(socketIds));
+			}
+			else if (path === WAIT_FOR_DISCONNECT) {
+				var socketId = parsedUrl.query;
+				response.end("Hi", socketId);
 			}
 			else {
 				response.statusCode = 404;
@@ -58,6 +63,21 @@
 
 
 	var client = exports.client = {};
+
+	client.waitForServerDisconnect = function waitForServerDisconnect(socketId) {
+		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
+		var url = origin + WAIT_FOR_DISCONNECT;
+		var request = $.ajax({
+			type: "GET",
+			url: url,
+			data: { socketId: socketId },
+			async: false,
+			cache: false
+		});
+		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
+
+		console.log(request.responseText);
+	};
 
 	client.isConnected = function isConnected(socketId) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;

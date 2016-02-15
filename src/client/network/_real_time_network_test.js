@@ -8,13 +8,22 @@
 
 	describe("NET: Real Time Network", function() {
 
-		it("connects to Socket.IO server", function(done) {
+		it("connects and disconnects from Socket.IO server", function(done) {
 			network.connect(harness.PORT, function(socketId) {
 				assert.equal(harness.client.isConnected(socketId), true, "client should have connected to server");
-				done();
+
+				network.disconnect(function() {
+					harness.client.waitForServerDisconnect(socketId);   // will timeout if disconnect doesn't work
+					done();
+				});
 			});
 		});
 
+		//it("sends pointer status to Socket.IO server", function(done) {
+		//	network.connect(harness.PORT, function(socketID) {
+		//		done();
+		//	});
+		//})
 	});
 
 }());

@@ -45,5 +45,8 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-* Clean up test harness code
+* Implement disconnect() and figuring how to wait for server-side disconnect (so we don't have race condition)
 - Create pointer status abstraction
+- Should real_time_network be object-oriented?
+- Create assert.isTrue and assert.isFalse?
+- Clean up test harness code
