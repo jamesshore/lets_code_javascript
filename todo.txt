@@ -40,9 +40,10 @@ Engineering Tasks:
 * Client: Communicate pointer status to server
 - Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
+- Address duplication of 'mouse' event name between client and server
 - Figure out bundling and distribution for socket.io client
 - Figure out how to de-dupe require paths for common files (such as "_assert.js")
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-* Create pointer status abstraction
+- Hook up the client UI code to the network abstraction

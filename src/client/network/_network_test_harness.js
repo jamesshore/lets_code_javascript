@@ -21,6 +21,8 @@
 		var socketIo = require("socket.io");
 		var url = require("url");
 
+		var lastPointerLocation = {};
+
 		var httpServer = http.createServer();
 
 		httpServer.on("connection", function(socket) {
@@ -43,6 +45,14 @@
 		});
 
 		var io = socketIo(httpServer);
+
+		io.on("connection", function(socket) {
+			socket.on("mouse", function(data) {
+				lastPointerLocation[socket.id] = data;
+			});
+		});
+
+
 		httpServer.listen(exports.PORT);
 		return io;
 
@@ -67,7 +77,23 @@
 		}
 
 		function pointerLocationEndpoint(parsedUrl, request, response) {
-			response.end(JSON.stringify({ x: 0, y: 10 }));
+			var querystring = require("querystring");
+			var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
+
+			var result = lastPointerLocation[socketId];
+
+			if (result === undefined) {
+				var socket = io.sockets.sockets[socketId];
+				socket.on("mouse", sendResponse);
+			}
+			else {
+				sendResponse(result);
+			}
+
+			function sendResponse(data) {
+				response.end(JSON.stringify(data));
+				delete lastPointerLocation[socketId];
+			}
 		}
 	};
 
@@ -96,7 +122,7 @@
 		});
 		request.done(function() {
 			if (request.status !== 200) throw new Error("Invalid status: " + request.status);
-			callback();
+			return callback();
 		});
 		request.fail(function(_, errorText) {
 			throw new Error(errorText);
@@ -118,18 +144,23 @@
 		return connectedIds.indexOf(socketId) !== -1;
 	};
 
-	client.lastPointerLocation = function lastPointerLocation() {
+	client.waitForPointerLocation = function waitForPointerLocation(socketId, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var url = origin + POINTER_LOCATION;
 		var request = $.ajax({
 			type: "GET",
 			url: url,
-			async: false,
+			data: { socketId: socketId },
+			async: true,
 			cache: false
 		});
-		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
-
-		return JSON.parse(request.responseText);
+		request.done(function() {
+			if (request.status !== 200) throw new Error("Invalid status: " + request.status);
+			return callback(JSON.parse(request.responseText));
+		});
+		request.fail(function(_, errorText) {
+			throw new Error(errorText);
+		});
 	};
 
 }());

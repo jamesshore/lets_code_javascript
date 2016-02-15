@@ -20,12 +20,12 @@
 
 		it("sends pointer status to Socket.IO server", function(done) {
 			network.connect(harness.PORT, function(socketId) {
-
 				network.sendPointerLocation(50, 75);
 
-				assert.deepEqual(harness.client.lastPointerLocation(), { x: 50, y: 75 });
-
-				network.disconnect(done);
+				harness.client.waitForPointerLocation(socketId, function(location) {
+					assert.deepEqual(location, { x: 50, y: 75 });
+					network.disconnect(done);
+				});
 			});
 		});
 	});

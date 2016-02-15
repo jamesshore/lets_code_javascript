@@ -22,7 +22,7 @@
 	};
 
 	exports.sendPointerLocation = function(x, y) {
-
+		socket.emit("mouse", { x: x, y: y });
 	};
 
 }());
