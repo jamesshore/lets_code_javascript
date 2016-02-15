@@ -15,10 +15,10 @@
 	};
 
 	exports.disconnect = function(callback) {
-		//socket.on("disconnect", function() {
+		socket.on("disconnect", function() {
 			return callback();
-		//});
-		//socket.close();
+		});
+		socket.close();
 	};
 
 }());

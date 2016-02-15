@@ -18,6 +18,7 @@
 		var http = require("http");
 		var socketIo = require("socket.io");
 		var url = require("url");
+		var querystring = require("querystring");
 
 		var httpServer = http.createServer();
 
@@ -37,8 +38,18 @@
 				response.end(JSON.stringify(socketIds));
 			}
 			else if (path === WAIT_FOR_DISCONNECT) {
-				var socketId = parsedUrl.query;
-				response.end("Hi", socketId);
+				var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
+
+				console.log(Object.keys(io.sockets.connected), socketId);
+
+				var socket = io.sockets.sockets[socketId];
+
+				if (socket === undefined || socket.disconnected) return response.end("disconnected");
+				console.log("Not disconnected");
+				socket.on("disconnect", function() {
+					console.log("Disconnect event");
+					return response.end("disconnected");
+				});
 			}
 			else {
 				response.statusCode = 404;
@@ -65,6 +76,7 @@
 	var client = exports.client = {};
 
 	client.waitForServerDisconnect = function waitForServerDisconnect(socketId) {
+		console.log("Waiting for disconnect", socketId);
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var url = origin + WAIT_FOR_DISCONNECT;
 		var request = $.ajax({
