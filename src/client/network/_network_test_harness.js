@@ -14,8 +14,6 @@
 	server.connections = [];
 
 	server.start = function() {
-		var socketIoConnections = [];
-
 		var http = require("http");
 		var socketIo = require("socket.io");
 		var url = require("url");
@@ -26,33 +24,24 @@
 			server.connections.push(socket);
 		});
 
-
-
 		httpServer.on("request", function(request, response) {
 			response.setHeader("Access-Control-Allow-Origin", "*");
 
 			var path = url.parse(request.url).pathname;
 			if (path === CONNECTED_CLIENTS) {
-				response.end(JSON.stringify(socketIoConnections));
+				var socketIds = Object.keys(io.sockets.connected).map(function(id) {
+					return id.substring(2);
+				});
+
+				response.end(JSON.stringify(socketIds));
 			}
 			else {
 				response.statusCode = 404;
 				response.end("Not Found");
 			}
-
 		});
-
-
-
 
 		var io = socketIo(httpServer);
-		io.on("connection", function(socket) {
-			var userAgent = socket.request.headers["user-agent"];
-
-			socketIoConnections.push(socket.id.substring(2));
-		});
-
-
 		httpServer.listen(exports.PORT);
 		return io;
 	};
