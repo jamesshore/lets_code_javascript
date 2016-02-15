@@ -18,7 +18,6 @@
 		var http = require("http");
 		var socketIo = require("socket.io");
 		var url = require("url");
-		var querystring = require("querystring");
 
 		var httpServer = http.createServer();
 
@@ -31,31 +30,38 @@
 
 			var parsedUrl = url.parse(request.url);
 			var path = parsedUrl.pathname;
-			if (path === CONNECTED_CLIENTS) {
-				var socketIds = Object.keys(io.sockets.connected).map(function(id) {
-					return id.substring(2);
-				});
-				response.end(JSON.stringify(socketIds));
-			}
-			else if (path === WAIT_FOR_DISCONNECT) {
-				var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
-
-				var socket = io.sockets.sockets[socketId];
-
-				if (socket === undefined || socket.disconnected) return response.end("disconnected");
-				socket.on("disconnect", function() {
-					return response.end("disconnected");
-				});
-			}
-			else {
-				response.statusCode = 404;
-				response.end("Not Found");
+			switch(path) {
+				case CONNECTED_CLIENTS: return connectedClientsEndpoint(parsedUrl, request, response);
+				case WAIT_FOR_DISCONNECT: return waitForDisconnectEndpoint(parsedUrl, request, response);
+				default:
+					response.statusCode = 404;
+					response.end("Not Found");
 			}
 		});
 
 		var io = socketIo(httpServer);
 		httpServer.listen(exports.PORT);
 		return io;
+
+		function connectedClientsEndpoint(parsedUrl, request, response) {
+			var socketIds = Object.keys(io.sockets.connected).map(function(id) {
+				return id.substring(2);
+			});
+			response.end(JSON.stringify(socketIds));
+		}
+
+		function waitForDisconnectEndpoint(parsedUrl, request, response) {
+			var querystring = require("querystring");
+
+			var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
+
+			var socket = io.sockets.sockets[socketId];
+
+			if (socket === undefined || socket.disconnected) return response.end("disconnected");
+			socket.on("disconnect", function() {
+				return response.end("disconnected");
+			});
+		}
 	};
 
 	server.stopFn = function(io, callback) {
