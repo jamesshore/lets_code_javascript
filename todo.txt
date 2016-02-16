@@ -47,3 +47,7 @@ Engineering Tasks:
 
 To Do on current task:
 - Hook up the client UI code to the network abstraction
+- OFF-CAMERA:
+	- Integrate
+	- Update Node
+	- Update dependencies
