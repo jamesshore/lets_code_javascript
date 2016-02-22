@@ -5,7 +5,7 @@
 	var assert = require("../../shared/_assert.js");
 	var harness = require("./_network_test_harness.js");
 	var Connection = require("./real_time_connection.js");
-	var failFast = require("../ui/fail_fast.js");
+	var failFast = require("../../shared/fail_fast.js");
 
 	describe("NET: Real Time Network", function() {
 

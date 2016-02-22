@@ -7,7 +7,7 @@
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
-	var failFast = require("./fail_fast.js");
+	var failFast = require("../../shared/fail_fast.js");
 
 	var svgCanvas = null;
 	var start = null;

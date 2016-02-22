@@ -3,7 +3,7 @@
 (function() {
 	"use strict";
 
-	var failFast = require("../ui/fail_fast.js");
+	var failFast = require("../../shared/fail_fast.js");
 
 	var Connection = module.exports = function RealTimeConnection() {
 		this._connectCalled = false;

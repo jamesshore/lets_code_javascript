@@ -46,8 +46,7 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-* Maybe real_time_network should actually be real_time_connection object rather than a module
-- Move fail_fast.js to shared/
+* Move fail_fast.js to shared/
 - Inject network object
 - Make spy
 - Test-drive the actual code using spy
