@@ -38,7 +38,9 @@
 		handleTouchDragEvents();
 		handleMousePointerNetworking();
 
-		network.connect();
+		//*****
+		network.connect(5000, function() {});
+		//*****
 
 		return svgCanvas;
 	};
@@ -54,9 +56,11 @@
 	}
 
 	function handleMousePointerNetworking() {
+		//*****
 		drawingArea.onMouseMove(function(pageOffset) {
 			network.sendPointerLocation(pageOffset.x, pageOffset.y);
 		});
+		//*****
 	}
 
 
