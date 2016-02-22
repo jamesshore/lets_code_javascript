@@ -5,35 +5,35 @@
 
 	var failFast = require("../ui/fail_fast.js");
 
-	var socket;
-
 	var Connection = module.exports = function RealTimeConnection() {
 		this._connectCalled = false;
+		this._socket = null;
 	};
 
 	Connection.prototype.connect = function connect(port, callback) {
 		this._connectCalled = true;
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
-		socket = io(origin);
+		this._socket = io(origin);
 
-		socket.on("connect", function() {
-			return callback(socket.id);
+		var self = this;
+		this._socket.on("connect", function() {
+			return callback(self._socket.id);
 		});
 	};
 
 	Connection.prototype.disconnect = function disconnect(callback) {
 		failFastUnlessConnected(this);
 
-		socket.on("disconnect", function() {
+		this._socket.on("disconnect", function() {
 			return callback();
 		});
-		socket.close();
+		this._socket.close();
 	};
 
 	Connection.prototype.sendPointerLocation = function sendPointerLocation(x, y) {
 		failFastUnlessConnected(this);
 
-		socket.emit("mouse", { x: x, y: y });
+		this._socket.emit("mouse", { x: x, y: y });
 	};
 
 	function failFastUnlessConnected(self) {
