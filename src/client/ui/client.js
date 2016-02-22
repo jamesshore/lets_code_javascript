@@ -17,7 +17,7 @@
 	var documentBody;
 	var windowElement;
 
-	exports.initializeDrawingArea = function(elements) {
+	exports.initializeDrawingArea = function(elements, realTimeConnection) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 
 		drawingArea = elements.drawingAreaDiv;
@@ -35,6 +35,8 @@
 		handleClearScreenClick();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
+
+		if (realTimeConnection !== undefined) realTimeConnection.connect(5000);
 
 		return svgCanvas;
 	};

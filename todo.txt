@@ -46,10 +46,10 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-* Move fail_fast.js to shared/
-- Inject network object
+* Inject network object
 - Make spy
 - Test-drive the actual code using spy
+- Stop hardcoding port 5000 in connect()
 - Only send mouse pointer location when it's inside the drawing area
 - Need to translate pageOffset to relativeOffset (do we need to improve design of offset translations?)
 - Open question: how to make sure our test double matches our real code?
