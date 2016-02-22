@@ -11,61 +11,13 @@
 
 	mocha.setup({ignoreLeaks: true});
 
-
-	describe("UI: Drawing area networking", function() {
-
-		var drawingArea;
-		var clearButton;
-		var documentBody;
-		var windowElement;
-		var svgCanvas;
-
-		beforeEach(function() {
-			documentBody = new HtmlElement(document.body);
-			windowElement = new HtmlElement(window);
-
-			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
-			drawingArea.appendSelfToBody();
-
-			clearButton = HtmlElement.fromHtml("<input type='button'>");
-
-		});
-
-		afterEach(function() {
-			documentBody.removeAllEventHandlers();
-			windowElement.removeAllEventHandlers();
-			drawingArea.remove();
-			client.drawingAreaHasBeenRemovedFromDom();
-		});
-
-		it("connects to server upon initialization", function() {
-			function ConnectionSpy() {
-			}
-
-			ConnectionSpy.prototype.connect = function() {
-				ConnectionSpy.prototype.connect.args = arguments;
-			};
-
-			var spy = new ConnectionSpy();
-			svgCanvas = client.initializeDrawingArea({
-				drawingAreaDiv: drawingArea,
-				clearScreenButton: clearButton
-			}, spy);
-
-
-			assert.deepEqual(spy.args, [ 5000 ]);
-
-		});
-
-	});
-
-
 	describe("UI: Drawing area", function() {
 		var drawingArea;
 		var clearButton;
 		var documentBody;
 		var windowElement;
 		var svgCanvas;
+		var connectionSpy;
 
 		beforeEach(function() {
 			documentBody = new HtmlElement(document.body);
@@ -75,11 +27,12 @@
 			drawingArea.appendSelfToBody();
 
 			clearButton = HtmlElement.fromHtml("<input type='button'>");
+			connectionSpy = new RealTimeConnectionSpy();
 
 			svgCanvas = client.initializeDrawingArea({
 				drawingAreaDiv: drawingArea,
 				clearScreenButton: clearButton
-			});
+			}, connectionSpy);
 		});
 
 		afterEach(function() {
@@ -335,6 +288,14 @@
 			});
 		}
 
+		describe("networking", function() {
+
+			it("connects to server upon initialization", function() {
+				assert.deepEqual(connectionSpy.connect.args, [ 5000 ], "connect() should have been called");
+			});
+
+		});
+
 		function dragMouse(startX, startY, endX, endY) {
 			drawingArea.triggerMouseDown(startX, startY);
 			drawingArea.triggerMouseMove(endX, endY);
@@ -346,4 +307,11 @@
 		}
 
 	});
+
+	function RealTimeConnectionSpy() {}
+
+	RealTimeConnectionSpy.prototype.connect = function() {
+		RealTimeConnectionSpy.prototype.connect.args = Array.prototype.slice.call(arguments);
+	};
+
 }());

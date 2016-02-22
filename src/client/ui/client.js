@@ -36,7 +36,7 @@
 		handleMouseDragEvents();
 		handleTouchDragEvents();
 
-		if (realTimeConnection !== undefined) realTimeConnection.connect(5000);
+		realTimeConnection.connect(5000);
 
 		return svgCanvas;
 	};
