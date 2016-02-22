@@ -23,6 +23,7 @@ var Browser = require('..').Browser,
     By = require('..').By,
     error = require('..').error,
     until = require('..').until,
+    promise = require('../lib/promise'),
     test = require('../lib/test'),
     assert = require('../testing/assert'),
     Pages = test.Pages;
@@ -42,7 +43,6 @@ test.suite(function(env) {
   });
 
   describe('finding elements', function() {
-
     test.it(
         'should work after loading multiple pages in a row',
         function() {
@@ -63,7 +63,7 @@ test.suite(function(env) {
         driver.get(Pages.formPage);
         driver.findElement(By.id('nonExistantButton')).
             then(fail, function(e) {
-              assert(e.code).equalTo(error.ErrorCode.NO_SUCH_ELEMENT);
+              assert(e).instanceOf(error.NoSuchElementError);
             });
       });
 
@@ -86,11 +86,12 @@ test.suite(function(env) {
       });
 
       test.it(
-        'should be able to find elements by partial link text', function() {
-          driver.get(Pages.xhtmlTestPage);
-          driver.findElement(By.partialLinkText('ick me')).click();
-          driver.wait(until.titleIs('We Arrive Here'), 5000);
-        });
+          'should be able to find elements by partial link text',
+          function() {
+            driver.get(Pages.xhtmlTestPage);
+            driver.findElement(By.partialLinkText('ick me')).click();
+            driver.wait(until.titleIs('We Arrive Here'), 5000);
+          });
 
       test.it('should work when link text contains equals sign', function() {
         driver.get(Pages.xhtmlTestPage);
@@ -230,7 +231,7 @@ test.suite(function(env) {
         driver.get(Pages.xhtmlTestPage);
         driver.findElement(By.className('nameB')).
             then(fail, function(e) {
-              assert(e.code).equalTo(error.ErrorCode.NO_SUCH_ELEMENT);
+              assert(e).instanceOf(error.NoSuchElementError);
             });
       });
 
@@ -241,11 +242,11 @@ test.suite(function(env) {
         });
       });
 
-      test.it('does not permit compound class names', function() {
-        driver.get(Pages.xhtmlTestPage);
-        driver.findElement(By.className('a b')).then(fail, pass);
-        driver.findElements(By.className('a b')).then(fail, pass);
-        function pass() {}
+      test.it('permits compound class names', function() {
+        return driver.get(Pages.xhtmlTestPage)
+            .then(() => driver.findElement(By.className('nameA nameC')))
+            .then(el => el.getText())
+            .then(text => assert(text).equalTo('An H2 title'));
       });
     });
 
@@ -349,6 +350,43 @@ test.suite(function(env) {
             var el = driver.findElement(By.css('option[selected]'));
             assert(el.getAttribute('value')).equalTo('two');
           });
+    });
+
+    describe('by custom locator', function() {
+      test.it('handles single element result', function() {
+        driver.get(Pages.javascriptPage);
+
+        let link = driver.findElement(function(driver) {
+          let links = driver.findElements(By.tagName('a'));
+          return promise.filter(links, function(link) {
+            return link.getAttribute('id').then(id => id === 'updatediv');
+          }).then(links => links[0]);
+        });
+
+        assert(link.getText()).isEqualTo('Update a div');
+      });
+
+      test.it('uses first element if locator resolves to list', function() {
+        driver.get(Pages.javascriptPage);
+
+        let link = driver.findElement(function() {
+          return driver.findElements(By.tagName('a'));
+        });
+
+        assert(link.getText()).isEqualTo('Change the page title!');
+      });
+
+      test.it('fails if locator returns non-webelement value', function() {
+        driver.get(Pages.javascriptPage);
+
+        let link = driver.findElement(function() {
+          return driver.getTitle();
+        });
+
+        return link.then(
+            () => fail('Should have failed'),
+            (e) => assert(e).instanceOf(TypeError));
+      });
     });
   });
 });

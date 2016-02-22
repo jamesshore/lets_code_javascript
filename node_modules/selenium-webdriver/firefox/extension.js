@@ -19,35 +19,27 @@
 
 'use strict';
 
-var AdmZip = require('adm-zip'),
+const AdmZip = require('adm-zip'),
     fs = require('fs'),
     path = require('path'),
-    util = require('util'),
     xml = require('xml2js');
 
-var promise = require('..').promise,
+const promise = require('../lib/promise'),
     checkedCall = promise.checkedNodeCall,
     io = require('../io');
 
 
 /**
  * Thrown when there an add-on is malformed.
- * @param {string} msg The error message.
- * @constructor
- * @extends {Error}
  */
-function AddonFormatError(msg) {
-  Error.call(this);
-
-  Error.captureStackTrace(this, AddonFormatError);
-
-  /** @override */
-  this.name = AddonFormatError.name;
-
-  /** @override */
-  this.message = msg;
+class AddonFormatError extends Error {
+  /** @param {string} msg The error message. */
+  constructor(msg) {
+    super(msg);
+    /** @override */
+    this.name = this.constructor.name;
+  }
 }
-util.inherits(AddonFormatError, Error);
 
 
 
@@ -147,7 +139,7 @@ function getDetails(addonPath) {
 /**
  * Reads the manifest for a Firefox add-on.
  * @param {string} addonPath Path to a Firefox add-on as a xpi or an extension.
- * @return {!promise.Promise.<!Object>} A promise for the parsed manifest.
+ * @return {!promise.Promise<!Object>} A promise for the parsed manifest.
  */
 function readManifest(addonPath) {
   var manifest;

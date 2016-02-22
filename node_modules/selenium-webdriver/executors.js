@@ -16,47 +16,31 @@
 // under the License.
 
 /**
- * @fileoverview Various utilities for working with
- * {@link webdriver.CommandExecutor} implementations.
+ * @fileoverview Various utilities for working with {@link ./command.Executor}
+ * implementations.
  */
 
-var HttpClient = require('./http').HttpClient,
+ 'use strict';
+
+const HttpClient = require('./http').HttpClient,
     HttpExecutor = require('./http').Executor,
-    promise = require('./_base').require('webdriver.promise');
-
-
-
-/**
- * Wraps a promised {@link webdriver.CommandExecutor}, ensuring no commands
- * are executed until the wrapped executor has been fully built.
- * @param {!webdriver.promise.Promise.<!webdriver.CommandExecutor>} delegate The
- *     promised delegate.
- * @constructor
- * @implements {webdriver.CommandExecutor}
- */
-var DeferredExecutor = function(delegate) {
-
-  /** @override */
-  this.execute = function(command, callback) {
-    delegate.then(function(executor) {
-      executor.execute(command, callback);
-    }, callback);
-  };
-};
+    DeferredExecutor = require('./lib/command').DeferredExecutor,
+    promise = require('./lib/promise');
 
 
 // PUBLIC API
 
 
+/** @deprecated Use {@link ./lib/command.DeferredExecutor} instead. */
 exports.DeferredExecutor = DeferredExecutor;
 
 /**
  * Creates a command executor that uses WebDriver's JSON wire protocol.
- * @param {(string|!webdriver.promise.Promise.<string>)} url The server's URL,
+ * @param {(string|!promise.Promise<string>)} url The server's URL,
  *     or a promise that will resolve to that URL.
- * @param {string=} opt_proxy (optional) The URL of the HTTP proxy for the
+ * @param {?string=} opt_proxy (optional) The URL of the HTTP proxy for the
  *     client to use.
- * @returns {!webdriver.CommandExecutor} The new command executor.
+ * @returns {!./lib/command.Executor} The new command executor.
  */
 exports.createExecutor = function(url, opt_proxy) {
   return new DeferredExecutor(promise.when(url, function(url) {
