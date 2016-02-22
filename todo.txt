@@ -37,7 +37,7 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Client: Communicate pointer status to server
+* Hook up the client UI code to the network abstraction
 - Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
 - Address duplication of 'mouse' event name between client and server
@@ -46,8 +46,7 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-- AT START OF EPISODE:
-	- Integrated
-	- Updated Node
-	- Updated dependencies
-- Hook up the client UI code to the network abstraction
+* Spike the client UI hook-up: prove that it works
+- Figure out our production design
+- Figure out our test strategy (test double?)
+- Test-drive the actual code
