@@ -46,7 +46,10 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-* Spike the client UI hook-up: prove that it works
-- Figure out our production design
-- Figure out our test strategy (test double?)
-- Test-drive the actual code
+* Maybe real_time_network should actually be real_time_connection object rather than a module
+- Inject network object
+- Make spy
+- Test-drive the actual code using spy
+- Only send mouse pointer location when it's inside the drawing area
+- Need to translate pageOffset to relativeOffset (do we need to improve design of offset translations?)
+- Open question: how to make sure our test double matches our real code?
