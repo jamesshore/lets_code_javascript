@@ -46,8 +46,8 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
+- AT START OF EPISODE:
+	- Integrated
+	- Updated Node
+	- Updated dependencies
 - Hook up the client UI code to the network abstraction
-- OFF-CAMERA:
-	- Integrate
-	- Update Node
-	- Update dependencies
