@@ -129,7 +129,7 @@
 		});
 	};
 
-	client.isConnected = function isConnected(socketId) {
+	client.isConnected = function isConnected(connection) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var url = origin + CONNECTED_CLIENTS;
 		var request = $.ajax({
@@ -141,7 +141,7 @@
 		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
 
 		var connectedIds = JSON.parse(request.responseText);
-		return connectedIds.indexOf(socketId) !== -1;
+		return connectedIds.indexOf(connection.getSocketId()) !== -1;
 	};
 
 	client.waitForPointerLocation = function waitForPointerLocation(socketId, callback) {

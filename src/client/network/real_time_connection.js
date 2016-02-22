@@ -36,6 +36,11 @@
 		this._socket.emit("mouse", { x: x, y: y });
 	};
 
+	Connection.prototype.getSocketId = function getSocketId() {
+		failFastUnlessConnected(this);
+		return this._socket.id;
+	};
+
 	function failFastUnlessConnected(self) {
 		failFast.unlessTrue(self._connectCalled, "Connection used before connect() called");
 	}
