@@ -15,33 +15,31 @@
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
 		this._socket = io(origin);
 
-		var self = this;
 		this._socket.on("connect", function() {
-			return callback(self._socket.id);
+			return callback(null);
 		});
 	};
 
 	Connection.prototype.disconnect = function disconnect(callback) {
-		failFastUnlessConnected(this);
+		failFastUnlessConnectCalled(this);
 
 		this._socket.on("disconnect", function() {
-			return callback();
+			return callback(null);
 		});
 		this._socket.close();
 	};
 
 	Connection.prototype.sendPointerLocation = function sendPointerLocation(x, y) {
-		failFastUnlessConnected(this);
-
+		failFastUnlessConnectCalled(this);
 		this._socket.emit("mouse", { x: x, y: y });
 	};
 
 	Connection.prototype.getSocketId = function getSocketId() {
-		failFastUnlessConnected(this);
+		failFastUnlessConnectCalled(this);
 		return this._socket.id;
 	};
 
-	function failFastUnlessConnected(self) {
+	function failFastUnlessConnectCalled(self) {
 		failFast.unlessTrue(self._connectCalled, "Connection used before connect() called");
 	}
 
