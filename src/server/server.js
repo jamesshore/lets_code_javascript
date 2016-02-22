@@ -41,6 +41,7 @@
 	function handleSocketIoEvents(ioServer) {
 		ioServer.on("connect", function(socket) {
 			socket.on("mouse", function(data) {
+				console.log(data);
 				socket.broadcast.emit("mouse", data);
 			});
 		});

@@ -8,6 +8,7 @@
 	var HtmlElement = require("./html_element.js");
 	var browser = require("./browser.js");
 	var failFast = require("./fail_fast.js");
+	var network = require("../network/real_time_network.js");
 
 	var svgCanvas = null;
 	var start = null;
@@ -35,6 +36,9 @@
 		handleClearScreenClick();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
+		handleMousePointerNetworking();
+
+		network.connect();
 
 		return svgCanvas;
 	};
@@ -48,6 +52,13 @@
 			svgCanvas.clear();
 		});
 	}
+
+	function handleMousePointerNetworking() {
+		drawingArea.onMouseMove(function(pageOffset) {
+			network.sendPointerLocation(pageOffset.x, pageOffset.y);
+		});
+	}
+
 
 	function handleMouseDragEvents() {
 		drawingArea.onMouseDown(startDrag);
