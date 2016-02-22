@@ -5,7 +5,10 @@
 
 	var socket;
 
-	exports.connect = function(port, callback) {
+	var Connection = exports.Connection = function Connection() {
+	};
+
+	Connection.prototype.connect = function connect(port, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
 		socket = io(origin);
 
@@ -14,14 +17,14 @@
 		});
 	};
 
-	exports.disconnect = function(callback) {
+	Connection.prototype.disconnect = function disconnect(callback) {
 		socket.on("disconnect", function() {
 			return callback();
 		});
 		socket.close();
 	};
 
-	exports.sendPointerLocation = function(x, y) {
+	Connection.prototype.sendPointerLocation = function sendPointerLocation(x, y) {
 		socket.emit("mouse", { x: x, y: y });
 	};
 
