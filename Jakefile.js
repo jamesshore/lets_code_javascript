@@ -47,8 +47,10 @@
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
-		karmaRunner().serve(paths.karmaConfig, complete, fail);
-	}, {async: true});
+		karmaRunner().start({
+			configFile: paths.karmaConfig
+		}, complete, fail);
+	}, { async: true });
 
 	desc("Start localhost server for manual testing");
 	task("run", [ "build" ], function() {
@@ -57,7 +59,7 @@
 		console.log("Running server. Press Ctrl-C to stop.");
 		runServer.runInteractively();
 		// We never call complete() because we want the task to hang until the user presses 'Ctrl-C'.
-	}, {async: true});
+	}, { async: true });
 
 
 	//*** LINT
@@ -101,7 +103,7 @@
 	});
 
 	incrementalTask("testClientJavaScript", [], paths.clientJsTestDependencies(), function(complete, fail) {
-		console.log("Testing browser JavaScript: ");
+		console.log("Testing browser UI code: ");
 		runKarmaOnTaggedSubsetOfTests("UI", complete, fail);
 	});
 
@@ -115,14 +117,14 @@
 
 		var networkHarness = require("./src/client/network/_network_test_harness.js");
 
-		var io = networkHarness.startTestServer();
-		runKarmaOnTaggedSubsetOfTests("NET", networkHarness.stopTestServerFn(io, complete), fail);
+		var io = networkHarness.server.start();
+		runKarmaOnTaggedSubsetOfTests("NET", networkHarness.server.stopFn(io, complete), fail);
 	});
 
 	function runKarmaOnTaggedSubsetOfTests(tag, complete, fail) {
-		karmaRunner().runTests({
+		karmaRunner().run({
 			configFile: paths.karmaConfig,
-			browsers: testedBrowsers(),
+			expectedBrowsers: testedBrowsers(),
 			strict: strict,
 			// We use Mocha's "grep" feature as a poor-man's substitute for proper test tagging and subsetting
 			// (which Mocha doesn't have at the time of this writing). However, Mocha's grep option disables
@@ -200,7 +202,7 @@
 			outfile: paths.buildClientDir + "/bundle.js",
 			options: { debug: true }
 		}, complete, fail);
-	}, {async: true});
+	}, { async: true });
 
 
 	//*** CHECK VERSIONS
@@ -215,7 +217,7 @@
 			actual: process.version,
 			strict: strict
 		}, complete, fail);
-	});
+	}, { async: true });
 
 
 	//*** CHECKLISTS
@@ -298,7 +300,7 @@
 	}
 
 	function karmaRunner() {
-		return require("./build/util/karma_runner.js");
+		return require("simplebuild-karma");
 	}
 
 	function mochaRunner() {

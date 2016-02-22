@@ -190,12 +190,8 @@
 		}
 
 		function closeSocket(socket, callback) {
-			// timeout is necessary due to apparent race condition in socket.io-client
-			// see https://github.com/socketio/socket.io-client/issues/935
-			setTimeout(function() {
-				socket.disconnect();
-				callback();
-			}, 50);
+			socket.disconnect();
+			callback();
 		}
 
 	});

@@ -8,7 +8,12 @@
 var spawn = require('child_process').spawn,
   path = require('path'),
   fs = require('fs'),
+  getOptions = require('./options'),
   args = [path.join(__dirname, '_mocha')];
+
+// Load mocha.opts into process.argv
+// Must be loaded here to handle node-specific options
+getOptions();
 
 process.argv.slice(2).forEach(function(arg){
   var flag = arg.split('=')[0];
@@ -32,9 +37,12 @@ process.argv.slice(2).forEach(function(arg){
     case '--es_staging':
     case '--no-deprecation':
     case '--prof':
+    case '--log-timer-events':
     case '--throw-deprecation':
     case '--trace-deprecation':
+    case '--use_strict':
     case '--allow-natives-syntax':
+    case '--perf-basic-prof':
       args.unshift(arg);
       break;
     default:
