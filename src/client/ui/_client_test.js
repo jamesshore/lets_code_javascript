@@ -291,8 +291,10 @@
 		describe("networking", function() {
 
 			it("connects to server upon initialization", function() {
-				assert.deepEqual(connectionSpy.connect.args, [ 5000 ], "connect() should have been called");
+				assert.deepEqual(connectionSpy.connect.args, [ window.location.port ], "connect() should have been called");
 			});
+
+
 
 		});
 

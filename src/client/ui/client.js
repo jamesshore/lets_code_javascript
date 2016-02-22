@@ -36,7 +36,7 @@
 		handleMouseDragEvents();
 		handleTouchDragEvents();
 
-		realTimeConnection.connect(5000);
+		realTimeConnection.connect(window.location.port);
 
 		return svgCanvas;
 	};
