@@ -5,7 +5,7 @@
 	var assert = require("../../shared/_assert.js");
 	var harness = require("./_network_test_harness.js");
 	var Connection = require("./real_time_connection.js");
-	var failFast = require("../../shared/fail_fast.js");
+	var async = require("./vendor/async-1.5.2.js");
 
 	describe("NET: Real Time Network", function() {
 
@@ -27,10 +27,18 @@
 			});
 		});
 
-		//it("connect() can be called without callback", function(done) {
-		//	connection.connect(harness.PORT);
-		//	harness.client.waitForServerConnect(connection, done);
-		//});
+		it("connect() can be called without callback", function(done) {
+			connection.connect(harness.PORT);
+			async.until(test, fn, done);
+
+			function test() {
+				return connection.isConnected();
+			}
+
+			function fn(callback) {
+				setTimeout(callback, 50);
+			}
+		});
 
 		it("sends pointer status to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {

@@ -30,6 +30,7 @@ module.exports = function(config) {
 			'src/client/content/*.js': [ 'commonjs' ],
 			'src/client/ui/*.js': [ 'commonjs' ],
 			'src/client/network/*.js': [ 'commonjs' ],
+			'src/client/network/vendor/async-1.5.2.js': [ 'commonjs' ],
 			'src/client/content/vendor/quixote-0.9.0.js': [ 'commonjs' ],
 			'src/shared/vendor/proclaim-2.0.0.js': [ 'commonjs' ],
 			'src/shared/*.js': [ 'commonjs' ]

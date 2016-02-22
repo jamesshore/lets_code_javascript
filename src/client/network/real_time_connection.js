@@ -15,7 +15,7 @@
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
 		this._socket = io(origin);
 
-		this._socket.on("connect", function() {
+		if (callback !== undefined) this._socket.on("connect", function() {
 			return callback(null);
 		});
 	};
