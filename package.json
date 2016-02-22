@@ -13,7 +13,7 @@
     "jshint": "^2.9.1",
     "karma": "^0.13.19",
     "karma-commonjs": "0.0.13",
-    "karma-mocha": "^0.2.1",
+    "karma-mocha": "^0.2.2",
     "mocha": "^2.4.5",
     "procfile": "^0.1.1",
     "selenium-webdriver": "^2.46.1",
