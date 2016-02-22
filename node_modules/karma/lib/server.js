@@ -30,7 +30,8 @@ function createSocketIoServer (webServer, executor, config) {
     // avoid destroying http upgrades from socket.io to get proxied websockets working
     destroyUpgrade: false,
     path: config.urlRoot + 'socket.io/',
-    transports: config.transports
+    transports: config.transports,
+    forceJSONP: config.forceJSONP
   })
 
   // hack to overcome circular dependency
@@ -224,7 +225,7 @@ Server.prototype._start = function (config, launcher, preprocess, fileList, webS
       } else {
         newBrowser = self._injector.createChild([{
           id: ['value', info.id || null],
-          fullName: ['value', info.name],
+          fullName: ['value', (helper.isDefined(info.displayName) ? info.displayName : info.name)],
           socket: ['value', socket]
         }]).instantiate(Browser)
 
@@ -251,8 +252,10 @@ Server.prototype._start = function (config, launcher, preprocess, fileList, webS
       var results = singleRunBrowsers.getResults()
       if (singleRunBrowserNotCaptured) {
         results.exitCode = 1
+      } else if (results.success + results.failed === 0 && !config.failOnEmptyTestSuite) {
+        results.exitCode = 0
+        self.log.warn('Test suite was empty.')
       }
-
       self.emit('run_complete', singleRunBrowsers, results)
     }
   }

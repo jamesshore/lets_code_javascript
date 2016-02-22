@@ -127,7 +127,7 @@ function bodyParser(req, res, next) {
 [npm-image]: https://img.shields.io/npm/v/type-is.svg
 [npm-url]: https://npmjs.org/package/type-is
 [node-version-image]: https://img.shields.io/node/v/type-is.svg
-[node-version-url]: http://nodejs.org/download/
+[node-version-url]: https://nodejs.org/en/download/
 [travis-image]: https://img.shields.io/travis/jshttp/type-is/master.svg
 [travis-url]: https://travis-ci.org/jshttp/type-is
 [coveralls-image]: https://img.shields.io/coveralls/jshttp/type-is/master.svg

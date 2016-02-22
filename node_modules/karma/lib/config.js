@@ -195,7 +195,11 @@ var normalizeConfig = function (config, configFilePath) {
       }
 
       module[type + ':' + name] = ['factory', function (injector) {
-        return injector.createChild([locals], [token]).get(token)
+        var plugin = injector.createChild([locals], [token]).get(token)
+        if (type === 'launcher' && helper.isDefined(definition.displayName)) {
+          plugin.displayName = definition.displayName
+        }
+        return plugin
       }]
       hasSomeInlinedPlugin = true
     })
@@ -249,6 +253,7 @@ var Config = function () {
   this.reportSlowerThan = 0
   this.loggers = [constant.CONSOLE_APPENDER]
   this.transports = ['polling', 'websocket']
+  this.forceJSONP = false
   this.plugins = ['karma-*']
   this.defaultClient = this.client = {
     args: [],
@@ -260,6 +265,8 @@ var Config = function () {
   this.browserDisconnectTolerance = 0
   this.browserNoActivityTimeout = 10000
   this.concurrency = Infinity
+  this.failOnEmptyTestSuite = true
+  this.retryLimit = 2
 }
 
 var CONFIG_SYNTAX_HELP = '  module.exports = function(config) {\n' +
@@ -312,7 +319,7 @@ var parseConfig = function (configFilePath, cliOptions) {
     return process.exit(1)
   }
 
-  // merge the config from config file and cliOptions (precendense)
+  // merge the config from config file and cliOptions (precedence)
   config.set(cliOptions)
 
   // configure the logger as soon as we can
