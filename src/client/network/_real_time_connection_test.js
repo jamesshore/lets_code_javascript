@@ -27,6 +27,11 @@
 			});
 		});
 
+		//it("connect() can be called without callback", function(done) {
+		//	connection.connect(harness.PORT);
+		//	harness.client.waitForServerConnect(connection, done);
+		//});
+
 		it("sends pointer status to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 				connection.sendPointerLocation(50, 75);
@@ -45,12 +50,23 @@
 			});
 		});
 
+		it("checks status of connection", function(done) {
+			connection.connect(harness.PORT, function() {
+				assert.equal(connection.isConnected(), true, "should be connected");
+				connection.disconnect(function() {
+					assert.equal(connection.isConnected(), false, "should not be connected");
+					done();
+				});
+			});
+		});
+
 		it("fails fast when methods are called before connect() is called", function() {
 			var expectedMessage = "Connection used before connect() called";
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
+			assert.throws(connection.isConnected.bind(connection), expectedMessage, "isConnected()");
 
 			function callback() {
 				assert.fail("Callback should never be called");

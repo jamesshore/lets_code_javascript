@@ -39,6 +39,11 @@
 		return this._socket.id;
 	};
 
+	Connection.prototype.isConnected = function isConnected() {
+		failFastUnlessConnectCalled(this);
+		return this._socket.connected;
+	};
+
 	function failFastUnlessConnectCalled(self) {
 		failFast.unlessTrue(self._connectCalled, "Connection used before connect() called");
 	}
