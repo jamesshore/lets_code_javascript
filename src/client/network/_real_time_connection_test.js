@@ -4,14 +4,15 @@
 
 	var assert = require("../../shared/_assert.js");
 	var harness = require("./_network_test_harness.js");
-	var network = require("./real_time_connection.js");
+	var Connection = require("./real_time_connection.js");
+	var failFast = require("../ui/fail_fast.js");
 
 	describe("NET: Real Time Network", function() {
 
 		var connection;
 
 		beforeEach(function() {
-			connection = new network.Connection();
+			connection = new Connection();
 		});
 
 		it("connects and disconnects from Socket.IO server", function(done) {
@@ -33,6 +34,17 @@
 					connection.disconnect(done);
 				});
 			});
+		});
+
+		it("fails fast when methods are called before connect() is called", function() {
+			var expectedMessage = "Connection used before connect() called";
+
+			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
+			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
+
+			function callback() {
+				assert.fail("Callback should never be called");
+			}
 		});
 	});
 

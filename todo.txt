@@ -47,6 +47,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Maybe real_time_network should actually be real_time_connection object rather than a module
+- Move fail_fast.js to shared/
 - Inject network object
 - Make spy
 - Test-drive the actual code using spy
