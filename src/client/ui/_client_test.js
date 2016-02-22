@@ -291,9 +291,20 @@
 		describe("networking", function() {
 
 			it("connects to server upon initialization", function() {
-				assert.deepEqual(connectionSpy.connect.args, [ window.location.port ], "connect() should have been called");
+				assert.deepEqual(connectionSpy.connect.args, [ window.location.port ]);
 			});
 
+			it("sends pointer location whenever mouse moves", function() {
+				//drawingArea.triggerMouseMove(50, 60);
+				//assert.deepEqual(connectionSpy.sendPointerLocation.args, [ 58, 68 ]);
+			});
+
+			it("sends pointer location when touch changes", function() {
+				if (!browser.supportsTouchEvents()) return;
+
+				drawingArea.triggerSingleTouchMove(30, 40);
+				assert.deepEqual(connectionSpy.sendPointerLocation.args, [ 13, 28 ]);
+			});
 
 
 		});
@@ -314,6 +325,10 @@
 
 	RealTimeConnectionSpy.prototype.connect = function() {
 		RealTimeConnectionSpy.prototype.connect.args = Array.prototype.slice.call(arguments);
+	};
+
+	RealTimeConnectionSpy.prototype.sendPointerLocation = function() {
+		RealTimeConnectionSpy.prototype.sendPointerLocation.args = Array.prototype.slice.call(arguments);
 	};
 
 }());
