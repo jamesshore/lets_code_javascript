@@ -1,6 +1,6 @@
 var path = require('path')
 var optimist = require('optimist')
-var fs = require('fs')
+var fs = require('graceful-fs')
 
 var Server = require('./server')
 var helper = require('./helper')
@@ -35,6 +35,10 @@ var processArgs = function (argv, options, fs, path) {
 
   if (helper.isString(options.colors)) {
     options.colors = options.colors === 'true'
+  }
+
+  if (helper.isString(options.failOnEmptyTestSuite)) {
+    options.failOnEmptyTestSuite = options.failOnEmptyTestSuite === 'true'
   }
 
   if (helper.isString(options.logLevel)) {
@@ -165,6 +169,8 @@ var describeStart = function () {
     .describe('single-run', 'Run the test when browsers captured and exit.')
     .describe('no-single-run', 'Disable single-run.')
     .describe('report-slower-than', '<integer> Report tests that are slower than given time [ms].')
+    .describe('fail-on-empty-test-suite', 'Fail on empty test suite.')
+    .describe('no-fail-on-empty-test-suite', 'Do not fail on empty test suite.')
     .describe('help', 'Print usage and options.')
 }
 
@@ -176,6 +182,8 @@ var describeRun = function () {
       '  $0 run [<configFile>] [<options>] [ -- <clientArgs>]')
     .describe('port', '<integer> Port where the server is listening.')
     .describe('no-refresh', 'Do not re-glob all the patterns.')
+    .describe('fail-on-empty-test-suite', 'Fail on empty test suite.')
+    .describe('no-fail-on-empty-test-suite', 'Do not fail on empty test suite.')
     .describe('help', 'Print usage.')
 }
 

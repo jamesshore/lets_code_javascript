@@ -29,6 +29,7 @@ User Stories to finish current MMF:
 * see other users' mouse pointers
 - multi-user clear button
 - multi-user line drawing
+- other users' mouse pointers disappear when they leave the drawing area
 - version synchronization across client/server
 - offline handling
 - collision-handling / conflicts / race conditions
@@ -37,17 +38,17 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Client: Communicate pointer status to server
+* Hook up the client UI code to the network abstraction
+- Need to translate pageOffset to relativeOffset (do we need to improve design of offset translations?)
 - Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
+- Open question: how to make sure our test double matches our real code?
+	- Use sinon.js? testdouble.js?
+- Revisit Martin Grandrath's client connection design question (in E399)
 - Address duplication of 'mouse' event name between client and server
 - Figure out bundling and distribution for socket.io client
 - Figure out how to de-dupe require paths for common files (such as "_assert.js")
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
+- Update smoke tests
 
 To Do on current task:
-- Hook up the client UI code to the network abstraction
-- OFF-CAMERA:
-	- Integrate
-	- Update Node
-	- Update dependencies

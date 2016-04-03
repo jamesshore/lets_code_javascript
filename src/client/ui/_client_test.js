@@ -17,6 +17,7 @@
 		var documentBody;
 		var windowElement;
 		var svgCanvas;
+		var connectionSpy;
 
 		beforeEach(function() {
 			documentBody = new HtmlElement(document.body);
@@ -26,11 +27,12 @@
 			drawingArea.appendSelfToBody();
 
 			clearButton = HtmlElement.fromHtml("<input type='button'>");
+			connectionSpy = new RealTimeConnectionSpy();
 
 			svgCanvas = client.initializeDrawingArea({
 				drawingAreaDiv: drawingArea,
 				clearScreenButton: clearButton
-			});
+			}, connectionSpy);
 		});
 
 		afterEach(function() {
@@ -286,6 +288,31 @@
 			});
 		}
 
+		describe("networking", function() {
+
+			it("connects to server upon initialization", function() {
+				assert.deepEqual(connectionSpy.connectArgs, [ window.location.port ]);
+			});
+
+			it("sends pointer location whenever mouse moves", function() {
+				drawingArea.triggerMouseMove(50, 60);
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 58, 68 ]);
+			});
+
+			it("doesn't send pointer location when mouse moves outside drawing area", function() {
+				documentBody.triggerMouseMove(13, 7);
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
+			});
+
+			it("doesn't send pointer location when touch changes", function() {
+				if (!browser.supportsTouchEvents()) return;
+
+				drawingArea.triggerSingleTouchMove(30, 40);
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
+			});
+
+		});
+
 		function dragMouse(startX, startY, endX, endY) {
 			drawingArea.triggerMouseDown(startX, startY);
 			drawingArea.triggerMouseMove(endX, endY);
@@ -297,4 +324,15 @@
 		}
 
 	});
+
+	function RealTimeConnectionSpy() {}
+
+	RealTimeConnectionSpy.prototype.connect = function() {
+		this.connectArgs = Array.prototype.slice.call(arguments);
+	};
+
+	RealTimeConnectionSpy.prototype.sendPointerLocation = function() {
+		this.sendPointerLocationArgs = Array.prototype.slice.call(arguments);
+	};
+
 }());

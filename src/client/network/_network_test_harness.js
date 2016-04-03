@@ -110,13 +110,13 @@
 
 	var client = exports.client = {};
 
-	client.waitForServerDisconnect = function waitForServerDisconnect(socketId, callback) {
+	client.waitForServerDisconnect = function waitForServerDisconnect(connection, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var url = origin + WAIT_FOR_DISCONNECT;
 		var request = $.ajax({
 			type: "GET",
 			url: url,
-			data: { socketId: socketId },
+			data: { socketId: connection.getSocketId() },
 			async: true,
 			cache: false
 		});
@@ -129,7 +129,7 @@
 		});
 	};
 
-	client.isConnected = function isConnected(socketId) {
+	client.isConnected = function isConnected(connection) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var url = origin + CONNECTED_CLIENTS;
 		var request = $.ajax({
@@ -141,16 +141,16 @@
 		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
 
 		var connectedIds = JSON.parse(request.responseText);
-		return connectedIds.indexOf(socketId) !== -1;
+		return connectedIds.indexOf(connection.getSocketId()) !== -1;
 	};
 
-	client.waitForPointerLocation = function waitForPointerLocation(socketId, callback) {
+	client.waitForPointerLocation = function waitForPointerLocation(connection, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var url = origin + POINTER_LOCATION;
 		var request = $.ajax({
 			type: "GET",
 			url: url,
-			data: { socketId: socketId },
+			data: { socketId: connection.getSocketId() },
 			async: true,
 			cache: false
 		});

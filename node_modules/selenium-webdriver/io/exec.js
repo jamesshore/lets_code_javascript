@@ -17,9 +17,8 @@
 
 'use strict';
 
-var childProcess = require('child_process');
-
-var promise = require('..').promise;
+const childProcess = require('child_process');
+const promise = require('../lib/promise');
 
 
 /**
@@ -32,9 +31,10 @@ var promise = require('..').promise;
  *     information, refer to the documentation of `child_process.spawn`.
  *
  * @typedef {{
- *   args: (!Array.<string>|undefined),
- *   env: (!Object.<string, string>|undefined),
- *   stdio: (string|!Array.<string|number|!Stream|null|undefined>|undefined)
+ *   args: (!Array<string>|undefined),
+ *   env: (!Object<string, string>|undefined),
+ *   stdio: (string|!Array<string|number|!stream.Stream|null|undefined>|
+ *           undefined)
  * }}
  */
 var Options;
@@ -42,56 +42,68 @@ var Options;
 
 /**
  * Describes a command's termination conditions.
- * @param {?number} code The exit code, or {@code null} if the command did not
- *     exit normally.
- * @param {?string} signal The signal used to kill the command, or
- *     {@code null}.
- * @constructor
  */
-var Result = function(code, signal) {
-  /** @type {?number} */
-  this.code = code;
+class Result {
+  /**
+   * @param {?number} code The exit code, or {@code null} if the command did not
+   *     exit normally.
+   * @param {?string} signal The signal used to kill the command, or
+   *     {@code null}.
+   */
+  constructor(code, signal) {
+    /** @type {?number} */
+    this.code = code;
 
-  /** @type {?string} */
-  this.signal = signal;
-};
+    /** @type {?string} */
+    this.signal = signal;
+  }
+
+  /** @override */
+  toString() {
+    return `Result(code=${this.code}, signal=${this.signal})`;
+  }
+}
 
 
-/** @override */
-Result.prototype.toString = function() {
-  return 'Result(code=' + this.code + ', signal=' + this.signal + ')';
-};
-
-
+const COMMAND_RESULT =
+    /** !WeakMap<!Command, !promise.Promise<!Result>> */new WeakMap;
+const KILL_HOOK = /** !WeakMap<!Command, function(string)> */new WeakMap;
 
 /**
  * Represents a command running in a sub-process.
- * @param {!promise.Promise.<!Result>} result The command result.
- * @constructor
  */
-var Command = function(result, onKill) {
+class Command {
+  /**
+   * @param {!promise.Promise<!Result>} result The command result.
+   * @param {function(string)} onKill The function to call when {@link #kill()}
+   *     is called.
+   */
+  constructor(result, onKill) {
+    COMMAND_RESULT.set(this, result);
+    KILL_HOOK.set(this, onKill);
+  }
+
   /** @return {boolean} Whether this command is still running. */
-  this.isRunning = function() {
-    return result.isPending();
-  };
+  isRunning() {
+    return COMMAND_RESULT.get(this).isPending();
+  }
 
   /**
-   * @return {!promise.Promise.<!Result>} A promise for the result of this
+   * @return {!promise.Promise<!Result>} A promise for the result of this
    *     command.
    */
-  this.result = function() {
-    return result;
-  };
+  result() {
+    return /** @type {!promise.Promise<!Result>} */(COMMAND_RESULT.get(this));
+  }
 
   /**
    * Sends a signal to the underlying process.
-   * @param {string=} opt_signal The signal to send; defaults to
-   *     {@code SIGTERM}.
+   * @param {string=} opt_signal The signal to send; defaults to `SIGTERM`.
    */
-  this.kill = function(opt_signal) {
-    onKill(opt_signal || 'SIGTERM');
-  };
-};
+  kill(opt_signal) {
+    KILL_HOOK.get(this)(opt_signal || 'SIGTERM');
+  }
+}
 
 
 // PUBLIC API
@@ -105,7 +117,7 @@ var Command = function(result, onKill) {
  * @param {Options=} opt_options The command options.
  * @return {!Command} The launched command.
  */
-module.exports = function(command, opt_options) {
+module.exports = function exec(command, opt_options) {
   var options = opt_options || {};
 
   var proc = childProcess.spawn(command, options.args || [], {
@@ -138,3 +150,10 @@ module.exports = function(command, opt_options) {
     proc && proc.kill('SIGTERM');
   }
 };
+
+// Exported to improve generated API documentation.
+
+module.exports.Command = Command;
+/** @typedef {!Options} */
+module.exports.Options = Options;
+module.exports.Result = Result;
