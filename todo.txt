@@ -49,6 +49,6 @@ Engineering Tasks:
 - Figure out bundling and distribution for socket.io client
 - Figure out how to de-dupe require paths for common files (such as "_assert.js")
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
+- Update smoke tests
 
 To Do on current task:
-* Hook up HTML code and update smoke tests

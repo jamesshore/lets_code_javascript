@@ -197,7 +197,8 @@
 		browserifyRunner.bundle({
 			requires: [
 				{ path: "./src/client/ui/client.js", expose: "./client.js" },
-				{ path: "./src/client/ui/html_element.js", expose: "./html_element.js" }
+				{ path: "./src/client/ui/html_element.js", expose: "./html_element.js" },
+				{ path: "./src/client/network/real_time_connection.js", expose: "./real_time_connection.js" }
 			],
 			outfile: paths.buildClientDir + "/bundle.js",
 			options: { debug: true }
