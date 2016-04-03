@@ -234,7 +234,7 @@
 		console.log("   e. 'jake'");
 		console.log("   f. If jake fails, stop! Try again after fixing the issue.");
 		console.log("3. 'git checkout integration'");
-		console.log("4. 'git merge master --no-ff --log'");
+		console.log("4. 'git merge master --no-ff --log=100 -m \"INTEGRATE: \" -e'");
 		console.log("5. 'git checkout master'");
 	});
 
