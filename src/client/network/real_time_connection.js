@@ -40,8 +40,7 @@
 	};
 
 	Connection.prototype.isConnected = function isConnected() {
-		failFastUnlessConnectCalled(this);
-		return this._socket.connected;
+		return this._socket !== null && this._socket.connected;
 	};
 
 	function failFastUnlessConnectCalled(self) {

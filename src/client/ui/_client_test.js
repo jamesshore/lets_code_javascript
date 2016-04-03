@@ -306,7 +306,6 @@
 				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
 			});
 
-
 		});
 
 		function dragMouse(startX, startY, endX, endY) {

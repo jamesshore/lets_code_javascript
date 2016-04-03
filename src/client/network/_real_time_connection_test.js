@@ -59,10 +59,12 @@
 		});
 
 		it("checks status of connection", function(done) {
+			assert.equal(connection.isConnected(), false, "should not be connected before connect() is called");
+
 			connection.connect(harness.PORT, function() {
-				assert.equal(connection.isConnected(), true, "should be connected");
+				assert.equal(connection.isConnected(), true, "should be connected after connect() is complete");
 				connection.disconnect(function() {
-					assert.equal(connection.isConnected(), false, "should not be connected");
+					assert.equal(connection.isConnected(), false, "should not be connected after disconnect() is complete");
 					done();
 				});
 			});
@@ -74,7 +76,6 @@
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
-			assert.throws(connection.isConnected.bind(connection), expectedMessage, "isConnected()");
 
 			function callback() {
 				assert.fail("Callback should never be called");

@@ -38,6 +38,7 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Hook up the client UI code to the network abstraction
+- Hook up HTML code and update smoke tests
 - Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
 - Address duplication of 'mouse' event name between client and server
@@ -46,9 +47,8 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-* Send mouse pointer location
-- Discuss Martin Grandrath's suggestions in E399
-- Only send mouse pointer location when it's inside the drawing area
+* Only send mouse pointer location when it's inside the drawing area
 - Need to translate pageOffset to relativeOffset (do we need to improve design of offset translations?)
 - Open question: how to make sure our test double matches our real code?
 	- Use sinon.js? testdouble.js?
+- Revisit Martin Grandrath's client connection design question (in E399)
