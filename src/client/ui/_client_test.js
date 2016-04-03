@@ -299,6 +299,11 @@
 				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 58, 68 ]);
 			});
 
+			it("doesn't send pointer location when mouse moves outside drawing area", function() {
+				documentBody.triggerMouseMove(13, 7);
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
+			});
+
 			it("doesn't send pointer location when touch changes", function() {
 				if (!browser.supportsTouchEvents()) return;
 
