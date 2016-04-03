@@ -47,7 +47,7 @@ test.suite(function(env) {
     test.it('fails if script throws', function() {
       execute('throw new Error("boom")')
           .then(function() { throw shoudlHaveFailed; })
-          .thenCatch(function(e) {
+          .catch(function(e) {
             // The java WebDriver server adds a bunch of crap to error messages.
             // Error message will just be "JavaScript error" for IE.
             assert(e.message).matches(/.*(JavaScript error|boom).*/);
@@ -57,7 +57,7 @@ test.suite(function(env) {
     test.it('fails if script does not parse', function() {
       execute('throw function\\*')
           .then(function() { throw shoudlHaveFailed; })
-          .thenCatch(function(e) {
+          .catch(function(e) {
             assert(e).notEqualTo(shouldHaveFailed);
           });
     });
@@ -308,6 +308,20 @@ test.suite(function(env) {
       });
     });
 
+    describe('getInnerHtml', function() {
+      test.it('returns element innerHTML using executeScript', function() {
+        let html = driver.findElement(By.css('div.request')).getInnerHtml();
+        assert(html).equalTo('GET /common/echo HTTP/1.1');
+      });
+    });
+
+    describe('getOuterHtml', function() {
+      test.it('returns element outerHTML using executeScript', function() {
+        let html = driver.findElement(By.css('div.request')).getOuterHtml();
+        assert(html)
+            .equalTo('<div class="request">GET /common/echo HTTP/1.1</div>');
+      });
+    });
   });
 
   function verifyJson(expected) {
