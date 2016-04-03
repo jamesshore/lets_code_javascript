@@ -46,9 +46,8 @@ Engineering Tasks:
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 
 To Do on current task:
-- AT START OF EPISODE:
-	- Discuss Martin Grandrath's suggestions in E399
 * Send mouse pointer location
+- Discuss Martin Grandrath's suggestions in E399
 - Only send mouse pointer location when it's inside the drawing area
 - Need to translate pageOffset to relativeOffset (do we need to improve design of offset translations?)
 - Open question: how to make sure our test double matches our real code?

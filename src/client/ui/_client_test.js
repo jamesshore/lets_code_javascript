@@ -291,19 +291,19 @@
 		describe("networking", function() {
 
 			it("connects to server upon initialization", function() {
-				assert.deepEqual(connectionSpy.connect.args, [ window.location.port ]);
+				assert.deepEqual(connectionSpy.connectArgs, [ window.location.port ]);
 			});
 
 			it("sends pointer location whenever mouse moves", function() {
-				//drawingArea.triggerMouseMove(50, 60);
-				//assert.deepEqual(connectionSpy.sendPointerLocation.args, [ 58, 68 ]);
+				drawingArea.triggerMouseMove(50, 60);
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 58, 68 ]);
 			});
 
-			it("sends pointer location when touch changes", function() {
+			it("doesn't send pointer location when touch changes", function() {
 				if (!browser.supportsTouchEvents()) return;
 
 				drawingArea.triggerSingleTouchMove(30, 40);
-				assert.deepEqual(connectionSpy.sendPointerLocation.args, [ 13, 28 ]);
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
 			});
 
 
@@ -324,11 +324,11 @@
 	function RealTimeConnectionSpy() {}
 
 	RealTimeConnectionSpy.prototype.connect = function() {
-		RealTimeConnectionSpy.prototype.connect.args = Array.prototype.slice.call(arguments);
+		this.connectArgs = Array.prototype.slice.call(arguments);
 	};
 
 	RealTimeConnectionSpy.prototype.sendPointerLocation = function() {
-		RealTimeConnectionSpy.prototype.sendPointerLocation.args = Array.prototype.slice.call(arguments);
+		this.sendPointerLocationArgs = Array.prototype.slice.call(arguments);
 	};
 
 }());
