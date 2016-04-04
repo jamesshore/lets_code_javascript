@@ -52,3 +52,5 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
+* Consider how to improve the design
+- Do it

@@ -296,7 +296,7 @@
 
 			it("sends pointer location whenever mouse moves", function() {
 				drawingArea.triggerMouseMove(50, 60);
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 58, 68 ]);
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 50, 60 ]);
 			});
 
 			it("doesn't send pointer location when mouse moves outside drawing area", function() {

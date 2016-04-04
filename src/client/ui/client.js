@@ -49,8 +49,9 @@
 	};
 
 	function sendPointerEventsOverNetwork() {
-		drawingArea.onMouseMove(function(location) {
-			network.sendPointerLocation(location.x, location.y);
+		drawingArea.onMouseMove(function(pageOffset) {
+			var relativeOffset = drawingArea.relativeOffset(pageOffset);
+			network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
 		});
 	}
 
