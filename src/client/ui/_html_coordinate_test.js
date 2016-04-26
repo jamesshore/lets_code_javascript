@@ -23,35 +23,35 @@
 			var coord1 = HtmlCoordinate.fromRelativeCoords(element, 10, 20);
 			var coord2 = HtmlCoordinate.fromRelativeCoords(element, 10, 20);
 
-			assert.equal(coord1.equals(coord2), true);
+			assert.objEqual(coord1, coord2);
 		});
 
 		it("are equal when HtmlElement is different but the underlying DOM element is the same", function() {
 			var coord1 = HtmlCoordinate.fromRelativeCoords(element, 10, 20);
 			var coord2 = HtmlCoordinate.fromRelativeCoords(HtmlElement.fromId("element"), 10, 20);
 
-			assert.equal(coord1.equals(coord2), true);
+			assert.objEqual(coord1, coord2);
 		});
 
 		it("are different when elements are different", function() {
 			var coord1 = HtmlCoordinate.fromRelativeCoords(element, 10, 20);
 			var coord2 = HtmlCoordinate.fromRelativeCoords(HtmlElement.fromHtml("<div></div>"), 10, 20);
 
-			assert.equal(coord1.equals(coord2), false);
+			assert.objNotEqual(coord1, coord2);
 		});
 
 		it("are different when x values are different", function() {
 			var coord1 = HtmlCoordinate.fromRelativeCoords(element, 10, 20);
 			var coord2 = HtmlCoordinate.fromRelativeCoords(element, 15, 20);
 
-			assert.equal(coord1.equals(coord2), false);
+			assert.objNotEqual(coord1, coord2);
 		});
 
 		it("are different when y values are different", function() {
 			var coord1 = HtmlCoordinate.fromRelativeCoords(element, 10, 20);
 			var coord2 = HtmlCoordinate.fromRelativeCoords(element, 10, 25);
 
-			assert.equal(coord1.equals(coord2), false);
+			assert.objNotEqual(coord1, coord2);
 		});
 
 	});

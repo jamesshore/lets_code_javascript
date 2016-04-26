@@ -52,7 +52,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Make a HtmlCoordinate object
-	- Update assertion library to have objEquals and other better helper methods
+	- Add toString() method
 	- Implement page offset translation code
 	- Implement fromPageCoordinate() factory method
 - Improve client.js
