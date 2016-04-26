@@ -22,5 +22,13 @@
 			this._relativeY === that._relativeY;
 	};
 
+	HtmlCoordinate.prototype.toString = function() {
+		var x = this._relativeX;
+		var y = this._relativeY;
+		var tag = this._element.toDomElement().tagName.toLowerCase();
+
+		return "[HtmlCoordinate (" + x + ", " + y + ") relative to <" + tag + ">]";
+	};
+
 
 }());
