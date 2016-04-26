@@ -51,11 +51,10 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
-* Make a HtmlCoordinate object
-	- Add toString() method
-	- Implement page offset translation code
-	- Implement fromPageCoordinate() factory method
+- Implement fromPageCoordinate() factory method
+- Implement page offset translation code
 - Improve client.js
 - Improve _client_test.js
+- Modify HtmlElement to return HtmlCoordinate in mouse events
 - Remove pageOffset() and relativeOffset() from HtmlElement and its tests
 - Improve svg_canvas.js to use location?

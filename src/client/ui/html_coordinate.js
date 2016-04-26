@@ -14,6 +14,14 @@
 		return new HtmlCoordinate(element, x, y);
 	};
 
+	HtmlCoordinate.prototype.toRelativeX = function() {
+			return this._relativeX;
+		};
+
+	HtmlCoordinate.prototype.toRelativeY = function() {
+		return this._relativeY;
+	};
+
 	HtmlCoordinate.prototype.equals = function(that) {
 		failFast.unlessTrue(that instanceof HtmlCoordinate, "tried to compare HtmlCoordinate with a different type of object");
 

@@ -19,6 +19,12 @@
 			element.remove();
 		});
 
+		it("provides relative x and y coordinates", function() {
+			var coord = HtmlCoordinate.fromRelativeCoords(element, 10, 20);
+			assert.equal(coord.toRelativeX(), 10, "x");
+			assert.equal(coord.toRelativeY(), 20, "y");
+		});
+
 		it("converts to string for debugging purposes", function() {
 			var coord = HtmlCoordinate.fromRelativeCoords(element, 10, 20);
 			assert.equal(coord.toString(), "[HtmlCoordinate (10, 20) relative to <div>]");
