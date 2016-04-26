@@ -51,11 +51,8 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
-- Implement fromPageCoordinate() factory method
-- Stop poking into HtmlElement's internals
-- Implement page offset translation code
-- Improve client.js
-- Improve _client_test.js
+* Improve svg_canvas.js to use HtmlCoordinate
+- Improve _client_test.js to use HtmlCoordinate
 - Modify HtmlElement to return HtmlCoordinate in mouse events
+- Stop poking into HtmlElement's internals!
 - Remove pageOffset() and relativeOffset() from HtmlElement and its tests
-- Improve svg_canvas.js to use location?
