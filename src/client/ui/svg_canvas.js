@@ -22,6 +22,7 @@
 		var startY = start.toRelativeY();
 		var endX = end.toRelativeX();
 		var endY = end.toRelativeY();
+
 		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
 			.attr({
 				"stroke": SvgCanvas.LINE_COLOR,
@@ -30,7 +31,10 @@
 			});
 	};
 
-	SvgCanvas.prototype.drawDot = function(x, y) {
+	SvgCanvas.prototype.drawDot = function(coord) {
+		var x = coord.toRelativeX();
+		var y = coord.toRelativeY();
+
 		this._paper.circle(x, y, SvgCanvas.STROKE_WIDTH / 2)
 			.attr({
 				"stroke": SvgCanvas.LINE_COLOR,

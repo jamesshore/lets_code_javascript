@@ -51,11 +51,8 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
-* Improve svg_canvas.js to use HtmlCoordinate
-	- update tests to use newDrawLine()
-	- replace drawLine with newDrawLine()
-	- do it again with newDrawDot()
+* Modify HtmlElement to return HtmlCoordinate in mouse events
 - Improve _client_test.js to use HtmlCoordinate
-- Modify HtmlElement to return HtmlCoordinate in mouse events
 - Stop poking into HtmlElement's internals!
+- Should SvgCanvas fail fast if HtmlCoordinate's element doesn't correspond to SvgCanvas? Or should it automatically convert?
 - Remove pageOffset() and relativeOffset() from HtmlElement and its tests

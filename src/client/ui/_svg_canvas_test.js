@@ -67,7 +67,7 @@
 		});
 
 		it("draws dots and styles them nicely", function() {
-			svgCanvas.drawDot(5, 10);
+			svgCanvas.drawDot(coord(5, 10));
 
 			var elements = svgCanvas.elementsForTestingOnly();
 			assert.equal(elements.length, 1);

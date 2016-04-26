@@ -97,7 +97,7 @@
 	function endDrag() {
 		if (!isCurrentlyDrawing()) return;
 
-		if (!lineDrawn) svgCanvas.drawDot(start.toRelativeX(), start.toRelativeY());
+		if (!lineDrawn) svgCanvas.drawDot(start);
 
 		start = null;
 		lineDrawn = false;
