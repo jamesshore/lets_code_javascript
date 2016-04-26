@@ -6,12 +6,14 @@
 
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
+	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("../../shared/_assert.js");
 
 	describe("UI: SvgCanvas", function() {
 
 		var div;
 		var svgCanvas;
+		var irrelevantElement = HtmlElement.fromHtml("<div></div>");
 
 		beforeEach(function() {
 			div = HtmlElement.fromHtml("<div style='width: 200px; height: 900px;'>hi</div>");
@@ -49,14 +51,14 @@
 		});
 
 		it("draws and returns one line segment", function() {
-			svgCanvas.drawLine(1, 2, 5, 10);
+			svgCanvas.drawLine(coord(1, 2), coord(5, 10));
 			assert.deepEqual(svgCanvas.lineSegments(), [[1, 2, 5, 10]]);
 		});
 
 		it("draws and returns multiple line segments", function() {
-			svgCanvas.drawLine(1, 2, 5, 10);
-			svgCanvas.drawLine(20, 60, 2, 3);
-			svgCanvas.drawLine(0, 0, 100, 200);
+			svgCanvas.drawLine(coord(1, 2), coord(5, 10));
+			svgCanvas.drawLine(coord(20, 60), coord(2, 3));
+			svgCanvas.drawLine(coord(0, 0), coord(100, 200));
 			assert.deepEqual(svgCanvas.lineSegments(), [
 				[1, 2, 5, 10],
 				[20, 60, 2, 3],
@@ -81,7 +83,7 @@
 		});
 
 		it("styles lines nicely", function() {
-			svgCanvas.drawLine(3, 3, 4, 4);
+			svgCanvas.drawLine(coord(3, 3), coord(4, 4));
 			var attrs = svgCanvas.elementsForTestingOnly()[0].attrs;
 			assert.equal(attrs.stroke, SvgCanvas.LINE_COLOR);
 			assert.equal(attrs["stroke-width"], SvgCanvas.STROKE_WIDTH);
@@ -89,10 +91,14 @@
 		});
 
 		it("clears everything", function() {
-			svgCanvas.drawLine(3, 3, 4, 4);
+			svgCanvas.drawLine(coord(3, 3), coord(4, 4));
 			svgCanvas.clear();
 			assert.deepEqual(svgCanvas.lineSegments(), []);
 		});
+
+		function coord(x, y) {
+			return HtmlCoordinate.fromRelativeOffset(irrelevantElement, x, y);
+		}
 
 	});
 

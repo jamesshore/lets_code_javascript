@@ -17,7 +17,11 @@
 		this._paper.clear();
 	};
 
-	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
+	SvgCanvas.prototype.drawLine = function(start, end) {
+		var startX = start.toRelativeX();
+		var startY = start.toRelativeY();
+		var endX = end.toRelativeX();
+		var endY = end.toRelativeY();
 		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
 			.attr({
 				"stroke": SvgCanvas.LINE_COLOR,

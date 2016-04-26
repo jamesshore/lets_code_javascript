@@ -52,6 +52,9 @@ Engineering Tasks:
 
 To Do on current task:
 * Improve svg_canvas.js to use HtmlCoordinate
+	- update tests to use newDrawLine()
+	- replace drawLine with newDrawLine()
+	- do it again with newDrawDot()
 - Improve _client_test.js to use HtmlCoordinate
 - Modify HtmlElement to return HtmlCoordinate in mouse events
 - Stop poking into HtmlElement's internals!

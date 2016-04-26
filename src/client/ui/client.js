@@ -88,7 +88,7 @@
 		var endCoords = drawingArea.relativeOffset(pageOffset);
 		var end = new HtmlCoordinate(drawingArea, endCoords.x, endCoords.y);
 		if (!start.equals(end)) {
-			svgCanvas.drawLine(start.toRelativeX(), start.toRelativeY(), end.toRelativeX(), end.toRelativeY());
+			svgCanvas.drawLine(start, end);
 			start = end;
 			lineDrawn = true;
 		}
