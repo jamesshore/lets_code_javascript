@@ -4,19 +4,18 @@
 
 	var failFast = require("../../shared/fail_fast.js");
 
-	var HtmlCoordinate = module.exports = function HtmlCoordinate(element, relativeX, relativeY, pageX, pageY) {
+	var HtmlCoordinate = module.exports = function HtmlCoordinate(pageX, pageY) {
 		this._pageX = pageX;
 		this._pageY = pageY;
 	};
 
 	HtmlCoordinate.fromRelativeOffset = function(element, x, y) {
 		var page = pageOffset(element._element, x, y);
-		return new HtmlCoordinate(element, x, y, page.x, page.y);
+		return new HtmlCoordinate(page.x, page.y);
 	};
 
 	HtmlCoordinate.fromPageOffset = function(element, x, y) {
-		var relativeCoords = relativeOffset(element._element, x, y);
-		return new HtmlCoordinate(element, relativeCoords.x, relativeCoords.y, x, y);
+		return new HtmlCoordinate(x, y);
 	};
 
 	HtmlCoordinate.prototype.toRelativeOffset = function(element) {
