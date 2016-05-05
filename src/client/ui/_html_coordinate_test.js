@@ -39,43 +39,29 @@
 		});
 
 		it("converts to string for debugging purposes", function() {
-			var coord = HtmlCoordinate.fromRelativeOffset(element, 10, 20);
-			assert.equal(coord.toString(), "[HtmlCoordinate (10, 20) relative to <div>]");
+			var coord = HtmlCoordinate.fromPageOffset(element, 10, 20);
+			assert.equal(coord.toString(), "[HtmlCoordinate page offset (10, 20)]");
 		});
 
 		describe("equality", function() {
 
-			it("is equal when based on the same data", function() {
-				var coord1 = HtmlCoordinate.fromRelativeOffset(element, 10, 20);
+			it("is equal when based on the same page data", function() {
+				var coord1 = HtmlCoordinate.fromPageOffset(element, 25, 35);
 				var coord2 = HtmlCoordinate.fromRelativeOffset(element, 10, 20);
 
 				assert.objEqual(coord1, coord2);
 			});
 
-			it("is equal when HtmlElement is different but the underlying DOM element is the same", function() {
-				var coord1 = HtmlCoordinate.fromRelativeOffset(element, 10, 20);
-				var coord2 = HtmlCoordinate.fromRelativeOffset(HtmlElement.fromId("element"), 10, 20);
-
-				assert.objEqual(coord1, coord2);
-			});
-
-			it("is not equal when elements are different", function() {
-				var coord1 = HtmlCoordinate.fromRelativeOffset(element, 10, 20);
-				var coord2 = HtmlCoordinate.fromRelativeOffset(HtmlElement.fromHtml("<div></div>"), 10, 20);
-
-				assert.objNotEqual(coord1, coord2);
-			});
-
 			it("is not equal when x values are different", function() {
-				var coord1 = HtmlCoordinate.fromRelativeOffset(element, 10, 20);
-				var coord2 = HtmlCoordinate.fromRelativeOffset(element, 15, 20);
+				var coord1 = HtmlCoordinate.fromPageOffset(element, 10, 20);
+				var coord2 = HtmlCoordinate.fromPageOffset(element, 15, 20);
 
 				assert.objNotEqual(coord1, coord2);
 			});
 
 			it("is not equal when y values are different", function() {
-				var coord1 = HtmlCoordinate.fromRelativeOffset(element, 10, 20);
-				var coord2 = HtmlCoordinate.fromRelativeOffset(element, 10, 25);
+				var coord1 = HtmlCoordinate.fromPageOffset(element, 10, 20);
+				var coord2 = HtmlCoordinate.fromPageOffset(element, 10, 25);
 
 				assert.objNotEqual(coord1, coord2);
 			});

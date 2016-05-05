@@ -5,9 +5,6 @@
 	var failFast = require("../../shared/fail_fast.js");
 
 	var HtmlCoordinate = module.exports = function HtmlCoordinate(element, relativeX, relativeY, pageX, pageY) {
-		this._element = element;
-		this._relativeX = relativeX;
-		this._relativeY = relativeY;
 		this._pageX = pageX;
 		this._pageY = pageY;
 	};
@@ -29,17 +26,14 @@
 	HtmlCoordinate.prototype.equals = function(that) {
 		failFast.unlessTrue(that instanceof HtmlCoordinate, "tried to compare HtmlCoordinate with a different type of object");
 
-		return this._element.toDomElement() === that._element.toDomElement() &&
-			this._relativeX === that._relativeX &&
-			this._relativeY === that._relativeY;
+		return this._pageX === that._pageX && this._pageY === that._pageY;
 	};
 
 	HtmlCoordinate.prototype.toString = function() {
-		var x = this._relativeX;
-		var y = this._relativeY;
-		var tag = this._element.toDomElement().tagName.toLowerCase();
+		var x = this._pageX;
+		var y = this._pageY;
 
-		return "[HtmlCoordinate (" + x + ", " + y + ") relative to <" + tag + ">]";
+		return "[HtmlCoordinate page offset (" + x + ", " + y + ")]";
 	};
 
 	function pageOffset($element, relativeX, relativeY) {
