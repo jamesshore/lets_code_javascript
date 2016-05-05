@@ -24,8 +24,8 @@
 			assert.deepEqual(coord.toRelativeOffset(element), { x: 10, y: 20 });
 		});
 
-		it("converts page offsets to relative offset", function() {
-			var coord = HtmlCoordinate.fromPageOffset(element, 10, 20);
+		it("converts page offsets to relative offsets", function() {
+			var coord = HtmlCoordinate.fromPageOffset(10, 20);
 			assert.deepEqual(coord.toRelativeOffset(element), { x: -5, y: 5 });
 		});
 
@@ -39,29 +39,29 @@
 		});
 
 		it("converts to string for debugging purposes", function() {
-			var coord = HtmlCoordinate.fromPageOffset(element, 10, 20);
+			var coord = HtmlCoordinate.fromPageOffset(10, 20);
 			assert.equal(coord.toString(), "[HtmlCoordinate page offset (10, 20)]");
 		});
 
 		describe("equality", function() {
 
 			it("is equal when based on the same page data", function() {
-				var coord1 = HtmlCoordinate.fromPageOffset(element, 25, 35);
+				var coord1 = HtmlCoordinate.fromPageOffset(25, 35);
 				var coord2 = HtmlCoordinate.fromRelativeOffset(element, 10, 20);
 
 				assert.objEqual(coord1, coord2);
 			});
 
 			it("is not equal when x values are different", function() {
-				var coord1 = HtmlCoordinate.fromPageOffset(element, 10, 20);
-				var coord2 = HtmlCoordinate.fromPageOffset(element, 15, 20);
+				var coord1 = HtmlCoordinate.fromPageOffset(10, 20);
+				var coord2 = HtmlCoordinate.fromPageOffset(15, 20);
 
 				assert.objNotEqual(coord1, coord2);
 			});
 
 			it("is not equal when y values are different", function() {
-				var coord1 = HtmlCoordinate.fromPageOffset(element, 10, 20);
-				var coord2 = HtmlCoordinate.fromPageOffset(element, 10, 25);
+				var coord1 = HtmlCoordinate.fromPageOffset(10, 20);
+				var coord2 = HtmlCoordinate.fromPageOffset(10, 25);
 
 				assert.objNotEqual(coord1, coord2);
 			});

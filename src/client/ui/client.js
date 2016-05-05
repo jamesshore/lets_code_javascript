@@ -78,13 +78,13 @@
 	}
 
 	function startDrag(pageOffset) {
-		start = HtmlCoordinate.fromPageOffset(drawingArea, pageOffset.x, pageOffset.y);
+		start = HtmlCoordinate.fromPageOffset(pageOffset.x, pageOffset.y);
 	}
 
 	function continueDrag(pageOffset) {
 		if (!isCurrentlyDrawing()) return;
 
-		var end = HtmlCoordinate.fromPageOffset(drawingArea, pageOffset.x, pageOffset.y);
+		var end = HtmlCoordinate.fromPageOffset(pageOffset.x, pageOffset.y);
 		if (!start.equals(end)) {
 			svgCanvas.drawLine(start, end);
 			start = end;

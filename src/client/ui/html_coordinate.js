@@ -14,7 +14,7 @@
 		return new HtmlCoordinate(page.x, page.y);
 	};
 
-	HtmlCoordinate.fromPageOffset = function(element, x, y) {
+	HtmlCoordinate.fromPageOffset = function(x, y) {
 		return new HtmlCoordinate(x, y);
 	};
 
