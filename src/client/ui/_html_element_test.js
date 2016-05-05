@@ -101,11 +101,11 @@
 				});
 
 				it("handlers receive a HtmlCoordinate object", function() {
-					checkEventHandler(htmlElement.onMouseClick2, htmlElement.triggerMouseClick);
-					checkEventHandler(htmlElement.onMouseDown2, htmlElement.triggerMouseDown);
-					checkEventHandler(htmlElement.onMouseMove2, htmlElement.triggerMouseMove);
-					checkEventHandler(htmlElement.onMouseLeave2, htmlElement.triggerMouseLeave);
-					checkEventHandler(htmlElement.onMouseUp2, htmlElement.triggerMouseUp);
+					checkEventHandler(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
+					checkEventHandler(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
+					checkEventHandler(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
+					checkEventHandler(htmlElement.onMouseLeave, htmlElement.triggerMouseLeave);
+					checkEventHandler(htmlElement.onMouseUp, htmlElement.triggerMouseUp);
 
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
@@ -185,8 +185,8 @@
 				});
 
 				it("handles single-touch events", function() {
-					checkEventHandler(htmlElement.onSingleTouchStart2, htmlElement.triggerSingleTouchStart);
-					checkEventHandler(htmlElement.onSingleTouchMove2, htmlElement.triggerSingleTouchMove);
+					checkEventHandler(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
+					checkEventHandler(htmlElement.onSingleTouchMove, htmlElement.triggerSingleTouchMove);
 
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);

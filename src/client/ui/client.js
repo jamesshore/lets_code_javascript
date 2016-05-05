@@ -50,8 +50,8 @@
 	};
 
 	function sendPointerEventsOverNetwork() {
-		drawingArea.onMouseMove(function(pageOffset) {
-			var relativeOffset = drawingArea.relativeOffset(pageOffset);
+		drawingArea.onMouseMove(function(coordinate) {
+			var relativeOffset = coordinate.toRelativeOffset(drawingArea);
 			network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
 		});
 	}
@@ -77,14 +77,14 @@
 		drawingArea.onMultiTouchStart(endDrag);
 	}
 
-	function startDrag(pageOffset) {
-		start = HtmlCoordinate.fromPageOffset(pageOffset.x, pageOffset.y);
+	function startDrag(coordinate) {
+		start = coordinate;
 	}
 
-	function continueDrag(pageOffset) {
+	function continueDrag(coordinate) {
 		if (!isCurrentlyDrawing()) return;
 
-		var end = HtmlCoordinate.fromPageOffset(pageOffset.x, pageOffset.y);
+		var end = coordinate;
 		if (!start.equals(end)) {
 			svgCanvas.drawLine(start, end);
 			start = end;
