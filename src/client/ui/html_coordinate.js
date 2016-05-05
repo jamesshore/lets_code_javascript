@@ -19,19 +19,11 @@
 
 	HtmlCoordinate.fromPageOffset = function(element, x, y) {
 		var relativeCoords = relativeOffset(element._element, x, y);
-		return new HtmlCoordinate(element, relativeCoords.x, relativeCoords.y);
+		return new HtmlCoordinate(element, relativeCoords.x, relativeCoords.y, x, y);
 	};
 
 	HtmlCoordinate.prototype.toRelativeOffset = function(element) {
 		return relativeOffset(element._element, this._pageX, this._pageY);
-	};
-
-	HtmlCoordinate.prototype.toRelativeX = function() {
-		return this._relativeX;
-	};
-
-	HtmlCoordinate.prototype.toRelativeY = function() {
-		return this._relativeY;
 	};
 
 	HtmlCoordinate.prototype.equals = function(that) {

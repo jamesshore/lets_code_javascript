@@ -11,18 +11,17 @@
 
 	describe("UI: SvgCanvas", function() {
 
-		var div;
+		var canvasElement;
 		var svgCanvas;
-		var irrelevantElement = HtmlElement.fromHtml("<div'></div>");
 
 		beforeEach(function() {
-			div = HtmlElement.fromHtml("<div style='width: 200px; height: 900px;'>hi</div>");
-			div.appendSelfToBody();
-			svgCanvas = new SvgCanvas(div);
+			canvasElement = HtmlElement.fromHtml("<div style='width: 200px; height: 900px;'>hi</div>");
+			canvasElement.appendSelfToBody();
+			svgCanvas = new SvgCanvas(canvasElement);
 		});
 
 		afterEach(function() {
-			div.remove();
+			canvasElement.remove();
 		});
 
 		it("has the same dimensions as its enclosing div, regardless of border", function() {
@@ -32,7 +31,7 @@
 			var realRaphael = Raphael;
 			try {
 				Raphael = SpyRaphael;
-				svgCanvas = new SvgCanvas(div);
+				svgCanvas = new SvgCanvas(canvasElement);
 				assert.equal(Raphael.width, 200);
 				assert.equal(Raphael.height, 900);
 			}
@@ -97,7 +96,7 @@
 		});
 
 		function coord(x, y) {
-			return HtmlCoordinate.fromRelativeOffset(irrelevantElement, x, y);
+			return HtmlCoordinate.fromRelativeOffset(canvasElement, x, y);
 		}
 
 	});

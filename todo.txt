@@ -51,8 +51,7 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
-* Modify SvgCanvas to use toRelativeOffset() instead of toRelativeX() and toRelativeY()
-- Remove relative offsets from HtmlCoordinate internals and update equality tests
+* Remove relative offsets from HtmlCoordinate internals and update equality tests
 - Modify HtmlElement to return HtmlCoordinate in mouse events
 	- Do we want to modify HtmlCoordinate to be page-relative rather than element-relative?
 	- Update _html_element_test.js to use new HtmlCoordinate mouse events
