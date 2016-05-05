@@ -22,11 +22,15 @@
 		return new HtmlCoordinate(element, relativeCoords.x, relativeCoords.y);
 	};
 
-	HtmlCoordinate.prototype.toRelativeX = function(element) {
+	HtmlCoordinate.prototype.toRelativeOffset = function(element) {
+		return relativeOffset(element._element, this._pageX, this._pageY);
+	};
+
+	HtmlCoordinate.prototype.toRelativeX = function() {
 		return this._relativeX;
 	};
 
-	HtmlCoordinate.prototype.toRelativeY = function(element) {
+	HtmlCoordinate.prototype.toRelativeY = function() {
 		return this._relativeY;
 	};
 

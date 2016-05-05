@@ -11,7 +11,7 @@
 		var element;
 
 		beforeEach(function() {
-			element = HtmlElement.fromHtml("<div id='element'></div>");
+			element = HtmlElement.fromHtml("<div id='element' style='position: absolute; top: 15px; left: 15px;'></div>");
 			element.appendSelfToBody();
 		});
 
@@ -27,8 +27,17 @@
 
 		it("converts page offsets to relative coordinates", function() {
 			var coord = HtmlCoordinate.fromPageOffset(element, 10, 20);
-			assert.equal(coord.toRelativeX(element), 2, "x");
-			assert.equal(coord.toRelativeY(element), 12, "y");
+			assert.equal(coord.toRelativeX(element), -5, "x");
+			assert.equal(coord.toRelativeY(element), 5, "y");
+		});
+
+		it("converts positions relative to one element to be relative to another", function() {
+			var element2 = HtmlElement.fromHtml("<div style='position: absolute; top: 100px; left: 100px;'></div>");
+			element2.appendSelfToBody();
+
+			var coord = HtmlCoordinate.fromRelativeOffset(element2, 10, 20);
+			var offset = coord.toRelativeOffset(element);
+			assert.deepEqual(offset, { x: 95, y: 105 });
 		});
 
 		it("converts to string for debugging purposes", function() {
