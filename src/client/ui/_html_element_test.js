@@ -4,6 +4,7 @@
 	"use strict";
 
 	var HtmlElement = require("./html_element.js");
+	var HtmlCoordinate = require("./html_coordinate.js");
 	var browser = require("./browser.js");
 	var assert = require("../../shared/_assert.js");
 
@@ -99,19 +100,19 @@
 					}
 				});
 
-				it("handlers receive coordinates relative to the page", function() {
-					checkEventHandler(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
-					checkEventHandler(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
-					checkEventHandler(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
-					checkEventHandler(htmlElement.onMouseLeave, htmlElement.triggerMouseLeave);
-					checkEventHandler(htmlElement.onMouseUp, htmlElement.triggerMouseUp);
+				it("handlers receive a HtmlCoordinate object", function() {
+					checkEventHandler(htmlElement.onMouseClick2, htmlElement.triggerMouseClick);
+					checkEventHandler(htmlElement.onMouseDown2, htmlElement.triggerMouseDown);
+					checkEventHandler(htmlElement.onMouseMove2, htmlElement.triggerMouseMove);
+					checkEventHandler(htmlElement.onMouseLeave2, htmlElement.triggerMouseLeave);
+					checkEventHandler(htmlElement.onMouseUp2, htmlElement.triggerMouseUp);
 
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
 						eventTriggerFn.call(htmlElement, 60, 40);
 
 						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
-						assert.deepEqual(monitor.eventTriggeredAt, expectedPageCoordinates);
+						assert.objEqual(monitor.eventTriggeredAt, HtmlCoordinate.fromPageOffset(expectedPageCoordinates.x, expectedPageCoordinates.y));
 					}
 				});
 
@@ -184,15 +185,15 @@
 				});
 
 				it("handles single-touch events", function() {
-					checkEventHandler(htmlElement.onSingleTouchStart, htmlElement.triggerSingleTouchStart);
-					checkEventHandler(htmlElement.onSingleTouchMove, htmlElement.triggerSingleTouchMove);
+					checkEventHandler(htmlElement.onSingleTouchStart2, htmlElement.triggerSingleTouchStart);
+					checkEventHandler(htmlElement.onSingleTouchMove2, htmlElement.triggerSingleTouchMove);
 
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
 						eventTriggerFn.call(htmlElement, 60, 40);
 
-						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
-						assert.deepEqual(monitor.eventTriggeredAt, expectedPageCoordinates);
+						var pageOffset = htmlElement.pageOffset({ x: 60, y: 40 });
+						assert.objEqual(monitor.eventTriggeredAt, HtmlCoordinate.fromPageOffset(pageOffset.x, pageOffset.y));
 					}
 				});
 

@@ -65,6 +65,12 @@
 	HtmlElement.prototype.onMouseLeave = onMouseEventFn("mouseleave");
 	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
 
+	HtmlElement.prototype.onMouseClick2 = onMouseEventFn2("click");
+	HtmlElement.prototype.onMouseDown2 = onMouseEventFn2("mousedown");
+	HtmlElement.prototype.onMouseMove2 = onMouseEventFn2("mousemove");
+	HtmlElement.prototype.onMouseLeave2 = onMouseEventFn2("mouseleave");
+	HtmlElement.prototype.onMouseUp2 = onMouseEventFn2("mouseup");
+
 	function triggerMouseEventFn(event) {
 		return function(relativeX, relativeY) {
 			var pageCoords;
@@ -84,6 +90,14 @@
 			this._element.on(event, function(event) {
 				var pageOffset = { x: event.pageX, y: event.pageY };
 				callback(pageOffset);
+			});
+		};
+	}
+
+	function onMouseEventFn2(event) {
+		return function(callback) {
+			this._element.on(event, function(event) {
+				callback(HtmlCoordinate.fromPageOffset(event.pageX, event.pageY));
 			});
 		};
 	}
@@ -112,6 +126,9 @@
 	HtmlElement.prototype.onSingleTouchStart = onSingleTouchEventFn("touchstart");
 	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
 	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
+
+	HtmlElement.prototype.onSingleTouchStart2 = onSingleTouchEventFn2("touchstart");
+	HtmlElement.prototype.onSingleTouchMove2 = onSingleTouchEventFn2("touchmove");
 
 	function triggerZeroTouchEventFn(event) {
 		return function() {
@@ -154,6 +171,21 @@
 				var offset = { x: pageX, y: pageY };
 
 				callback(offset);
+			});
+		};
+	}
+
+
+	function onSingleTouchEventFn2(eventName) {
+		return function(callback) {
+			this._element.on(eventName, function(event) {
+				var originalEvent = event.originalEvent;
+				if (originalEvent.touches.length !== 1) return;
+
+				var pageX = originalEvent.touches[0].pageX;
+				var pageY = originalEvent.touches[0].pageY;
+
+				callback(HtmlCoordinate.fromPageOffset(pageX, pageY));
 			});
 		};
 	}

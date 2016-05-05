@@ -51,10 +51,8 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
-* Remove relative offsets from HtmlCoordinate internals and update equality tests
-- Modify HtmlElement to return HtmlCoordinate in mouse events
-	- Do we want to modify HtmlCoordinate to be page-relative rather than element-relative?
-	- Update _html_element_test.js to use new HtmlCoordinate mouse events
+* Update client.js to use new HtmlElement events
+- delete old HtmlElement events
 - Improve _client_test.js to use HtmlCoordinate
 - Stop poking into HtmlElement's internals!
   - Use .offsetX/Y? Ref Vlad Gurdiga comment, E407: http://www.letscodejavascript.com/v3/comments/live/407#comment-2655306593
