@@ -21,14 +21,14 @@
 
 		it("provides relative x and y coordinates", function() {
 			var coord = HtmlCoordinate.fromRelativeOffset(element, 10, 20);
-			assert.equal(coord.toRelativeX(), 10, "x");
-			assert.equal(coord.toRelativeY(), 20, "y");
+			assert.equal(coord.toRelativeX(element), 10, "x");
+			assert.equal(coord.toRelativeY(element), 20, "y");
 		});
 
 		it("converts page offsets to relative coordinates", function() {
 			var coord = HtmlCoordinate.fromPageOffset(element, 10, 20);
-			assert.equal(coord.toRelativeX(), 2, "x");
-			assert.equal(coord.toRelativeY(), 12, "y");
+			assert.equal(coord.toRelativeX(element), 2, "x");
+			assert.equal(coord.toRelativeY(element), 12, "y");
 		});
 
 		it("converts to string for debugging purposes", function() {

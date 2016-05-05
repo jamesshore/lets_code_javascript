@@ -13,7 +13,7 @@
 
 		var div;
 		var svgCanvas;
-		var irrelevantElement = HtmlElement.fromHtml("<div></div>");
+		var irrelevantElement = HtmlElement.fromHtml("<div'></div>");
 
 		beforeEach(function() {
 			div = HtmlElement.fromHtml("<div style='width: 200px; height: 900px;'>hi</div>");

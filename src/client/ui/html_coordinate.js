@@ -4,14 +4,17 @@
 
 	var failFast = require("../../shared/fail_fast.js");
 
-	var HtmlCoordinate = module.exports = function HtmlCoordinate(element, relativeX, relativeY) {
+	var HtmlCoordinate = module.exports = function HtmlCoordinate(element, relativeX, relativeY, pageX, pageY) {
 		this._element = element;
 		this._relativeX = relativeX;
 		this._relativeY = relativeY;
+		this._pageX = pageX;
+		this._pageY = pageY;
 	};
 
 	HtmlCoordinate.fromRelativeOffset = function(element, x, y) {
-		return new HtmlCoordinate(element, x, y);
+		var page = pageOffset(element._element, x, y);
+		return new HtmlCoordinate(element, x, y, page.x, page.y);
 	};
 
 	HtmlCoordinate.fromPageOffset = function(element, x, y) {
@@ -19,11 +22,11 @@
 		return new HtmlCoordinate(element, relativeCoords.x, relativeCoords.y);
 	};
 
-	HtmlCoordinate.prototype.toRelativeX = function() {
-			return this._relativeX;
-		};
+	HtmlCoordinate.prototype.toRelativeX = function(element) {
+		return this._relativeX;
+	};
 
-	HtmlCoordinate.prototype.toRelativeY = function() {
+	HtmlCoordinate.prototype.toRelativeY = function(element) {
 		return this._relativeY;
 	};
 
@@ -43,6 +46,16 @@
 		return "[HtmlCoordinate (" + x + ", " + y + ") relative to <" + tag + ">]";
 	};
 
+	function pageOffset($element, relativeX, relativeY) {
+		failFastIfStylingPresent($element);
+
+		var topLeftOfDrawingArea = $element.offset();
+		return {
+			x: relativeX + topLeftOfDrawingArea.left,
+			y: relativeY + topLeftOfDrawingArea.top
+		};
+	}
+
 	function relativeOffset($element, pageX, pageY) {
 		failFastIfStylingPresent($element);
 
@@ -61,12 +74,12 @@
 
 		function failFastIfPaddingPresent(side) {
 			var css = $element.css("padding-" + side);
-			if (css !== "0px") throw new Error("Do not apply padding to elements used with relativeOffset() (expected 0px but was " + css + ")");
+			if (css !== "0px" && css !== "") throw new Error("Do not apply padding to elements used with relativeOffset() (expected 0px but was " + css + ")");
 		}
 
 		function failFastIfBorderPresent(side) {
 			var css = $element.css("border-" + side + "-width");
-			if (css !== "0px") throw new Error("Do not apply border to elements used with relativeOffset() (expected 0px but was " + css + ")");
+			if (css !== "0px" && css !== "") throw new Error("Do not apply border to elements used with relativeOffset() (expected 0px but was " + css + ")");
 		}
 	}
 
