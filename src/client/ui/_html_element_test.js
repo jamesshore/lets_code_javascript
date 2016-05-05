@@ -1,4 +1,4 @@
-// Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2013-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 (function() {
 	"use strict";

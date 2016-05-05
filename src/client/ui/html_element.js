@@ -1,4 +1,4 @@
-// Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2013-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global $, jQuery */
 
 (function() {
@@ -6,6 +6,7 @@
 
 	var browser = require("./browser.js");
 	var failFast = require("../../shared/fail_fast.js");
+	var HtmlCoordinate = require("./html_coordinate.js");
 
 
 	/* Constructors */
@@ -64,6 +65,9 @@
 	HtmlElement.prototype.onMouseLeave = onMouseEventFn("mouseleave");
 	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
 
+	HtmlElement.prototype.onMouseDown2 = onMouseEventFn2("mousedown");
+	HtmlElement.prototype.onMouseMove2 = onMouseEventFn2("mousemove");
+
 	function triggerMouseEventFn(event) {
 		return function(relativeX, relativeY) {
 			var pageCoords;
@@ -75,6 +79,16 @@
 			}
 
 			sendMouseEvent(this, event, pageCoords);
+		};
+	}
+
+	function onMouseEventFn2(event) {
+		return function(callback) {
+			var self = this;
+			self._element.on(event, function(event) {
+				var coordinate = HtmlCoordinate.fromPageOffset(self, event.pageX, event.pageY);
+				callback(coordinate);
+			});
 		};
 	}
 
@@ -111,6 +125,9 @@
 	HtmlElement.prototype.onSingleTouchStart = onSingleTouchEventFn("touchstart");
 	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
 	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
+
+	HtmlElement.prototype.onSingleTouchStart2 = onSingleTouchEventFn2("touchstart");
+	HtmlElement.prototype.onSingleTouchMove2 = onSingleTouchEventFn2("touchmove");
 
 	function triggerZeroTouchEventFn(event) {
 		return function() {
@@ -153,6 +170,22 @@
 				var offset = { x: pageX, y: pageY };
 
 				callback(offset);
+			});
+		};
+	}
+
+	function onSingleTouchEventFn2(eventName) {
+		return function(callback) {
+			var self = this;
+			self._element.on(eventName, function(event) {
+				var originalEvent = event.originalEvent;
+				if (originalEvent.touches.length !== 1) return;
+
+				var pageX = originalEvent.touches[0].pageX;
+				var pageY = originalEvent.touches[0].pageY;
+				var coordinate = HtmlCoordinate.fromPageOffset(self, pageX, pageY);
+
+				callback(coordinate);
 			});
 		};
 	}
