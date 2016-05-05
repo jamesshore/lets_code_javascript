@@ -51,7 +51,10 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
-* Modify HtmlElement to return HtmlCoordinate in mouse events
+* Fix HtmlCoordinate to store page-relative coordinates rather than element-relative coordinates
+	- Modify toRelativeX() and toRelativeY() to take an element
+- Modify HtmlElement to return HtmlCoordinate in mouse events
+	- Do we want to modify HtmlCoordinate to be page-relative rather than element-relative?
 	- Update _html_element_test.js to use new HtmlCoordinate mouse events
 - Improve _client_test.js to use HtmlCoordinate
 - Stop poking into HtmlElement's internals!

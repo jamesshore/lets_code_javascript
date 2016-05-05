@@ -73,6 +73,20 @@
 				]);
 			});
 
+			it("draws a line if event is triggered on document, not drawing area", function() {
+				drawingArea.triggerMouseDown(25, 35);
+
+				var pageCoordinates = drawingArea.pageOffset({x: 70, y: 90});
+				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
+				documentBody.triggerMouseMove(bodyRelative.x, bodyRelative.y);
+
+				drawingArea.triggerMouseUp(70, 90);
+
+				assert.deepEqual(lines(), [
+					[25, 35, 70, 90]
+				]);
+			});
+
 			it("does not draw a dot at the end of a drag", function() {
 				drawingArea.triggerMouseDown(20, 30);
 				drawingArea.triggerMouseMove(50, 60);

@@ -96,7 +96,10 @@
 
 	exports.deepEqual = function(actual, expected, message) {
 		message = message ? message + ": " : "";
-		proclaim.deepEqual(actual, expected, message + "expected deep equality.");
+			proclaim.deepEqual(
+				actual,
+				expected,
+				message + "expected " + JSON.stringify(expected) + ", but got " + JSON.stringify(actual));
 	};
 
 	exports.match = function(actual, expectedRegex, message) {

@@ -63,28 +63,30 @@
 	}
 
 	function handleMouseDragEvents() {
-		drawingArea.onMouseDown2(startDrag);
-		documentBody.onMouseMove2(continueDrag);
+		drawingArea.onMouseDown(startDrag);
+		documentBody.onMouseMove(continueDrag);
 		windowElement.onMouseUp(endDrag);
 	}
 
 	function handleTouchDragEvents() {
-		drawingArea.onSingleTouchStart2(startDrag);
-		drawingArea.onSingleTouchMove2(continueDrag);
+		drawingArea.onSingleTouchStart(startDrag);
+		drawingArea.onSingleTouchMove(continueDrag);
 		drawingArea.onTouchEnd(endDrag);
 		drawingArea.onTouchCancel(endDrag);
 
 		drawingArea.onMultiTouchStart(endDrag);
 	}
 
-	function startDrag(coordinate) {
-		start = coordinate;
+	function startDrag(pageOffset) {
+		var relativeCoords = drawingArea.relativeOffset(pageOffset);
+		start = new HtmlCoordinate(drawingArea, relativeCoords.x, relativeCoords.y);
 	}
 
-	function continueDrag(coordinate) {
+	function continueDrag(pageOffset) {
 		if (!isCurrentlyDrawing()) return;
 
-		var end = coordinate;
+		var endCoords = drawingArea.relativeOffset(pageOffset);
+		var end = new HtmlCoordinate(drawingArea, endCoords.x, endCoords.y);
 		if (!start.equals(end)) {
 			svgCanvas.drawLine(start, end);
 			start = end;
