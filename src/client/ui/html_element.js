@@ -66,16 +66,22 @@
 	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
 
 	function triggerMouseEventFn(event) {
-		return function(relativeX, relativeY) {
-			var pageCoords;
-			if (relativeX === undefined || relativeY === undefined) {
-				pageCoords = { x: 0, y: 0 };
+		return function(parm1, parm2) {
+			var coordinate;
+			if (parm1 === undefined && parm2 === undefined) {
+				// no parameters, assume no coordinate
+				coordinate = HtmlCoordinate.fromPageOffset(0, 0);
+			}
+			else if (parm1 !== undefined && parm2 === undefined) {
+			  // one HtmlCoordinate parameter
+				coordinate = parm1;
 			}
 			else {
-				pageCoords = pageOffset(this, relativeX, relativeY);
+				// (x, y) coordinate as numbers relative to this element
+				coordinate = HtmlCoordinate.fromRelativeOffset(this, parm1, parm2);
 			}
 
-			sendMouseEvent(this, event, pageCoords);
+			sendMouseEvent(this, event, coordinate.toPageOffset());
 		};
 	}
 

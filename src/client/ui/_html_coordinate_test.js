@@ -24,6 +24,11 @@
 			assert.deepEqual(coord.toRelativeOffset(element), { x: 10, y: 20 });
 		});
 
+		it("provides page x and y coordinates", function() {
+			var coord = HtmlCoordinate.fromPageOffset(13, 42);
+			assert.deepEqual(coord.toPageOffset(), { x: 13, y: 42 });
+		});
+
 		it("converts page offsets to relative offsets", function() {
 			var coord = HtmlCoordinate.fromPageOffset(10, 20);
 			assert.deepEqual(coord.toRelativeOffset(element), { x: -5, y: 5 });

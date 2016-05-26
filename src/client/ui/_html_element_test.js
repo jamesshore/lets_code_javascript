@@ -70,21 +70,6 @@
 			});
 
 			describe("mouse events", function() {
-				it("can be triggered with coordinates relative to the element", function() {
-					checkEventTrigger(htmlElement.triggerMouseClick, "click");
-					checkEventTrigger(htmlElement.triggerMouseDown, "mousedown");
-					checkEventTrigger(htmlElement.triggerMouseMove, "mousemove");
-					checkEventTrigger(htmlElement.triggerMouseLeave, "mouseleave");
-					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
-
-					function checkEventTrigger(eventTriggerFn, event) {
-						var monitor = monitorEvent(event);
-						eventTriggerFn.call(htmlElement, 4, 7);
-
-						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
-						assert.deepEqual(monitor.pageCoordinates, [ expectedPageCoordinates.x, expectedPageCoordinates.y ]);
-					}
-				});
 
 				it("can be triggered without coordinates", function() {
 					checkEventTrigger(htmlElement.triggerMouseClick, "click");
@@ -96,11 +81,39 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
-						assert.deepEqual(monitor.pageCoordinates, [ 0, 0 ]);
+						assert.objEqual(monitor.htmlCoordinate, HtmlCoordinate.fromPageOffset(0, 0));
 					}
 				});
 
-				it("handlers receive a HtmlCoordinate object", function() {
+				it("can be triggered with coordinates relative to the element", function() {
+					checkEventTrigger(htmlElement.triggerMouseClick, "click");
+					checkEventTrigger(htmlElement.triggerMouseDown, "mousedown");
+					checkEventTrigger(htmlElement.triggerMouseMove, "mousemove");
+					checkEventTrigger(htmlElement.triggerMouseLeave, "mouseleave");
+					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, 4, 7);
+						assert.objEqual(monitor.htmlCoordinate, HtmlCoordinate.fromRelativeOffset(htmlElement, 4, 7));
+					}
+				});
+
+				it("can be triggered with HtmlCoordinate object", function() {
+					checkEventTrigger(htmlElement.triggerMouseClick, "click");
+					checkEventTrigger(htmlElement.triggerMouseDown, "mousedown");
+					checkEventTrigger(htmlElement.triggerMouseMove, "mousemove");
+					checkEventTrigger(htmlElement.triggerMouseLeave, "mouseleave");
+					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, HtmlCoordinate.fromPageOffset(13, 17));
+						assert.objEqual(monitor.htmlCoordinate, HtmlCoordinate.fromPageOffset(13, 17));
+					}
+				});
+
+				it("handlers receive HtmlCoordinate object", function() {
 					checkEventHandler(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
 					checkEventHandler(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
 					checkEventHandler(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
@@ -221,6 +234,7 @@
 				htmlElement._element.on(event, function(event) {
 					monitor.eventTriggered = true;
 					monitor.pageCoordinates = [ event.pageX, event.pageY ];
+					monitor.htmlCoordinate = HtmlCoordinate.fromPageOffset(event.pageX, event.pageY);
 					monitor.defaultPrevented = event.isDefaultPrevented();
 
 					if (event.originalEvent) {

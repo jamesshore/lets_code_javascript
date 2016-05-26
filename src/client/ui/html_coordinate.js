@@ -22,6 +22,13 @@
 		return relativeOffset(element._element, this._pageX, this._pageY);
 	};
 
+	HtmlCoordinate.prototype.toPageOffset = function() {
+		return {
+			x: this._pageX,
+			y: this._pageY
+		};
+	};
+
 	HtmlCoordinate.prototype.equals = function(that) {
 		failFast.unlessTrue(that instanceof HtmlCoordinate, "tried to compare HtmlCoordinate with a different type of object");
 
@@ -29,10 +36,7 @@
 	};
 
 	HtmlCoordinate.prototype.toString = function() {
-		var x = this._pageX;
-		var y = this._pageY;
-
-		return "[HtmlCoordinate page offset (" + x + ", " + y + ")]";
+		return "[HtmlCoordinate page offset (" + this._pageX + ", " + this._pageY + ")]";
 	};
 
 	function pageOffset($element, relativeX, relativeY) {
