@@ -51,7 +51,7 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
-- Finish making coordinate conversion tests from _html_element_test.js work in HtmlCoordinate tests
+* Modify event creation methods to not use pageOffset() and relativeOffset(). Should we send in an HtmlCoordinate?
 - Remove pageOffset() and relativeOffset() from HtmlElement and its tests
 - Stop poking into HtmlElement's internals!
   - Use .offsetX/Y? Ref Vlad Gurdiga comment, E407: http://www.letscodejavascript.com/v3/comments/live/407#comment-2655306593
