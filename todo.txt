@@ -55,3 +55,6 @@ To Do on current task:
 - Remove pageOffset() and relativeOffset() from HtmlElement and its tests
 - Stop poking into HtmlElement's internals!
   - Use .offsetX/Y? Ref Vlad Gurdiga comment, E407: http://www.letscodejavascript.com/v3/comments/live/407#comment-2655306593
+- Martin Grandrath comments, E414
+	- Remove `element2` from DOM (_html_coordinate_test.js, line 34)
+	- Make from*Offset() parameters an object, for consistency with to*Offset()?
