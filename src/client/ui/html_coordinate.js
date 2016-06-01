@@ -9,9 +9,21 @@
 		this._pageY = pageY;
 	};
 
-	HtmlCoordinate.fromRelativeOffset = function(element, x, y) {
-		var page = pageOffset(element._element, x, y);
-		return new HtmlCoordinate(page.x, page.y);
+	HtmlCoordinate.fromRelativeOffset = function(element, relativeX, relativeY) {
+		var $element = element._element;
+		failFastIfStylingPresent($element);
+
+		var domElement = element.toDomElement();
+		var elementPosition = domElement.getBoundingClientRect();
+		var scrollX = domElement.ownerDocument.defaultView.pageXOffset;
+		var scrollY = domElement.ownerDocument.defaultView.pageYOffset;
+
+		var relativeOffset = {
+			x: scrollX + elementPosition.left + relativeX,
+			y: scrollY + elementPosition.top + relativeY
+		};
+
+		return new HtmlCoordinate(relativeOffset.x, relativeOffset.y);
 	};
 
 	HtmlCoordinate.fromPageOffset = function(x, y) {
@@ -38,16 +50,6 @@
 	HtmlCoordinate.prototype.toString = function() {
 		return "[HtmlCoordinate page offset (" + this._pageX + ", " + this._pageY + ")]";
 	};
-
-	function pageOffset($element, relativeX, relativeY) {
-		failFastIfStylingPresent($element);
-
-		var topLeftOfDrawingArea = $element.offset();
-		return {
-			x: relativeX + topLeftOfDrawingArea.left,
-			y: relativeY + topLeftOfDrawingArea.top
-		};
-	}
 
 	function relativeOffset($element, pageX, pageY) {
 		failFastIfStylingPresent($element);

@@ -52,4 +52,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Stop poking into HtmlElement's internals!
+	- Implement getBoundingClientRect()
+		- Account for page scrolling
 	- Rewrite offset conversion code to use DOM functions rather than JQuery functions
