@@ -156,8 +156,8 @@
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement, 4, 7);
 
-						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
-						assert.deepEqual(monitor.touches, [[ expectedPageCoordinates.x, expectedPageCoordinates.y ]]);
+						var expectedPageCoordinates = HtmlCoordinate.fromRelativeOffset(htmlElement, 4, 7).toPageOffset();
+						assert.deepEqual(monitor.touches, [{ x: expectedPageCoordinates.x, y: expectedPageCoordinates.y }]);
 					}
 				});
 
@@ -168,7 +168,7 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
-						assert.deepEqual(monitor.touches, [[ 0, 0 ]]);
+						assert.deepEqual(monitor.touches, [{ x: 0, y: 0 }]);
 					}
 				});
 
@@ -179,11 +179,11 @@
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement, 10, 20, 30, 40);
 
-						var expectedFirstTouch = htmlElement.pageOffset({ x: 10, y: 20 });
-						var expectedSecondTouch = htmlElement.pageOffset({ x: 30, y: 40 });
+						var expectedFirstTouch = HtmlCoordinate.fromRelativeOffset(htmlElement, 10, 20).toPageOffset();
+						var expectedSecondTouch = HtmlCoordinate.fromRelativeOffset(htmlElement, 30, 40).toPageOffset();
 						assert.deepEqual(monitor.touches, [
-							[ expectedFirstTouch.x, expectedFirstTouch.y ],
-							[ expectedSecondTouch.x, expectedSecondTouch.y ]
+							{ x: expectedFirstTouch.x, y: expectedFirstTouch.y },
+							{ x: expectedSecondTouch.x, y: expectedSecondTouch.y }
 						]);
 					}
 				});
@@ -243,7 +243,7 @@
 						var eventTouches = event.originalEvent.touches;
 						monitor.touches = [];
 						for (var i = 0; i < eventTouches.length; i++) {
-							monitor.touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
+							monitor.touches.push({ x: eventTouches[i].pageX, y: eventTouches[i].pageY });
 						}
 					}
 				});
