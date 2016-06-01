@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2012-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global Raphael, mocha, Touch */
 
 (function() {
@@ -75,10 +75,8 @@
 			});
 
 			it("draws a line if event is triggered on document, not drawing area", function() {
-				var bodyOffset = HtmlCoordinate.fromRelativeOffset(drawingArea, 70, 90).toRelativeOffset(documentBody);
-
 				drawingArea.triggerMouseDown(25, 35);
-				documentBody.triggerMouseMove(bodyOffset.x, bodyOffset.y);
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 70, 90));
 				drawingArea.triggerMouseUp(70, 90);
 
 				assert.deepEqual(lines(), [
@@ -173,13 +171,11 @@
 			});
 
 			it("continues drawing if mouse leaves drawing area and comes back in", function() {
-				var bodyOffset = HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70).toRelativeOffset(documentBody);
-
 				drawingArea.triggerMouseDown(20, 30);
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseLeave(700, 70);
 
-				documentBody.triggerMouseMove(bodyOffset.x, bodyOffset.y);
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70));
 
 				drawingArea.triggerMouseMove(90, 40);
 				drawingArea.triggerMouseUp(90, 40);
@@ -192,14 +188,12 @@
 			});
 
 			it("stops drawing if mouse leaves drawing area and mouse button is released", function() {
-				var bodyOffset = HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70).toRelativeOffset(documentBody);
-
 				drawingArea.triggerMouseDown(20, 30);
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseLeave(700, 70);
 
-				documentBody.triggerMouseMove(bodyOffset.x, bodyOffset.y);
-				documentBody.triggerMouseUp(bodyOffset.x, bodyOffset.y);
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70));
+				documentBody.triggerMouseUp(HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70));
 
 				drawingArea.triggerMouseMove(90, 40);
 
@@ -210,13 +204,11 @@
 			});
 
 			it("stops drawing if mouse leaves window and mouse button is released", function() {
-				var bodyOffset = HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70).toRelativeOffset(documentBody);
-
 				drawingArea.triggerMouseDown(20, 30);
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseLeave(700, 70);
 
-				documentBody.triggerMouseMove(bodyOffset.x, bodyOffset.y);
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70));
 
 				windowElement.triggerMouseLeave();
 				windowElement.triggerMouseUp();

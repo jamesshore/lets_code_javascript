@@ -51,6 +51,5 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
-* take advantage of HtmlElement.trigger*()'s ability to take an HtmlCoordinate
-- Stop poking into HtmlElement's internals!
-  - Use .offsetX/Y? Ref Vlad Gurdiga comment, E407: http://www.letscodejavascript.com/v3/comments/live/407#comment-2655306593
+* Stop poking into HtmlElement's internals!
+	- Rewrite offset conversion code to use DOM functions rather than JQuery functions
