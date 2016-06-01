@@ -38,9 +38,14 @@
 			var element2 = HtmlElement.fromHtml("<div style='position: absolute; top: 100px; left: 100px;'></div>");
 			element2.appendSelfToBody();
 
-			var coord = HtmlCoordinate.fromRelativeOffset(element2, 10, 20);
-			var offset = coord.toRelativeOffset(element);
-			assert.deepEqual(offset, { x: 95, y: 105 });
+			try {
+				var coord = HtmlCoordinate.fromRelativeOffset(element2, 10, 20);
+				var offset = coord.toRelativeOffset(element);
+				assert.deepEqual(offset, { x: 95, y: 105 });
+			}
+			finally {
+				element2.remove();
+			}
 		});
 
 		it("converts to string for debugging purposes", function() {
