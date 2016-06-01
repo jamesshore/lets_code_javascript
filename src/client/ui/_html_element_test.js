@@ -125,10 +125,10 @@
 
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
-						eventTriggerFn.call(htmlElement, 60, 40);
 
-						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
-						assert.objEqual(monitor.eventTriggeredAt, HtmlCoordinate.fromPageOffset(expectedPageCoordinates.x, expectedPageCoordinates.y));
+						var expectedCoordinate = HtmlCoordinate.fromPageOffset(60, 40);
+						eventTriggerFn.call(htmlElement, expectedCoordinate);
+						assert.objEqual(monitor.eventTriggeredAt, expectedCoordinate);
 					}
 				});
 
@@ -218,7 +218,6 @@
 					}
 				});
 
-
 				it("handles zero-touch events", function() {
 					checkEventHandler(htmlElement.onTouchEnd, htmlElement.triggerTouchEnd);
 					checkEventHandler(htmlElement.onTouchCancel, htmlElement.triggerTouchCancel);
@@ -237,10 +236,10 @@
 
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
-						eventTriggerFn.call(htmlElement, 60, 40);
 
-						var pageOffset = htmlElement.pageOffset({ x: 60, y: 40 });
-						assert.objEqual(monitor.eventTriggeredAt, HtmlCoordinate.fromPageOffset(pageOffset.x, pageOffset.y));
+						var expectedCoordinate = HtmlCoordinate.fromPageOffset(60, 40);
+						eventTriggerFn.call(htmlElement, expectedCoordinate);
+						assert.objEqual(monitor.eventTriggeredAt, expectedCoordinate);
 					}
 				});
 
