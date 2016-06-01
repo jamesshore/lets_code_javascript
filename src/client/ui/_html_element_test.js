@@ -81,7 +81,7 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
-						assert.objEqual(monitor.htmlCoordinate, HtmlCoordinate.fromPageOffset(0, 0));
+						assert.deepEqual(monitor.pageCoordinates, { x: 0, y: 0 });
 					}
 				});
 
@@ -95,7 +95,10 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement, 4, 7);
-						assert.objEqual(monitor.htmlCoordinate, HtmlCoordinate.fromRelativeOffset(htmlElement, 4, 7));
+						assert.deepEqual(
+							monitor.pageCoordinates,
+							HtmlCoordinate.fromRelativeOffset(htmlElement, 4, 7).toPageOffset()
+						);
 					}
 				});
 
@@ -109,7 +112,7 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement, HtmlCoordinate.fromPageOffset(13, 17));
-						assert.objEqual(monitor.htmlCoordinate, HtmlCoordinate.fromPageOffset(13, 17));
+						assert.deepEqual(monitor.pageCoordinates, { x: 13, y: 17 });
 					}
 				});
 
@@ -233,8 +236,7 @@
 
 				htmlElement._element.on(event, function(event) {
 					monitor.eventTriggered = true;
-					monitor.pageCoordinates = [ event.pageX, event.pageY ];
-					monitor.htmlCoordinate = HtmlCoordinate.fromPageOffset(event.pageX, event.pageY);
+					monitor.pageCoordinates = { x: event.pageX, y: event.pageY };
 					monitor.defaultPrevented = event.isDefaultPrevented();
 
 					if (event.originalEvent) {
