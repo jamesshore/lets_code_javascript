@@ -148,7 +148,18 @@
 					}
 				});
 
-				it("sends single-touch events relative to triggering element", function() {
+				it("can send single-touch events without coordinates", function() {
+					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
+					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement);
+						assert.deepEqual(monitor.touches, [{ x: 0, y: 0 }]);
+					}
+				});
+
+				it("can send single-touch events relative to triggering element", function() {
 					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
 					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
 
@@ -161,18 +172,19 @@
 					}
 				});
 
-				it("can send single-touch events without coordinates", function() {
+				it("can send single-touch events with HtmlCoordinate object", function() {
 					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
 					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
 
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
-						eventTriggerFn.call(htmlElement);
-						assert.deepEqual(monitor.touches, [{ x: 0, y: 0 }]);
+						eventTriggerFn.call(htmlElement, HtmlCoordinate.fromPageOffset(13, 17));
+
+						assert.deepEqual(monitor.touches, [{ x: 13, y: 17 }]);
 					}
 				});
 
-				it("sends multi-touch events relative to triggering element", function() {
+				it("can send multi-touch events relative to triggering element", function() {
 					checkEventTrigger(htmlElement.triggerMultiTouchStart, "touchstart");
 
 					function checkEventTrigger(eventTriggerFn, event) {
@@ -187,6 +199,25 @@
 						]);
 					}
 				});
+
+				it("can send multi-touch events using HtmlCoordinate objects", function() {
+					checkEventTrigger(htmlElement.triggerMultiTouchStart, "touchstart");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(
+							htmlElement,
+							HtmlCoordinate.fromPageOffset(10, 20),
+							HtmlCoordinate.fromPageOffset(30, 40)
+						);
+
+						assert.deepEqual(monitor.touches, [
+							{ x: 10, y: 20 },
+							{ x: 30, y: 40 }
+						]);
+					}
+				});
+
 
 				it("handles zero-touch events", function() {
 					checkEventHandler(htmlElement.onTouchEnd, htmlElement.triggerTouchEnd);

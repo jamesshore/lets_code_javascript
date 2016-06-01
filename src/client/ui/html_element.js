@@ -126,16 +126,48 @@
 	}
 
 	function triggerSingleTouchEventFn(event) {
-		return function(relativeX, relativeY) {
-			var touch = createTouch(this, relativeX, relativeY);
+		return function(parm1, parm2) {
+			var coordinate;
+			if (parm1 === undefined && parm2 === undefined) {
+				// no parameters, assume no coordinate
+				coordinate = HtmlCoordinate.fromPageOffset(0, 0);
+			}
+			else if (parm1 !== undefined && parm2 === undefined) {
+			  // one HtmlCoordinate parameter
+				coordinate = parm1;
+			}
+			else {
+				// (x, y) coordinate as numbers relative to this element
+				coordinate = HtmlCoordinate.fromRelativeOffset(this, parm1, parm2);
+			}
+
+			var touch = createTouch(this, coordinate);
 			sendTouchEvent(this, event, document.createTouchList(touch));
 		};
 	}
 
 	function triggerMultiTouchEventFn(event) {
-		return function(relative1X, relative1Y, relative2X, relative2Y) {
-			var touch1 = createTouch(this, relative1X, relative1Y);
-			var touch2 = createTouch(this, relative2X, relative2Y);
+		return function(parm1, parm2, parm3, parm4) {
+			var coordinate1;
+			var coordinate2;
+			if (parm1 === undefined && parm2 === undefined && parm3 === undefined && parm4 === undefined) {
+				// no parameters, assume no coordinates
+				coordinate1 = HtmlCoordinate.fromPageOffset(0, 0);
+				coordinate2 = HtmlCoordinate.fromPageOffset(0, 0);
+			}
+			else if (parm1 !== undefined && parm2 !== undefined && parm3 === undefined && parm4 === undefined) {
+			  // two HtmlCoordinate parameters
+				coordinate1 = parm1;
+				coordinate2 = parm2;
+			}
+			else {
+				// two (x, y) coordinates as numbers relative to this element
+				coordinate1 = HtmlCoordinate.fromRelativeOffset(this, parm1, parm2);
+				coordinate2 = HtmlCoordinate.fromRelativeOffset(this, parm3, parm4);
+			}
+
+			var touch1 = createTouch(this, coordinate1);
+			var touch2 = createTouch(this, coordinate2);
 			sendTouchEvent(this, event, document.createTouchList(touch1, touch2));
 		};
 	}
@@ -225,8 +257,8 @@
 		self._element.trigger(eventData);
 	}
 
-	function createTouch(self, relativeX, relativeY) {
-		var offset = pageOffset(self, relativeX, relativeY);
+	function createTouch(self, coordinate) {
+		var offset = coordinate.toPageOffset();
 
 		var view = window;
 		var target = self._element[0];
