@@ -12,6 +12,7 @@ var join = require('path').join;
 var readdirSync = require('fs').readdirSync;
 var statSync = require('fs').statSync;
 var watchFile = require('fs').watchFile;
+var toISOString = require('to-iso-string');
 
 /**
  * Ignored directories.
@@ -454,7 +455,7 @@ function jsonStringify(object, spaces, depth) {
   var space = spaces * depth;
   var str = isArray(object) ? '[' : '{';
   var end = isArray(object) ? ']' : '}';
-  var length = object.length || exports.keys(object).length;
+  var length = typeof object.length === 'number' ? object.length : exports.keys(object).length;
   // `.repeat()` polyfill
   function repeat(s, n) {
     return new Array(n).join(s);
@@ -472,15 +473,19 @@ function jsonStringify(object, spaces, depth) {
         break;
       case 'boolean':
       case 'regexp':
+      case 'symbol':
       case 'number':
         val = val === 0 && (1 / val) === -Infinity // `-0`
           ? '-0'
           : val.toString();
         break;
       case 'date':
-        var sDate = isNaN(val.getTime())        // Invalid date
-          ? val.toString()
-          : val.toISOString();
+        var sDate;
+        if (isNaN(val.getTime())) { // Invalid date
+          sDate = val.toString();
+        } else {
+          sDate = val.toISOString ? val.toISOString() : toISOString(val);
+        }
         val = '[Date: ' + sDate + ']';
         break;
       case 'buffer':
@@ -498,7 +503,7 @@ function jsonStringify(object, spaces, depth) {
   }
 
   for (var i in object) {
-    if (!object.hasOwnProperty(i)) {
+    if (!Object.prototype.hasOwnProperty.call(object, i)) {
       continue; // not my business
     }
     --length;
@@ -597,6 +602,7 @@ exports.canonicalize = function(value, stack) {
     case 'number':
     case 'regexp':
     case 'boolean':
+    case 'symbol':
       canonicalizedObj = value;
       break;
     default:
@@ -731,7 +737,11 @@ exports.stackTraceFilter = function() {
       }
 
       // Clean up cwd(absolute)
-      list.push(line.replace(cwd, ''));
+      if (/\(?.+:\d+:\d+\)?$/.test(line)) {
+        line = line.replace(cwd, '');
+      }
+
+      list.push(line);
       return list;
     }, []);
 
