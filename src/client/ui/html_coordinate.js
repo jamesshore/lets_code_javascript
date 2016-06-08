@@ -9,6 +9,17 @@
 		this._pageY = pageY;
 	};
 
+	HtmlCoordinate.fromPageOffset = function(x, y) {
+		return new HtmlCoordinate(x, y);
+	};
+
+	HtmlCoordinate.prototype.toPageOffset = function() {
+		return {
+			x: this._pageX,
+			y: this._pageY
+		};
+	};
+
 	HtmlCoordinate.fromRelativeOffset = function(htmlElement, relativeX, relativeY) {
 		failFastIfStylingPresent(htmlElement);
 
@@ -20,10 +31,6 @@
 		);
 	};
 
-	HtmlCoordinate.fromPageOffset = function(x, y) {
-		return new HtmlCoordinate(x, y);
-	};
-
 	HtmlCoordinate.prototype.toRelativeOffset = function(htmlElement) {
 		failFastIfStylingPresent(htmlElement);
 
@@ -32,13 +39,6 @@
 		return {
 			x: this._pageX - scroll.x - element.x,
 			y: this._pageY - scroll.y - element.y
-		};
-	};
-
-	HtmlCoordinate.prototype.toPageOffset = function() {
-		return {
-			x: this._pageX,
-			y: this._pageY
 		};
 	};
 

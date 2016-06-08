@@ -51,4 +51,3 @@ Engineering Tasks:
 - Update smoke tests
 
 To Do on current task:
-* Simplify _html_element_test.js (ref Martin Grandrath pull request, https://github.com/jamesshore/lets_code_javascript/pull/12/files#diff-0)
