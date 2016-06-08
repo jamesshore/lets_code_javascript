@@ -12,7 +12,7 @@
     "jake": "^8.0.12",
     "jshint": "^2.9.2",
     "karma": "^0.13.22",
-    "karma-commonjs": "0.0.13",
+    "karma-commonjs": "^1.0.0",
     "karma-mocha": "^0.2.2",
     "mocha": "^2.4.5",
     "procfile": "^0.1.1",
