@@ -52,7 +52,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Stop poking into HtmlElement's internals!
-	- Rewrite toRelativeOffset()
-		- Account for page scrolling
 	- Rewrite failFast code (replace it with getComputedStyle and stop failing fast?)
+	- Eliminate all uses of JQuery in HtmlCoordinate
 - Simplify _html_element_test.js (ref Martin Grandrath pull request, https://github.com/jamesshore/lets_code_javascript/pull/12/files#diff-0)

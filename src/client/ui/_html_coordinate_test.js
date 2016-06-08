@@ -56,6 +56,22 @@
 		describe("relative offset conversion", function() {
 
 			var COLLAPSING_BODY_MARGIN = 8;
+			var scrollEnabler;
+			var scroller;
+
+			beforeEach(function() {
+				scrollEnabler = HtmlElement.fromHtml(
+					"<div style='position: absolute; left: 5000px; top: 5000px; width: 60px'>scroll enabler</div>"
+				);
+				scrollEnabler.appendSelfToBody();
+				scroller = scrollEnabler.toDomElement().ownerDocument.defaultView;
+			});
+
+			afterEach(function() {
+				scroller.scroll(0, 0);
+				scrollEnabler.remove();
+			});
+
 
 			it("'from relative offset' ignores margin", function() {
 				checkFromRelativeOffsetCalculation("margin-top: 13px;", 0, 13 - COLLAPSING_BODY_MARGIN);
@@ -65,31 +81,28 @@
 			});
 
 			it("'from relative offset' accounts for page scrolling", function() {
-				var scrollEnabler = HtmlElement.fromHtml(
-					"<div style='position: absolute; left: 5000px; top: 5000px; width: 60px'>scroll enabler</div>"
-				);
-				scrollEnabler.appendSelfToBody();
-				var scrollMe = scrollEnabler.toDomElement().ownerDocument.defaultView;
+				var preScrollCoordinates = HtmlCoordinate.fromRelativeOffset(element, 0, 0);
+				scroller.scroll(80, 90);
+				var postScrollCoordinates = HtmlCoordinate.fromRelativeOffset(element, 0, 0);
 
-				try {
-					var preScrollCoordinates = HtmlCoordinate.fromRelativeOffset(element, 0, 0);
-
-					scrollMe.scroll(80, 90);
-					var postScrollCoordinates = HtmlCoordinate.fromRelativeOffset(element, 0, 0);
-
-					assert.objEqual(postScrollCoordinates, preScrollCoordinates);
-				}
-				finally {
-					scrollMe.scroll(0, 0);
-					scrollEnabler.remove();
-				}
+				assert.objEqual(postScrollCoordinates, preScrollCoordinates);
 			});
 
-			it("'to relative offset' for margin", function() {
+			it("'to relative offset' ignores margin", function() {
 				checkToRelativeOffsetCalculation("margin-top: 13px;", 0, 13 - COLLAPSING_BODY_MARGIN);
 				checkToRelativeOffsetCalculation("margin-left: 13px;", 13, 0);
 				checkToRelativeOffsetCalculation("margin: 13px;", 13, 13 - COLLAPSING_BODY_MARGIN);
 				checkToRelativeOffsetCalculation("margin: 1em; font-size: 16px", 16, 16 - COLLAPSING_BODY_MARGIN);
+			});
+
+			it("'to relative offset' accounts for page scrolling", function() {
+				var coordinate = HtmlCoordinate.fromPageOffset(100, 100);
+
+				var preScrollOffset = coordinate.toRelativeOffset(element);
+				scroller.scroll(80, 90);
+				var postScrollOffset = coordinate.toRelativeOffset(element);
+
+				assert.deepEqual(postScrollOffset, preScrollOffset);
 			});
 
 			it("fails fails fast if there is any padding", function() {

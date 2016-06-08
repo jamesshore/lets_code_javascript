@@ -29,12 +29,11 @@
 		var $element = htmlElement._element;
 		failFastIfStylingPresent($element);
 
-		var pageOffset = elementOffset(htmlElement);
-		var pageX = this._pageX;
-		var pageY = this._pageY;
+		var scroll = scrollOffset(htmlElement);
+		var element = elementOffset(htmlElement);
 		return {
-			x: pageX - pageOffset.x,
-			y: pageY - pageOffset.y
+			x: this._pageX - scroll.x - element.x,
+			y: this._pageY - scroll.y - element.y
 		};
 	};
 
