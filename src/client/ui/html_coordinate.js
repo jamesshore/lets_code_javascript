@@ -10,8 +10,7 @@
 	};
 
 	HtmlCoordinate.fromRelativeOffset = function(htmlElement, relativeX, relativeY) {
-		var $element = htmlElement._element;
-		failFastIfStylingPresent($element);
+		failFastIfStylingPresent(htmlElement);
 
 		var scroll = scrollOffset(htmlElement);
 		var element = elementOffset(htmlElement);
@@ -26,8 +25,7 @@
 	};
 
 	HtmlCoordinate.prototype.toRelativeOffset = function(htmlElement) {
-		var $element = htmlElement._element;
-		failFastIfStylingPresent($element);
+		failFastIfStylingPresent(htmlElement);
 
 		var scroll = scrollOffset(htmlElement);
 		var element = elementOffset(htmlElement);
@@ -54,6 +52,14 @@
 		return "[HtmlCoordinate page offset (" + this._pageX + ", " + this._pageY + ")]";
 	};
 
+	function scrollOffset(element) {
+		var domElement = element.toDomElement();
+		return {
+			x: domElement.ownerDocument.defaultView.pageXOffset,
+			y: domElement.ownerDocument.defaultView.pageYOffset
+		};
+	}
+
 	function elementOffset(element) {
 		var domElement = element.toDomElement();
 		var elementPosition = domElement.getBoundingClientRect();
@@ -63,33 +69,22 @@
 		};
 	}
 
-	function scrollOffset(element) {
-		var domElement = element.toDomElement();
-		return {
-			x: domElement.ownerDocument.defaultView.pageXOffset,
-			y: domElement.ownerDocument.defaultView.pageYOffset
-		};
-	}
+	function failFastIfStylingPresent(element) {
+		var style = window.getComputedStyle(element.toDomElement());
 
-	function failFastIfStylingPresent($element) {
-		var element = $element[0];
 		failFastIfPaddingPresent("top");
 		failFastIfPaddingPresent("left");
 		failFastIfBorderPresent("top");
 		failFastIfBorderPresent("left");
 
 		function failFastIfPaddingPresent(side) {
-			var css = element.style["padding-" + side];
-
-			if (css !== "0px" && css !== "") throw new Error("Do not apply padding to elements used with relativeOffset() (expected 0px but was " + css + ")");
+			var css = style.getPropertyValue("padding-" + side);
+			if (css !== "0px") throw new Error("HtmlCoordinate cannot convert relative offsets for elements that have padding (" + side + " padding was '" + css + "')");
 		}
 
 		function failFastIfBorderPresent(side) {
-			//var check = element.style["border-" + side + "-width"];
-			//console.log(check);
-
-			var css = $element.css("border-" + side + "-width");
-			if (css !== "0px" && css !== "") throw new Error("Do not apply border to elements used with relativeOffset() (expected 0px but was " + css + ")");
+			var css = style.getPropertyValue("border-" + side + "-width");
+			if (css !== "0px") throw new Error("HtmlCoordinate cannot convert relative offsets for elements that have border (" + side + " border was '" + css + "')");
 		}
 	}
 
