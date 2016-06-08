@@ -50,6 +50,20 @@ output
 [ 'beep', '--boop=/home/robot' ]
 ```
 
+## parse with custom escape charcter
+
+``` js
+var parse = require('shell-quote').parse;
+var xs = parse('beep --boop="$PWD"', { PWD: '/home/robot' }, { escape: '^' });
+console.dir(xs);
+```
+
+output
+
+```
+[ 'beep', '--boop=/home/robot' ]
+```
+
 ## parsing shell operators
 
 ``` js
@@ -62,6 +76,20 @@ output:
 
 ```
 [ 'beep', { op: '||' }, 'boop', { op: '>' }, '/byte' ]
+```
+
+## parsing shell comment
+
+``` js
+var parse = require('shell-quote').parse;
+var xs = parse('beep > boop # > kaboom');
+console.dir(xs);
+```
+
+output:
+
+```
+[ 'beep', { op: '>' }, 'boop', { comment: '> kaboom' } ]
 ```
 
 # methods

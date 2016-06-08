@@ -33,8 +33,8 @@ for (var i = 0; i < 4; i++) {
     TOKEN += (Math.pow(16,8)*Math.random()).toString(16);
 }
 
-exports.parse = function (s, env) {
-    var mapped = parse(s, env);
+exports.parse = function (s, env, opts) {
+    var mapped = parse(s, env, opts);
     if (typeof env !== 'function') return mapped;
     return reduce(mapped, function (acc, s) {
         if (typeof s === 'object') return acc.concat(s);
@@ -49,16 +49,21 @@ exports.parse = function (s, env) {
     }, []);
 };
 
-function parse (s, env) {
+function parse (s, env, opts) {
     var chunker = new RegExp([
         '(' + CONTROL + ')', // control chars
         '(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')*'
     ].join('|'), 'g');
     var match = filter(s.match(chunker), Boolean);
-    
+    var commented = false;
+
     if (!match) return [];
     if (!env) env = {};
-    return map(match, function (s) {
+    if (!opts) opts = {};
+    return map(match, function (s, j) {
+        if (commented) {
+            return;
+        }
         if (RegExp('^' + CONTROL + '$').test(s)) {
             return { op: s };
         }
@@ -76,17 +81,16 @@ function parse (s, env) {
         //     "allonetoken")
         var SQ = "'";
         var DQ = '"';
-        var BS = '\\';
         var DS = '$';
+        var BS = opts.escape || '\\';
         var quote = false;
-        var varname = false;
         var esc = false;
         var out = '';
         var isGlob = false;
 
         for (var i = 0, len = s.length; i < len; i++) {
             var c = s.charAt(i);
-            isGlob = isGlob || (!quote && (c === '*' || c === '?'))
+            isGlob = isGlob || (!quote && (c === '*' || c === '?'));
             if (esc) {
                 out += c;
                 esc = false;
@@ -112,18 +116,25 @@ function parse (s, env) {
                         out += parseEnvVar();
                     }
                     else {
-                        out += c
+                        out += c;
                     }
                 }
             }
             else if (c === DQ || c === SQ) {
-                quote = c
+                quote = c;
             }
             else if (RegExp('^' + CONTROL + '$').test(c)) {
                 return { op: s };
             }
+            else if (RegExp('^#$').test(c)) {
+                commented = true;
+                if (out.length){
+                    return [out, { comment: s.slice(i+1) + match.slice(j+1).join(' ') }];
+                }
+                return [{ comment: s.slice(i+1) + match.slice(j+1).join(' ') }];
+            }
             else if (c === BS) {
-                esc = true
+                esc = true;
             }
             else if (c === DS) {
                 out += parseEnvVar();
@@ -133,14 +144,14 @@ function parse (s, env) {
 
         if (isGlob) return {op: 'glob', pattern: out};
 
-        return out
+        return out;
 
         function parseEnvVar() {
             i += 1;
             var varend, varname;
             //debugger
             if (s.charAt(i) === '{') {
-                i += 1
+                i += 1;
                 if (s.charAt(i) === '}') {
                     throw new Error("Bad substitution: " + s.substr(i - 2, 3));
                 }
@@ -161,21 +172,28 @@ function parse (s, env) {
                     varname = s.substr(i);
                     i = s.length;
                 } else {
-                    varname = s.substr(i, varend.index)
+                    varname = s.substr(i, varend.index);
                     i += varend.index - 1;
                 }
             }
             return getVar(null, '', varname);
         }
-    });
-    
+    })
+    // finalize parsed aruments
+    .reduce(function(prev, arg){
+        if (arg === undefined){
+            return prev;
+        }
+        return prev.concat(arg);
+    },[]);
+
     function getVar (_, pre, key) {
         var r = typeof env === 'function' ? env(key) : env[key];
         if (r === undefined) r = '';
-        
+
         if (typeof r === 'object') {
             return pre + TOKEN + json.stringify(r) + TOKEN;
         }
         else return pre + r;
     }
-};
+}
