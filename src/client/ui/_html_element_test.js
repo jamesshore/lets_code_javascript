@@ -168,7 +168,7 @@
 						eventTriggerFn.call(htmlElement, 4, 7);
 
 						var expectedPageCoordinates = HtmlCoordinate.fromRelativeOffset(htmlElement, 4, 7).toPageOffset();
-						assert.deepEqual(monitor.touches, [{ x: expectedPageCoordinates.x, y: expectedPageCoordinates.y }]);
+						assert.deepEqual(monitor.touches, [ expectedPageCoordinates ]);
 					}
 				});
 
@@ -193,10 +193,7 @@
 
 						var expectedFirstTouch = HtmlCoordinate.fromRelativeOffset(htmlElement, 10, 20).toPageOffset();
 						var expectedSecondTouch = HtmlCoordinate.fromRelativeOffset(htmlElement, 30, 40).toPageOffset();
-						assert.deepEqual(monitor.touches, [
-							{ x: expectedFirstTouch.x, y: expectedFirstTouch.y },
-							{ x: expectedSecondTouch.x, y: expectedSecondTouch.y }
-						]);
+						assert.deepEqual(monitor.touches, [ expectedFirstTouch, expectedSecondTouch ]);
 					}
 				});
 
