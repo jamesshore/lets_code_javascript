@@ -73,36 +73,31 @@
 			});
 
 
-			it("'from relative offset' ignores margin", function() {
+			it("ignores margin", function() {
 				checkFromRelativeOffsetCalculation("margin-top: 13px;", 0, 13 - COLLAPSING_BODY_MARGIN);
 				checkFromRelativeOffsetCalculation("margin-left: 13px;", 13, 0);
 				checkFromRelativeOffsetCalculation("margin: 13px;", 13, 13 - COLLAPSING_BODY_MARGIN);
 				checkFromRelativeOffsetCalculation("margin: 1em; font-size: 16px", 16, 16 - COLLAPSING_BODY_MARGIN);
-			});
 
-			it("'from relative offset' accounts for page scrolling", function() {
-				var preScrollCoordinates = HtmlCoordinate.fromRelativeOffset(element, 0, 0);
-				scroller.scroll(80, 90);
-				var postScrollCoordinates = HtmlCoordinate.fromRelativeOffset(element, 0, 0);
-
-				assert.objEqual(postScrollCoordinates, preScrollCoordinates);
-			});
-
-			it("'to relative offset' ignores margin", function() {
 				checkToRelativeOffsetCalculation("margin-top: 13px;", 0, 13 - COLLAPSING_BODY_MARGIN);
 				checkToRelativeOffsetCalculation("margin-left: 13px;", 13, 0);
 				checkToRelativeOffsetCalculation("margin: 13px;", 13, 13 - COLLAPSING_BODY_MARGIN);
 				checkToRelativeOffsetCalculation("margin: 1em; font-size: 16px", 16, 16 - COLLAPSING_BODY_MARGIN);
 			});
 
-			it("'to relative offset' accounts for page scrolling", function() {
-				var coordinate = HtmlCoordinate.fromPageOffset(100, 100);
+			it("accounts for page scrolling", function() {
+				var pageOffset = HtmlCoordinate.fromPageOffset(100, 100);
 
-				var preScrollOffset = coordinate.toRelativeOffset(element);
+				var preScrollFromRelative = HtmlCoordinate.fromRelativeOffset(element, 0, 0);
+				var preScrollToRelative = pageOffset.toRelativeOffset(element);
+
 				scroller.scroll(80, 90);
-				var postScrollOffset = coordinate.toRelativeOffset(element);
 
-				assert.deepEqual(postScrollOffset, preScrollOffset);
+				var postScrollFromRelative = HtmlCoordinate.fromRelativeOffset(element, 0, 0);
+				var postScrollToRelative = pageOffset.toRelativeOffset(element);
+
+				assert.objEqual(postScrollFromRelative, preScrollFromRelative);
+				assert.deepEqual(postScrollToRelative, preScrollToRelative);
 			});
 
 			it("fails fails fast if there is any padding", function() {
