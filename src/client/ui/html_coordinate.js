@@ -62,17 +62,22 @@
 	}
 
 	function failFastIfStylingPresent($element) {
+		var element = $element[0];
 		failFastIfPaddingPresent("top");
 		failFastIfPaddingPresent("left");
 		failFastIfBorderPresent("top");
 		failFastIfBorderPresent("left");
 
 		function failFastIfPaddingPresent(side) {
-			var css = $element.css("padding-" + side);
+			var css = element.style["padding-" + side];
+
 			if (css !== "0px" && css !== "") throw new Error("Do not apply padding to elements used with relativeOffset() (expected 0px but was " + css + ")");
 		}
 
 		function failFastIfBorderPresent(side) {
+			//var check = element.style["border-" + side + "-width"];
+			//console.log(check);
+
 			var css = $element.css("border-" + side + "-width");
 			if (css !== "0px" && css !== "") throw new Error("Do not apply border to elements used with relativeOffset() (expected 0px but was " + css + ")");
 		}
