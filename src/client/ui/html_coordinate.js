@@ -9,29 +9,33 @@
 		this._pageY = pageY;
 	};
 
-	HtmlCoordinate.fromRelativeOffset = function(element, relativeX, relativeY) {
-		var $element = element._element;
+	HtmlCoordinate.fromRelativeOffset = function(htmlElement, relativeX, relativeY) {
+		var $element = htmlElement._element;
 		failFastIfStylingPresent($element);
 
-		var domElement = element.toDomElement();
-		var elementPosition = domElement.getBoundingClientRect();
-		var scrollX = domElement.ownerDocument.defaultView.pageXOffset;
-		var scrollY = domElement.ownerDocument.defaultView.pageYOffset;
-
-		var relativeOffset = {
-			x: scrollX + elementPosition.left + relativeX,
-			y: scrollY + elementPosition.top + relativeY
-		};
-
-		return new HtmlCoordinate(relativeOffset.x, relativeOffset.y);
+		var scroll = scrollOffset(htmlElement);
+		var element = elementOffset(htmlElement);
+		return new HtmlCoordinate(
+			scroll.x + element.x + relativeX,
+			scroll.y + element.y + relativeY
+		);
 	};
 
 	HtmlCoordinate.fromPageOffset = function(x, y) {
 		return new HtmlCoordinate(x, y);
 	};
 
-	HtmlCoordinate.prototype.toRelativeOffset = function(element) {
-		return relativeOffset(element._element, this._pageX, this._pageY);
+	HtmlCoordinate.prototype.toRelativeOffset = function(htmlElement) {
+		var $element = htmlElement._element;
+		failFastIfStylingPresent($element);
+
+		var pageOffset = elementOffset(htmlElement);
+		var pageX = this._pageX;
+		var pageY = this._pageY;
+		return {
+			x: pageX - pageOffset.x,
+			y: pageY - pageOffset.y
+		};
 	};
 
 	HtmlCoordinate.prototype.toPageOffset = function() {
@@ -51,13 +55,20 @@
 		return "[HtmlCoordinate page offset (" + this._pageX + ", " + this._pageY + ")]";
 	};
 
-	function relativeOffset($element, pageX, pageY) {
-		failFastIfStylingPresent($element);
-
-		var pageOffset = $element.offset();
+	function elementOffset(element) {
+		var domElement = element.toDomElement();
+		var elementPosition = domElement.getBoundingClientRect();
 		return {
-			x: pageX - pageOffset.left,
-			y: pageY - pageOffset.top
+			x: elementPosition.left,
+			y: elementPosition.top
+		};
+	}
+
+	function scrollOffset(element) {
+		var domElement = element.toDomElement();
+		return {
+			x: domElement.ownerDocument.defaultView.pageXOffset,
+			y: domElement.ownerDocument.defaultView.pageYOffset
 		};
 	}
 
