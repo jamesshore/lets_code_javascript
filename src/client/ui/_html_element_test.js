@@ -1,9 +1,10 @@
-// Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2013-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 (function() {
 	"use strict";
 
 	var HtmlElement = require("./html_element.js");
+	var HtmlCoordinate = require("./html_coordinate.js");
 	var browser = require("./browser.js");
 	var assert = require("../../shared/_assert.js");
 
@@ -69,21 +70,6 @@
 			});
 
 			describe("mouse events", function() {
-				it("can be triggered with coordinates relative to the element", function() {
-					checkEventTrigger(htmlElement.triggerMouseClick, "click");
-					checkEventTrigger(htmlElement.triggerMouseDown, "mousedown");
-					checkEventTrigger(htmlElement.triggerMouseMove, "mousemove");
-					checkEventTrigger(htmlElement.triggerMouseLeave, "mouseleave");
-					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
-
-					function checkEventTrigger(eventTriggerFn, event) {
-						var monitor = monitorEvent(event);
-						eventTriggerFn.call(htmlElement, 4, 7);
-
-						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
-						assert.deepEqual(monitor.pageCoordinates, [ expectedPageCoordinates.x, expectedPageCoordinates.y ]);
-					}
-				});
 
 				it("can be triggered without coordinates", function() {
 					checkEventTrigger(htmlElement.triggerMouseClick, "click");
@@ -95,11 +81,42 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
-						assert.deepEqual(monitor.pageCoordinates, [ 0, 0 ]);
+						assert.deepEqual(monitor.pageCoordinates, { x: 0, y: 0 });
 					}
 				});
 
-				it("handlers receive coordinates relative to the page", function() {
+				it("can be triggered with coordinates relative to the element", function() {
+					checkEventTrigger(htmlElement.triggerMouseClick, "click");
+					checkEventTrigger(htmlElement.triggerMouseDown, "mousedown");
+					checkEventTrigger(htmlElement.triggerMouseMove, "mousemove");
+					checkEventTrigger(htmlElement.triggerMouseLeave, "mouseleave");
+					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, 4, 7);
+						assert.deepEqual(
+							monitor.pageCoordinates,
+							HtmlCoordinate.fromRelativeOffset(htmlElement, 4, 7).toPageOffset()
+						);
+					}
+				});
+
+				it("can be triggered with HtmlCoordinate object", function() {
+					checkEventTrigger(htmlElement.triggerMouseClick, "click");
+					checkEventTrigger(htmlElement.triggerMouseDown, "mousedown");
+					checkEventTrigger(htmlElement.triggerMouseMove, "mousemove");
+					checkEventTrigger(htmlElement.triggerMouseLeave, "mouseleave");
+					checkEventTrigger(htmlElement.triggerMouseUp, "mouseup");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, HtmlCoordinate.fromPageOffset(13, 17));
+						assert.deepEqual(monitor.pageCoordinates, { x: 13, y: 17 });
+					}
+				});
+
+				it("handlers receive HtmlCoordinate object", function() {
 					checkEventHandler(htmlElement.onMouseClick, htmlElement.triggerMouseClick);
 					checkEventHandler(htmlElement.onMouseDown, htmlElement.triggerMouseDown);
 					checkEventHandler(htmlElement.onMouseMove, htmlElement.triggerMouseMove);
@@ -108,10 +125,10 @@
 
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
-						eventTriggerFn.call(htmlElement, 60, 40);
 
-						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
-						assert.deepEqual(monitor.eventTriggeredAt, expectedPageCoordinates);
+						var expectedCoordinate = HtmlCoordinate.fromPageOffset(60, 40);
+						eventTriggerFn.call(htmlElement, expectedCoordinate);
+						assert.objEqual(monitor.eventTriggeredAt, expectedCoordinate);
 					}
 				});
 
@@ -131,19 +148,6 @@
 					}
 				});
 
-				it("sends single-touch events relative to triggering element", function() {
-					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
-					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
-
-					function checkEventTrigger(eventTriggerFn, event) {
-						var monitor = monitorEvent(event);
-						eventTriggerFn.call(htmlElement, 4, 7);
-
-						var expectedPageCoordinates = htmlElement.pageOffset({ x: 4, y: 7 });
-						assert.deepEqual(monitor.touches, [[ expectedPageCoordinates.x, expectedPageCoordinates.y ]]);
-					}
-				});
-
 				it("can send single-touch events without coordinates", function() {
 					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
 					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
@@ -151,22 +155,62 @@
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement);
-						assert.deepEqual(monitor.touches, [[ 0, 0 ]]);
+						assert.deepEqual(monitor.touches, [{ x: 0, y: 0 }]);
 					}
 				});
 
-				it("sends multi-touch events relative to triggering element", function() {
+				it("can send single-touch events relative to triggering element", function() {
+					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
+					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, 4, 7);
+
+						var expectedPageCoordinates = HtmlCoordinate.fromRelativeOffset(htmlElement, 4, 7).toPageOffset();
+						assert.deepEqual(monitor.touches, [ expectedPageCoordinates ]);
+					}
+				});
+
+				it("can send single-touch events with HtmlCoordinate object", function() {
+					checkEventTrigger(htmlElement.triggerSingleTouchStart, "touchstart");
+					checkEventTrigger(htmlElement.triggerSingleTouchMove, "touchmove");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(htmlElement, HtmlCoordinate.fromPageOffset(13, 17));
+
+						assert.deepEqual(monitor.touches, [{ x: 13, y: 17 }]);
+					}
+				});
+
+				it("can send multi-touch events relative to triggering element", function() {
 					checkEventTrigger(htmlElement.triggerMultiTouchStart, "touchstart");
 
 					function checkEventTrigger(eventTriggerFn, event) {
 						var monitor = monitorEvent(event);
 						eventTriggerFn.call(htmlElement, 10, 20, 30, 40);
 
-						var expectedFirstTouch = htmlElement.pageOffset({ x: 10, y: 20 });
-						var expectedSecondTouch = htmlElement.pageOffset({ x: 30, y: 40 });
+						var expectedFirstTouch = HtmlCoordinate.fromRelativeOffset(htmlElement, 10, 20).toPageOffset();
+						var expectedSecondTouch = HtmlCoordinate.fromRelativeOffset(htmlElement, 30, 40).toPageOffset();
+						assert.deepEqual(monitor.touches, [ expectedFirstTouch, expectedSecondTouch ]);
+					}
+				});
+
+				it("can send multi-touch events using HtmlCoordinate objects", function() {
+					checkEventTrigger(htmlElement.triggerMultiTouchStart, "touchstart");
+
+					function checkEventTrigger(eventTriggerFn, event) {
+						var monitor = monitorEvent(event);
+						eventTriggerFn.call(
+							htmlElement,
+							HtmlCoordinate.fromPageOffset(10, 20),
+							HtmlCoordinate.fromPageOffset(30, 40)
+						);
+
 						assert.deepEqual(monitor.touches, [
-							[ expectedFirstTouch.x, expectedFirstTouch.y ],
-							[ expectedSecondTouch.x, expectedSecondTouch.y ]
+							{ x: 10, y: 20 },
+							{ x: 30, y: 40 }
 						]);
 					}
 				});
@@ -189,10 +233,10 @@
 
 					function checkEventHandler(eventHandlerFn, eventTriggerFn) {
 						var monitor = monitorEventHandler(htmlElement, eventHandlerFn);
-						eventTriggerFn.call(htmlElement, 60, 40);
 
-						var expectedPageCoordinates = htmlElement.pageOffset({ x: 60, y: 40 });
-						assert.deepEqual(monitor.eventTriggeredAt, expectedPageCoordinates);
+						var expectedCoordinate = HtmlCoordinate.fromPageOffset(60, 40);
+						eventTriggerFn.call(htmlElement, expectedCoordinate);
+						assert.objEqual(monitor.eventTriggeredAt, expectedCoordinate);
 					}
 				});
 
@@ -219,14 +263,14 @@
 
 				htmlElement._element.on(event, function(event) {
 					monitor.eventTriggered = true;
-					monitor.pageCoordinates = [ event.pageX, event.pageY ];
+					monitor.pageCoordinates = { x: event.pageX, y: event.pageY };
 					monitor.defaultPrevented = event.isDefaultPrevented();
 
 					if (event.originalEvent) {
 						var eventTouches = event.originalEvent.touches;
 						monitor.touches = [];
 						for (var i = 0; i < eventTouches.length; i++) {
-							monitor.touches.push([ eventTouches[i].pageX, eventTouches[i].pageY ]);
+							monitor.touches.push({ x: eventTouches[i].pageX, y: eventTouches[i].pageY });
 						}
 					}
 				});
@@ -270,139 +314,6 @@
 				});
 			});
 		});
-
-		describe("coordinate conversion", function() {
-
-			var COLLAPSING_BODY_MARGIN = 8;
-
-			beforeEach(function() {
-				htmlElement.appendSelfToBody();
-			});
-
-			afterEach(function() {
-				htmlElement.remove();
-			});
-
-			it("converts page coordinates into relative element coordinates", function() {
-				var offset = htmlElement.relativeOffset({x: 100, y: 150});
-				assertRelativeOffsetEquals(offset, 92, 142);
-			});
-
-			it("converts relative coordinates into page coordinates", function() {
-				var offset = htmlElement.relativeOffset({x: 100, y: 150});
-				assertPageOffsetEquals(offset, 92, 142);
-			});
-
-			it("page coordinate conversion accounts for margin", function() {
-				checkRelativeStyle("margin-top: 13px;", 0, 13 - COLLAPSING_BODY_MARGIN);
-				checkRelativeStyle("margin-left: 13px;", 13, 0);
-				checkRelativeStyle("margin: 13px;", 13, 13 - COLLAPSING_BODY_MARGIN);
-				checkRelativeStyle("margin: 1em; font-size: 16px", 16, 16 - COLLAPSING_BODY_MARGIN);
-			});
-
-			it("relative coordinate conversion accounts for margin", function() {
-				checkPageStyle("margin-top: 13px;", 0, 13 - COLLAPSING_BODY_MARGIN);
-				checkPageStyle("margin-left: 13px;", 13, 0);
-				checkPageStyle("margin: 13px;", 13, 13 - COLLAPSING_BODY_MARGIN);
-				checkPageStyle("margin: 1em; font-size: 16px", 16, 16 - COLLAPSING_BODY_MARGIN);
-			});
-
-			it("page coordinate conversion fails fast if there is any padding", function() {
-				expectFailFast("padding-top: 13px;");
-				expectFailFast("padding-left: 13px;");
-				expectFailFast("padding: 13px;");
-				expectFailFast("padding: 1em; font-size: 16px");
-
-				// IE 8 weirdness
-				expectFailFast("padding-top: 20%");
-				expectFailFast("padding-left: 20%");
-			});
-
-			it("page coordinate conversion fails fast if there is any border", function() {
-				expectFailFast("border-top: 13px solid;");
-				expectFailFast("border-left: 13px solid;");
-				expectFailFast("border: 13px solid;");
-				expectFailFast("border: 1em solid; font-size: 16px");
-
-				// IE 8 weirdness
-				expectFailFast("border: thin solid");
-				expectFailFast("border: medium solid");
-				expectFailFast("border: thick solid");
-				checkRelativeStyle("border: 13px none", 0, 0);
-				checkPageStyle("border: 13px none", 0, 0);
-			});
-
-			function expectFailFast(elementStyle) {
-				var styledElement = HtmlElement.fromHtml("<div style='" + elementStyle + "'></div>");
-				try {
-					styledElement.appendSelfToBody();
-					assert.throws(function() {
-						styledElement.relativeOffset({ x: 100, y: 150 });
-					});
-					assert.throws(function() {
-						styledElement.pageOffset({ x: 100, y: 150 });
-					});
-				}
-				finally {
-					styledElement.remove();
-				}
-			}
-
-			function checkRelativeStyle(elementStyle, additionalXOffset, additionalYOffset) {
-				var BASE_STYLE = "width: 120px; height: 80px; border: 0px none;";
-
-				var unstyledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + "'></div>");
-				unstyledElement.appendSelfToBody();
-				var unstyledOffset = unstyledElement.relativeOffset({x: 100, y: 150});
-				unstyledElement.remove();
-
-				var styledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + elementStyle + "'></div>");
-				try {
-					styledElement.appendSelfToBody();
-					var styledOffset = styledElement.relativeOffset({x: 100, y: 150});
-					assertRelativeOffsetEquals(
-						styledOffset,
-						unstyledOffset.x - additionalXOffset,
-						unstyledOffset.y - additionalYOffset
-					);
-				}
-				finally {
-					styledElement.remove();
-				}
-			}
-
-			function checkPageStyle(elementStyle, additionalXOffset, additionalYOffset) {
-				var BASE_STYLE = "width: 120px; height: 80px; border: 0px none;";
-
-				var unstyledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + "'></div>");
-				unstyledElement.appendSelfToBody();
-				var unstyledOffset = unstyledElement.pageOffset({x: 100, y: 150});
-				unstyledElement.remove();
-
-				var styledElement = HtmlElement.fromHtml("<div style='" + BASE_STYLE + elementStyle + "'></div>");
-				try {
-					styledElement.appendSelfToBody();
-					var styledOffset = styledElement.pageOffset({x: 100, y: 150});
-					assertRelativeOffsetEquals(
-						styledOffset,
-						unstyledOffset.x + additionalXOffset,
-						unstyledOffset.y + additionalYOffset
-					);
-				}
-				finally {
-					styledElement.remove();
-				}
-			}
-
-			function assertRelativeOffsetEquals(actualOffset, expectedX, expectedY) {
-				assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
-			}
-		});
-
-		function assertPageOffsetEquals(actualOffset, expectedX, expectedY) {
-			assert.deepEqual(actualOffset, {x: expectedX, y: expectedY});
-		}
-
 
 		describe("DOM manipulation", function() {
 

@@ -6,21 +6,22 @@
 
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
+	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("../../shared/_assert.js");
 
 	describe("UI: SvgCanvas", function() {
 
-		var div;
+		var canvasElement;
 		var svgCanvas;
 
 		beforeEach(function() {
-			div = HtmlElement.fromHtml("<div style='width: 200px; height: 900px;'>hi</div>");
-			div.appendSelfToBody();
-			svgCanvas = new SvgCanvas(div);
+			canvasElement = HtmlElement.fromHtml("<div style='width: 200px; height: 900px;'>hi</div>");
+			canvasElement.appendSelfToBody();
+			svgCanvas = new SvgCanvas(canvasElement);
 		});
 
 		afterEach(function() {
-			div.remove();
+			canvasElement.remove();
 		});
 
 		it("has the same dimensions as its enclosing div, regardless of border", function() {
@@ -30,7 +31,7 @@
 			var realRaphael = Raphael;
 			try {
 				Raphael = SpyRaphael;
-				svgCanvas = new SvgCanvas(div);
+				svgCanvas = new SvgCanvas(canvasElement);
 				assert.equal(Raphael.width, 200);
 				assert.equal(Raphael.height, 900);
 			}
@@ -49,14 +50,14 @@
 		});
 
 		it("draws and returns one line segment", function() {
-			svgCanvas.drawLine(1, 2, 5, 10);
+			svgCanvas.drawLine(coord(1, 2), coord(5, 10));
 			assert.deepEqual(svgCanvas.lineSegments(), [[1, 2, 5, 10]]);
 		});
 
 		it("draws and returns multiple line segments", function() {
-			svgCanvas.drawLine(1, 2, 5, 10);
-			svgCanvas.drawLine(20, 60, 2, 3);
-			svgCanvas.drawLine(0, 0, 100, 200);
+			svgCanvas.drawLine(coord(1, 2), coord(5, 10));
+			svgCanvas.drawLine(coord(20, 60), coord(2, 3));
+			svgCanvas.drawLine(coord(0, 0), coord(100, 200));
 			assert.deepEqual(svgCanvas.lineSegments(), [
 				[1, 2, 5, 10],
 				[20, 60, 2, 3],
@@ -65,7 +66,7 @@
 		});
 
 		it("draws dots and styles them nicely", function() {
-			svgCanvas.drawDot(5, 10);
+			svgCanvas.drawDot(coord(5, 10));
 
 			var elements = svgCanvas.elementsForTestingOnly();
 			assert.equal(elements.length, 1);
@@ -81,7 +82,7 @@
 		});
 
 		it("styles lines nicely", function() {
-			svgCanvas.drawLine(3, 3, 4, 4);
+			svgCanvas.drawLine(coord(3, 3), coord(4, 4));
 			var attrs = svgCanvas.elementsForTestingOnly()[0].attrs;
 			assert.equal(attrs.stroke, SvgCanvas.LINE_COLOR);
 			assert.equal(attrs["stroke-width"], SvgCanvas.STROKE_WIDTH);
@@ -89,10 +90,14 @@
 		});
 
 		it("clears everything", function() {
-			svgCanvas.drawLine(3, 3, 4, 4);
+			svgCanvas.drawLine(coord(3, 3), coord(4, 4));
 			svgCanvas.clear();
 			assert.deepEqual(svgCanvas.lineSegments(), []);
 		});
+
+		function coord(x, y) {
+			return HtmlCoordinate.fromRelativeOffset(canvasElement, x, y);
+		}
 
 	});
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2012-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global Raphael, mocha, Touch */
 
 (function() {
@@ -7,6 +7,7 @@
 	var client = require("./client.js");
 	var browser = require("./browser.js");
 	var HtmlElement = require("./html_element.js");
+	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("../../shared/_assert.js");
 
 	mocha.setup({ignoreLeaks: true});
@@ -70,6 +71,16 @@
 
 				assert.deepEqual(lines(), [
 					[20, 30, 50, 60]
+				]);
+			});
+
+			it("draws a line if event is triggered on document, not drawing area", function() {
+				drawingArea.triggerMouseDown(25, 35);
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 70, 90));
+				drawingArea.triggerMouseUp(70, 90);
+
+				assert.deepEqual(lines(), [
+					[25, 35, 70, 90]
 				]);
 			});
 
@@ -164,9 +175,7 @@
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseLeave(700, 70);
 
-				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
-				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
-				documentBody.triggerMouseMove(bodyRelative.x, bodyRelative.y);
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70));
 
 				drawingArea.triggerMouseMove(90, 40);
 				drawingArea.triggerMouseUp(90, 40);
@@ -183,10 +192,8 @@
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseLeave(700, 70);
 
-				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
-				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
-				documentBody.triggerMouseMove(bodyRelative.x, bodyRelative.y);
-				documentBody.triggerMouseUp(bodyRelative.x, bodyRelative.y);
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70));
+				documentBody.triggerMouseUp(HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70));
 
 				drawingArea.triggerMouseMove(90, 40);
 
@@ -201,9 +208,7 @@
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseLeave(700, 70);
 
-				var pageCoordinates = drawingArea.pageOffset({x: 700, y: 70});
-				var bodyRelative = documentBody.relativeOffset(pageCoordinates);
-				documentBody.triggerMouseMove(bodyRelative.x, bodyRelative.y);
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 700, 70));
 
 				windowElement.triggerMouseLeave();
 				windowElement.triggerMouseUp();
@@ -296,7 +301,7 @@
 
 			it("sends pointer location whenever mouse moves", function() {
 				drawingArea.triggerMouseMove(50, 60);
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 58, 68 ]);
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 50, 60 ]);
 			});
 
 			it("doesn't send pointer location when mouse moves outside drawing area", function() {

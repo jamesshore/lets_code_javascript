@@ -38,8 +38,7 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Hook up the client UI code to the network abstraction
-- Need to translate pageOffset to relativeOffset (do we need to improve design of offset translations?)
+* Need to translate pageOffset to relativeOffset (do we need to improve design of offset translations?)
 - Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
 - Open question: how to make sure our test double matches our real code?

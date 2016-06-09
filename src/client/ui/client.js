@@ -6,6 +6,7 @@
 
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
+	var HtmlCoordinate = require("./html_coordinate.js");
 	var browser = require("./browser.js");
 	var failFast = require("../../shared/fail_fast.js");
 
@@ -49,8 +50,9 @@
 	};
 
 	function sendPointerEventsOverNetwork() {
-		drawingArea.onMouseMove(function(location) {
-			network.sendPointerLocation(location.x, location.y);
+		drawingArea.onMouseMove(function(coordinate) {
+			var relativeOffset = coordinate.toRelativeOffset(drawingArea);
+			network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
 		});
 	}
 
@@ -75,16 +77,16 @@
 		drawingArea.onMultiTouchStart(endDrag);
 	}
 
-	function startDrag(pageOffset) {
-		start = drawingArea.relativeOffset(pageOffset);
+	function startDrag(coordinate) {
+		start = coordinate;
 	}
 
-	function continueDrag(pageOffset) {
+	function continueDrag(coordinate) {
 		if (!isCurrentlyDrawing()) return;
 
-		var end = drawingArea.relativeOffset(pageOffset);
-		if (start.x !== end.x || start.y !== end.y) {
-			svgCanvas.drawLine(start.x, start.y, end.x, end.y);
+		var end = coordinate;
+		if (!start.equals(end)) {
+			svgCanvas.drawLine(start, end);
 			start = end;
 			lineDrawn = true;
 		}
@@ -93,7 +95,7 @@
 	function endDrag() {
 		if (!isCurrentlyDrawing()) return;
 
-		if (!lineDrawn) svgCanvas.drawDot(start.x, start.y);
+		if (!lineDrawn) svgCanvas.drawDot(start);
 
 		start = null;
 		lineDrawn = false;

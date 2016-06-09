@@ -1,4 +1,4 @@
-// Copyright (c) 2013 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2013-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global $, jQuery */
 
 (function() {
@@ -6,6 +6,7 @@
 
 	var browser = require("./browser.js");
 	var failFast = require("../../shared/fail_fast.js");
+	var HtmlCoordinate = require("./html_coordinate.js");
 
 
 	/* Constructors */
@@ -65,24 +66,29 @@
 	HtmlElement.prototype.onMouseUp = onMouseEventFn("mouseup");
 
 	function triggerMouseEventFn(event) {
-		return function(relativeX, relativeY) {
-			var pageCoords;
-			if (relativeX === undefined || relativeY === undefined) {
-				pageCoords = { x: 0, y: 0 };
+		return function(parm1, parm2) {
+			var coordinate;
+			if (parm1 === undefined && parm2 === undefined) {
+				// no parameters, assume no coordinate
+				coordinate = HtmlCoordinate.fromPageOffset(0, 0);
+			}
+			else if (parm1 !== undefined && parm2 === undefined) {
+			  // one HtmlCoordinate parameter
+				coordinate = parm1;
 			}
 			else {
-				pageCoords = pageOffset(this, relativeX, relativeY);
+				// (x, y) coordinate as numbers relative to this element
+				coordinate = HtmlCoordinate.fromRelativeOffset(this, parm1, parm2);
 			}
 
-			sendMouseEvent(this, event, pageCoords);
+			sendMouseEvent(this, event, coordinate.toPageOffset());
 		};
 	}
 
 	function onMouseEventFn(event) {
 		return function(callback) {
 			this._element.on(event, function(event) {
-				var pageOffset = { x: event.pageX, y: event.pageY };
-				callback(pageOffset);
+				callback(HtmlCoordinate.fromPageOffset(event.pageX, event.pageY));
 			});
 		};
 	}
@@ -112,6 +118,7 @@
 	HtmlElement.prototype.onSingleTouchMove = onSingleTouchEventFn("touchmove");
 	HtmlElement.prototype.onMultiTouchStart = onMultiTouchEventFn("touchstart");
 
+
 	function triggerZeroTouchEventFn(event) {
 		return function() {
 			sendTouchEvent(this, event, document.createTouchList());
@@ -119,16 +126,48 @@
 	}
 
 	function triggerSingleTouchEventFn(event) {
-		return function(relativeX, relativeY) {
-			var touch = createTouch(this, relativeX, relativeY);
+		return function(parm1, parm2) {
+			var coordinate;
+			if (parm1 === undefined && parm2 === undefined) {
+				// no parameters, assume no coordinate
+				coordinate = HtmlCoordinate.fromPageOffset(0, 0);
+			}
+			else if (parm1 !== undefined && parm2 === undefined) {
+			  // one HtmlCoordinate parameter
+				coordinate = parm1;
+			}
+			else {
+				// (x, y) coordinate as numbers relative to this element
+				coordinate = HtmlCoordinate.fromRelativeOffset(this, parm1, parm2);
+			}
+
+			var touch = createTouch(this, coordinate);
 			sendTouchEvent(this, event, document.createTouchList(touch));
 		};
 	}
 
 	function triggerMultiTouchEventFn(event) {
-		return function(relative1X, relative1Y, relative2X, relative2Y) {
-			var touch1 = createTouch(this, relative1X, relative1Y);
-			var touch2 = createTouch(this, relative2X, relative2Y);
+		return function(parm1, parm2, parm3, parm4) {
+			var coordinate1;
+			var coordinate2;
+			if (parm1 === undefined && parm2 === undefined && parm3 === undefined && parm4 === undefined) {
+				// no parameters, assume no coordinates
+				coordinate1 = HtmlCoordinate.fromPageOffset(0, 0);
+				coordinate2 = HtmlCoordinate.fromPageOffset(0, 0);
+			}
+			else if (parm1 !== undefined && parm2 !== undefined && parm3 === undefined && parm4 === undefined) {
+			  // two HtmlCoordinate parameters
+				coordinate1 = parm1;
+				coordinate2 = parm2;
+			}
+			else {
+				// two (x, y) coordinates as numbers relative to this element
+				coordinate1 = HtmlCoordinate.fromRelativeOffset(this, parm1, parm2);
+				coordinate2 = HtmlCoordinate.fromRelativeOffset(this, parm3, parm4);
+			}
+
+			var touch1 = createTouch(this, coordinate1);
+			var touch2 = createTouch(this, coordinate2);
 			sendTouchEvent(this, event, document.createTouchList(touch1, touch2));
 		};
 	}
@@ -150,9 +189,8 @@
 
 				var pageX = originalEvent.touches[0].pageX;
 				var pageY = originalEvent.touches[0].pageY;
-				var offset = { x: pageX, y: pageY };
 
-				callback(offset);
+				callback(HtmlCoordinate.fromPageOffset(pageX, pageY));
 			});
 		};
 	}
@@ -219,8 +257,8 @@
 		self._element.trigger(eventData);
 	}
 
-	function createTouch(self, relativeX, relativeY) {
-		var offset = pageOffset(self, relativeX, relativeY);
+	function createTouch(self, coordinate) {
+		var offset = coordinate.toPageOffset();
 
 		var view = window;
 		var target = self._element[0];
@@ -234,7 +272,7 @@
 	}
 
 
-	/* Dimensions, offsets, and positioning */
+	/* Dimensions */
 
 	HtmlElement.prototype.getDimensions = function() {
 		return {
@@ -243,50 +281,6 @@
 		};
 	};
 
-	HtmlElement.prototype.relativeOffset = function(pageOffset) {
-		return relativeOffset(this, pageOffset.x, pageOffset.y);
-	};
-
-	HtmlElement.prototype.pageOffset = function(relativeOffset) {
-		return pageOffset(this, relativeOffset.x, relativeOffset.y);
-	};
-
-	function relativeOffset(self, pageX, pageY) {
-		failFastIfStylingPresent(self);
-
-		var pageOffset = self._element.offset();
-		return {
-			x: pageX - pageOffset.left,
-			y: pageY - pageOffset.top
-		};
-	}
-
-	function pageOffset(self, relativeX, relativeY) {
-		failFastIfStylingPresent(self);
-
-		var topLeftOfDrawingArea = self._element.offset();
-		return {
-			x: relativeX + topLeftOfDrawingArea.left,
-			y: relativeY + topLeftOfDrawingArea.top
-		};
-	}
-
-	function failFastIfStylingPresent(self) {
-		failFastIfPaddingPresent("top");
-		failFastIfPaddingPresent("left");
-		failFastIfBorderPresent("top");
-		failFastIfBorderPresent("left");
-
-		function failFastIfPaddingPresent(side) {
-			var css = self._element.css("padding-" + side);
-			if (css !== "0px") throw new Error("Do not apply padding to elements used with relativeOffset() (expected 0px but was " + css + ")");
-		}
-
-		function failFastIfBorderPresent(side) {
-			var css = self._element.css("border-" + side + "-width");
-			if (css !== "0px") throw new Error("Do not apply border to elements used with relativeOffset() (expected 0px but was " + css + ")");
-		}
-	}
 
 	/* DOM Manipulation */
 

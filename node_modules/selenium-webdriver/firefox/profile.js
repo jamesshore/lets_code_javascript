@@ -23,7 +23,6 @@
 'use strict';
 
 const AdmZip = require('adm-zip'),
-    AdmConstants = require('adm-zip/util/constants'),
     fs = require('fs'),
     path = require('path'),
     vm = require('vm');
@@ -199,8 +198,8 @@ function decode(data) {
 
 
 /**
- * Models a Firefox proifle directory for use with the FirefoxDriver. The
- * {@code Proifle} directory uses an in-memory model until {@link #writeToDisk}
+ * Models a Firefox profile directory for use with the FirefoxDriver. The
+ * {@code Profile} directory uses an in-memory model until {@link #writeToDisk}
  * is called.
  */
 class Profile {
@@ -385,7 +384,8 @@ class Profile {
     return this.writeToDisk(true).then(function(dir) {
       var zip = new AdmZip();
       zip.addLocalFolder(dir, '');
-      zip.getEntries()[0].header.method = AdmConstants.STORED;
+      // Stored compression, see https://en.wikipedia.org/wiki/Zip_(file_format)
+      zip.getEntries()[0].header.method = 0;
       return io.tmpFile().then(function(file) {
         zip.writeZip(file);  // Sync! Why oh why :-(
         return promise.checkedNodeCall(fs.readFile, file);

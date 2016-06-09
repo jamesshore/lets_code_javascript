@@ -6,6 +6,7 @@
 
 	var SvgCanvas = module.exports = function(htmlElement) {
 		var dimensions = htmlElement.getDimensions();
+		this._element = htmlElement;
 		this._paper = new Raphael(htmlElement.toDomElement(), dimensions.width, dimensions.height);
 	};
 
@@ -17,8 +18,11 @@
 		this._paper.clear();
 	};
 
-	SvgCanvas.prototype.drawLine = function(startX, startY, endX, endY) {
-		this._paper.path("M" + startX + "," + startY + "L" + endX + "," + endY)
+	SvgCanvas.prototype.drawLine = function(start, end) {
+		var startOffset = start.toRelativeOffset(this._element);
+		var endOffset = end.toRelativeOffset(this._element);
+
+		this._paper.path("M" + startOffset.x + "," + startOffset.y + "L" + endOffset.x + "," + endOffset.y)
 			.attr({
 				"stroke": SvgCanvas.LINE_COLOR,
 				"stroke-width": SvgCanvas.STROKE_WIDTH,
@@ -26,8 +30,10 @@
 			});
 	};
 
-	SvgCanvas.prototype.drawDot = function(x, y) {
-		this._paper.circle(x, y, SvgCanvas.STROKE_WIDTH / 2)
+	SvgCanvas.prototype.drawDot = function(coord) {
+		var offset = coord.toRelativeOffset(this._element);
+
+		this._paper.circle(offset.x, offset.y, SvgCanvas.STROKE_WIDTH / 2)
 			.attr({
 				"stroke": SvgCanvas.LINE_COLOR,
 				"fill": SvgCanvas.LINE_COLOR

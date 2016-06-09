@@ -21,12 +21,12 @@
 
 'use strict';
 
-const error = require('../error'),
-    Executor = require('./index').Executor,
+const Executor = require('./index').Executor,
     HttpClient = require('./index').HttpClient,
     HttpRequest = require('./index').Request,
     Command = require('../lib/command').Command,
     CommandName = require('../lib/command').Name,
+    error = require('../lib/error'),
     promise = require('../lib/promise');
 
 
@@ -41,10 +41,7 @@ function getStatus(url) {
   var client = new HttpClient(url);
   var executor = new Executor(client);
   var command = new Command(CommandName.GET_SERVER_STATUS);
-  return executor.execute(command).then(function(responseObj) {
-    error.checkLegacyResponse(responseObj);
-    return responseObj['value'];
-  });
+  return executor.execute(command);
 }
 
 
@@ -77,7 +74,14 @@ exports.waitForServer = function(url, timeout) {
     return getStatus(url).then(ready.fulfill, onError);
   }
 
-  function onError() {
+  function onError(e) {
+    // Some servers don't support the status command. If they are able to
+    // response with an error, then can consider the server ready.
+    if (e instanceof error.UnsupportedOperationError) {
+      ready.fulfill();
+      return;
+    }
+
     if (Date.now() - start > timeout) {
       ready.reject(
           Error('Timed out waiting for the WebDriver server at ' + url));
