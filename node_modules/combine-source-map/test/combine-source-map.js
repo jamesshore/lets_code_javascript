@@ -108,25 +108,25 @@ test('add one file without inlined source', function (t) {
       mappings
     , [ { generated: { line: 4, column: 0 },
         original: { line: 1, column: 0 },
-        source: 'foo.js', name: undefined },
+        source: 'foo.js', name: null },
       { generated: { line: 5, column: 0 },
         original: { line: 2, column: 0 },
-        source: 'foo.js', name: undefined },
+        source: 'foo.js', name: null },
       { generated: { line: 6, column: 0 },
         original: { line: 3, column: 0 },
-        source: 'foo.js', name: undefined },
+        source: 'foo.js', name: null },
       { generated: { line: 7, column: 0 },
         original: { line: 4, column: 0 },
-        source: 'foo.js', name: undefined },
+        source: 'foo.js', name: null },
       { generated: { line: 8, column: 0 },
         original: { line: 5, column: 0 },
-        source: 'foo.js', name: undefined },
+        source: 'foo.js', name: null },
       { generated: { line: 9, column: 0 },
         original: { line: 6, column: 0 },
-        source: 'foo.js', name: undefined },
+        source: 'foo.js', name: null },
       { generated: { line: 10, column: 0 },
         original: { line: 7, column: 0 },
-        source: 'foo.js', name: undefined } ]
+        source: 'foo.js', name: null } ]
     , 'generates mappings offset by the given line'
   )
   t.end()
@@ -177,19 +177,19 @@ test('add one file with inlined sources from multiple files', function(t) {
     , [ { original: { column: 0, line: 1 },
         generated: { column: 0, line: 1 },
         source: 'one.js',
-        name: undefined },
+        name: null },
       { original: { column: 0, line: 1 },
         generated: { column: 0, line: 2 },
         source: 'two.js',
-        name: undefined },
+        name: null },
       { original: { column: 0, line: 1 },
         generated: { column: 0, line: 3 },
         source: 'three.js',
-        name: undefined },
+        name: null },
       { original: { column: 0, line: 1 },
         generated: { column: 0, line: 4 },
         source: 'four.js',
-        name: undefined } ], 'should properly map multiple files');
+        name: null } ], 'should properly map multiple files');
   t.end()
 });
 
@@ -262,19 +262,19 @@ test('relative path from multiple files', function(t) {
     , [ { original: { column: 0, line: 1 },
         generated: { column: 0, line: 1 },
         source: 'src/package1/sub/one.js',
-        name: undefined },
+        name: null },
       { original: { column: 0, line: 1 },
         generated: { column: 0, line: 2 },
         source: 'src/package1/sub/two.js',
-        name: undefined },
+        name: null },
       { original: { column: 0, line: 1 },
         generated: { column: 0, line: 3 },
         source: 'src/package2/sub/three.js',
-        name: undefined },
+        name: null },
       { original: { column: 0, line: 1 },
         generated: { column: 0, line: 4 },
         source: 'src/package2/sub/four.js',
-        name: undefined } ], 'should properly map multiple files');
+        name: null } ], 'should properly map multiple files');
   t.end()
 });
 
@@ -318,11 +318,11 @@ test('relative path when source and file name are the same', function(t) {
     , [ { original: { column: 0, line: 1 },
         generated: { column: 0, line: 1 },
         source: 'a/b/one.js',
-        name: undefined },
+        name: null },
       { original: { column: 0, line: 1 },
         generated: { column: 0, line: 2 },
         source: 'a/b/two.js',
-        name: undefined } ], 'should properly map multiple files');
+        name: null } ], 'should properly map multiple files');
   t.end()
 });
 

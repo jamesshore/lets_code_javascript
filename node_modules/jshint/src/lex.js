@@ -1627,7 +1627,8 @@ Lexer.prototype = {
       }
 
       if (type === "(identifier)") {
-        if (value === "return" || value === "case" || value === "typeof") {
+        if (value === "return" || value === "case" ||
+            value === "typeof" || value === "instanceof") {
           this.prereg = true;
         }
 
@@ -1639,6 +1640,10 @@ Lexer.prototype = {
             obj = null;
           }
         }
+      }
+
+      if (type === "(template)" || type === "(template middle)") {
+        this.prereg = true;
       }
 
       if (!obj) {
@@ -1771,7 +1776,7 @@ Lexer.prototype = {
         this.triggerAsync("Identifier", {
           line: this.line,
           char: this.char,
-          from: this.form,
+          from: this.from,
           name: token.value,
           raw_name: token.text,
           isProperty: state.tokens.curr.id === "."

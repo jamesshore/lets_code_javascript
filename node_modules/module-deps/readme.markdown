@@ -150,7 +150,7 @@ to a module that is expected to follow this format:
 
 ``` js
 var through = require('through2');
-module.exports = function (file) { return through() };
+module.exports = function (file, opts) { return through() };
 ```
 
 You don't necessarily need to use the
@@ -205,6 +205,11 @@ and `ggg` gets `{"y":4}`:
   }
 }
 ```
+
+Options sent to the module-deps constructor are also provided under
+`opts._flags`. These options are sometimes required if your transform
+needs to do something different when browserify is run in debug mode, for
+example.
 
 # usage
 

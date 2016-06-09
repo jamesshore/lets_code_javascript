@@ -15,7 +15,7 @@ test('transform options', function (t) {
     
     p.pipe(JSONStream.stringify()).pipe(pack).pipe(concat(function (src) {
         Function('console', src.toString('utf8'))({
-            log: function (msg) { t.equal(msg, 333) }
+            log: function (msg) { t.equal(msg, 999) }
         });
     }));
 });

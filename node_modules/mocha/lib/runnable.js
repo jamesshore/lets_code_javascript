@@ -45,6 +45,7 @@ module.exports = Runnable;
 function Runnable(title, fn) {
   this.title = title;
   this.fn = fn;
+  this.body = (fn || '').toString();
   this.async = fn && fn.length;
   this.sync = !this.async;
   this._timeout = 2000;
@@ -54,6 +55,7 @@ function Runnable(title, fn) {
   this._trace = new Error('done() called multiple times');
   this._retries = -1;
   this._currentRetry = 0;
+  this.pending = false;
 }
 
 /**
@@ -124,10 +126,19 @@ Runnable.prototype.enableTimeouts = function(enabled) {
 /**
  * Halt and mark as pending.
  *
- * @api private
+ * @api public
  */
 Runnable.prototype.skip = function() {
   throw new Pending();
+};
+
+/**
+ * Check if this runnable or its parent suite is marked as pending.
+ *
+ * @api private
+ */
+Runnable.prototype.isPending = function() {
+  return this.pending || (this.parent && this.parent.isPending());
 };
 
 /**
@@ -302,7 +313,7 @@ Runnable.prototype.run = function(fn) {
 
   // sync or promise-returning
   try {
-    if (this.pending) {
+    if (this.isPending()) {
       done();
     } else {
       callFn(this.fn);

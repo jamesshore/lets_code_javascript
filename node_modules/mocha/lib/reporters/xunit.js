@@ -130,8 +130,8 @@ XUnit.prototype.test = function(test) {
 
   if (test.state === 'failed') {
     var err = test.err;
-    this.write(tag('testcase', attrs, false, tag('failure', {}, false, cdata(escape(err.message) + '\n' + err.stack))));
-  } else if (test.pending) {
+    this.write(tag('testcase', attrs, false, tag('failure', {}, false, escape(err.message) + '\n' + escape(err.stack))));
+  } else if (test.isPending()) {
     this.write(tag('testcase', attrs, false, tag('skipped', {}, true)));
   } else {
     this.write(tag('testcase', attrs, true));
@@ -163,12 +163,4 @@ function tag(name, attrs, close, content) {
     tag += content + '</' + name + end;
   }
   return tag;
-}
-
-/**
- * Return cdata escaped CDATA `str`.
- */
-
-function cdata(str) {
-  return '<![CDATA[' + escape(str) + ']]>';
 }
