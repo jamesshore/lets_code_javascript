@@ -1,7 +1,9 @@
-// Copyright (c) 2015 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2015-2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 /* global io:false, $:false */
 (function() {
 	"use strict";
+
+	// The network test harness is started inside of the build script before the network tests are run
 
 	var CONNECTED_CLIENTS = "/connected-clients";
 	var WAIT_FOR_DISCONNECT = "/wait-for-disconnect";
