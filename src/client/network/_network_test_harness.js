@@ -4,9 +4,9 @@
 	"use strict";
 
 
-	var CONNECTED_CLIENTS = "/connected-clients";
-	var WAIT_FOR_DISCONNECT = "/wait-for-disconnect";
-	var POINTER_LOCATION = "/pointer-location";
+	var IS_CONNECTED = "/is-connected";
+	var WAIT_FOR_SERVER_DISCONNECT = "/wait-for-server-disconnect";
+	var WAIT_FOR_POINTER_LOCATION = "/wait-for-pointer-location";
 
 	exports.PORT = 5030;
 
@@ -27,31 +27,85 @@
 		// See bug #1602: https://github.com/socketio/socket.io/issues/1602
 		var connections = [];
 
-
-		var lastPointerLocation = {};
-
 		var httpServer = http.createServer();
 
 		httpServer.on("connection", function(socket) {
 			connections.push(socket);
 		});
 
+
+		var endpointMap = {};
+		endpointMap[IS_CONNECTED] = isConnectedEndpoint;
+		endpointMap[WAIT_FOR_SERVER_DISCONNECT] = waitForServerDisconnectEndpoint;
+		endpointMap[WAIT_FOR_POINTER_LOCATION] = waitForPointerLocationEndpoint;
+
+
+		//endpointMap[WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation();
+
+
+
+
+
+
+		httpServer.listen(exports.PORT);
+
+
 		httpServer.on("request", function(request, response) {
 			response.setHeader("Access-Control-Allow-Origin", "*");
 
 			var parsedUrl = url.parse(request.url);
 			var path = parsedUrl.pathname;
-			switch(path) {
-				case CONNECTED_CLIENTS: return connectedClientsEndpoint(parsedUrl, request, response);
-				case WAIT_FOR_DISCONNECT: return waitForDisconnectEndpoint(parsedUrl, request, response);
-				case POINTER_LOCATION: return pointerLocationEndpoint(parsedUrl, request, response);
-				default:
-					response.statusCode = 404;
-					response.end("Not Found");
+
+			var endpoint = endpointMap[path];
+			if (endpoint !== undefined) {
+				endpoint(parsedUrl, request, response);
+			}
+			else {
+				response.statusCode = 404;
+				response.end("Not Found");
 			}
 		});
-
 		var io = socketIo(httpServer);
+
+
+
+		function setupWaitForPointerLocation() {
+			var lastPointerLocation = {};
+
+			io.on("connection", function(socket) {
+				socket.on("mouse", function(data) {
+					lastPointerLocation[socket.id] = data;
+				});
+			});
+
+			return waitForPointerLocationEndpoint;
+
+			function waitForPointerLocationEndpoint(parsedUrl, request, response) {
+				var socketId = getSocketId(parsedUrl);
+
+				var result = lastPointerLocation[socketId];
+
+				if (result === undefined) {
+					var socket = io.sockets.sockets[socketId];
+					socket.on("mouse", sendResponse);
+				}
+				else {
+					sendResponse(result);
+				}
+
+				function sendResponse(data) {
+					response.end(JSON.stringify(data));
+					delete lastPointerLocation[socketId];
+				}
+			}
+		}
+
+
+		//---
+
+
+
+		var lastPointerLocation = {};
 
 		io.on("connection", function(socket) {
 			socket.on("mouse", function(data) {
@@ -60,40 +114,8 @@
 		});
 
 
-		httpServer.listen(exports.PORT);
-
-		return stopFn;
-
-		function stopFn(callback) {
-			return function() {
-				io.close();
-				connections.forEach(function(socket) {
-					socket.unref();
-				});
-				callback();
-			};
-		}
-
-		function connectedClientsEndpoint(parsedUrl, request, response) {
-			var socketIds = Object.keys(io.sockets.connected).map(function(id) {
-				return id.substring(2);
-			});
-			response.end(JSON.stringify(socketIds));
-		}
-
-		function waitForDisconnectEndpoint(parsedUrl, request, response) {
-			var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
-
-			var socket = io.sockets.sockets[socketId];
-
-			if (socket === undefined || socket.disconnected) return response.end("disconnected");
-			socket.on("disconnect", function() {
-				return response.end("disconnected");
-			});
-		}
-
-		function pointerLocationEndpoint(parsedUrl, request, response) {
-			var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
+		function waitForPointerLocationEndpoint(parsedUrl, request, response) {
+			var socketId = getSocketId(parsedUrl);
 
 			var result = lastPointerLocation[socketId];
 
@@ -110,14 +132,52 @@
 				delete lastPointerLocation[socketId];
 			}
 		}
+		//---
+
+
+		return stopFn;
+
+		function stopFn(callback) {
+			return function() {
+				io.close();
+				connections.forEach(function(socket) {
+					socket.unref();
+				});
+				callback();
+			};
+		}
+
+		function isConnectedEndpoint(parsedUrl, request, response) {
+			var socketIds = Object.keys(io.sockets.connected).map(function(id) {
+				return id.substring(2);
+			});
+			response.end(JSON.stringify(socketIds));
+		}
+
+		function waitForServerDisconnectEndpoint(parsedUrl, request, response) {
+			var socket = io.sockets.sockets[getSocketId(parsedUrl)];
+
+			if (socket === undefined || socket.disconnected) return response.end("disconnected");
+			socket.on("disconnect", function() {
+				return response.end("disconnected");
+			});
+		}
+
+		function getSocketId(parsedUrl) {
+			return "/#" + querystring.parse(parsedUrl.query).socketId;
+		}
+
+
 	};
+
+
 
 
 	var client = exports.client = {};
 
 	client.waitForServerDisconnect = function waitForServerDisconnect(connection, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
-		var url = origin + WAIT_FOR_DISCONNECT;
+		var url = origin + WAIT_FOR_SERVER_DISCONNECT;
 		var request = $.ajax({
 			type: "GET",
 			url: url,
@@ -136,7 +196,7 @@
 
 	client.isConnected = function isConnected(connection) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
-		var url = origin + CONNECTED_CLIENTS;
+		var url = origin + IS_CONNECTED;
 		var request = $.ajax({
 			type: "GET",
 			url: url,
@@ -151,7 +211,7 @@
 
 	client.waitForPointerLocation = function waitForPointerLocation(connection, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
-		var url = origin + POINTER_LOCATION;
+		var url = origin + WAIT_FOR_POINTER_LOCATION;
 		var request = $.ajax({
 			type: "GET",
 			url: url,
