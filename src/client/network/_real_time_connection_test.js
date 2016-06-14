@@ -51,6 +51,20 @@
 			});
 		});
 
+		it("receives pointer status from Socket.IO server", function(done) {
+			connection.connect(harness.PORT, function() {
+
+				connection.onPointerLocation(function(x, y) {
+					assert.equal(x, 90, "x");
+					assert.equal(y, 160, "y");
+
+					connection.disconnect(done);
+				});
+
+				harness.client.sendPointerLocation(50, 75);
+			});
+		});
+
 		it("provides socket ID", function(done) {
 			connection.connect(harness.PORT, function() {
 				assert.defined(connection.getSocketId());
@@ -75,6 +89,7 @@
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
+			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 
 			function callback() {

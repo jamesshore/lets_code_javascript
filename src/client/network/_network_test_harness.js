@@ -3,7 +3,6 @@
 (function() {
 	"use strict";
 
-	// The network test harness is started inside of the build script before the network tests are run
 
 	var CONNECTED_CLIENTS = "/connected-clients";
 	var WAIT_FOR_DISCONNECT = "/wait-for-disconnect";
@@ -18,6 +17,7 @@
 	// See bug #1602: https://github.com/socketio/socket.io/issues/1602
 	server.connections = [];
 
+	// The network test harness is started inside of the build script before the network tests are run
 	server.start = function() {
 		var http = require("http");
 		var socketIo = require("socket.io");
@@ -163,6 +163,10 @@
 		request.fail(function(_, errorText) {
 			throw new Error(errorText);
 		});
+	};
+
+	client.sendPointerLocation = function sendPointerLocation(x, y) {
+
 	};
 
 }());
