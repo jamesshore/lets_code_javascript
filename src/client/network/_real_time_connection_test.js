@@ -51,7 +51,7 @@
 			});
 		});
 
-		it("receives pointer status from Socket.IO server", function(done) {
+		it.skip("receives pointer status from Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 
 				connection.onPointerLocation(function(x, y) {

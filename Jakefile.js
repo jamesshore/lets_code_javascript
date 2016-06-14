@@ -117,8 +117,8 @@
 
 		var networkHarness = require("./src/client/network/_network_test_harness.js");
 
-		var io = networkHarness.server.start();
-		runKarmaOnTaggedSubsetOfTests("NET", networkHarness.server.stopFn(io, complete), fail);
+		var networkStopFn = networkHarness.server.start();
+		runKarmaOnTaggedSubsetOfTests("NET", networkStopFn(complete), fail);
 	});
 
 	function runKarmaOnTaggedSubsetOfTests(tag, complete, fail) {

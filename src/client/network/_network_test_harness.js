@@ -10,25 +10,30 @@
 
 	exports.PORT = 5030;
 
-	var server = exports.server = {};
-
-	// Socket.IO doesn't exit cleanly, so we have to manually collect the connections
-	// and unref() them so the server process will exit.
-	// See bug #1602: https://github.com/socketio/socket.io/issues/1602
-	server.connections = [];
+	var server =  exports.server = {};
 
 	// The network test harness is started inside of the build script before the network tests are run
 	server.start = function() {
+		// This code is Node-specific, but this file runs in both Node and clients, so anything Node-specific
+		// has to be inside this function. As a result, this function is more like a standalone module.
+
 		var http = require("http");
 		var socketIo = require("socket.io");
 		var url = require("url");
+		var querystring = require("querystring");
+
+		// Socket.IO doesn't exit cleanly, so we have to manually collect the connections
+		// and unref() them so the server process will exit.
+		// See bug #1602: https://github.com/socketio/socket.io/issues/1602
+		var connections = [];
+
 
 		var lastPointerLocation = {};
 
 		var httpServer = http.createServer();
 
 		httpServer.on("connection", function(socket) {
-			server.connections.push(socket);
+			connections.push(socket);
 		});
 
 		httpServer.on("request", function(request, response) {
@@ -56,7 +61,18 @@
 
 
 		httpServer.listen(exports.PORT);
-		return io;
+
+		return stopFn;
+
+		function stopFn(callback) {
+			return function() {
+				io.close();
+				connections.forEach(function(socket) {
+					socket.unref();
+				});
+				callback();
+			};
+		}
 
 		function connectedClientsEndpoint(parsedUrl, request, response) {
 			var socketIds = Object.keys(io.sockets.connected).map(function(id) {
@@ -66,8 +82,6 @@
 		}
 
 		function waitForDisconnectEndpoint(parsedUrl, request, response) {
-			var querystring = require("querystring");
-
 			var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
 
 			var socket = io.sockets.sockets[socketId];
@@ -79,7 +93,6 @@
 		}
 
 		function pointerLocationEndpoint(parsedUrl, request, response) {
-			var querystring = require("querystring");
 			var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
 
 			var result = lastPointerLocation[socketId];
@@ -97,16 +110,6 @@
 				delete lastPointerLocation[socketId];
 			}
 		}
-	};
-
-	server.stopFn = function(io, callback) {
-		return function() {
-			io.close();
-			server.connections.forEach(function(socket) {
-				socket.unref();
-			});
-			callback();
-		};
 	};
 
 
