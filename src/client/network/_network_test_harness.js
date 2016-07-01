@@ -91,12 +91,12 @@
 				else {
 					sendResponse(result);
 				}
-			}
 
-			function sendResponse(data) {
-				response.end(JSON.stringify(data));
-				delete lastPointerLocation[socketId];
-			}
+				function sendResponse(data) {
+					response.end(JSON.stringify(data));
+					delete lastPointerLocation[socketId];
+				}
+			};
 		}
 
 		function setupIsConnected() {
