@@ -131,21 +131,13 @@
 	var client = exports.client = {};
 
 	client.waitForServerDisconnect = function waitForServerDisconnect(connection, callback) {
-		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
-		var url = origin + WAIT_FOR_SERVER_DISCONNECT;
-		var request = $.ajax({
+		ajax({
 			type: "GET",
-			url: url,
-			data: { socketId: connection.getSocketId() },
+			endpoint: WAIT_FOR_SERVER_DISCONNECT,
 			async: true,
-			cache: false
-		});
-		request.done(function() {
-			if (request.status !== 200) throw new Error("Invalid status: " + request.status);
-			return callback();
-		});
-		request.fail(function(_, errorText) {
-			throw new Error(errorText);
+			data: { socketId: connection.getSocketId() }
+		}, function(err, responseText) {
+			return callback(err);
 		});
 	};
 
@@ -165,26 +157,36 @@
 	};
 
 	client.waitForPointerLocation = function waitForPointerLocation(connection, callback) {
-		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
-		var url = origin + WAIT_FOR_POINTER_LOCATION;
-		var request = $.ajax({
+		ajax({
 			type: "GET",
-			url: url,
-			data: { socketId: connection.getSocketId() },
+			endpoint: WAIT_FOR_POINTER_LOCATION,
 			async: true,
-			cache: false
-		});
-		request.done(function() {
-			if (request.status !== 200) throw new Error("Invalid status: " + request.status);
-			return callback(JSON.parse(request.responseText));
-		});
-		request.fail(function(_, errorText) {
-			throw new Error(errorText);
+			data: { socketId: connection.getSocketId() }
+		}, function(err, responseText) {
+			return callback(err, JSON.parse(responseText));
 		});
 	};
 
 	client.sendPointerLocation = function sendPointerLocation(x, y) {
 
 	};
+
+	function ajax(options, callback) {
+		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
+		var request = $.ajax({
+			type: options.type,
+			url: origin + options.endpoint,
+			data: options.data,
+			async: options.async,
+			cache: false
+		});
+		request.done(function() {
+			if (request.status !== 200) throw new Error("Invalid status: " + request.status);
+			return callback(null, request.responseText);
+		});
+		request.fail(function(_, errorText) {
+			throw new Error(errorText);
+		});
+	}
 
 }());

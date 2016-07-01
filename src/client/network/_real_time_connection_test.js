@@ -44,7 +44,7 @@
 			connection.connect(harness.PORT, function() {
 				connection.sendPointerLocation(50, 75);
 
-				harness.client.waitForPointerLocation(connection, function(location) {
+				harness.client.waitForPointerLocation(connection, function(error, location) {
 					assert.deepEqual(location, { x: 50, y: 75 });
 					connection.disconnect(done);
 				});
