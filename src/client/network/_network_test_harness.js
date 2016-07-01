@@ -142,17 +142,13 @@
 	};
 
 	client.isConnected = function isConnected(connection) {
-		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
-		var url = origin + IS_CONNECTED;
-		var request = $.ajax({
+		var responseText = ajax({
 			type: "GET",
-			url: url,
-			async: false,
-			cache: false
+			endpoint: IS_CONNECTED,
+			async: false
 		});
-		if (request.status !== 200) throw new Error("Invalid status: " + request.status);
 
-		var connectedIds = JSON.parse(request.responseText);
+		var connectedIds = JSON.parse(responseText);
 		return connectedIds.indexOf(connection.getSocketId()) !== -1;
 	};
 
@@ -180,13 +176,20 @@
 			async: options.async,
 			cache: false
 		});
-		request.done(function() {
+
+		if (options.async) {
+			request.done(function() {
+				if (request.status !== 200) throw new Error("Invalid status: " + request.status);
+				return callback(null, request.responseText);
+			});
+			request.fail(function(_, errorText) {
+				throw new Error(errorText);
+			});
+		}
+		else {
 			if (request.status !== 200) throw new Error("Invalid status: " + request.status);
-			return callback(null, request.responseText);
-		});
-		request.fail(function(_, errorText) {
-			throw new Error(errorText);
-		});
+			else return request.responseText;
+		}
 	}
 
 }());

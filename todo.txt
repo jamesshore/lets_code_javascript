@@ -50,9 +50,7 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* Clean up _network_test_harness server code
-- Clean up _network_test_harness client code
-- Implement harness.sendPointerLocation()
+* Implement harness.sendPointerLocation()
 - Finish implementing onPointerLocation() and tests
 	- Discuss E423 comments
 - Provide unique ID with each pointer event
