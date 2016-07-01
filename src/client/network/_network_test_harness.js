@@ -22,35 +22,19 @@
 		var url = require("url");
 		var querystring = require("querystring");
 
-		// Socket.IO doesn't exit cleanly, so we have to manually collect the connections
-		// and unref() them so the server process will exit.
-		// See bug #1602: https://github.com/socketio/socket.io/issues/1602
-		var connections = [];
-
 		var httpServer = http.createServer();
-
-		httpServer.on("connection", function(socket) {
-			connections.push(socket);
-		});
-
+		httpServer.on("request", handleResponse);
+		var io = socketIo(httpServer);
+		httpServer.listen(exports.PORT);
 
 		var endpointMap = {};
 		endpointMap[IS_CONNECTED] = isConnectedEndpoint;
 		endpointMap[WAIT_FOR_SERVER_DISCONNECT] = waitForServerDisconnectEndpoint;
-		endpointMap[WAIT_FOR_POINTER_LOCATION] = waitForPointerLocationEndpoint;
+		endpointMap[WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation();
 
+		return stopFn();
 
-		//endpointMap[WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation();
-
-
-
-
-
-
-		httpServer.listen(exports.PORT);
-
-
-		httpServer.on("request", function(request, response) {
+		function handleResponse(request, response) {
 			response.setHeader("Access-Control-Allow-Origin", "*");
 
 			var parsedUrl = url.parse(request.url);
@@ -64,10 +48,7 @@
 				response.statusCode = 404;
 				response.end("Not Found");
 			}
-		});
-		var io = socketIo(httpServer);
-
-
+		}
 
 		function setupWaitForPointerLocation() {
 			var lastPointerLocation = {};
@@ -100,50 +81,23 @@
 			}
 		}
 
-
-		//---
-
-
-
-		var lastPointerLocation = {};
-
-		io.on("connection", function(socket) {
-			socket.on("mouse", function(data) {
-				lastPointerLocation[socket.id] = data;
-			});
-		});
-
-
-		function waitForPointerLocationEndpoint(parsedUrl, request, response) {
-			var socketId = getSocketId(parsedUrl);
-
-			var result = lastPointerLocation[socketId];
-
-			if (result === undefined) {
-				var socket = io.sockets.sockets[socketId];
-				socket.on("mouse", sendResponse);
-			}
-			else {
-				sendResponse(result);
-			}
-
-			function sendResponse(data) {
-				response.end(JSON.stringify(data));
-				delete lastPointerLocation[socketId];
-			}
-		}
-		//---
-
-
-		return stopFn;
-
-		function stopFn(callback) {
-			return function() {
-				io.close();
-				connections.forEach(function(socket) {
-					socket.unref();
+		function stopFn() {
+			return function(callback) {
+				// Socket.IO doesn't exit cleanly, so we have to manually collect the connections
+				// and unref() them so the server process will exit.
+				// See bug #1602: https://github.com/socketio/socket.io/issues/1602
+				var connections = [];
+				httpServer.on("connection", function(socket) {
+					connections.push(socket);
 				});
-				callback();
+
+				return function() {
+					io.close();
+					connections.forEach(function(socket) {
+						socket.unref();
+					});
+					callback();
+				};
 			};
 		}
 
