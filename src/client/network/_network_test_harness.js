@@ -28,8 +28,8 @@
 		httpServer.listen(exports.PORT);
 
 		var endpointMap = {};
-		endpointMap[IS_CONNECTED] = isConnectedEndpoint;
-		endpointMap[WAIT_FOR_SERVER_DISCONNECT] = waitForServerDisconnectEndpoint;
+		endpointMap[IS_CONNECTED] = setupIsConnected();
+		endpointMap[WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
 		endpointMap[WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation();
 
 		return stopFn();
@@ -47,37 +47,6 @@
 			else {
 				response.statusCode = 404;
 				response.end("Not Found");
-			}
-		}
-
-		function setupWaitForPointerLocation() {
-			var lastPointerLocation = {};
-
-			io.on("connection", function(socket) {
-				socket.on("mouse", function(data) {
-					lastPointerLocation[socket.id] = data;
-				});
-			});
-
-			return waitForPointerLocationEndpoint;
-
-			function waitForPointerLocationEndpoint(parsedUrl, request, response) {
-				var socketId = getSocketId(parsedUrl);
-
-				var result = lastPointerLocation[socketId];
-
-				if (result === undefined) {
-					var socket = io.sockets.sockets[socketId];
-					socket.on("mouse", sendResponse);
-				}
-				else {
-					sendResponse(result);
-				}
-
-				function sendResponse(data) {
-					response.end(JSON.stringify(data));
-					delete lastPointerLocation[socketId];
-				}
 			}
 		}
 
@@ -101,26 +70,58 @@
 			};
 		}
 
-		function isConnectedEndpoint(parsedUrl, request, response) {
-			var socketIds = Object.keys(io.sockets.connected).map(function(id) {
-				return id.substring(2);
+		function setupWaitForPointerLocation() {
+			var lastPointerLocation = {};
+
+			io.on("connection", function(socket) {
+				socket.on("mouse", function(data) {
+					lastPointerLocation[socket.id] = data;
+				});
 			});
-			response.end(JSON.stringify(socketIds));
+
+			return function waitForPointerLocationEndpoint(parsedUrl, request, response) {
+				var socketId = getSocketId(parsedUrl);
+
+				var result = lastPointerLocation[socketId];
+
+				if (result === undefined) {
+					var socket = io.sockets.sockets[socketId];
+					socket.on("mouse", sendResponse);
+				}
+				else {
+					sendResponse(result);
+				}
+			}
+
+			function sendResponse(data) {
+				response.end(JSON.stringify(data));
+				delete lastPointerLocation[socketId];
+			}
 		}
 
-		function waitForServerDisconnectEndpoint(parsedUrl, request, response) {
-			var socket = io.sockets.sockets[getSocketId(parsedUrl)];
+		function setupIsConnected() {
+			return function isConnectedEndpoint(parsedUrl, request, response) {
+				var socketIds = Object.keys(io.sockets.connected).map(function(id) {
+					return id.substring(2);
+				});
+				response.end(JSON.stringify(socketIds));
+			};
+		}
 
-			if (socket === undefined || socket.disconnected) return response.end("disconnected");
-			socket.on("disconnect", function() {
-				return response.end("disconnected");
-			});
+		function setupWaitForServerDisconnect() {
+			return function waitForServerDisconnectEndpoint(parsedUrl, request, response) {
+				var socket = io.sockets.sockets[getSocketId(parsedUrl)];
+
+				if (socket === undefined || socket.disconnected) return response.end("disconnected");
+				socket.on("disconnect", function() {
+					return response.end("disconnected");
+				});
+			};
 		}
 
 		function getSocketId(parsedUrl) {
 			return "/#" + querystring.parse(parsedUrl.query).socketId;
 		}
-
 
 	};
 
