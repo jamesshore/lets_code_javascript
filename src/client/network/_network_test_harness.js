@@ -7,6 +7,7 @@
 	var IS_CONNECTED = "/is-connected";
 	var WAIT_FOR_SERVER_DISCONNECT = "/wait-for-server-disconnect";
 	var WAIT_FOR_POINTER_LOCATION = "/wait-for-pointer-location";
+	var SEND_POINTER_LOCATION = "/send-pointer-location";
 
 	exports.PORT = 5030;
 
@@ -31,6 +32,7 @@
 		endpointMap[IS_CONNECTED] = setupIsConnected();
 		endpointMap[WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
 		endpointMap[WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation();
+		endpointMap[SEND_POINTER_LOCATION] = setupSendPointerLocation();
 
 		return stopFn();
 
@@ -110,13 +112,26 @@
 
 		function setupWaitForServerDisconnect() {
 			return function waitForServerDisconnectEndpoint(parsedUrl, request, response) {
-				var socket = io.sockets.sockets[getSocketId(parsedUrl)];
-
+				var socket = getSocket(parsedUrl);
 				if (socket === undefined || socket.disconnected) return response.end("disconnected");
 				socket.on("disconnect", function() {
 					return response.end("disconnected");
 				});
 			};
+		}
+
+		function setupSendPointerLocation() {
+			return function sendPointerLocationEndpoint(parsedUrl, request, response) {
+				var data = querystring.parse(parsedUrl.query);
+				var socket = getSocket(parsedUrl);
+				socket.emit("mouse", { x: data.x, y: data.y });
+
+				return response.end("ok");
+			};
+		}
+
+		function getSocket(parsedUrl) {
+			return io.sockets.sockets[getSocketId(parsedUrl)];
 		}
 
 		function getSocketId(parsedUrl) {
@@ -132,7 +147,6 @@
 
 	client.waitForServerDisconnect = function waitForServerDisconnect(connection, callback) {
 		ajax({
-			type: "GET",
 			endpoint: WAIT_FOR_SERVER_DISCONNECT,
 			async: true,
 			data: { socketId: connection.getSocketId() }
@@ -143,7 +157,6 @@
 
 	client.isConnected = function isConnected(connection) {
 		var responseText = ajax({
-			type: "GET",
 			endpoint: IS_CONNECTED,
 			async: false
 		});
@@ -154,7 +167,6 @@
 
 	client.waitForPointerLocation = function waitForPointerLocation(connection, callback) {
 		ajax({
-			type: "GET",
 			endpoint: WAIT_FOR_POINTER_LOCATION,
 			async: true,
 			data: { socketId: connection.getSocketId() }
@@ -163,14 +175,20 @@
 		});
 	};
 
-	client.sendPointerLocation = function sendPointerLocation(x, y) {
-
+	client.sendPointerLocation = function sendPointerLocation(connection, x, y, callback) {
+		ajax({
+			endpoint: SEND_POINTER_LOCATION,
+			async: true,
+			data: { x: x, y: y, socketId: connection.getSocketId() }
+		}, function(err, responseText) {
+			callback();
+		});
 	};
 
 	function ajax(options, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var request = $.ajax({
-			type: options.type,
+			type: "GET",
 			url: origin + options.endpoint,
 			data: options.data,
 			async: options.async,

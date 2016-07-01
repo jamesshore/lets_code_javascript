@@ -51,7 +51,7 @@
 			});
 		});
 
-		it.skip("receives pointer status from Socket.IO server", function(done) {
+		it("receives pointer status from Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 
 				connection.onPointerLocation(function(x, y) {
@@ -61,7 +61,7 @@
 					connection.disconnect(done);
 				});
 
-				harness.client.sendPointerLocation(50, 75);
+				harness.client.sendPointerLocation(connection, 90, 160, function() {});
 			});
 		});
 

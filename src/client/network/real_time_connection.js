@@ -36,8 +36,9 @@
 
 	Connection.prototype.onPointerLocation = function onPointerLocation(handler) {
 		failFastUnlessConnectCalled(this);
-
-		//handler();
+		this._socket.on("mouse", function(data) {
+			return handler(data.x, data.y);
+		});
 	};
 
 	Connection.prototype.getSocketId = function getSocketId() {

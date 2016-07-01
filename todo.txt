@@ -50,8 +50,8 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* Implement harness.sendPointerLocation()
 - Finish implementing onPointerLocation() and tests
 	- Discuss E423 comments
+- Network test harness: pass 'data' rather than 'parsedUrl' to endpoint handlers?
 - Provide unique ID with each pointer event
 - Modify client.js to prove that we get pointer events
