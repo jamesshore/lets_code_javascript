@@ -50,8 +50,8 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-- Network test harness: pass 'data' rather than 'parsedUrl' to endpoint handlers?
-	- E426 comments
+* Network test harness: pass 'data' rather than 'parsedUrl' to endpoint handlers?
 	- sendPointerLocation(): don't unpack event, just pass through the entire object
+	- E426 comments
 - Modify client.js to prove that we get pointer events
 - assert.deepEqual isn't strict -- should it be?
