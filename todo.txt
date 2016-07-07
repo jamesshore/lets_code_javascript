@@ -50,9 +50,10 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* Finish implementing onPointerLocation() and tests
-- Provide unique ID with each pointer event
+* Provide unique ID with each pointer event
+	- Server-side
 - Network test harness: pass 'data' rather than 'parsedUrl' to endpoint handlers?
 	- E426 comments
+	- sendPointerLocation(): don't unpack event, just pass through the entire object
 - Modify client.js to prove that we get pointer events
 - assert.deepEqual isn't strict -- should it be?

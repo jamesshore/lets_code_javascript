@@ -124,7 +124,7 @@
 			return function sendPointerLocationEndpoint(parsedUrl, request, response) {
 				var data = querystring.parse(parsedUrl.query);
 				var socket = getSocket(parsedUrl);
-				socket.emit("mouse", { x: data.x, y: data.y });
+				socket.emit("mouse", { id: data.id, x: data.x, y: data.y });
 
 				return response.end("ok");
 			};
@@ -175,11 +175,16 @@
 		});
 	};
 
-	client.sendPointerLocation = function sendPointerLocation(connection, x, y, callback) {
+	client.sendPointerLocation = function sendPointerLocation(connection, data, callback) {
 		ajax({
 			endpoint: SEND_POINTER_LOCATION,
 			async: true,
-			data: { x: x, y: y, socketId: connection.getSocketId() }
+			data: {
+				id: data.id,
+				x: data.x,
+				y: data.y,
+				socketId: connection.getSocketId()
+			}
 		}, function(err, responseText) {
 			callback();
 		});

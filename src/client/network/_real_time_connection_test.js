@@ -52,17 +52,20 @@
 		});
 
 		it("receives pointer status from Socket.IO server", function(done) {
+			var EXPECTED_EVENT = {
+				id: 0xdeadbeef,
+				x: 90,
+				y: 160
+			};
+
 			connection.connect(harness.PORT, function() {
 
 				connection.onPointerLocation(function(event) {
-					assert.deepEqual(event, {
-						x: 90,
-						y: 160
-					});
+					assert.deepEqual(event, EXPECTED_EVENT);
 					connection.disconnect(done);
 				});
 
-				harness.client.sendPointerLocation(connection, 90, 160, function() {});
+				harness.client.sendPointerLocation(connection, EXPECTED_EVENT, function() {});
 			});
 		});
 
