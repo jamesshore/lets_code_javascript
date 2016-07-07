@@ -44,7 +44,7 @@
 
 			var endpoint = endpointMap[path];
 			if (endpoint !== undefined) {
-				endpoint(parsedUrl, request, response);
+				endpoint(getSocket(parsedUrl), parsedUrl, request, response);
 			}
 			else {
 				response.statusCode = 404;
@@ -81,13 +81,12 @@
 				});
 			});
 
-			return function waitForPointerLocationEndpoint(parsedUrl, request, response) {
-				var socketId = getSocketId(parsedUrl);
+			return function waitForPointerLocationEndpoint(socket, data, request, response) {
+				var socketId = socket.id;
 
 				var result = lastPointerLocation[socketId];
 
 				if (result === undefined) {
-					var socket = io.sockets.sockets[socketId];
 					socket.on("mouse", sendResponse);
 				}
 				else {
@@ -102,7 +101,7 @@
 		}
 
 		function setupIsConnected() {
-			return function isConnectedEndpoint(parsedUrl, request, response) {
+			return function isConnectedEndpoint(socket, data, request, response) {
 				var socketIds = Object.keys(io.sockets.connected).map(function(id) {
 					return id.substring(2);
 				});
@@ -111,8 +110,7 @@
 		}
 
 		function setupWaitForServerDisconnect() {
-			return function waitForServerDisconnectEndpoint(parsedUrl, request, response) {
-				var socket = getSocket(parsedUrl);
+			return function waitForServerDisconnectEndpoint(socket, data, request, response) {
 				if (socket === undefined || socket.disconnected) return response.end("disconnected");
 				socket.on("disconnect", function() {
 					return response.end("disconnected");
@@ -121,10 +119,9 @@
 		}
 
 		function setupSendPointerLocation() {
-			return function sendPointerLocationEndpoint(parsedUrl, request, response) {
+			return function sendPointerLocationEndpoint(socket, parsedUrl, request, response) {
 				var data = JSON.parse(querystring.parse(parsedUrl.query).event);
 
-				var socket = getSocket(parsedUrl);
 				socket.emit("mouse", { id: data.id, x: data.x, y: data.y });
 
 				return response.end("ok");
@@ -132,11 +129,8 @@
 		}
 
 		function getSocket(parsedUrl) {
-			return io.sockets.sockets[getSocketId(parsedUrl)];
-		}
-
-		function getSocketId(parsedUrl) {
-			return "/#" + querystring.parse(parsedUrl.query).socketId;
+			var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
+			return io.sockets.sockets[socketId];
 		}
 
 	};
