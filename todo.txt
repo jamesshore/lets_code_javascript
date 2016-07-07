@@ -50,8 +50,7 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* automatically serialize and deserialize data
-- Fix 'connections' block location in stopFn
+* Fix 'connections' block location in stopFn
 - Pass in closure variables to functions
 - Split network_test_harness into client, server, and shared files
 

@@ -60,15 +60,15 @@
 		}
 
 		function stopFn() {
-			return function(callback) {
-				// Socket.IO doesn't exit cleanly, so we have to manually collect the connections
-				// and unref() them so the server process will exit.
-				// See bug #1602: https://github.com/socketio/socket.io/issues/1602
-				var connections = [];
-				httpServer.on("connection", function(socket) {
-					connections.push(socket);
-				});
+			// Socket.IO doesn't exit cleanly, so we have to manually collect the connections
+			// and unref() them so the server process will exit.
+			// See bug #1602: https://github.com/socketio/socket.io/issues/1602
+			var connections = [];
+			httpServer.on("connection", function(socket) {
+				connections.push(socket);
+			});
 
+			return function(callback) {
 				return function() {
 					io.close();
 					connections.forEach(function(socket) {
