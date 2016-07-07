@@ -11,10 +11,7 @@
 
 	exports.PORT = 5030;
 
-
-	var client = exports.client = {};
-
-	client.waitForServerDisconnect = function waitForServerDisconnect(connection, callback) {
+	exports.waitForServerDisconnect = function waitForServerDisconnect(connection, callback) {
 		ajax({
 			connection: connection,
 			endpoint: WAIT_FOR_SERVER_DISCONNECT,
@@ -24,7 +21,7 @@
 		});
 	};
 
-	client.isConnected = function isConnected(connection) {
+	exports.isConnected = function isConnected(connection) {
 		var responseText = ajax({
 			connection: connection,
 			endpoint: IS_CONNECTED,
@@ -35,7 +32,7 @@
 		return connectedIds.indexOf(connection.getSocketId()) !== -1;
 	};
 
-	client.waitForPointerLocation = function waitForPointerLocation(connection, callback) {
+	exports.waitForPointerLocation = function waitForPointerLocation(connection, callback) {
 		ajax({
 			connection: connection,
 			endpoint: WAIT_FOR_POINTER_LOCATION,
@@ -45,7 +42,7 @@
 		});
 	};
 
-	client.sendPointerLocation = function sendPointerLocation(connection, event, callback) {
+	exports.sendPointerLocation = function sendPointerLocation(connection, event, callback) {
 		ajax({
 			connection: connection,
 			endpoint: SEND_POINTER_LOCATION,

@@ -18,11 +18,11 @@
 		it("connects and disconnects from Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function(err) {
 				assert.equal(err, null, "connect() should not have error");
-				assert.equal(harness.client.isConnected(connection), true, "client should have connected to server");
+				assert.equal(harness.isConnected(connection), true, "client should have connected to server");
 
 				connection.disconnect(function(err2) {
 					assert.equal(err2, null, "disconnect() should not have error");
-					harness.client.waitForServerDisconnect(connection, done);   // will timeout if disconnect doesn't work
+					harness.waitForServerDisconnect(connection, done);   // will timeout if disconnect doesn't work
 				});
 			});
 		});
@@ -44,7 +44,7 @@
 			connection.connect(harness.PORT, function() {
 				connection.sendPointerLocation(50, 75);
 
-				harness.client.waitForPointerLocation(connection, function(error, location) {
+				harness.waitForPointerLocation(connection, function(error, location) {
 					assert.deepEqual(location, { x: 50, y: 75 });
 					connection.disconnect(done);
 				});
@@ -65,7 +65,7 @@
 					connection.disconnect(done);
 				});
 
-				harness.client.sendPointerLocation(connection, EXPECTED_EVENT, function() {});
+				harness.sendPointerLocation(connection, EXPECTED_EVENT, function() {});
 			});
 		});
 

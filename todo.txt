@@ -51,7 +51,5 @@ Engineering Tasks:
 
 To Do on current task:
 * Split network_test_harness into client, server, and shared files
-
-- E426 network test harness comments
 - Modify client.js to prove that we get pointer events
 - assert.deepEqual isn't strict -- should it be?

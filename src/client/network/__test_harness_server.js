@@ -10,10 +10,8 @@
 
 	exports.PORT = 5030;
 
-	var server =  exports.server = {};
-
 	// The network test harness is started inside of the build script before the network tests are run
-	server.start = function() {
+	exports.start = function() {
 		// We do our requires here so karma-commonjs doesn't complain. This file is processed by Karma even
 		// though it never runs on the client. This makes our Karma configuration a bit easier.
 		var http = require("http");
