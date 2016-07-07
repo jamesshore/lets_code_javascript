@@ -54,10 +54,11 @@
 		it("receives pointer status from Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 
-				connection.onPointerLocation(function(x, y) {
-					assert.equal(x, 90, "x");
-					assert.equal(y, 160, "y");
-
+				connection.onPointerLocation(function(event) {
+					assert.deepEqual(event, {
+						x: 90,
+						y: 160
+					});
 					connection.disconnect(done);
 				});
 

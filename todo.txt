@@ -43,15 +43,16 @@ Engineering Tasks:
 - Open question: how to make sure our test double matches our real code?
 	- Use sinon.js? testdouble.js?
 - Revisit Martin Grandrath's client connection design question (in E399)
-- Address duplication of 'mouse' event name between client and server
+- Address duplication of 'mouse' event name between client, server, and network test harness
 - Figure out bundling and distribution for socket.io client
 - Figure out how to de-dupe require paths for common files (such as "_assert.js")
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 - Update smoke tests for real-time networking
 
 To Do on current task:
-- Finish implementing onPointerLocation() and tests
-	- Discuss E423 comments
-- Network test harness: pass 'data' rather than 'parsedUrl' to endpoint handlers?
+* Finish implementing onPointerLocation() and tests
 - Provide unique ID with each pointer event
+- Network test harness: pass 'data' rather than 'parsedUrl' to endpoint handlers?
+	- E426 comments
 - Modify client.js to prove that we get pointer events
+- assert.deepEqual isn't strict -- should it be?
