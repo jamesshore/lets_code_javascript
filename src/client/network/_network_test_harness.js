@@ -44,7 +44,9 @@
 
 			var endpoint = endpointMap[path];
 			if (endpoint !== undefined) {
-				endpoint(getSocket(parsedUrl), parsedUrl, request, response);
+				var rawData = querystring.parse(parsedUrl.query).data;
+				var parsedData = rawData !== undefined ? JSON.parse(rawData) : undefined;
+				endpoint(getSocket(parsedUrl), parsedData, request, response);
 			}
 			else {
 				response.statusCode = 404;
@@ -119,9 +121,7 @@
 		}
 
 		function setupSendPointerLocation() {
-			return function sendPointerLocationEndpoint(socket, parsedUrl, request, response) {
-				var data = JSON.parse(querystring.parse(parsedUrl.query).event);
-
+			return function sendPointerLocationEndpoint(socket, data, request, response) {
 				socket.emit("mouse", { id: data.id, x: data.x, y: data.y });
 
 				return response.end("ok");
@@ -142,9 +142,9 @@
 
 	client.waitForServerDisconnect = function waitForServerDisconnect(connection, callback) {
 		ajax({
+			connection: connection,
 			endpoint: WAIT_FOR_SERVER_DISCONNECT,
-			async: true,
-			data: { socketId: connection.getSocketId() }
+			async: true
 		}, function(err, responseText) {
 			return callback(err);
 		});
@@ -152,6 +152,7 @@
 
 	client.isConnected = function isConnected(connection) {
 		var responseText = ajax({
+			connection: connection,
 			endpoint: IS_CONNECTED,
 			async: false
 		});
@@ -162,9 +163,9 @@
 
 	client.waitForPointerLocation = function waitForPointerLocation(connection, callback) {
 		ajax({
+			connection: connection,
 			endpoint: WAIT_FOR_POINTER_LOCATION,
-			async: true,
-			data: { socketId: connection.getSocketId() }
+			async: true
 		}, function(err, responseText) {
 			return callback(err, JSON.parse(responseText));
 		});
@@ -172,12 +173,10 @@
 
 	client.sendPointerLocation = function sendPointerLocation(connection, event, callback) {
 		ajax({
+			connection: connection,
 			endpoint: SEND_POINTER_LOCATION,
 			async: true,
-			data: {
-				event: JSON.stringify(event),
-				socketId: connection.getSocketId()
-			}
+			data: event
 		}, function(err, responseText) {
 			callback();
 		});
@@ -188,7 +187,10 @@
 		var request = $.ajax({
 			type: "GET",
 			url: origin + options.endpoint,
-			data: options.data,
+			data: {
+				data: JSON.stringify(options.data),
+				socketId: options.connection.getSocketId()
+			},
 			async: options.async,
 			cache: false
 		});

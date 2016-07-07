@@ -50,8 +50,7 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* Network test harness: pass 'data' rather than 'parsedUrl' to endpoint handlers?
-	- automatically serialize and deserialize data
+- automatically serialize and deserialize data
 - E426 network test harness comments
 - Modify client.js to prove that we get pointer events
 - assert.deepEqual isn't strict -- should it be?
