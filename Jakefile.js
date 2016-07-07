@@ -115,7 +115,7 @@
 	incrementalTask("testClientNetwork", [], paths.clientNetworkTestDependencies(), function(complete, fail) {
 		console.log("Testing browser networking code: ");
 
-		var networkHarness = require("./src/client/network/_network_test_harness.js");
+		var networkHarness = require("./src/client/network/__test_harness_server.js");
 
 		var networkStopFn = networkHarness.server.start();
 		runKarmaOnTaggedSubsetOfTests("NET", networkStopFn(complete), fail);
