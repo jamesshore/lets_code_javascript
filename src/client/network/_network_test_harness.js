@@ -44,14 +44,19 @@
 
 			var endpoint = endpointMap[path];
 			if (endpoint !== undefined) {
-				var rawData = querystring.parse(parsedUrl.query).data;
-				var parsedData = rawData !== undefined ? JSON.parse(rawData) : undefined;
-				endpoint(getSocket(parsedUrl), parsedData, request, response);
+				var parsedQuery = querystring.parse(parsedUrl.query);
+				var parsedData = parsedQuery.data !== undefined ? JSON.parse(parsedQuery.data) : undefined;
+				endpoint(getSocket(parsedQuery.socketId), parsedData, request, response);
 			}
 			else {
 				response.statusCode = 404;
 				response.end("Not Found");
 			}
+		}
+
+		function getSocket(clientSocketId) {
+			var socketId = "/#" + clientSocketId;
+			return io.sockets.sockets[socketId];
 		}
 
 		function stopFn() {
@@ -126,11 +131,6 @@
 
 				return response.end("ok");
 			};
-		}
-
-		function getSocket(parsedUrl) {
-			var socketId = "/#" + querystring.parse(parsedUrl.query).socketId;
-			return io.sockets.sockets[socketId];
 		}
 
 	};
