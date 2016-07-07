@@ -3,12 +3,9 @@
 (function() {
 	"use strict";
 
-	var IS_CONNECTED = "/is-connected";
-	var WAIT_FOR_SERVER_DISCONNECT = "/wait-for-server-disconnect";
-	var WAIT_FOR_POINTER_LOCATION = "/wait-for-pointer-location";
-	var SEND_POINTER_LOCATION = "/send-pointer-location";
+	var shared = require("./__test_harness_shared.js");
 
-	exports.PORT = 5030;
+	var endpoints = shared.endpoints;
 
 	// The network test harness is started inside of the build script before the network tests are run
 	exports.start = function() {
@@ -22,13 +19,13 @@
 		var httpServer = http.createServer();
 		httpServer.on("request", handleResponse);
 		var io = socketIo(httpServer);
-		httpServer.listen(exports.PORT);
+		httpServer.listen(shared.PORT);
 
 		var endpointMap = {};
-		endpointMap[WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation(io);
-		endpointMap[IS_CONNECTED] = setupIsConnected(io);
-		endpointMap[WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
-		endpointMap[SEND_POINTER_LOCATION] = setupSendPointerLocation();
+		endpointMap[endpoints.WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation(io);
+		endpointMap[endpoints.IS_CONNECTED] = setupIsConnected(io);
+		endpointMap[endpoints.WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
+		endpointMap[endpoints.SEND_POINTER_LOCATION] = setupSendPointerLocation();
 
 		return stopFn(httpServer, io);
 
@@ -129,7 +126,5 @@
 			return response.end("ok");
 		};
 	}
-
-
 
 }());

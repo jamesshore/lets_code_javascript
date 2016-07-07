@@ -3,18 +3,16 @@
 (function() {
 	"use strict";
 
+	var shared = require("./__test_harness_shared.js");
 
-	var IS_CONNECTED = "/is-connected";
-	var WAIT_FOR_SERVER_DISCONNECT = "/wait-for-server-disconnect";
-	var WAIT_FOR_POINTER_LOCATION = "/wait-for-pointer-location";
-	var SEND_POINTER_LOCATION = "/send-pointer-location";
+	var endpoints = shared.endpoints;
 
-	exports.PORT = 5030;
+	exports.PORT = shared.PORT;
 
 	exports.waitForServerDisconnect = function waitForServerDisconnect(connection, callback) {
 		ajax({
 			connection: connection,
-			endpoint: WAIT_FOR_SERVER_DISCONNECT,
+			endpoint: endpoints.WAIT_FOR_SERVER_DISCONNECT,
 			async: true
 		}, function(err, responseText) {
 			return callback(err);
@@ -24,7 +22,7 @@
 	exports.isConnected = function isConnected(connection) {
 		var responseText = ajax({
 			connection: connection,
-			endpoint: IS_CONNECTED,
+			endpoint: endpoints.IS_CONNECTED,
 			async: false
 		});
 
@@ -35,7 +33,7 @@
 	exports.waitForPointerLocation = function waitForPointerLocation(connection, callback) {
 		ajax({
 			connection: connection,
-			endpoint: WAIT_FOR_POINTER_LOCATION,
+			endpoint: endpoints.WAIT_FOR_POINTER_LOCATION,
 			async: true
 		}, function(err, responseText) {
 			return callback(err, JSON.parse(responseText));
@@ -45,7 +43,7 @@
 	exports.sendPointerLocation = function sendPointerLocation(connection, event, callback) {
 		ajax({
 			connection: connection,
-			endpoint: SEND_POINTER_LOCATION,
+			endpoint: endpoints.SEND_POINTER_LOCATION,
 			async: true,
 			data: event
 		}, function(err, responseText) {
