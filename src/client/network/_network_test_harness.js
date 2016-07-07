@@ -29,12 +29,12 @@
 		httpServer.listen(exports.PORT);
 
 		var endpointMap = {};
-		endpointMap[IS_CONNECTED] = setupIsConnected();
+		endpointMap[WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation(io);
+		endpointMap[IS_CONNECTED] = setupIsConnected(io);
 		endpointMap[WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
-		endpointMap[WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation();
 		endpointMap[SEND_POINTER_LOCATION] = setupSendPointerLocation();
 
-		return stopFn();
+		return stopFn(httpServer, io);
 
 		function handleResponse(request, response) {
 			response.setHeader("Access-Control-Allow-Origin", "*");
@@ -59,7 +59,7 @@
 			return io.sockets.sockets[socketId];
 		}
 
-		function stopFn() {
+		function stopFn(httpServer, io) {
 			// Socket.IO doesn't exit cleanly, so we have to manually collect the connections
 			// and unref() them so the server process will exit.
 			// See bug #1602: https://github.com/socketio/socket.io/issues/1602
@@ -79,7 +79,7 @@
 			};
 		}
 
-		function setupWaitForPointerLocation() {
+		function setupWaitForPointerLocation(io) {
 			var lastPointerLocation = {};
 
 			io.on("connection", function(socket) {
@@ -107,7 +107,7 @@
 			};
 		}
 
-		function setupIsConnected() {
+		function setupIsConnected(io) {
 			return function isConnectedEndpoint(socket, data, request, response) {
 				var socketIds = Object.keys(io.sockets.connected).map(function(id) {
 					return id.substring(2);
