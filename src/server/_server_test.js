@@ -157,7 +157,7 @@
 		});
 
 		it("broadcasts mouse message from one client to all others", function(done) {
-			var EXPECTED_DATA = "mouse data";
+			var EXPECTED_DATA = { x: 100, y: 200 };
 
 			var emitter = createSocket();
 			var receiver1 = createSocket();
@@ -169,7 +169,11 @@
 
 			async.each([ receiver1, receiver2 ], function(client, next) {
 				client.on("mouse", function(data) {
-					assert.equal(data, EXPECTED_DATA);
+					assert.deepEqual(data, {
+						id: "/#" + emitter.id,           // should add unique sender ID to data
+						x: EXPECTED_DATA.x,
+						y: EXPECTED_DATA.y
+					});
 					next();
 				});
 			}, end);
@@ -177,11 +181,7 @@
 			emitter.emit("mouse", EXPECTED_DATA);
 
 			function end() {
-				// Note from Martin Grandrath, http://www.letscodejavascript.com/v3/comments/live/380#comment-2468557689
-				// Can replace this with `async.each([...], closeSocket, done);`
-				async.each([ emitter, receiver1, receiver2 ], function(socket, next) {
-					closeSocket(socket, next);
-				}, done);
+				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);
 			}
 		});
 
