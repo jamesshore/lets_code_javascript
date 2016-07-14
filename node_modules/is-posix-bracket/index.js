@@ -1,7 +1,7 @@
 /*!
  * is-posix-bracket <https://github.com/jonschlinkert/is-posix-bracket>
  *
- * Copyright (c) 2015, Jon Schlinkert.
+ * Copyright (c) 2015-2016, Jon Schlinkert.
  * Licensed under the MIT License.
  */
 

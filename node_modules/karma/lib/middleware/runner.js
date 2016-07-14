@@ -1,9 +1,10 @@
 /**
- * Runner middleware is reponsible for communication with `karma run`.
+ * Runner middleware is responsible for communication with `karma run`.
  *
  * It basically triggers a test run and streams stdout back.
  */
 
+var _ = require('lodash')
 var path = require('path')
 var helper = require('../helper')
 var log = require('../logger').create()
@@ -33,9 +34,10 @@ var createRunnerMiddleware = function (emitter, fileList, capturedBrowsers, repo
         response.write('Waiting for previous execution...\n')
       }
 
+      var data = request.body
       emitter.once('run_start', function () {
         var responseWrite = response.write.bind(response)
-
+        responseWrite.colors = data.colors
         reporter.addAdapter(responseWrite)
 
         // clean up, close runner response
@@ -46,9 +48,16 @@ var createRunnerMiddleware = function (emitter, fileList, capturedBrowsers, repo
         })
       })
 
-      var data = request.body
-      log.debug('Setting client.args to ', data.args)
-      config.client.args = data.args
+      if (_.isEmpty(data.args)) {
+        log.debug('Ignoring empty client.args from run command')
+      } else if ((_.isArray(data.args) && _.isArray(config.client.args)) ||
+        (_.isPlainObject(data.args) && _.isPlainObject(config.client.args))) {
+        log.debug('Merging client.args with ', data.args)
+        config.client.args = _.merge(config.client.args, data.args)
+      } else {
+        log.warn('Replacing client.args with ', data.args, ' as their types do not match.')
+        config.client.args = data.args
+      }
 
       var fullRefresh = true
 
