@@ -1,6 +1,10 @@
 # v2.0.0
 
-Lots of changes here! The biggest feature is modularization. You can now `require("async/series")` to only require the `series` function. Every Async library function is available this way. You still can `require("async")` to require the entire library, like you could do before.
+Lots of changes here!
+
+First and foremost, we have a slick new [site for docs](https://caolan.github.io/async/). Special thanks to [**@hargasinski**](https://github.com/hargasinski) for his work converting our old docs to `jsdoc` format and implementing the new website. Also huge ups to [**@ivanseidel**](https://github.com/ivanseidel) for designing our new logo. It was a long process for both of these tasks, but I think these changes turned out extraordinary well.
+
+The biggest feature is modularization. You can now `require("async/series")` to only require the `series` function. Every Async library function is available this way. You still can `require("async")` to require the entire library, like you could do before.
 
 We also provide Async as a collection of ES2015 modules. You can now `import {each} from 'async-es'` or `import waterfall from 'async-es/waterfall'`. If you are using only a few Async functions, and are using a ES bundler such as Rollup, this can significantly lower your build size.
 
@@ -19,6 +23,8 @@ There were several cases where Async accepted some functions that did not strict
 
 Another theme is performance. We have eliminated internal deferrals in all cases where they make sense. For example, in `waterfall` and `auto`, there was a `setImmediate` between each task -- these deferrals have been removed. A `setImmediate` call can add up to 1ms of delay. This might not seem like a lot, but it can add up if you are using many Async functions in the course of processing a HTTP request, for example. Nearly all asynchronous functions that do I/O already have some sort of deferral built in, so the extra deferral is unnecessary. The trade-off of this change is removing our built-in stack-overflow defense. Many synchronous callback calls in series can quickly overflow the JS call stack. If you do have a function that is sometimes synchronous (calling its callback on the same tick), and are running into stack overflows, wrap it with `async.ensureAsync()`.
 
+Another big performance win has been re-implementing `queue`, `cargo`, and `priorityQueue` with [doubly linked lists](https://en.wikipedia.org/wiki/Doubly_linked_list) instead of arrays. This has lead to queues being an order of [magnitude faster on large sets of tasks](https://github.com/caolan/async/pull/1205).
+
 ## New Features
 
 - Async is now modularized. Individual functions can be `require()`d from the main package. (`require('async/auto')`) (#984, #996)
@@ -30,10 +36,12 @@ Another theme is performance. We have eliminated internal deferrals in all cases
 - Added `reflect` and `reflectAll`, analagous to [`Promise.reflect()`](http://bluebirdjs.com/docs/api/reflect.html), a wrapper for async tasks that always succeeds, by gathering results and errors into an object.  (#942, #1012, #1095)
 - `constant` supports dynamic arguments -- it will now always use its last argument as the callback. (#1016, #1052)
 - `setImmediate` and `nextTick` now support arguments to partially apply to the deferred function, like the node-native versions do. (#940, #1053)
+- `auto` now supports resolving cyclic dependencies using [Kahn's algorithm](https://en.wikipedia.org/wiki/Topological_sorting#Kahn.27s_algorithm) (#1140).
 - Added `autoInject`, a relative of `auto` that automatically spreads a task's dependencies as arguments to the task function. (#608, #1055, #1099, #1100)
 - You can now limit the concurrency of `auto` tasks. (#635, #637)
 - Added `retryable`, a relative of `retry` that wraps an async function, making it retry when called. (#1058)
-- `retry` now supports specifying a function that determines the next time interval, useful for exponential backoff and other retry strategies. (#1161)
+- `retry` now supports specifying a function that determines the next time interval, useful for exponential backoff, logging and other retry strategies. (#1161)
+- `retry` will now pass all of the arguments the task function was resolved with to the callback (#1231).
 - Added `q.unsaturated` -- callback called when a `queue`'s number of running workers falls below a threshold. (#868, #1030, #1033, #1034)
 - Added `q.error` -- a callback called whenever a `queue` task calls its callback with an error. (#1170)
 - `applyEach` and `applyEachSeries` now pass results to the final callback. (#1088)
@@ -47,14 +55,25 @@ Another theme is performance. We have eliminated internal deferrals in all cases
 - `filter`, `reject`, `some`, `every`, and related functions now expect an error as the first callback argument, rather than just a simple boolean. Pass `null` as the first argument, or use `fs.access` instead of `fs.exists`. (#118, #774, #1028, #1041)
 - `{METHOD}` and `{METHOD}Series` are now implemented in terms of `{METHOD}Limit`. This is a major internal simplification, and is not expected to cause many problems, but it does subtly affect how functions execute internally. (#778, #847)
 - `retry`'s callback is now optional. Previously, omitting the callback would partially apply the function, meaning it could be passed directly as a task to `series` or `auto`. The partially applied "control-flow" behavior has been separated out into `retryable`. (#1054, #1058)
+- The test function for `whilst`, `until`, and `during` used to be passed non-error args from the iteratee function's callback, but this led to weirdness where the first call of the test function would be passed no args. We have made it so the test function is never passed extra arguments, and only the `doWhilst`, `doUntil`, and `doDuring` functions pass iteratee callback arguments to the test function (#1217, #1224)
+- The `q.tasks` array has been renamed `q._tasks` and is now implemented as a doubly linked list (DLL). Any code that used to interact with this array will need to be updated to either use the provided helpers or support DLLs (#1205).
 - The timing of the `q.saturated()` callback in a `queue` has been modified to better reflect when tasks pushed to the queue will start queueing. (#724, #1078)
+- Removed `iterator` method in favour of [ES2015 iterator protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators ) which natively supports arrays (#1237)
 - Dropped support for Component, Jam, SPM, and Volo (#1175, ##176)
+
+## Bug Fixes
+
+- Improved handling of no dependency cases in `auto` & `autoInject` (#1147).
+- Fixed a bug where the callback generated by `asyncify` with  `Promises` could resolve twice (#1197).
+- Fixed several documented optional callbacks not actually being optional (#1223).
 
 ## Other
 
 - Added `someSeries` and `everySeries` for symmetry, as well as a complete set of `any`/`anyLimit`/`anySeries` and `all`/`/allLmit`/`allSeries` aliases.
 - Added `find` as an alias for `detect. (as well as `findLimit` and `findSeries`).
-- Various doc fixes (#1005, #1008, #1010, #1015, #1021, #1037, #1102)
+- Various doc fixes (#1005, #1008, #1010, #1015, #1021, #1037, #1039, #1051, #1102, #1107, #1121, #1123, #1129, #1135, #1138, #1141, #1153, #1216, #1217, #1232, #1233, #1236, #1238)
+
+Thank you [**@aearly**](github.com/aearly) and [**@megawac**](github.com/megawac) for taking the lead on version 2 of async.
 
 ------------------------------------------
 
