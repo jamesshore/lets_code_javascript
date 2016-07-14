@@ -7,7 +7,7 @@
   "devDependencies": {
     "async": "^2.0.0-rc.6",
     "browserify": "^13.0.1",
-    "glob": "^7.0.3",
+    "glob": "^7.0.5",
     "hashcat": "^0.3.1",
     "jake": "^8.0.12",
     "jshint": "^2.9.2",
