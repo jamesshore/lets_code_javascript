@@ -50,5 +50,7 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
+* AT START OF EPISODE:
+	- Updated dependencies and Node version (6.3.0)
+	- Fixed assert.deepEqual to be strict (migrated Proclaim --> Chai)
 - Modify client.js to prove that we get pointer events
-- assert.deepEqual isn't strict -- should it be?
