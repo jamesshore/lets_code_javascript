@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2015-2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 /* global io:false */
 (function() {
 	"use strict";
@@ -32,6 +32,13 @@
 	Connection.prototype.sendPointerLocation = function sendPointerLocation(x, y) {
 		failFastUnlessConnectCalled(this);
 		this._socket.emit("mouse", { x: x, y: y });
+	};
+
+	Connection.prototype.onPointerLocation = function onPointerLocation(handler) {
+		failFastUnlessConnectCalled(this);
+		this._socket.on("mouse", function(data) {
+			return handler(data);
+		});
 	};
 
 	Connection.prototype.getSocketId = function getSocketId() {

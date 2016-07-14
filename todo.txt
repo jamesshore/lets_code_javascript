@@ -38,16 +38,17 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Need to translate pageOffset to relativeOffset (do we need to improve design of offset translations?)
-- Client: Receive pointer status from server
+* Client: Receive pointer status from server
 - Client: Make client display "ghost" pointers for other users
 - Open question: how to make sure our test double matches our real code?
 	- Use sinon.js? testdouble.js?
 - Revisit Martin Grandrath's client connection design question (in E399)
-- Address duplication of 'mouse' event name between client and server
+- Address duplication of 'mouse' event name between client, server, and network test harness
 - Figure out bundling and distribution for socket.io client
 - Figure out how to de-dupe require paths for common files (such as "_assert.js")
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
-- Update smoke tests
+- Update smoke tests for real-time networking
 
 To Do on current task:
+- Modify client.js to prove that we get pointer events
+- assert.deepEqual isn't strict -- should it be?

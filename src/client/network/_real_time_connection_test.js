@@ -1,9 +1,9 @@
-// Copyright (c) 2015 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2015-2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 (function() {
 	"use strict";
 
 	var assert = require("../../shared/_assert.js");
-	var harness = require("./_network_test_harness.js");
+	var harness = require("./__test_harness_client.js");
 	var Connection = require("./real_time_connection.js");
 	var async = require("./vendor/async-1.5.2.js");
 
@@ -18,11 +18,11 @@
 		it("connects and disconnects from Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function(err) {
 				assert.equal(err, null, "connect() should not have error");
-				assert.equal(harness.client.isConnected(connection), true, "client should have connected to server");
+				assert.equal(harness.isConnected(connection), true, "client should have connected to server");
 
 				connection.disconnect(function(err2) {
 					assert.equal(err2, null, "disconnect() should not have error");
-					harness.client.waitForServerDisconnect(connection, done);   // will timeout if disconnect doesn't work
+					harness.waitForServerDisconnect(connection, done);   // will timeout if disconnect doesn't work
 				});
 			});
 		});
@@ -44,10 +44,28 @@
 			connection.connect(harness.PORT, function() {
 				connection.sendPointerLocation(50, 75);
 
-				harness.client.waitForPointerLocation(connection, function(location) {
+				harness.waitForPointerLocation(connection, function(error, location) {
 					assert.deepEqual(location, { x: 50, y: 75 });
 					connection.disconnect(done);
 				});
+			});
+		});
+
+		it("receives pointer status from Socket.IO server", function(done) {
+			var EXPECTED_EVENT = {
+				id: 0xdeadbeef,
+				x: 90,
+				y: 160
+			};
+
+			connection.connect(harness.PORT, function() {
+
+				connection.onPointerLocation(function(event) {
+					assert.deepEqual(event, EXPECTED_EVENT);
+					connection.disconnect(done);
+				});
+
+				harness.sendPointerLocation(connection, EXPECTED_EVENT, function() {});
 			});
 		});
 
@@ -75,6 +93,7 @@
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
+			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 
 			function callback() {
