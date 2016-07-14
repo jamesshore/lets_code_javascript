@@ -9,6 +9,7 @@
 	// We use Proclaim rather than Chai because Chai doesn't support IE 8.
 	// But Proclaim error messages are terrible, so we end up doing a lot ourselves.
 	var proclaim = require("./vendor/proclaim-2.0.0.js");
+	var objectDiff = require("./vendor/big-object-diff-0.7.0.js");
 
 	var shim = {
 		Function: {
@@ -96,10 +97,15 @@
 
 	exports.deepEqual = function(actual, expected, message) {
 		message = message ? message + ": " : "";
-			proclaim.deepEqual(
+		// We use objectDiff.match() instead of proclaim.deepEqual() because Proclaim doesn't do strict
+		// equality checking in its deepEqual() assertion and objectDiff does.
+		if (!objectDiff.match(actual, expected)) {
+			proclaim.fail(
 				actual,
 				expected,
-				message + "expected " + JSON.stringify(expected) + ", but got " + JSON.stringify(actual));
+				message + "expected " + JSON.stringify(expected) + ", but got " + JSON.stringify(actual)
+			);
+		}
 	};
 
 	exports.match = function(actual, expectedRegex, message) {

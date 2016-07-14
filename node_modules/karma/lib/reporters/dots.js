@@ -1,10 +1,10 @@
 var BaseReporter = require('./base')
 
-var DotsReporter = function (formatError, reportSlow) {
-  BaseReporter.call(this, formatError, reportSlow)
+var DotsReporter = function (formatError, reportSlow, useColors, browserConsoleLogOptions) {
+  BaseReporter.call(this, formatError, reportSlow, useColors, browserConsoleLogOptions)
 
   var DOTS_WRAP = 80
-
+  this.EXCLUSIVELY_USE_COLORS = false
   this.onRunStart = function () {
     this._browsers = []
     this._dotsCount = 0

@@ -77,7 +77,7 @@
 
 				return client.drawingAreaCanvas.lineSegments();
 			}).then(function(lineSegments) {
-				assert.deepEqual(lineSegments, [[ "10", "20", "50", "60" ]]);
+				assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
 			});
 
 			driver.controlFlow().execute(done);
