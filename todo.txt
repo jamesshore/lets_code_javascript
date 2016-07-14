@@ -52,5 +52,6 @@ Engineering Tasks:
 To Do on current task:
 * AT START OF EPISODE:
 	- Updated dependencies and Node version (6.3.0)
-	- Fixed assert.deepEqual to be strict (migrated Proclaim --> Chai)
+	- Fixed assert.deepEqual to be strict (used big-object-diff)
+		- Exposed minor bug in SvgCanvas.lineSegments()
 - Modify client.js to prove that we get pointer events

@@ -96,10 +96,10 @@
 		var pathComponents = path.match(pathRegex);
 
 		return [
-			pathComponents[1],
-			pathComponents[2],
-			pathComponents[3],
-			pathComponents[4]
+			parseInt(pathComponents[1], 10),
+			parseInt(pathComponents[2], 10),
+			parseInt(pathComponents[3], 10),
+			parseInt(pathComponents[4], 10)
 		];
 	}
 
