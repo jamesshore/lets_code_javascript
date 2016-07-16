@@ -33,14 +33,14 @@
 
 		svgCanvas = new SvgCanvas(drawingArea);
 
+		network = realTimeConnection;
+		network.connect(window.location.port);
+
 		drawingArea.preventBrowserDragDefaults();
-		sendPointerEventsOverNetwork();
+		handleRealTimeNetwork();
 		handleClearScreenClick();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
-
-		network = realTimeConnection;
-		network.connect(window.location.port);
 
 		return svgCanvas;
 	};
@@ -49,10 +49,14 @@
 		svgCanvas = null;
 	};
 
-	function sendPointerEventsOverNetwork() {
+	function handleRealTimeNetwork() {
 		drawingArea.onMouseMove(function(coordinate) {
 			var relativeOffset = coordinate.toRelativeOffset(drawingArea);
 			network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
+		});
+
+		network.onPointerLocation(function(event) {
+			console.log(event);
 		});
 	}
 
