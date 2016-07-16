@@ -38,8 +38,7 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Client: Receive pointer status from server
-- Client: Make client display "ghost" pointers for other users
+* Client: Make client display "ghost" pointers for other users
 - Open question: how to make sure our test double matches our real code?
 	- Use sinon.js? testdouble.js?
 - Revisit Martin Grandrath's client connection design question (in E399)
@@ -50,8 +49,7 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* AT START OF EPISODE:
-	- Updated dependencies and Node version (6.3.0)
-	- Fixed assert.deepEqual to be strict (used big-object-diff)
-		- Exposed minor bug in SvgCanvas.lineSegments()
-- Modify client.js to prove that we get pointer events
+- Spike ghost pointers
+	- listen for pointer events
+	- display ghost pointer for each event
+	- display multiple ghost pointers when multiple clients are connected
