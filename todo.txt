@@ -49,5 +49,4 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-- Spike ghost pointers
-	* display multiple ghost pointers when multiple clients are connected
+* Spike ghost pointers (DONE)

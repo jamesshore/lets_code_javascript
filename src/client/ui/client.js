@@ -54,15 +54,30 @@
 			var relativeOffset = coordinate.toRelativeOffset(drawingArea);
 			network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
 		});
+		documentBody.onSingleTouchMove(function(coordinate) {
+			var relativeOffset = coordinate.toRelativeOffset(drawingArea);
+			network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
+		});
 
-		var cursor = HtmlElement.fromHtml("<div style='position:absolute;'><img src='/images/cursor.png' width='24px' height='24px'></div>");
-		cursor.appendSelfToBody();
+		var allCursors = {};
 
 		network.onPointerLocation(function(event) {
-			var coordinate = HtmlCoordinate.fromRelativeOffset(drawingArea, event.x, event.y).toPageOffset();
+			var id = event.id;
+			if (allCursors[id] === undefined) allCursors[id] = createCursor();
+			moveCursor(allCursors[id], event.x, event.y);
+		});
+
+		function createCursor() {
+			var cursor = HtmlElement.fromHtml("<div style='position:absolute;'><img src='/images/cursor.png' width='24px' height='24px'></div>");
+			cursor.appendSelfToBody();
+			return cursor;
+		}
+
+		function moveCursor(cursor, x, y) {
+			var coordinate = HtmlCoordinate.fromRelativeOffset(drawingArea, x, y).toPageOffset();
 			cursor.toDomElement().style.top = coordinate.y + "px";
 			cursor.toDomElement().style.left = coordinate.x + "px";
-		});
+		}
 	}
 
 	function handleClearScreenClick() {
