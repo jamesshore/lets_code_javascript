@@ -305,8 +305,13 @@
 			});
 
 			it("doesn't send pointer location when mouse moves outside drawing area", function() {
-				documentBody.triggerMouseMove(13, 7);
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
+				// documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 13, 7));
+
+				console.log(HtmlCoordinate.fromRelativeOffset(documentBody, 20, 40));
+
+				documentBody.triggerMouseMove(20, 40);
+
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 0, 0 ]);
 			});
 
 			it("doesn't send pointer location when touch changes", function() {

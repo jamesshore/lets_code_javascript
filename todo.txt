@@ -27,6 +27,8 @@ Minimum Marketable Features:
 
 User Stories to finish current MMF:
 * see other users' mouse pointers
+- send pointer events on touch, not just mouse move?
+- make mouse pointer disappear when it leaves drawing area?
 - multi-user clear button
 - multi-user line drawing
 - other users' mouse pointers disappear when they leave the drawing area
@@ -49,7 +51,9 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-- Spike ghost pointers
-	- listen for pointer events
-	- display ghost pointer for each event
-	- display multiple ghost pointers when multiple clients are connected
+* Send pointer events on documentBody, not drawing area
+- Create div
+- Move div according to pointer events
+- Manage multiple cursors
+- Change opacity of cursor
+
