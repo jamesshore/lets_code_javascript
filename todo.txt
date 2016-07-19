@@ -51,8 +51,7 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* Send pointer events on documentBody, not drawing area
-- Create div
+* Create div
 - Move div according to pointer events
 - Manage multiple cursors
 - Change opacity of cursor

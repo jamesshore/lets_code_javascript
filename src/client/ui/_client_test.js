@@ -13,6 +13,8 @@
 	mocha.setup({ignoreLeaks: true});
 
 	describe("UI: Drawing area", function() {
+
+		var padding;
 		var drawingArea;
 		var clearButton;
 		var documentBody;
@@ -23,6 +25,9 @@
 		beforeEach(function() {
 			documentBody = new HtmlElement(document.body);
 			windowElement = new HtmlElement(window);
+
+			padding = HtmlElement.fromHtml("<p>prevent drawing area and document body from having same origin</p>");
+			padding.appendSelfToBody();
 
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			drawingArea.appendSelfToBody();
@@ -37,6 +42,7 @@
 		});
 
 		afterEach(function() {
+			padding.remove();
 			drawingArea.remove();
 			documentBody.removeAllEventHandlers();
 			windowElement.removeAllEventHandlers();
@@ -304,14 +310,9 @@
 				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 50, 60 ]);
 			});
 
-			it("doesn't send pointer location when mouse moves outside drawing area", function() {
-				// documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 13, 7));
-
-				console.log(HtmlCoordinate.fromRelativeOffset(documentBody, 20, 40));
-
-				documentBody.triggerMouseMove(20, 40);
-
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 0, 0 ]);
+			it("sends pointer location even when mouse moves outside drawing area", function() {
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
+				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 20, 40 ]);
 			});
 
 			it("doesn't send pointer location when touch changes", function() {
