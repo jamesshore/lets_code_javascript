@@ -356,14 +356,19 @@
 				});
 			});
 
-			// it("finds elements by selector", function() {
-			// 	var expectedElement1 = HtmlElement.fromHtml("<div class='aClass'>one</div>");
-			// 	var expectedElement2 = HtmlElement.fromHtml("<div class='aClass'>two</div>");
-			// 	expectedElement1.appendSelfToBody();
-			// 	expectedElement1.appendSelfToBody();
-			//
-			//
-			// });
+			it("finds elements by selector", function() {
+				var expectedElement1 = HtmlElement.appendHtmlToBody("<div class='aClass'>one</div>");
+				var expectedElement2 = HtmlElement.appendHtmlToBody("<div class='aClass'>two</div>");
+				try {
+					var elements = HtmlElement.fromSelector(".aClass");
+					assert.equal(elements.length, 2);
+					assert.equal(elements[0]._element, expectedElement1._element);
+				}
+				finally {
+					expectedElement1.remove();
+					expectedElement2.remove();
+				}
+			});
 
 			it("appends elements", function() {
 				htmlElement.append(HtmlElement.fromHtml("<div></div>"));

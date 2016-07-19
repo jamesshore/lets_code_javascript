@@ -35,6 +35,9 @@
 		return new HtmlElement(domElement);
 	};
 
+	HtmlElement.fromSelector = function(selector) {
+		return $(selector);
+	};
 
 	/* General event handling */
 
