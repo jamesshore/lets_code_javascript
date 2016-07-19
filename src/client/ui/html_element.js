@@ -23,6 +23,12 @@
 		return new HtmlElement($(html)[0]);
 	};
 
+	HtmlElement.appendHtmlToBody = function(html) {
+		var element = HtmlElement.fromHtml(html);
+		element.appendSelfToBody();
+		return element;
+	};
+
 	HtmlElement.fromId = function(id) {
 		var domElement = document.getElementById(id);
 		failFast.unlessTrue(domElement !== null, "could not find element with id '" + id + "'");

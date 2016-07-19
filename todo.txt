@@ -51,7 +51,11 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* Create div
+* HtmlElement.appendHtmlToBody("foo");
+- Modify HtmlElement to retrieve elements by selector
+- Create div
+	- Provide class to client.js
+	- Provide img URL and size to client.js
 - Move div according to pointer events
 - Manage multiple cursors
 - Change opacity of cursor

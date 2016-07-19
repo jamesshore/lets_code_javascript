@@ -322,6 +322,10 @@
 				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
 			});
 
+			// it("creates a cursor div when a pointer event containing a new client ID is received", function() {
+			//
+			// });
+
 		});
 
 		function dragMouse(startX, startY, endX, endY) {

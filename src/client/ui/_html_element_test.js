@@ -328,6 +328,20 @@
 				assert.equal(element._domElement, domElement);
 			});
 
+			it("creates element from raw HTML and appends it to the body", function() {
+				try {
+					var childrenBeforeAppend = bodyElement._element.children().length;
+
+					var element = HtmlElement.appendHtmlToBody("<div>element</div>");
+					assert.equal(element.toDomElement().outerHTML.toLowerCase(), "<div>element</div>");
+
+					var childrenAfterAppend = bodyElement._element.children().length;
+					assert.equal(childrenBeforeAppend + 1, childrenAfterAppend);
+				} finally {
+					htmlElement.remove();
+				}
+			});
+
 			it("finds element by ID", function() {
 				var expectedElement = HtmlElement.fromHtml("<div id='anElement'></div>");
 				expectedElement.appendSelfToBody();
@@ -341,6 +355,15 @@
 					var element = HtmlElement.fromId("noSuchId");
 				});
 			});
+
+			// it("finds elements by selector", function() {
+			// 	var expectedElement1 = HtmlElement.fromHtml("<div class='aClass'>one</div>");
+			// 	var expectedElement2 = HtmlElement.fromHtml("<div class='aClass'>two</div>");
+			// 	expectedElement1.appendSelfToBody();
+			// 	expectedElement1.appendSelfToBody();
+			//
+			//
+			// });
 
 			it("appends elements", function() {
 				htmlElement.append(HtmlElement.fromHtml("<div></div>"));
