@@ -50,13 +50,18 @@
 	};
 
 	function handleRealTimeNetwork() {
-		drawingArea.onMouseMove(function(coordinate) {
+		documentBody.onMouseMove(function(coordinate) {
 			var relativeOffset = coordinate.toRelativeOffset(drawingArea);
 			network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
 		});
 
+		var cursor = HtmlElement.fromHtml("<div style='position:absolute;'><img src='/images/cursor.png' width='24px' height='24px'></div>");
+		cursor.appendSelfToBody();
+
 		network.onPointerLocation(function(event) {
-			console.log(event);
+			var coordinate = HtmlCoordinate.fromRelativeOffset(drawingArea, event.x, event.y).toPageOffset();
+			cursor.toDomElement().style.top = coordinate.y + "px";
+			cursor.toDomElement().style.left = coordinate.x + "px";
 		});
 	}
 

@@ -50,6 +50,4 @@ Engineering Tasks:
 
 To Do on current task:
 - Spike ghost pointers
-	- listen for pointer events
-	- display ghost pointer for each event
-	- display multiple ghost pointers when multiple clients are connected
+	* display multiple ghost pointers when multiple clients are connected
