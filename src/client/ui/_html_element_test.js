@@ -362,7 +362,8 @@
 				try {
 					var elements = HtmlElement.fromSelector(".aClass");
 					assert.equal(elements.length, 2);
-					assert.equal(elements[0]._element, expectedElement1._element);
+					assert.equal(elements[0].toDomElement(), expectedElement1.toDomElement());
+					assert.equal(elements[1].toDomElement(), expectedElement2.toDomElement());
 				}
 				finally {
 					expectedElement1.remove();

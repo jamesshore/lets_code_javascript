@@ -36,7 +36,9 @@
 	};
 
 	HtmlElement.fromSelector = function(selector) {
-		return $(selector);
+		return $(selector).map(function(index, domElement) {
+			return new HtmlElement(domElement);
+		}).get();
 	};
 
 	/* General event handling */
