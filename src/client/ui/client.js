@@ -57,8 +57,9 @@
 		var eventIds = {};
 		network.onPointerLocation(function(event) {
 			if (!eventIdSeenBefore(event.id)) {
-				HtmlElement.appendHtmlToBody(pointerHtml);
+				var element = HtmlElement.appendHtmlToBody(pointerHtml);
 				eventIds[event.id] = true;
+				element.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, event.x, event.y));
 			}
 		});
 

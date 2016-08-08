@@ -334,31 +334,31 @@
 				assert.deepEqual(connectionFake.sendPointerLocationArgs, undefined);
 			});
 
-			it("doesn't create a cursor div on startup", function() {
+			it("doesn't create pointer HTML on startup", function() {
 				assert.equal(getPointerDivs().length, 0);
 			});
 
-			it("creates a cursor HTML when a pointer event is received", function() {
+			it("creates a pointer HTML when a pointer event is received", function() {
 				connectionFake.triggerOnPointerLocationEvent(createEvent());
 				assert.equal(getPointerDivs().length, 1);
 			});
 
-			it("doesn't create a cursor HTML when a pointer event containing a previous client ID is received", function () {
+			it("doesn't create a pointer HTML when a pointer event containing a previous client ID is received", function () {
 				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
 				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
 				assert.equal(getPointerDivs().length, 1);
 			});
 
-			it("creates a cursor HTML for each unique client ID", function() {
+			it("creates a pointer HTML for each unique client ID", function() {
 				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
 				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "2" }));
 				assert.equal(getPointerDivs().length, 2);
 			});
 
-			// it("positions cursor HTML according to event's position", function() {
+			// it("positions pointer HTML according to event's position", function() {
 			// 	connectionFake.triggerOnPointerLocationEvent(createEvent({ x: 10, y: 20 }));
 			// 	var pointerElement = getPointerDivs()[0];
-			//
+			// 	assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
 			// });
 
 			function getPointerDivs() {
