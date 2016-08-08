@@ -396,6 +396,25 @@
 			});
 		});
 
+
+		describe("equality", function() {
+
+			it("is equal when referencing the same underlying DOM element", function() {
+				var element1 = HtmlElement.fromHtml("<code>foo</code>");
+				var element2 = new HtmlElement(element1.toDomElement());
+
+				assert.equal(element1.equals(element2), true);
+			});
+
+			it("is not equal when two different elements are referenced, even if they look the same", function() {
+				var element1 = HtmlElement.fromHtml("<code>foo</code>");
+				var element2 = HtmlElement.fromHtml("<code>foo</code>");
+
+				assert.equal(element1.equals(element2), false);
+			});
+
+		});
+
 	});
 
 }());

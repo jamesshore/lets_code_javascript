@@ -311,4 +311,13 @@
 		return this._element[0];
 	};
 
+
+	/* Equality */
+
+	HtmlElement.prototype.equals = function(that) {
+		failFast.unlessTrue(that instanceof HtmlElement, "Tried to compare HtmlElement to non-HtmlElement: [" + that + "]");
+
+		return this.toDomElement() === that.toDomElement();
+	};
+
 }());
