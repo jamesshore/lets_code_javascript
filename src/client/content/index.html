@@ -92,7 +92,8 @@
 
 			client.drawingAreaCanvas = client.initializeDrawingArea({
 				drawingAreaDiv: HtmlElement.fromId("drawing-area"),
-				clearScreenButton: HtmlElement.fromId("clear-button")
+				clearScreenButton: HtmlElement.fromId("clear-button"),
+				pointerHtml: "<div>placeholder</div>"
 			}, new RealTimeConnection());
 		});
 	</script>

@@ -40,8 +40,7 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Client: Make client display "ghost" pointers for other users
-- Style and test our pointer HTML (50% opaque?)
+* Style and test our pointer HTML (50% opaque?)
 - Open question: how to make sure our test double matches our real code?
 	- Use sinon.js? testdouble.js?
 - Revisit Martin Grandrath's client connection design question (in E399)
@@ -52,7 +51,4 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* Modify HtmlCoordinate.equals() to ignore minor rendering corrections
-- Move div according to pointer events
-- Get smoke test passing (if not complete)
-
+-
