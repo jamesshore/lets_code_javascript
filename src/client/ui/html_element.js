@@ -289,6 +289,15 @@
 		return HtmlCoordinate.fromRelativeOffset(this, 0, 0);
 	};
 
+	HtmlElement.prototype.setAbsolutePosition = function(coordinate) {
+		var offset = coordinate.toPageOffset();
+
+		var style = this.toDomElement().style;
+		style.position = "absolute";
+		style.top = offset.y + "px";
+		style.left = offset.x + "px";
+	};
+
 	HtmlElement.prototype.getDimensions = function() {
 		return {
 			width: this._element.width(),

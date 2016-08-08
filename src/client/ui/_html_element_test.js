@@ -299,6 +299,15 @@
 				assert.objEqual(actual, expected);
 			});
 
+			it("absolutely positions element", function() {
+				HtmlElement.appendHtmlToBody("<div style='width: 100px; height: 100px;'>spacer</div>");
+				var expectedPosition = HtmlCoordinate.fromPageOffset(20, 30);
+
+				var element = HtmlElement.appendHtmlToBody("<div style='width: 10px; height: 10px;'>element</div>");
+				element.setAbsolutePosition(expectedPosition);
+				assert.objEqual(element.getPosition(), expectedPosition);
+			});
+
 			it("provides its dimensions", function() {
 				var element = HtmlElement.fromHtml("<div style='width: 120px; height: 80px;'></div>");
 				assert.deepEqual(element.getDimensions(), {
