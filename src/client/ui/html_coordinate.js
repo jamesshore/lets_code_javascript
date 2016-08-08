@@ -45,7 +45,10 @@
 	HtmlCoordinate.prototype.equals = function(that) {
 		failFast.unlessTrue(that instanceof HtmlCoordinate, "tried to compare HtmlCoordinate with a different type of object");
 
-		return this._pageX === that._pageX && this._pageY === that._pageY;
+		var xDiff = Math.abs(this._pageX - that._pageX);
+		var yDiff = Math.abs(this._pageY - that._pageY);
+
+		return xDiff < 0.01 && yDiff < 0.01;
 	};
 
 	HtmlCoordinate.prototype.toString = function() {
