@@ -30,17 +30,14 @@
 
 		documentBody = new HtmlElement(document.body);
 		windowElement = new HtmlElement(window);
-
 		svgCanvas = new SvgCanvas(drawingArea);
+		network = realTimeConnection;
 
 		drawingArea.preventBrowserDragDefaults();
-		sendPointerEventsOverNetwork();
+		handleRealTimeNetworking();
 		handleClearScreenClick();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
-
-		network = realTimeConnection;
-		network.connect(window.location.port);
 
 		return svgCanvas;
 	};
@@ -49,8 +46,14 @@
 		svgCanvas = null;
 	};
 
-	function sendPointerEventsOverNetwork() {
+	function handleRealTimeNetworking() {
+		network.connect(window.location.port);
+
 		documentBody.onMouseMove(sendPointerEvent);
+
+		network.onPointerLocation(function() {
+			HtmlElement.appendHtmlToBody("<div class='pointerClass'></div>");
+		});
 	}
 
 	function sendPointerEvent(coordinate) {

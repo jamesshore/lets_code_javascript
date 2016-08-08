@@ -9,6 +9,7 @@
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("../../shared/_assert.js");
+	var failFast = require("../../shared/fail_fast");
 
 	mocha.setup({ignoreLeaks: true});
 
@@ -20,7 +21,9 @@
 		var documentBody;
 		var windowElement;
 		var svgCanvas;
-		var connectionSpy;
+		var connectionFake;
+
+		var POINTER_DIV_CLASS = "pointerClass";
 
 		beforeEach(function() {
 			documentBody = new HtmlElement(document.body);
@@ -33,12 +36,12 @@
 			drawingArea.appendSelfToBody();
 
 			clearButton = HtmlElement.fromHtml("<input type='button'>");
-			connectionSpy = new RealTimeConnectionSpy();
+			connectionFake = new RealTimeConnectionFake();
 
 			svgCanvas = client.initializeDrawingArea({
 				drawingAreaDiv: drawingArea,
 				clearScreenButton: clearButton
-			}, connectionSpy);
+			}, connectionFake);
 		});
 
 		afterEach(function() {
@@ -47,7 +50,15 @@
 			documentBody.removeAllEventHandlers();
 			windowElement.removeAllEventHandlers();
 			client.drawingAreaHasBeenRemovedFromDom();
+			removePointerDivs();
 		});
+
+		function removePointerDivs() {
+			var pointerDivs = HtmlElement.fromSelector("." + POINTER_DIV_CLASS);
+			pointerDivs.forEach(function(div) {
+				div.remove();
+			});
+		}
 
 		it("does not allow text to be selected or page to scroll when drag starts within drawing area", function() {
 			assert.equal(drawingArea.isBrowserDragDefaultsPrevented(), true);
@@ -302,29 +313,38 @@
 		describe("networking", function() {
 
 			it("connects to server upon initialization", function() {
-				assert.deepEqual(connectionSpy.connectArgs, [ window.location.port ]);
+				assert.deepEqual(connectionFake.connectArgs, [ window.location.port ]);
 			});
 
 			it("sends pointer location whenever mouse moves", function() {
 				drawingArea.triggerMouseMove(50, 60);
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 50, 60 ]);
+				assert.deepEqual(connectionFake.sendPointerLocationArgs, [ 50, 60 ]);
 			});
 
 			it("sends pointer location even when mouse moves outside drawing area", function() {
 				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 20, 40 ]);
+				assert.deepEqual(connectionFake.sendPointerLocationArgs, [ 20, 40 ]);
 			});
 
 			it("doesn't send pointer location when touch changes", function() {
 				if (!browser.supportsTouchEvents()) return;
 
 				drawingArea.triggerSingleTouchMove(30, 40);
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
+				assert.deepEqual(connectionFake.sendPointerLocationArgs, undefined);
 			});
 
-			// it("creates a cursor div when a pointer event containing a new client ID is received", function() {
-			//
-			// });
+			it("doesn't create a cursor div on startup", function() {
+				assert.equal(getPointerDivs().length, 0);
+			});
+
+			it("creates a cursor div when a pointer event containing a new client ID is received", function() {
+				connectionFake.triggerOnPointerLocationEvent();
+				assert.equal(getPointerDivs().length, 1);
+			});
+
+			function getPointerDivs() {
+				return HtmlElement.fromSelector("." + POINTER_DIV_CLASS);
+			}
 
 		});
 
@@ -340,14 +360,24 @@
 
 	});
 
-	function RealTimeConnectionSpy() {}
+	function RealTimeConnectionFake() {}
 
-	RealTimeConnectionSpy.prototype.connect = function() {
+	RealTimeConnectionFake.prototype.connect = function() {
 		this.connectArgs = Array.prototype.slice.call(arguments);
 	};
 
-	RealTimeConnectionSpy.prototype.sendPointerLocation = function() {
+	RealTimeConnectionFake.prototype.sendPointerLocation = function() {
 		this.sendPointerLocationArgs = Array.prototype.slice.call(arguments);
+	};
+
+	RealTimeConnectionFake.prototype.onPointerLocation = function(handler) {
+		failFast.unlessTrue(this._handler === undefined, "RealTimeConnectionFake.onPointerLocation called twice");
+		this._handler = handler;
+	};
+
+	RealTimeConnectionFake.prototype.triggerOnPointerLocationEvent = function() {
+		failFast.unlessTrue(this._handler !== undefined, "onPointerLocation() not called before triggerOnPointerLocationEvent()");
+		this._handler();
 	};
 
 }());
