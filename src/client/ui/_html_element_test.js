@@ -361,9 +361,9 @@
 				var expectedElement2 = HtmlElement.appendHtmlToBody("<div class='aClass'>two</div>");
 				try {
 					var elements = HtmlElement.fromSelector(".aClass");
-					assert.equal(elements.length, 2);
-					assert.equal(elements[0].toDomElement(), expectedElement1.toDomElement());
-					assert.equal(elements[1].toDomElement(), expectedElement2.toDomElement());
+					assert.equal(elements.length, 2, "# of elements");
+					assert.objEqual(elements[0], expectedElement1, "element one");
+					assert.objEqual(elements[1], expectedElement2, "element two");
 				}
 				finally {
 					expectedElement1.remove();

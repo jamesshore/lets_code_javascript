@@ -51,8 +51,7 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* HtmlElement.equals()
-- Create div
+* Create div
 	- Provide class to client.js
 	- Provide img URL and size to client.js
 - Move div according to pointer events
