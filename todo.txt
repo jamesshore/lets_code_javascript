@@ -52,5 +52,7 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
-* Move div according to pointer events
+* HtmlElement.getCoordinates()
+- HtmlElement.moveTo()
+- Move div according to pointer events
 

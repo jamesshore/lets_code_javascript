@@ -283,7 +283,11 @@
 	}
 
 
-	/* Dimensions */
+	/* Position and Dimensions */
+
+	HtmlElement.prototype.getPosition = function() {
+		return HtmlCoordinate.fromRelativeOffset(this, 0, 0);
+	};
 
 	HtmlElement.prototype.getDimensions = function() {
 		return {

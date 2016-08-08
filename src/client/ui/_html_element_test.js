@@ -291,7 +291,14 @@
 			}
 		});
 
-		describe("sizing", function() {
+		describe("position and sizing", function() {
+
+			it("provides the position of its upper-left corner", function() {
+				var expected = HtmlCoordinate.fromPageOffset(8, 8);
+				var actual = bodyElement.getPosition();
+				assert.objEqual(actual, expected);
+			});
+
 			it("provides its dimensions", function() {
 				var element = HtmlElement.fromHtml("<div style='width: 120px; height: 80px;'></div>");
 				assert.deepEqual(element.getDimensions(), {
@@ -313,7 +320,9 @@
 					height: 80
 				});
 			});
+
 		});
+
 
 		describe("DOM manipulation", function() {
 
