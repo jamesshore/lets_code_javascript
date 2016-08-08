@@ -15,6 +15,7 @@
 	var lineDrawn = false;
 	var drawingArea;
 	var clearScreenButton;
+	var pointerHtml;
 	var documentBody;
 	var windowElement;
 	var network;
@@ -24,9 +25,11 @@
 
 		drawingArea = elements.drawingAreaDiv;
 		clearScreenButton = elements.clearScreenButton;
+		pointerHtml = elements.pointerHtml;
 
 		failFast.unlessDefined(drawingArea, "elements.drawingArea");
 		failFast.unlessDefined(clearScreenButton, "elements.clearScreenButton");
+		failFast.unlessDefined(pointerHtml, "elements.pointerHtml");
 
 		documentBody = new HtmlElement(document.body);
 		windowElement = new HtmlElement(window);
@@ -51,10 +54,19 @@
 
 		documentBody.onMouseMove(sendPointerEvent);
 
-		network.onPointerLocation(function() {
-			HtmlElement.appendHtmlToBody("<div class='pointerClass'></div>");
+		var eventIds = {};
+		network.onPointerLocation(function(event) {
+			if (!eventIdSeenBefore(event.id)) {
+				HtmlElement.appendHtmlToBody(pointerHtml);
+				eventIds[event.id] = true;
+			}
 		});
+
+		function eventIdSeenBefore(id) {
+			return eventIds[id] === true;
+		}
 	}
+
 
 	function sendPointerEvent(coordinate) {
 		var relativeOffset = coordinate.toRelativeOffset(drawingArea);

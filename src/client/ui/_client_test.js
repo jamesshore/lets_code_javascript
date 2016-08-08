@@ -40,7 +40,8 @@
 
 			svgCanvas = client.initializeDrawingArea({
 				drawingAreaDiv: drawingArea,
-				clearScreenButton: clearButton
+				clearScreenButton: clearButton,
+				pointerHtml: "<div class='" + POINTER_DIV_CLASS + "'></div>"
 			}, connectionFake);
 		});
 
@@ -337,13 +338,36 @@
 				assert.equal(getPointerDivs().length, 0);
 			});
 
-			it("creates a cursor div when a pointer event containing a new client ID is received", function() {
-				connectionFake.triggerOnPointerLocationEvent();
+			it("creates a cursor div when a pointer event is received", function() {
+				connectionFake.triggerOnPointerLocationEvent(createEvent());
 				assert.equal(getPointerDivs().length, 1);
+			});
+
+			it("doesn't create a cursor div when a pointer event containing a previous client ID is received", function () {
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
+				assert.equal(getPointerDivs().length, 1);
+			});
+
+			it("creates a cursor div for each unique client ID", function() {
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "2" }));
+				assert.equal(getPointerDivs().length, 2);
 			});
 
 			function getPointerDivs() {
 				return HtmlElement.fromSelector("." + POINTER_DIV_CLASS);
+			}
+
+			function createEvent(event) {
+				// Object.assign would be preferable here, but it's not supported on IE 11 or Chrome Mobile 44
+				// Feel free to rewrite this to use Object.assign when those browsers are no longer supported
+				if (event === undefined) event = {};
+				return {
+					id: event.id || "irrelevant_id",
+					x: event.x || 0,
+					y: event.y || 0
+				};
 			}
 
 		});
@@ -375,9 +399,9 @@
 		this._handler = handler;
 	};
 
-	RealTimeConnectionFake.prototype.triggerOnPointerLocationEvent = function() {
+	RealTimeConnectionFake.prototype.triggerOnPointerLocationEvent = function(event) {
 		failFast.unlessTrue(this._handler !== undefined, "onPointerLocation() not called before triggerOnPointerLocationEvent()");
-		this._handler();
+		this._handler(event);
 	};
 
 }());
