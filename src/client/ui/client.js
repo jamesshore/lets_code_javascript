@@ -56,16 +56,13 @@
 
 		var eventIds = {};
 		network.onPointerLocation(function(event) {
-			if (!eventIdSeenBefore(event.id)) {
-				var element = HtmlElement.appendHtmlToBody(pointerHtml);
-				eventIds[event.id] = true;
-				element.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, event.x, event.y));
+			var pointerElement = eventIds[event.id];
+			if (pointerElement === undefined) {
+				pointerElement = HtmlElement.appendHtmlToBody(pointerHtml);
+				eventIds[event.id] = pointerElement;
 			}
+			pointerElement.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, event.x, event.y));
 		});
-
-		function eventIdSeenBefore(id) {
-			return eventIds[id] === true;
-		}
 	}
 
 

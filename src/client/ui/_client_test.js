@@ -355,11 +355,19 @@
 				assert.equal(getPointerDivs().length, 2);
 			});
 
-			// it("positions pointer HTML according to event's position", function() {
-			// 	connectionFake.triggerOnPointerLocationEvent(createEvent({ x: 10, y: 20 }));
-			// 	var pointerElement = getPointerDivs()[0];
-			// 	assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
-			// });
+			it("positions new pointer HTML according to event's position", function() {
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ x: 10, y: 20 }));
+				var pointerElement = getPointerDivs()[0];
+				assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
+			});
+
+			it("moves existing pointer HTML when new pointer event is received", function() {
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ x: 10, y: 20 }));
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ x: 30, y: 40 }));
+
+				var pointerElement = getPointerDivs()[0];
+				assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));
+			});
 
 			function getPointerDivs() {
 				return HtmlElement.fromSelector("." + POINTER_DIV_CLASS);
