@@ -300,12 +300,16 @@
 			});
 
 			it("absolutely positions element", function() {
-				HtmlElement.appendHtmlToBody("<div style='width: 100px; height: 100px;'>spacer</div>");
 				var expectedPosition = HtmlCoordinate.fromPageOffset(20, 30);
 
 				var element = HtmlElement.appendHtmlToBody("<div style='width: 10px; height: 10px;'>element</div>");
-				element.setAbsolutePosition(expectedPosition);
-				assert.objEqual(element.getPosition(), expectedPosition);
+				try {
+					element.setAbsolutePosition(expectedPosition);
+					assert.objEqual(element.getPosition(), expectedPosition);
+				}
+				finally {
+					element.remove();
+				}
 			});
 
 			it("provides its dimensions", function() {
