@@ -224,7 +224,7 @@ describe('promise control flow', function() {
 
       return timeout(5).then(function() {
         assert(!callback.called);
-        d1.fulfill(d2);
+        d1.fulfill(d2.promise);
         return timeout(5);
       }).then(function() {
         assert(!callback.called);
@@ -679,7 +679,7 @@ describe('promise control flow', function() {
        */
       schedulePush('foo').
           then(() => schedulePush('bar')).
-          thenFinally(() => schedulePush('baz'));
+          finally(() => schedulePush('baz'));
       return waitForIdle().then(assertingMessages('foo', 'bar', 'baz'));
     });
 
@@ -698,7 +698,7 @@ describe('promise control flow', function() {
         throw new StubError;
       }).
       then(function() { schedulePush('bar'); }).
-      thenFinally(function() { schedulePush('baz'); });
+      finally(function() { schedulePush('baz'); });
 
       return waitForAbort().
           then(assertIsStubError).
@@ -722,7 +722,7 @@ describe('promise control flow', function() {
               throw new StubError;
             });
           }).
-          thenFinally(function() {
+          finally(function() {
             return schedulePush('baz');
           });
       return waitForAbort().
@@ -1454,7 +1454,7 @@ describe('promise control flow', function() {
       });
 
       var d = new promise.Deferred();
-      d.then(deferredPair.callback, deferredPair.errback);
+      d.promise.then(deferredPair.callback, deferredPair.errback);
 
       promise.fulfilled().
           then(function() {
@@ -1479,7 +1479,7 @@ describe('promise control flow', function() {
       });
 
       var d = new promise.Deferred();
-      d.then(deferredPair.callback, deferredPair.errback);
+      d.promise.then(deferredPair.callback, deferredPair.errback);
 
       schedule('a').
           then(function() {
@@ -1558,7 +1558,7 @@ describe('promise control flow', function() {
       assert.equal(e, err);
       assertFlowIs(defaultFlow);
     });
-    promise.defer().then(function() {
+    promise.defer().promise.then(function() {
       assertFlowIs(defaultFlow);
     });
 
@@ -1578,9 +1578,11 @@ describe('promise control flow', function() {
         assertFlowIs(newFlow);
       });
 
-      promise.defer().then(function() {
+      let d = promise.defer();
+      d.promise.then(function() {
         assertFlowIs(newFlow);
       });
+      d.fulfill();
     }).then(function() {
       assertFlowIs(newFlow);
     });
@@ -2067,7 +2069,7 @@ describe('promise control flow', function() {
     it('1', function() {
       var called = 0;
       var task = flow.execute(() => called++);
-      task.thenFinally(() => called++);
+      task.finally(() => called++);
 
       return new Promise(function(fulfill) {
         flow.once('reset', fulfill);
@@ -2087,13 +2089,13 @@ describe('promise control flow', function() {
     it('2', function() {
       var called = 0;
       var task1 = flow.execute(() => called++);
-      task1.thenFinally(() => called++);
+      task1.finally(() => called++);
 
       var task2 = flow.execute(() => called++);
-      task2.thenFinally(() => called++);
+      task2.finally(() => called++);
 
       var task3 = flow.execute(() => called++);
-      task3.thenFinally(() => called++);
+      task3.finally(() => called++);
 
       return new Promise(function(fulfill) {
         flow.once('reset', fulfill);
