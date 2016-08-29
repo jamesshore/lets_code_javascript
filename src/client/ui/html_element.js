@@ -290,12 +290,26 @@
 	};
 
 	HtmlElement.prototype.setAbsolutePosition = function(coordinate) {
-		var offset = coordinate.toPageOffset();
+		var offset;
+
+		var offsetParent = this.toDomElement().offsetParent;
+		if (offsetParent === document.body && !isPositioned(document.body)) {
+			offset = coordinate.toPageOffset();
+		}
+		else {
+			var positionedParent = new HtmlElement(offsetParent);
+			offset = coordinate.toRelativeOffset(positionedParent);
+		}
 
 		var style = this.toDomElement().style;
 		style.position = "absolute";
 		style.top = offset.y + "px";
 		style.left = offset.x + "px";
+
+		function isPositioned(element) {
+			var position = element.style.position;
+			return position === "relative" || position === "fixed" || position === "absolute";
+		}
 	};
 
 	HtmlElement.prototype.getDimensions = function() {

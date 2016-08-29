@@ -312,6 +312,45 @@
 				}
 			});
 
+			it("positions element even when parent is positioned", function() {
+				var container = HtmlElement.appendHtmlToBody(
+					"<div>" +
+					" <div style='height:20px; width: 30px;'>spacer</div>" +
+					" <div id='parent' style='position: relative;'>" +
+					"   <div id='element'>element</div>" +
+					" </div>"
+				);
+				var element = HtmlElement.fromId("element");
+
+				try {
+					var expectedPosition = HtmlCoordinate.fromPageOffset(50, 60);
+					element.setAbsolutePosition(expectedPosition);
+					assert.objEqual(element.getPosition(), expectedPosition);
+				}
+				finally {
+					container.remove();
+				}
+			});
+
+			it("positions element even when the positioned parent is the document body", function() {
+				var expectedPosition = HtmlCoordinate.fromPageOffset(20, 30);
+				var bodyStyle = document.body.style;
+				var oldBodyPosition = bodyStyle.position;
+
+				var element = HtmlElement.appendHtmlToBody("<div style='width: 10px; height: 10px;'>element</div>");
+				try {
+
+					bodyStyle.position = "relative";
+					element.setAbsolutePosition(expectedPosition);
+					assert.objEqual(element.getPosition(), expectedPosition);
+				}
+				finally {
+					bodyStyle.position = oldBodyPosition;
+					element.remove();
+				}
+			});
+
+
 			it("provides its dimensions", function() {
 				var element = HtmlElement.fromHtml("<div style='width: 120px; height: 80px;'></div>");
 				assert.deepEqual(element.getDimensions(), {
