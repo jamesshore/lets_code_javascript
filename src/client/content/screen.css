@@ -154,6 +154,13 @@ strong {
 }
 
 
+/* Ghost Pointer block */
+
+.ghost-pointer {
+	opacity: 0.5;
+}
+
+
 /* 'Not Found' block */
 
 .not-found {
