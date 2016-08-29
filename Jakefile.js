@@ -15,8 +15,6 @@
 	var strict = !process.env.loose;
 	if (strict) console.log("For more forgiving test settings, use 'loose=true'");
 
-	var itonly = process.env.itonly;
-
 	//*** DIRECTORIES
 
 	directory(paths.tempTestfileDir);
@@ -126,11 +124,7 @@
 			configFile: paths.karmaConfig,
 			expectedBrowsers: testedBrowsers(),
 			strict: strict,
-			// We use Mocha's "grep" feature as a poor-man's substitute for proper test tagging and subsetting
-			// (which Mocha doesn't have at the time of this writing). However, Mocha's grep option disables
-			// Mocha's "it.only()" feature. So we don't use grep if the "itonly" option is set on the command
-			// line.
-			clientArgs: itonly ? [] : [ "--grep=" + tag + ":" ]
+			clientArgs: [ "--grep=" + tag + ":" ]
 		}, complete, fail);
 	}
 

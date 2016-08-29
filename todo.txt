@@ -40,7 +40,6 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Style and test our pointer HTML (50% opaque?)
 - Open question: how to make sure our test double matches our real code?
 	- Use sinon.js? testdouble.js?
 - Revisit Martin Grandrath's client connection design question (in E399)
@@ -53,4 +52,3 @@ Engineering Tasks:
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-* Test-drive a new 'ghost-pointer' block
