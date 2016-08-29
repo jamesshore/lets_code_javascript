@@ -49,9 +49,11 @@ Engineering Tasks:
 - Figure out how to de-dupe require paths for common files (such as "_assert.js")
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 - Update smoke tests for real-time networking
+	- Replace Selenium? Fix it?
 
 To Do on current task:
 - setAbsolutePosition() won't work when parent element is positioned
 	- see Mattias Åslund fiddle, E440
 - element positioning test needs to clean up after itself
 - Mocha 3.0: .only() fixed! "itonly" build flag no longer needed
+- disabled smoke tests: Selenium now requires separate download
