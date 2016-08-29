@@ -51,4 +51,6 @@ Engineering Tasks:
 - Update smoke tests for real-time networking
 
 To Do on current task:
--
+- setAbsolutePosition() won't work when parent element is positioned
+	- see Mattias Åslund fiddle, E440
+- element positioning test needs to clean up after itself
