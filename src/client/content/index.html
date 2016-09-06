@@ -92,7 +92,8 @@
 
 			client.drawingAreaCanvas = client.initializeDrawingArea({
 				drawingAreaDiv: HtmlElement.fromId("drawing-area"),
-				clearScreenButton: HtmlElement.fromId("clear-button")
+				clearScreenButton: HtmlElement.fromId("clear-button"),
+				pointerHtml: "<div class='ghost-pointer'><img width='16px' height='16px' src='/images/cursor.png'></div>"
 			}, new RealTimeConnection());
 		});
 	</script>

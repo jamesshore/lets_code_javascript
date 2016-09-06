@@ -291,7 +291,66 @@
 			}
 		});
 
-		describe("sizing", function() {
+		describe("position and sizing", function() {
+
+			it("provides the position of its upper-left corner", function() {
+				var expected = HtmlCoordinate.fromPageOffset(8, 8);
+				var actual = bodyElement.getPosition();
+				assert.objEqual(actual, expected);
+			});
+
+			it("absolutely positions element", function() {
+				var expectedPosition = HtmlCoordinate.fromPageOffset(20, 30);
+
+				var element = HtmlElement.appendHtmlToBody("<div style='width: 10px; height: 10px;'>element</div>");
+				try {
+					element.setAbsolutePosition(expectedPosition);
+					assert.objEqual(element.getPosition(), expectedPosition);
+				}
+				finally {
+					element.remove();
+				}
+			});
+
+			it("positions element even when parent is positioned", function() {
+				var container = HtmlElement.appendHtmlToBody(
+					"<div>" +
+					" <div style='height:20px; width: 30px;'>spacer</div>" +
+					" <div id='parent' style='position: relative;'>" +
+					"   <div id='element'>element</div>" +
+					" </div>"
+				);
+				var element = HtmlElement.fromId("element");
+
+				try {
+					var expectedPosition = HtmlCoordinate.fromPageOffset(50, 60);
+					element.setAbsolutePosition(expectedPosition);
+					assert.objEqual(element.getPosition(), expectedPosition);
+				}
+				finally {
+					container.remove();
+				}
+			});
+
+			it("positions element even when the positioned parent is the document body", function() {
+				var expectedPosition = HtmlCoordinate.fromPageOffset(20, 30);
+				var bodyStyle = document.body.style;
+				var oldBodyPosition = bodyStyle.position;
+
+				var element = HtmlElement.appendHtmlToBody("<div style='width: 10px; height: 10px;'>element</div>");
+				try {
+
+					bodyStyle.position = "relative";
+					element.setAbsolutePosition(expectedPosition);
+					assert.objEqual(element.getPosition(), expectedPosition);
+				}
+				finally {
+					bodyStyle.position = oldBodyPosition;
+					element.remove();
+				}
+			});
+
+
 			it("provides its dimensions", function() {
 				var element = HtmlElement.fromHtml("<div style='width: 120px; height: 80px;'></div>");
 				assert.deepEqual(element.getDimensions(), {
@@ -313,7 +372,9 @@
 					height: 80
 				});
 			});
+
 		});
+
 
 		describe("DOM manipulation", function() {
 
@@ -328,6 +389,20 @@
 				assert.equal(element._domElement, domElement);
 			});
 
+			it("creates element from raw HTML and appends it to the body", function() {
+				try {
+					var childrenBeforeAppend = bodyElement._element.children().length;
+
+					var element = HtmlElement.appendHtmlToBody("<div>element</div>");
+					assert.equal(element.toDomElement().outerHTML.toLowerCase(), "<div>element</div>");
+
+					var childrenAfterAppend = bodyElement._element.children().length;
+					assert.equal(childrenBeforeAppend + 1, childrenAfterAppend);
+				} finally {
+					htmlElement.remove();
+				}
+			});
+
 			it("finds element by ID", function() {
 				var expectedElement = HtmlElement.fromHtml("<div id='anElement'></div>");
 				expectedElement.appendSelfToBody();
@@ -340,6 +415,21 @@
 				assert.throws(function() {
 					var element = HtmlElement.fromId("noSuchId");
 				});
+			});
+
+			it("finds elements by selector", function() {
+				var expectedElement1 = HtmlElement.appendHtmlToBody("<div class='aClass'>one</div>");
+				var expectedElement2 = HtmlElement.appendHtmlToBody("<div class='aClass'>two</div>");
+				try {
+					var elements = HtmlElement.fromSelector(".aClass");
+					assert.equal(elements.length, 2, "# of elements");
+					assert.objEqual(elements[0], expectedElement1, "element one");
+					assert.objEqual(elements[1], expectedElement2, "element two");
+				}
+				finally {
+					expectedElement1.remove();
+					expectedElement2.remove();
+				}
 			});
 
 			it("appends elements", function() {
@@ -365,6 +455,25 @@
 				elementToAppend.remove();
 				assert.equal(htmlElement._element.children().length, 0);
 			});
+		});
+
+
+		describe("equality", function() {
+
+			it("is equal when referencing the same underlying DOM element", function() {
+				var element1 = HtmlElement.fromHtml("<code>foo</code>");
+				var element2 = new HtmlElement(element1.toDomElement());
+
+				assert.equal(element1.equals(element2), true);
+			});
+
+			it("is not equal when two different elements are referenced, even if they look the same", function() {
+				var element1 = HtmlElement.fromHtml("<code>foo</code>");
+				var element2 = HtmlElement.fromHtml("<code>foo</code>");
+
+				assert.equal(element1.equals(element2), false);
+			});
+
 		});
 
 	});

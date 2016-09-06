@@ -23,7 +23,9 @@ module.exports = function(config) {
 		],
 
 		// list of files to exclude
-		exclude: [],
+		exclude: [
+			'src/client/network/__test_harness_server.js'
+		],
 
 		// preprocessors
 		preprocessors: {

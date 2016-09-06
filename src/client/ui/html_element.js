@@ -23,12 +23,23 @@
 		return new HtmlElement($(html)[0]);
 	};
 
+	HtmlElement.appendHtmlToBody = function(html) {
+		var element = HtmlElement.fromHtml(html);
+		element.appendSelfToBody();
+		return element;
+	};
+
 	HtmlElement.fromId = function(id) {
 		var domElement = document.getElementById(id);
 		failFast.unlessTrue(domElement !== null, "could not find element with id '" + id + "'");
 		return new HtmlElement(domElement);
 	};
 
+	HtmlElement.fromSelector = function(selector) {
+		return $(selector).map(function(index, domElement) {
+			return new HtmlElement(domElement);
+		}).get();
+	};
 
 	/* General event handling */
 
@@ -272,7 +283,34 @@
 	}
 
 
-	/* Dimensions */
+	/* Position and Dimensions */
+
+	HtmlElement.prototype.getPosition = function() {
+		return HtmlCoordinate.fromRelativeOffset(this, 0, 0);
+	};
+
+	HtmlElement.prototype.setAbsolutePosition = function(coordinate) {
+		var offset;
+
+		var offsetParent = this.toDomElement().offsetParent;
+		if (offsetParent === document.body && !isPositioned(document.body)) {
+			offset = coordinate.toPageOffset();
+		}
+		else {
+			var positionedParent = new HtmlElement(offsetParent);
+			offset = coordinate.toRelativeOffset(positionedParent);
+		}
+
+		var style = this.toDomElement().style;
+		style.position = "absolute";
+		style.top = offset.y + "px";
+		style.left = offset.x + "px";
+
+		function isPositioned(element) {
+			var position = element.style.position;
+			return position === "relative" || position === "fixed" || position === "absolute";
+		}
+	};
 
 	HtmlElement.prototype.getDimensions = function() {
 		return {
@@ -298,6 +336,15 @@
 
 	HtmlElement.prototype.toDomElement = function() {
 		return this._element[0];
+	};
+
+
+	/* Equality */
+
+	HtmlElement.prototype.equals = function(that) {
+		failFast.unlessTrue(that instanceof HtmlElement, "Tried to compare HtmlElement to non-HtmlElement: [" + that + "]");
+
+		return this.toDomElement() === that.toDomElement();
 	};
 
 }());

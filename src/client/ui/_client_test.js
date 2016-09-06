@@ -9,39 +9,57 @@
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("../../shared/_assert.js");
+	var failFast = require("../../shared/fail_fast");
 
 	mocha.setup({ignoreLeaks: true});
 
 	describe("UI: Drawing area", function() {
+
+		var padding;
 		var drawingArea;
 		var clearButton;
 		var documentBody;
 		var windowElement;
 		var svgCanvas;
-		var connectionSpy;
+		var connectionFake;
+
+		var POINTER_DIV_CLASS = "pointerClass";
 
 		beforeEach(function() {
 			documentBody = new HtmlElement(document.body);
 			windowElement = new HtmlElement(window);
 
+			padding = HtmlElement.fromHtml("<p>prevent drawing area and document body from having same origin</p>");
+			padding.appendSelfToBody();
+
 			drawingArea = HtmlElement.fromHtml("<div style='height: 300px; width: 600px'>hi</div>");
 			drawingArea.appendSelfToBody();
 
 			clearButton = HtmlElement.fromHtml("<input type='button'>");
-			connectionSpy = new RealTimeConnectionSpy();
+			connectionFake = new RealTimeConnectionFake();
 
 			svgCanvas = client.initializeDrawingArea({
 				drawingAreaDiv: drawingArea,
-				clearScreenButton: clearButton
-			}, connectionSpy);
+				clearScreenButton: clearButton,
+				pointerHtml: "<div class='" + POINTER_DIV_CLASS + "'></div>"
+			}, connectionFake);
 		});
 
 		afterEach(function() {
+			padding.remove();
 			drawingArea.remove();
 			documentBody.removeAllEventHandlers();
 			windowElement.removeAllEventHandlers();
 			client.drawingAreaHasBeenRemovedFromDom();
+			removePointerDivs();
 		});
+
+		function removePointerDivs() {
+			var pointerDivs = HtmlElement.fromSelector("." + POINTER_DIV_CLASS);
+			pointerDivs.forEach(function(div) {
+				div.remove();
+			});
+		}
 
 		it("does not allow text to be selected or page to scroll when drag starts within drawing area", function() {
 			assert.equal(drawingArea.isBrowserDragDefaultsPrevented(), true);
@@ -296,25 +314,75 @@
 		describe("networking", function() {
 
 			it("connects to server upon initialization", function() {
-				assert.deepEqual(connectionSpy.connectArgs, [ window.location.port ]);
+				assert.deepEqual(connectionFake.connectArgs, [ window.location.port ]);
 			});
 
 			it("sends pointer location whenever mouse moves", function() {
 				drawingArea.triggerMouseMove(50, 60);
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, [ 50, 60 ]);
+				assert.deepEqual(connectionFake.sendPointerLocationArgs, [ 50, 60 ]);
 			});
 
-			it("doesn't send pointer location when mouse moves outside drawing area", function() {
-				documentBody.triggerMouseMove(13, 7);
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
+			it("sends pointer location even when mouse moves outside drawing area", function() {
+				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
+				assert.deepEqual(connectionFake.sendPointerLocationArgs, [ 20, 40 ]);
 			});
 
 			it("doesn't send pointer location when touch changes", function() {
 				if (!browser.supportsTouchEvents()) return;
 
 				drawingArea.triggerSingleTouchMove(30, 40);
-				assert.deepEqual(connectionSpy.sendPointerLocationArgs, undefined);
+				assert.deepEqual(connectionFake.sendPointerLocationArgs, undefined);
 			});
+
+			it("doesn't create pointer HTML on startup", function() {
+				assert.equal(getPointerDivs().length, 0);
+			});
+
+			it("creates a pointer HTML when a pointer event is received", function() {
+				connectionFake.triggerOnPointerLocationEvent(createEvent());
+				assert.equal(getPointerDivs().length, 1);
+			});
+
+			it("doesn't create a pointer HTML when a pointer event containing a previous client ID is received", function () {
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
+				assert.equal(getPointerDivs().length, 1);
+			});
+
+			it("creates a pointer HTML for each unique client ID", function() {
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ id: "2" }));
+				assert.equal(getPointerDivs().length, 2);
+			});
+
+			it("positions new pointer HTML according to event's position", function() {
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ x: 10, y: 20 }));
+				var pointerElement = getPointerDivs()[0];
+				assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
+			});
+
+			it("moves existing pointer HTML when new pointer event is received", function() {
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ x: 10, y: 20 }));
+				connectionFake.triggerOnPointerLocationEvent(createEvent({ x: 30, y: 40 }));
+
+				var pointerElement = getPointerDivs()[0];
+				assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));
+			});
+
+			function getPointerDivs() {
+				return HtmlElement.fromSelector("." + POINTER_DIV_CLASS);
+			}
+
+			function createEvent(event) {
+				// Object.assign would be preferable here, but it's not supported on IE 11 or Chrome Mobile 44
+				// Feel free to rewrite this to use Object.assign when those browsers are no longer supported
+				if (event === undefined) event = {};
+				return {
+					id: event.id || "irrelevant_id",
+					x: event.x || 0,
+					y: event.y || 0
+				};
+			}
 
 		});
 
@@ -330,14 +398,24 @@
 
 	});
 
-	function RealTimeConnectionSpy() {}
+	function RealTimeConnectionFake() {}
 
-	RealTimeConnectionSpy.prototype.connect = function() {
+	RealTimeConnectionFake.prototype.connect = function() {
 		this.connectArgs = Array.prototype.slice.call(arguments);
 	};
 
-	RealTimeConnectionSpy.prototype.sendPointerLocation = function() {
+	RealTimeConnectionFake.prototype.sendPointerLocation = function() {
 		this.sendPointerLocationArgs = Array.prototype.slice.call(arguments);
+	};
+
+	RealTimeConnectionFake.prototype.onPointerLocation = function(handler) {
+		failFast.unlessTrue(this._handler === undefined, "RealTimeConnectionFake.onPointerLocation called twice");
+		this._handler = handler;
+	};
+
+	RealTimeConnectionFake.prototype.triggerOnPointerLocationEvent = function(event) {
+		failFast.unlessTrue(this._handler !== undefined, "onPointerLocation() not called before triggerOnPointerLocationEvent()");
+		this._handler(event);
 	};
 
 }());

@@ -199,6 +199,10 @@
 		return element.getRawStyle("text-transform") === "uppercase";
 	};
 
+	exports.opacity = function opacity(element) {
+		return element.getRawStyle("opacity");
+	};
+
 	exports.assertHoverStyle = function assertHoverStyle(button, expectedColor, description) {
 		applyClass(button, "_hover_", function() {
 			assert.equal(exports.backgroundColor(button), expectedColor, description + " hover state background color");

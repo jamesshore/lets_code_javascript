@@ -911,19 +911,6 @@ class Thenable {
   catch(errback) {}
 
   /**
-   * An alias for {@link #catch()}
-   *
-   * @param {function(*): (R|IThenable<R>)} errback The
-   *     function to call if this promise is rejected. The function should
-   *     expect a single argument: the rejection reason.
-   * @return {!ManagedPromise<R>} A new promise which will be
-   *     resolved wdith the result of the invoked callback.
-   * @deprecated Use {@link #catch()} instead.
-   * @template R
-   */
-  thenCatch(errback) {}
-
-  /**
    * Registers a listener to invoke when this promise is resolved, regardless
    * of whether the promise's value was successfully computed. This function
    * is synonymous with the {@code finally} clause in a synchronous API:
@@ -960,45 +947,7 @@ class Thenable {
    * @template R
    */
   finally(callback) {}
-
-  /**
-   * Registers a listener to invoke when this promise is resolved, regardless
-   * of whether the promise's value was successfully computed. This function
-   * is synonymous with the {@code finally} clause in a synchronous API:
-   *
-   *     // Synchronous API:
-   *     try {
-   *       doSynchronousWork();
-   *     } finally {
-   *       cleanUp();
-   *     }
-   *
-   *     // Asynchronous promise API:
-   *     doAsynchronousWork().thenFinally(cleanUp);
-   *
-   * __Note:__ similar to the {@code finally} clause, if the registered
-   * callback returns a rejected promise or throws an error, it will silently
-   * replace the rejection error (if any) from this promise:
-   *
-   *     try {
-   *       throw Error('one');
-   *     } finally {
-   *       throw Error('two');  // Hides Error: one
-   *     }
-   *
-   *     promise.rejected(Error('one'))
-   *         .thenFinally(function() {
-   *           throw Error('two');  // Hides Error: one
-   *         });
-   *
-   * @param {function(): (R|IThenable<R>)} callback The function
-   *     to call when this promise is resolved.
-   * @return {!ManagedPromise<R>} A promise that will be fulfilled
-   *     with the callback result.
-   * @deprecated Use {@link #finally()} instead.
-   * @template R
-   */
-  thenFinally(callback) {}}
+}
 
 
 /**
@@ -1013,12 +962,14 @@ const PromiseState = {
 
 
 /**
- * Internal symbol used to store a cancellation handler for
- * {@link ManagedPromise} objects. This is an internal implementation detail
- * used by the {@link TaskQueue} class to monitor for when a promise is
- * cancelled without generating an extra promise via then().
+ * Internal map used to store cancellation handlers for {@link ManagedPromise}
+ * objects. This is an internal implementation detail used by the
+ * {@link TaskQueue} class to monitor for when a promise is cancelled without
+ * generating an extra promise via then().
+ *
+ * @const {!WeakMap<!ManagedPromise, function(!CancellationError)>}
  */
-const CANCEL_HANDLER_SYMBOL = Symbol('on cancel');
+const ON_CANCEL_HANDLER = new WeakMap;
 
 
 /**
@@ -1029,7 +980,6 @@ const CANCEL_HANDLER_SYMBOL = Symbol('on cancel');
  * resolved.
  *
  * @implements {Thenable<T>}
- * @unrestricted
  * @template T
  * @see http://promises-aplus.github.io/promises-spec/
  */
@@ -1056,7 +1006,7 @@ class ManagedPromise {
       this.stack_ = captureStackTrace('ManagedPromise', 'new', this.constructor);
     }
 
-    /** @private {ManagedPromise<?>} */
+    /** @private {Thenable<?>} */
     this.parent_ = null;
 
     /** @private {Array<!Task>} */
@@ -1073,9 +1023,6 @@ class ManagedPromise {
 
     /** @private {TaskQueue} */
     this.queue_ = null;
-
-    /** @private {(function(CancellationError)|null)} */
-    this[CANCEL_HANDLER_SYMBOL] = null;
 
     try {
       var self = this;
@@ -1122,6 +1069,7 @@ class ManagedPromise {
       if (Thenable.isImplementation(newValue)) {
         // 2.3.2
         newValue = /** @type {!Thenable} */(newValue);
+        this.parent_ = newValue;
         newValue.then(
             this.unblockAndResolve_.bind(this, PromiseState.FULFILLED),
             this.unblockAndResolve_.bind(this, PromiseState.REJECTED));
@@ -1215,7 +1163,7 @@ class ManagedPromise {
   scheduleNotifications_() {
     vlog(2, () => this + ' scheduling notifications', this);
 
-    this[CANCEL_HANDLER_SYMBOL] = null;
+    ON_CANCEL_HANDLER.delete(this);
     if (this.value_ instanceof CancellationError
         && this.value_.silent_) {
       this.callbacks_ = null;
@@ -1243,9 +1191,10 @@ class ManagedPromise {
       this.parent_.cancel(opt_reason);
     } else {
       var reason = CancellationError.wrap(opt_reason);
-      if (this[CANCEL_HANDLER_SYMBOL]) {
-        this[CANCEL_HANDLER_SYMBOL](reason);
-        this[CANCEL_HANDLER_SYMBOL] = null;
+      let onCancel = ON_CANCEL_HANDLER.get(this);
+      if (onCancel) {
+        onCancel(reason);
+        ON_CANCEL_HANDLER.delete(this);
       }
 
       if (this.state_ === PromiseState.BLOCKED) {
@@ -1256,6 +1205,9 @@ class ManagedPromise {
     }
 
     function canCancel(promise) {
+      if (!(promise instanceof ManagedPromise)) {
+        return Thenable.isImplementation(promise);
+      }
       return promise.state_ === PromiseState.PENDING
           || promise.state_ === PromiseState.BLOCKED;
     }
@@ -1278,14 +1230,6 @@ class ManagedPromise {
         null, errback, 'catch', ManagedPromise.prototype.catch);
   }
 
-  /**
-   * @override
-   * @deprecated Use {@link #catch()} instead.
-   */
-  thenCatch(errback) {
-    return this.catch(errback);
-  }
-
   /** @override */
   finally(callback) {
     var error;
@@ -1301,14 +1245,6 @@ class ManagedPromise {
         throw error;
       }
     });
-  }
-
-  /**
-   * @override
-   * @deprecated Use {@link #finally()} instead.
-   */
-  thenFinally(callback) {
-    return this.finally(callback);
   }
 
   /**
@@ -1398,7 +1334,6 @@ Thenable.addImplementation(ManagedPromise);
  * the next turn of the event loop, the rejection will be passed to the
  * {@link ControlFlow} as an unhandled failure.
  *
- * @implements {Thenable<T>}
  * @template T
  */
 class Deferred {
@@ -1442,122 +1377,6 @@ class Deferred {
       reject(opt_reason);
     };
   }
-
-  /** @override */
-  isPending() {
-    return this.promise.isPending();
-  }
-
-  /** @override */
-  cancel(opt_reason) {
-    this.promise.cancel(opt_reason);
-  }
-
-  /**
-   * @override
-   * @deprecated Use {@code then} from the promise property directly.
-   */
-  then(opt_cb, opt_eb) {
-    return this.promise.then(opt_cb, opt_eb);
-  }
-
-  /**
-   * @override
-   * @deprecated Use {@lcode catch} from the promise property directly.
-   */
-  catch(opt_eb) {
-    return this.promise.catch(opt_eb);
-  }
-
-  /**
-   * @override
-   * @deprecated Use {@code thenCatch} from the promise property directly.
-   */
-  thenCatch(opt_eb) {
-    return this.promise.thenCatch(opt_eb);
-  }
-
-  /**
-   * @override
-   * @deprecated Use {@code thenFinally} from the promise property directly.
-   */
-  thenFinally(opt_cb) {
-    return this.promise.thenFinally(opt_cb);
-  }
-
-  /**
-   * @override
-   * @deprecated Use {@code finally} from the promise property directly.
-   */
-  finally(opt_cb) {
-    return this.promise.finally(opt_cb);
-  }
-}
-Thenable.addImplementation(Deferred);
-
-
-/**
- * Registers a listener to invoke when a promise is resolved, regardless of
- * whether the promise's value was successfully computed. This function is
- * synonymous with the `finally` clause in a synchronous API:
- *
- *     // Synchronous API:
- *     try {
- *       doSynchronousWork();
- *     } finally {
- *       cleanUp();
- *     }
- *
- *     // Asynchronous promise API:
- *     promise.finally(doAsynchronousWork(), cleanUp);
- *
- * __Note:__ similar to the `finally` clause, if the registered callback returns
- * a rejected promise or throws an error, that error will silently replace the
- * rejection (if any) from the initial promise:
- *
- *     try {
- *       throw Error('one');
- *     } finally {
- *       throw Error('two');  // Hides Error: one
- *     }
- *
- *     let p = promise.rejected(Error('one'));
- *     promise.finally(p, function() {
- *       throw Error('two');  // Hides Error: one
- *     });
- *
- * @param {PROMISE_TYPE} promise The thenable, promise-like object with which
- *     to register the callback.
- * @param {function(): *} callback The function to call when the promise is
- *     resolved.
- * @return {!PROMISE_TYPE} A new promise that is chained to the callback. This
- *     promise will inherit the value of the original input if the callback
- *     does not throw or return a rejected promise.
- * @template PROMISE_TYPE
- * @deprecated
- */
-function thenFinally(promise, callback) {
-  if (!isPromise(promise)) {
-    throw TypeError('first argument must be a promise-like object');
-  }
-
-  if (typeof callback !== 'function') {
-    throw TypeError('second argument must be a function');
-  }
-
-  let error;
-  let mustThrow = false;
-  return promise
-      .then(() => callback(), (e) => {
-        error = e;
-        mustThrow = true;
-        return callback();
-      })
-      .then(() => {
-        if (mustThrow) {
-          throw error;
-        }
-      });
 }
 
 
@@ -2750,8 +2569,9 @@ class TaskQueue extends events.EventEmitter {
 
     this.tasks_.push(task);
     task.queue = this;
-    task.promise[CANCEL_HANDLER_SYMBOL] =
-        this.onTaskCancelled_.bind(this, task);
+    ON_CANCEL_HANDLER.set(
+        task.promise,
+        (e) => this.onTaskCancelled_(task, e));
 
     vlog(1, () => this + '.enqueue(' + task + ')', this);
     vlog(2, () => this.flow_.toString(), this);
@@ -2784,7 +2604,9 @@ class TaskQueue extends events.EventEmitter {
         return;
       }
 
-      cb.promise[CANCEL_HANDLER_SYMBOL] = this.onTaskCancelled_.bind(this, cb);
+      ON_CANCEL_HANDLER.set(
+          cb.promise,
+          (e) => this.onTaskCancelled_(cb, e));
 
       if (cb.queue === this && this.tasks_.indexOf(cb) !== -1) {
         return;
@@ -2850,7 +2672,8 @@ class TaskQueue extends events.EventEmitter {
 
     if (this.pending_) {
       vlog(2, () => this + '.abort(); cancelling pending task', this);
-      this.pending_.task.cancel(/** @type {!CancellationError} */(error));
+      this.pending_.task.promise.cancel(
+          /** @type {!CancellationError} */(error));
 
     } else {
       vlog(2, () => this + '.abort(); emitting error event', this);
@@ -3166,7 +2989,7 @@ function consume(generatorFn, opt_self, var_args) {
   }
 
   function pump(fn, opt_arg) {
-    if (!deferred.isPending()) {
+    if (!deferred.promise.isPending()) {
       return;  // Defererd was cancelled; silently abort.
     }
 
@@ -3214,7 +3037,6 @@ module.exports = {
   map: map,
   rejected: rejected,
   setDefaultFlow: setDefaultFlow,
-  thenFinally: thenFinally,
   when: when,
 
   get LONG_STACK_TRACES() { return LONG_STACK_TRACES; },

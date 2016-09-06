@@ -27,6 +27,8 @@ Minimum Marketable Features:
 
 User Stories to finish current MMF:
 * see other users' mouse pointers
+- send pointer events on touch, not just mouse move?
+- make mouse pointer disappear when it leaves drawing area?
 - multi-user clear button
 - multi-user line drawing
 - other users' mouse pointers disappear when they leave the drawing area
@@ -38,8 +40,6 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
-* Client: Receive pointer status from server
-- Client: Make client display "ghost" pointers for other users
 - Open question: how to make sure our test double matches our real code?
 	- Use sinon.js? testdouble.js?
 - Revisit Martin Grandrath's client connection design question (in E399)
@@ -48,10 +48,7 @@ Engineering Tasks:
 - Figure out how to de-dupe require paths for common files (such as "_assert.js")
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 - Update smoke tests for real-time networking
+	- Replace Selenium? Fix it?
+	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-* AT START OF EPISODE:
-	- Updated dependencies and Node version (6.3.0)
-	- Fixed assert.deepEqual to be strict (used big-object-diff)
-		- Exposed minor bug in SvgCanvas.lineSegments()
-- Modify client.js to prove that we get pointer events

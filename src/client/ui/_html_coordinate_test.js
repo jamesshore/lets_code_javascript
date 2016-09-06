@@ -211,6 +211,13 @@
 				assert.objNotEqual(coord1, coord2);
 			});
 
+			it("ignores minor rendering corrections", function() {
+				// When an element is rendered, it's sometimes positioned in a slighly different location than our
+				// calculated coordinate. We still want that position to be considered equal to the one we calculated.
+				assert.objEqual(HtmlCoordinate.fromPageOffset(10, 20), HtmlCoordinate.fromPageOffset(10.0099, 20), "x");
+				assert.objEqual(HtmlCoordinate.fromPageOffset(10, 20), HtmlCoordinate.fromPageOffset(10, 19.991), "y");
+			});
+
 		});
 	});
 

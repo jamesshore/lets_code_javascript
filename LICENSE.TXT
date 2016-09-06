@@ -1,6 +1,7 @@
 License
 -------
-Copyright (c) 2012-2013 Titanium I.T. LLC
+Copyright (c) 2012-2016 Titanium I.T. LLC except for Third-Party Material
+stated below.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -16,3 +17,18 @@ THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+
+Third-Party Material
+--------------------
+Copyrights for some files belong to third parties. They have been included
+in their redistributable form and any existing copyright and license notices
+remain intact. These files may be found in the following locations:
+
+* `node_modules`
+* various `vendor` directories
+
+In addition, the file `src/client/content/images/cursor.png` is based on
+"near me" icon included in Google's Material Icons set, which is licensed
+under the Apache License Version 2.0. For more information, see:
+	https://design.google.com/icons/

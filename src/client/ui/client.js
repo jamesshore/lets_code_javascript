@@ -15,6 +15,7 @@
 	var lineDrawn = false;
 	var drawingArea;
 	var clearScreenButton;
+	var pointerHtml;
 	var documentBody;
 	var windowElement;
 	var network;
@@ -24,23 +25,22 @@
 
 		drawingArea = elements.drawingAreaDiv;
 		clearScreenButton = elements.clearScreenButton;
+		pointerHtml = elements.pointerHtml;
 
 		failFast.unlessDefined(drawingArea, "elements.drawingArea");
 		failFast.unlessDefined(clearScreenButton, "elements.clearScreenButton");
+		failFast.unlessDefined(pointerHtml, "elements.pointerHtml");
 
 		documentBody = new HtmlElement(document.body);
 		windowElement = new HtmlElement(window);
-
 		svgCanvas = new SvgCanvas(drawingArea);
+		network = realTimeConnection;
 
 		drawingArea.preventBrowserDragDefaults();
-		sendPointerEventsOverNetwork();
+		handleRealTimeNetworking();
 		handleClearScreenClick();
 		handleMouseDragEvents();
 		handleTouchDragEvents();
-
-		network = realTimeConnection;
-		network.connect(window.location.port);
 
 		return svgCanvas;
 	};
@@ -49,11 +49,26 @@
 		svgCanvas = null;
 	};
 
-	function sendPointerEventsOverNetwork() {
-		drawingArea.onMouseMove(function(coordinate) {
-			var relativeOffset = coordinate.toRelativeOffset(drawingArea);
-			network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
+	function handleRealTimeNetworking() {
+		network.connect(window.location.port);
+
+		documentBody.onMouseMove(sendPointerEvent);
+
+		var eventIds = {};
+		network.onPointerLocation(function(event) {
+			var pointerElement = eventIds[event.id];
+			if (pointerElement === undefined) {
+				pointerElement = HtmlElement.appendHtmlToBody(pointerHtml);
+				eventIds[event.id] = pointerElement;
+			}
+			pointerElement.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, event.x, event.y));
 		});
+	}
+
+
+	function sendPointerEvent(coordinate) {
+		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
+		network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
 	}
 
 	function handleClearScreenClick() {

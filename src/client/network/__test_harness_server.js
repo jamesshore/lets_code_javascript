@@ -4,18 +4,15 @@
 	"use strict";
 
 	var shared = require("./__test_harness_shared.js");
+	var http = require("http");
+	var socketIo = require("socket.io");
+	var url = require("url");
+	var querystring = require("querystring");
 
 	var endpoints = shared.endpoints;
 
 	// The network test harness is started inside of the build script before the network tests are run
 	exports.start = function() {
-		// We do our requires here so karma-commonjs doesn't complain. This file is processed by Karma even
-		// though it never runs on the client. This makes our Karma configuration a bit easier.
-		var http = require("http");
-		var socketIo = require("socket.io");
-		var url = require("url");
-		var querystring = require("querystring");
-
 		var httpServer = http.createServer();
 		httpServer.on("request", handleResponse);
 		var io = socketIo(httpServer);
