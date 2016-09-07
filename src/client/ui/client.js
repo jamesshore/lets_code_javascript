@@ -65,7 +65,6 @@
 		});
 	}
 
-
 	function sendPointerEvent(coordinate) {
 		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
 		network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
