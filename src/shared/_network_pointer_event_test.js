@@ -7,11 +7,12 @@
 
 	describe("UI: Network Pointer Event", function() {
 
-		it("converts bare objects to NetworkPointerEvents", function() {
+		it("converts bare objects to NetworkPointerEvents and back", function() {
 			var bareObject = { id: "a", x: 1, y: 2 };
-			var expected = new NetworkPointerEvent("a", 1, 2);
+			var eventObject = new NetworkPointerEvent("a", 1, 2);
 
-			assert.deepEqual(NetworkPointerEvent.fromObject(bareObject), expected);
+			assert.deepEqual(NetworkPointerEvent.fromObject(bareObject), eventObject, "fromSerializableObject()");
+			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
 		});
 
 	});

@@ -14,4 +14,12 @@
 		return new NetworkPointerEvent(obj.id, obj.x, obj.y);
 	};
 
+	NetworkPointerEvent.prototype.toSerializableObject = function toSerializableObject() {
+		return {
+			id: this.id,
+			x: this.x,
+			y: this.y
+		};
+	};
+
 }());

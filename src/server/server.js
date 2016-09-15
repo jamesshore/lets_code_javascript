@@ -41,9 +41,9 @@
 
 	function handleSocketIoEvents(ioServer) {
 		ioServer.on("connect", function(socket) {
-			socket.on("mouse", function(data) {
-				var event = new NetworkPointerEvent(socket.id, data.x, data.y);
-				socket.broadcast.emit(NetworkPointerEvent.EVENT_NAME, event);
+			socket.on("mouse", function(clientEvent) {
+				var serverEvent = new NetworkPointerEvent(socket.id, clientEvent.x, clientEvent.y);
+				socket.broadcast.emit(NetworkPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());
 			});
 		});
 	}

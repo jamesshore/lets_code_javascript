@@ -53,7 +53,9 @@ Engineering Tasks:
 
 To Do on current task:
 * Add serializer to NetworkPointerEvent object and refactor to use that
-- Create a client-side 'event' object that replaces bare event object
+	- Rename NetworkPointerEvent.fromObject() --> fromSerializableObject()
+	- Rename NetworkPointerEvent --> ServerPointerEvent
+- Create a ClientPointerEvent that replaces bare event object
 - Fix Jake so that shared tests run under their own quick build target (run on server and client?)
 - Do we have a separate client and server event object?
 - Address "mouse" event name duplication
