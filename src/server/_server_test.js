@@ -165,7 +165,7 @@
 			var receiver1 = createSocket();
 			var receiver2 = createSocket();
 
-			emitter.on("mouse", function() {
+			emitter.on(ServerPointerEvent.EVENT_NAME, function() {
 				assert.fail("emitter should not receive its own events");
 			});
 
@@ -180,7 +180,7 @@
 				});
 			}, end);
 
-			emitter.emit("mouse", new ClientPointerEvent(EXPECTED_DATA.x, EXPECTED_DATA.y).toSerializableObject());
+			emitter.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(EXPECTED_DATA.x, EXPECTED_DATA.y).toSerializableObject());
 
 			function end() {
 				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);

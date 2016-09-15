@@ -42,7 +42,7 @@
 
 	function handleSocketIoEvents(ioServer) {
 		ioServer.on("connect", function(socket) {
-			socket.on("mouse", function(eventData) {
+			socket.on(ClientPointerEvent.EVENT_NAME, function(eventData) {
 				var clientEvent = ClientPointerEvent.fromSerializableObject(eventData);
 				var serverEvent = new ServerPointerEvent(socket.id, clientEvent.x, clientEvent.y);
 				socket.broadcast.emit(ServerPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());

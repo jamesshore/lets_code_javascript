@@ -33,7 +33,7 @@
 
 	Connection.prototype.sendPointerLocation = function sendPointerLocation(x, y) {
 		failFastUnlessConnectCalled(this);
-		this._socket.emit("mouse", new ClientPointerEvent(x, y).toSerializableObject());
+		this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
 	};
 
 	Connection.prototype.onPointerLocation = function onPointerLocation(handler) {
