@@ -11,7 +11,7 @@
 			var bareObject = { id: "a", x: 1, y: 2 };
 			var eventObject = new NetworkPointerEvent("a", 1, 2);
 
-			assert.deepEqual(NetworkPointerEvent.fromObject(bareObject), eventObject, "fromSerializableObject()");
+			assert.deepEqual(NetworkPointerEvent.fromSerializableObject(bareObject), eventObject, "fromSerializableObject()");
 			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
 		});
 

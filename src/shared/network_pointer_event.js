@@ -10,7 +10,7 @@
 
 	NetworkPointerEvent.EVENT_NAME = "server_pointer_event";
 
-	NetworkPointerEvent.fromObject = function fromObject(obj) {
+	NetworkPointerEvent.fromSerializableObject = function fromSerializableObject(obj) {
 		return new NetworkPointerEvent(obj.id, obj.x, obj.y);
 	};
 
