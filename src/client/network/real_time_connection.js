@@ -5,6 +5,7 @@
 
 	var failFast = require("../../shared/fail_fast.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
+	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 
 	var Connection = module.exports = function RealTimeConnection() {
 		this._connectCalled = false;
@@ -32,7 +33,8 @@
 
 	Connection.prototype.sendPointerLocation = function sendPointerLocation(x, y) {
 		failFastUnlessConnectCalled(this);
-		this._socket.emit("mouse", { x: x, y: y });
+		var clientEvent = new ClientPointerEvent(x, y);
+		this._socket.emit("mouse", clientEvent);
 	};
 
 	Connection.prototype.onPointerLocation = function onPointerLocation(handler) {

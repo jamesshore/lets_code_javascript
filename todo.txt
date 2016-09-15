@@ -53,6 +53,11 @@ Engineering Tasks:
 
 To Do on current task:
 * Create a ClientPointerEvent that replaces bare event object
+	- create a ClientPointerEvent
+	- create constructor
+	- fromSerializableObject()
+	- toSerializableObject()
+- Look at the client and server code for opportunities to move responsibilities into event objects
 - Fix Jake so that shared tests run under their own quick build target (run on server and client?)
 - Do we have a separate client and server event object?
 - Address "mouse" event name duplication
