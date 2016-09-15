@@ -37,7 +37,7 @@
 
 	Connection.prototype.onPointerLocation = function onPointerLocation(handler) {
 		failFastUnlessConnectCalled(this);
-		this._socket.on("mouse", function(eventData) {
+		this._socket.on(NetworkPointerEvent.EVENT_NAME, function(eventData) {
 			return handler(NetworkPointerEvent.fromObject(eventData));
 		});
 	};

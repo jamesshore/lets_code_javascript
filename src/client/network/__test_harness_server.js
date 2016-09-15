@@ -119,7 +119,7 @@
 
 	function setupSendPointerLocation() {
 		return function sendPointerLocationEndpoint(socket, data, request, response) {
-			socket.emit("mouse", new NetworkPointerEvent(data.id, data.x, data.y));
+			socket.emit(NetworkPointerEvent.EVENT_NAME, data);
 
 			return response.end("ok");
 		};

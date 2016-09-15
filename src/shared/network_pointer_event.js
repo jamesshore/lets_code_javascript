@@ -8,6 +8,8 @@
 		this.y = y;
 	};
 
+	NetworkPointerEvent.EVENT_NAME = "server_pointer_event";
+
 	NetworkPointerEvent.fromObject = function fromObject(obj) {
 		return new NetworkPointerEvent(obj.id, obj.x, obj.y);
 	};
