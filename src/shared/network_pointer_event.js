@@ -8,4 +8,8 @@
 		this.y = y;
 	};
 
+	NetworkPointerEvent.fromObject = function fromObject(obj) {
+		return new NetworkPointerEvent(obj.id, obj.x, obj.y);
+	};
+
 }());

@@ -88,19 +88,15 @@
 
 	exports.deepEqual = function(actual, expected, message) {
 		message = message ? message + ": " : "";
+
 		// We use objectDiff.match() instead of proclaim.deepEqual() because Proclaim doesn't do strict
 		// equality checking in its deepEqual() assertion and objectDiff does.
-
 		if (!objectDiff.match(actual, expected)) {
 			var expectedString = JSON.stringify(expected);
 			var actualString = JSON.stringify(actual);
 
-			if (expectedString !== actualString) {
-				message += "expected " + expectedString + ", but got " + actualString;
-			}
-			else {
-				message += "object prototype expected " + describeObject(expected) + ", but got " + describeObject(actual);
-			}
+			if (expectedString !== actualString) message += "expected " + expectedString + ", but got " + actualString;
+			else message += "object prototype expected " + describeObject(expected) + ", but got " + describeObject(actual);
 
 			proclaim.fail(
 				actual,

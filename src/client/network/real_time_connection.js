@@ -4,6 +4,7 @@
 	"use strict";
 
 	var failFast = require("../../shared/fail_fast.js");
+	var NetworkPointerEvent = require("../../shared/network_pointer_event.js");
 
 	var Connection = module.exports = function RealTimeConnection() {
 		this._connectCalled = false;
@@ -36,8 +37,8 @@
 
 	Connection.prototype.onPointerLocation = function onPointerLocation(handler) {
 		failFastUnlessConnectCalled(this);
-		this._socket.on("mouse", function(event) {
-			return handler(event);
+		this._socket.on("mouse", function(eventData) {
+			return handler(NetworkPointerEvent.fromObject(eventData));
 		});
 	};
 

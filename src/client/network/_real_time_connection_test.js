@@ -8,7 +8,7 @@
 	var async = require("./vendor/async-1.5.2.js");
 	var NetworkPointerEvent = require("../../shared/network_pointer_event.js");
 
-	describe("NET: Real Time Network", function() {
+	describe("NET: Real Time Connection", function() {
 
 		var connection;
 
