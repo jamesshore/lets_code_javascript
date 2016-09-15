@@ -9,6 +9,7 @@
 	var assert = require("../shared/_assert.js");
 	var io = require("socket.io-client");
 	var ServerPointerEvent = require("../shared/server_pointer_event.js");
+	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 
 	var CONTENT_DIR = "generated/test";
 
@@ -179,7 +180,7 @@
 				});
 			}, end);
 
-			emitter.emit("mouse", EXPECTED_DATA);
+			emitter.emit("mouse", new ClientPointerEvent(EXPECTED_DATA.x, EXPECTED_DATA.y).toSerializableObject());
 
 			function end() {
 				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);

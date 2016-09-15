@@ -7,6 +7,10 @@
 		this.y = y;
 	};
 
+	ClientPointerEvent.fromSerializableObject = function fromSerializableObject(obj) {
+		return new ClientPointerEvent(obj.x, obj.y);
+	};
+
 	ClientPointerEvent.prototype.toSerializableObject = function toSerializableObject() {
 		return {
 			x: this.x,
