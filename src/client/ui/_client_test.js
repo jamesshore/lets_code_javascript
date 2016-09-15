@@ -10,7 +10,7 @@
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("../../shared/_assert.js");
 	var failFast = require("../../shared/fail_fast.js");
-	var NetworkPointerEvent = require("../../shared/network_pointer_event.js");
+	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 
 	mocha.setup({ignoreLeaks: true});
 
@@ -379,7 +379,7 @@
 				// Object.assign would be preferable here, but it's not supported on IE 11 or Chrome Mobile 44
 				// Feel free to rewrite this to use Object.assign when those browsers are no longer supported
 				if (event === undefined) event = {};
-				return new NetworkPointerEvent(
+				return new ServerPointerEvent(
 					event.id || "irrelevant_id",
 					event.x || 0,
 					event.y || 0

@@ -6,7 +6,7 @@
 	var harness = require("./__test_harness_client.js");
 	var Connection = require("./real_time_connection.js");
 	var async = require("./vendor/async-1.5.2.js");
-	var NetworkPointerEvent = require("../../shared/network_pointer_event.js");
+	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 
 	describe("NET: Real Time Connection", function() {
 
@@ -53,7 +53,7 @@
 		});
 
 		it("receives pointer status from Socket.IO server", function(done) {
-			var EXPECTED_EVENT = new NetworkPointerEvent(0xdeadbeef, 90, 160);
+			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
 
 			connection.connect(harness.PORT, function() {
 

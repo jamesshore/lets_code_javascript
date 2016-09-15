@@ -8,7 +8,7 @@
 	var socketIo = require("socket.io");
 	var url = require("url");
 	var querystring = require("querystring");
-	var NetworkPointerEvent = require("../../shared/network_pointer_event.js");
+	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 
 	var endpoints = shared.endpoints;
 
@@ -119,7 +119,7 @@
 
 	function setupSendPointerLocation() {
 		return function sendPointerLocationEndpoint(socket, data, request, response) {
-			socket.emit(NetworkPointerEvent.EVENT_NAME, data);
+			socket.emit(ServerPointerEvent.EVENT_NAME, data);
 
 			return response.end("ok");
 		};

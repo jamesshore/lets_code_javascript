@@ -8,7 +8,7 @@
 	var async = require("async");
 	var assert = require("../shared/_assert.js");
 	var io = require("socket.io-client");
-	var NetworkPointerEvent = require("../shared/network_pointer_event.js");
+	var ServerPointerEvent = require("../shared/server_pointer_event.js");
 
 	var CONTENT_DIR = "generated/test";
 
@@ -169,7 +169,7 @@
 			});
 
 			async.each([ receiver1, receiver2 ], function(client, next) {
-				client.on(NetworkPointerEvent.EVENT_NAME, function(data) {
+				client.on(ServerPointerEvent.EVENT_NAME, function(data) {
 					assert.deepEqual(data, {
 						id: "/#" + emitter.id,           // should add unique sender ID to data
 						x: EXPECTED_DATA.x,

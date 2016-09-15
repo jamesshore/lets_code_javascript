@@ -4,7 +4,7 @@
 	"use strict";
 
 	var failFast = require("../../shared/fail_fast.js");
-	var NetworkPointerEvent = require("../../shared/network_pointer_event.js");
+	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 
 	var Connection = module.exports = function RealTimeConnection() {
 		this._connectCalled = false;
@@ -37,8 +37,8 @@
 
 	Connection.prototype.onPointerLocation = function onPointerLocation(handler) {
 		failFastUnlessConnectCalled(this);
-		this._socket.on(NetworkPointerEvent.EVENT_NAME, function(eventData) {
-			return handler(NetworkPointerEvent.fromSerializableObject(eventData));
+		this._socket.on(ServerPointerEvent.EVENT_NAME, function(eventData) {
+			return handler(ServerPointerEvent.fromSerializableObject(eventData));
 		});
 	};
 
