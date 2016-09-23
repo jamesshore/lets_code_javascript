@@ -19,6 +19,7 @@
 	var documentBody;
 	var windowElement;
 	var network;
+	var eventIds;
 
 	exports.initializeDrawingArea = function(elements, realTimeConnection) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
@@ -35,6 +36,7 @@
 		windowElement = new HtmlElement(window);
 		svgCanvas = new SvgCanvas(drawingArea);
 		network = realTimeConnection;
+		eventIds = {};
 
 		drawingArea.preventBrowserDragDefaults();
 		handleRealTimeNetworking();
@@ -51,29 +53,12 @@
 
 	function handleRealTimeNetworking() {
 		network.connect(window.location.port);
-
 		documentBody.onMouseMove(sendPointerEvent);
-
-		var eventIds = {};
-		network.onPointerLocation(function(event) {
-			var pointerElement = eventIds[event.id];
-			if (pointerElement === undefined) {
-				pointerElement = HtmlElement.appendHtmlToBody(pointerHtml);
-				eventIds[event.id] = pointerElement;
-			}
-			pointerElement.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, event.x, event.y));
-		});
-	}
-
-	function sendPointerEvent(coordinate) {
-		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
-		network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
+		network.onPointerLocation(displayNetworkPointer);
 	}
 
 	function handleClearScreenClick() {
-		clearScreenButton.onMouseClick(function() {
-			svgCanvas.clear();
-		});
+		clearScreenButton.onMouseClick(clearDrawingArea);
 	}
 
 	function handleMouseDragEvents() {
@@ -89,6 +74,24 @@
 		drawingArea.onTouchCancel(endDrag);
 
 		drawingArea.onMultiTouchStart(endDrag);
+	}
+
+	function sendPointerEvent(coordinate) {
+		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
+		network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
+	}
+
+	function displayNetworkPointer(serverEvent) {
+		var pointerElement = eventIds[serverEvent.id];
+		if (pointerElement === undefined) {
+			pointerElement = HtmlElement.appendHtmlToBody(pointerHtml);
+			eventIds[serverEvent.id] = pointerElement;
+		}
+		pointerElement.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, serverEvent.x, serverEvent.y));
+	}
+
+	function clearDrawingArea() {
+		svgCanvas.clear();
 	}
 
 	function startDrag(coordinate) {
