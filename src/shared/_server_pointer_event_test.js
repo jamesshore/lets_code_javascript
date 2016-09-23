@@ -5,7 +5,7 @@
 	var assert = require("./_assert.js");
 	var ServerPointerEvent = require("./server_pointer_event.js");
 
-	describe("UI: ServerPointerEvent", function() {
+	describe("SHARED: ServerPointerEvent", function() {
 
 		it("converts bare objects to ServerPointerEvents and back", function() {
 			var bareObject = { id: "a", x: 1, y: 2 };

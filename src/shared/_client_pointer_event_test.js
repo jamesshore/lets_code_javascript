@@ -6,7 +6,7 @@
 	var ClientPointerEvent = require("./client_pointer_event.js");
 	var ServerPointerEvent = require("./server_pointer_event.js");
 
-	describe("UI: ClientPointerEvent", function() {
+	describe("SHARED: ClientPointerEvent", function() {
 
 		it("converts bare objects to ClientPointerEvents and back", function() {
 			var bareObject = { x: 1, y: 2 };
