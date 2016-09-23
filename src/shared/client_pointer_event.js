@@ -2,9 +2,11 @@
 (function() {
 	"use strict";
 
+	var ServerPointerEvent = require("./server_pointer_event.js");
+
 	var ClientPointerEvent = module.exports = function ServerPointerEvent(x, y) {
-		this.x = x;
-		this.y = y;
+		this._x = x;
+		this._y = y;
 	};
 
 	ClientPointerEvent.EVENT_NAME = "client_pointer_event";
@@ -15,9 +17,13 @@
 
 	ClientPointerEvent.prototype.toSerializableObject = function toSerializableObject() {
 		return {
-			x: this.x,
-			y: this.y
+			x: this._x,
+			y: this._y
 		};
+	};
+
+	ClientPointerEvent.prototype.toServerEvent = function toServerEvent(id) {
+		return new ServerPointerEvent(id, this._x, this._y);
 	};
 
 }());

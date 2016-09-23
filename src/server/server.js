@@ -44,7 +44,7 @@
 		ioServer.on("connect", function(socket) {
 			socket.on(ClientPointerEvent.EVENT_NAME, function(eventData) {
 				var clientEvent = ClientPointerEvent.fromSerializableObject(eventData);
-				var serverEvent = new ServerPointerEvent(socket.id, clientEvent.x, clientEvent.y);
+				var serverEvent = clientEvent.toServerEvent(socket.id);
 				socket.broadcast.emit(ServerPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());
 			});
 		});

@@ -52,5 +52,4 @@ Engineering Tasks:
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-* Look at the client and server code for opportunities to move responsibilities into event objects
-- Fix Jake so that shared tests run under their own quick build target (run on server and client?)
+* Fix Jake so that shared tests run under their own quick build target (run on server and client?)
