@@ -220,6 +220,10 @@ Runner.prototype.checkGlobals = function(test) {
  * @param {Error} err
  */
 Runner.prototype.fail = function(test, err) {
+  if (test.isPending()) {
+    return;
+  }
+
   ++this.failures;
   test.state = 'failed';
 
@@ -306,9 +310,11 @@ Runner.prototype.hook = function(name, fn) {
           if (name === 'beforeEach' || name === 'afterEach') {
             self.test.pending = true;
           } else {
-            suite.tests.forEach(function(test) {
+            utils.forEach(suite.tests, function(test) {
               test.pending = true;
             });
+            // a pending hook won't be executed twice.
+            hook.pending = true;
           }
         } else {
           self.failHook(hook, err);
@@ -414,6 +420,9 @@ Runner.prototype.runTest = function(fn) {
   var self = this;
   var test = this.test;
 
+  if (!test) {
+    return;
+  }
   if (this.asyncOnly) {
     test.asyncOnly = true;
   }
@@ -695,8 +704,8 @@ Runner.prototype.uncaught = function(err) {
 
   runnable.clearTimeout();
 
-  // Ignore errors if complete
-  if (runnable.state) {
+  // Ignore errors if complete or pending
+  if (runnable.state || runnable.isPending()) {
     return;
   }
   this.fail(runnable, err);
@@ -854,7 +863,7 @@ function filterOnly(suite) {
   } else {
     // Otherwise, do not run any of the tests in this suite.
     suite.tests = [];
-    suite._onlySuites.forEach(function(onlySuite) {
+    utils.forEach(suite._onlySuites, function(onlySuite) {
       // If there are other `only` tests/suites nested in the current `only` suite, then filter that `only` suite.
       // Otherwise, all of the tests on this `only` suite should be run, so don't filter it.
       if (hasOnly(onlySuite)) {
@@ -892,7 +901,7 @@ function hasOnly(suite) {
 function filterLeaks(ok, globals) {
   return filter(globals, function(key) {
     // Firefox and Chrome exposes iframes as index inside the window object
-    if (/^d+/.test(key)) {
+    if (/^\d+/.test(key)) {
       return false;
     }
 
