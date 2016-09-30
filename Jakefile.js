@@ -257,8 +257,6 @@
 	task("socketIoVersion", [], function() {
 		console.log("Checking Socket.IO versions: .");
 
-		var version = require("./build/util/version_checker.js");
-
 		var nodeServerVersion = require("socket.io/package").version;
 		var nodeClientVersion = require("socket.io-client/package").version;
 
@@ -269,13 +267,20 @@
 			);
 		}
 
-		version.check({
-			name: "Socket.IO",
-			expected: nodeServerVersion,
-			actual: nodeClientVersion,
-			strict: true
-		}, complete, fail);
-	}, { async: true });
+		var vendorClientFilename = "./src/client/network/vendor/socket.io-" + nodeServerVersion + ".js";
+		try {
+			var stat = fs().statSync(vendorClientFilename);
+			// file exists, we're all good
+		}
+		catch (err) {
+			console.log("Socket.IO vendor file version did not match or was missing!\n" +
+				"  Expected version " + nodeServerVersion + "\n" +
+				"  at location " + vendorClientFilename + "\n" +
+				"  (" + err + ")"
+			);
+			fail("Socket.IO version mismatch");
+		}
+	});
 
 
 	//*** CHECKLISTS
