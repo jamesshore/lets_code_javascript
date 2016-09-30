@@ -45,10 +45,9 @@ Engineering Tasks:
 - Figure out bundling and distribution for socket.io client
 - Figure out how to de-dupe require paths for common files (such as "_assert.js")
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
+- Increase Mocha's timeout to prevent spurious test failures due to CPU overload
 - Update smoke tests for real-time networking
 	- Replace Selenium? Fix it?
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-- At start of episode:
-	- Discuss Mattias Åslund comment, E449 (re function names)
