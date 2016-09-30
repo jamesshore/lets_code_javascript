@@ -40,9 +40,9 @@ User Stories to finish current MMF:
 - security (handling bad data, denial of service attacks)
 
 Engineering Tasks:
+* Figure out bundling and distribution for socket.io client
 - Open question: how to make sure our test double matches our real code?
 	- Use sinon.js? testdouble.js?
-- Figure out bundling and distribution for socket.io client
 - Figure out how to de-dupe require paths for common files (such as "_assert.js")
 	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 - Increase Mocha's timeout to prevent spurious test failures due to CPU overload
@@ -51,3 +51,4 @@ Engineering Tasks:
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
+* Version synchronization between socket.io and vendor/socket.io in client

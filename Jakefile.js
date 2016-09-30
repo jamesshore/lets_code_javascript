@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2012-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global desc, task, file, jake, rule, fail, complete, directory*/
 
 (function() {
@@ -41,7 +41,7 @@
 	task("default", [ "clean", "quick", "smoketest" ]);
 
 	desc("Incrementally lint and test fast targets");
-	task("quick", [ "nodeVersion", "lint", "test" ]);
+	task("quick", [ "versions", "lint", "test" ]);
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
@@ -239,6 +239,9 @@
 
 	//*** CHECK VERSIONS
 
+	desc("Check dependency versions");
+	task("versions", [ "nodeVersion", "socketIoVersion" ]);
+
 	task("nodeVersion", [], function() {
 		console.log("Checking Node.js version: .");
 		var version = require("./build/util/version_checker.js");
@@ -248,6 +251,29 @@
 			expected: require("./package.json").engines.node,
 			actual: process.version,
 			strict: strict
+		}, complete, fail);
+	}, { async: true });
+
+	task("socketIoVersion", [], function() {
+		console.log("Checking Socket.IO versions: .");
+
+		var version = require("./build/util/version_checker.js");
+
+		var nodeServerVersion = require("socket.io/package").version;
+		var nodeClientVersion = require("socket.io-client/package").version;
+
+		if (nodeServerVersion !== nodeClientVersion) {
+			fail("Socket.IO versions did not match!\n" +
+				"  socket.io: " + nodeServerVersion + "\n" +
+				"  socket.io-client: " + nodeClientVersion
+			);
+		}
+
+		version.check({
+			name: "Socket.IO",
+			expected: nodeServerVersion,
+			actual: nodeClientVersion,
+			strict: true
 		}, complete, fail);
 	}, { async: true });
 
