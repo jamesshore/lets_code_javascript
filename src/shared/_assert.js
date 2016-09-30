@@ -49,15 +49,6 @@
 		);
 	};
 
-	exports.implements = function(obj, expectedType, message) {
-		exports.type(obj, expectedType, message);
-
-		message = message ? message + ": " : "";
-		proclaim.isDefined(obj.checkAbstractMethods, message + describeObject(obj) + " does not extend an abstract class");
-		var needed = obj.checkAbstractMethods();
-		proclaim.isTrue(needed.length === 0, message + "must implement " + needed.join(" and "));
-	};
-
 	exports.equal = function(actual, expected, message) {
 		message = message ? message + ": " : "";
 		var expectedType = typeof expected;
@@ -97,13 +88,20 @@
 
 	exports.deepEqual = function(actual, expected, message) {
 		message = message ? message + ": " : "";
+
 		// We use objectDiff.match() instead of proclaim.deepEqual() because Proclaim doesn't do strict
 		// equality checking in its deepEqual() assertion and objectDiff does.
 		if (!objectDiff.match(actual, expected)) {
+			var expectedString = JSON.stringify(expected);
+			var actualString = JSON.stringify(actual);
+
+			if (expectedString !== actualString) message += "expected " + expectedString + ", but got " + actualString;
+			else message += "object prototype expected " + describeObject(expected) + ", but got " + describeObject(actual);
+
 			proclaim.fail(
 				actual,
 				expected,
-				message + "expected " + JSON.stringify(expected) + ", but got " + JSON.stringify(actual)
+				message
 			);
 		}
 	};
@@ -158,7 +156,7 @@
 
 	function describeObject(obj) {
 		var actualType = "unknown";
-		var prototype = shim.Object.getPrototypeOf(obj);
+		var prototype = Object.getPrototypeOf(obj);
 		if (prototype === null) actualType = "object without a prototype";
 		else if (prototype.constructor) actualType = shim.Function.name(prototype.constructor);
 		return actualType;

@@ -6,7 +6,7 @@
 	var FailFastException = failFast.FailFastException;
 	var assert = require("./_assert.js");
 
-	describe("UI: Fail Fast module", function() {
+	describe("SHARED: Fail Fast module", function() {
 
 		it("uses custom exception", function() {
 			try {

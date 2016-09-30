@@ -8,6 +8,8 @@
 	var socketIo = require("socket.io");
 	var url = require("url");
 	var querystring = require("querystring");
+	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
+	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 
 	var endpoints = shared.endpoints;
 
@@ -74,7 +76,7 @@
 		var lastPointerLocation = {};
 
 		io.on("connection", function(socket) {
-			socket.on("mouse", function(data) {
+			socket.on(ClientPointerEvent.EVENT_NAME, function(data) {
 				lastPointerLocation[socket.id] = data;
 			});
 		});
@@ -85,7 +87,7 @@
 			var result = lastPointerLocation[socketId];
 
 			if (result === undefined) {
-				socket.on("mouse", sendResponse);
+				socket.on(ClientPointerEvent.EVENT_NAME, sendResponse);
 			}
 			else {
 				sendResponse(result);
@@ -118,7 +120,7 @@
 
 	function setupSendPointerLocation() {
 		return function sendPointerLocationEndpoint(socket, data, request, response) {
-			socket.emit("mouse", { id: data.id, x: data.x, y: data.y });
+			socket.emit(ServerPointerEvent.EVENT_NAME, data);
 
 			return response.end("ok");
 		};

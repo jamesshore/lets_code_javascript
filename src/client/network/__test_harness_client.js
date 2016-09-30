@@ -45,7 +45,7 @@
 			connection: connection,
 			endpoint: endpoints.SEND_POINTER_LOCATION,
 			async: true,
-			data: event
+			data: event.toSerializableObject()
 		}, function(err, responseText) {
 			callback();
 		});

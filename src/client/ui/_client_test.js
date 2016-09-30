@@ -9,7 +9,8 @@
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("../../shared/_assert.js");
-	var failFast = require("../../shared/fail_fast");
+	var failFast = require("../../shared/fail_fast.js");
+	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 
 	mocha.setup({ignoreLeaks: true});
 
@@ -311,6 +312,7 @@
 			});
 		}
 
+
 		describe("networking", function() {
 
 			it("connects to server upon initialization", function() {
@@ -377,11 +379,11 @@
 				// Object.assign would be preferable here, but it's not supported on IE 11 or Chrome Mobile 44
 				// Feel free to rewrite this to use Object.assign when those browsers are no longer supported
 				if (event === undefined) event = {};
-				return {
-					id: event.id || "irrelevant_id",
-					x: event.x || 0,
-					y: event.y || 0
-				};
+				return new ServerPointerEvent(
+					event.id || "irrelevant_id",
+					event.x || 0,
+					event.y || 0
+				);
 			}
 
 		});

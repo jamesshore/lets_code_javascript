@@ -6,6 +6,8 @@
 	var fs = require("fs");
 	var send = require("send");
 	var io = require('socket.io');
+	var ServerPointerEvent = require("../shared/server_pointer_event.js");
+	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 
 	var Server = module.exports = function Server() {};
 
@@ -40,12 +42,10 @@
 
 	function handleSocketIoEvents(ioServer) {
 		ioServer.on("connect", function(socket) {
-			socket.on("mouse", function(data) {
-				socket.broadcast.emit("mouse", {
-					id: socket.id,
-					x: data.x,
-					y: data.y
-				});
+			socket.on(ClientPointerEvent.EVENT_NAME, function(eventData) {
+				var clientEvent = ClientPointerEvent.fromSerializableObject(eventData);
+				var serverEvent = clientEvent.toServerEvent(socket.id);
+				socket.broadcast.emit(ServerPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());
 			});
 		});
 	}

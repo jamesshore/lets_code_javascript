@@ -29,6 +29,10 @@
 		return deglob("src/server/**/_*_test.js");
 	};
 
+	exports.sharedTestFiles = function() {
+		return deglob("src/shared/**/_*_test.js");
+	};
+
 	exports.cssTestDependencies = function() {
 		return deglob([
 			"src/client/content/**/*",
@@ -43,6 +47,12 @@
 		]);
 	};
 
+	exports.sharedJsTestDependencies = function() {
+		return deglob([
+			"src/shared/**/*"
+		]);
+	};
+
 	exports.clientNetworkTestDependencies = function() {
 		return deglob([
 			"src/client/network/**/*.js",
@@ -50,7 +60,7 @@
 		]);
 	};
 
-	exports.serverFiles = function() {
+	exports.serverTestDependencies = function() {
 		return deglob([
 			"src/server/**/*.js",
 			"src/shared/**/*.js"

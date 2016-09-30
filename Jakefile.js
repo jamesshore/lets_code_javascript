@@ -86,13 +86,16 @@
 	//*** TEST
 
 	desc("Test everything (except smoke tests)");
-	task("test", [ "testServer", "testClient" ]);
+	task("test", [ "testShared", "testServer", "testClient" ]);
 
 	desc("Test client code");
-	task("testClient", [ "testClientJavaScript", "testClientNetwork", "testClientCss" ]);
+	task("testClient", [ "testClientUi", "testClientNetwork", "testClientCss" ]);
+
+	desc("Test shared code");
+	task("testShared", [ "testSharedOnServer", "testSharedOnClient" ]);
 
 	desc("Test server code");
-	incrementalTask("testServer", [ paths.tempTestfileDir ], paths.serverFiles(), function(complete, fail) {
+	incrementalTask("testServer", [ paths.tempTestfileDir ], paths.serverTestDependencies(), function(complete, fail) {
 		console.log("Testing server JavaScript: ");
 		mochaRunner().runTests({
 			files: paths.serverTestFiles(),
@@ -100,7 +103,20 @@
 		}, complete, fail);
 	});
 
-	incrementalTask("testClientJavaScript", [], paths.clientJsTestDependencies(), function(complete, fail) {
+	incrementalTask("testSharedOnServer", [], paths.sharedJsTestDependencies(), function(complete, fail) {
+		console.log("Testing shared JavaScript on server: ");
+		mochaRunner().runTests({
+			files: paths.sharedTestFiles(),
+			options: mochaConfig()
+		}, complete, fail);
+	});
+
+	incrementalTask("testSharedOnClient", [], paths.sharedJsTestDependencies(), function(complete, fail) {
+		console.log("Testing shared JavaScript on client: ");
+		runKarmaOnTaggedSubsetOfTests("SHARED", complete, fail);
+	});
+
+	incrementalTask("testClientUi", [], paths.clientJsTestDependencies(), function(complete, fail) {
 		console.log("Testing browser UI code: ");
 		runKarmaOnTaggedSubsetOfTests("UI", complete, fail);
 	});

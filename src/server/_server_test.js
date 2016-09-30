@@ -8,6 +8,8 @@
 	var async = require("async");
 	var assert = require("../shared/_assert.js");
 	var io = require("socket.io-client");
+	var ServerPointerEvent = require("../shared/server_pointer_event.js");
+	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 
 	var CONTENT_DIR = "generated/test";
 
@@ -163,12 +165,12 @@
 			var receiver1 = createSocket();
 			var receiver2 = createSocket();
 
-			emitter.on("mouse", function() {
+			emitter.on(ServerPointerEvent.EVENT_NAME, function() {
 				assert.fail("emitter should not receive its own events");
 			});
 
 			async.each([ receiver1, receiver2 ], function(client, next) {
-				client.on("mouse", function(data) {
+				client.on(ServerPointerEvent.EVENT_NAME, function(data) {
 					assert.deepEqual(data, {
 						id: "/#" + emitter.id,           // should add unique sender ID to data
 						x: EXPECTED_DATA.x,
@@ -178,7 +180,7 @@
 				});
 			}, end);
 
-			emitter.emit("mouse", EXPECTED_DATA);
+			emitter.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(EXPECTED_DATA.x, EXPECTED_DATA.y).toSerializableObject());
 
 			function end() {
 				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);

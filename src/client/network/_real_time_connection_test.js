@@ -6,8 +6,10 @@
 	var harness = require("./__test_harness_client.js");
 	var Connection = require("./real_time_connection.js");
 	var async = require("./vendor/async-1.5.2.js");
+	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
+	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 
-	describe("NET: Real Time Network", function() {
+	describe("NET: Real Time Connection", function() {
 
 		var connection;
 
@@ -45,18 +47,14 @@
 				connection.sendPointerLocation(50, 75);
 
 				harness.waitForPointerLocation(connection, function(error, location) {
-					assert.deepEqual(location, { x: 50, y: 75 });
+					assert.deepEqual(location, new ClientPointerEvent(50, 75).toSerializableObject());
 					connection.disconnect(done);
 				});
 			});
 		});
 
 		it("receives pointer status from Socket.IO server", function(done) {
-			var EXPECTED_EVENT = {
-				id: 0xdeadbeef,
-				x: 90,
-				y: 160
-			};
+			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
 
 			connection.connect(harness.PORT, function() {
 
