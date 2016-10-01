@@ -102,4 +102,4 @@ Then, to deploy:
 
 1. Run `./jake.sh deploy` (Unix/Mac) or `jake deploy` (Windows) for instructions
 
-*Note:* The master and integration branches are not guaranteed to deploy successfully. The last known-good deploy was commit 19ecffa0b7c152c77dbed4ffe8cceaf3f44d6fce. We'll establish better deployment practices in a future chapter of the screencast.
+*Note:* The master and integration branches are not guaranteed to deploy successfully. The last known-good deploy was commit 0eabb0cd7b9f16a9375cb8b16a1d449570d23162. We'll establish better deployment practices in a future chapter of the screencast.
