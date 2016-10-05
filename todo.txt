@@ -38,6 +38,7 @@ User Stories to finish current MMF:
 - load management
 - server monitoring / error handling
 - security (handling bad data, denial of service attacks)
+	- nsp, snyk
 
 Engineering Tasks:
 - Open question: how to make sure our test double matches our real code?
