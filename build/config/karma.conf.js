@@ -14,6 +14,7 @@ module.exports = function(config) {
 
 		// list of files / patterns to load in the browser
 		files: [
+			'src/node_modules/**/*.js',
 			'src/client/**/*.js',
 			'src/shared/**/*.js',
 			{ pattern: 'src/client/content/vendor/normalize-3.0.2.css', included: false },
@@ -29,6 +30,7 @@ module.exports = function(config) {
 
 		// preprocessors
 		preprocessors: {
+			'src/node_modules/*.js': [ 'commonjs' ],
 			'src/client/content/*.js': [ 'commonjs' ],
 			'src/client/ui/*.js': [ 'commonjs' ],
 			'src/client/network/*.js': [ 'commonjs' ],

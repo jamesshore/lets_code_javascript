@@ -8,7 +8,7 @@
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var browser = require("./browser.js");
-	var failFast = require("../../shared/fail_fast.js");
+	var failFast = require("fail_fast");
 
 	var svgCanvas = null;
 	var start = null;

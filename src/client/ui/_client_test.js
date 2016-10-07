@@ -9,7 +9,7 @@
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("../../shared/_assert.js");
-	var failFast = require("../../shared/fail_fast.js");
+	var failFast = require("fail_fast");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 
 	mocha.setup({ignoreLeaks: true});
