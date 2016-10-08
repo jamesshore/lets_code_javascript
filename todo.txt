@@ -41,8 +41,7 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-* Figure out how to de-dupe require paths for common files (such as "_assert.js")
-- Open question: how to make sure our test double matches our real code?
+* Open question: how to make sure our test double matches our real code?
 	- Use sinon.js? testdouble.js?
 - Increase Mocha's timeout to prevent spurious test failures due to CPU overload
 - Update smoke tests for real-time networking
@@ -51,7 +50,10 @@ Engineering Tasks:
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-- AT START OF EPISODE:
-	- Finished moving fail_fast.js and _assert.js to node_modules
-	- karma-commonjs bug on Windows (patched locally) -- see https://github.com/karma-runner/karma-commonjs/pull/54
-	- Updated quick build to work with src/node_modules
+- Factory for creating a null RealTimeConnection
+- connect
+- disconnect
+- sendPointerLocation
+- onPointerLocation
+- getSocketId
+- isConnected

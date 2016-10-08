@@ -9,7 +9,7 @@
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 
-	describe("NET: Real Time Connection", function() {
+	describe("NET: RealTimeConnection", function() {
 
 		var connection;
 
@@ -98,6 +98,29 @@
 				assert.fail("Callback should never be called");
 			}
 		});
+
+	});
+
+	describe("NET: Null RealTimeConnection", function() {
+
+		var connection;
+
+		beforeEach(function() {
+			connection = Connection.createNull();
+		});
+
+		it("connects and disconnects without talking to Socket.IO server", function(done) {
+			connection.connect(harness.PORT, function(err) {
+				assert.equal(err, null, "connect() should not have error");
+				assert.equal(harness.isConnected(connection), false, "client should not have connected to server");
+
+				// connection.disconnect(function(err2) {
+				// 	assert.equal(err2, null, "disconnect() should not have error");
+				// 	harness.waitForServerDisconnect(connection, done);   // will timeout if disconnect doesn't work
+				// });
+			});
+		});
+
 	});
 
 }());

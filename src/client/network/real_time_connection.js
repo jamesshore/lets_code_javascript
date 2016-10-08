@@ -7,12 +7,16 @@
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 
-	var Connection = module.exports = function RealTimeConnection() {
+	var Connection = module.exports = function() {
 		this._connectCalled = false;
 		this._socket = null;
 	};
 
-	Connection.prototype.connect = function connect(port, callback) {
+	Connection.createNull = function() {
+		return new Connection();
+	};
+
+	Connection.prototype.connect = function(port, callback) {
 		this._connectCalled = true;
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
 		this._socket = io(origin);
@@ -22,7 +26,7 @@
 		});
 	};
 
-	Connection.prototype.disconnect = function disconnect(callback) {
+	Connection.prototype.disconnect = function(callback) {
 		failFastUnlessConnectCalled(this);
 
 		this._socket.on("disconnect", function() {
@@ -31,24 +35,24 @@
 		this._socket.close();
 	};
 
-	Connection.prototype.sendPointerLocation = function sendPointerLocation(x, y) {
+	Connection.prototype.sendPointerLocation = function(x, y) {
 		failFastUnlessConnectCalled(this);
 		this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
 	};
 
-	Connection.prototype.onPointerLocation = function onPointerLocation(handler) {
+	Connection.prototype.onPointerLocation = function(handler) {
 		failFastUnlessConnectCalled(this);
 		this._socket.on(ServerPointerEvent.EVENT_NAME, function(eventData) {
 			return handler(ServerPointerEvent.fromSerializableObject(eventData));
 		});
 	};
 
-	Connection.prototype.getSocketId = function getSocketId() {
+	Connection.prototype.getSocketId = function() {
 		failFastUnlessConnectCalled(this);
 		return this._socket.id;
 	};
 
-	Connection.prototype.isConnected = function isConnected() {
+	Connection.prototype.isConnected = function() {
 		return this._socket !== null && this._socket.connected;
 	};
 
