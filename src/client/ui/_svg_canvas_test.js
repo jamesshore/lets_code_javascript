@@ -7,7 +7,7 @@
 	var SvgCanvas = require("./svg_canvas.js");
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
-	var assert = require("../../shared/_assert.js");
+	var assert = require("_assert");
 
 	describe("UI: SvgCanvas", function() {
 

@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var failFast = require("../../shared/fail_fast.js");
+	var failFast = require("fail_fast.js");
 
 	var HtmlCoordinate = module.exports = function HtmlCoordinate(pageX, pageY) {
 		this._pageX = pageX;

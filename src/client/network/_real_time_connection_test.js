@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var assert = require("../../shared/_assert.js");
+	var assert = require("_assert");
 	var harness = require("./__test_harness_client.js");
 	var Connection = require("./real_time_connection.js");
 	var async = require("./vendor/async-1.5.2.js");

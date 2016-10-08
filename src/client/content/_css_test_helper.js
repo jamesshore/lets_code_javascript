@@ -3,7 +3,7 @@
 	"use strict";
 
 	var quixote = require("./vendor/quixote-0.9.0.js");
-	var assert = require("../../shared/_assert.js");
+	var assert = require("_assert");
 
 	exports.TRANSPARENT = "rgba(0, 0, 0, 0)";
 	exports.WHITE = "rgb(255, 255, 255)";

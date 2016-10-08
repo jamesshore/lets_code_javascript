@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var assert = require("./_assert.js");
+	var assert = require("_assert");
 	var ClientPointerEvent = require("./client_pointer_event.js");
 	var ServerPointerEvent = require("./server_pointer_event.js");
 

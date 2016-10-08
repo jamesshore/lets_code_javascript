@@ -8,7 +8,7 @@
 	var browser = require("./browser.js");
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
-	var assert = require("../../shared/_assert.js");
+	var assert = require("_assert");
 	var failFast = require("fail_fast");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 

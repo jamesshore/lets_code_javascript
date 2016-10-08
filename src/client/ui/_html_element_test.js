@@ -6,7 +6,7 @@
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var browser = require("./browser.js");
-	var assert = require("../../shared/_assert.js");
+	var assert = require("_assert");
 
 	describe("UI: HtmlElement", function() {
 		var windowElement;

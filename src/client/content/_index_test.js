@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var assert = require("../../shared/_assert.js");
+	var assert = require("_assert");
 	var cssHelper = require("./_css_test_helper.js");
 	var quixote = require("./vendor/quixote-0.9.0.js");
 

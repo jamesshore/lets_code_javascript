@@ -13,7 +13,7 @@
 	var http = require("http");
 	var firefox = require("selenium-webdriver/firefox");
 	var runServer = require("./_run_server.js");
-	var assert = require("./shared/_assert.js");
+	var assert = require("_assert");
 
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";

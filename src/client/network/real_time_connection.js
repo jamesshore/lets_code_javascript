@@ -3,7 +3,7 @@
 (function() {
 	"use strict";
 
-	var failFast = require("../../shared/fail_fast.js");
+	var failFast = require("fail_fast");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 

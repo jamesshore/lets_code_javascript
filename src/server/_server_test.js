@@ -6,7 +6,7 @@
 	var http = require("http");
 	var fs = require("fs");
 	var async = require("async");
-	var assert = require("../shared/_assert.js");
+	var assert = require("_assert");
 	var io = require("socket.io-client");
 	var ServerPointerEvent = require("../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
