@@ -51,19 +51,7 @@ Engineering Tasks:
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-- Move fail_fast.js and one client require variable
-- Smoke test
-- Move other fail_fast requires
-- Move _assert.js
-- Be sure to smoke test -- make sure Browserify works
-
-- Require options - thanks to https://gist.github.com/branneman/8048520
-	- NODE_PATH environment variable or 'app-module-path' module (also, 'aliasify' courtesy of Scott Corgan, E381)
-		+ keep code where it's at
-		- requires configuration in each entry point
-	- Create our own node_modules directory
-		+ uses all built-in module resolution
-		- unusual use node_modules; counter to what most people expect
-		- it can cause problems with some tools
-		- requires us to move code, could make it hard to find
-		+ strictly limit what's easily accessible
+- AT START OF EPISODE:
+	- Finished moving fail_fast.js and _assert.js to node_modules
+	- karma-commonjs bug on Windows (patched locally) -- see https://github.com/karma-runner/karma-commonjs/pull/54
+	- Updated quick build to work with src/node_modules

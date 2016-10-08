@@ -33,11 +33,6 @@ module.exports = function(config) {
 			'src/node_modules/*.js': [ 'commonjs' ],
 			'src/node_modules/vendor/big-object-diff-0.7.0.js': [ 'commonjs' ],
 			'src/node_modules/vendor/proclaim-2.0.0.js': [ 'commonjs' ],
-
-			// delete these two lines
-			'src/shared/vendor/big-object-diff-0.7.0.js': [ 'commonjs' ],
-			'src/shared/vendor/proclaim-2.0.0.js': [ 'commonjs' ],
-
 			'src/client/content/*.js': [ 'commonjs' ],
 			'src/client/ui/*.js': [ 'commonjs' ],
 			'src/client/network/*.js': [ 'commonjs' ],
