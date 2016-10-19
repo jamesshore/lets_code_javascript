@@ -7,11 +7,10 @@
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 
-	var _isNull = false;
-
 	var Connection = module.exports = function() {
 		this._connectCalled = false;
 		this._socket = null;
+		this._isNull = false;
 	};
 
 	Connection.createNull = function() {
@@ -22,7 +21,10 @@
 
 	Connection.prototype.connect = function(port, callback) {
 		this._connectCalled = true;
-		if (this._isNull) return callback(null);
+		if (this._isNull) {
+			if (callback) return callback(null);
+			else return;
+		}
 
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
 		this._socket = io(origin);
@@ -44,6 +46,8 @@
 
 	Connection.prototype.sendPointerLocation = function(x, y) {
 		failFastUnlessConnectCalled(this);
+		if (this._isNull) return;
+
 		this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
 	};
 

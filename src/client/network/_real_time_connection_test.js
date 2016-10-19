@@ -121,6 +121,27 @@
 			});
 		});
 
+		it("connect() can be called without callback", function() {
+			connection.connect(harness.PORT);
+			// expect no exception
+		});
+
+		it("it ignores attempts to send pointer status to Socket.IO server", function(done) {
+			connection.connect(harness.PORT, function() {
+				connection.sendPointerLocation(50, 75);
+				done();
+			});
+		});
+
+		it("can register for pointer events, but they never occur", function(done) {
+			connection.connect(harness.PORT, function() {
+				connection.onPointerLocation(function() {
+					throw new Error("onPointerLocation() should never be called");
+				});
+				done();
+			});
+		});
+
 		it("provides a null socket ID", function(done) {
 			connection.connect(harness.PORT, function() {
 				assert.equal(connection.getSocketId(), "NullConnection");
