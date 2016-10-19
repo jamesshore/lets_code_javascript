@@ -11,6 +11,7 @@
 		this._connectCalled = false;
 		this._socket = null;
 		this._isNull = false;
+		this._lastSentPointerLocation = null;
 	};
 
 	Connection.createNull = function() {
@@ -53,9 +54,17 @@
 
 	Connection.prototype.sendPointerLocation = function(x, y) {
 		failFastUnlessConnectCalled(this);
-		if (this._isNull) return;
 
-		this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
+		this._lastSentPointerLocation = { x: x, y: y };
+		if (!this._isNull) {
+			this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
+		}
+	};
+
+	Connection.prototype.getLastSentPointerLocation = function() {
+		failFastUnlessConnectCalled(this);
+
+		return this._lastSentPointerLocation;
 	};
 
 	Connection.prototype.onPointerLocation = function(handler) {

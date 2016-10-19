@@ -53,6 +53,17 @@
 			});
 		});
 
+		it("gets most recent pointer location sent to Socket.IO server, even if it hasn't be received yet", function(done) {
+			connection.connect(harness.PORT, function() {
+				assert.deepEqual(connection.getLastSentPointerLocation(), null, "should not have a location if nothing sent");
+				connection.sendPointerLocation(50, 75);
+				assert.deepEqual(connection.getLastSentPointerLocation(), { x: 50, y: 75 }, "should return last sent value");
+				connection.disconnect(done);
+			});
+		});
+
+		it("does something?? if no pointer location has been sent");
+
 		it("receives pointer status from Socket.IO server", function(done) {
 			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
 
@@ -105,6 +116,7 @@
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
+			assert.throws(connection.getLastSentPointerLocation.bind(connection), expectedMessage, "getLastSentPointerLocation()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
@@ -144,6 +156,15 @@
 		it("it ignores attempts to send pointer status to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 				connection.sendPointerLocation(50, 75);
+				done();
+			});
+		});
+
+		it("gets most recent attempt to send pointer location, even though nothing is actually sent", function(done) {
+			connection.connect(harness.PORT, function() {
+				assert.deepEqual(connection.getLastSentPointerLocation(), null, "should not have a location if nothing sent");
+				connection.sendPointerLocation(50, 75);
+				assert.deepEqual(connection.getLastSentPointerLocation(), { x: 50, y: 75 }, "should return last sent value");
 				done();
 			});
 		});
@@ -194,9 +215,10 @@
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
+			assert.throws(connection.getLastSentPointerLocation.bind(connection), expectedMessage, "getLastSentPointerLocation()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
-			// assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
+			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
 
 			function callback() {
 				assert.fail("Callback should never be called");

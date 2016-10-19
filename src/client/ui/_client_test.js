@@ -321,9 +321,9 @@
 				assert.equal(nullConnection.getPort(), window.location.port, "should be connected to correct port");
 			});
 
-			it.skip("sends pointer location whenever mouse moves", function() {
+			it("sends pointer location whenever mouse moves", function() {
 				drawingArea.triggerMouseMove(50, 60);
-				assert.deepEqual(nullConnection.sendPointerLocationArgs, [ 50, 60 ]);
+				assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 50, y: 60 });
 			});
 
 			it.skip("sends pointer location even when mouse moves outside drawing area", function() {
