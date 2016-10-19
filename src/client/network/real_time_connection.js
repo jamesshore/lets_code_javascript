@@ -22,6 +22,9 @@
 	Connection.prototype.connect = function(port, callback) {
 		this._connectCalled = true;
 		if (this._isNull) {
+			this._socket = {
+				connected: true
+			};
 			if (callback) return callback(null);
 			else return;
 		}
@@ -36,7 +39,10 @@
 
 	Connection.prototype.disconnect = function(callback) {
 		failFastUnlessConnectCalled(this);
-		if (this._isNull) return callback(null);
+		if (this._isNull) {
+			this._socket.connected = false;
+			return callback(null);
+		}
 
 		this._socket.on("disconnect", function() {
 			return callback(null);
@@ -53,6 +59,8 @@
 
 	Connection.prototype.onPointerLocation = function(handler) {
 		failFastUnlessConnectCalled(this);
+		if (this._isNull) return;
+
 		this._socket.on(ServerPointerEvent.EVENT_NAME, function(eventData) {
 			return handler(ServerPointerEvent.fromSerializableObject(eventData));
 		});
