@@ -42,7 +42,7 @@
 			}
 		});
 
-		it("sends pointer status to Socket.IO server", function(done) {
+		it("sends pointer location to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 				connection.sendPointerLocation(50, 75);
 
@@ -62,9 +62,7 @@
 			});
 		});
 
-		it("does something?? if no pointer location has been sent");
-
-		it("receives pointer status from Socket.IO server", function(done) {
+		it("receives pointer location from Socket.IO server", function(done) {
 			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
 
 			connection.connect(harness.PORT, function() {
@@ -75,6 +73,27 @@
 				});
 
 				harness.sendPointerLocation(connection, EXPECTED_EVENT, function() {});
+			});
+		});
+
+		it("can trigger pointer location event manually", function(done) {
+			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
+
+			connection.connect(harness.PORT, function() {
+				connection.onPointerLocation(function(event) {
+					assert.deepEqual(event, EXPECTED_EVENT);
+					connection.disconnect(done);
+				});
+
+				connection.triggerPointerLocation(0xdeadbeef, 90, 160);
+				// if triggerPointerLocation doesn't do anything, the test will time out
+			});
+		});
+
+		it("can trigger pointer location event even when no one listening", function(done) {
+			connection.connect(harness.PORT, function() {
+				connection.triggerPointerLocation(0xdeadbeef, 12, 23);
+				connection.disconnect(done);
 			});
 		});
 
@@ -118,6 +137,7 @@
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
 			assert.throws(connection.getLastSentPointerLocation.bind(connection), expectedMessage, "getLastSentPointerLocation()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
+			assert.throws(connection.triggerPointerLocation.bind(connection), expectedMessage, "triggerPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
 
@@ -169,11 +189,23 @@
 			});
 		});
 
-		it("can register for pointer events, but they never occur", function(done) {
+		it("can trigger pointer location event manually", function(done) {
+			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
+
 			connection.connect(harness.PORT, function() {
-				connection.onPointerLocation(function() {
-					throw new Error("onPointerLocation() should never be called");
+				connection.onPointerLocation(function(event) {
+					assert.deepEqual(event, EXPECTED_EVENT);
+					done();
 				});
+
+				connection.triggerPointerLocation(0xdeadbeef, 90, 160);
+				// if triggerPointerLocation doesn't do anything, the test will time out
+			});
+		});
+
+		it("can trigger pointer location event even when no one listening", function(done) {
+			connection.connect(harness.PORT, function() {
+				connection.triggerPointerLocation(0xdeadbeef, 12, 23);
 				done();
 			});
 		});
@@ -217,6 +249,7 @@
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
 			assert.throws(connection.getLastSentPointerLocation.bind(connection), expectedMessage, "getLastSentPointerLocation()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
+			assert.throws(connection.triggerPointerLocation.bind(connection), expectedMessage, "triggerPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
 
