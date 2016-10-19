@@ -316,10 +316,9 @@
 
 		describe("networking", function() {
 
-			it.skip("connects to server upon initialization", function() {
-				assert.equal(nullConnection.isConnected(), true);
-// TODO: test that we connected to the correct port
-				assert.deepEqual(nullConnection.connectArgs, [ window.location.port ]);
+			it("connects to server upon initialization", function() {
+				assert.equal(nullConnection.isConnected(), true, "should be connected");
+				assert.equal(nullConnection.getPort(), window.location.port, "should be connected to correct port");
 			});
 
 			it.skip("sends pointer location whenever mouse moves", function() {
