@@ -52,5 +52,7 @@ Engineering Tasks:
 To Do on current task:
 * Get NullRealTimeConnection working in _client_test.js
 -
-- Consider: is a 'nullIo' object better than conditionals?
-- Run behavior tests from both regular and Null RealTimeConnection tests?
+- Improve production code
+	- Consider: is a 'nullIo' object better than conditionals?
+- Improve test duplication
+	- Run behavior tests from both regular and Null RealTimeConnection tests?

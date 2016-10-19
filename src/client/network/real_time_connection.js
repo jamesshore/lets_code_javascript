@@ -79,10 +79,7 @@
 		failFastUnlessConnectCalled(this);
 		if (!this.isConnected()) return null;
 
-		var rawPort = this._socket.io.engine.port;
-		var port = +rawPort;
-		failFast.unlessTrue(!isNaN(port), "Expected numeric port from Socket.IO, but got '" + rawPort + "'");
-		return port;
+		return this._socket.io.engine.port;
 	};
 
 	Connection.prototype.isConnected = function() {
