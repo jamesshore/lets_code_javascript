@@ -326,23 +326,23 @@
 				assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 50, y: 60 });
 			});
 
-			it.skip("sends pointer location even when mouse moves outside drawing area", function() {
+			it("sends pointer location even when mouse moves outside drawing area", function() {
 				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
-				assert.deepEqual(nullConnection.sendPointerLocationArgs, [ 20, 40 ]);
+				assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 20, y: 40 });
 			});
 
-			it.skip("doesn't send pointer location when touch changes", function() {
+			it("doesn't send pointer location when touch changes", function() {
 				if (!browser.supportsTouchEvents()) return;
 
 				drawingArea.triggerSingleTouchMove(30, 40);
-				assert.deepEqual(nullConnection.sendPointerLocationArgs, undefined);
+				assert.deepEqual(nullConnection.getLastSentPointerLocation(), null);
 			});
 
-			it.skip("doesn't create pointer HTML on startup", function() {
+			it("doesn't create pointer HTML on startup", function() {
 				assert.equal(getPointerDivs().length, 0);
 			});
 
-			it.skip("creates a pointer HTML when a pointer event is received", function() {
+			it.skip("creates pointer HTML when a pointer event is received", function() {
 				nullConnection.triggerOnPointerLocationEvent(createEvent());
 				assert.equal(getPointerDivs().length, 1);
 			});
