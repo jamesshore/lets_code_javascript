@@ -69,15 +69,22 @@
 
 		it("provides socket ID", function(done) {
 			connection.connect(harness.PORT, function() {
-				assert.defined(connection.getSocketId());
-				connection.disconnect(done);
+				var socketId = connection.getSocketId();
+				assert.defined(socketId, "should return socket ID after connecting");
+				connection.disconnect(function() {
+					assert.equal(connection.getSocketId(), null, "should return null after disconnecting");
+					done();
+				});
 			});
 		});
 
 		it("provides server port", function(done) {
 			connection.connect(harness.PORT, function() {
-				assert.equal(connection.getPort(), harness.PORT);
-				connection.disconnect(done);
+				assert.equal(connection.getPort(), harness.PORT, "should return connection port after connecting");
+				connection.disconnect(function() {
+					assert.equal(connection.getPort(), null, "should return null after disconnecting");
+					done();
+				});
 			});
 		});
 
@@ -100,6 +107,7 @@
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
+			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
 
 			function callback() {
 				assert.fail("Callback should never be called");
@@ -152,7 +160,20 @@
 		it("provides a null socket ID", function(done) {
 			connection.connect(harness.PORT, function() {
 				assert.equal(connection.getSocketId(), "NullConnection");
-				done();
+				connection.disconnect(function() {
+					assert.equal(connection.getSocketId(), null, "should return null after disconnecting");
+					done();
+				});
+			});
+		});
+
+		it("provides server port", function(done) {
+			connection.connect(harness.PORT, function() {
+				assert.equal(connection.getPort(), harness.PORT, "should return connection port after connecting");
+				connection.disconnect(function() {
+					assert.equal(connection.getPort(), null, "should return null after disconnecting");
+					done();
+				});
 			});
 		});
 
@@ -175,6 +196,7 @@
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
+			// assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
 
 			function callback() {
 				assert.fail("Callback should never be called");

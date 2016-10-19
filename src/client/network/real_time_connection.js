@@ -23,7 +23,8 @@
 		this._connectCalled = true;
 		if (this._isNull) {
 			this._socket = {
-				connected: true
+				connected: true,
+				io: { engine: { port: port }}
 			};
 			if (callback) return callback(null);
 			else return;
@@ -68,13 +69,20 @@
 
 	Connection.prototype.getSocketId = function() {
 		failFastUnlessConnectCalled(this);
+		if (!this.isConnected()) return null;
 		if (this._isNull) return "NullConnection";
 
-		return this._socket.id;
+		else return this._socket.id;
 	};
 
 	Connection.prototype.getPort = function() {
-		return this._socket.io.engine.port;
+		failFastUnlessConnectCalled(this);
+		if (!this.isConnected()) return null;
+
+		var rawPort = this._socket.io.engine.port;
+		var port = +rawPort;
+		failFast.unlessTrue(!isNaN(port), "Expected numeric port from Socket.IO, but got '" + rawPort + "'");
+		return port;
 	};
 
 	Connection.prototype.isConnected = function() {
