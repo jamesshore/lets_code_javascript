@@ -73,6 +73,10 @@
 		return this._socket.id;
 	};
 
+	Connection.prototype.getPort = function() {
+		return this._socket.io.engine.port;
+	};
+
 	Connection.prototype.isConnected = function() {
 		return this._socket !== null && this._socket.connected;
 	};

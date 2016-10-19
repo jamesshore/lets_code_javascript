@@ -74,6 +74,13 @@
 			});
 		});
 
+		it("provides server port", function(done) {
+			connection.connect(harness.PORT, function() {
+				assert.equal(connection.getPort(), harness.PORT);
+				connection.disconnect(done);
+			});
+		});
+
 		it("checks status of connection", function(done) {
 			assert.equal(connection.isConnected(), false, "should not be connected before connect() is called");
 
