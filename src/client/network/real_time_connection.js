@@ -7,17 +7,23 @@
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 
+	var _isNull = false;
+
 	var Connection = module.exports = function() {
 		this._connectCalled = false;
 		this._socket = null;
 	};
 
 	Connection.createNull = function() {
-		return new Connection();
+		var connection = new Connection();
+		connection._isNull = true;
+		return connection;
 	};
 
 	Connection.prototype.connect = function(port, callback) {
 		this._connectCalled = true;
+		if (this._isNull) return callback(null);
+
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
 		this._socket = io(origin);
 
@@ -28,6 +34,7 @@
 
 	Connection.prototype.disconnect = function(callback) {
 		failFastUnlessConnectCalled(this);
+		if (this._isNull) return callback(null);
 
 		this._socket.on("disconnect", function() {
 			return callback(null);
@@ -49,6 +56,8 @@
 
 	Connection.prototype.getSocketId = function() {
 		failFastUnlessConnectCalled(this);
+		if (this._isNull) return "NullConnection";
+
 		return this._socket.id;
 	};
 

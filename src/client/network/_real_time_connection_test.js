@@ -114,10 +114,17 @@
 				assert.equal(err, null, "connect() should not have error");
 				assert.equal(harness.isConnected(connection), false, "client should not have connected to server");
 
-				// connection.disconnect(function(err2) {
-				// 	assert.equal(err2, null, "disconnect() should not have error");
-				// 	harness.waitForServerDisconnect(connection, done);   // will timeout if disconnect doesn't work
-				// });
+				connection.disconnect(function(err2) {
+					assert.equal(err2, null, "disconnect() should not have error");
+					done();
+				});
+			});
+		});
+
+		it("provides a null socket ID", function(done) {
+			connection.connect(harness.PORT, function() {
+				assert.equal(connection.getSocketId(), "NullConnection");
+				done();
 			});
 		});
 
