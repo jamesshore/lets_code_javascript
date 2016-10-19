@@ -57,3 +57,5 @@ To Do on current task:
 - onPointerLocation
 - getSocketId
 - isConnected
+- Consider: is a 'nullIo' object better than conditionals?
+- Run behavior tests from both regular and Null RealTimeConnection tests?
