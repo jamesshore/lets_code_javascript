@@ -54,6 +54,9 @@ To Do on current task:
 -
 - Improve production code
 	- Consider: is a 'nullIo' object better than conditionals?
+	- Shouldn't mix sync and async callbacks (ref E458 comments)
 - Improve test duplication
 	- Run behavior tests from both regular and Null RealTimeConnection tests?
+	- Group tests by method rather than connection type
 - UI tests now depend on network code...?
+
