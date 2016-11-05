@@ -9,18 +9,22 @@
 	var EventEmitter = require("./vendor/emitter-1.2.1.js");
 
 	var Connection = module.exports = function() {
-		this._io = window.io;
-		this._connectCalled = false;
-		this._socket = null;
-		this._lastSentPointerLocation = null;
-		this._pointerLocationHandlers = [];
+		return initialize(this, window.io);
 	};
 
 	Connection.createNull = function() {
 		var connection = new Connection();
-		connection._io = nullIo;
-		return connection;
+		return initialize(connection, nullIo);
 	};
+	
+	function initialize(self, ioToInject) {
+		self._io = ioToInject;
+		self._connectCalled = false;
+		self._socket = null;
+		self._lastSentPointerLocation = null;
+		self._pointerLocationHandlers = [];
+		return self;
+	}
 
 	Connection.prototype.connect = function(port, callback) {
 		this._connectCalled = true;

@@ -51,7 +51,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Improve production code
-	- Consider: is a 'nullIo' object better than conditionals?
 	- Should onPointerLocation() and triggerPointerLocation use event emitter?
 	- Shouldn't mix sync and async callbacks (ref E458 comments)
 	- Possible bug: RealTimeConnection.disconnect() should use .once() not .on(); could callback twice
