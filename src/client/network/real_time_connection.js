@@ -24,10 +24,7 @@
 	Connection.prototype.connect = function(port, callback) {
 		this._connectCalled = true;
 		if (this._isNull) {
-			this._socket = {
-				connected: true,
-				io: { engine: { port: port }}
-			};
+			this._socket = new NullSocketIo(port);
 			if (callback) return callback(null);
 			else return;
 		}
@@ -110,5 +107,17 @@
 	function failFastUnlessConnectCalled(self) {
 		failFast.unlessTrue(self._connectCalled, "Connection used before connect() called");
 	}
+
+
+	//**** NullSocketIo mimics the socket.io interface, but doesn't talk over the network
+
+	function NullSocketIo(port) {
+		this.connected = true;
+		this.io = {
+			engine: { port: port }
+		};
+	}
+
+
 
 }());
