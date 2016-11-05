@@ -9,30 +9,23 @@
 	var EventEmitter = require("./vendor/emitter-1.2.1.js");
 
 	var Connection = module.exports = function() {
+		this._io = window.io;
 		this._connectCalled = false;
 		this._socket = null;
-		this._isNull = false;
 		this._lastSentPointerLocation = null;
 		this._pointerLocationHandlers = [];
 	};
 
 	Connection.createNull = function() {
 		var connection = new Connection();
-		connection._isNull = true;
+		connection._io = nullIo;
 		return connection;
 	};
 
 	Connection.prototype.connect = function(port, callback) {
 		this._connectCalled = true;
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
-		if (this._isNull) {
-			this._socket = nullIo(origin);
-			if (callback) return callback(null);
-			else return;
-		}
-
-		this._socket = io(origin);
-
+		this._socket = this._io(origin);
 		if (callback !== undefined) this._socket.on("connect", function() {
 			return callback(null);
 		});
@@ -123,6 +116,8 @@
 		this.io = {
 			engine: { port: port }
 		};
+
+		asynchronouslyEmitConnectEvent(this);
 	}
 
 	NullSocket.prototype.emit = function() {
@@ -131,6 +126,7 @@
 
 	NullSocket.prototype.on = function(event, handler) {
 		if (event === "disconnect") return this._emitter.on(event, handler);
+		if (event === "connect") return this._emitter.on(event, handler);
 		// ignore all other events
 	};
 
@@ -138,5 +134,11 @@
 		this.connected = false;
 		this._emitter.emit("disconnect");
 	};
+
+	function asynchronouslyEmitConnectEvent(self) {
+		setTimeout(function() {
+			self._emitter.emit("connect");
+		}, 0);
+	}
 
 }());
