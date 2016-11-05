@@ -51,9 +51,7 @@
 		failFastUnlessConnectCalled(this);
 
 		this._lastSentPointerLocation = { x: x, y: y };
-		if (!this._isNull) {
-			this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
-		}
+		this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
 	};
 
 	Connection.prototype.getLastSentPointerLocation = function() {
@@ -65,7 +63,6 @@
 	Connection.prototype.onPointerLocation = function(handler) {
 		failFastUnlessConnectCalled(this);
 		this._pointerLocationHandlers.push(handler);
-		if (this._isNull) return;
 
 		this._socket.on(ServerPointerEvent.EVENT_NAME, function(eventData) {
 			return handler(ServerPointerEvent.fromSerializableObject(eventData));
@@ -85,7 +82,6 @@
 	Connection.prototype.getSocketId = function() {
 		failFastUnlessConnectCalled(this);
 		if (!this.isConnected()) return null;
-		if (this._isNull) return "NullConnection";
 
 		else return this._socket.id;
 	};
@@ -109,17 +105,27 @@
 	//**** NullSocketIo mimics the socket.io interface, but doesn't talk over the network
 
 	function NullSocketIo(port) {
+		this._emitter = new EventEmitter();
+
 		this.connected = true;
+		this.id = "NullConnection";
 		this.io = {
 			engine: { port: port }
 		};
 	}
-	NullSocketIo.prototype = Object.create(EventEmitter.prototype);
-	NullSocketIo.prototype.constructor = NullSocketIo;
+
+	NullSocketIo.prototype.emit = function() {
+		// ignore all events (that's what makes this a "Null" Socket.IO)
+	};
+
+	NullSocketIo.prototype.on = function(event, handler) {
+		if (event === "disconnect") return this._emitter.on(event, handler);
+		// ignore all other events
+	};
 
 	NullSocketIo.prototype.close = function() {
 		this.connected = false;
-		this.emit("disconnect");
+		this._emitter.emit("disconnect");
 	};
 
 }());
