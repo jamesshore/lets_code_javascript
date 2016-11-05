@@ -50,13 +50,11 @@ Engineering Tasks:
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-* Get NullRealTimeConnection working in _client_test.js
--
-- Improve production code
+* Improve production code
 	- Consider: is a 'nullIo' object better than conditionals?
 	- Shouldn't mix sync and async callbacks (ref E458 comments)
 - Improve test duplication
 	- Run behavior tests from both regular and Null RealTimeConnection tests?
-	- Group tests by method rather than connection type
+	- Group tests by method rather than connection type?
 - UI tests now depend on network code...?
 

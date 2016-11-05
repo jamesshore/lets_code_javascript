@@ -316,6 +316,10 @@
 
 		describe("networking", function() {
 
+			var IRRELEVANT_ID = "irrelevant_id";
+			var IRRELEVANT_X = 0;
+			var IRRELEVANT_Y = 0;
+
 			it("connects to server upon initialization", function() {
 				assert.equal(nullConnection.isConnected(), true, "should be connected");
 				assert.equal(nullConnection.getPort(), window.location.port, "should be connected to correct port");
@@ -338,36 +342,36 @@
 				assert.deepEqual(nullConnection.getLastSentPointerLocation(), null);
 			});
 
-			it("doesn't create pointer HTML on startup", function() {
+			it("doesn't create pointer element on startup", function() {
 				assert.equal(getPointerDivs().length, 0);
 			});
 
-			it.skip("creates pointer HTML when a pointer event is received", function() {
-				nullConnection.triggerOnPointerLocationEvent(createEvent());
+			it("creates pointer element when a pointer event is received", function() {
+				nullConnection.triggerPointerLocation(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y);
 				assert.equal(getPointerDivs().length, 1);
 			});
 
-			it.skip("doesn't create a pointer HTML when a pointer event containing a previous client ID is received", function () {
-				nullConnection.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
-				nullConnection.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
+			it("doesn't create pointer element when a pointer event containing a previous client ID is received", function () {
+				nullConnection.triggerPointerLocation("my_id", IRRELEVANT_X, IRRELEVANT_Y);
+				nullConnection.triggerPointerLocation("my_id", IRRELEVANT_X, IRRELEVANT_Y);
 				assert.equal(getPointerDivs().length, 1);
 			});
 
-			it.skip("creates a pointer HTML for each unique client ID", function() {
-				nullConnection.triggerOnPointerLocationEvent(createEvent({ id: "1" }));
-				nullConnection.triggerOnPointerLocationEvent(createEvent({ id: "2" }));
+			it("creates a pointer element for each unique client ID", function() {
+				nullConnection.triggerPointerLocation("unique_id_1", IRRELEVANT_X, IRRELEVANT_Y);
+				nullConnection.triggerPointerLocation("unique_id_2", IRRELEVANT_X, IRRELEVANT_Y);
 				assert.equal(getPointerDivs().length, 2);
 			});
 
-			it.skip("positions new pointer HTML according to event's position", function() {
-				nullConnection.triggerOnPointerLocationEvent(createEvent({ x: 10, y: 20 }));
+			it("positions new pointer element according to event's position", function() {
+				nullConnection.triggerPointerLocation(IRRELEVANT_ID, 10, 20);
 				var pointerElement = getPointerDivs()[0];
 				assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
 			});
 
-			it.skip("moves existing pointer HTML when new pointer event is received", function() {
-				nullConnection.triggerOnPointerLocationEvent(createEvent({ x: 10, y: 20 }));
-				nullConnection.triggerOnPointerLocationEvent(createEvent({ x: 30, y: 40 }));
+			it("moves existing pointer element when a new pointer event is received", function() {
+				nullConnection.triggerPointerLocation("my_id", 10, 20);
+				nullConnection.triggerPointerLocation("my_id", 30, 40);
 
 				var pointerElement = getPointerDivs()[0];
 				assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));
@@ -375,17 +379,6 @@
 
 			function getPointerDivs() {
 				return HtmlElement.fromSelector("." + POINTER_DIV_CLASS);
-			}
-
-			function createEvent(event) {
-				// Object.assign would be preferable here, but it's not supported on IE 11 or Chrome Mobile 44
-				// Feel free to rewrite this to use Object.assign when those browsers are no longer supported
-				if (event === undefined) event = {};
-				return new ServerPointerEvent(
-					event.id || "irrelevant_id",
-					event.x || 0,
-					event.y || 0
-				);
 			}
 
 		});
@@ -401,25 +394,5 @@
 		}
 
 	});
-
-	function RealTimeConnectionFake() {}
-
-	RealTimeConnectionFake.prototype.connect = function() {
-		this.connectArgs = Array.prototype.slice.call(arguments);
-	};
-
-	RealTimeConnectionFake.prototype.sendPointerLocation = function() {
-		this.sendPointerLocationArgs = Array.prototype.slice.call(arguments);
-	};
-
-	RealTimeConnectionFake.prototype.onPointerLocation = function(handler) {
-		failFast.unlessTrue(this._handler === undefined, "RealTimeConnectionFake.onPointerLocation called twice");
-		this._handler = handler;
-	};
-
-	RealTimeConnectionFake.prototype.triggerOnPointerLocationEvent = function(event) {
-		failFast.unlessTrue(this._handler !== undefined, "onPointerLocation() not called before triggerOnPointerLocationEvent()");
-		this._handler(event);
-	};
 
 }());
