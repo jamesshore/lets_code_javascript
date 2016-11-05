@@ -6,6 +6,7 @@
 	var failFast = require("fail_fast");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
+	var EventEmitter = require("events");
 
 	var Connection = module.exports = function() {
 		this._connectCalled = false;
@@ -117,7 +118,25 @@
 			engine: { port: port }
 		};
 	}
+	NullSocketIo.prototype = Object.create(EventEmitter.prototype);
+	NullSocketIo.prototype.constructor = NullSocketIo;
 
+	NullSocketIo.prototype.close = function() {
+		this._socket.connected = false;
+		this.emit("disconnect");
+	};
+
+
+	// failFastUnlessConnectCalled(this);
+	// if (this._isNull) {
+	// 	this._socket.connected = false;
+	// 	return callback(null);
+	// }
+	//
+	// this._socket.on("disconnect", function() {
+	// 	return callback(null);
+	// });
+	// this._socket.close();
 
 
 }());
