@@ -24,13 +24,13 @@
 
 	Connection.prototype.connect = function(port, callback) {
 		this._connectCalled = true;
+		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
 		if (this._isNull) {
-			this._socket = new NullSocketIo(port);
+			this._socket = nullIo(origin);
 			if (callback) return callback(null);
 			else return;
 		}
 
-		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
 		this._socket = io(origin);
 
 		if (callback !== undefined) this._socket.on("connect", function() {
@@ -102,9 +102,20 @@
 	}
 
 
-	//**** NullSocketIo mimics the socket.io interface, but doesn't talk over the network
+	//**** nullIo mimics the socket.io interface, but doesn't talk over the network
 
-	function NullSocketIo(port) {
+	function nullIo(origin) {
+		return new NullSocket(parsePort(origin));
+	}
+
+	// This code based on https://gist.github.com/jlong/2428561
+	function parsePort(url) {
+		var parser = document.createElement('a');
+		parser.href = url;
+		return parser.port;
+	}
+
+	function NullSocket(port) {
 		this._emitter = new EventEmitter();
 
 		this.connected = true;
@@ -114,16 +125,16 @@
 		};
 	}
 
-	NullSocketIo.prototype.emit = function() {
-		// ignore all events (that's what makes this a "Null" Socket.IO)
+	NullSocket.prototype.emit = function() {
+		// ignore all events (that's what makes this a "Null" Socket)
 	};
 
-	NullSocketIo.prototype.on = function(event, handler) {
+	NullSocket.prototype.on = function(event, handler) {
 		if (event === "disconnect") return this._emitter.on(event, handler);
 		// ignore all other events
 	};
 
-	NullSocketIo.prototype.close = function() {
+	NullSocket.prototype.close = function() {
 		this.connected = false;
 		this._emitter.emit("disconnect");
 	};
