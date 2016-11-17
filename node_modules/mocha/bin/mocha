@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _mocha(1) executable.
@@ -14,7 +16,7 @@ var args = [path.join(__dirname, '_mocha')];
 // Must be loaded here to handle node-specific options
 getOptions();
 
-process.argv.slice(2).forEach(function(arg) {
+process.argv.slice(2).forEach(function (arg) {
   var flag = arg.split('=')[0];
 
   switch (flag) {
@@ -64,8 +66,8 @@ process.argv.slice(2).forEach(function(arg) {
 });
 
 var proc = spawn(process.execPath, args, { stdio: 'inherit' });
-proc.on('exit', function(code, signal) {
-  process.on('exit', function() {
+proc.on('exit', function (code, signal) {
+  process.on('exit', function () {
     if (signal) {
       process.kill(process.pid, signal);
     } else {
@@ -75,7 +77,7 @@ proc.on('exit', function(code, signal) {
 });
 
 // terminate children.
-process.on('SIGINT', function() {
+process.on('SIGINT', function () {
   proc.kill('SIGINT'); // calls runner.abort()
   proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
 });
