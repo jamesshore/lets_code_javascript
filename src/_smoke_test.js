@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2012-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global document, window, CSSRule */
 /*jshint regexp:false*/
 

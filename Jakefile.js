@@ -146,32 +146,11 @@
 
 	desc("End-to-end smoke tests");
 	task("smoketest", [ "build" ], function(why) {
-		console.log("WARNING: Smoke tests disabled. Build `smoketest[why]` for explanation.");
-		if (why === "why") {
-			console.log(
-				"\nWhy the smoke tests are disabled:\n" +
-				"\n" +
-				"Firefox 48 broke compatibility with selenium-webdriver 2.53.3. In\n" +
-				"selenium-webdriver 3.0.0-beta-2, this problem was 'fixed' by requiring a\n" +
-				"new executable, 'geckodriver', to be downloaded separately and placed in\n" +
-				"the path. However, this raises problems with creating a reproducible build.\n" +
-				"\n" +
-				"Selenium has been unreliable in general, so I'm considering replacing it\n" +
-				"with a different solution. Even if I don't, figuring out a good, cross-\n" +
-				"platform, reproducible-build solution to the geckodriver problem will\n" +
-				"require dedicated effort. Rather than leave the build broken in the mean-\n" +
-				"time, I've chosen to disable the smoke tests instead.\n" +
-				"\n" +
-				"James Shore, 29 Aug 2016"
-			);
-		}
-
-		return complete();
-		// console.log("Smoke testing app: ");
-		// mochaRunner().runTests({
-		// 	files: paths.smokeTestFiles(),
-		// 	options: mochaConfig()
-		// }, complete, fail);
+		console.log("Smoke testing app: ");
+		mochaRunner().runTests({
+			files: paths.smokeTestFiles(),
+			options: mochaConfig()
+		}, complete, fail);
 	}, { async: true });
 
 

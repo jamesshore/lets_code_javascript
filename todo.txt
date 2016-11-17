@@ -41,15 +41,13 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-- Update smoke tests for real-time networking
-	- Replace Selenium? Fix it?
-		- http://www.nightmarejs.org/ ?
-	- Update readme to reflect reproducibility issues with Selenium
+* Update smoke tests for real-time networking
 
 To Do on current task:
-- AT START OF EPISODE:
-	- Increased Mocha and Karma timeouts
-	- Upgraded to latest LTS version of Node (6.9.1). Couldn't use latest (v7.1.0) due to minor Browserify issue
-		(Browserify triggered deprecation warning and output. Appeared to work, but message is ugly.)
-	- Upgraded all dependencies to latest versions
-	- Fixed breaking change introduced in Socket.IO v1.5.0 (removed '/#' from beginning of server socket ID)
+- Get smoke tests working again
+- Spin up a second browser
+- move the mouse pointer in one browser
+- confirm that the ghost pointer moved in the second browser
+
+- Update readme: explain installing gecko-driver, mention `brew install geckodriver`
+	- Update readme to reflect reproducibility issues with Selenium
