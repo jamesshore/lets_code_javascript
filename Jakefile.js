@@ -261,10 +261,11 @@
 		var nodeClientVersion = require("socket.io-client/package").version;
 
 		if (nodeServerVersion !== nodeClientVersion) {
-			fail("Socket.IO versions did not match!\n" +
+			console.log("Socket.IO versions did not match!\n" +
 				"  socket.io: " + nodeServerVersion + "\n" +
 				"  socket.io-client: " + nodeClientVersion
 			);
+			fail("Socket.IO version mismatch");
 		}
 
 		var vendorClientFilename = "./src/client/network/vendor/socket.io-" + nodeServerVersion + ".js";
