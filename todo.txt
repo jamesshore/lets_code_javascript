@@ -49,4 +49,5 @@ Engineering Tasks:
 To Do on current task:
 - AT START OF EPISODE:
 	- Increased Mocha and Karma timeouts
-	- Upgraded to latest version of Node (7.0.0)
+	- Upgraded to latest LTS version of Node (6.9.1). Couldn't use latest (v7.0.0) due to minor Browserify issue
+		(Browserify triggered deprecation warning and output. Appeared to work, but message is ugly.)
