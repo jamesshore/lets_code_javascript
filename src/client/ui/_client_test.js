@@ -13,7 +13,7 @@
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var RealTimeConnection = require("../network/real_time_connection.js");
 
-	mocha.setup({ignoreLeaks: true});
+	mocha.setup({ignoreLeaks: true, timeout:5000});
 
 	describe("UI: Drawing area", function() {
 
