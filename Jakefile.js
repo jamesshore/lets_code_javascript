@@ -277,6 +277,8 @@
 			console.log("Socket.IO vendor file version did not match or was missing!\n" +
 				"  Expected version " + nodeServerVersion + "\n" +
 				"  at location " + vendorClientFilename + "\n" +
+				"  To get correct version, `jake run` and go to:\n" +
+				"    http://localhost:5000/socket.io/socket.io.js\n" +
 				"  (" + err + ")"
 			);
 			fail("Socket.IO version mismatch");
