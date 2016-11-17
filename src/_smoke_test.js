@@ -11,13 +11,13 @@
 
 	var child_process = require("child_process");
 	var http = require("http");
-	var firefox = require("selenium-webdriver/firefox");
+	var webdriver = require('selenium-webdriver');
 	var runServer = require("./_run_server.js");
 	var assert = require("_assert");
 
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
-	var EXPECTED_BROWSER = "firefox 47.0.1";
+	var EXPECTED_BROWSER = "firefox 49.0.2";
 
 	var serverProcess;
 	var driver;
@@ -29,7 +29,7 @@
 			runServer.runProgrammatically(function(process) {
 				serverProcess = process;
 
-				driver = new firefox.Driver();
+				driver = new webdriver.Builder().forBrowser("firefox").build();
 				driver.getCapabilities().then(function(capabilities) {
 					var version = capabilities.get("browserName") + " " + capabilities.get("version");
 					if (version !== EXPECTED_BROWSER) {
