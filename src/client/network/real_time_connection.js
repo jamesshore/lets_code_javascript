@@ -21,7 +21,7 @@
 		self._connectCalled = false;
 		self._socket = null;
 		self._lastSentPointerLocation = null;
-		self._pointerLocationHandlers = [];
+		self._localEmitter = new EventEmitter();
 		return self;
 	}
 
@@ -62,7 +62,7 @@
 
 	Connection.prototype.onPointerLocation = function(handler) {
 		failFastUnlessConnectCalled(this);
-		this._pointerLocationHandlers.push(handler);
+		this._localEmitter.on("pointer", handler);
 
 		this._socket.on(ServerPointerEvent.EVENT_NAME, function(eventData) {
 			return handler(ServerPointerEvent.fromSerializableObject(eventData));
@@ -71,12 +71,9 @@
 
 	Connection.prototype.triggerPointerLocation = function(socketId, x, y) {
 		failFastUnlessConnectCalled(this);
-		var numHandlers = this._pointerLocationHandlers.length;
-		if (numHandlers === 0) return;
-		if (numHandlers > 1) failFast.unreachable("RealTimeConnection.triggerPointerLocation() only supports one handler");
 
 		var event = new ServerPointerEvent(socketId, x, y);
-		if (this._pointerLocationHandlers.length === 1) this._pointerLocationHandlers[0](event);
+		this._localEmitter.emit("pointer", event);
 	};
 
 	Connection.prototype.getSocketId = function() {

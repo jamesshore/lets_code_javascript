@@ -50,12 +50,7 @@ Engineering Tasks:
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-* Improve production code
-	- Possible bug: RealTimeConnection.disconnect() should use .once() not .on(); could callback twice
-		- and connect() too?
-	- Should onPointerLocation() and triggerPointerLocation use event emitter?
-	- Use URL class in RealTimeConnection.parsePort? (ref Martin Grandrath, E464 comments)
-- Improve test duplication
+* Improve test duplication
 	- Run behavior tests from both regular and Null RealTimeConnection tests?
 	- Group tests by method rather than connection type?
 - UI tests now depend on network code...?
