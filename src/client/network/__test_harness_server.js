@@ -48,8 +48,7 @@
 	};
 
 	function getSocket(io, clientSocketId) {
-		var socketId = "/#" + clientSocketId;
-		return io.sockets.sockets[socketId];
+		return io.sockets.sockets[clientSocketId];
 	}
 
 	function stopFn(httpServer, io) {
@@ -102,9 +101,7 @@
 
 	function setupIsConnected(io) {
 		return function isConnectedEndpoint(socket, data, request, response) {
-			var socketIds = Object.keys(io.sockets.connected).map(function(id) {
-				return id.substring(2);
-			});
+			var socketIds = Object.keys(io.sockets.connected);
 			response.end(JSON.stringify(socketIds));
 		};
 	}

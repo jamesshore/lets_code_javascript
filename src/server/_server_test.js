@@ -172,7 +172,7 @@
 			async.each([ receiver1, receiver2 ], function(client, next) {
 				client.on(ServerPointerEvent.EVENT_NAME, function(data) {
 					assert.deepEqual(data, {
-						id: "/#" + emitter.id,           // should add unique sender ID to data
+						id: emitter.id,           // should add unique sender ID to data
 						x: EXPECTED_DATA.x,
 						y: EXPECTED_DATA.y
 					});

@@ -51,3 +51,5 @@ To Do on current task:
 	- Increased Mocha and Karma timeouts
 	- Upgraded to latest LTS version of Node (6.9.1). Couldn't use latest (v7.0.0) due to minor Browserify issue
 		(Browserify triggered deprecation warning and output. Appeared to work, but message is ugly.)
+	- Upgraded all dependencies to latest versions
+	- Fixed breaking change introduced in Socket.IO v1.5.0 (removed '/#' from beginning of server socket ID)
