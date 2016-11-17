@@ -29,7 +29,9 @@
 		this._connectCalled = true;
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + port;
 		this._socket = this._io(origin);
-		if (callback !== undefined) this._socket.on("connect", function() {
+		// Choice of calling .once() instead of .on() is not tested. It only comes into play when the server
+		// connection is interrupted, which we don't support yet
+		if (callback !== undefined) this._socket.once("connect", function() {
 			return callback(null);
 		});
 	};
@@ -37,7 +39,9 @@
 	Connection.prototype.disconnect = function(callback) {
 		failFastUnlessConnectCalled(this);
 
-		this._socket.on("disconnect", function() {
+		// Choice of calling .once() instead of .on() is not tested. It only comes into play when the server
+		// connection is interrupted, which we don't support yet
+		this._socket.once("disconnect", function() {
 			return callback(null);
 		});
 		this._socket.close();
@@ -128,8 +132,12 @@
 	};
 
 	NullSocket.prototype.on = function(event, handler) {
-		if (event === "disconnect") return this._emitter.on(event, handler);
-		if (event === "connect") return this._emitter.on(event, handler);
+		// ignore all events
+	};
+
+	NullSocket.prototype.once = function(event, handler) {
+		if (event === "disconnect") return this._emitter.once(event, handler);
+		if (event === "connect") return this._emitter.once(event, handler);
 		// ignore all other events
 	};
 

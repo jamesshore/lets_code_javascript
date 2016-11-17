@@ -46,15 +46,10 @@
 
 						assert.equal(connectCallback, 1, "connect callback");
 						assert.equal(disconnectCallback, 1, "disconnect callback");
-
 						done();
 					});
 				});
 			});
-
-
-
-
 		});
 
 		it("connect() can be called without callback", function(done) {
