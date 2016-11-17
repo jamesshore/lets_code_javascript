@@ -1,7 +1,7 @@
 
 # Engine.IO client
 
-[![Build Status](https://secure.travis-ci.org/socketio/engine.io-client.svg)](http://travis-ci.org/socketio/engine.io-client)
+[![Build Status](https://travis-ci.org/socketio/engine.io-client.svg?branch=master)](http://travis-ci.org/socketio/engine.io-client)
 [![NPM version](https://badge.fury.io/js/engine.io-client.svg)](http://badge.fury.io/js/engine.io-client)
 
 This is the client for [Engine.IO](http://github.com/socketio/engine.io),
@@ -223,6 +223,7 @@ Exposed as `eio` in the browser standalone build.
         (see [ws module](https://github.com/einaros/ws) api docs). Set to `false` to disable. (`true`)
         - `threshold` (`Number`): data is compressed only if the byte size is above this value. This option is ignored on the browser. (`1024`)
       - `extraHeaders` (`Object`): Headers that will be passed for each request to the server (via xhr-polling and via websockets). These values then can be used during handshake or for special proxies. Can only be used in Node.js client environment.
+      - `onlyBinaryUpgrades` (`Boolean`): whether transport upgrades should be restricted to transports supporting binary data (`false`)
 - `send`
     - Sends a message to the server
     - **Parameters**

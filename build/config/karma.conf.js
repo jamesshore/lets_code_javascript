@@ -14,6 +14,7 @@ module.exports = function(config) {
 
 		// list of files / patterns to load in the browser
 		files: [
+			'src/node_modules/**/*.js',
 			'src/client/**/*.js',
 			'src/shared/**/*.js',
 			{ pattern: 'src/client/content/vendor/normalize-3.0.2.css', included: false },
@@ -29,13 +30,15 @@ module.exports = function(config) {
 
 		// preprocessors
 		preprocessors: {
+			'src/node_modules/*.js': [ 'commonjs' ],
+			'src/node_modules/vendor/big-object-diff-0.7.0.js': [ 'commonjs' ],
+			'src/node_modules/vendor/proclaim-2.0.0.js': [ 'commonjs' ],
 			'src/client/content/*.js': [ 'commonjs' ],
 			'src/client/ui/*.js': [ 'commonjs' ],
 			'src/client/network/*.js': [ 'commonjs' ],
 			'src/client/network/vendor/async-1.5.2.js': [ 'commonjs' ],
+			'src/client/network/vendor/emitter-1.2.1.js': [ 'commonjs' ],
 			'src/client/content/vendor/quixote-0.9.0.js': [ 'commonjs' ],
-			'src/shared/vendor/big-object-diff-0.7.0.js': [ 'commonjs' ],
-			'src/shared/vendor/proclaim-2.0.0.js': [ 'commonjs' ],
 			'src/shared/*.js': [ 'commonjs' ]
 		},
 
@@ -68,6 +71,9 @@ module.exports = function(config) {
 
 		// If browser does not capture in given timeout [ms], kill it
 		captureTimeout: 60000,
+
+		// If no message received from browser in [ms] while running tests, disconnect it
+		browserNoActivityTimeout: 30000,
 
 		// Continuous Integration mode
 		// if true, it capture browsers, run tests and exit

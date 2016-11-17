@@ -9,7 +9,7 @@
 	var http = require("http");
 	var fs = require("fs");
 	var procfile = require("procfile");
-	var assert = require("./shared/_assert.js");
+	var assert = require("_assert");
 
 	describe("Release", function() {
 		this.timeout(10 * 1000);

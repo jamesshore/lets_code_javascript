@@ -38,17 +38,18 @@ User Stories to finish current MMF:
 - load management
 - server monitoring / error handling
 - security (handling bad data, denial of service attacks)
+	- nsp, snyk
 
 Engineering Tasks:
-- Open question: how to make sure our test double matches our real code?
-	- Use sinon.js? testdouble.js?
-- Figure out bundling and distribution for socket.io client
-- Figure out how to de-dupe require paths for common files (such as "_assert.js")
-	- See Scott Corgan comment, E381: http://www.letscodejavascript.com/v3/comments/live/381#comment-2489897377
 - Update smoke tests for real-time networking
 	- Replace Selenium? Fix it?
+		- http://www.nightmarejs.org/ ?
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-- At start of episode:
-	- Discuss Mattias Åslund comment, E449 (re function names)
+- AT START OF EPISODE:
+	- Increased Mocha and Karma timeouts
+	- Upgraded to latest LTS version of Node (6.9.1). Couldn't use latest (v7.1.0) due to minor Browserify issue
+		(Browserify triggered deprecation warning and output. Appeared to work, but message is ugly.)
+	- Upgraded all dependencies to latest versions
+	- Fixed breaking change introduced in Socket.IO v1.5.0 (removed '/#' from beginning of server socket ID)

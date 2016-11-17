@@ -1,4 +1,41 @@
 
+1.7.2 / 2016-10-24
+===================
+
+  * [fix] Set accept header to */* to support react app proxy (#508)
+  * [fix] remove a workaround for ios (#465)
+  * [fix] onPacket now emits data on 'closing' state as well (#484)
+  * [fix] Obfuscate `ActiveXObject` occurrences (#509)
+  * [docs] Add missing `onlyBinaryUpgrades` option in the docs (#510)
+  * [chore] Add Github issue and PR templates (#511)
+
+1.7.1 / 2016-10-20
+===================
+
+  * [fix] Define "requestsCount" var and "requests" hash unconditionally (#490)
+  * [perf] Add all properties to the socket in the constructor (#488)
+  * [chore] Update zuul browser settings (#504)
+  * [chore] Bump engine.io-parser to 1.3.1 (#505)
+  * [chore] Use more-specific imports for StealJS compatibility (#467)
+
+1.7.0 / 2016-10-05
+===================
+
+  * [fix] Revert "default `rejectUnauthorized` to `true`" (#496)
+  * [fix] Use xhr.responseText if xhr.response is not provided (#483)
+  * [fix] Fix issue with errors during WebSocket creation not being caught (#475)
+  * [style] Add missing semi-colon (#501)
+  * [chore] Add gulp & babel in the build process (#455)
+  * [chore] Add eslint (#458)
+  * [chore] Bump zuul (#464)
+  * [chore] Remove unused submodule (#466)
+  * [chore] Bumping ws to 1.1.1 (#478)
+  * [chore] Update zuul browser settings following EOL notices (#486)
+  * [chore] Bump engine.io-parser (#492)
+  * [chore] Make the build status badge point towards master (#497)
+  * [chore] Bump zuul to 3.11.0 & zuul-ngrok to 4.0.0 (#498)
+  * [chore] Restrict files included in npm package (#499)
+
 1.6.11 / 2016-06-23
 ===================
 

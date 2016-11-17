@@ -30,40 +30,47 @@
 	};
 
 	exports.sharedTestFiles = function() {
-		return deglob("src/shared/**/_*_test.js");
+		return deglob([
+			"src/shared/**/_*_test.js",
+			"src/node_modules/**/_*_test.js"
+		]);
 	};
 
 	exports.cssTestDependencies = function() {
 		return deglob([
 			"src/client/content/**/*",
-			"src/shared/**/*"
+			"src/node_modules/**/*.js"
 		]);
 	};
 
 	exports.clientJsTestDependencies = function() {
 		return deglob([
-			"src/client/ui/**/*",
-			"src/shared/**/*"
+			"src/client/ui/**/*.js",
+			"src/shared/**/*.js",
+			"src/node_modules/**/*.js"
 		]);
 	};
 
 	exports.sharedJsTestDependencies = function() {
 		return deglob([
-			"src/shared/**/*"
+			"src/shared/**/*.js",
+			"src/node_modules/**/*.js"
 		]);
 	};
 
 	exports.clientNetworkTestDependencies = function() {
 		return deglob([
 			"src/client/network/**/*.js",
-			"src/shared/**/*"
+			"src/shared/**/*.js",
+			"src/node_modules/**/*.js"
 		]);
 	};
 
 	exports.serverTestDependencies = function() {
 		return deglob([
 			"src/server/**/*.js",
-			"src/shared/**/*.js"
+			"src/shared/**/*.js",
+			"src/node_modules/**/*.js"
 		]);
 	};
 

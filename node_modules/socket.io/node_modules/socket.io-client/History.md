@@ -1,4 +1,28 @@
 
+1.5.1 / 2016-10-24
+==================
+
+  * [chore] Disable AMD for json3 (#1005)
+  * [chore] Bump socket.io-parser to 2.3.0 (#1009)
+  * [chore] Bump engine.io-client to 1.7.1 (#1010)
+  * [chore] Update zuul browser settings (#1011)
+  * [chore] Add Github issue and PR templates (#1013)
+  * [chore] Bump engine.io-client to 1.7.2 and socket.io-parser to 2.3.1 (#1015)
+
+1.5.0 / 2016-10-06
+==================
+
+  * [fix] Fix query string management (#943)
+  * [chore] Add gulp & babel in the build process (#940)
+  * [chore] Add eslint (#951)
+  * [chore] bump zuul (#958)
+  * [chore] Remove jspm browser config (#957)
+  * [chore] Update zuul browser settings following EOL notices (#985)
+  * [chore] Bump zuul to 3.11.0 & zuul-ngrok to 4.0.0 (#997)
+  * [chore] reference build badge to master branch (#967)
+  * [chore] Bump engine.io-client to 1.7.0 (#996)
+  * [chore] Restrict files included in npm package (#998)
+
 1.4.8 / 2016-06-23
 ==================
 

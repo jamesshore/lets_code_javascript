@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2012-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global desc, task, file, jake, rule, fail, complete, directory*/
 
 (function() {
@@ -41,7 +41,7 @@
 	task("default", [ "clean", "quick", "smoketest" ]);
 
 	desc("Incrementally lint and test fast targets");
-	task("quick", [ "nodeVersion", "lint", "test" ]);
+	task("quick", [ "versions", "lint", "test" ]);
 
 	desc("Start Karma server for testing");
 	task("karma", function() {
@@ -216,7 +216,7 @@
 		shell().rm("-rf", paths.buildClientDir + "/*");
 		shell().cp(
 			"-R",
-			"src/client/content/*", "src/client/ui/vendor", "src/client/network/vendor", "src/shared/vendor",
+			"src/client/content/*", "src/client/ui/vendor", "src/client/network/vendor",
 			paths.buildClientDir
 		);
 	});
@@ -239,6 +239,9 @@
 
 	//*** CHECK VERSIONS
 
+	desc("Check dependency versions");
+	task("versions", [ "nodeVersion", "socketIoVersion" ]);
+
 	task("nodeVersion", [], function() {
 		console.log("Checking Node.js version: .");
 		var version = require("./build/util/version_checker.js");
@@ -250,6 +253,37 @@
 			strict: strict
 		}, complete, fail);
 	}, { async: true });
+
+	task("socketIoVersion", [], function() {
+		console.log("Checking Socket.IO versions: .");
+
+		var nodeServerVersion = require("socket.io/package").version;
+		var nodeClientVersion = require("socket.io-client/package").version;
+
+		if (nodeServerVersion !== nodeClientVersion) {
+			console.log("Socket.IO versions did not match!\n" +
+				"  socket.io: " + nodeServerVersion + "\n" +
+				"  socket.io-client: " + nodeClientVersion
+			);
+			fail("Socket.IO version mismatch");
+		}
+
+		var vendorClientFilename = "./src/client/network/vendor/socket.io-" + nodeServerVersion + ".js";
+		try {
+			var stat = fs().statSync(vendorClientFilename);
+			// file exists, we're all good
+		}
+		catch (err) {
+			console.log("Socket.IO vendor file version did not match or was missing!\n" +
+				"  Expected version " + nodeServerVersion + "\n" +
+				"  at location " + vendorClientFilename + "\n" +
+				"  To get correct version, `jake run` and go to:\n" +
+				"    http://localhost:5000/socket.io/socket.io.js\n" +
+				"  (" + err + ")"
+			);
+			fail("Socket.IO version mismatch");
+		}
+	});
 
 
 	//*** CHECKLISTS

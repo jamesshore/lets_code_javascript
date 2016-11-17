@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var assert = require("../../shared/_assert.js");
+	var assert = require("_assert");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var HtmlElement = require("./html_element.js");
 

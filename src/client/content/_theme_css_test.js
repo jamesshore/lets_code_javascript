@@ -3,7 +3,7 @@
 	"use strict";
 
 	var cssHelper = require("./_css_test_helper.js");
-	var assert = require("../../shared/_assert.js");
+	var assert = require("_assert");
 
 	describe("CSS: 'Let's Code' theme", function() {
 

@@ -10,6 +10,6 @@
 		SEND_POINTER_LOCATION: "/send-pointer-location"
 	};
 
-	exports.PORT = 5030;
+	exports.PORT = "5030";
 
 }());

@@ -7,9 +7,9 @@ try {
 } catch (e) {}
 
 var xhr = new global.XMLHttpRequest()
-// If location.host is empty, e.g. if this page/worker was loaded
-// from a Blob, then use example.com to avoid an error
-xhr.open('GET', global.location.host ? '/' : 'https://example.com')
+// If XDomainRequest is available (ie only, where xhr might not work
+// cross domain), use the page location. Otherwise use example.com
+xhr.open('GET', global.XDomainRequest ? '/' : 'https://example.com')
 
 function checkTypeSupport (type) {
 	try {

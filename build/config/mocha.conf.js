@@ -4,7 +4,8 @@
 
 	module.exports = {
 		ui: "bdd",
-		reporter: "dot"
+		reporter: "dot",
+		timeout: 5000
 	};
 
 }());
