@@ -41,7 +41,6 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-- Increase Mocha's timeout to prevent spurious test failures due to CPU overload
 - Update smoke tests for real-time networking
 	- Replace Selenium? Fix it?
 		- http://www.nightmarejs.org/ ?
@@ -50,3 +49,4 @@ Engineering Tasks:
 To Do on current task:
 - AT START OF EPISODE:
 	- Increased Mocha and Karma timeouts
+	- Upgraded to latest version of Node (7.0.0)
