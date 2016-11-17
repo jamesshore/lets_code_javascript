@@ -51,10 +51,9 @@ Engineering Tasks:
 
 To Do on current task:
 * Improve production code
-	- Should onPointerLocation() and triggerPointerLocation use event emitter?
-	- Shouldn't mix sync and async callbacks (ref E458 comments)
 	- Possible bug: RealTimeConnection.disconnect() should use .once() not .on(); could callback twice
 		- and connect() too?
+	- Should onPointerLocation() and triggerPointerLocation use event emitter?
 	- Use URL class in RealTimeConnection.parsePort? (ref Martin Grandrath, E464 comments)
 - Improve test duplication
 	- Run behavior tests from both regular and Null RealTimeConnection tests?

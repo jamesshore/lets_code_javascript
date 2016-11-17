@@ -168,6 +168,23 @@
 			});
 		});
 
+		it("closes connection asynchronously", function(done) {
+			connection.connect(harness.PORT, function(err) {
+				if (err) return done(err);
+
+				var timeoutCalled = false;
+				setTimeout(function() {
+					timeoutCalled = true;
+				}, 0);
+
+				connection.disconnect(function(err) {
+					if (err) return done(err);
+					assert.equal(timeoutCalled, true, "if disconnect is asynchronous, other asynchronous code should have run");
+					done();
+				});
+			});
+		});
+
 		it("connect() can be called without callback", function() {
 			connection.connect(harness.PORT);
 			// expect no exception

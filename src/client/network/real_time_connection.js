@@ -13,8 +13,7 @@
 	};
 
 	Connection.createNull = function() {
-		var connection = new Connection();
-		return initialize(connection, nullIo);
+		return initialize(new Connection(), nullIo);
 	};
 	
 	function initialize(self, ioToInject) {
@@ -121,7 +120,7 @@
 			engine: { port: port }
 		};
 
-		asynchronouslyEmitConnectEvent(this);
+		asynchronousEmit(this._emitter, "connect");
 	}
 
 	NullSocket.prototype.emit = function() {
@@ -136,12 +135,12 @@
 
 	NullSocket.prototype.close = function() {
 		this.connected = false;
-		this._emitter.emit("disconnect");
+		asynchronousEmit(this._emitter, "disconnect");
 	};
 
-	function asynchronouslyEmitConnectEvent(self) {
+	function asynchronousEmit(emitter, event) {
 		setTimeout(function() {
-			self._emitter.emit("connect");
+			emitter.emit(event);
 		}, 0);
 	}
 
