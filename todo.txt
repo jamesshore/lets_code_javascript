@@ -41,8 +41,6 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-* Open question: how to make sure our test double matches our real code?
-	- Use sinon.js? testdouble.js?
 - Increase Mocha's timeout to prevent spurious test failures due to CPU overload
 - Update smoke tests for real-time networking
 	- Replace Selenium? Fix it?
@@ -50,8 +48,4 @@ Engineering Tasks:
 	- Update readme to reflect reproducibility issues with Selenium
 
 To Do on current task:
-* Improve test duplication
-	- Run behavior tests from both regular and Null RealTimeConnection tests?
-	- Group tests by method rather than connection type?
-- UI tests now depend on network code...?
 

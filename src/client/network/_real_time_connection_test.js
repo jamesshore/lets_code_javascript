@@ -171,131 +171,57 @@
 
 	});
 
-	describe("NET: Null RealTimeConnection", function() {
 
-		var connection;
+	describe("NET: RealTimeConnection._nullIo", function() {
 
-		beforeEach(function() {
-			connection = Connection.createNull();
+		var IRRELEVANT_SERVER = "http://irrelevant_server";
+
+		var nullIo = Connection._nullIo;
+
+		it("mimics Socket.IO variables (without actually talking to a server)", function() {
+			var socket = nullIo("http://any.host:9283");
+
+			assert.equal(socket.connected, true, "connected");
+			assert.equal(socket.id, "NullConnection", "id");
+			assert.deepEqual(socket.io, {
+				engine: {
+					port: "9283"
+				}
+			}, "io");
 		});
 
-		it("connects and disconnects without talking to Socket.IO server", function(done) {
-			connection.connect(harness.PORT, function(err) {
-				assert.equal(err, null, "connect() should not have error");
-				assert.equal(harness.isConnected(connection), false, "client should not have connected to server");
-
-				connection.disconnect(function(err2) {
-					assert.equal(err2, null, "disconnect() should not have error");
-					done();
-				});
-			});
-		});
-
-		it("closes connection asynchronously", function(done) {
-			connection.connect(harness.PORT, function(err) {
-				if (err) return done(err);
-
-				var timeoutCalled = false;
-				setTimeout(function() {
-					timeoutCalled = true;
-				}, 0);
-
-				connection.disconnect(function(err) {
-					if (err) return done(err);
-					assert.equal(timeoutCalled, true, "if disconnect is asynchronous, other asynchronous code should have run");
-					done();
-				});
-			});
-		});
-
-		it("connect() can be called without callback", function() {
-			connection.connect(harness.PORT);
-			// expect no exception
-		});
-
-		it("it ignores attempts to send pointer status to Socket.IO server", function(done) {
-			connection.connect(harness.PORT, function() {
-				connection.sendPointerLocation(50, 75);
+		it("emits connect event upon construction", function(done) {
+			var socket = nullIo(IRRELEVANT_SERVER);
+			socket.once("connect", function() {
 				done();
 			});
+			// test times out if connect event not sent
 		});
 
-		it("gets most recent attempt to send pointer location, even though nothing is actually sent", function(done) {
-			connection.connect(harness.PORT, function() {
-				assert.deepEqual(connection.getLastSentPointerLocation(), null, "should not have a location if nothing sent");
-				connection.sendPointerLocation(50, 75);
-				assert.deepEqual(connection.getLastSentPointerLocation(), { x: 50, y: 75 }, "should return last sent value");
+		it("silently swallows all events that would be sent to server", function(done) {
+			var socket = nullIo(IRRELEVANT_SERVER);
+
+			var eventHandler = false;
+			socket.on("my_event", function() {
+				eventHandler = true;
+				done();   // test will fail if done is called twice
+			});
+			socket.emit("my_event");
+
+			assert.equal(eventHandler, false, "events should be swallowed");
+			done();
+		});
+
+		it("'closes' socket by emitting asynchronous disconnect event and changing state", function(done) {
+			var socket = nullIo(IRRELEVANT_SERVER);
+
+			socket.close();
+			// by putting event handler after close(), we test that the event is asynchronous
+			socket.once("disconnect", function() {
+				assert.equal(socket.connected, false, "socket should no longer be connected");
 				done();
 			});
-		});
-
-		it("can trigger pointer location event manually", function(done) {
-			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
-
-			connection.connect(harness.PORT, function() {
-				connection.onPointerLocation(function(event) {
-					assert.deepEqual(event, EXPECTED_EVENT);
-					done();
-				});
-
-				connection.triggerPointerLocation(0xdeadbeef, 90, 160);
-				// if triggerPointerLocation doesn't do anything, the test will time out
-			});
-		});
-
-		it("can trigger pointer location event even when no one listening", function(done) {
-			connection.connect(harness.PORT, function() {
-				connection.triggerPointerLocation(0xdeadbeef, 12, 23);
-				done();
-			});
-		});
-
-		it("provides a null socket ID", function(done) {
-			connection.connect(harness.PORT, function() {
-				assert.equal(connection.getSocketId(), "NullConnection");
-				connection.disconnect(function() {
-					assert.equal(connection.getSocketId(), null, "should return null after disconnecting");
-					done();
-				});
-			});
-		});
-
-		it("provides server port", function(done) {
-			connection.connect(harness.PORT, function() {
-				assert.equal(connection.getPort(), harness.PORT, "should return connection port after connecting");
-				connection.disconnect(function() {
-					assert.equal(connection.getPort(), null, "should return null after disconnecting");
-					done();
-				});
-			});
-		});
-
-		it("checks status of connection", function(done) {
-			assert.equal(connection.isConnected(), false, "should not be connected before connect() is called");
-
-			connection.connect(harness.PORT, function() {
-				assert.equal(connection.isConnected(), true, "should be connected after connect() is complete");
-				connection.disconnect(function() {
-					assert.equal(connection.isConnected(), false, "should not be connected after disconnect() is complete");
-					done();
-				});
-			});
-		});
-
-		it("fails fast when methods are called before connect() is called", function() {
-			var expectedMessage = "Connection used before connect() called";
-
-			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
-			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
-			assert.throws(connection.getLastSentPointerLocation.bind(connection), expectedMessage, "getLastSentPointerLocation()");
-			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
-			assert.throws(connection.triggerPointerLocation.bind(connection), expectedMessage, "triggerPointerLocation()");
-			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
-			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
-
-			function callback() {
-				assert.fail("Callback should never be called");
-			}
+			// test times out if disconnect event not sent
 		});
 
 	});

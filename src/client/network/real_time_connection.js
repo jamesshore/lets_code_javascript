@@ -13,7 +13,7 @@
 	};
 
 	Connection.createNull = function() {
-		return initialize(new Connection(), nullIo);
+		return initialize(new Connection(), Connection._nullIo);
 	};
 	
 	function initialize(self, ioToInject) {
@@ -101,9 +101,10 @@
 
 	//**** nullIo mimics the socket.io interface, but doesn't talk over the network
 
-	function nullIo(origin) {
+	// We're exposing this for test purposes only.
+	Connection._nullIo = function(origin) {
 		return new NullSocket(parsePort(origin));
-	}
+	};
 
 	// This code based on https://gist.github.com/jlong/2428561
 	function parsePort(url) {
