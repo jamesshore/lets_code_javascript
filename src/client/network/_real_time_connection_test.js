@@ -29,6 +29,34 @@
 			});
 		});
 
+		it("only calls connect() and disconnect() callbacks once", function(done) {
+			var connectCallback = 0;
+			var disconnectCallback = 0;
+
+			connection.connect(harness.PORT, function(err) {
+				if (err) return done(err);
+				connectCallback++;
+
+				connection.disconnect(function(err) {
+					if (err) return done(err);
+					disconnectCallback++;
+
+					connection.connect(harness.PORT, function(err) {
+						if (err) return done(err);
+
+						assert.equal(connectCallback, 1, "connect callback");
+						assert.equal(disconnectCallback, 1, "disconnect callback");
+
+						done();
+					});
+				});
+			});
+
+
+
+
+		});
+
 		it("connect() can be called without callback", function(done) {
 			connection.connect(harness.PORT);
 			async.until(test, fn, done);
