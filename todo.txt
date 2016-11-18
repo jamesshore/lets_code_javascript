@@ -45,6 +45,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Confirm that the ghost pointer moved in the second browser
-
+- Consider using npm module 'geckodriver' rather than downloading geckodriver manually
 - Update readme: explain installing gecko-driver, mention `brew install geckodriver`
 	- Update readme to reflect reproducibility issues with Selenium
