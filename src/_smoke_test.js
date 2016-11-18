@@ -95,7 +95,14 @@
 			driver.get(HOME_PAGE_URL);
 
 			var driver2 = createDriver();
-			driver2.get(NOT_FOUND_PAGE_URL);
+			driver2.get(HOME_PAGE_URL);
+
+			driver.executeScript(function() {
+				var HtmlElement = require("./html_element.js");
+				var drawingArea = HtmlElement.fromId("drawing-area");
+
+				drawingArea.triggerMouseMove(50, 60);
+			});
 
 			driver2.controlFlow().execute(function() {
 				try {
@@ -103,7 +110,7 @@
 				}
 				finally {
 					setTimeout(function() {
-						driver2.quit().then(done);
+						// driver2.quit().then(done);
 					}, 0);
 				}
 			});

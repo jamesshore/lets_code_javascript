@@ -44,10 +44,7 @@ Engineering Tasks:
 * Update smoke tests for real-time networking
 
 To Do on current task:
-- Get smoke tests working again
-- Spin up a second browser
-- move the mouse pointer in one browser
-- confirm that the ghost pointer moved in the second browser
+* Confirm that the ghost pointer moved in the second browser
 
 - Update readme: explain installing gecko-driver, mention `brew install geckodriver`
 	- Update readme to reflect reproducibility issues with Selenium
