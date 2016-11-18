@@ -23,13 +23,13 @@
 	var driver;
 
 	describe("Smoke test", function() {
-		this.timeout(10 * 1000);
+		this.timeout(30 * 1000);
 
 		before(function (done) {
 			runServer.runProgrammatically(function(process) {
 				serverProcess = process;
 
-				driver = new webdriver.Builder().forBrowser("firefox").build();
+				driver = createDriver();
 				driver.getCapabilities().then(function(capabilities) {
 					var version = capabilities.get("browserName") + " " + capabilities.get("version");
 					if (version !== EXPECTED_BROWSER) {
@@ -63,6 +63,14 @@
 			});
 		});
 
+		it("home page fonts are loaded", function(done) {
+			assertWebFontsLoaded(HOME_PAGE_URL, done);
+		});
+
+		it("404 page fonts are loaded", function(done) {
+			assertWebFontsLoaded(NOT_FOUND_PAGE_URL, done);
+		});
+
 		it("user can draw on page", function(done) {
 			driver.get(HOME_PAGE_URL);
 
@@ -83,15 +91,29 @@
 			driver.controlFlow().execute(done);
 		});
 
-		it("home page fonts are loaded", function(done) {
-			assertWebFontsLoaded(HOME_PAGE_URL, done);
-		});
+		it.only("networks multiple users together", function(done) {
+			driver.get(HOME_PAGE_URL);
 
-		it("404 page fonts are loaded", function(done) {
-			assertWebFontsLoaded(NOT_FOUND_PAGE_URL, done);
+			var driver2 = createDriver();
+			driver2.get(NOT_FOUND_PAGE_URL);
+
+			driver2.controlFlow().execute(function() {
+				try {
+					// assert.fail("Test failed!");
+				}
+				finally {
+					setTimeout(function() {
+						driver2.quit().then(done);
+					}, 0);
+				}
+			});
 		});
 
 	});
+
+	function createDriver() {
+		return new webdriver.Builder().forBrowser("firefox").build();
+	}
 
 	function assertWebFontsLoaded(url, done) {
 		var TIMEOUT = 10 * 1000;
