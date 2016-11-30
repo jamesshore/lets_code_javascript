@@ -91,11 +91,18 @@
 			driver.controlFlow().execute(done);
 		});
 
-		it.only("networks multiple users together", function(done) {
+		it("networks multiple users together", function(done) {
 			driver.get(HOME_PAGE_URL);
 
 			var driver2 = createDriver();
 			driver2.get(HOME_PAGE_URL);
+
+			driver2.executeScript(function() {
+				var HtmlElement = require("./html_element.js");
+				return HtmlElement.fromSelector(".ghost-pointer").length;
+			}).then(function(numGhostPointers) {
+				assert.equal(numGhostPointers, 0, "should not have any ghost pointers before pointer is moved in other browser");
+			});
 
 			driver.executeScript(function() {
 				var HtmlElement = require("./html_element.js");
@@ -104,15 +111,15 @@
 				drawingArea.triggerMouseMove(50, 60);
 			});
 
-			driver2.controlFlow().execute(function() {
-				try {
-					// assert.fail("Test failed!");
-				}
-				finally {
-					setTimeout(function() {
-						// driver2.quit().then(done);
-					}, 0);
-				}
+			driver2.executeScript(function() {
+				var HtmlElement = require("./html_element.js");
+				return HtmlElement.fromSelector(".ghost-pointer").length;
+			}).then(function(numGhostPointers) {
+				assert.equal(numGhostPointers, 1, "should have one ghost pointer after pointer is moved in other browser");
+			});
+
+			driver.controlFlow().execute(function() {
+				driver2.quit().then(done);
 			});
 		});
 
