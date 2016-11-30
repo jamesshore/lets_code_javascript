@@ -48,3 +48,5 @@ To Do on current task:
 - Consider using npm module 'geckodriver' rather than downloading geckodriver manually
 - Update readme: explain installing gecko-driver, mention `brew install geckodriver`
 	- Update readme to reflect reproducibility issues with Selenium
+- BEFORE NEXT EPISODE
+	- try it: Nice test of asynchronous code in http://www.letscodejavascript.com/v3/comments/live/465#comment-3015324687
