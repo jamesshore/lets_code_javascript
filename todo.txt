@@ -44,8 +44,7 @@ Engineering Tasks:
 * Update smoke tests for real-time networking
 
 To Do on current task:
-* Smoke test is failing on Windows
-- How can improve the smoke test code?
+* How can improve the smoke test code?
 	- What do we do about hardcoded ".ghost-pointer" class?
 - Consider using npm module 'geckodriver' rather than downloading geckodriver manually
 - Viewer comments

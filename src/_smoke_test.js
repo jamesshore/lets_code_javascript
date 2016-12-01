@@ -20,6 +20,8 @@
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
 	var EXPECTED_BROWSER = "firefox 50.0.1";
+	var GHOST_POINTER_SELECTOR = ".ghost-pointer";
+	var DRAWING_AREA_ID = "drawing-area";
 
 	var serverProcess;
 	var driver;
@@ -76,17 +78,17 @@
 		it("user can draw on page", function(done) {
 			driver.get(HOME_PAGE_URL);
 
-			driver.executeScript(function() {
+			driver.executeScript(function(DRAWING_AREA_ID) {
 				var client = require("./client.js");
 				var HtmlElement = require("./html_element.js");
 
-				var drawingArea = HtmlElement.fromId("drawing-area");
+				var drawingArea = HtmlElement.fromId(DRAWING_AREA_ID);
 				drawingArea.triggerMouseDown(10, 20);
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseUp(50, 60);
 
 				return client.drawingAreaCanvas.lineSegments();
-			}).then(function(lineSegments) {
+			}, DRAWING_AREA_ID).then(function(lineSegments) {
 				assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
 			});
 
@@ -99,21 +101,21 @@
 			var driver2 = createDriver();
 			driver2.get(HOME_PAGE_URL);
 
-			driver2.executeScript(function() {
+			driver2.executeScript(function(GHOST_POINTER_SELECTOR) {
 				var HtmlElement = require("./html_element.js");
-				return HtmlElement.fromSelector(".ghost-pointer").length;
-			}).then(function(numGhostPointers) {
+				return HtmlElement.fromSelector(GHOST_POINTER_SELECTOR).length;
+			}, GHOST_POINTER_SELECTOR).then(function(numGhostPointers) {
 				assert.equal(numGhostPointers, 0, "should not have any ghost pointers before pointer is moved in other browser");
 			});
 
-			driver.executeScript(function() {
+			driver.executeScript(function(DRAWING_AREA_ID) {
 				var HtmlElement = require("./html_element.js");
-				var drawingArea = HtmlElement.fromId("drawing-area");
+				var drawingArea = HtmlElement.fromId(DRAWING_AREA_ID);
 
 				drawingArea.triggerMouseMove(50, 60);
-			});
+			}, DRAWING_AREA_ID);
 
-			driver2.wait(until.elementsLocated(By.css('.ghost-pointer')));
+			driver2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR)));
 
 			driver.controlFlow().execute(function() {
 				driver2.quit().then(done);
