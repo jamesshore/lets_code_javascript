@@ -12,6 +12,8 @@
 	var child_process = require("child_process");
 	var http = require("http");
 	var webdriver = require('selenium-webdriver');
+	var By = webdriver.By;
+	var until = webdriver.until;
 	var runServer = require("./_run_server.js");
 	var assert = require("_assert");
 
@@ -111,12 +113,7 @@
 				drawingArea.triggerMouseMove(50, 60);
 			});
 
-			driver2.executeScript(function() {
-				var HtmlElement = require("./html_element.js");
-				return HtmlElement.fromSelector(".ghost-pointer").length;
-			}).then(function(numGhostPointers) {
-				assert.equal(numGhostPointers, 1, "should have one ghost pointer after pointer is moved in other browser");
-			});
+			driver2.wait(until.elementsLocated(By.css('.ghost-pointer')));
 
 			driver.controlFlow().execute(function() {
 				driver2.quit().then(done);
