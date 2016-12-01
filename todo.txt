@@ -44,8 +44,6 @@ Engineering Tasks:
 * Update smoke tests for real-time networking
 
 To Do on current task:
-* How can improve the smoke test code?
-	- What do we do about hardcoded ".ghost-pointer" class?
-- Consider using npm module 'geckodriver' rather than downloading geckodriver manually
+* Consider using npm module 'geckodriver' rather than downloading geckodriver manually
 - Viewer comments
 	- Nice test of asynchronous code in http://www.letscodejavascript.com/v3/comments/live/465#comment-3015324687

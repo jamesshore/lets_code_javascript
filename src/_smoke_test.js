@@ -101,23 +101,17 @@
 			var driver2 = createDriver();
 			driver2.get(HOME_PAGE_URL);
 
-			driver2.executeScript(function(GHOST_POINTER_SELECTOR) {
-				var HtmlElement = require("./html_element.js");
-				return HtmlElement.fromSelector(GHOST_POINTER_SELECTOR).length;
-			}, GHOST_POINTER_SELECTOR).then(function(numGhostPointers) {
-				assert.equal(numGhostPointers, 0, "should not have any ghost pointers before pointer is moved in other browser");
+			driver2.findElements(By.css(GHOST_POINTER_SELECTOR)).then(function(elements) {
+				assert.equal(elements.length, 0, "should not have any ghost pointers before pointer is moved in other browser");
 			});
 
 			driver.executeScript(function(DRAWING_AREA_ID) {
 				var HtmlElement = require("./html_element.js");
-				var drawingArea = HtmlElement.fromId(DRAWING_AREA_ID);
-
-				drawingArea.triggerMouseMove(50, 60);
+				HtmlElement.fromId(DRAWING_AREA_ID).triggerMouseMove(50, 60);
 			}, DRAWING_AREA_ID);
 
-			driver2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR)));
-
-			driver.controlFlow().execute(function() {
+			// if we don't find the element before we time out, then the networking isn't working and the test will fail.
+			driver2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR))).then(function() {
 				driver2.quit().then(done);
 			});
 		});
