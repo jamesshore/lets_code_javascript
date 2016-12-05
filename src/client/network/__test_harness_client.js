@@ -51,6 +51,16 @@
 		});
 	};
 
+	exports.waitForDrawEvent = function(connection, callback) {
+		ajax({
+			connection: connection,
+			endpoint: endpoints.WAIT_FOR_DRAW_EVENT,
+			async: true
+		}, function(err, responseText) {
+			return callback(err, JSON.parse(responseText));
+		});
+	};
+
 	function ajax(options, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var request = $.ajax({

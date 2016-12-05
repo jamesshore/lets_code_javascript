@@ -124,7 +124,7 @@
 
 
 
-		it.skip("sends drawing events to Socket.IO server", function(done) {
+		it("sends drawing events to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 				var event = new ClientDrawEvent(1, 2, 3, 4);
 

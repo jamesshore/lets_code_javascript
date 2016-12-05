@@ -76,6 +76,10 @@
 		this._localEmitter.emit("pointer", event);
 	};
 
+	Connection.prototype.sendDrawEvent = function(event) {
+		// todo
+	};
+
 	Connection.prototype.getSocketId = function() {
 		failFastUnlessConnectCalled(this);
 		if (!this.isConnected()) return null;
