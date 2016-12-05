@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2012-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global document, window, CSSRule */
 /*jshint regexp:false*/
 
@@ -11,25 +11,29 @@
 
 	var child_process = require("child_process");
 	var http = require("http");
-	var firefox = require("selenium-webdriver/firefox");
+	var webdriver = require('selenium-webdriver');
+	var By = webdriver.By;
+	var until = webdriver.until;
 	var runServer = require("./_run_server.js");
 	var assert = require("_assert");
 
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
-	var EXPECTED_BROWSER = "firefox 47.0.1";
+	var EXPECTED_BROWSER = "firefox 50.0.2";
+	var GHOST_POINTER_SELECTOR = ".ghost-pointer";
+	var DRAWING_AREA_ID = "drawing-area";
 
 	var serverProcess;
 	var driver;
 
 	describe("Smoke test", function() {
-		this.timeout(10 * 1000);
+		this.timeout(30 * 1000);
 
 		before(function (done) {
 			runServer.runProgrammatically(function(process) {
 				serverProcess = process;
 
-				driver = new firefox.Driver();
+				driver = createDriver();
 				driver.getCapabilities().then(function(capabilities) {
 					var version = capabilities.get("browserName") + " " + capabilities.get("version");
 					if (version !== EXPECTED_BROWSER) {
@@ -63,26 +67,6 @@
 			});
 		});
 
-		it("user can draw on page", function(done) {
-			driver.get(HOME_PAGE_URL);
-
-			driver.executeScript(function() {
-				var client = require("./client.js");
-				var HtmlElement = require("./html_element.js");
-
-				var drawingArea = HtmlElement.fromId("drawing-area");
-				drawingArea.triggerMouseDown(10, 20);
-				drawingArea.triggerMouseMove(50, 60);
-				drawingArea.triggerMouseUp(50, 60);
-
-				return client.drawingAreaCanvas.lineSegments();
-			}).then(function(lineSegments) {
-				assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
-			});
-
-			driver.controlFlow().execute(done);
-		});
-
 		it("home page fonts are loaded", function(done) {
 			assertWebFontsLoaded(HOME_PAGE_URL, done);
 		});
@@ -91,7 +75,52 @@
 			assertWebFontsLoaded(NOT_FOUND_PAGE_URL, done);
 		});
 
+		it("user can draw on page", function(done) {
+			driver.get(HOME_PAGE_URL);
+
+			driver.executeScript(function(DRAWING_AREA_ID) {
+				var client = require("./client.js");
+				var HtmlElement = require("./html_element.js");
+
+				var drawingArea = HtmlElement.fromId(DRAWING_AREA_ID);
+				drawingArea.triggerMouseDown(10, 20);
+				drawingArea.triggerMouseMove(50, 60);
+				drawingArea.triggerMouseUp(50, 60);
+
+				return client.drawingAreaCanvas.lineSegments();
+			}, DRAWING_AREA_ID).then(function(lineSegments) {
+				assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
+			});
+
+			driver.controlFlow().execute(done);
+		});
+
+		it("networks multiple users together", function(done) {
+			driver.get(HOME_PAGE_URL);
+
+			var driver2 = createDriver();
+			driver2.get(HOME_PAGE_URL);
+
+			driver2.findElements(By.css(GHOST_POINTER_SELECTOR)).then(function(elements) {
+				assert.equal(elements.length, 0, "should not have any ghost pointers before pointer is moved in other browser");
+			});
+
+			driver.executeScript(function(DRAWING_AREA_ID) {
+				var HtmlElement = require("./html_element.js");
+				HtmlElement.fromId(DRAWING_AREA_ID).triggerMouseMove(50, 60);
+			}, DRAWING_AREA_ID);
+
+			// if we don't find the element before we time out, then the networking isn't working and the test will fail.
+			driver2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR))).then(function() {
+				driver2.quit().then(done);
+			});
+		});
+
 	});
+
+	function createDriver() {
+		return new webdriver.Builder().forBrowser("firefox").build();
+	}
 
 	function assertWebFontsLoaded(url, done) {
 		var TIMEOUT = 10 * 1000;

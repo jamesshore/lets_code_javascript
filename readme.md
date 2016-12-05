@@ -17,8 +17,9 @@ Before building or running for the first time:
 1. Install [Node.js](http://nodejs.org/download/)
 2. Install [Git](http://git-scm.com/downloads)
 3. Install [Firefox](http://getfirefox.com) (for smoke tests)
-3. Clone source repository: `git clone https://github.com/jamesshore/lets_code_javascript.git`
-4. All commands must run from root of repository: `cd lets_code_javascript`
+4. Install geckodriver into path (for smoke tests). On Mac, this is most easily done with [Homebrew](http://brew.sh/): `brew install geckodriver`. On Windows, [download geckodriver](https://github.com/mozilla/geckodriver/releases/) and manually add it to your path. On Linux, either download geckodriver manually or use your favorite package manager.
+5. Clone source repository: `git clone https://github.com/jamesshore/lets_code_javascript.git`
+6. All commands must run from root of repository: `cd lets_code_javascript`
 
 *Note:* If you update the repository (with `git pull` or similar), be sure to erase generated files with `git clean -fdx` first. (Note that this will erase any files you've added, so be sure to check in what you want to keep first.)
 
@@ -39,7 +40,7 @@ Compatibility notes:
 
 * Episodes 1-9 don't work on case-sensitive file systems. To fix the problem, rename `jakefile.js` to `Jakefile.js` (with a capital 'J').
 * Episodes 37-39 don't work on Windows. A workaround is included in the episode 37 video.
-
+* Episodes 269-441 and 469+ may fail when running smoke tests. They use Selenium for smoke testing and download the appropriate Firefox driver as needed. Those drivers may be missing or incompatible with your current version of Firefox. Starting with episode 469, Selenium uses geckodriver, which is installed separately from the rest of Selenium, which may make the smoke tests more reliable.
 
 ### To change Node versions and run the code:
 
