@@ -8,6 +8,8 @@
 	var async = require("./vendor/async-1.5.2.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
+	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
 	describe("NET: RealTimeConnection", function() {
 
@@ -113,12 +115,75 @@
 			});
 		});
 
-		it("can trigger pointer location event even when no one listening", function(done) {
+		it("can trigger pointer location event even when no one is listening", function(done) {
 			connection.connect(harness.PORT, function() {
 				connection.triggerPointerLocation(0xdeadbeef, 12, 23);
 				connection.disconnect(done);
 			});
 		});
+
+
+
+		it.skip("sends drawing events to Socket.IO server", function(done) {
+			connection.connect(harness.PORT, function() {
+				var event = new ClientDrawEvent(1, 2, 3, 4);
+
+				connection.sendDrawEvent(event);
+
+				harness.waitForDrawEvent(connection, function(error, eventData) {
+					assert.deepEqual(eventData, event.toSerializableObject());
+					connection.disconnect(done);
+				});
+			});
+		});
+
+		// it("gets most recent pointer location sent to Socket.IO server, even if it hasn't be received yet", function(done) {
+		// 	connection.connect(harness.PORT, function() {
+		// 		assert.deepEqual(connection.getLastSentPointerLocation(), null, "should not have a location if nothing sent");
+		// 		connection.sendPointerLocation(50, 75);
+		// 		assert.deepEqual(connection.getLastSentPointerLocation(), { x: 50, y: 75 }, "should return last sent value");
+		// 		connection.disconnect(done);
+		// 	});
+		// });
+		//
+		// it("receives pointer location from Socket.IO server", function(done) {
+		// 	var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
+		//
+		// 	connection.connect(harness.PORT, function() {
+		//
+		// 		connection.onPointerLocation(function(event) {
+		// 			assert.deepEqual(event, EXPECTED_EVENT);
+		// 			connection.disconnect(done);
+		// 		});
+		//
+		// 		harness.sendPointerLocation(connection, EXPECTED_EVENT, function() {});
+		// 	});
+		// });
+		//
+		// it("can trigger pointer location event manually", function(done) {
+		// 	var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
+		//
+		// 	connection.connect(harness.PORT, function() {
+		// 		connection.onPointerLocation(function(event) {
+		// 			assert.deepEqual(event, EXPECTED_EVENT);
+		// 			connection.disconnect(done);
+		// 		});
+		//
+		// 		connection.triggerPointerLocation(0xdeadbeef, 90, 160);
+		// 		// if triggerPointerLocation doesn't do anything, the test will time out
+		// 	});
+		// });
+		//
+		// it("can trigger pointer location event even when no one is listening", function(done) {
+		// 	connection.connect(harness.PORT, function() {
+		// 		connection.triggerPointerLocation(0xdeadbeef, 12, 23);
+		// 		connection.disconnect(done);
+		// 	});
+		// });
+
+
+
+
 
 		it("provides socket ID", function(done) {
 			connection.connect(harness.PORT, function() {

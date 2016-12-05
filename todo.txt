@@ -40,13 +40,17 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-* Modify server to handle line drawing
-- Modify RealTimeConnection to handle line drawing
+* Modify RealTimeConnection to handle line drawing
 - Update client.js to send line drawing events to server
 - Update client.js to listen for line drawing events from server
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
 	- ServerDrawEvent and ClientDrawEvent are exact duplicated :-/
 	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent
+	- A lot of duplication in server event tests. Tests are pretty ugly, too.
+	- RealTimeConnection - lots of duplication in event handling. Genericize it to not know about event details?
 
 To Do on current task:
+- Modify test harness client
+- Modify test harness server
+- Modify tests
