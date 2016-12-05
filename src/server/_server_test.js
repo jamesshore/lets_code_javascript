@@ -194,7 +194,7 @@
 		});
 
 		it("broadcasts draw events from one client to all others", function(done) {
-			var EXPECTED_DATA = "tbd";
+			var EXPECTED_DATA = { fromX: 100, fromY: 200, toX: 300, toY: 400 };
 
 			var emitter = createSocket();
 			var receiver1 = createSocket();
@@ -207,7 +207,7 @@
 			async.each([ receiver1, receiver2 ], function(client, next) {
 				client.on(ServerDrawEvent.EVENT_NAME, function(data) {
 					try {
-						assert.deepEqual(data, {});
+						assert.deepEqual(data, EXPECTED_DATA);
 					}
 					finally {
 						next();
@@ -215,7 +215,12 @@
 				});
 			}, end);
 
-			emitter.emit(ClientDrawEvent.EVENT_NAME, new ClientDrawEvent("something").toSerializableObject());
+			emitter.emit(ClientDrawEvent.EVENT_NAME, new ClientDrawEvent(
+				EXPECTED_DATA.fromX,
+				EXPECTED_DATA.fromY,
+				EXPECTED_DATA.toX,
+				EXPECTED_DATA.toY
+			).toSerializableObject());
 
 			function end() {
 				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);
