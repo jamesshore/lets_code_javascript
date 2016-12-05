@@ -10,6 +10,8 @@
 	var io = require("socket.io-client");
 	var ServerPointerEvent = require("../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
+	var ServerDrawEvent = require("../shared/server_draw_event.js");
+	var ClientDrawEvent = require("../shared/client_draw_event.js");
 
 	var CONTENT_DIR = "generated/test";
 
@@ -158,7 +160,7 @@
 			server.stop(done);
 		});
 
-		it("broadcasts mouse message from one client to all others", function(done) {
+		it("broadcasts pointer events from one client to all others", function(done) {
 			var EXPECTED_DATA = { x: 100, y: 200 };
 
 			var emitter = createSocket();
@@ -171,16 +173,49 @@
 
 			async.each([ receiver1, receiver2 ], function(client, next) {
 				client.on(ServerPointerEvent.EVENT_NAME, function(data) {
-					assert.deepEqual(data, {
-						id: emitter.id,           // should add unique sender ID to data
-						x: EXPECTED_DATA.x,
-						y: EXPECTED_DATA.y
-					});
-					next();
+					try {
+						assert.deepEqual(data, {
+							id: emitter.id,           // should add unique sender ID to data
+							x: EXPECTED_DATA.x,
+							y: EXPECTED_DATA.y
+						});
+					}
+					finally {
+						next();
+					}
 				});
 			}, end);
 
 			emitter.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(EXPECTED_DATA.x, EXPECTED_DATA.y).toSerializableObject());
+
+			function end() {
+				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);
+			}
+		});
+
+		it("broadcasts draw events from one client to all others", function(done) {
+			var EXPECTED_DATA = "tbd";
+
+			var emitter = createSocket();
+			var receiver1 = createSocket();
+			var receiver2 = createSocket();
+
+			emitter.on(ServerDrawEvent.EVENT_NAME, function() {
+				assert.fail("emitter should not receive its own events");
+			});
+
+			async.each([ receiver1, receiver2 ], function(client, next) {
+				client.on(ServerDrawEvent.EVENT_NAME, function(data) {
+					try {
+						assert.deepEqual(data, {});
+					}
+					finally {
+						next();
+					}
+				});
+			}, end);
+
+			emitter.emit(ClientDrawEvent.EVENT_NAME, new ClientDrawEvent("something").toSerializableObject());
 
 			function end() {
 				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);

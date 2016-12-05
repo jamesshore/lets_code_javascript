@@ -47,5 +47,6 @@ Engineering Tasks:
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
 	- ServerDrawEvent and ClientDrawEvent are exact duplicated :-/
+	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent
 
 To Do on current task:

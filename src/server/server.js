@@ -8,6 +8,8 @@
 	var io = require('socket.io');
 	var ServerPointerEvent = require("../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
+	var ServerDrawEvent = require("../shared/server_draw_event.js");
+	var ClientDrawEvent = require("../shared/client_draw_event.js");
 
 	var Server = module.exports = function Server() {};
 
@@ -46,6 +48,11 @@
 				var clientEvent = ClientPointerEvent.fromSerializableObject(eventData);
 				var serverEvent = clientEvent.toServerEvent(socket.id);
 				socket.broadcast.emit(ServerPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());
+			});
+			socket.on(ClientDrawEvent.EVENT_NAME, function(eventData) {
+				var clientEvent = ClientDrawEvent.fromSerializableObject(eventData);
+				var serverEvent = clientEvent.toServerEvent();
+				socket.broadcast.emit(ServerDrawEvent.EVENT_NAME, serverEvent.toSerializableObject());
 			});
 		});
 	}
