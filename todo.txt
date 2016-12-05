@@ -40,8 +40,7 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-* Make new Client and Server event classes for line drawing
-- Modify server to handle line drawing
+* Modify server to handle line drawing
 - Modify RealTimeConnection to handle line drawing
 - Update client.js to send line drawing events to server
 - Update client.js to listen for line drawing events from server
@@ -50,5 +49,3 @@ Engineering Tasks:
 	- ServerDrawEvent and ClientDrawEvent are exact duplicated :-/
 
 To Do on current task:
-* ServerDrawEvent
-- ClientDrawEvent.toServerEvent

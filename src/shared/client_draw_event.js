@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	// var ServerPointerEvent = require("./server_pointer_event.js");
+	var ServerDrawEvent = require("./server_draw_event.js");
 
 	var ClientDrawEvent = module.exports = function(fromX, fromY, toX, toY) {
 		this._data = {
@@ -23,8 +23,8 @@
 		return this._data;
 	};
 
-	// ClientDrawEvent.prototype.toServerEvent = function(id) {
-	// 	return new ServerPointerEvent(id, this._x, this._y);
-	// };
+	ClientDrawEvent.prototype.toServerEvent = function() {
+		return new ServerDrawEvent(this._data.fromX, this._data.fromY, this._data.toX, this._data.toY);
+	};
 
 }());
