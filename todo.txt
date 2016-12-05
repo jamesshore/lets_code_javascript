@@ -40,11 +40,14 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
+* Make new Client and Server event classes for line drawing
+- Modify server to handle line drawing
+- Modify RealTimeConnection to handle line drawing
 - Update client.js to send line drawing events to server
 - Update client.js to listen for line drawing events from server
-- Make new Client and Server event classes for line drawing
-- Modify RealTimeConnection to handle line drawing
-- Modify server to handle line drawing
+- Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
+	- Location (or Coordinate) object?
 
 To Do on current task:
--
+* ServerDrawEvent
+- ClientDrawEvent.toServerEvent
