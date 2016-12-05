@@ -5,7 +5,7 @@
     "node": "6.9.1"
   },
   "devDependencies": {
-    "async": "^2.1.2",
+    "async": "^2.1.4",
     "browserify": "^13.1.1",
     "glob": "^7.1.1",
     "hashcat": "^0.3.1",
