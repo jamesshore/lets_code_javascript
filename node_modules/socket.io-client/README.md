@@ -8,11 +8,13 @@
 ![Downloads](http://img.shields.io/npm/dm/socket.io-client.svg?style=flat)
 [![](http://slack.socket.io/badge.svg?)](http://slack.socket.io)
 
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/socket.svg)](https://saucelabs.com/u/socket)
+
 ## How to use
 
 A standalone build of `socket.io-client` is exposed automatically by the
 socket.io server as `/socket.io/socket.io.js`. Alternatively you can
-serve the file `socket.io.js` found at the root of this repository.
+serve the file `socket.io.js` or `socket.io.min.js` found in the `dist` folder.
 
 ```html
 <script src="/socket.io/socket.io.js"></script>
