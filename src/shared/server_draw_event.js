@@ -3,11 +3,13 @@
 	"use strict";
 
 	var ServerDrawEvent = module.exports = function(fromX, fromY, toX, toY) {
-		this._data = {
-			fromX: fromX,
-			fromY: fromY,
-			toX: toX,
-			toY: toY
+		this.from = {
+			x: fromX,
+			y: fromY
+		};
+		this.to = {
+			x: toX,
+			y: toY
 		};
 	};
 
@@ -18,7 +20,12 @@
 	};
 
 	ServerDrawEvent.prototype.toSerializableObject = function toSerializableObject() {
-		return this._data;
+		return {
+			fromX: this.from.x,
+			fromY: this.from.y,
+			toX: this.to.x,
+			toY: this.to.y
+		};
 	};
 
 }());
