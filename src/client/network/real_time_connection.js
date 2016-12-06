@@ -90,6 +90,12 @@
 		return this._lastSentDrawEvent;
 	};
 
+	Connection.prototype.onDrawEvent = function(handler) {
+		this._socket.on(ServerDrawEvent.EVENT_NAME, function(eventData) {
+			return handler(ServerDrawEvent.fromSerializableObject(eventData));
+		});
+	};
+
 	Connection.prototype.getSocketId = function() {
 		failFastUnlessConnectCalled(this);
 		if (!this.isConnected()) return null;

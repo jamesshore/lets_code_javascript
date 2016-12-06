@@ -61,6 +61,17 @@
 		});
 	};
 
+	exports.sendDrawEvent = function sendDrawEvent(connection, event, callback) {
+		ajax({
+			connection: connection,
+			endpoint: endpoints.SEND_DRAW_EVENT,
+			async: true,
+			data: event.toSerializableObject()
+		}, function(err, responseText) {
+			callback();
+		});
+	};
+
 	function ajax(options, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var request = $.ajax({

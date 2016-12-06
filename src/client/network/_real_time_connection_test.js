@@ -146,7 +146,7 @@
 			});
 		});
 
-		it.skip("receives draw events from Socket.IO server", function(done) {
+		it("receives draw events from Socket.IO server", function(done) {
 			var EXPECTED_EVENT = new ServerDrawEvent(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
