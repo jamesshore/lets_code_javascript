@@ -40,8 +40,7 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-* Modify RealTimeConnection to handle line drawing
-- Update client.js to send line drawing events to server
+* Update client.js to send line drawing events to server
 - Update client.js to listen for line drawing events from server
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
@@ -52,6 +51,3 @@ Engineering Tasks:
 	- RealTimeConnection test harness has lots of duplication
 
 To Do on current task:
-- Modify test harness client
-- Modify test harness server
-- Modify tests

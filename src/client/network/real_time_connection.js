@@ -65,8 +65,8 @@
 
 	Connection.prototype.onPointerLocation = function(handler) {
 		failFastUnlessConnectCalled(this);
-		this._localEmitter.on("pointer", handler);
 
+		this._localEmitter.on(ServerPointerEvent.EVENT_NAME, handler);
 		this._socket.on(ServerPointerEvent.EVENT_NAME, function(eventData) {
 			return handler(ServerPointerEvent.fromSerializableObject(eventData));
 		});
@@ -76,7 +76,7 @@
 		failFastUnlessConnectCalled(this);
 
 		var event = new ServerPointerEvent(socketId, x, y);
-		this._localEmitter.emit("pointer", event);
+		this._localEmitter.emit(ServerPointerEvent.EVENT_NAME, event);
 	};
 
 	Connection.prototype.sendDrawEvent = function(event) {
@@ -91,9 +91,18 @@
 	};
 
 	Connection.prototype.onDrawEvent = function(handler) {
+		failFastUnlessConnectCalled(this);
+
+		this._localEmitter.on(ServerDrawEvent.EVENT_NAME, handler);
 		this._socket.on(ServerDrawEvent.EVENT_NAME, function(eventData) {
 			return handler(ServerDrawEvent.fromSerializableObject(eventData));
 		});
+	};
+
+	Connection.prototype.triggerDrawEvent = function(event) {
+		failFastUnlessConnectCalled(this);
+
+		this._localEmitter.emit(ServerDrawEvent.EVENT_NAME, event);
 	};
 
 	Connection.prototype.getSocketId = function() {
