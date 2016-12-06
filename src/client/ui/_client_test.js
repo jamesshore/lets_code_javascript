@@ -10,6 +10,7 @@
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("_assert");
 	var ClientDrawEvent = require("../../shared/client_draw_event.js");
+	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var RealTimeConnection = require("../network/real_time_connection.js");
 
 	mocha.setup({ignoreLeaks: true, timeout:5000});
@@ -337,6 +338,15 @@
 					clickMouse(33, 99);
 					assert.deepEqual(nullConnection.getLastSentDrawEvent(), new ClientDrawEvent(33, 99, 33, 99));
 				});
+
+				it.skip("draws line segment when draw event is received", function() {
+					nullConnection.triggerDrawEvent(new ServerDrawEvent(4, 90, 77, 2));
+					assert.deepEqual(lines(), [
+						[ 4, 90, 77, 2 ]
+					]);
+				});
+
+				it("draws dot when draw event is received");
 
 			});
 
