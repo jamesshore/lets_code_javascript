@@ -9,8 +9,7 @@
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("_assert");
-	var failFast = require("fail_fast");
-	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
+	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var RealTimeConnection = require("../network/real_time_connection.js");
 
 	mocha.setup({ignoreLeaks: true, timeout:5000});
@@ -325,6 +324,17 @@
 				it("connects to server upon initialization", function() {
 					assert.equal(nullConnection.isConnected(), true, "should be connected");
 					assert.equal(nullConnection.getPort(), window.location.port, "should be connected to correct port");
+				});
+
+			});
+
+			describe("drawing", function() {
+
+				it("sends line segment when line segment is drawn", function() {
+					dragMouse(10, 20, 40, 90);
+
+					var expectedEvent = new ServerDrawEvent(10, 20, 40, 90);
+					assert.deepEqual(nullConnection.getLastSentDrawEvent(), expectedEvent);
 				});
 
 			});
