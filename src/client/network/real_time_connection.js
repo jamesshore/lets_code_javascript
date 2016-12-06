@@ -7,6 +7,8 @@
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var EventEmitter = require("./vendor/emitter-1.2.1.js");
+	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
 	var Connection = module.exports = function() {
 		return initialize(this, window.io);
@@ -21,6 +23,7 @@
 		self._connectCalled = false;
 		self._socket = null;
 		self._lastSentPointerLocation = null;
+		self._lastSentDrawEvent = null;
 		self._localEmitter = new EventEmitter();
 		return self;
 	}
@@ -77,7 +80,14 @@
 	};
 
 	Connection.prototype.sendDrawEvent = function(event) {
-		// todo
+		failFastUnlessConnectCalled(this);
+
+		this._lastSentDrawEvent = event;
+		this._socket.emit(ClientDrawEvent.EVENT_NAME, event.toSerializableObject());
+	};
+
+	Connection.prototype.getLastSentDrawEvent = function() {
+		return this._lastSentDrawEvent;
 	};
 
 	Connection.prototype.getSocketId = function() {

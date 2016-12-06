@@ -80,6 +80,7 @@
 				return callback(null, request.responseText);
 			});
 			request.fail(function(_, errorText) {
+				if (request.status !== 200) throw new Error("Invalid status: " + request.status);
 				throw new Error(errorText);
 			});
 		}
