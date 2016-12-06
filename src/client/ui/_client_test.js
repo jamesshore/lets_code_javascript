@@ -320,66 +320,74 @@
 			var IRRELEVANT_X = 0;
 			var IRRELEVANT_Y = 0;
 
-			it("connects to server upon initialization", function() {
-				assert.equal(nullConnection.isConnected(), true, "should be connected");
-				assert.equal(nullConnection.getPort(), window.location.port, "should be connected to correct port");
+			describe("initialization", function() {
+
+				it("connects to server upon initialization", function() {
+					assert.equal(nullConnection.isConnected(), true, "should be connected");
+					assert.equal(nullConnection.getPort(), window.location.port, "should be connected to correct port");
+				});
+
 			});
 
-			it("sends pointer location whenever mouse moves", function() {
-				drawingArea.triggerMouseMove(50, 60);
-				assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 50, y: 60 });
+			describe("pointer location", function() {
+
+				it("sends pointer location whenever mouse moves", function() {
+					drawingArea.triggerMouseMove(50, 60);
+					assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 50, y: 60 });
+				});
+
+				it("sends pointer location even when mouse moves outside drawing area", function() {
+					documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
+					assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 20, y: 40 });
+				});
+
+				it("doesn't send pointer location when touch changes", function() {
+					if (!browser.supportsTouchEvents()) return;
+
+					drawingArea.triggerSingleTouchMove(30, 40);
+					assert.deepEqual(nullConnection.getLastSentPointerLocation(), null);
+				});
+
+				it("doesn't create pointer element on startup", function() {
+					assert.equal(getPointerDivs().length, 0);
+				});
+
+				it("creates pointer element when a pointer event is received", function() {
+					nullConnection.triggerPointerLocation(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y);
+					assert.equal(getPointerDivs().length, 1);
+				});
+
+				it("doesn't create pointer element when a pointer event containing a previous client ID is received", function() {
+					nullConnection.triggerPointerLocation("my_id", IRRELEVANT_X, IRRELEVANT_Y);
+					nullConnection.triggerPointerLocation("my_id", IRRELEVANT_X, IRRELEVANT_Y);
+					assert.equal(getPointerDivs().length, 1);
+				});
+
+				it("creates a pointer element for each unique client ID", function() {
+					nullConnection.triggerPointerLocation("unique_id_1", IRRELEVANT_X, IRRELEVANT_Y);
+					nullConnection.triggerPointerLocation("unique_id_2", IRRELEVANT_X, IRRELEVANT_Y);
+					assert.equal(getPointerDivs().length, 2);
+				});
+
+				it("positions new pointer element according to event's position", function() {
+					nullConnection.triggerPointerLocation(IRRELEVANT_ID, 10, 20);
+					var pointerElement = getPointerDivs()[0];
+					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
+				});
+
+				it("moves existing pointer element when a new pointer event is received", function() {
+					nullConnection.triggerPointerLocation("my_id", 10, 20);
+					nullConnection.triggerPointerLocation("my_id", 30, 40);
+
+					var pointerElement = getPointerDivs()[0];
+					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));
+				});
+
+				function getPointerDivs() {
+					return HtmlElement.fromSelector("." + POINTER_DIV_CLASS);
+				}
+
 			});
-
-			it("sends pointer location even when mouse moves outside drawing area", function() {
-				documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
-				assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 20, y: 40 });
-			});
-
-			it("doesn't send pointer location when touch changes", function() {
-				if (!browser.supportsTouchEvents()) return;
-
-				drawingArea.triggerSingleTouchMove(30, 40);
-				assert.deepEqual(nullConnection.getLastSentPointerLocation(), null);
-			});
-
-			it("doesn't create pointer element on startup", function() {
-				assert.equal(getPointerDivs().length, 0);
-			});
-
-			it("creates pointer element when a pointer event is received", function() {
-				nullConnection.triggerPointerLocation(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y);
-				assert.equal(getPointerDivs().length, 1);
-			});
-
-			it("doesn't create pointer element when a pointer event containing a previous client ID is received", function () {
-				nullConnection.triggerPointerLocation("my_id", IRRELEVANT_X, IRRELEVANT_Y);
-				nullConnection.triggerPointerLocation("my_id", IRRELEVANT_X, IRRELEVANT_Y);
-				assert.equal(getPointerDivs().length, 1);
-			});
-
-			it("creates a pointer element for each unique client ID", function() {
-				nullConnection.triggerPointerLocation("unique_id_1", IRRELEVANT_X, IRRELEVANT_Y);
-				nullConnection.triggerPointerLocation("unique_id_2", IRRELEVANT_X, IRRELEVANT_Y);
-				assert.equal(getPointerDivs().length, 2);
-			});
-
-			it("positions new pointer element according to event's position", function() {
-				nullConnection.triggerPointerLocation(IRRELEVANT_ID, 10, 20);
-				var pointerElement = getPointerDivs()[0];
-				assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
-			});
-
-			it("moves existing pointer element when a new pointer event is received", function() {
-				nullConnection.triggerPointerLocation("my_id", 10, 20);
-				nullConnection.triggerPointerLocation("my_id", 30, 40);
-
-				var pointerElement = getPointerDivs()[0];
-				assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));
-			});
-
-			function getPointerDivs() {
-				return HtmlElement.fromSelector("." + POINTER_DIV_CLASS);
-			}
 
 		});
 
