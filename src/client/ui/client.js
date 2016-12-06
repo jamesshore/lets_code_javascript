@@ -103,7 +103,7 @@
 
 		var end = coordinate;
 		if (!start.equals(end)) {
-			svgCanvas.drawLine(start, end);
+			drawLineSegment(start, end);
 			start = end;
 			lineDrawn = true;
 		}
@@ -112,7 +112,7 @@
 	function endDrag() {
 		if (!isCurrentlyDrawing()) return;
 
-		if (!lineDrawn) svgCanvas.drawDot(start);
+		if (!lineDrawn) drawLineSegment(start, start);
 
 		start = null;
 		lineDrawn = false;
@@ -120,6 +120,11 @@
 
 	function isCurrentlyDrawing() {
 		return start !== null;
+	}
+
+	function drawLineSegment(start, end) {
+		if (start.equals(end)) svgCanvas.drawDot(start);
+		else svgCanvas.drawLine(start, end);
 	}
 
 }());
