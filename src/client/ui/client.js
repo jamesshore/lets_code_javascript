@@ -9,6 +9,7 @@
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var browser = require("./browser.js");
 	var failFast = require("fail_fast");
+	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
 	var svgCanvas = null;
 	var start = null;
@@ -103,7 +104,7 @@
 
 		var end = coordinate;
 		if (!start.equals(end)) {
-			drawLineSegment(start, end);
+			drawLineSegmentAndSendNetworkEvent(start, end);
 			start = end;
 			lineDrawn = true;
 		}
@@ -112,7 +113,7 @@
 	function endDrag() {
 		if (!isCurrentlyDrawing()) return;
 
-		if (!lineDrawn) drawLineSegment(start, start);
+		if (!lineDrawn) drawLineSegmentAndSendNetworkEvent(start, start);
 
 		start = null;
 		lineDrawn = false;
@@ -122,9 +123,13 @@
 		return start !== null;
 	}
 
-	function drawLineSegment(start, end) {
+	function drawLineSegmentAndSendNetworkEvent(start, end) {
 		if (start.equals(end)) svgCanvas.drawDot(start);
 		else svgCanvas.drawLine(start, end);
+
+		var startOffset = start.toRelativeOffset(drawingArea);
+		var endOffset = end.toRelativeOffset(drawingArea);
+		network.sendDrawEvent(new ClientDrawEvent(startOffset.x, startOffset.y, endOffset.x, endOffset.y));
 	}
 
 }());

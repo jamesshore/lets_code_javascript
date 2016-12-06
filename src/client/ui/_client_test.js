@@ -9,7 +9,7 @@
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("_assert");
-	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 	var RealTimeConnection = require("../network/real_time_connection.js");
 
 	mocha.setup({ignoreLeaks: true, timeout:5000});
@@ -73,11 +73,9 @@
 		});
 
 		describe("mouse drag events", function() {
-			it("draws a dot in response to mouse click", function() {
-				drawingArea.triggerMouseDown(50, 60);
-				drawingArea.triggerMouseUp(50, 60);
-				drawingArea.triggerMouseClick(50, 60);
 
+			it("draws a dot in response to mouse click", function() {
+				clickMouse(50, 60);
 				assert.deepEqual(lines(), [
 					[50, 60]
 				]);
@@ -330,11 +328,14 @@
 
 			describe("drawing", function() {
 
-				it("sends line segment when line segment is drawn", function() {
+				it("sends draw event when line segment is drawn", function() {
 					dragMouse(10, 20, 40, 90);
+					assert.deepEqual(nullConnection.getLastSentDrawEvent(), new ClientDrawEvent(10, 20, 40, 90));
+				});
 
-					var expectedEvent = new ServerDrawEvent(10, 20, 40, 90);
-					assert.deepEqual(nullConnection.getLastSentDrawEvent(), expectedEvent);
+				it("sends draw event when dot is drawn", function() {
+					clickMouse(33, 99);
+					assert.deepEqual(nullConnection.getLastSentDrawEvent(), new ClientDrawEvent(33, 99, 33, 99));
 				});
 
 			});
@@ -405,6 +406,12 @@
 			drawingArea.triggerMouseDown(startX, startY);
 			drawingArea.triggerMouseMove(endX, endY);
 			drawingArea.triggerMouseUp(endX, endY);
+		}
+
+		function clickMouse(x, y) {
+			drawingArea.triggerMouseDown(x, y);
+			drawingArea.triggerMouseUp(x, y);
+			drawingArea.triggerMouseClick(x, y);
 		}
 
 		function lines() {
