@@ -51,3 +51,5 @@ Engineering Tasks:
 	- RealTimeConnection test harness has lots of duplication
 
 To Do on current task:
+- NEXT EPISODE:
+	- Chrome touch events (ref E472 comments)
