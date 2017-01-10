@@ -39,7 +39,8 @@
 
 		// Browser
 		console: false,
-		TouchEvent: false
+		TouchEvent: false,
+		Touch: false
 	};
 
 }());

@@ -247,9 +247,11 @@
 				// Event options
 				bubbles: canBubble,
 				cancelable: cancelable,
+
 				// UIEvent options
 				detail: detail,
 				view: view,
+
 				// TouchEvent options
 				touches: touches,
 				targetTouches: targetTouches,

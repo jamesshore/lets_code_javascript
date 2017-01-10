@@ -6,7 +6,6 @@
 
 	exports.supportsTouchEvents = function() {
 		return askModernizr("touch");
-		// return true;
 	};
 
 	exports.supportsTouchEventConstructor = function() {
