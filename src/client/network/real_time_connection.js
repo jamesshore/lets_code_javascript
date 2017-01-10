@@ -7,6 +7,8 @@
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var EventEmitter = require("./vendor/emitter-1.2.1.js");
+	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
 	var Connection = module.exports = function() {
 		return initialize(this, window.io);
@@ -21,6 +23,7 @@
 		self._connectCalled = false;
 		self._socket = null;
 		self._lastSentPointerLocation = null;
+		self._lastSentDrawEvent = null;
 		self._localEmitter = new EventEmitter();
 		return self;
 	}
@@ -62,8 +65,8 @@
 
 	Connection.prototype.onPointerLocation = function(handler) {
 		failFastUnlessConnectCalled(this);
-		this._localEmitter.on("pointer", handler);
 
+		this._localEmitter.on(ServerPointerEvent.EVENT_NAME, handler);
 		this._socket.on(ServerPointerEvent.EVENT_NAME, function(eventData) {
 			return handler(ServerPointerEvent.fromSerializableObject(eventData));
 		});
@@ -73,7 +76,33 @@
 		failFastUnlessConnectCalled(this);
 
 		var event = new ServerPointerEvent(socketId, x, y);
-		this._localEmitter.emit("pointer", event);
+		this._localEmitter.emit(ServerPointerEvent.EVENT_NAME, event);
+	};
+
+	Connection.prototype.sendDrawEvent = function(event) {
+		failFastUnlessConnectCalled(this);
+
+		this._lastSentDrawEvent = event;
+		this._socket.emit(ClientDrawEvent.EVENT_NAME, event.toSerializableObject());
+	};
+
+	Connection.prototype.getLastSentDrawEvent = function() {
+		return this._lastSentDrawEvent;
+	};
+
+	Connection.prototype.onDrawEvent = function(handler) {
+		failFastUnlessConnectCalled(this);
+
+		this._localEmitter.on(ServerDrawEvent.EVENT_NAME, handler);
+		this._socket.on(ServerDrawEvent.EVENT_NAME, function(eventData) {
+			return handler(ServerDrawEvent.fromSerializableObject(eventData));
+		});
+	};
+
+	Connection.prototype.triggerDrawEvent = function(event) {
+		failFastUnlessConnectCalled(this);
+
+		this._localEmitter.emit(ServerDrawEvent.EVENT_NAME, event);
 	};
 
 	Connection.prototype.getSocketId = function() {

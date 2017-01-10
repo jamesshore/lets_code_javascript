@@ -44,13 +44,13 @@ module.exports = function (opts) {
     function write (row, enc, next) {
         if (first && opts.standalone) {
             var pre = umd.prelude(opts.standalone).trim();
-            stream.push(Buffer(pre + 'return '));
+            stream.push(new Buffer(pre + 'return '));
         }
         else if (first && stream.hasExports) {
             var pre = opts.externalRequireName || 'require';
-            stream.push(Buffer(pre + '='));
+            stream.push(new Buffer(pre + '='));
         }
-        if (first) stream.push(Buffer(prelude + '({'));
+        if (first) stream.push(new Buffer(prelude + '({'));
         
         if (row.sourceFile && !row.nomap) {
             if (!sourcemap) {
@@ -81,7 +81,7 @@ module.exports = function (opts) {
             ']'
         ].join('');
 
-        stream.push(Buffer(wrappedSource));
+        stream.push(new Buffer(wrappedSource));
         lineno += newlinesIn(wrappedSource);
         
         first = false;
@@ -93,13 +93,13 @@ module.exports = function (opts) {
     }
     
     function end () {
-        if (first) stream.push(Buffer(prelude + '({'));
+        if (first) stream.push(new Buffer(prelude + '({'));
         entries = entries.filter(function (x) { return x !== undefined });
         
-        stream.push(Buffer('},{},' + JSON.stringify(entries) + ')'));
+        stream.push(new Buffer('},{},' + JSON.stringify(entries) + ')'));
 
         if (opts.standalone && !first) {
-            stream.push(Buffer(
+            stream.push(new Buffer(
                 '(' + JSON.stringify(stream.standaloneModule) + ')'
                 + umd.postlude(opts.standalone)
             ));
@@ -112,9 +112,9 @@ module.exports = function (opts) {
                     /^\/\/#/, function () { return opts.sourceMapPrefix }
                 )
             }
-            stream.push(Buffer('\n' + comment + '\n'));
+            stream.push(new Buffer('\n' + comment + '\n'));
         }
-        if (!sourcemap && !opts.standalone) stream.push(Buffer(';\n'));
+        if (!sourcemap && !opts.standalone) stream.push(new Buffer(';\n'));
 
         stream.push(null);
     }

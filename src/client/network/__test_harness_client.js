@@ -51,6 +51,27 @@
 		});
 	};
 
+	exports.waitForDrawEvent = function(connection, callback) {
+		ajax({
+			connection: connection,
+			endpoint: endpoints.WAIT_FOR_DRAW_EVENT,
+			async: true
+		}, function(err, responseText) {
+			return callback(err, JSON.parse(responseText));
+		});
+	};
+
+	exports.sendDrawEvent = function sendDrawEvent(connection, event, callback) {
+		ajax({
+			connection: connection,
+			endpoint: endpoints.SEND_DRAW_EVENT,
+			async: true,
+			data: event.toSerializableObject()
+		}, function(err, responseText) {
+			callback();
+		});
+	};
+
 	function ajax(options, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var request = $.ajax({
@@ -70,6 +91,7 @@
 				return callback(null, request.responseText);
 			});
 			request.fail(function(_, errorText) {
+				if (request.status !== 200) throw new Error("Invalid status: " + request.status);
 				throw new Error(errorText);
 			});
 		}

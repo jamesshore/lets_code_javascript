@@ -26,12 +26,11 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* see other users' mouse pointers
+* multi-user line drawing
+- multi-user clear button
 - send pointer events on touch, not just mouse move?
 - make mouse pointer disappear when it leaves drawing area?
 - make mouse pointer disappear when user disconnects
-- multi-user clear button
-- multi-user line drawing
 - version synchronization across client/server
 - offline handling
 - collision-handling / conflicts / race conditions
@@ -41,9 +40,16 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-* Update smoke tests for real-time networking
+* Why doesn't it work for real??
+- Improve client.js
+- Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
+	- Location (or Coordinate) object?
+	- ServerDrawEvent and ClientDrawEvent are exact duplicated :-/
+	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent
+	- A lot of duplication in server event tests. Tests are pretty ugly, too.
+	- RealTimeConnection - lots of duplication in event handling. Genericize it to not know about event details?
+	- RealTimeConnection test harness has lots of duplication
 
 To Do on current task:
-* Consider using npm module 'geckodriver' rather than downloading geckodriver manually
-- Viewer comments
-	- Nice test of asynchronous code in http://www.letscodejavascript.com/v3/comments/live/465#comment-3015324687
+- NEXT EPISODE:
+	- Chrome touch events (ref E472 comments)

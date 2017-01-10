@@ -7,7 +7,9 @@
 		IS_CONNECTED: "/is-connected",
 		WAIT_FOR_SERVER_DISCONNECT: "/wait-for-server-disconnect",
 		WAIT_FOR_POINTER_LOCATION: "/wait-for-pointer-location",
-		SEND_POINTER_LOCATION: "/send-pointer-location"
+		SEND_POINTER_LOCATION: "/send-pointer-location",
+		WAIT_FOR_DRAW_EVENT: "/wait-for-draw-event",
+		SEND_DRAW_EVENT: "/send-draw-event"
 	};
 
 	exports.PORT = "5030";

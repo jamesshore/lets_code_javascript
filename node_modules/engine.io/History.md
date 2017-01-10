@@ -1,4 +1,30 @@
 
+1.8.2  / 2016-12-11
+===================
+
+  * [fix] Add proper response when handleUpgrade fails (#458)
+  * [test] Use explicit versions for travis tests (#457)
+  * [refactor] Remove deprecated code used for nodejs v0.8 (#456)
+  * [chore] Bump engine.io-parser to version 1.3.2 (#455)
+  * [perf] websocket optimisation (#453)
+  * [docs] Rename ServerRequest to IncomingMessage (#448)
+  * [chore] Bump base64id to version 1.0.0 (#451)
+
+1.8.1 / 2016-11-27
+===================
+
+  * [fix] Only add defined callbacks to the stack (#447)
+
+1.8.0 / 2016-11-20
+===================
+
+  * [style] Fix some typos (#439)
+  * [style] Add ESlint (#385)
+  * [test] fix tests for NodeJS v7 (#441)
+  * [feature] Fix cookiePath empty bug and add cookieHttpOnly option (#423)
+  * [fix] Don't delete ws when closing the server (#444)
+  * [chore] Bump debug to version 2.3.3 (#445)
+
 1.7.2 / 2016-10-24
 ===================
 

@@ -1,4 +1,30 @@
 
+1.7.2 / 2016-12-11
+===================
+
+  * [chore] Bump engine.io-client to version 1.8.2 (#1044)
+  * [chore] Speed up lint by avoiding '**/*.js' matching pattern (#1043)
+
+1.7.1 / 2016-11-28
+==================
+
+  * [docs] Add saucelabs browser matrix in README (#1035)
+  * [fix] Fix json import in slim build (#1036)
+
+1.7.0 / 2016-11-27
+==================
+
+  * [chore] Move generated files to `dist` folder (#1025)
+  * [chore] Provide a slim build without JSON3 and debug (#1030)
+  * [chore] Bump engine.io-client to 1.8.1 (#1032)
+
+1.6.0 / 2016-11-20
+==================
+
+  * [feature] emit sourcemap for socket.io.js (#953)
+  * [feature] Support minified `socket.io.min.js` (#1021)
+  * [chore] Bump dependencies (#1026)
+
 1.5.1 / 2016-10-24
 ==================
 

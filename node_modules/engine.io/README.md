@@ -224,7 +224,8 @@ to a single process.
         headers. Set to `false` to not send one. (`io`)
       - `cookiePath` (`String|Boolean`): path of the above `cookie`
         option. If false, no path will be sent, which means browsers will only send the cookie on the engine.io attached path (`/engine.io`).
-        Set this to `/` to send the io cookie on all requests. (`false`)
+        Set false to not save io cookie on all requests. (`/`)
+      - `cookieHttpOnly` (`Boolean`): If `true` HttpOnly io cookie cannot be accessed by client-side APIs, such as JavaScript. (`true`) _This option has no effect if `cookie` or `cookiePath` is set to `false`._
       - `wsEngine` (`String`): what WebSocket server implementation to use. Specified module must conform to the `ws` interface (see [ws module api docs](https://github.com/websockets/ws/blob/master/doc/ws.md)). Default value is `ws`. An alternative c++ addon is also available by installing `uws` module.
 - `close`
     - Closes all clients
@@ -232,13 +233,13 @@ to a single process.
 - `handleRequest`
     - Called internally when a `Engine` request is intercepted.
     - **Parameters**
-      - `http.ServerRequest`: a node request object
+      - `http.IncomingMessage`: a node request object
       - `http.ServerResponse`: a node response object
     - **Returns** `Server` for chaining
 - `handleUpgrade`
     - Called internally when a `Engine` ws upgrade is intercepted.
     - **Parameters** (same as `upgrade` event)
-      - `http.ServerRequest`: a node request object
+      - `http.IncomingMessage`: a node request object
       - `net.Stream`: TCP socket for the request
       - `Buffer`: legacy tail bytes
     - **Returns** `Server` for chaining
@@ -257,7 +258,7 @@ to a single process.
     - Generate a socket id.
     - Overwrite this method to generate your custom socket id.
     - **Parameters**
-      - `http.ServerRequest`: a node request object
+      - `http.IncomingMessage`: a node request object
   - **Returns** A socket id for connected client.
 
 <hr><br>
@@ -302,7 +303,7 @@ A representation of a client. _Inherits from EventEmitter_.
 
 - `id` _(String)_: unique identifier
 - `server` _(Server)_: engine parent reference
-- `request` _(http.ServerRequest)_: request that originated the Socket
+- `request` _(http.IncomingMessage)_: request that originated the Socket
 - `upgraded` _(Boolean)_: whether the transport has been upgraded
 - `readyState` _(String)_: opening|open|closing|closed
 - `transport` _(Transport)_: transport reference

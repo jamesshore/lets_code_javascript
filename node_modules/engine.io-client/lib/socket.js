@@ -92,12 +92,17 @@ function Socket (uri, opts) {
   this.ca = opts.ca || null;
   this.ciphers = opts.ciphers || null;
   this.rejectUnauthorized = opts.rejectUnauthorized === undefined ? null : opts.rejectUnauthorized;
+  this.forceNode = !!opts.forceNode;
 
   // other options for Node.js client
   var freeGlobal = typeof global === 'object' && global;
   if (freeGlobal.global === freeGlobal) {
     if (opts.extraHeaders && Object.keys(opts.extraHeaders).length > 0) {
       this.extraHeaders = opts.extraHeaders;
+    }
+
+    if (opts.localAddress) {
+      this.localAddress = opts.localAddress;
     }
   }
 
@@ -184,7 +189,9 @@ Socket.prototype.createTransport = function (name) {
     ciphers: this.ciphers,
     rejectUnauthorized: this.rejectUnauthorized,
     perMessageDeflate: this.perMessageDeflate,
-    extraHeaders: this.extraHeaders
+    extraHeaders: this.extraHeaders,
+    forceNode: this.forceNode,
+    localAddress: this.localAddress
   });
 
   return transport;

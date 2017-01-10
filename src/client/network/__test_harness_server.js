@@ -10,13 +10,15 @@
 	var querystring = require("querystring");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
+	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
 	var endpoints = shared.endpoints;
 
 	// The network test harness is started inside of the build script before the network tests are run
 	exports.start = function() {
 		var httpServer = http.createServer();
-		httpServer.on("request", handleResponse);
+		httpServer.on("request", handleRequest);
 		var io = socketIo(httpServer);
 		httpServer.listen(shared.PORT);
 
@@ -25,10 +27,12 @@
 		endpointMap[endpoints.IS_CONNECTED] = setupIsConnected(io);
 		endpointMap[endpoints.WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
 		endpointMap[endpoints.SEND_POINTER_LOCATION] = setupSendPointerLocation();
+		endpointMap[endpoints.WAIT_FOR_DRAW_EVENT] = setupWaitForDrawEvent(io);
+		endpointMap[endpoints.SEND_DRAW_EVENT] = setupSendDrawEvent();
 
 		return stopFn(httpServer, io);
 
-		function handleResponse(request, response) {
+		function handleRequest(request, response) {
 			response.setHeader("Access-Control-Allow-Origin", "*");
 
 			var parsedUrl = url.parse(request.url);
@@ -99,6 +103,34 @@
 		};
 	}
 
+	function setupWaitForDrawEvent(io) {
+		var lastDrawEvent = {};
+
+		io.on("connection", function(socket) {
+			socket.on(ClientDrawEvent.EVENT_NAME, function(data) {
+				lastDrawEvent[socket.id] = data;
+			});
+		});
+
+		return function waitForDrawEventEndpoint(socket, data, request, response) {
+			var socketId = socket.id;
+
+			var result = lastDrawEvent[socketId];
+
+			if (result === undefined) {
+				socket.on(ClientDrawEvent.EVENT_NAME, sendResponse);
+			}
+			else {
+				sendResponse(result);
+			}
+
+			function sendResponse(data) {
+				response.end(JSON.stringify(data));
+				delete lastDrawEvent[socketId];
+			}
+		};
+	}
+
 	function setupIsConnected(io) {
 		return function isConnectedEndpoint(socket, data, request, response) {
 			var socketIds = Object.keys(io.sockets.connected);
@@ -118,7 +150,13 @@
 	function setupSendPointerLocation() {
 		return function sendPointerLocationEndpoint(socket, data, request, response) {
 			socket.emit(ServerPointerEvent.EVENT_NAME, data);
+			return response.end("ok");
+		};
+	}
 
+	function setupSendDrawEvent() {
+		return function sendDrawEventEndpoint(socket, data, request, response) {
+			socket.emit(ServerDrawEvent.EVENT_NAME, data);
 			return response.end("ok");
 		};
 	}

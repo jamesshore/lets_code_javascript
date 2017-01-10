@@ -9,6 +9,7 @@
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var browser = require("./browser.js");
 	var failFast = require("fail_fast");
+	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
 	var svgCanvas = null;
 	var start = null;
@@ -55,6 +56,11 @@
 		network.connect(window.location.port);
 		documentBody.onMouseMove(sendPointerEvent);
 		network.onPointerLocation(displayNetworkPointer);
+		network.onDrawEvent(function(event) {
+			var from = HtmlCoordinate.fromRelativeOffset(drawingArea, event.from.x, event.from.y);
+			var to = HtmlCoordinate.fromRelativeOffset(drawingArea, event.to.x, event.to.y);
+			drawLineSegment(from, to);
+		});
 	}
 
 	function handleClearScreenClick() {
@@ -103,7 +109,7 @@
 
 		var end = coordinate;
 		if (!start.equals(end)) {
-			svgCanvas.drawLine(start, end);
+			drawLineSegmentAndSendDrawEvent(start, end);
 			start = end;
 			lineDrawn = true;
 		}
@@ -112,7 +118,7 @@
 	function endDrag() {
 		if (!isCurrentlyDrawing()) return;
 
-		if (!lineDrawn) svgCanvas.drawDot(start);
+		if (!lineDrawn) drawLineSegmentAndSendDrawEvent(start, start);
 
 		start = null;
 		lineDrawn = false;
@@ -120,6 +126,22 @@
 
 	function isCurrentlyDrawing() {
 		return start !== null;
+	}
+
+	function drawLineSegmentAndSendDrawEvent(start, end) {
+		drawLineSegment(start, end);
+		sendDrawEvent(start, end);
+	}
+
+	function drawLineSegment(start, end) {
+		if (start.equals(end)) svgCanvas.drawDot(start);
+		else svgCanvas.drawLine(start, end);
+	}
+
+	function sendDrawEvent(start, end) {
+		var startOffset = start.toRelativeOffset(drawingArea);
+		var endOffset = end.toRelativeOffset(drawingArea);
+		network.sendDrawEvent(new ClientDrawEvent(startOffset.x, startOffset.y, endOffset.x, endOffset.y));
 	}
 
 }());
