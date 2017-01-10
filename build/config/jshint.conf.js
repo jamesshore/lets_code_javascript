@@ -38,7 +38,8 @@
 		after: false,
 
 		// Browser
-		console: false
+		console: false,
+		TouchEvent: false
 	};
 
 }());

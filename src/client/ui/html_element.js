@@ -219,6 +219,7 @@
 	function sendTouchEvent(self, eventType, touchList) {
 		var touchEvent = document.createEvent("TouchEvent");
 
+
 		var canBubble = true;
 		var cancelable = true;
 		var view = window;
@@ -237,7 +238,28 @@
 		var scale = 1;
 		var rotation = 0;
 
-		if (browser.usesAndroidInitTouchEventParameterOrder()) {
+
+		if (browser.supportsTouchEventConstructor()) {
+			console.log("PRE EVENT CREATION");
+			touchEvent = new TouchEvent(eventType, {
+				// Event options
+				bubbles: canBubble,
+				cancelable: cancelable,
+				// UIEvent options
+				detail: detail,
+				view: view,
+				// TouchEvent options
+				touches: touches,
+				targetTouches: targetTouches,
+				changedTouches: changedTouches,
+				ctrlKey: ctrlKey,
+				altKey: altKey,
+				shiftKey: shiftKey,
+				metaKey: metaKey
+			});
+			console.log("TOUCH EVENT CREATED");
+		}
+		else if (browser.usesAndroidInitTouchEventParameterOrder()) {
 			touchEvent.initTouchEvent(
 				touches, targetTouches, changedTouches,
 				eventType,

@@ -8,6 +8,17 @@
 		return askModernizr("touch");
 	};
 
+	exports.supportsTouchEventConstructor = function() {
+		try {
+			var unused = new TouchEvent("touchstart", {});
+			return true;
+		}
+		catch (err) {
+			if (!(err instanceof TypeError)) throw err;
+			return false;
+		}
+	};
+
 	exports.usesAndroidInitTouchEventParameterOrder = function() {
 		var touchEvent = document.createEvent("TouchEvent");
 		var touches = document.createTouchList();
