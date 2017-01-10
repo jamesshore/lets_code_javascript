@@ -8,7 +8,6 @@
 	var failFast = require("fail_fast.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 
-
 	/* Constructors */
 
 	var HtmlElement = module.exports = function(domElement) {
@@ -132,7 +131,7 @@
 
 	function triggerZeroTouchEventFn(event) {
 		return function() {
-			sendTouchEvent(this, event, document.createTouchList());
+			sendTouchEvent(this, event, []);
 		};
 	}
 
@@ -153,7 +152,7 @@
 			}
 
 			var touch = createTouch(this, coordinate);
-			sendTouchEvent(this, event, document.createTouchList(touch));
+			sendTouchEvent(this, event, [ touch ]);
 		};
 	}
 
@@ -179,7 +178,7 @@
 
 			var touch1 = createTouch(this, coordinate1);
 			var touch2 = createTouch(this, coordinate2);
-			sendTouchEvent(this, event, document.createTouchList(touch1, touch2));
+			sendTouchEvent(this, event, [ touch1, touch2 ]);
 		};
 	}
 
@@ -216,9 +215,14 @@
 		};
 	}
 
-	function sendTouchEvent(self, eventType, touchList) {
+	function sendTouchEvent(self, eventType, touchesToSend) {
 		var touchEvent = document.createEvent("TouchEvent");
 
+		var touchList;
+		if (touchesToSend.length === 0) touchList = document.createTouchList();
+		else if (touchesToSend.length === 1) touchList = document.createTouchList(touchesToSend[0]);
+		else if (touchesToSend.length === 2) touchList = document.createTouchList(touchesToSend[0], touchesToSend[1]);
+		else failFast.unreachable("Too many touchesToSend: " + touchesToSend.length);
 
 		var canBubble = true;
 		var cancelable = true;
@@ -238,9 +242,7 @@
 		var scale = 1;
 		var rotation = 0;
 
-
 		if (browser.supportsTouchEventConstructor()) {
-			console.log("PRE EVENT CREATION");
 			touchEvent = new TouchEvent(eventType, {
 				// Event options
 				bubbles: canBubble,
@@ -257,7 +259,6 @@
 				shiftKey: shiftKey,
 				metaKey: metaKey
 			});
-			console.log("TOUCH EVENT CREATED");
 		}
 		else if (browser.usesAndroidInitTouchEventParameterOrder()) {
 			touchEvent.initTouchEvent(
