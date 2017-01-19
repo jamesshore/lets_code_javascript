@@ -12,6 +12,8 @@ Ideal for parsing request bodies.
 
 ## API
 
+<!-- eslint-disable no-unused-vars -->
+
 ```js
 var getRawBody = require('raw-body')
 ```
@@ -26,11 +28,14 @@ Options:
   If the contents of the stream do not add up to this length,
   an `400` error code is returned.
 - `limit` - The byte limit of the body.
+  This is the number of bytes or any string format supported by
+  [bytes](https://www.npmjs.com/package/bytes),
+  for example `1000`, `'500kb'` or `'3mb'`.
   If the body ends up being larger than this limit,
   a `413` error code is returned.
-- `encoding` - The requested encoding.
-  By default, a `Buffer` instance will be returned.
-  Most likely, you want `utf8`.
+- `encoding` - The encoding to use to decode the body into a string.
+  By default, a `Buffer` instance will be returned when no encoding is specified.
+  Most likely, you want `utf-8`, so setting `encoding` to `true` will decode as `utf-8`.
   You can use any type of encoding supported by [iconv-lite](https://www.npmjs.org/package/iconv-lite#readme).
 
 You can also pass a string in place of options to just specify the encoding.
@@ -58,32 +63,46 @@ For streams that use file descriptors, you should `stream.destroy()` or `stream.
 ### Simple Express example
 
 ```js
+var contentType = require('content-type')
+var express = require('express')
 var getRawBody = require('raw-body')
-var typer = require('media-typer')
+
+var app = express()
 
 app.use(function (req, res, next) {
   getRawBody(req, {
     length: req.headers['content-length'],
     limit: '1mb',
-    encoding: typer.parse(req.headers['content-type']).parameters.charset
+    encoding: contentType.parse(req).parameters.charset
   }, function (err, string) {
     if (err) return next(err)
     req.text = string
     next()
   })
 })
+
+// now access req.text
 ```
 
 ### Simple Koa example
 
 ```js
-app.use(function* (next) {
-  var string = yield getRawBody(this.req, {
-    length: this.length,
+var contentType = require('content-type')
+var getRawBody = require('raw-body')
+var koa = require('koa')
+
+var app = koa()
+
+app.use(function * (next) {
+  this.text = yield getRawBody(this.req, {
+    length: this.req.headers['content-length'],
     limit: '1mb',
-    encoding: this.charset
+    encoding: contentType.parse(this.req).parameters.charset
   })
+  yield next
 })
+
+// now access this.text
 ```
 
 ### Using as a promise
@@ -117,7 +136,7 @@ server.listen(3000)
 [npm-image]: https://img.shields.io/npm/v/raw-body.svg
 [npm-url]: https://npmjs.org/package/raw-body
 [node-version-image]: https://img.shields.io/node/v/raw-body.svg
-[node-version-url]: http://nodejs.org/download/
+[node-version-url]: https://nodejs.org/en/download/
 [travis-image]: https://img.shields.io/travis/stream-utils/raw-body/master.svg
 [travis-url]: https://travis-ci.org/stream-utils/raw-body
 [coveralls-image]: https://img.shields.io/coveralls/stream-utils/raw-body/master.svg

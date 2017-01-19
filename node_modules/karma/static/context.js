@@ -191,8 +191,21 @@ var ContextKarma = function (callParentKarmaMethod) {
       self.log('dump', arguments)
     }
 
+    var _confirm = contextWindow.confirm
+    var _prompt = contextWindow.prompt
+
     contextWindow.alert = function (msg) {
       self.log('alert', [msg])
+    }
+
+    contextWindow.confirm = function (msg) {
+      self.log('confirm', [msg])
+      _confirm(msg)
+    }
+
+    contextWindow.prompt = function (msg, defaultVal) {
+      self.log('prompt', [msg, defaultVal])
+      _prompt(msg, defaultVal)
     }
 
     // If we want to overload our console, then do it
@@ -296,7 +309,7 @@ function useNative () {
 module.exports = useNative() ? NativeCustomEvent :
 
 // IE >= 9
-'function' === typeof document.createEvent ? function CustomEvent (type, params) {
+'undefined' !== typeof document && 'function' === typeof document.createEvent ? function CustomEvent (type, params) {
   var e = document.createEvent('CustomEvent');
   if (params) {
     e.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
