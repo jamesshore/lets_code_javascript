@@ -72,6 +72,20 @@
 		});
 	};
 
+	exports.sendEvent = function(connection, event, callback) {
+		ajax({
+			connection: connection,
+			endpoint: endpoints.SEND_EVENT,
+			async: true,
+			data: {
+				eventName: event.name,
+				eventData: event.toSerializableObject()
+			}
+		}, function(err, responseText) {
+			callback(err);
+		});
+	};
+
 	function ajax(options, callback) {
 		var origin = window.location.protocol + "//" + window.location.hostname + ":" + exports.PORT;
 		var request = $.ajax({

@@ -100,7 +100,7 @@
 					assert.deepEqual(event, DRAW_EVENT);
 					connection.disconnect(done);
 				});
-				harness.sendDrawEvent(connection, DRAW_EVENT, function() {});
+				harness.sendEvent(connection, DRAW_EVENT, function() {});
 			});
 		});
 

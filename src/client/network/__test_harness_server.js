@@ -23,9 +23,13 @@
 		httpServer.listen(shared.PORT);
 
 		var endpointMap = {};
-		endpointMap[endpoints.WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation(io);
 		endpointMap[endpoints.IS_CONNECTED] = setupIsConnected(io);
 		endpointMap[endpoints.WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
+		endpointMap[endpoints.SEND_EVENT] = setupSendEvent();
+		// endpointMap[endpoints.WAIT_FOR_EVENT] = setupWaitForEvent(io);
+
+		// obsolete
+		endpointMap[endpoints.WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation(io);
 		endpointMap[endpoints.SEND_POINTER_LOCATION] = setupSendPointerLocation();
 		endpointMap[endpoints.WAIT_FOR_DRAW_EVENT] = setupWaitForDrawEvent(io);
 		endpointMap[endpoints.SEND_DRAW_EVENT] = setupSendDrawEvent();
@@ -157,6 +161,13 @@
 	function setupSendDrawEvent() {
 		return function sendDrawEventEndpoint(socket, data, request, response) {
 			socket.emit(ServerDrawEvent.EVENT_NAME, data);
+			return response.end("ok");
+		};
+	}
+
+	function setupSendEvent() {
+		return function sendEventEndpoint(socket, data, request, response) {
+			socket.emit(data.eventName, data.eventData);
 			return response.end("ok");
 		};
 	}
