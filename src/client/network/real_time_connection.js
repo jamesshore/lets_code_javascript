@@ -23,7 +23,7 @@
 		self._connectCalled = false;
 		self._socket = null;
 		self._lastSentPointerLocation = null;
-		self._lastSentDrawEvent = null;
+		self._lastSentEvent = null;
 		self._localEmitter = new EventEmitter();
 		return self;
 	}
@@ -53,9 +53,6 @@
 	Connection.prototype.sendPointerLocation = function(x, y) {
 		this._lastSentPointerLocation = { x: x, y: y };
 		this.sendEvent(new ClientPointerEvent(x, y));
-		// failFastUnlessConnectCalled(this);
-		//
-		// this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
 	};
 
 	Connection.prototype.getLastSentPointerLocation = function() {
@@ -84,12 +81,12 @@
 		failFastUnlessConnectCalled(this);
 		failFast.unlessDefined(event.name, "event.name");
 
-		this._lastSentDrawEvent = event;
+		this._lastSentEvent = event;
 		this._socket.emit(event.name, event.toSerializableObject());
 	};
 
-	Connection.prototype.getLastSentDrawEvent = function() {
-		return this._lastSentDrawEvent;
+	Connection.prototype.getLastSentEvent = function() {
+		return this._lastSentEvent;
 	};
 
 	Connection.prototype.onDrawEvent = function(handler) {

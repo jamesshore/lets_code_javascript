@@ -331,12 +331,12 @@
 
 				it("sends draw event when line segment is drawn", function() {
 					dragMouse(10, 20, 40, 90);
-					assert.deepEqual(nullConnection.getLastSentDrawEvent(), new ClientDrawEvent(10, 20, 40, 90));
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawEvent(10, 20, 40, 90));
 				});
 
 				it("sends draw event when dot is drawn", function() {
 					clickMouse(33, 99);
-					assert.deepEqual(nullConnection.getLastSentDrawEvent(), new ClientDrawEvent(33, 99, 33, 99));
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawEvent(33, 99, 33, 99));
 				});
 
 				it("draws line segment when draw event is received", function() {
@@ -361,6 +361,7 @@
 					drawingArea.triggerMouseMove(50, 60);
 					assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 50, y: 60 });
 				});
+
 
 				it("sends pointer location even when mouse moves outside drawing area", function() {
 					documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));

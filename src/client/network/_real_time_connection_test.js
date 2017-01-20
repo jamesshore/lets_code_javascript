@@ -132,9 +132,9 @@
 			var DRAW_EVENT = new ClientDrawEvent(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
-				assert.deepEqual(connection.getLastSentDrawEvent(), null, "should not have event if nothing sent");
+				assert.deepEqual(connection.getLastSentEvent(), null, "should not have event if nothing sent");
 				connection.sendEvent(DRAW_EVENT);
-				assert.deepEqual(connection.getLastSentDrawEvent(), DRAW_EVENT, "should return last sent event");
+				assert.deepEqual(connection.getLastSentEvent(), DRAW_EVENT, "should return last sent event");
 				connection.disconnect(done);
 			});
 		});
