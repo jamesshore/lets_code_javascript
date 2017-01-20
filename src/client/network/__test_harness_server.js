@@ -32,7 +32,6 @@
 		endpointMap[endpoints.WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation(io);
 		endpointMap[endpoints.SEND_POINTER_LOCATION] = setupSendPointerLocation();
 		endpointMap[endpoints.WAIT_FOR_DRAW_EVENT] = setupWaitForDrawEvent(io);
-		endpointMap[endpoints.SEND_DRAW_EVENT] = setupSendDrawEvent();
 
 		return stopFn(httpServer, io);
 
@@ -154,13 +153,6 @@
 	function setupSendPointerLocation() {
 		return function sendPointerLocationEndpoint(socket, data, request, response) {
 			socket.emit(ServerPointerEvent.EVENT_NAME, data);
-			return response.end("ok");
-		};
-	}
-
-	function setupSendDrawEvent() {
-		return function sendDrawEventEndpoint(socket, data, request, response) {
-			socket.emit(ServerDrawEvent.EVENT_NAME, data);
 			return response.end("ok");
 		};
 	}

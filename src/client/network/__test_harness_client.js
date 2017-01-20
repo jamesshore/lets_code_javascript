@@ -61,17 +61,6 @@
 		});
 	};
 
-	exports.sendDrawEvent = function sendDrawEvent(connection, event, callback) {
-		ajax({
-			connection: connection,
-			endpoint: endpoints.SEND_DRAW_EVENT,
-			async: true,
-			data: event.toSerializableObject()
-		}, function(err, responseText) {
-			callback();
-		});
-	};
-
 	exports.sendEvent = function(connection, event, callback) {
 		ajax({
 			connection: connection,
