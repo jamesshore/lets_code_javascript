@@ -47,13 +47,6 @@
 		this._socket.close();
 	};
 
-	Connection.prototype.triggerPointerLocation = function(socketId, x, y) {
-		failFastUnlessConnectCalled(this);
-
-		var event = new ServerPointerEvent(socketId, x, y);
-		this._localEmitter.emit(ServerPointerEvent.EVENT_NAME, event);
-	};
-
 	Connection.prototype.sendEvent = function(event) {
 		failFastUnlessConnectCalled(this);
 		failFast.unlessDefined(event.name, "event.name");

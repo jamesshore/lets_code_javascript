@@ -40,10 +40,7 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * RealTimeConnection - remove duplication in event handling and test harness
-	* Genericize draw event methods
-	- Remove pointer event methods
 	- Genericize our draw event test harness methods
-	- Remove pointer event test harness methods
 	- Review all RealTimeConnection tests to ensure their descriptions match their genericized behavior
 	- Should RealTimeConnection tests use a fake event?
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
@@ -53,4 +50,3 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
-* Remove triggerPointerLocation
