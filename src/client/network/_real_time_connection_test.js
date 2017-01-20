@@ -78,15 +78,6 @@
 			});
 		});
 
-		it("gets most recent pointer location sent to Socket.IO server, even if it hasn't be received yet", function(done) {
-			connection.connect(harness.PORT, function() {
-				assert.deepEqual(connection.getLastSentPointerLocation(), null, "should not have a location if nothing sent");
-				connection.sendPointerLocation(50, 75);
-				assert.deepEqual(connection.getLastSentPointerLocation(), { x: 50, y: 75 }, "should return last sent value");
-				connection.disconnect(done);
-			});
-		});
-
 		it("receives pointer location from Socket.IO server", function(done) {
 			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
 
@@ -128,7 +119,7 @@
 			});
 		});
 
-		it("gets most recent draw event sent to Socket.IO server, even if it hasn't be received yet", function(done) {
+		it("gets most recent event sent to Socket.IO server, even if it hasn't be received yet", function(done) {
 			var DRAW_EVENT = new ClientDrawEvent(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
@@ -205,7 +196,6 @@
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
 			assert.throws(connection.sendEvent.bind(connection), expectedMessage, "sendEvent()");
-			assert.throws(connection.getLastSentPointerLocation.bind(connection), expectedMessage, "getLastSentPointerLocation()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.onDrawEvent.bind(connection, callback), expectedMessage, "onDrawEvent()");
 			assert.throws(connection.triggerPointerLocation.bind(connection), expectedMessage, "triggerPointerLocation()");

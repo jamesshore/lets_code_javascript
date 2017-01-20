@@ -55,12 +55,6 @@
 		this.sendEvent(new ClientPointerEvent(x, y));
 	};
 
-	Connection.prototype.getLastSentPointerLocation = function() {
-		failFastUnlessConnectCalled(this);
-
-		return this._lastSentPointerLocation;
-	};
-
 	Connection.prototype.onPointerLocation = function(handler) {
 		failFastUnlessConnectCalled(this);
 

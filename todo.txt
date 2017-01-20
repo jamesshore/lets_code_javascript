@@ -44,6 +44,7 @@ Engineering Tasks:
 	- Genericize our draw event test harness methods
 	- Remove pointer event methods
 	- Remove pointer event test harness methods
+	- Review all RealTimeConnection tests to ensure their descriptions match their genericized behavior
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
 	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent
@@ -51,8 +52,7 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
-* remove getLastSentPointerLocation
-- Modify client.js to use sendEvent
+* Modify client.js to use sendEvent
 - remove sendPointerLocation
 - onDrawEvent --> onEvent
 - triggerDrawEvent --> triggerEvent

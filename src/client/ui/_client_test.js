@@ -11,6 +11,7 @@
 	var assert = require("_assert");
 	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var RealTimeConnection = require("../network/real_time_connection.js");
 
 	mocha.setup({ignoreLeaks: true, timeout:5000});
@@ -359,20 +360,19 @@
 
 				it("sends pointer location whenever mouse moves", function() {
 					drawingArea.triggerMouseMove(50, 60);
-					assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 50, y: 60 });
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(50, 60));
 				});
-
 
 				it("sends pointer location even when mouse moves outside drawing area", function() {
 					documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
-					assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 20, y: 40 });
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(20, 40));
 				});
 
 				it("doesn't send pointer location when touch changes", function() {
 					if (!browser.supportsTouchEvents()) return;
 
 					drawingArea.triggerSingleTouchMove(30, 40);
-					assert.deepEqual(nullConnection.getLastSentPointerLocation(), null);
+					assert.deepEqual(nullConnection.getLastSentEvent(), null);
 				});
 
 				it("doesn't create pointer element on startup", function() {
