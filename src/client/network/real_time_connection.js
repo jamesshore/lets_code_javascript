@@ -79,12 +79,11 @@
 		this._localEmitter.emit(ServerPointerEvent.EVENT_NAME, event);
 	};
 
-	Connection.prototype.sendDrawEvent = function(event) {
+	Connection.prototype.sendEvent = function(event) {
 		failFastUnlessConnectCalled(this);
 
 		this._lastSentDrawEvent = event;
-		this._socket.emit(ClientDrawEvent.EVENT_NAME, event.toSerializableObject());
-		// this._socket.emit(event.name, event.toSerializableObject());
+		this._socket.emit(event.name, event.toSerializableObject());
 	};
 
 	Connection.prototype.getLastSentDrawEvent = function() {

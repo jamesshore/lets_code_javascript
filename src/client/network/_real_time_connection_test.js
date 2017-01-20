@@ -119,7 +119,7 @@
 			connection.connect(harness.PORT, function() {
 				var event = new ClientDrawEvent(1, 2, 3, 4);
 
-				connection.sendDrawEvent(event);
+				connection.sendEvent(event);
 
 				harness.waitForDrawEvent(connection, function(error, eventData) {
 					assert.deepEqual(eventData, event.toSerializableObject());
@@ -133,7 +133,7 @@
 
 			connection.connect(harness.PORT, function() {
 				assert.deepEqual(connection.getLastSentDrawEvent(), null, "should not have event if nothing sent");
-				connection.sendDrawEvent(DRAW_EVENT);
+				connection.sendEvent(DRAW_EVENT);
 				assert.deepEqual(connection.getLastSentDrawEvent(), DRAW_EVENT, "should return last sent event");
 				connection.disconnect(done);
 			});
@@ -204,7 +204,7 @@
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
-			assert.throws(connection.sendDrawEvent.bind(connection), expectedMessage, "sendDrawEvent()");
+			assert.throws(connection.sendEvent.bind(connection), expectedMessage, "sendEvent()");
 			assert.throws(connection.getLastSentPointerLocation.bind(connection), expectedMessage, "getLastSentPointerLocation()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.onDrawEvent.bind(connection, callback), expectedMessage, "onDrawEvent()");

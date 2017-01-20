@@ -141,7 +141,7 @@
 	function sendDrawEvent(start, end) {
 		var startOffset = start.toRelativeOffset(drawingArea);
 		var endOffset = end.toRelativeOffset(drawingArea);
-		network.sendDrawEvent(new ClientDrawEvent(startOffset.x, startOffset.y, endOffset.x, endOffset.y));
+		network.sendEvent(new ClientDrawEvent(startOffset.x, startOffset.y, endOffset.x, endOffset.y));
 	}
 
 }());

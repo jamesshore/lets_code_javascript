@@ -51,8 +51,6 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
-- Modify ClientDrawEvent instances to have a name
-- sendDrawEvent --> sendEvent
-- getLastSentDrawEvent --> getLastSentEvent
+* getLastSentDrawEvent --> getLastSentEvent
 - onDrawEvent --> onEvent
 - triggerDrawEvent --> triggerEvent
