@@ -52,7 +52,6 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
-* Modify client.js to use sendEvent
-- remove sendPointerLocation
-- onDrawEvent --> onEvent
+* onDrawEvent --> onEvent
+- remove onPointerLocation
 - triggerDrawEvent --> triggerEvent

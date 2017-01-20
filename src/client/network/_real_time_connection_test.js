@@ -67,17 +67,6 @@
 			}
 		});
 
-		it("sends pointer location to Socket.IO server", function(done) {
-			connection.connect(harness.PORT, function() {
-				connection.sendPointerLocation(50, 75);
-
-				harness.waitForPointerLocation(connection, function(error, location) {
-					assert.deepEqual(location, new ClientPointerEvent(50, 75).toSerializableObject());
-					connection.disconnect(done);
-				});
-			});
-		});
-
 		it("receives pointer location from Socket.IO server", function(done) {
 			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
 
@@ -194,7 +183,6 @@
 			var expectedMessage = "Connection used before connect() called";
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
-			assert.throws(connection.sendPointerLocation.bind(connection, 0, 0), expectedMessage, "sendPointerLocation()");
 			assert.throws(connection.sendEvent.bind(connection), expectedMessage, "sendEvent()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.onDrawEvent.bind(connection, callback), expectedMessage, "onDrawEvent()");

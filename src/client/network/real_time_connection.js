@@ -5,10 +5,8 @@
 
 	var failFast = require("fail_fast");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
-	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var EventEmitter = require("./vendor/emitter-1.2.1.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
-	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
 	var Connection = module.exports = function() {
 		return initialize(this, window.io);
@@ -22,7 +20,6 @@
 		self._io = ioToInject;
 		self._connectCalled = false;
 		self._socket = null;
-		self._lastSentPointerLocation = null;
 		self._lastSentEvent = null;
 		self._localEmitter = new EventEmitter();
 		return self;
@@ -48,11 +45,6 @@
 			return callback(null);
 		});
 		this._socket.close();
-	};
-
-	Connection.prototype.sendPointerLocation = function(x, y) {
-		this._lastSentPointerLocation = { x: x, y: y };
-		this.sendEvent(new ClientPointerEvent(x, y));
 	};
 
 	Connection.prototype.onPointerLocation = function(handler) {

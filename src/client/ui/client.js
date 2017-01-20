@@ -10,6 +10,7 @@
 	var browser = require("./browser.js");
 	var failFast = require("fail_fast");
 	var ClientDrawEvent = require("../../shared/client_draw_event.js");
+	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 
 	var svgCanvas = null;
 	var start = null;
@@ -84,7 +85,7 @@
 
 	function sendPointerEvent(coordinate) {
 		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
-		network.sendPointerLocation(relativeOffset.x, relativeOffset.y);
+		network.sendEvent(new ClientPointerEvent(relativeOffset.x, relativeOffset.y));
 	}
 
 	function displayNetworkPointer(serverEvent) {
