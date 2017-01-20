@@ -51,12 +51,11 @@
 	};
 
 	Connection.prototype.sendPointerLocation = function(x, y) {
-		// this.sendEvent(new ClientPointerEvent(x, y));
-
-		failFastUnlessConnectCalled(this);
-
 		this._lastSentPointerLocation = { x: x, y: y };
-		this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
+		this.sendEvent(new ClientPointerEvent(x, y));
+		// failFastUnlessConnectCalled(this);
+		//
+		// this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
 	};
 
 	Connection.prototype.getLastSentPointerLocation = function() {
