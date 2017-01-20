@@ -40,17 +40,6 @@
 		});
 	};
 
-	exports.sendPointerLocation = function sendPointerLocation(connection, event, callback) {
-		ajax({
-			connection: connection,
-			endpoint: endpoints.SEND_POINTER_LOCATION,
-			async: true,
-			data: event.toSerializableObject()
-		}, function(err, responseText) {
-			callback();
-		});
-	};
-
 	exports.waitForDrawEvent = function(connection, callback) {
 		ajax({
 			connection: connection,

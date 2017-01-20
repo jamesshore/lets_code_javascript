@@ -50,4 +50,6 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
-- Delete sendDrawEvent
+* Add generic waitForEvent
+- Remove waitForDrawEvent
+- Remove waitForPointerLocation

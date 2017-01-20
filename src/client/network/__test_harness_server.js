@@ -30,7 +30,6 @@
 
 		// obsolete
 		endpointMap[endpoints.WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation(io);
-		endpointMap[endpoints.SEND_POINTER_LOCATION] = setupSendPointerLocation();
 		endpointMap[endpoints.WAIT_FOR_DRAW_EVENT] = setupWaitForDrawEvent(io);
 
 		return stopFn(httpServer, io);
@@ -147,13 +146,6 @@
 			socket.on("disconnect", function() {
 				return response.end("disconnected");
 			});
-		};
-	}
-
-	function setupSendPointerLocation() {
-		return function sendPointerLocationEndpoint(socket, data, request, response) {
-			socket.emit(ServerPointerEvent.EVENT_NAME, data);
-			return response.end("ok");
 		};
 	}
 
