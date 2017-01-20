@@ -76,10 +76,6 @@
 		});
 	};
 
-	Connection.prototype.triggerDrawEvent = function(event) {
-		this.triggerEvent(ServerDrawEvent, event);
-	};
-
 	Connection.prototype.triggerEvent = function(eventConstructor, event) {
 		failFastUnlessConnectCalled(this);
 		failFast.unlessDefined(eventConstructor.EVENT_NAME, "eventConstructor.EVENT_NAME");

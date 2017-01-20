@@ -54,4 +54,5 @@ Engineering Tasks:
 
 To Do on current task:
 * Remove triggerDrawEvent
+- Modify triggerEvent to use event.name instead of eventConstructor.EVENT_NAME
 - Remove triggerPointerLocation

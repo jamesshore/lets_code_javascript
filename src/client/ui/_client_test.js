@@ -341,14 +341,14 @@
 				});
 
 				it("draws line segment when draw event is received", function() {
-					nullConnection.triggerDrawEvent(new ServerDrawEvent(4, 90, 77, 2));
+					nullConnection.triggerEvent(ServerDrawEvent, new ServerDrawEvent(4, 90, 77, 2));
 					assert.deepEqual(lines(), [
 						[ 4, 90, 77, 2 ]
 					]);
 				});
 
 				it("draws dot when draw event is received", function() {
-					nullConnection.triggerDrawEvent(new ServerDrawEvent(5, 10, 5, 10));
+					nullConnection.triggerEvent(ServerDrawEvent, new ServerDrawEvent(5, 10, 5, 10));
 					assert.deepEqual(lines(), [
 						[ 5, 10 ]
 					]);

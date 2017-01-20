@@ -113,7 +113,7 @@
 					connection.disconnect(done);
 				});
 
-				connection.triggerDrawEvent(DRAW_EVENT);
+				connection.triggerEvent(ServerDrawEvent, DRAW_EVENT);
 				// if triggerPointerLocation doesn't do anything, the test will time out
 			});
 		});
@@ -158,7 +158,6 @@
 			assert.throws(connection.sendEvent.bind(connection), expectedMessage, "sendEvent()");
 			assert.throws(connection.onEvent.bind(connection, ServerDrawEvent, callback), expectedMessage, "onDrawEvent()");
 			assert.throws(connection.triggerPointerLocation.bind(connection), expectedMessage, "triggerPointerLocation()");
-			assert.throws(connection.triggerDrawEvent.bind(connection), expectedMessage, "triggerDrawEvent()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
 
