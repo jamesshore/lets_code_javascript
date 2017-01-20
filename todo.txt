@@ -51,6 +51,8 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
-* getLastSentDrawEvent --> getLastSentEvent
+* Modify ClientPointerEvent to have .name property
+- remove sendPointerLocation
+- getLastSentDrawEvent --> getLastSentEvent
 - onDrawEvent --> onEvent
 - triggerDrawEvent --> triggerEvent
