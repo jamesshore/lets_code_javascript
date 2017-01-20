@@ -10,6 +10,7 @@
 	var browser = require("./browser.js");
 	var failFast = require("fail_fast");
 	var ClientDrawEvent = require("../../shared/client_draw_event.js");
+	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 
 	var svgCanvas = null;
@@ -57,7 +58,7 @@
 		network.connect(window.location.port);
 		documentBody.onMouseMove(sendPointerEvent);
 		network.onPointerLocation(displayNetworkPointer);
-		network.onDrawEvent(function(event) {
+		network.onEvent(ServerDrawEvent, function(event) {
 			var from = HtmlCoordinate.fromRelativeOffset(drawingArea, event.from.x, event.from.y);
 			var to = HtmlCoordinate.fromRelativeOffset(drawingArea, event.to.x, event.to.y);
 			drawLineSegment(from, to);

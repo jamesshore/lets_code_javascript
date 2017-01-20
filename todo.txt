@@ -45,6 +45,7 @@ Engineering Tasks:
 	- Remove pointer event methods
 	- Remove pointer event test harness methods
 	- Review all RealTimeConnection tests to ensure their descriptions match their genericized behavior
+	- Should RealTimeConnection tests use a fake event?
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
 	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent

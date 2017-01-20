@@ -75,10 +75,6 @@
 		return this._lastSentEvent;
 	};
 
-	Connection.prototype.onDrawEvent = function(handler) {
-		this.onEvent(ServerDrawEvent, handler);
-	};
-
 	Connection.prototype.onEvent = function(eventConstructor, handler) {
 		failFastUnlessConnectCalled(this);
 		failFast.unlessDefined(eventConstructor.EVENT_NAME, "eventConstructor.EVENT_NAME");

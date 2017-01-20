@@ -124,7 +124,7 @@
 
 			connection.connect(harness.PORT, function() {
 
-				connection.onDrawEvent(function(event) {
+				connection.onEvent(ServerDrawEvent, function(event) {
 					assert.deepEqual(event, DRAW_EVENT);
 					connection.disconnect(done);
 				});
@@ -136,7 +136,7 @@
 			var DRAW_EVENT = new ServerDrawEvent(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
-				connection.onDrawEvent(function(event) {
+				connection.onEvent(ServerDrawEvent, function(event) {
 					assert.deepEqual(event, DRAW_EVENT);
 					connection.disconnect(done);
 				});
@@ -185,7 +185,7 @@
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendEvent.bind(connection), expectedMessage, "sendEvent()");
 			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
-			assert.throws(connection.onDrawEvent.bind(connection, callback), expectedMessage, "onDrawEvent()");
+			assert.throws(connection.onEvent.bind(connection, ServerDrawEvent, callback), expectedMessage, "onDrawEvent()");
 			assert.throws(connection.triggerPointerLocation.bind(connection), expectedMessage, "triggerPointerLocation()");
 			assert.throws(connection.triggerDrawEvent.bind(connection), expectedMessage, "triggerDrawEvent()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
