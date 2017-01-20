@@ -84,6 +84,7 @@
 
 		this._lastSentDrawEvent = event;
 		this._socket.emit(ClientDrawEvent.EVENT_NAME, event.toSerializableObject());
+		// this._socket.emit(event.name, event.toSerializableObject());
 	};
 
 	Connection.prototype.getLastSentDrawEvent = function() {

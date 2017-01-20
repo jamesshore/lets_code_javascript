@@ -39,13 +39,20 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
+* RealTimeConnection - remove duplication in event handling and test harness
+	* Genericize draw event methods
+	- Genericize our draw event test harness methods
+	- Remove pointer event methods
+	- Remove pointer event test harness methods
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
 	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent
 	- A lot of duplication in server event tests. Tests are pretty ugly, too.
-	- RealTimeConnection - lots of duplication in event handling. Genericize it to not know about event details?
-	- RealTimeConnection test harness has lots of duplication
 	- Improve client.js
 
 To Do on current task:
--
+- Modify ClientDrawEvent instances to have a name
+- sendDrawEvent --> sendEvent
+- getLastSentDrawEvent --> getLastSentEvent
+- onDrawEvent --> onEvent
+- triggerDrawEvent --> triggerEvent
