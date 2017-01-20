@@ -76,11 +76,15 @@
 		});
 	};
 
-
 	Connection.prototype.triggerDrawEvent = function(event) {
-		failFastUnlessConnectCalled(this);
+		this.triggerEvent(ServerDrawEvent, event);
+	};
 
-		this._localEmitter.emit(ServerDrawEvent.EVENT_NAME, event);
+	Connection.prototype.triggerEvent = function(eventConstructor, event) {
+		failFastUnlessConnectCalled(this);
+		failFast.unlessDefined(eventConstructor.EVENT_NAME, "eventConstructor.EVENT_NAME");
+
+		this._localEmitter.emit(eventConstructor.EVENT_NAME, event);
 	};
 
 	Connection.prototype.getSocketId = function() {

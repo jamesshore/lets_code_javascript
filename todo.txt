@@ -53,4 +53,5 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
-* triggerDrawEvent --> triggerEvent
+* Remove triggerDrawEvent
+- Remove triggerPointerLocation
