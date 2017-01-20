@@ -113,7 +113,7 @@
 					connection.disconnect(done);
 				});
 
-				connection.triggerEvent(ServerDrawEvent, DRAW_EVENT);
+				connection.triggerEvent(DRAW_EVENT);
 				// if triggerPointerLocation doesn't do anything, the test will time out
 			});
 		});

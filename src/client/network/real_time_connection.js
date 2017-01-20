@@ -76,11 +76,11 @@
 		});
 	};
 
-	Connection.prototype.triggerEvent = function(eventConstructor, event) {
+	Connection.prototype.triggerEvent = function(event) {
 		failFastUnlessConnectCalled(this);
-		failFast.unlessDefined(eventConstructor.EVENT_NAME, "eventConstructor.EVENT_NAME");
+		failFast.unlessDefined(event.name, "event.name");
 
-		this._localEmitter.emit(eventConstructor.EVENT_NAME, event);
+		this._localEmitter.emit(event.name, event);
 	};
 
 	Connection.prototype.getSocketId = function() {
