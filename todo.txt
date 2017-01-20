@@ -53,5 +53,6 @@ Engineering Tasks:
 
 To Do on current task:
 * onDrawEvent --> onEvent
+- remove onDrawEvent
 - remove onPointerLocation
 - triggerDrawEvent --> triggerEvent

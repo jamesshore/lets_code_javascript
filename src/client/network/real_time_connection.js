@@ -76,13 +76,19 @@
 	};
 
 	Connection.prototype.onDrawEvent = function(handler) {
-		failFastUnlessConnectCalled(this);
+		this.onEvent(ServerDrawEvent, handler);
+	};
 
-		this._localEmitter.on(ServerDrawEvent.EVENT_NAME, handler);
-		this._socket.on(ServerDrawEvent.EVENT_NAME, function(eventData) {
-			return handler(ServerDrawEvent.fromSerializableObject(eventData));
+	Connection.prototype.onEvent = function(eventConstructor, handler) {
+		failFastUnlessConnectCalled(this);
+		failFast.unlessDefined(eventConstructor.EVENT_NAME, "eventConstructor.EVENT_NAME");
+
+		this._localEmitter.on(eventConstructor.EVENT_NAME, handler);
+		this._socket.on(eventConstructor.EVENT_NAME, function(eventData) {
+			return handler(eventConstructor.fromSerializableObject(eventData));
 		});
 	};
+
 
 	Connection.prototype.triggerDrawEvent = function(event) {
 		failFastUnlessConnectCalled(this);
