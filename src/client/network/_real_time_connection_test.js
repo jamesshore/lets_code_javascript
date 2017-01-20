@@ -67,34 +67,6 @@
 			}
 		});
 
-		it("receives pointer location from Socket.IO server", function(done) {
-			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
-
-			connection.connect(harness.PORT, function() {
-
-				connection.onPointerLocation(function(event) {
-					assert.deepEqual(event, EXPECTED_EVENT);
-					connection.disconnect(done);
-				});
-
-				harness.sendPointerLocation(connection, EXPECTED_EVENT, function() {});
-			});
-		});
-
-		it("can trigger pointer location event manually", function(done) {
-			var EXPECTED_EVENT = new ServerPointerEvent(0xdeadbeef, 90, 160);
-
-			connection.connect(harness.PORT, function() {
-				connection.onPointerLocation(function(event) {
-					assert.deepEqual(event, EXPECTED_EVENT);
-					connection.disconnect(done);
-				});
-
-				connection.triggerPointerLocation(0xdeadbeef, 90, 160);
-				// if triggerPointerLocation doesn't do anything, the test will time out
-			});
-		});
-
 		it("sends draw events to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 				var event = new ClientDrawEvent(1, 2, 3, 4);
@@ -184,7 +156,6 @@
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendEvent.bind(connection), expectedMessage, "sendEvent()");
-			assert.throws(connection.onPointerLocation.bind(connection, callback), expectedMessage, "onPointerLocation()");
 			assert.throws(connection.onEvent.bind(connection, ServerDrawEvent, callback), expectedMessage, "onDrawEvent()");
 			assert.throws(connection.triggerPointerLocation.bind(connection), expectedMessage, "triggerPointerLocation()");
 			assert.throws(connection.triggerDrawEvent.bind(connection), expectedMessage, "triggerDrawEvent()");

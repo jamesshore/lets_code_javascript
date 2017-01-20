@@ -47,15 +47,6 @@
 		this._socket.close();
 	};
 
-	Connection.prototype.onPointerLocation = function(handler) {
-		failFastUnlessConnectCalled(this);
-
-		this._localEmitter.on(ServerPointerEvent.EVENT_NAME, handler);
-		this._socket.on(ServerPointerEvent.EVENT_NAME, function(eventData) {
-			return handler(ServerPointerEvent.fromSerializableObject(eventData));
-		});
-	};
-
 	Connection.prototype.triggerPointerLocation = function(socketId, x, y) {
 		failFastUnlessConnectCalled(this);
 
