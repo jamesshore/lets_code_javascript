@@ -53,3 +53,4 @@ To Do on current task:
 * Add generic waitForEvent
 - Remove waitForDrawEvent
 - Remove waitForPointerLocation
+- Change event.name --> event.name() (ref Laurent Bourgault-Roy comment, E484)
