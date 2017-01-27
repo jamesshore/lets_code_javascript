@@ -108,15 +108,16 @@
 		var lastDrawEvent = {};
 
 		io.on("connection", function(socket) {
-			socket.on(ClientDrawEvent.EVENT_NAME, function(data) {
-				lastDrawEvent[socket.id] = data;
+			var eventName = ClientDrawEvent.EVENT_NAME;
+			socket.on(eventName, function(data) {
+				lastDrawEvent[eventDataKey(socket.id, eventName)] = data;
 			});
 		});
 
 		return function waitForEventEndpoint(socket, data, request, response) {
-			var socketId = socket.id;
+			var key = eventDataKey(socket.id, data.eventName);
 
-			var result = lastDrawEvent[socketId];
+			var result = lastDrawEvent[key];
 
 			if (result === undefined) {
 				socket.once(data.eventName, sendResponse);
@@ -127,9 +128,13 @@
 
 			function sendResponse(data) {
 				response.end(JSON.stringify(data));
-				delete lastDrawEvent[socketId];
+				delete lastDrawEvent[key];
 			}
 		};
+
+		function eventDataKey(socketId, eventName) {
+			return socketId + "|" + eventName;
+		}
 	}
 
 	function setupIsConnected(io) {
