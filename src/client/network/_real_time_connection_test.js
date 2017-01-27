@@ -6,8 +6,6 @@
 	var harness = require("./__test_harness_client.js");
 	var Connection = require("./real_time_connection.js");
 	var async = require("./vendor/async-1.5.2.js");
-	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
-	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
@@ -67,7 +65,7 @@
 			}
 		});
 
-		it("sends draw events to Socket.IO server", function(done) {
+		it("sends events to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 				var event = new ClientDrawEvent(1, 2, 3, 4);
 
@@ -91,7 +89,7 @@
 			});
 		});
 
-		it("receives draw events from Socket.IO server", function(done) {
+		it("receives events from Socket.IO server", function(done) {
 			var DRAW_EVENT = new ServerDrawEvent(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
@@ -104,7 +102,7 @@
 			});
 		});
 
-		it("can trigger draw event manually", function(done) {
+		it("can trigger events manually", function(done) {
 			var DRAW_EVENT = new ServerDrawEvent(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
@@ -156,7 +154,8 @@
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendEvent.bind(connection), expectedMessage, "sendEvent()");
-			assert.throws(connection.onEvent.bind(connection, ServerDrawEvent, callback), expectedMessage, "onDrawEvent()");
+			assert.throws(connection.onEvent.bind(connection, ServerDrawEvent, callback), expectedMessage, "onEvent()");
+			assert.throws(connection.triggerEvent.bind(connection), expectedMessage, "triggerEvent()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
 

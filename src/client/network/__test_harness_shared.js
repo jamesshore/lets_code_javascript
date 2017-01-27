@@ -8,10 +8,7 @@
 		WAIT_FOR_SERVER_DISCONNECT: "/wait-for-server-disconnect",
 
 		SEND_EVENT: "/send-event",
-		WAIT_FOR_EVENT: "/wait-for-event",
-
-		// obsolete
-		WAIT_FOR_POINTER_LOCATION: "/wait-for-pointer-location"
+		WAIT_FOR_EVENT: "/wait-for-event"
 	};
 
 	exports.PORT = "5030";
