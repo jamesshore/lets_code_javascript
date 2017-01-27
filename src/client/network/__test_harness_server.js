@@ -4,6 +4,7 @@
 	"use strict";
 
 	var shared = require("./__test_harness_shared.js");
+	var failFast = require("fail_fast");
 	var http = require("http");
 	var socketIo = require("socket.io");
 	var url = require("url");
@@ -107,20 +108,30 @@
 	function setupWaitForEvent(io) {
 		var lastDrawEvent = {};
 
+		var TESTABLE_EVENTS = [
+			ClientDrawEvent.EVENT_NAME,
+			ClientPointerEvent.EVENT_NAME
+		];
+
 		io.on("connection", function(socket) {
-			var eventName = ClientDrawEvent.EVENT_NAME;
-			socket.on(eventName, function(data) {
-				lastDrawEvent[eventDataKey(socket.id, eventName)] = data;
+			TESTABLE_EVENTS.forEach(function(eventName) {
+				socket.on(eventName, function(data) {
+					lastDrawEvent[eventDataKey(socket.id, eventName)] = data;
+				});
 			});
 		});
 
 		return function waitForEventEndpoint(socket, data, request, response) {
-			var key = eventDataKey(socket.id, data.eventName);
+			var eventName = data.eventName;
+			failFast.unlessTrue(
+				TESTABLE_EVENTS.indexOf(eventName) !== -1,
+				eventName + " not yet supported; add it to TESTABLE_EVENTS constant in test harness server."
+			);
+			var key = eventDataKey(socket.id, eventName);
 
 			var result = lastDrawEvent[key];
-
 			if (result === undefined) {
-				socket.once(data.eventName, sendResponse);
+				socket.once(eventName, sendResponse);
 			}
 			else {
 				sendResponse(result);
