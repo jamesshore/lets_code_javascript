@@ -51,5 +51,4 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
-- Remove waitForDrawEvent
-- Remove waitForPointerLocation
+* Remove waitForPointerLocation

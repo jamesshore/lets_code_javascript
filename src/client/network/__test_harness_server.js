@@ -9,9 +9,7 @@
 	var socketIo = require("socket.io");
 	var url = require("url");
 	var querystring = require("querystring");
-	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
-	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
 	var endpoints = shared.endpoints;
@@ -28,9 +26,6 @@
 		endpointMap[endpoints.WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
 		endpointMap[endpoints.SEND_EVENT] = setupSendEvent();
 		endpointMap[endpoints.WAIT_FOR_EVENT] = setupWaitForEvent(io);
-
-		// obsolete - deleteme
-		endpointMap[endpoints.WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation(io);
 
 		return stopFn(httpServer, io);
 
@@ -77,31 +72,26 @@
 		};
 	}
 
-	function setupWaitForPointerLocation(io) {
-		var lastPointerLocation = {};
+	function setupIsConnected(io) {
+		return function isConnectedEndpoint(socket, data, request, response) {
+			var socketIds = Object.keys(io.sockets.connected);
+			response.end(JSON.stringify(socketIds));
+		};
+	}
 
-		io.on("connection", function(socket) {
-			socket.on(ClientPointerEvent.EVENT_NAME, function(data) {
-				lastPointerLocation[socket.id] = data;
+	function setupWaitForServerDisconnect() {
+		return function waitForServerDisconnectEndpoint(socket, data, request, response) {
+			if (socket === undefined || socket.disconnected) return response.end("disconnected");
+			socket.on("disconnect", function() {
+				return response.end("disconnected");
 			});
-		});
+		};
+	}
 
-		return function waitForPointerLocationEndpoint(socket, data, request, response) {
-			var socketId = socket.id;
-
-			var result = lastPointerLocation[socketId];
-
-			if (result === undefined) {
-				socket.on(ClientPointerEvent.EVENT_NAME, sendResponse);
-			}
-			else {
-				sendResponse(result);
-			}
-
-			function sendResponse(data) {
-				response.end(JSON.stringify(data));
-				delete lastPointerLocation[socketId];
-			}
+	function setupSendEvent() {
+		return function sendEventEndpoint(socket, data, request, response) {
+			socket.emit(data.eventName, data.eventData);
+			return response.end("ok");
 		};
 	}
 
@@ -146,29 +136,6 @@
 		function eventDataKey(socketId, eventName) {
 			return socketId + "|" + eventName;
 		}
-	}
-
-	function setupIsConnected(io) {
-		return function isConnectedEndpoint(socket, data, request, response) {
-			var socketIds = Object.keys(io.sockets.connected);
-			response.end(JSON.stringify(socketIds));
-		};
-	}
-
-	function setupWaitForServerDisconnect() {
-		return function waitForServerDisconnectEndpoint(socket, data, request, response) {
-			if (socket === undefined || socket.disconnected) return response.end("disconnected");
-			socket.on("disconnect", function() {
-				return response.end("disconnected");
-			});
-		};
-	}
-
-	function setupSendEvent() {
-		return function sendEventEndpoint(socket, data, request, response) {
-			socket.emit(data.eventName, data.eventData);
-			return response.end("ok");
-		};
 	}
 
 }());
