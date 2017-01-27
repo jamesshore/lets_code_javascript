@@ -26,11 +26,10 @@
 		endpointMap[endpoints.IS_CONNECTED] = setupIsConnected(io);
 		endpointMap[endpoints.WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
 		endpointMap[endpoints.SEND_EVENT] = setupSendEvent();
-		// endpointMap[endpoints.WAIT_FOR_EVENT] = setupWaitForEvent(io);
+		endpointMap[endpoints.WAIT_FOR_EVENT] = setupWaitForEvent(io);
 
-		// obsolete
+		// obsolete - deleteme
 		endpointMap[endpoints.WAIT_FOR_POINTER_LOCATION] = setupWaitForPointerLocation(io);
-		endpointMap[endpoints.WAIT_FOR_DRAW_EVENT] = setupWaitForDrawEvent(io);
 
 		return stopFn(httpServer, io);
 
@@ -105,7 +104,7 @@
 		};
 	}
 
-	function setupWaitForDrawEvent(io) {
+	function setupWaitForEvent(io) {
 		var lastDrawEvent = {};
 
 		io.on("connection", function(socket) {
@@ -114,13 +113,13 @@
 			});
 		});
 
-		return function waitForDrawEventEndpoint(socket, data, request, response) {
+		return function waitForEventEndpoint(socket, data, request, response) {
 			var socketId = socket.id;
 
 			var result = lastDrawEvent[socketId];
 
 			if (result === undefined) {
-				socket.on(ClientDrawEvent.EVENT_NAME, sendResponse);
+				socket.once(data.eventName, sendResponse);
 			}
 			else {
 				sendResponse(result);

@@ -43,6 +43,7 @@ Engineering Tasks:
 	- Genericize our draw event test harness methods
 	- Review all RealTimeConnection tests to ensure their descriptions match their genericized behavior
 	- Should RealTimeConnection tests use a fake event?
+	- Change event.name --> event.name() (ref Laurent Bourgault-Roy comment, E484)
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
 	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent
@@ -53,4 +54,3 @@ To Do on current task:
 * Add generic waitForEvent
 - Remove waitForDrawEvent
 - Remove waitForPointerLocation
-- Change event.name --> event.name() (ref Laurent Bourgault-Roy comment, E484)

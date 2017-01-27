@@ -40,10 +40,13 @@
 		});
 	};
 
-	exports.waitForDrawEvent = function(connection, callback) {
+	exports.waitForEvent = function(connection, eventConstructor, callback) {
 		ajax({
 			connection: connection,
-			endpoint: endpoints.WAIT_FOR_DRAW_EVENT,
+			endpoint: endpoints.WAIT_FOR_EVENT,
+			data: {
+				eventName: eventConstructor.EVENT_NAME
+			},
 			async: true
 		}, function(err, responseText) {
 			return callback(err, JSON.parse(responseText));

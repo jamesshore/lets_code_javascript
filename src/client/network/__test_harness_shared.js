@@ -11,8 +11,7 @@
 		WAIT_FOR_EVENT: "/wait-for-event",
 
 		// obsolete
-		WAIT_FOR_POINTER_LOCATION: "/wait-for-pointer-location",
-		WAIT_FOR_DRAW_EVENT: "/wait-for-draw-event"
+		WAIT_FOR_POINTER_LOCATION: "/wait-for-pointer-location"
 	};
 
 	exports.PORT = "5030";
