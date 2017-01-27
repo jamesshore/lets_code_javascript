@@ -36,7 +36,7 @@
 			endpoint: endpoints.SEND_EVENT,
 			async: true,
 			data: {
-				eventName: event.name,
+				eventName: event.name(),
 				eventData: event.toSerializableObject()
 			}
 		}, function(err, responseText) {

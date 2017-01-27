@@ -10,7 +10,7 @@
 	};
 
 	ClientPointerEvent.EVENT_NAME = "client_pointer_event";
-	ClientPointerEvent.prototype.name = ClientPointerEvent.EVENT_NAME;
+	ClientPointerEvent.prototype.name = function() { return ClientPointerEvent.EVENT_NAME; };
 
 	ClientPointerEvent.fromSerializableObject = function(obj) {
 		return new ClientPointerEvent(obj.x, obj.y);

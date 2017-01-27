@@ -49,10 +49,9 @@
 
 	Connection.prototype.sendEvent = function(event) {
 		failFastUnlessConnectCalled(this);
-		failFast.unlessDefined(event.name, "event.name");
 
 		this._lastSentEvent = event;
-		this._socket.emit(event.name, event.toSerializableObject());
+		this._socket.emit(event.name(), event.toSerializableObject());
 	};
 
 	Connection.prototype.getLastSentEvent = function() {
@@ -71,9 +70,8 @@
 
 	Connection.prototype.triggerEvent = function(event) {
 		failFastUnlessConnectCalled(this);
-		failFast.unlessDefined(event.name, "event.name");
 
-		this._localEmitter.emit(event.name, event);
+		this._localEmitter.emit(event.name(), event);
 	};
 
 	Connection.prototype.getSocketId = function() {

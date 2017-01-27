@@ -39,9 +39,6 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-* RealTimeConnection - remove duplication in event handling and test harness
-	- Review all RealTimeConnection tests to ensure their descriptions match their genericized behavior
-	- Change event.name --> event.name() (ref Laurent Bourgault-Roy comment, E484)
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
 	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent

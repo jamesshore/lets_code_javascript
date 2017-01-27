@@ -24,7 +24,7 @@
 		});
 
 		it("instances know their network event name", function() {
-			assert.equal(new ClientPointerEvent(1, 2).name, ClientPointerEvent.EVENT_NAME);
+			assert.equal(new ClientPointerEvent(1, 2).name(), ClientPointerEvent.EVENT_NAME);
 		});
 
 	});
