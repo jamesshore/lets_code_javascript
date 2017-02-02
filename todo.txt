@@ -39,6 +39,9 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
+* Create new clear events
+- Update server to reflect clear events from one browser to another
+- Update client.js to support clear button behavior
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
 	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent
@@ -46,3 +49,5 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
+* ClientClearScreenEvent
+- ServerClearScreenEvent
