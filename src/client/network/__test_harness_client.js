@@ -9,7 +9,7 @@
 
 	exports.PORT = shared.PORT;
 
-	exports.waitForServerDisconnect = function waitForServerDisconnect(connection, callback) {
+	exports.waitForServerDisconnect = function(connection, callback) {
 		ajax({
 			connection: connection,
 			endpoint: endpoints.WAIT_FOR_SERVER_DISCONNECT,
@@ -19,7 +19,7 @@
 		});
 	};
 
-	exports.isConnected = function isConnected(connection) {
+	exports.isConnected = function(connection) {
 		var responseText = ajax({
 			connection: connection,
 			endpoint: endpoints.IS_CONNECTED,
@@ -30,45 +30,30 @@
 		return connectedIds.indexOf(connection.getSocketId()) !== -1;
 	};
 
-	exports.waitForPointerLocation = function waitForPointerLocation(connection, callback) {
+	exports.sendEvent = function(connection, event, callback) {
 		ajax({
 			connection: connection,
-			endpoint: endpoints.WAIT_FOR_POINTER_LOCATION,
+			endpoint: endpoints.SEND_EVENT,
+			async: true,
+			data: {
+				eventName: event.name(),
+				eventData: event.toSerializableObject()
+			}
+		}, function(err, responseText) {
+			callback(err);
+		});
+	};
+
+	exports.waitForEvent = function(connection, eventConstructor, callback) {
+		ajax({
+			connection: connection,
+			endpoint: endpoints.WAIT_FOR_EVENT,
+			data: {
+				eventName: eventConstructor.EVENT_NAME
+			},
 			async: true
 		}, function(err, responseText) {
 			return callback(err, JSON.parse(responseText));
-		});
-	};
-
-	exports.sendPointerLocation = function sendPointerLocation(connection, event, callback) {
-		ajax({
-			connection: connection,
-			endpoint: endpoints.SEND_POINTER_LOCATION,
-			async: true,
-			data: event.toSerializableObject()
-		}, function(err, responseText) {
-			callback();
-		});
-	};
-
-	exports.waitForDrawEvent = function(connection, callback) {
-		ajax({
-			connection: connection,
-			endpoint: endpoints.WAIT_FOR_DRAW_EVENT,
-			async: true
-		}, function(err, responseText) {
-			return callback(err, JSON.parse(responseText));
-		});
-	};
-
-	exports.sendDrawEvent = function sendDrawEvent(connection, event, callback) {
-		ajax({
-			connection: connection,
-			endpoint: endpoints.SEND_DRAW_EVENT,
-			async: true,
-			data: event.toSerializableObject()
-		}, function(err, responseText) {
-			callback();
 		});
 	};
 

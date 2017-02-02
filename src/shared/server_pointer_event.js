@@ -9,6 +9,7 @@
 	};
 
 	ServerPointerEvent.EVENT_NAME = "server_pointer_event";
+	ServerPointerEvent.prototype.name = function() { return ServerPointerEvent.EVENT_NAME; };
 
 	ServerPointerEvent.fromSerializableObject = function fromSerializableObject(obj) {
 		return new ServerPointerEvent(obj.id, obj.x, obj.y);

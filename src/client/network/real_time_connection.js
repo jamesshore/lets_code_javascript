@@ -5,10 +5,8 @@
 
 	var failFast = require("fail_fast");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
-	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var EventEmitter = require("./vendor/emitter-1.2.1.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
-	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 
 	var Connection = module.exports = function() {
 		return initialize(this, window.io);
@@ -22,8 +20,7 @@
 		self._io = ioToInject;
 		self._connectCalled = false;
 		self._socket = null;
-		self._lastSentPointerLocation = null;
-		self._lastSentDrawEvent = null;
+		self._lastSentEvent = null;
 		self._localEmitter = new EventEmitter();
 		return self;
 	}
@@ -50,59 +47,31 @@
 		this._socket.close();
 	};
 
-	Connection.prototype.sendPointerLocation = function(x, y) {
+	Connection.prototype.sendEvent = function(event) {
 		failFastUnlessConnectCalled(this);
 
-		this._lastSentPointerLocation = { x: x, y: y };
-		this._socket.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(x, y).toSerializableObject());
+		this._lastSentEvent = event;
+		this._socket.emit(event.name(), event.toSerializableObject());
 	};
 
-	Connection.prototype.getLastSentPointerLocation = function() {
-		failFastUnlessConnectCalled(this);
-
-		return this._lastSentPointerLocation;
+	Connection.prototype.getLastSentEvent = function() {
+		return this._lastSentEvent;
 	};
 
-	Connection.prototype.onPointerLocation = function(handler) {
+	Connection.prototype.onEvent = function(eventConstructor, handler) {
 		failFastUnlessConnectCalled(this);
+		failFast.unlessDefined(eventConstructor.EVENT_NAME, "eventConstructor.EVENT_NAME");
 
-		this._localEmitter.on(ServerPointerEvent.EVENT_NAME, handler);
-		this._socket.on(ServerPointerEvent.EVENT_NAME, function(eventData) {
-			return handler(ServerPointerEvent.fromSerializableObject(eventData));
+		this._localEmitter.on(eventConstructor.EVENT_NAME, handler);
+		this._socket.on(eventConstructor.EVENT_NAME, function(eventData) {
+			return handler(eventConstructor.fromSerializableObject(eventData));
 		});
 	};
 
-	Connection.prototype.triggerPointerLocation = function(socketId, x, y) {
+	Connection.prototype.triggerEvent = function(event) {
 		failFastUnlessConnectCalled(this);
 
-		var event = new ServerPointerEvent(socketId, x, y);
-		this._localEmitter.emit(ServerPointerEvent.EVENT_NAME, event);
-	};
-
-	Connection.prototype.sendDrawEvent = function(event) {
-		failFastUnlessConnectCalled(this);
-
-		this._lastSentDrawEvent = event;
-		this._socket.emit(ClientDrawEvent.EVENT_NAME, event.toSerializableObject());
-	};
-
-	Connection.prototype.getLastSentDrawEvent = function() {
-		return this._lastSentDrawEvent;
-	};
-
-	Connection.prototype.onDrawEvent = function(handler) {
-		failFastUnlessConnectCalled(this);
-
-		this._localEmitter.on(ServerDrawEvent.EVENT_NAME, handler);
-		this._socket.on(ServerDrawEvent.EVENT_NAME, function(eventData) {
-			return handler(ServerDrawEvent.fromSerializableObject(eventData));
-		});
-	};
-
-	Connection.prototype.triggerDrawEvent = function(event) {
-		failFastUnlessConnectCalled(this);
-
-		this._localEmitter.emit(ServerDrawEvent.EVENT_NAME, event);
+		this._localEmitter.emit(event.name(), event);
 	};
 
 	Connection.prototype.getSocketId = function() {

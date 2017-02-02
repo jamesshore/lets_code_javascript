@@ -11,6 +11,8 @@
 	var assert = require("_assert");
 	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
+	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var RealTimeConnection = require("../network/real_time_connection.js");
 
 	mocha.setup({ignoreLeaks: true, timeout:5000});
@@ -331,23 +333,23 @@
 
 				it("sends draw event when line segment is drawn", function() {
 					dragMouse(10, 20, 40, 90);
-					assert.deepEqual(nullConnection.getLastSentDrawEvent(), new ClientDrawEvent(10, 20, 40, 90));
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawEvent(10, 20, 40, 90));
 				});
 
 				it("sends draw event when dot is drawn", function() {
 					clickMouse(33, 99);
-					assert.deepEqual(nullConnection.getLastSentDrawEvent(), new ClientDrawEvent(33, 99, 33, 99));
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawEvent(33, 99, 33, 99));
 				});
 
 				it("draws line segment when draw event is received", function() {
-					nullConnection.triggerDrawEvent(new ServerDrawEvent(4, 90, 77, 2));
+					nullConnection.triggerEvent(new ServerDrawEvent(4, 90, 77, 2));
 					assert.deepEqual(lines(), [
 						[ 4, 90, 77, 2 ]
 					]);
 				});
 
 				it("draws dot when draw event is received", function() {
-					nullConnection.triggerDrawEvent(new ServerDrawEvent(5, 10, 5, 10));
+					nullConnection.triggerEvent(new ServerDrawEvent(5, 10, 5, 10));
 					assert.deepEqual(lines(), [
 						[ 5, 10 ]
 					]);
@@ -359,19 +361,19 @@
 
 				it("sends pointer location whenever mouse moves", function() {
 					drawingArea.triggerMouseMove(50, 60);
-					assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 50, y: 60 });
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(50, 60));
 				});
 
 				it("sends pointer location even when mouse moves outside drawing area", function() {
 					documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
-					assert.deepEqual(nullConnection.getLastSentPointerLocation(), { x: 20, y: 40 });
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(20, 40));
 				});
 
 				it("doesn't send pointer location when touch changes", function() {
 					if (!browser.supportsTouchEvents()) return;
 
 					drawingArea.triggerSingleTouchMove(30, 40);
-					assert.deepEqual(nullConnection.getLastSentPointerLocation(), null);
+					assert.deepEqual(nullConnection.getLastSentEvent(), null);
 				});
 
 				it("doesn't create pointer element on startup", function() {
@@ -379,31 +381,31 @@
 				});
 
 				it("creates pointer element when a pointer event is received", function() {
-					nullConnection.triggerPointerLocation(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y);
+					nullConnection.triggerEvent(new ServerPointerEvent(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1);
 				});
 
 				it("doesn't create pointer element when a pointer event containing a previous client ID is received", function() {
-					nullConnection.triggerPointerLocation("my_id", IRRELEVANT_X, IRRELEVANT_Y);
-					nullConnection.triggerPointerLocation("my_id", IRRELEVANT_X, IRRELEVANT_Y);
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1);
 				});
 
 				it("creates a pointer element for each unique client ID", function() {
-					nullConnection.triggerPointerLocation("unique_id_1", IRRELEVANT_X, IRRELEVANT_Y);
-					nullConnection.triggerPointerLocation("unique_id_2", IRRELEVANT_X, IRRELEVANT_Y);
+					nullConnection.triggerEvent(new ServerPointerEvent("unique_id_1", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerEvent(new ServerPointerEvent("unique_id_2", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 2);
 				});
 
 				it("positions new pointer element according to event's position", function() {
-					nullConnection.triggerPointerLocation(IRRELEVANT_ID, 10, 20);
+					nullConnection.triggerEvent(new ServerPointerEvent(IRRELEVANT_ID, 10, 20));
 					var pointerElement = getPointerDivs()[0];
 					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
 				});
 
 				it("moves existing pointer element when a new pointer event is received", function() {
-					nullConnection.triggerPointerLocation("my_id", 10, 20);
-					nullConnection.triggerPointerLocation("my_id", 30, 40);
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", 10, 20));
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", 30, 40));
 
 					var pointerElement = getPointerDivs()[0];
 					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));

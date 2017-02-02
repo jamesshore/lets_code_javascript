@@ -15,6 +15,10 @@
 			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
 		});
 
+		it("instances know their network event name", function() {
+			assert.equal(new ServerPointerEvent(1, 2, 3, 4).name(), ServerPointerEvent.EVENT_NAME);
+		});
+
 	});
 
 }());
