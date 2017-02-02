@@ -4,7 +4,7 @@
 
 	var assert = require("_assert");
 	var ClientClearScreenEvent = require("./client_clear_screen_event.js");
-	// var ServerDrawEvent = require("./server_draw_event.js");
+	var ServerClearScreenEvent = require("./server_clear_screen_event.js");
 
 	describe("SHARED: ClientClearScreenEvent", function() {
 
@@ -16,16 +16,16 @@
 			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
 		});
 
-		// it("translates to ServerClearScreenEvent", function() {
-		// 	var expected = new ServerDrawEvent(1, 2, 3, 4);
-		// 	var actual = new ClientDrawEvent(1, 2, 3, 4).toServerEvent();
-		//
-		// 	assert.deepEqual(actual, expected);
-		// });
+		it("translates to ServerClearScreenEvent", function() {
+			var expected = new ServerClearScreenEvent();
+			var actual = new ClientClearScreenEvent().toServerEvent();
 
-		// it("instances know their network event name", function() {
-			// assert.equal(new ClientScreenEvent(1, 2, 3, 4).name(), ClientDrawEvent.EVENT_NAME);
-		// });
+			assert.deepEqual(actual, expected);
+		});
+
+		it("instances know their network event name", function() {
+			assert.equal(new ClientClearScreenEvent().name(), ClientClearScreenEvent.EVENT_NAME);
+		});
 
 	});
 

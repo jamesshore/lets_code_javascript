@@ -2,20 +2,14 @@
 (function() {
 	"use strict";
 
-	// var ServerDrawEvent = require("./server_draw_event.js");
+	var ServerClearScreenEvent = require("./server_clear_screen_event.js");
 
 	var ClientClearScreenEvent = module.exports = function() {
-		// this._data = {
-		// 	fromX: fromX,
-		// 	fromY: fromY,
-		// 	toX: toX,
-		// 	toY: toY
-		// };
 	};
 
-	// ClientDrawEvent.EVENT_NAME = "client_line_event";
-	// ClientDrawEvent.prototype.name = function() { return ClientDrawEvent.EVENT_NAME; };
-	//
+	ClientClearScreenEvent.EVENT_NAME = "client_clear_screen_event";
+	ClientClearScreenEvent.prototype.name = function() { return ClientClearScreenEvent.EVENT_NAME; };
+
 	ClientClearScreenEvent.fromSerializableObject = function(obj) {
 		return new ClientClearScreenEvent();
 	};
@@ -24,8 +18,8 @@
 		return {};
 	};
 
-	// ClientDrawEvent.prototype.toServerEvent = function() {
-	// 	return new ServerDrawEvent(this._data.fromX, this._data.fromY, this._data.toX, this._data.toY);
-	// };
+	ClientClearScreenEvent.prototype.toServerEvent = function() {
+		return new ServerClearScreenEvent();
+	};
 
 }());
