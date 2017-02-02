@@ -10,6 +10,8 @@
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 	var ServerDrawEvent = require("../shared/server_draw_event.js");
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
+	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
+	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 
 	var Server = module.exports = function Server() {};
 
@@ -53,6 +55,11 @@
 				var clientEvent = ClientDrawEvent.fromSerializableObject(eventData);
 				var serverEvent = clientEvent.toServerEvent();
 				socket.broadcast.emit(ServerDrawEvent.EVENT_NAME, serverEvent.toSerializableObject());
+			});
+			socket.on(ClientClearScreenEvent.EVENT_NAME, function(eventData) {
+				var clientEvent = ClientClearScreenEvent.fromSerializableObject(eventData);
+				var serverEvent = clientEvent.toServerEvent();
+				socket.broadcast.emit(ServerClearScreenEvent.EVENT_NAME, serverEvent.toSerializableObject());
 			});
 		});
 	}

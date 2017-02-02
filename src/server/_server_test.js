@@ -12,6 +12,8 @@
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 	var ServerDrawEvent = require("../shared/server_draw_event.js");
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
+	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
+	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 
 	var CONTENT_DIR = "generated/test";
 
@@ -221,6 +223,35 @@
 				EXPECTED_DATA.toX,
 				EXPECTED_DATA.toY
 			).toSerializableObject());
+
+			function end() {
+				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);
+			}
+		});
+
+		it("broadcasts clear screen events from one client to all others", function(done) {
+			var EXPECTED_DATA = {};
+
+			var emitter = createSocket();
+			var receiver1 = createSocket();
+			var receiver2 = createSocket();
+
+			emitter.on(ServerClearScreenEvent.EVENT_NAME, function() {
+				assert.fail("emitter should not receive its own events");
+			});
+
+			async.each([ receiver1, receiver2 ], function(client, next) {
+				client.on(ServerClearScreenEvent.EVENT_NAME, function(data) {
+					try {
+						assert.deepEqual(data, EXPECTED_DATA);
+					}
+					finally {
+						next();
+					}
+				});
+			}, end);
+
+			emitter.emit(ClientClearScreenEvent.EVENT_NAME, new ClientClearScreenEvent().toSerializableObject());
 
 			function end() {
 				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);

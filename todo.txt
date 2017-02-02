@@ -48,3 +48,5 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
+* Review server code for opportunity to improve
+- Review tests for opportunity to improve
