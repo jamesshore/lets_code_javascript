@@ -46,23 +46,34 @@
 
 	function handleSocketIoEvents(ioServer) {
 		ioServer.on("connect", function(socket) {
-			socket.on(ClientPointerEvent.EVENT_NAME, function(eventData) {
-				var clientEvent = ClientPointerEvent.fromSerializableObject(eventData);
-				var serverEvent = clientEvent.toServerEvent(socket.id);
-				socket.broadcast.emit(ServerPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());
-			});
-			socket.on(ClientDrawEvent.EVENT_NAME, function(eventData) {
-				var clientEvent = ClientDrawEvent.fromSerializableObject(eventData);
+			reflectClientEventsWithId(socket);
+			reflectClientEventsWithoutId(socket);
+		});
+	}
+
+	function reflectClientEventsWithId(socket) {
+		socket.on(ClientPointerEvent.EVENT_NAME, function(eventData) {
+			var clientEvent = ClientPointerEvent.fromSerializableObject(eventData);
+			var serverEvent = clientEvent.toServerEvent(socket.id);
+			socket.broadcast.emit(ServerPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());
+		});
+	}
+
+	function reflectClientEventsWithoutId(socket) {
+		var supportedEvents = [
+			ClientDrawEvent,
+			ClientClearScreenEvent
+		];
+
+		supportedEvents.forEach(function(eventConstructor) {
+			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
+				var clientEvent = eventConstructor.fromSerializableObject(eventData);
 				var serverEvent = clientEvent.toServerEvent();
-				socket.broadcast.emit(ServerDrawEvent.EVENT_NAME, serverEvent.toSerializableObject());
-			});
-			socket.on(ClientClearScreenEvent.EVENT_NAME, function(eventData) {
-				var clientEvent = ClientClearScreenEvent.fromSerializableObject(eventData);
-				var serverEvent = clientEvent.toServerEvent();
-				socket.broadcast.emit(ServerClearScreenEvent.EVENT_NAME, serverEvent.toSerializableObject());
+				socket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
 			});
 		});
 	}
+
 
 	function serveErrorFile(response, statusCode, file) {
 		response.statusCode = statusCode;
