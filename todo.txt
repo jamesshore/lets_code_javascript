@@ -43,7 +43,9 @@ Engineering Tasks:
 - Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
 	- Location (or Coordinate) object?
 	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent
-	- A lot of duplication in server event tests. Tests are pretty ugly, too.
 	- Improve client.js
 
 To Do on current task:
+* Send event when clear button is clicked
+- Clear screen when clear event is received
+- Clean up intersection of networking and drawing code

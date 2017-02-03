@@ -9,11 +9,13 @@
 	var HtmlElement = require("./html_element.js");
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("_assert");
+	var RealTimeConnection = require("../network/real_time_connection.js");
 	var ClientDrawEvent = require("../../shared/client_draw_event.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
-	var RealTimeConnection = require("../network/real_time_connection.js");
+	var ClientClearScreenEvent = require("../../shared/client_clear_screen_event.js");
+	var ServerClearScreenEvent = require("../../shared/server_clear_screen_event.js");
 
 	mocha.setup({ignoreLeaks: true, timeout:5000});
 
@@ -353,6 +355,15 @@
 					assert.deepEqual(lines(), [
 						[ 5, 10 ]
 					]);
+				});
+
+			});
+
+			describe("clear button", function() {
+
+				it("sends clear screen event when clear button is clicked", function() {
+					clearButton.triggerMouseClick();
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientClearScreenEvent());
 				});
 
 			});

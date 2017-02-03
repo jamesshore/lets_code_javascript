@@ -13,6 +13,8 @@
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
+	var ClientClearScreenEvent = require("../../shared/client_clear_screen_event.js");
+	var ServerClearScreenEvent = require("../../shared/server_clear_screen_event.js");
 
 	var svgCanvas = null;
 	var start = null;
@@ -67,7 +69,7 @@
 	}
 
 	function handleClearScreenClick() {
-		clearScreenButton.onMouseClick(clearDrawingArea);
+		clearScreenButton.onMouseClick(clearDrawingAreaAndSendEvent);
 	}
 
 	function handleMouseDragEvents() {
@@ -99,10 +101,6 @@
 		pointerElement.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, serverEvent.x, serverEvent.y));
 	}
 
-	function clearDrawingArea() {
-		svgCanvas.clear();
-	}
-
 	function startDrag(coordinate) {
 		start = coordinate;
 	}
@@ -129,6 +127,15 @@
 
 	function isCurrentlyDrawing() {
 		return start !== null;
+	}
+
+	function clearDrawingAreaAndSendEvent() {
+		clearDrawingArea();
+		network.sendEvent(new ClientClearScreenEvent());
+	}
+
+	function clearDrawingArea() {
+		svgCanvas.clear();
 	}
 
 	function drawLineSegmentAndSendDrawEvent(start, end) {
