@@ -44,11 +44,11 @@
 		network = realTimeConnection;
 		eventIds = {};
 
-		drawingArea.preventBrowserDragDefaults();
-		handleRealTimeNetworking();
-		handleClearScreenClick();
-		handleMouseDragEvents();
-		handleTouchDragEvents();
+		network.connect(window.location.port);
+
+		handlePointerMovement();
+		handleClearScreenAction();
+		handleDrawing();
 
 		return svgCanvas;
 	};
@@ -57,35 +57,12 @@
 		svgCanvas = null;
 	};
 
-	function handleRealTimeNetworking() {
-		network.connect(window.location.port);
+
+	//*** Pointers
+
+	function handlePointerMovement() {
 		documentBody.onMouseMove(sendPointerEvent);
 		network.onEvent(ServerPointerEvent, displayNetworkPointer);
-		network.onEvent(ServerDrawEvent, function(event) {
-			var from = HtmlCoordinate.fromRelativeOffset(drawingArea, event.from.x, event.from.y);
-			var to = HtmlCoordinate.fromRelativeOffset(drawingArea, event.to.x, event.to.y);
-			drawLineSegment(from, to);
-		});
-		network.onEvent(ServerClearScreenEvent, clearDrawingArea);
-	}
-
-	function handleClearScreenClick() {
-		clearScreenButton.onMouseClick(clearDrawingAreaAndSendEvent);
-	}
-
-	function handleMouseDragEvents() {
-		drawingArea.onMouseDown(startDrag);
-		documentBody.onMouseMove(continueDrag);
-		windowElement.onMouseUp(endDrag);
-	}
-
-	function handleTouchDragEvents() {
-		drawingArea.onSingleTouchStart(startDrag);
-		drawingArea.onSingleTouchMove(continueDrag);
-		drawingArea.onTouchEnd(endDrag);
-		drawingArea.onTouchCancel(endDrag);
-
-		drawingArea.onMultiTouchStart(endDrag);
 	}
 
 	function sendPointerEvent(coordinate) {
@@ -100,6 +77,56 @@
 			eventIds[serverEvent.id] = pointerElement;
 		}
 		pointerElement.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, serverEvent.x, serverEvent.y));
+	}
+
+
+	//*** Clear Screen
+
+	function handleClearScreenAction() {
+		clearScreenButton.onMouseClick(clearDrawingAreaAndSendEvent);
+		network.onEvent(ServerClearScreenEvent, clearDrawingArea);
+	}
+
+	function clearDrawingAreaAndSendEvent() {
+		clearDrawingArea();
+		network.sendEvent(new ClientClearScreenEvent());
+	}
+
+	function clearDrawingArea() {
+		svgCanvas.clear();
+	}
+
+
+	//*** Drawing
+
+	function handleDrawing() {
+		drawingArea.preventBrowserDragDefaults();
+		handleMouseDragGesture();
+		handleTouchDragGesture();
+		handleNetworkDrawing();
+	}
+
+	function handleNetworkDrawing() {
+		network.onEvent(ServerDrawEvent, function(event) {
+			var from = HtmlCoordinate.fromRelativeOffset(drawingArea, event.from.x, event.from.y);
+			var to = HtmlCoordinate.fromRelativeOffset(drawingArea, event.to.x, event.to.y);
+			drawLineSegment(from, to);
+		});
+	}
+
+	function handleMouseDragGesture() {
+		drawingArea.onMouseDown(startDrag);
+		documentBody.onMouseMove(continueDrag);
+		windowElement.onMouseUp(endDrag);
+	}
+
+	function handleTouchDragGesture() {
+		drawingArea.onSingleTouchStart(startDrag);
+		drawingArea.onSingleTouchMove(continueDrag);
+		drawingArea.onTouchEnd(endDrag);
+		drawingArea.onTouchCancel(endDrag);
+
+		drawingArea.onMultiTouchStart(endDrag);
 	}
 
 	function startDrag(coordinate) {
@@ -128,15 +155,6 @@
 
 	function isCurrentlyDrawing() {
 		return start !== null;
-	}
-
-	function clearDrawingAreaAndSendEvent() {
-		clearDrawingArea();
-		network.sendEvent(new ClientClearScreenEvent());
-	}
-
-	function clearDrawingArea() {
-		svgCanvas.clear();
 	}
 
 	function drawLineSegmentAndSendDrawEvent(start, end) {
