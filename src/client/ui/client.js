@@ -66,6 +66,7 @@
 			var to = HtmlCoordinate.fromRelativeOffset(drawingArea, event.to.x, event.to.y);
 			drawLineSegment(from, to);
 		});
+		network.onEvent(ServerClearScreenEvent, clearDrawingArea);
 	}
 
 	function handleClearScreenClick() {

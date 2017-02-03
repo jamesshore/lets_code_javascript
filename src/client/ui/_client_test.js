@@ -366,6 +366,12 @@
 					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientClearScreenEvent());
 				});
 
+				it("clears screen when clear event is received", function() {
+					dragMouse(10, 20, 40, 90);
+					nullConnection.triggerEvent(new ServerClearScreenEvent());
+					assert.deepEqual(lines(), []);
+				});
+
 			});
 
 			describe("pointer location", function() {

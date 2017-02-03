@@ -27,6 +27,7 @@ Minimum Marketable Features:
 
 User Stories to finish current MMF:
 * multi-user clear button
+- make 'clear' button depress when clear event received?
 - send pointer events on touch, not just mouse move?
 - make mouse pointer disappear when it leaves drawing area?
 - make mouse pointer disappear when user disconnects
@@ -46,6 +47,4 @@ Engineering Tasks:
 	- Improve client.js
 
 To Do on current task:
-* Send event when clear button is clicked
-- Clear screen when clear event is received
 - Clean up intersection of networking and drawing code
