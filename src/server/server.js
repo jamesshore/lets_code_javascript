@@ -74,7 +74,6 @@
 		});
 	}
 
-
 	function serveErrorFile(response, statusCode, file) {
 		response.statusCode = statusCode;
 		response.setHeader("Content-Type", "text/html; charset=UTF-8");

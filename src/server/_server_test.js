@@ -163,87 +163,30 @@
 		});
 
 		it("broadcasts pointer events from one client to all others", function(done) {
-			var EXPECTED_DATA = { x: 100, y: 200 };
-
-			var emitter = createSocket();
-			var receiver1 = createSocket();
-			var receiver2 = createSocket();
-
-			emitter.on(ServerPointerEvent.EVENT_NAME, function() {
-				assert.fail("emitter should not receive its own events");
-			});
-
-			async.each([ receiver1, receiver2 ], function(client, next) {
-				client.on(ServerPointerEvent.EVENT_NAME, function(data) {
-					try {
-						assert.deepEqual(data, {
-							id: emitter.id,           // should add unique sender ID to data
-							x: EXPECTED_DATA.x,
-							y: EXPECTED_DATA.y
-						});
-					}
-					finally {
-						next();
-					}
-				});
-			}, end);
-
-			emitter.emit(ClientPointerEvent.EVENT_NAME, new ClientPointerEvent(EXPECTED_DATA.x, EXPECTED_DATA.y).toSerializableObject());
-
-			function end() {
-				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);
-			}
+			checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent, done);
 		});
 
 		it("broadcasts draw events from one client to all others", function(done) {
-			var EXPECTED_DATA = { fromX: 100, fromY: 200, toX: 300, toY: 400 };
-
-			var emitter = createSocket();
-			var receiver1 = createSocket();
-			var receiver2 = createSocket();
-
-			emitter.on(ServerDrawEvent.EVENT_NAME, function() {
-				assert.fail("emitter should not receive its own events");
-			});
-
-			async.each([ receiver1, receiver2 ], function(client, next) {
-				client.on(ServerDrawEvent.EVENT_NAME, function(data) {
-					try {
-						assert.deepEqual(data, EXPECTED_DATA);
-					}
-					finally {
-						next();
-					}
-				});
-			}, end);
-
-			emitter.emit(ClientDrawEvent.EVENT_NAME, new ClientDrawEvent(
-				EXPECTED_DATA.fromX,
-				EXPECTED_DATA.fromY,
-				EXPECTED_DATA.toX,
-				EXPECTED_DATA.toY
-			).toSerializableObject());
-
-			function end() {
-				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);
-			}
+			checkEventReflection(new ClientDrawEvent(100, 200, 300, 400), ServerDrawEvent, done);
 		});
 
 		it("broadcasts clear screen events from one client to all others", function(done) {
-			var EXPECTED_DATA = {};
+			checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent, done);
+		});
 
+		function checkEventReflection(clientEvent, serverEventConstructor, done) {
 			var emitter = createSocket();
 			var receiver1 = createSocket();
 			var receiver2 = createSocket();
 
-			emitter.on(ServerClearScreenEvent.EVENT_NAME, function() {
+			emitter.on(serverEventConstructor.EVENT_NAME, function() {
 				assert.fail("emitter should not receive its own events");
 			});
 
-			async.each([ receiver1, receiver2 ], function(client, next) {
-				client.on(ServerClearScreenEvent.EVENT_NAME, function(data) {
+			async.each([receiver1, receiver2], function(client, next) {
+				client.on(serverEventConstructor.EVENT_NAME, function(data) {
 					try {
-						assert.deepEqual(data, EXPECTED_DATA);
+						assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
 					}
 					finally {
 						next();
@@ -251,12 +194,12 @@
 				});
 			}, end);
 
-			emitter.emit(ClientClearScreenEvent.EVENT_NAME, new ClientClearScreenEvent().toSerializableObject());
+			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
 			function end() {
-				async.each([ emitter, receiver1, receiver2 ], closeSocket, done);
+				async.each([emitter, receiver1, receiver2], closeSocket, done);
 			}
-		});
+		}
 
 		function createSocket() {
 			return io("http://localhost:" + PORT);
