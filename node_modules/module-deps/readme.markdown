@@ -94,6 +94,51 @@ contents for browser fields, main entries, and transforms
 * `opts.fileCache` - an object mapping filenames to raw source to avoid reading
 from disk.
 
+* `opts.persistentCache` - a complex cache handler that allows async and persistent
+    caching of data. A `persistentCache` needs to follow this interface:
+    ```
+    function persistentCache (
+        file, // the path to the file that is loaded
+        id,   // the id that is used to reference this file
+        pkg,  // the package that this file belongs to fallback
+        fallback, // async fallback handler to be called if the cache doesn't hold the given file 
+        cb    // callback handler that receives the cache data
+    ) {
+        if (hasError()) {
+            return cb(error) // Pass any error to the callback
+        }
+
+        var fileData = fs.readFileSync(file)
+        var key = keyFromFile(file, fileData)
+
+        if (db.has(key)) {
+            return cb(null, {
+                source: db.get(key).toString(),
+                package: pkg, // The package for housekeeping
+                deps: {
+                    'id':  // id that is used to reference a required file
+                    'file' // file path to the required file
+                }
+            })
+        }
+        //
+        // The fallback will process the file in case the file is not
+        // in cache.
+        //
+        // Note that if your implementation doesn't need the file data
+        // then you can pass `null` instead of the source and the fallback will
+        // fetch the data by itself.
+        //
+        fallback(fileData, function (error, cacheableEntry) {
+            if (error) {
+                return cb(error)
+            }
+            db.addToCache(key, cacheableEntry)
+            cb(null, cacheableEntry)
+        })
+    }
+    ```
+
 * `opts.paths` - array of global paths to search. Defaults to splitting on `':'`
 in `process.env.NODE_PATH`
 
