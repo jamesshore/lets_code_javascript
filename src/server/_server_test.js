@@ -10,6 +10,8 @@
 	var io = require("socket.io-client");
 	var ServerPointerEvent = require("../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
+	var ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
+	var ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 	var ServerDrawEvent = require("../shared/server_draw_event.js");
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
 	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
@@ -164,6 +166,10 @@
 
 		it("broadcasts pointer events from one client to all others", function(done) {
 			checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent, done);
+		});
+
+		it("broadcasts 'remove pointer' events from one client to all others", function(done) {
+			checkEventReflection(new ClientRemovePointerEvent(), ServerRemovePointerEvent, done);
 		});
 
 		it("broadcasts draw events from one client to all others", function(done) {
