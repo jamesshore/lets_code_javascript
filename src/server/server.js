@@ -10,6 +10,8 @@
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 	var ServerDrawEvent = require("../shared/server_draw_event.js");
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
+	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
+	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 
 	var Server = module.exports = function Server() {};
 
@@ -44,15 +46,30 @@
 
 	function handleSocketIoEvents(ioServer) {
 		ioServer.on("connect", function(socket) {
-			socket.on(ClientPointerEvent.EVENT_NAME, function(eventData) {
-				var clientEvent = ClientPointerEvent.fromSerializableObject(eventData);
-				var serverEvent = clientEvent.toServerEvent(socket.id);
-				socket.broadcast.emit(ServerPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());
-			});
-			socket.on(ClientDrawEvent.EVENT_NAME, function(eventData) {
-				var clientEvent = ClientDrawEvent.fromSerializableObject(eventData);
+			reflectClientEventsWithId(socket);
+			reflectClientEventsWithoutId(socket);
+		});
+	}
+
+	function reflectClientEventsWithId(socket) {
+		socket.on(ClientPointerEvent.EVENT_NAME, function(eventData) {
+			var clientEvent = ClientPointerEvent.fromSerializableObject(eventData);
+			var serverEvent = clientEvent.toServerEvent(socket.id);
+			socket.broadcast.emit(ServerPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());
+		});
+	}
+
+	function reflectClientEventsWithoutId(socket) {
+		var supportedEvents = [
+			ClientDrawEvent,
+			ClientClearScreenEvent
+		];
+
+		supportedEvents.forEach(function(eventConstructor) {
+			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
+				var clientEvent = eventConstructor.fromSerializableObject(eventData);
 				var serverEvent = clientEvent.toServerEvent();
-				socket.broadcast.emit(ServerDrawEvent.EVENT_NAME, serverEvent.toSerializableObject());
+				socket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
 			});
 		});
 	}

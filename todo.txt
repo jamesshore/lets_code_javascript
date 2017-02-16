@@ -26,7 +26,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* multi-user clear button
+- make 'clear' button depress when clear event received?
 - send pointer events on touch, not just mouse move?
 - make mouse pointer disappear when it leaves drawing area?
 - make mouse pointer disappear when user disconnects
@@ -39,10 +39,5 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-- Look for opportunities to improve the design--how can we make adding new behaviors inexpensive?
-	- Location (or Coordinate) object?
-	- Server vs. Client event names are confusing. Should be FromServerEvent and ToServerEvent or something equivalent
-	- A lot of duplication in server event tests. Tests are pretty ugly, too.
-	- Improve client.js
 
 To Do on current task:

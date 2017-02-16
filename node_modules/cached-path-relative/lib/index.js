@@ -8,7 +8,7 @@ var path = require('path')
  * Vars
  */
 
-var relative = path.relative.bind(path)
+var relative = path.relative
 var lastCwd = process.cwd()
 var cache = {}
 
