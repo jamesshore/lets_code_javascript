@@ -66,6 +66,7 @@
 		documentBody.onMouseMove(sendPointerEvent);
 		documentBody.onMouseLeave(sendRemovePointerEvent);
 		drawingArea.onSingleTouchMove(sendPointerEvent);
+		drawingArea.onTouchEnd(sendRemovePointerEvent);
 		network.onEvent(ServerPointerEvent, displayNetworkPointer);
 		network.onEvent(ServerRemovePointerEvent, removeNetworkPointer);
 	}

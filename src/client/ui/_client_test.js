@@ -411,6 +411,23 @@
 					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerEvent());
 				});
 
+				it("sends 'remove pointer' event when touch stops", function() {
+					if (!browser.supportsTouchEvents()) return;
+
+					drawingArea.triggerTouchEnd();
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerEvent());
+				});
+
+				it("only sends 'remove pointer' event in response to touches that end inside the drawing area", function() {
+					// If a touch starts in the drawing area and ends outside the drawing area, the browser will still send
+					// the 'touch end' event to the drawing area. Verified on Chrome Mobile 44 and Mobile Safari 10.0.0
+
+					if (!browser.supportsTouchEvents()) return;
+
+					documentBody.triggerTouchEnd();
+					assert.deepEqual(nullConnection.getLastSentEvent(), null);
+				});
+
 				it("creates pointer element when a pointer event is received", function() {
 					nullConnection.triggerEvent(new ServerPointerEvent(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1);

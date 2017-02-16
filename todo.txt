@@ -26,8 +26,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* make mouse pointer disappear when it leaves drawing area?
-- send pointer events on touch, not just mouse move?
+* send pointer events on touch, not just mouse move?
 - make 'clear' button depress when clear event received?
 - make mouse pointer disappear when user disconnects
 - version synchronization across client/server
@@ -39,7 +38,7 @@ User Stories to finish current MMF:
 	- nsp, snyk
 
 Engineering Tasks:
-* Send pointer events on touch drawing
-- Send "RemovePointerEvent" when touch drawing stops
+* Make touch pointer disappear when clear button is clicked
+	- should it not appear at all?
 
 To Do on current task:
