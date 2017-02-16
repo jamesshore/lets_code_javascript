@@ -14,6 +14,8 @@
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
+	var ClientRemovePointerEvent = require("../../shared/client_remove_pointer_event.js");
+	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
 	var ClientClearScreenEvent = require("../../shared/client_clear_screen_event.js");
 	var ServerClearScreenEvent = require("../../shared/server_clear_screen_event.js");
 
@@ -427,6 +429,16 @@
 					var pointerElement = getPointerDivs()[0];
 					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));
 				});
+
+				it("removes existing pointer element when 'remove' event is received", function() {
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					assert.equal(getPointerDivs().length, 1, "setup should have created pointer element");
+
+					nullConnection.triggerEvent(new ServerRemovePointerEvent("my_id"));
+					assert.equal(getPointerDivs().length, 0, "should have removed pointer element");
+				});
+
+				it("ignores 'remove' events when pointer element doesn't exist");
 
 				function getPointerDivs() {
 					return HtmlElement.fromSelector("." + POINTER_DIV_CLASS);

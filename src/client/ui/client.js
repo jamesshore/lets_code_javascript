@@ -13,6 +13,8 @@
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
+	var ClientRemovePointerEvent = require("../../shared/client_remove_pointer_event.js");
+	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
 	var ClientClearScreenEvent = require("../../shared/client_clear_screen_event.js");
 	var ServerClearScreenEvent = require("../../shared/server_clear_screen_event.js");
 
@@ -25,7 +27,7 @@
 	var documentBody;
 	var windowElement;
 	var network;
-	var eventIds;
+	var ghostPointerElements;
 
 	exports.initializeDrawingArea = function(elements, realTimeConnection) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
@@ -42,7 +44,7 @@
 		windowElement = new HtmlElement(window);
 		svgCanvas = new SvgCanvas(drawingArea);
 		network = realTimeConnection;
-		eventIds = {};
+		ghostPointerElements = {};
 
 		network.connect(window.location.port);
 
@@ -63,6 +65,7 @@
 	function handlePointerMovement() {
 		documentBody.onMouseMove(sendPointerEvent);
 		network.onEvent(ServerPointerEvent, displayNetworkPointer);
+		network.onEvent(ServerRemovePointerEvent, removeNetworkPointer);
 	}
 
 	function sendPointerEvent(coordinate) {
@@ -71,12 +74,19 @@
 	}
 
 	function displayNetworkPointer(serverEvent) {
-		var pointerElement = eventIds[serverEvent.id];
+		var pointerElement = ghostPointerElements[serverEvent.id];
 		if (pointerElement === undefined) {
 			pointerElement = HtmlElement.appendHtmlToBody(pointerHtml);
-			eventIds[serverEvent.id] = pointerElement;
+			ghostPointerElements[serverEvent.id] = pointerElement;
 		}
 		pointerElement.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, serverEvent.x, serverEvent.y));
+	}
+
+	function removeNetworkPointer(serverEvent) {
+		var pointerElement = ghostPointerElements[serverEvent.id];
+		failFast.unlessDefined(pointerElement, "removeNetworkPointer() couldn't find pointer matching " + serverEvent.id);
+
+		pointerElement.remove();
 	}
 
 
