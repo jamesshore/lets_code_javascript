@@ -64,6 +64,7 @@
 
 	function handlePointerMovement() {
 		documentBody.onMouseMove(sendPointerEvent);
+		documentBody.onMouseLeave(sendRemovePointerEvent);
 		network.onEvent(ServerPointerEvent, displayNetworkPointer);
 		network.onEvent(ServerRemovePointerEvent, removeNetworkPointer);
 	}
@@ -71,6 +72,10 @@
 	function sendPointerEvent(coordinate) {
 		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
 		network.sendEvent(new ClientPointerEvent(relativeOffset.x, relativeOffset.y));
+	}
+
+	function sendRemovePointerEvent() {
+		network.sendEvent(new ClientRemovePointerEvent());
 	}
 
 	function displayNetworkPointer(serverEvent) {

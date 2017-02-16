@@ -399,6 +399,11 @@
 					assert.equal(getPointerDivs().length, 0);
 				});
 
+				it("sends 'remove pointer' event when mouse leaves window", function () {
+					documentBody.triggerMouseLeave();
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerEvent());
+				});
+
 				it("creates pointer element when a pointer event is received", function() {
 					nullConnection.triggerEvent(new ServerPointerEvent(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1);
