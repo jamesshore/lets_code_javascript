@@ -65,6 +65,7 @@
 	function handlePointerMovement() {
 		documentBody.onMouseMove(sendPointerEvent);
 		documentBody.onMouseLeave(sendRemovePointerEvent);
+		drawingArea.onSingleTouchMove(sendPointerEvent);
 		network.onEvent(ServerPointerEvent, displayNetworkPointer);
 		network.onEvent(ServerRemovePointerEvent, removeNetworkPointer);
 	}

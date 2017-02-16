@@ -388,10 +388,17 @@
 					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(20, 40));
 				});
 
-				it("doesn't send pointer location when touch changes", function() {
+				it("does send pointer location when touch events occur within drawing area", function() {
 					if (!browser.supportsTouchEvents()) return;
 
 					drawingArea.triggerSingleTouchMove(30, 40);
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(30, 40));
+				});
+
+				it("doesn't send pointer location when touch events occur outside of drawing area", function() {
+					if (!browser.supportsTouchEvents()) return;
+
+					documentBody.triggerSingleTouchMove();
 					assert.deepEqual(nullConnection.getLastSentEvent(), null);
 				});
 
