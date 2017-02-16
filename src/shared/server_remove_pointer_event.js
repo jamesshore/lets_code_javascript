@@ -6,7 +6,7 @@
 		this.id = clientId;
 	};
 
-	ServerRemovePointerEvent.EVENT_NAME = "server_clear_screen_event";
+	ServerRemovePointerEvent.EVENT_NAME = "server_remove_pointer_event";
 	ServerRemovePointerEvent.prototype.name = function() { return ServerRemovePointerEvent.EVENT_NAME; };
 
 	ServerRemovePointerEvent.fromSerializableObject = function(obj) {

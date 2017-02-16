@@ -438,7 +438,19 @@
 					assert.equal(getPointerDivs().length, 0, "should have removed pointer element");
 				});
 
-				it("ignores 'remove' events when pointer element doesn't exist");
+				it("pointer reappears after being removed if another pointer event is received", function() {
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerEvent(new ServerRemovePointerEvent("my_id"));
+					assert.equal(getPointerDivs().length, 0, "setup have removed pointer element");
+
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					assert.equal(getPointerDivs().length, 1, "pointer element should be re-created");
+				});
+
+				it("ignores 'remove' events when pointer element doesn't exist", function() {
+					nullConnection.triggerEvent(new ServerRemovePointerEvent("non_existant_id"));
+					assert.equal(getPointerDivs().length, 0, "still no pointer elements");
+				});
 
 				function getPointerDivs() {
 					return HtmlElement.fromSelector("." + POINTER_DIV_CLASS);

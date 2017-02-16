@@ -84,8 +84,9 @@
 
 	function removeNetworkPointer(serverEvent) {
 		var pointerElement = ghostPointerElements[serverEvent.id];
-		failFast.unlessDefined(pointerElement, "removeNetworkPointer() couldn't find pointer matching " + serverEvent.id);
+		if (pointerElement === undefined) return;
 
+		delete ghostPointerElements[serverEvent.id];
 		pointerElement.remove();
 	}
 
