@@ -29,6 +29,9 @@
 	var network;
 	var ghostPointerElements;
 
+	var debugEl;
+
+
 	exports.initializeDrawingArea = function(elements, realTimeConnection) {
 		if (svgCanvas !== null) throw new Error("Client.js is not re-entrant");
 
@@ -52,12 +55,20 @@
 		handleClearScreenAction();
 		handleDrawing();
 
+		debugEl = HtmlElement.appendHtmlToBody(
+			"<p style='position:absolute; top: 100px; left: 10px;'>DEBUG</p>"
+		).toDomElement();
+
 		return svgCanvas;
 	};
 
 	exports.drawingAreaHasBeenRemovedFromDom = function() {
 		svgCanvas = null;
 	};
+
+	function debug(html) {
+		debugEl.innerHTML = html + "<br />" + debugEl.innerHTML;
+	}
 
 
 	//*** Pointers
@@ -69,9 +80,29 @@
 		drawingArea.onTouchEnd(sendRemovePointerEvent);
 		network.onEvent(ServerPointerEvent, displayNetworkPointer);
 		network.onEvent(ServerRemovePointerEvent, removeNetworkPointer);
+
+
+		drawingArea.onSingleTouchMove(function(coordinate) {
+			debug("ON SINGLE TOUCH MOVE: " + coordinate);
+		});
+		drawingArea.onTouchEnd(function(coordinate) {
+			debug("ON SINGLE TOUCH END: " + coordinate);
+		});
+		documentBody.onMouseMove(function(coordinate) {
+			debug("ON MOUSE MOVE: " + coordinate);
+		});
+		clearScreenButton.onTouchEnd(function(coordinate) {
+			debug("CLEAR BUTTON, TOUCH END: " + coordinate);
+		});
+
+
 	}
 
+
+
 	function sendPointerEvent(coordinate) {
+		debug("SEND POINTER EVENT: " + coordinate);
+
 		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
 		network.sendEvent(new ClientPointerEvent(relativeOffset.x, relativeOffset.y));
 	}
