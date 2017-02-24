@@ -57,44 +57,6 @@
 		).toDomElement();
 
 
-		function onTouchClick(element, doSomething) {
-			var clickInProgress;
-			var lastLocation;
-			var elementDom = element.toDomElement();
-			elementDom.addEventListener("touchstart", function(event) {
-				if (event.touches.length !== 1) return;
-				debug("TOUCH-CLICK STARTING");
-
-				event.preventDefault();
-
-				clickInProgress = true;
-				lastLocation = HtmlCoordinate.fromPageOffset(event.touches[0].pageX, event.touches[0].pageY);
-				
-			});
-			elementDom.addEventListener("touchmove", function(event) {
-				if (!clickInProgress) return;
-				if (event.touches.length !== 1) return;
-
-				lastLocation = HtmlCoordinate.fromPageOffset(event.touches[0].pageX, event.touches[0].pageY);
-			});
-			elementDom.addEventListener("touchend", function(event) {
-				if (!clickInProgress) return;
-				debug("TOUCH-CLICK ENDING");
-
-				clickInProgress = false;
-
-				if (element.isMyCoordinate(lastLocation)) {
-					debug("TOUCH-CLICK SUCCESS");
-					doSomething();
-				}
-				else {
-					debug("TOUCH-CLICK CANCELLED");
-				}
-			});
-			elementDom.addEventListener("touchcancel", function(event) {
-				clickInProgress = false;
-			});
-		}
 		onTouchClick(clearScreenButton, function() {
 			debug("CLEAR ELEMENT, TOUCH-CLICKED");
 		});
@@ -153,6 +115,45 @@
 		return svgCanvas;
 	};
 
+	function onTouchClick(element, doSomething) {
+		var clickInProgress;
+		var lastLocation;
+		var elementDom = element.toDomElement();
+		elementDom.addEventListener("touchstart", function(event) {
+			if (event.touches.length !== 1) return;
+			debug("TOUCH-CLICK STARTING");
+
+			event.preventDefault();
+
+			clickInProgress = true;
+			lastLocation = HtmlCoordinate.fromPageOffset(event.touches[0].pageX, event.touches[0].pageY);
+
+		});
+		elementDom.addEventListener("touchmove", function(event) {
+			if (!clickInProgress) return;
+			if (event.touches.length !== 1) return;
+
+			lastLocation = HtmlCoordinate.fromPageOffset(event.touches[0].pageX, event.touches[0].pageY);
+		});
+		elementDom.addEventListener("touchend", function(event) {
+			if (!clickInProgress) return;
+			debug("TOUCH-CLICK ENDING");
+
+			clickInProgress = false;
+
+			if (element.isMyCoordinate(lastLocation)) {
+				debug("TOUCH-CLICK SUCCESS");
+				doSomething();
+			}
+			else {
+				debug("TOUCH-CLICK CANCELLED");
+			}
+		});
+		elementDom.addEventListener("touchcancel", function(event) {
+			clickInProgress = false;
+		});
+	}
+
 	exports.drawingAreaHasBeenRemovedFromDom = function() {
 		svgCanvas = null;
 	};
@@ -206,6 +207,7 @@
 
 	function handleClearScreenAction() {
 		clearScreenButton.onMouseClick(clearDrawingAreaAndSendEvent);
+		onTouchClick(clearScreenButton, clearDrawingAreaAndSendEvent);
 		network.onEvent(ServerClearScreenEvent, clearDrawingArea);
 	}
 
