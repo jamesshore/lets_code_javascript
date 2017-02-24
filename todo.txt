@@ -26,7 +26,6 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* send pointer events on touch, not just mouse move?
 - make 'clear' button depress when clear event received?
 - make mouse pointer disappear when user disconnects
 - version synchronization across client/server
@@ -36,9 +35,12 @@ User Stories to finish current MMF:
 - server monitoring / error handling
 - security (handling bad data, denial of service attacks)
 	- nsp, snyk
+- don't show ghost pointer when tapping 'clear' button on mobile browsers
+	- see onTouchClick_spike branch (but note document.elementFromPoint may not be testable on IE 11)
+	- retire support for IE 11 first?
 
 Engineering Tasks:
-* Make touch pointer disappear when clear button is clicked
-	- should it not appear at all?
+-
 
 To Do on current task:
+-
