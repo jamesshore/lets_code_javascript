@@ -49,15 +49,63 @@
 		network = realTimeConnection;
 		ghostPointerElements = {};
 
-		network.connect(window.location.port);
 
-		handlePointerMovement();
-		handleClearScreenAction();
-		handleDrawing();
+		clearScreenButton.toDomElement()
 
 		debugEl = HtmlElement.appendHtmlToBody(
-			"<p style='position:absolute; top: 100px; left: 10px;'>DEBUG</p>"
+			"<p style='position:absolute; top: 200px; left: 10px; border: solid black 1px;'>DEBUG</p>"
 		).toDomElement();
+
+
+		// documentBody.onMouseMove(function(coordinate) {
+		// 	debug("BODY, MOUSE MOVE: " + coordinate);
+		// });
+		// documentBody.onSingleTouchMove(function(coordinate) {
+		// 	debug("BODY, TOUCH MOVE: " + coordinate);
+		// });
+		// documentBody.onTouchEnd(function(coordinate) {
+		// 	debug("BODY, TOUCH END: " + coordinate);
+		// });
+		documentBody.onMouseDown(function(coordinate) {
+			debug("BODY, MOUSE DOWN: " + coordinate);
+		});
+		documentBody.onMouseUp(function(coordinate) {
+			debug("BODY, MOUSE UP: " + coordinate);
+		});
+		documentBody.onMouseClick(function(coordinate) {
+			debug("BODY, MOUSE CLICK: " + coordinate);
+		});
+
+		// clearScreenButton.onMouseMove(function(coordinate) {
+		// 	debug("CLEAR BUTTON, MOUSE MOVE: " + coordinate);
+		// });
+		clearScreenButton.onSingleTouchStart(function(coordinate) {
+			debug("CLEAR BUTTON, TOUCH START: " + coordinate);
+		});
+		clearScreenButton.onSingleTouchMove(function(coordinate) {
+			debug("CLEAR BUTTON, TOUCH MOVE: " + coordinate);
+		});
+		clearScreenButton.onTouchEnd(function(coordinate) {
+			debug("CLEAR BUTTON, TOUCH END: " + coordinate);
+		});
+		clearScreenButton.onMouseDown(function(coordinate) {
+			debug("CLEAR BUTTON, MOUSE DOWN: " + coordinate);
+		});
+		clearScreenButton.onMouseUp(function(coordinate) {
+			debug("CLEAR BUTTON, MOUSE UP: " + coordinate);
+		});
+		clearScreenButton.onMouseClick(function(coordinate) {
+			debug("CLEAR BUTTON, MOUSE CLICK: " + coordinate);
+		});
+
+
+
+
+		// network.connect(window.location.port);
+		//
+		// handlePointerMovement();
+		// handleClearScreenAction();
+		// handleDrawing();
 
 		return svgCanvas;
 	};
@@ -80,29 +128,11 @@
 		drawingArea.onTouchEnd(sendRemovePointerEvent);
 		network.onEvent(ServerPointerEvent, displayNetworkPointer);
 		network.onEvent(ServerRemovePointerEvent, removeNetworkPointer);
-
-
-		drawingArea.onSingleTouchMove(function(coordinate) {
-			debug("ON SINGLE TOUCH MOVE: " + coordinate);
-		});
-		drawingArea.onTouchEnd(function(coordinate) {
-			debug("ON SINGLE TOUCH END: " + coordinate);
-		});
-		documentBody.onMouseMove(function(coordinate) {
-			debug("ON MOUSE MOVE: " + coordinate);
-		});
-		clearScreenButton.onTouchEnd(function(coordinate) {
-			debug("CLEAR BUTTON, TOUCH END: " + coordinate);
-		});
-
-
 	}
 
 
 
 	function sendPointerEvent(coordinate) {
-		debug("SEND POINTER EVENT: " + coordinate);
-
 		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
 		network.sendEvent(new ClientPointerEvent(relativeOffset.x, relativeOffset.y));
 	}
