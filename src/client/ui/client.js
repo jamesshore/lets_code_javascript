@@ -50,22 +50,44 @@
 		ghostPointerElements = {};
 
 
-		clearScreenButton.toDomElement()
+		var clearEl = clearScreenButton.toDomElement()
 
 		debugEl = HtmlElement.appendHtmlToBody(
 			"<p style='position:absolute; top: 200px; left: 10px; border: solid black 1px;'>DEBUG</p>"
 		).toDomElement();
 
 
+		function onTouchClick(element, doSomething) {
+			var clickInProgress;
+			element.addEventListener("touchstart", function(event) {
+				if (event.touches.length !== 1) return;
+				debug("TOUCH-CLICK STARTING");
+
+				event.preventDefault();
+
+				clickInProgress = true;
+			});
+			element.addEventListener("touchend", function(event) {
+				if (!clickInProgress) return;
+				debug("TOUCH-CLICK ENDING")
+
+				clickInProgress = false;
+				doSomething();
+			});
+		}
+		onTouchClick(clearEl, function() {
+			debug("CLEAR ELEMENT, TOUCH-CLICKED");
+		});
+
 		// documentBody.onMouseMove(function(coordinate) {
 		// 	debug("BODY, MOUSE MOVE: " + coordinate);
 		// });
-		// documentBody.onSingleTouchMove(function(coordinate) {
-		// 	debug("BODY, TOUCH MOVE: " + coordinate);
-		// });
-		// documentBody.onTouchEnd(function(coordinate) {
-		// 	debug("BODY, TOUCH END: " + coordinate);
-		// });
+		documentBody.onSingleTouchMove(function(coordinate) {
+			debug("BODY, TOUCH MOVE: " + coordinate);
+		});
+		documentBody.onTouchEnd(function(coordinate) {
+			debug("BODY, TOUCH END: " + coordinate);
+		});
 		documentBody.onMouseDown(function(coordinate) {
 			debug("BODY, MOUSE DOWN: " + coordinate);
 		});
@@ -101,11 +123,11 @@
 
 
 
-		// network.connect(window.location.port);
-		//
-		// handlePointerMovement();
-		// handleClearScreenAction();
-		// handleDrawing();
+		network.connect(window.location.port);
+
+		handlePointerMovement();
+		handleClearScreenAction();
+		handleDrawing();
 
 		return svgCanvas;
 	};
