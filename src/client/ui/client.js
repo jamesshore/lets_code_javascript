@@ -59,29 +59,50 @@
 
 		function onTouchClick(element, doSomething) {
 			var clickInProgress;
-			element.addEventListener("touchstart", function(event) {
+			var lastLocation;
+			var elementDom = element.toDomElement();
+			elementDom.addEventListener("touchstart", function(event) {
 				if (event.touches.length !== 1) return;
 				debug("TOUCH-CLICK STARTING");
 
 				event.preventDefault();
 
 				clickInProgress = true;
+				lastLocation = HtmlCoordinate.fromPageOffset(event.touches[0].pageX, event.touches[0].pageY);
+				
 			});
-			element.addEventListener("touchend", function(event) {
+			elementDom.addEventListener("touchmove", function(event) {
 				if (!clickInProgress) return;
-				debug("TOUCH-CLICK ENDING")
+				if (event.touches.length !== 1) return;
+
+				lastLocation = HtmlCoordinate.fromPageOffset(event.touches[0].pageX, event.touches[0].pageY);
+			});
+			elementDom.addEventListener("touchend", function(event) {
+				if (!clickInProgress) return;
+				debug("TOUCH-CLICK ENDING");
 
 				clickInProgress = false;
-				doSomething();
+
+				if (element.isMyCoordinate(lastLocation)) {
+					debug("TOUCH-CLICK SUCCESS");
+					doSomething();
+				}
+				else {
+					debug("TOUCH-CLICK CANCELLED");
+				}
+			});
+			elementDom.addEventListener("touchcancel", function(event) {
+				clickInProgress = false;
 			});
 		}
-		onTouchClick(clearEl, function() {
+		onTouchClick(clearScreenButton, function() {
 			debug("CLEAR ELEMENT, TOUCH-CLICKED");
 		});
 
-		// documentBody.onMouseMove(function(coordinate) {
-		// 	debug("BODY, MOUSE MOVE: " + coordinate);
-		// });
+		documentBody.onMouseMove(function(coordinate) {
+			debug("BODY, MOUSE MOVE: " + coordinate);
+			debug(clearScreenButton.isMyCoordinate(coordinate) ? "OVER CLEAR BUTTON" : "NOT OVER CLEAR BUTTON");
+		});
 		documentBody.onSingleTouchMove(function(coordinate) {
 			debug("BODY, TOUCH MOVE: " + coordinate);
 		});

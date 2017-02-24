@@ -310,6 +310,12 @@
 
 	/* Position and Dimensions */
 
+	HtmlElement.prototype.isMyCoordinate = function(coordinate) {
+		var offset = coordinate.toViewportOffset(this);
+		var element = document.elementFromPoint(offset.x, offset.y);
+		return element === this.toDomElement();
+	}
+
 	HtmlElement.prototype.getPosition = function() {
 		return HtmlCoordinate.fromRelativeOffset(this, 0, 0);
 	};

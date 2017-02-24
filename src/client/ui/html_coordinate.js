@@ -20,6 +20,16 @@
 		};
 	};
 
+	HtmlCoordinate.prototype.toViewportOffset = function(htmlElement) {
+		failFastIfStylingPresent(htmlElement);
+
+		var scroll = scrollOffset(htmlElement);
+		return {
+			x: this._pageX - scroll.x,
+			y: this._pageY - scroll.y
+		};
+	};
+
 	HtmlCoordinate.fromRelativeOffset = function(htmlElement, relativeX, relativeY) {
 		failFastIfStylingPresent(htmlElement);
 
