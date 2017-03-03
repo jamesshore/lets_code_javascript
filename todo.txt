@@ -26,7 +26,6 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-- make 'clear' button depress when clear event received?
 - make mouse pointer disappear when user disconnects
 - version synchronization across client/server
 - offline handling
@@ -35,9 +34,13 @@ User Stories to finish current MMF:
 - server monitoring / error handling
 - security (handling bad data, denial of service attacks)
 	- nsp, snyk
-- don't show ghost pointer when tapping 'clear' button on mobile browsers
+- bug: shows ghost pointer on other clients when tapping 'clear' button on mobile browsers
 	- see onTouchClick_spike branch (but note document.elementFromPoint may not be testable on IE 11)
 	- retire support for IE 11 first?
+- bug: ghost pointers block other actions
+	- e.g., starting a drag on top of a ghost pointer drags the pointer instead of drawing a line
+	- e.g., clicking clear button if ghost pointer is in the way prevents button from clicking
+- polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
 -
