@@ -34,6 +34,7 @@ User Stories to finish current MMF:
 - server monitoring / error handling
 - security (handling bad data, denial of service attacks)
 	- nsp, snyk
+- performance optimization (garbage collection pauses?)
 - bug: shows ghost pointer on other clients when tapping 'clear' button on mobile browsers
 	- see onTouchClick_spike branch (but note document.elementFromPoint may not be testable on IE 11)
 	- retire support for IE 11 first?
