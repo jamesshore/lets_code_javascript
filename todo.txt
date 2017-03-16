@@ -43,7 +43,7 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
--
+- Re-enable smoke tests' browser version check
 
 To Do on current task:
 -
