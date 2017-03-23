@@ -26,9 +26,15 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
+* re-sync when user refreshes browser or connects to work in progress
 - make mouse pointer disappear when user disconnects
+- time out inactive users (make their pointers disappear)
+- reconnect and resync when client is disconnected
+- show disconnection warning / other UX when client is disconnected
+- handle server reset smoothly (clear the drawing? re-sync to browsers? not persistence/DB)
+- handle packet loss (What packet loss is possible? TCP handles this? What about unstable cellular connections?)
+
 - version synchronization across client/server
-- offline handling
 - collision-handling / conflicts / race conditions
 - load management
 - server monitoring / error handling
@@ -44,6 +50,11 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
+* Modify server to store relevant resync events
+- Replay events on reconnect
+- 'Extract Class' refactoring in server.js?
+- Have client clear screen on reconnect (to prevent double-drawing events)
+
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
