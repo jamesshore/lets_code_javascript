@@ -14,6 +14,8 @@
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
+	var ClientRemovePointerEvent = require("../../shared/client_remove_pointer_event.js");
+	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
 	var ClientClearScreenEvent = require("../../shared/client_clear_screen_event.js");
 	var ServerClearScreenEvent = require("../../shared/server_clear_screen_event.js");
 
@@ -386,15 +388,44 @@
 					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(20, 40));
 				});
 
-				it("doesn't send pointer location when touch changes", function() {
+				it("does send pointer location when touch events occur within drawing area", function() {
 					if (!browser.supportsTouchEvents()) return;
 
 					drawingArea.triggerSingleTouchMove(30, 40);
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(30, 40));
+				});
+
+				it("doesn't send pointer location when touch events occur outside of drawing area", function() {
+					if (!browser.supportsTouchEvents()) return;
+
+					documentBody.triggerSingleTouchMove();
 					assert.deepEqual(nullConnection.getLastSentEvent(), null);
 				});
 
 				it("doesn't create pointer element on startup", function() {
 					assert.equal(getPointerDivs().length, 0);
+				});
+
+				it("sends 'remove pointer' event when mouse leaves window", function () {
+					documentBody.triggerMouseLeave();
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerEvent());
+				});
+
+				it("sends 'remove pointer' event when touch stops", function() {
+					if (!browser.supportsTouchEvents()) return;
+
+					drawingArea.triggerTouchEnd();
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerEvent());
+				});
+
+				it("only sends 'remove pointer' event in response to touches that end inside the drawing area", function() {
+					// If a touch starts in the drawing area and ends outside the drawing area, the browser will still send
+					// the 'touch end' event to the drawing area. Verified on Chrome Mobile 44 and Mobile Safari 10.0.0
+
+					if (!browser.supportsTouchEvents()) return;
+
+					documentBody.triggerTouchEnd();
+					assert.deepEqual(nullConnection.getLastSentEvent(), null);
 				});
 
 				it("creates pointer element when a pointer event is received", function() {
@@ -426,6 +457,28 @@
 
 					var pointerElement = getPointerDivs()[0];
 					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));
+				});
+
+				it("removes existing pointer element when 'remove' event is received", function() {
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					assert.equal(getPointerDivs().length, 1, "setup should have created pointer element");
+
+					nullConnection.triggerEvent(new ServerRemovePointerEvent("my_id"));
+					assert.equal(getPointerDivs().length, 0, "should have removed pointer element");
+				});
+
+				it("pointer reappears after being removed if another pointer event is received", function() {
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerEvent(new ServerRemovePointerEvent("my_id"));
+					assert.equal(getPointerDivs().length, 0, "setup have removed pointer element");
+
+					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					assert.equal(getPointerDivs().length, 1, "pointer element should be re-created");
+				});
+
+				it("ignores 'remove' events when pointer element doesn't exist", function() {
+					nullConnection.triggerEvent(new ServerRemovePointerEvent("non_existant_id"));
+					assert.equal(getPointerDivs().length, 0, "still no pointer elements");
 				});
 
 				function getPointerDivs() {

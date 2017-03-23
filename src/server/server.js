@@ -8,9 +8,9 @@
 	var io = require('socket.io');
 	var ServerPointerEvent = require("../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
-	var ServerDrawEvent = require("../shared/server_draw_event.js");
+	var ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
+	var ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
-	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
 	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 
 	var Server = module.exports = function Server() {};
@@ -52,10 +52,17 @@
 	}
 
 	function reflectClientEventsWithId(socket) {
-		socket.on(ClientPointerEvent.EVENT_NAME, function(eventData) {
-			var clientEvent = ClientPointerEvent.fromSerializableObject(eventData);
-			var serverEvent = clientEvent.toServerEvent(socket.id);
-			socket.broadcast.emit(ServerPointerEvent.EVENT_NAME, serverEvent.toSerializableObject());
+		var supportedEvents = [
+			ClientPointerEvent,
+			ClientRemovePointerEvent
+		];
+
+		supportedEvents.forEach(function(eventConstructor) {
+			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
+				var clientEvent = eventConstructor.fromSerializableObject(eventData);
+				var serverEvent = clientEvent.toServerEvent(socket.id);
+				socket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
+			});
 		});
 	}
 
