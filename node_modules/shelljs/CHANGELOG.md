@@ -1,11 +1,14 @@
 # Change Log
 
-## [Unreleased](https://github.com/shelljs/shelljs/tree/HEAD)
-
-[Full Changelog](https://github.com/shelljs/shelljs/compare/v0.7.5...HEAD)
+## [v0.7.6](https://github.com/shelljs/shelljs/tree/v0.7.6) (2017-01-08)
+[Full Changelog](https://github.com/shelljs/shelljs/compare/v0.7.5...v0.7.6)
 
 **Closed issues:**
 
+- unable to execute ionic command with shell js  [\#640](https://github.com/shelljs/shelljs/issues/640)
+- How to increase ShellJS buffer size? [\#639](https://github.com/shelljs/shelljs/issues/639)
+- mkdir fails with non-normalized path [\#634](https://github.com/shelljs/shelljs/issues/634)
+- Move execPath into common [\#633](https://github.com/shelljs/shelljs/issues/633)
 - QUESTION: Feedback while an operation is running? [\#629](https://github.com/shelljs/shelljs/issues/629)
 - Test setup/cleanup is broken [\#621](https://github.com/shelljs/shelljs/issues/621)
 - Ignore temp directories when running lint [\#620](https://github.com/shelljs/shelljs/issues/620)
@@ -35,6 +38,7 @@
 - Don't kill the node process upon unexpected error [\#483](https://github.com/shelljs/shelljs/issues/483)
 - Usage with neodoc [\#445](https://github.com/shelljs/shelljs/issues/445)
 - \[ Feature idea \] synchronous sleep command [\#441](https://github.com/shelljs/shelljs/issues/441)
+- Improve test coverage [\#347](https://github.com/shelljs/shelljs/issues/347)
 - Add a way to prevent shell-expansion on commands \(this issue is not for exec\) [\#345](https://github.com/shelljs/shelljs/issues/345)
 - Chown [\#183](https://github.com/shelljs/shelljs/issues/183)
 - spawn EMFILE [\#81](https://github.com/shelljs/shelljs/issues/81)
@@ -44,6 +48,10 @@
 
 **Merged pull requests:**
 
+- refactor: add config.reset\(\) and .resetForTesting\(\) [\#641](https://github.com/shelljs/shelljs/pull/641) ([nfischer](https://github.com/nfischer))
+- chore: set up test coverage [\#638](https://github.com/shelljs/shelljs/pull/638) ([nfischer](https://github.com/nfischer))
+- refactor: create common.execPath [\#636](https://github.com/shelljs/shelljs/pull/636) ([nfischer](https://github.com/nfischer))
+- fix: allow non-normalized paths as input to mkdir [\#635](https://github.com/shelljs/shelljs/pull/635) ([nfischer](https://github.com/nfischer))
 - Finalize moving to ava [\#630](https://github.com/shelljs/shelljs/pull/630) ([freitagbr](https://github.com/freitagbr))
 - test: refactor pushd tests to AVA [\#627](https://github.com/shelljs/shelljs/pull/627) ([nfischer](https://github.com/nfischer))
 - test: refactor popd tests to AVA [\#626](https://github.com/shelljs/shelljs/pull/626) ([nfischer](https://github.com/nfischer))
