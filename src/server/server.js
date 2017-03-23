@@ -6,9 +6,7 @@
 	var fs = require("fs");
 	var send = require("send");
 	var io = require('socket.io');
-	var ServerPointerEvent = require("../shared/server_pointer_event.js");
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
-	var ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
 	var ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
 	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
