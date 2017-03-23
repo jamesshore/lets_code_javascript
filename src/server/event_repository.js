@@ -11,7 +11,7 @@
 	};
 
 	EventRepository.prototype.replay = function() {
-		return this._data;
+		return this._data.slice();
 	};
 
 }());

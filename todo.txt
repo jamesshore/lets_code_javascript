@@ -40,7 +40,10 @@ User Stories to finish current MMF:
 - server monitoring / error handling
 - security (handling bad data, denial of service attacks)
 	- nsp, snyk
-- performance optimization (garbage collection pauses?)
+- performance optimization
+	- garbage collection pauses
+	- network tick rate is currently unbounded
+	- event repo stores everything, no culling
 - bug: shows ghost pointer on other clients when tapping 'clear' button on mobile browsers
 	- see onTouchClick_spike branch (but note document.elementFromPoint may not be testable on IE 11)
 	- retire support for IE 11 first?
@@ -58,4 +61,4 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-- Rename DataModel to EventRepository?
+- create test-only event?

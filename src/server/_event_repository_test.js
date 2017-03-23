@@ -18,14 +18,20 @@
 			assert.deepEqual(repo.replay(), []);
 		});
 
-		it("stores and replays one event", function() {
+		it("stores and replays multiple events", function() {
+			repo.store(new ServerClearScreenEvent());
 			repo.store(new ServerClearScreenEvent());
 			assert.deepEqual(repo.replay(), [
+				new ServerClearScreenEvent(),
 				new ServerClearScreenEvent()
 			]);
 		});
 
-		it("isolates its data from changes to returned results");
+		it("isolates its data from changes to returned results", function() {
+			var events = repo.replay();
+			events.push("change to our copy of repo's events");
+			assert.deepEqual(repo.replay(), [], "repo's events shouldn't change");
+		});
 
 	});
 
