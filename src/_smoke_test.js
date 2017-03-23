@@ -36,7 +36,7 @@
 				driver = createDriver();
 				driver.getCapabilities().then(function(capabilities) {
 					var version = capabilities.get("browserName") + " " + capabilities.get("version");
-					// DISABLED CHECK 16 Mar 2017 jdls. Was reporting 'undefined' for version number.
+					// DISABLED CHECK 16 Mar 2017 jdls. Was reporting 'undefined' for version number. Started with Firefox 52?
 					// if (version !== EXPECTED_BROWSER) {
 					// 	console.log("Warning: Smoke test browser expected " + EXPECTED_BROWSER + ", but was " + version);
 					// }
