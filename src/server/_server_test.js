@@ -180,6 +180,43 @@
 			checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent, done);
 		});
 
+		it("replays all previous events on client connection", function(done) {
+			var client1a = createSocket();
+			var client1b = createSocket();
+
+			var event1 = new ClientDrawEvent(1, 10, 100, 1000);
+			var event2 = new ClientDrawEvent(2, 20, 200, 2000);
+
+			var numEventsReceived = 0;
+			client1b.on(ClientDrawEvent.EVENT_NAME, function() {
+				numEventsReceived++;
+				if (numEventsReceived === 2) {
+					// we've confirmed that all events have been reflected by the server, which means the server should
+					// be ready for client2 to connect.
+					checkEventReplay();
+				}
+			});
+
+			client1a.emit(event1.name(), event1.toSerializableObject());
+			client1a.emit(event2.name(), event2.toSerializableObject());
+
+			function checkEventReplay() {
+				var client2 = createSocket();
+				var replayedEvents = [];
+				var numReplayedEvents = 0;
+				client2.on(ClientDrawEvent.EVENT_NAME, function(event) {
+					replayedEvents.push(ClientDrawEvent.fromSerializableObject(event));
+					numReplayedEvents++;
+
+					if (numReplayedEvents === 2) {
+						assert.deepEqual(replayedEvents, [ event1, event2 ]);
+						done();
+					}
+				});
+			}
+
+		});
+
 		function checkEventReflection(clientEvent, serverEventConstructor, done) {
 			var emitter = createSocket();
 			var receiver1 = createSocket();
