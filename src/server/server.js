@@ -44,9 +44,14 @@
 
 	function handleSocketIoEvents(ioServer) {
 		ioServer.on("connect", function(socket) {
+			replayPreviousEvents(socket);
 			reflectClientEventsWithId(socket);
 			reflectClientEventsWithoutId(socket);
 		});
+	}
+
+	function replayPreviousEvents(socket) {
+		socket.emit("server_draw_event", "bar");
 	}
 
 	function reflectClientEventsWithId(socket) {
