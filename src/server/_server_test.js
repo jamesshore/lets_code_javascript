@@ -180,43 +180,45 @@
 			checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent, done);
 		});
 
-		it.only("replays all previous events on client connection", function(done) {
+		it("replays all previous events on client connection", function(done) {
 			var event1 = new ClientDrawEvent(1, 10, 100, 1000);
 			var event2 = new ClientDrawEvent(2, 20, 200, 2000);
-			var event3 = new ClientDrawEvent(2, 20, 200, 2000);
+			var event3 = new ClientDrawEvent(3, 30, 300, 3000);
 
 			var sendClient = createSocket();
 			var waitForServerClient = createSocket();
 
 			var numEventsReceived = 0;
 			waitForServerClient.on(ServerDrawEvent.EVENT_NAME, function(event) {
-				console.log("WAIT FOR SERVER - EVENT");
 				numEventsReceived++;
 				if (numEventsReceived === 3) {
 					// we've confirmed that all events have been reflected by the server, which means the server should
 					// be ready for client2 to connect.
-					console.log("ALL SERVER EVENTS RECEIVED");
 					checkEventReplay();
+				}
+				if (numEventsReceived > 3) {
+					assert.fail("Received more events than expected: " + JSON.stringify(event));
 				}
 			});
 
-			console.log("EMITTING EVENTS");
 			sendClient.emit(event1.name(), event1.toSerializableObject());
 			sendClient.emit(event2.name(), event2.toSerializableObject());
 			sendClient.emit(event3.name(), event3.toSerializableObject());
 
 			function checkEventReplay() {
-				console.log("CHECKING REPLAY");
 				var checkReplayClient = createSocket();
 
 				var replayedEvents = [];
 				checkReplayClient.on("server_draw_event", function(event) {
-					console.log("CHECK REPLAY - EVENT");
 					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
 
 					if (replayedEvents.length === 3) {
 						// if we don't get the events, the test will time out
-						assert.deepEqual(replayedEvents, [ event1, event2, event3 ]);
+						assert.deepEqual(replayedEvents, [
+							event1.toServerEvent(),
+							event2.toServerEvent(),
+							event3.toServerEvent()
+						]);
 						end();
 					}
 				});
@@ -227,8 +229,6 @@
 			}
 
 		});
-
-		it("doesn't send replayed events to all connected clients; just the one that connected");
 
 		function checkEventReflection(clientEvent, serverEventConstructor, done) {
 			var emitter = createSocket();

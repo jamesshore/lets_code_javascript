@@ -10,6 +10,7 @@
 	var ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
 	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
+	var EventRepository = require("./event_repository.js");
 
 	var Server = module.exports = function Server() {};
 
@@ -20,7 +21,7 @@
 		handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
 
 		this._ioServer = io(this._httpServer);
-		handleSocketIoEvents(this._ioServer);
+		handleSocketIoEvents(this, this._ioServer);
 
 		this._httpServer.listen(portNumber, callback);
 	};
@@ -42,19 +43,23 @@
 		});
 	}
 
-	function handleSocketIoEvents(ioServer) {
+	function handleSocketIoEvents(self, ioServer) {
+		self._eventRepo = new EventRepository();
+
 		ioServer.on("connect", function(socket) {
-			replayPreviousEvents(socket);
-			reflectClientEventsWithId(socket);
-			reflectClientEventsWithoutId(socket);
+			replayPreviousEvents(self, socket);
+			reflectClientEventsWithId(self, socket);
+			reflectClientEventsWithoutId(self, socket);
 		});
 	}
 
-	function replayPreviousEvents(socket) {
-		socket.emit("server_draw_event", "bar");
+	function replayPreviousEvents(self, socket) {
+		self._eventRepo.replay().forEach(function(event) {
+			socket.emit(event.name(), event.toSerializableObject());
+		});
 	}
 
-	function reflectClientEventsWithId(socket) {
+	function reflectClientEventsWithId(self, socket) {
 		var supportedEvents = [
 			ClientPointerEvent,
 			ClientRemovePointerEvent
@@ -64,12 +69,13 @@
 			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
 				var clientEvent = eventConstructor.fromSerializableObject(eventData);
 				var serverEvent = clientEvent.toServerEvent(socket.id);
+				self._eventRepo.store(serverEvent);
 				socket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
 			});
 		});
 	}
 
-	function reflectClientEventsWithoutId(socket) {
+	function reflectClientEventsWithoutId(self, socket) {
 		var supportedEvents = [
 			ClientDrawEvent,
 			ClientClearScreenEvent
@@ -79,6 +85,7 @@
 			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
 				var clientEvent = eventConstructor.fromSerializableObject(eventData);
 				var serverEvent = clientEvent.toServerEvent();
+				self._eventRepo.store(serverEvent);
 				socket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
 			});
 		});
