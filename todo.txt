@@ -54,17 +54,9 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Modify server to store relevant resync events
-- Replay events on reconnect
-- 'Extract Class' refactoring in server.js?
-- Have client clear screen on reconnect (to prevent double-drawing events)
-
+- Extract 'RealTimeServer' from server.js?
+	- use that to clean up server tests
+	- Test that server doesn't send replay events to other clients as a separate test?
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-* Clean up our event replay server test
-	- Use socket.io's emit callback to determine when server receives events?
-	- Test that server doesn't send replay events to other clients as a separate test?
-- Discuss E502 comments
-
-- create test-only event?
