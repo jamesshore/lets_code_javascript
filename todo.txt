@@ -26,25 +26,40 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
+* re-sync when user refreshes browser or connects to work in progress
 - make mouse pointer disappear when user disconnects
+- time out inactive users (make their pointers disappear)
+- reconnect and resync when client is disconnected
+- show disconnection warning / other UX when client is disconnected
+- handle server reset smoothly (clear the drawing? re-sync to browsers? not persistence/DB)
+- handle packet loss (What packet loss is possible? TCP handles this? What about unstable cellular connections?)
+
 - version synchronization across client/server
-- offline handling
 - collision-handling / conflicts / race conditions
 - load management
 - server monitoring / error handling
 - security (handling bad data, denial of service attacks)
 	- nsp, snyk
-- performance optimization (garbage collection pauses?)
+- performance optimization
+	- garbage collection pauses
+	- network tick rate is currently unbounded
+	- event repo stores everything, no culling
 - bug: shows ghost pointer on other clients when tapping 'clear' button on mobile browsers
 	- see onTouchClick_spike branch (but note document.elementFromPoint may not be testable on IE 11)
 	- retire support for IE 11 first?
 - bug: ghost pointers block other actions
 	- e.g., starting a drag on top of a ghost pointer drags the pointer instead of drawing a line
 	- e.g., clicking clear button if ghost pointer is in the way prevents button from clicking
+	- investigate 'pointer-events: none' CSS
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
+- Extract 'RealTimeServer' from server.js?
+	- use that to clean up server tests
+	- Test that server doesn't send replay events to other clients as a separate test?
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
--
+- Karma 1.5.0: console.log no longer functions
+	- need to change karma.conf.js logLevel from LOG_INFO to LOG_LOG
+	- and update to Karma 1.6.0

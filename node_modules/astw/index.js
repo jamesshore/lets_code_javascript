@@ -1,11 +1,12 @@
 var parse = require('acorn').parse;
 
-module.exports = function (src) {
+module.exports = function (src, opts) {
+    if (!opts) opts = {}
     var ast = src;
     if (typeof src === 'string') {
         try {
             ast = parse(src, {
-                ecmaVersion: 6,
+                ecmaVersion: opts.ecmaVersion || 8,
                 allowReturnOutsideFunction: true
             })
         }

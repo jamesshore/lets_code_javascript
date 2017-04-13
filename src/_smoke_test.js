@@ -76,8 +76,14 @@
 			assertWebFontsLoaded(NOT_FOUND_PAGE_URL, done);
 		});
 
-		it("user can draw on page", function(done) {
+		it("user can draw on page and drawing is networked", function(done) {
 			driver.get(HOME_PAGE_URL);
+			var driver2 = createDriver();
+			driver2.get(HOME_PAGE_URL);
+
+			driver2.findElements(By.css(GHOST_POINTER_SELECTOR)).then(function(elements) {
+				assert.equal(elements.length, 0, "should not have any ghost pointers before pointer is moved in other browser");
+			});
 
 			driver.executeScript(function(DRAWING_AREA_ID) {
 				var client = require("./client.js");
@@ -93,27 +99,16 @@
 				assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
 			});
 
-			driver.controlFlow().execute(done);
-		});
-
-		it("networks multiple users together", function(done) {
-			driver.get(HOME_PAGE_URL);
-
-			var driver2 = createDriver();
-			driver2.get(HOME_PAGE_URL);
-
-			driver2.findElements(By.css(GHOST_POINTER_SELECTOR)).then(function(elements) {
-				assert.equal(elements.length, 0, "should not have any ghost pointers before pointer is moved in other browser");
-			});
-
-			driver.executeScript(function(DRAWING_AREA_ID) {
-				var HtmlElement = require("./html_element.js");
-				HtmlElement.fromId(DRAWING_AREA_ID).triggerMouseMove(50, 60);
-			}, DRAWING_AREA_ID);
-
-			// if we don't find the element before we time out, then the networking isn't working and the test will fail.
+			// Wait for ghost pointer to appear -- that means real-time networking has been established
+			// If it doesn't get established, the test will time out and fail.
 			driver2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR))).then(function() {
-				driver2.quit().then(done);
+				driver2.executeScript(function() {
+					var client = require("./client.js");
+					return client.drawingAreaCanvas.lineSegments();
+				}).then(function (lineSegments) {
+					assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
+					driver2.quit().then(done);
+				});
 			});
 		});
 
