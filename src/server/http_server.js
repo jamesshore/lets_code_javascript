@@ -6,14 +6,18 @@
 	var fs = require("fs");
 	var send = require("send");
 
-	var HttpServer = module.exports = function HttpServer() {};
+	var HttpServer = module.exports = function HttpServer(contentDir, notFoundPageToServe) {
+		this._httpServer = http.createServer();
 
-	HttpServer.prototype.start = function(self, contentDir, notFoundPageToServe, portNumber, callback) {
-		self._httpServer = http.createServer();
-		this.handleHttpRequests(self._httpServer, contentDir, notFoundPageToServe);
-		// self._httpServer.listen(portNumber, callback);
+		this.handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
+	};
 
-		callback();
+	HttpServer.prototype.start = function(portNumber, callback) {
+		this._httpServer.listen(portNumber, callback);
+	};
+
+	HttpServer.prototype.stop = function(callback) {
+		this._httpServer.close(callback);
 	};
 
 	HttpServer.prototype.handleHttpRequests = function handleHttpRequests(httpServer, contentDir, notFoundPageToServe) {
@@ -35,6 +39,5 @@
 			response.end(data);
 		});
 	}
-
 
 }());

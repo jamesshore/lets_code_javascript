@@ -64,3 +64,8 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
+- Test ordering issue with Socket.IO and http
+	- create httpserver
+	- set up httpserver events
+	- set up socket.io
+	- listen for HTTP
