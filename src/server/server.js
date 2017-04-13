@@ -10,18 +10,18 @@
 	Server.prototype.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
 		if (!portNumber) throw "port number is required";
 		
-		this._httpServerObj = new HttpServer(contentDir, notFoundPageToServe);
+		this._httpServer = new HttpServer(contentDir, notFoundPageToServe);
+		var realTimeServer = new RealTimeServer();
 
-		// TODO: Fix _httpServer encapsulation breakage
-		new RealTimeServer().start(this._httpServerObj._httpServer);
-
-		this._httpServerObj.start(portNumber, callback);
+		// must be done in this order
+		realTimeServer.start(this._httpServer.getNodeServer());
+		this._httpServer.start(portNumber, callback);
 	};
 
 	Server.prototype.stop = function(callback) {
-		if (this._httpServerObj === undefined) return callback(new Error("stop() called before server started"));
+		if (this._httpServer === undefined) return callback(new Error("stop() called before server started"));
 
-		this._httpServerObj.stop(callback);
+		this._httpServer.stop(callback);
 	};
 
 }());

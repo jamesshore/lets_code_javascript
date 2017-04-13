@@ -20,6 +20,10 @@
 		this._httpServer.close(callback);
 	};
 
+	HttpServer.prototype.getNodeServer = function() {
+		return this._httpServer;
+	};
+
 	HttpServer.prototype.handleHttpRequests = function handleHttpRequests(httpServer, contentDir, notFoundPageToServe) {
 		httpServer.on("request", function(request, response) {
 			send(request, request.url, { root: contentDir }).on("error", handleError).pipe(response);
