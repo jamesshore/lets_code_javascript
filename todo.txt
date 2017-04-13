@@ -60,3 +60,6 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
+- Karma 1.5.0: console.log no longer functions
+	- need to change karma.conf.js logLevel from LOG_INFO to LOG_LOG
+	- and update to Karma 1.6.0
