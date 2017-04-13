@@ -11,9 +11,9 @@
 
 	var RealTimeServer = module.exports = function RealTimeServer() {};
 
-	RealTimeServer.prototype.start = function() {
-		// this._ioServer = io(this._httpServer);
-		// RealTimeServer.handleSocketIoEvents(this, this._ioServer);
+	RealTimeServer.prototype.start = function(httpServer) {
+		this._ioServer = io(httpServer);
+		RealTimeServer.handleSocketIoEvents(this, this._ioServer);
 	};
 
 	RealTimeServer.handleSocketIoEvents = function handleSocketIoEvents(self, ioServer) {
@@ -63,6 +63,5 @@
 			});
 		});
 	}
-
 
 }());

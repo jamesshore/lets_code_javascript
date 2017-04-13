@@ -15,14 +15,9 @@
 
 		this._httpServer = http.createServer();
 		handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
-
-		var realTimeServer = new RealTimeServer();
-		realTimeServer.start();
-
-		this._ioServer = io(this._httpServer);
-		RealTimeServer.handleSocketIoEvents(this, this._ioServer);
-
 		this._httpServer.listen(portNumber, callback);
+
+		new RealTimeServer().start(this._httpServer);
 	};
 
 	Server.prototype.stop = function(callback) {
