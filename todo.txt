@@ -54,12 +54,13 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-- Extract 'RealTimeServer' from server.js?
+* Extract 'RealTimeServer' from server.js?
 	- use that to clean up server tests
 	- Test that server doesn't send replay events to other clients as a separate test?
+- Consider Jay Bazuzi's suggestions from E494 - direct connection from client to server when testing
+	- this implies a replaceable transport layer
+- Fix 'reflectClients' duplication?
+	- standardize toServerEvent signature so that there's no duplication needed
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-- Karma 1.5.0: console.log no longer functions
-	- need to change karma.conf.js logLevel from LOG_INFO to LOG_LOG
-	- and update to Karma 1.6.0
