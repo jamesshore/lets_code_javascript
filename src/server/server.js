@@ -6,6 +6,7 @@
 	var fs = require("fs");
 	var send = require("send");
 	var io = require('socket.io');
+	var HttpServer = require("./http_server.js");
 	var RealTimeServer = require("./real_time_server.js");
 
 	var Server = module.exports = function Server() {};
@@ -13,11 +14,15 @@
 	Server.prototype.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
 		if (!portNumber) throw "port number is required";
 
-		this._httpServer = http.createServer();
-		handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
-		this._httpServer.listen(portNumber, callback);
-
-		new RealTimeServer().start(this._httpServer);
+		var httpServer = new HttpServer();
+		var self = this;
+		httpServer.start(self, contentDir, notFoundPageToServe, portNumber, function() {
+			// self._httpServer = http.createServer();
+			// httpServer.handleHttpRequests(self._httpServer, contentDir, notFoundPageToServe);
+			self._httpServer.listen(portNumber, function() {
+				new RealTimeServer().start(self._httpServer);
+			});
+		});
 	};
 
 	Server.prototype.stop = function(callback) {
