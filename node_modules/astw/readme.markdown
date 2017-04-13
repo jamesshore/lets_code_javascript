@@ -29,9 +29,13 @@ walk(function (node) {
 var astw = require('astw')
 ```
 
-## var walk = astw(src)
+## var walk = astw(src, opts={})
 
 Return a `walk()` function from the source string or ast object `src`.
+
+Optionally:
+
+* `opts.ecmaVersion` - default: 8
 
 ## walk(cb)
 
