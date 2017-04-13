@@ -9,8 +9,6 @@
 	describe("SHARED: ClientDrawEvent", function() {
 
 		it("converts bare objects to ClientDrawEvents and back", function() {
-			console.log("HI");
-
 			var bareObject = { fromX: 1, fromY: 2, toX: 3, toY: 4 };
 			var eventObject = new ClientDrawEvent(1, 2, 3, 4);
 
