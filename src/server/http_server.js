@@ -9,7 +9,7 @@
 	var HttpServer = module.exports = function HttpServer(contentDir, notFoundPageToServe) {
 		this._httpServer = http.createServer();
 
-		this.handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
+		handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
 	};
 
 	HttpServer.prototype.start = function(portNumber, callback) {
@@ -24,7 +24,7 @@
 		return this._httpServer;
 	};
 
-	HttpServer.prototype.handleHttpRequests = function handleHttpRequests(httpServer, contentDir, notFoundPageToServe) {
+	function handleHttpRequests(httpServer, contentDir, notFoundPageToServe) {
 		httpServer.on("request", function(request, response) {
 			send(request, request.url, { root: contentDir }).on("error", handleError).pipe(response);
 
@@ -33,7 +33,7 @@
 				else throw err;
 			}
 		});
-	};
+	}
 
 	function serveErrorFile(response, statusCode, file) {
 		response.statusCode = statusCode;

@@ -13,10 +13,10 @@
 
 	RealTimeServer.prototype.start = function(httpServer) {
 		this._ioServer = io(httpServer);
-		RealTimeServer.handleSocketIoEvents(this, this._ioServer);
+		handleSocketIoEvents(this, this._ioServer);
 	};
 
-	RealTimeServer.handleSocketIoEvents = function handleSocketIoEvents(self, ioServer) {
+	function handleSocketIoEvents(self, ioServer) {
 		self._eventRepo = new EventRepository();
 
 		ioServer.on("connect", function(socket) {
@@ -24,7 +24,7 @@
 			reflectClientEventsWithId(self, socket);
 			reflectClientEventsWithoutId(self, socket);
 		});
-	};
+	}
 
 	function replayPreviousEvents(self, socket) {
 		self._eventRepo.replay().forEach(function(event) {
