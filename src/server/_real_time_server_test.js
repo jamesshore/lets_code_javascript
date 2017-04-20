@@ -27,10 +27,11 @@
 		this.timeout(4 * 1000);
 
 		var httpServer;
+		var realTimeServer;
 
 		beforeEach(function(done) {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			var realTimeServer = new RealTimeServer();
+			realTimeServer = new RealTimeServer();
 
 			realTimeServer.start(httpServer.getNodeServer());
 			httpServer.start(PORT, done);
@@ -56,12 +57,37 @@
 			checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent, done);
 		});
 
+		it("treats events received via method call exactly like events received via Socket.IO", function(done) {
+			var clientEvent = new ClientPointerEvent(100, 200);
+			var EMITTER_ID = "emitter_id";
+
+			var receiver1 = createSocket();
+			var receiver2 = createSocket();
+
+			async.each([receiver1, receiver2], function(client, next) {
+				client.on(ServerPointerEvent.EVENT_NAME, function(data) {
+					try {
+						assert.deepEqual(data, clientEvent.toServerEvent(EMITTER_ID).toSerializableObject());
+					}
+					finally {
+						next();
+					}
+				});
+			}, end);
+
+			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
+
+			function end() {
+				async.each([ receiver1, receiver2 ], closeSocket, done);
+			}
+		});
+
 		it("replays all previous events when client connects", function(done) {
 			var event1 = new ClientDrawEvent(1, 10, 100, 1000);
 			var event2 = new ClientDrawEvent(2, 20, 200, 2000);
 			var event3 = new ClientDrawEvent(3, 30, 300, 3000);
 
-			var sendClient = createSocket();
+			var emitter = createSocket();
 			var waitForServerClient = createSocket();
 
 			var numEventsReceived = 0;
@@ -77,15 +103,15 @@
 				}
 			});
 
-			sendClient.emit(event1.name(), event1.toSerializableObject());
-			sendClient.emit(event2.name(), event2.toSerializableObject());
-			sendClient.emit(event3.name(), event3.toSerializableObject());
+			emitter.emit(event1.name(), event1.toSerializableObject());
+			emitter.emit(event2.name(), event2.toSerializableObject());
+			emitter.emit(event3.name(), event3.toSerializableObject());
 
 			function checkEventReplay() {
 				var checkReplayClient = createSocket();
 
 				var replayedEvents = [];
-				checkReplayClient.on("server_draw_event", function(event) {
+				checkReplayClient.on(ServerDrawEvent.EVENT_NAME, function(event) {
 					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
 
 					if (replayedEvents.length === 3) {
@@ -100,7 +126,7 @@
 				});
 
 				function end() {
-					async.each([sendClient, waitForServerClient, checkReplayClient], closeSocket, done);
+					async.each([emitter, waitForServerClient, checkReplayClient], closeSocket, done);
 				}
 			}
 

@@ -16,13 +16,23 @@
 		handleSocketIoEvents(this, this._ioServer);
 	};
 
+	RealTimeServer.prototype.handleClientEvent = function(clientEvent, clientId) {
+		var serverEvent = processClientEvent(this, clientEvent, clientId);
+		this._ioServer.emit(serverEvent.name(), serverEvent.toSerializableObject());
+	};
+
+	function processClientEvent(self, clientEvent, clientId) {
+		var serverEvent = clientEvent.toServerEvent(clientId);
+		self._eventRepo.store(serverEvent);
+		return serverEvent;
+	}
+
 	function handleSocketIoEvents(self, ioServer) {
 		self._eventRepo = new EventRepository();
 
 		ioServer.on("connect", function(socket) {
 			replayPreviousEvents(self, socket);
-			reflectClientEventsWithId(self, socket);
-			reflectClientEventsWithoutId(self, socket);
+			handleClientEvents(self, socket);
 		});
 	}
 
@@ -32,24 +42,10 @@
 		});
 	}
 
-	function reflectClientEventsWithId(self, socket) {
+	function handleClientEvents(self, socket) {
 		var supportedEvents = [
 			ClientPointerEvent,
-			ClientRemovePointerEvent
-		];
-
-		supportedEvents.forEach(function(eventConstructor) {
-			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
-				var clientEvent = eventConstructor.fromSerializableObject(eventData);
-				var serverEvent = clientEvent.toServerEvent(socket.id);
-				self._eventRepo.store(serverEvent);
-				socket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
-			});
-		});
-	}
-
-	function reflectClientEventsWithoutId(self, socket) {
-		var supportedEvents = [
+			ClientRemovePointerEvent,
 			ClientDrawEvent,
 			ClientClearScreenEvent
 		];
@@ -57,8 +53,7 @@
 		supportedEvents.forEach(function(eventConstructor) {
 			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
 				var clientEvent = eventConstructor.fromSerializableObject(eventData);
-				var serverEvent = clientEvent.toServerEvent();
-				self._eventRepo.store(serverEvent);
+				var serverEvent = processClientEvent(self, clientEvent, socket.id);
 				socket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
 			});
 		});

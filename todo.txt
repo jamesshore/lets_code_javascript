@@ -63,4 +63,4 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-- Improve RealTimeServer tests
+* Improve RealTimeServer tests
