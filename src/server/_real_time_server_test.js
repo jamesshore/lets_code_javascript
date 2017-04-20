@@ -56,7 +56,7 @@
 			checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent, done);
 		});
 
-		it("replays all previous events on client connection", function(done) {
+		it("replays all previous events when client connects", function(done) {
 			var event1 = new ClientDrawEvent(1, 10, 100, 1000);
 			var event2 = new ClientDrawEvent(2, 20, 200, 2000);
 			var event3 = new ClientDrawEvent(3, 30, 300, 3000);

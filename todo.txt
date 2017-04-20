@@ -64,8 +64,3 @@ Engineering Tasks:
 
 To Do on current task:
 - Improve RealTimeServer tests
-- Test ordering issue with RealTimeServer and HttpServer
-	- create httpserver
-	- set up httpserver events
-	- set up socket.io
-	- listen for HTTP

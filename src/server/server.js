@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2012-2017 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 (function() {
 	"use strict";
 
@@ -11,11 +11,10 @@
 		if (!portNumber) throw "port number is required";
 		
 		this._httpServer = new HttpServer(contentDir, notFoundPageToServe);
-		var realTimeServer = new RealTimeServer();
-
-		// must be done in this order
-		realTimeServer.start(this._httpServer.getNodeServer());
 		this._httpServer.start(portNumber, callback);
+
+		var realTimeServer = new RealTimeServer();
+		realTimeServer.start(this._httpServer.getNodeServer());
 	};
 
 	Server.prototype.stop = function(callback) {
