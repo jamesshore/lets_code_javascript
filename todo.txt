@@ -54,13 +54,7 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Clean up server tests
-- Consider Jay Bazuzi's suggestions from E494 - direct connection from client to server when testing
-	- this implies a replaceable transport layer
-- Fix 'reflectClients' duplication?
-	- standardize toServerEvent signature so that there's no duplication needed
 - Test that server doesn't send replay events to other clients as a separate test?
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-* Improve RealTimeServer tests

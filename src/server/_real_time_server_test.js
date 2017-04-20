@@ -24,8 +24,6 @@
 	var PORT = 5020;
 
 	describe("RealTimeServer", function() {
-		this.timeout(4 * 1000);
-
 		var httpServer;
 		var realTimeServer;
 
@@ -83,53 +81,39 @@
 		});
 
 		it("replays all previous events when client connects", function(done) {
+			var IRRELEVANT_ID = "irrelevant";
+
 			var event1 = new ClientDrawEvent(1, 10, 100, 1000);
 			var event2 = new ClientDrawEvent(2, 20, 200, 2000);
 			var event3 = new ClientDrawEvent(3, 30, 300, 3000);
 
-			var emitter = createSocket();
-			var waitForServerClient = createSocket();
+			realTimeServer.handleClientEvent(event1, IRRELEVANT_ID);
+			realTimeServer.handleClientEvent(event2, IRRELEVANT_ID);
+			realTimeServer.handleClientEvent(event3, IRRELEVANT_ID);
 
-			var numEventsReceived = 0;
-			waitForServerClient.on(ServerDrawEvent.EVENT_NAME, function(event) {
-				numEventsReceived++;
-				if (numEventsReceived === 3) {
-					// we've confirmed that all events have been reflected by the server, which means the server should
-					// be ready for client2 to connect.
-					checkEventReplay();
-				}
-				if (numEventsReceived > 3) {
-					assert.fail("Received more events than expected: " + JSON.stringify(event));
-				}
-			});
+			var replayedEvents = [];
+			var client = createSocket();
 
-			emitter.emit(event1.name(), event1.toSerializableObject());
-			emitter.emit(event2.name(), event2.toSerializableObject());
-			emitter.emit(event3.name(), event3.toSerializableObject());
-
-			function checkEventReplay() {
-				var checkReplayClient = createSocket();
-
-				var replayedEvents = [];
-				checkReplayClient.on(ServerDrawEvent.EVENT_NAME, function(event) {
-					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
-
-					if (replayedEvents.length === 3) {
+			client.on(ServerDrawEvent.EVENT_NAME, function(event) {
+				replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
+				if (replayedEvents.length === 3) {
+					try {
 						// if we don't get the events, the test will time out
 						assert.deepEqual(replayedEvents, [
 							event1.toServerEvent(),
 							event2.toServerEvent(),
 							event3.toServerEvent()
 						]);
-						end();
 					}
-				});
-
-				function end() {
-					async.each([emitter, waitForServerClient, checkReplayClient], closeSocket, done);
+					finally {
+						closeSocket(client, done);
+					}
 				}
-			}
+			});
+		});
 
+		it("doesn't send replay events to other clients when a new client connects", function(done) {
+			done();
 		});
 
 		function checkEventReflection(clientEvent, serverEventConstructor, done) {

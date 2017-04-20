@@ -9,6 +9,9 @@
 	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 	var EventRepository = require("./event_repository.js");
 
+	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
+	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
+
 	var RealTimeServer = module.exports = function RealTimeServer() {};
 
 	RealTimeServer.prototype.start = function(httpServer) {
@@ -38,7 +41,8 @@
 
 	function replayPreviousEvents(self, socket) {
 		self._eventRepo.replay().forEach(function(event) {
-			socket.emit(event.name(), event.toSerializableObject());
+			// TODO: Deliberately incorrect. Needs to be socket.emit()!
+			self._ioServer.emit(event.name(), event.toSerializableObject());
 		});
 	}
 
