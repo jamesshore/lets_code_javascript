@@ -54,9 +54,7 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-- Move tests out of _server_tests.js to _http_server_test and _real_time_server_test.js
-- Make RealTimeServer.stop()?
-- Clean up server tests
+* Clean up server tests
 - Consider Jay Bazuzi's suggestions from E494 - direct connection from client to server when testing
 	- this implies a replaceable transport layer
 - Fix 'reflectClients' duplication?
@@ -65,7 +63,8 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-- Test ordering issue with Socket.IO and http
+- Improve RealTimeServer tests
+- Test ordering issue with RealTimeServer and HttpServer
 	- create httpserver
 	- set up httpserver events
 	- set up socket.io
