@@ -58,3 +58,4 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
+- Consider Martin Grandrath's Socket.IO initialization suggestion, E509
