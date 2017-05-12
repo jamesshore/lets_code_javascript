@@ -42,10 +42,8 @@
 		// Inspired by isaacs https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
 		ioServer.on("connection", function(socket) {
 			var key = socket.id;
-			console.log("NEW SOCKET.IO CONNECTION", key);
 			connections[key] = socket;
 			socket.on("disconnect", function() {
-				console.log("CLOSE SOCKET.IO CONNECTION", key);
 				delete connections[key];
 			});
 		});
