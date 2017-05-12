@@ -20,13 +20,8 @@
 	RealTimeServer.prototype.start = function(httpServer) {
 		this._ioServer = io(httpServer);
 
-		// trackActiveConnections(this._activeConnections, httpServer);
 		trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 		handleSocketIoEvents(this, this._ioServer);
-	};
-
-	RealTimeServer.prototype.stop = function(callback) {
-		callback();
 	};
 
 	RealTimeServer.prototype.handleClientEvent = function(clientEvent, clientId) {
@@ -48,16 +43,6 @@
 			});
 		});
 	}
-
-	// function trackActiveConnections(connections, httpServer) {
-	// 	httpServer.on('connection', function(socket) {
-	// 		var key = socket.remoteAddress + ':' + socket.remotePort;
-	// 		connections[key] = socket;
-	// 		socket.on("close", function() {
-	// 			delete connections[key];
-	// 		});
-	// 	});
-	// }
 
 	function processClientEvent(self, clientEvent, clientId) {
 		var serverEvent = clientEvent.toServerEvent(clientId);

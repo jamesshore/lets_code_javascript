@@ -58,8 +58,5 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-* Add realTimeServer.stop()
-	- Figure out how to tell if the server stopped
-		- Clean up 'active connections test'
-- Debug race condition in handleClientEvent() test
+* Debug race condition in handleClientEvent() test
 - Consider Martin Grandrath's Socket.IO initialization suggestion, E509

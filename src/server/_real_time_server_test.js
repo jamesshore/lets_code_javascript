@@ -36,7 +36,9 @@
 		});
 
 		afterEach(function(done) {
-			httpServer.stop(done);
+			waitForConnectionCount(0, "afterEach() requires all sockets to be closed", function() {
+				httpServer.stop(done);
+			});
 		});
 
 		it("counts the number of connections", function(done) {
@@ -64,11 +66,6 @@
 				else setTimeout(callback, 0);
 			});
 		}
-
-		it.skip("shut downs cleanly", function(done) {
-			createSocket();
-			realTimeServer.stop(done);
-		});
 
 		it("broadcasts pointer events from one client to all others", function(done) {
 			checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent, done);
