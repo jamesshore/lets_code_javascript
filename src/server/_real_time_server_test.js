@@ -40,20 +40,41 @@
 		});
 
 		it.only("counts the number of connections", function(done) {
-			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
-			console.log("CREATE SOCKET");
+
 			var socket = createSocket();
-			setTimeout(function() {
-				assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
-				console.log("CLOSE SOCKET");
-				closeSocket(socket, function() {
-					setTimeout(function() {
-						assert.equal(realTimeServer.numberOfActiveConnections(), 0, "after closing connection");
-						done();
-					}, 300);
-				});
-			}, 300);
+			waitUntil(connectionsEqualsFn(1), function() {
+				console.log("WAIT CONDITION SUCCEEDED");
+				done();
+			});
+
+			// assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
+			// console.log("CREATE SOCKET");
+			// var socket = createSocket();
+			// setTimeout(function() {
+			// 	assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
+			// 	console.log("CLOSE SOCKET");
+			// 	closeSocket(socket, function() {
+			// 		setTimeout(function() {
+			// 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "after closing connection");
+			// 			done();
+			// 		}, 300);
+			// 	});
+			// }, 300);
+
+			function connectionsEqualsFn(expectedConnections) {
+				return function() {
+					return realTimeServer.numberOfActiveConnections() === expectedConnections;
+				};
+			}
 		});
+
+		function waitUntil(conditionFn, callback) {
+			async.until(conditionFn, iteratee, callback);
+
+			function iteratee(next) {
+				setTimeout(next, 10);
+			}
+		}
 
 		it("does not count connections that have been closed", function(done) {
 			done();
