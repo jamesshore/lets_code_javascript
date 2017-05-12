@@ -12,17 +12,36 @@
 	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
 
-	var RealTimeServer = module.exports = function RealTimeServer() {};
+	var RealTimeServer = module.exports = function RealTimeServer() {
+		this._activeConnections = {};
+	};
 
 	RealTimeServer.prototype.start = function(httpServer) {
 		this._ioServer = io(httpServer);
+
+		trackActiveConnections(this._activeConnections, httpServer);
 		handleSocketIoEvents(this, this._ioServer);
+	};
+
+	RealTimeServer.prototype.stop = function(callback) {
+		callback();
 	};
 
 	RealTimeServer.prototype.handleClientEvent = function(clientEvent, clientId) {
 		var serverEvent = processClientEvent(this, clientEvent, clientId);
 		this._ioServer.emit(serverEvent.name(), serverEvent.toSerializableObject());
 	};
+
+	RealTimeServer.prototype.numberOfActiveConnections = function() {
+		return Object.keys(this._activeConnections).length;
+	};
+
+	function trackActiveConnections(connections, httpServer) {
+		httpServer.on('connection', function(socket) {
+			var key = socket.remoteAddress + ':' + socket.remotePort;
+			connections[key] = socket;
+		});
+	}
 
 	function processClientEvent(self, clientEvent, clientId) {
 		var serverEvent = clientEvent.toServerEvent(clientId);
