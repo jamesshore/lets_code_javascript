@@ -53,20 +53,6 @@
 			});
 		});
 
-		function waitForConnectionCount(expectedConnections, message, callback) {
-			var TIMEOUT = 1000; // milliseconds
-			var RETRY_PERIOD = 10; // milliseconds
-
-			var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
-			async.retry(retryOptions, function(next) {
-				if (realTimeServer.numberOfActiveConnections() === expectedConnections) return next();
-				else return next("fail");
-			}, function(err) {
-				if (err) return assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
-				else setTimeout(callback, 0);
-			});
-		}
-
 		it("broadcasts pointer events from one client to all others", function(done) {
 			checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent, done);
 		});
@@ -83,7 +69,7 @@
 			checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent, done);
 		});
 
-		it.skip("treats events received via method call exactly like events received via Socket.IO", function(done) {
+		it("treats events received via method call exactly like events received via Socket.IO", function(done) {
 			var clientEvent = new ClientPointerEvent(100, 200);
 			var EMITTER_ID = "emitter_id";
 
@@ -140,10 +126,6 @@
 			});
 		});
 
-		it("doesn't send replay events to other clients when a new client connects", function(done) {
-			done();
-		});
-
 		function checkEventReflection(clientEvent, serverEventConstructor, done) {
 			var emitter = createSocket();
 			var receiver1 = createSocket();
@@ -169,6 +151,20 @@
 			function end() {
 				async.each([emitter, receiver1, receiver2], closeSocket, done);
 			}
+		}
+
+		function waitForConnectionCount(expectedConnections, message, callback) {
+			var TIMEOUT = 1000; // milliseconds
+			var RETRY_PERIOD = 10; // milliseconds
+
+			var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
+			async.retry(retryOptions, function(next) {
+				if (realTimeServer.numberOfActiveConnections() === expectedConnections) return next();
+				else return next("fail");
+			}, function(err) {
+				if (err) return assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
+				else setTimeout(callback, 0);
+			});
 		}
 
 		function createSocket() {

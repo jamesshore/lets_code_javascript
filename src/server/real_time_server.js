@@ -13,7 +13,6 @@
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
 
 	var RealTimeServer = module.exports = function RealTimeServer() {
-		this._activeConnections = {};
 		this._socketIoConnections = {};
 	};
 
@@ -61,8 +60,7 @@
 
 	function replayPreviousEvents(self, socket) {
 		self._eventRepo.replay().forEach(function(event) {
-			// TODO: Deliberately incorrect. Needs to be socket.emit()!
-			self._ioServer.emit(event.name(), event.toSerializableObject());
+			socket.emit(event.name(), event.toSerializableObject());
 		});
 	}
 

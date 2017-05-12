@@ -26,7 +26,6 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* re-sync when user refreshes browser or connects to work in progress
 - make mouse pointer disappear when user disconnects
 - time out inactive users (make their pointers disappear)
 - reconnect and resync when client is disconnected
@@ -54,9 +53,7 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Test that server doesn't send replay events to other clients as a separate test?
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-* Debug race condition in handleClientEvent() test
 - Consider Martin Grandrath's Socket.IO initialization suggestion, E509
