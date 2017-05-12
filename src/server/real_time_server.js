@@ -38,8 +38,13 @@
 
 	function trackActiveConnections(connections, httpServer) {
 		httpServer.on('connection', function(socket) {
+			console.log("NEW CONNECTION", socket.remoteAddress, socket.remotePort);
 			var key = socket.remoteAddress + ':' + socket.remotePort;
 			connections[key] = socket;
+			socket.on("close", function() {
+				console.log("CLOSE CONNECTION", socket.remoteAddress, socket.remotePort);
+				delete connections[key];
+			});
 		});
 	}
 

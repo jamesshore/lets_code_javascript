@@ -35,17 +35,22 @@
 			httpServer.start(PORT, done);
 		});
 
-		afterEach(function(done) {
-			httpServer.stop(done);
-		});
+		// afterEach(function(done) {
+		// 	httpServer.stop(done);
+		// });
 
-		it("counts the number of connections", function(done) {
+		it.only("counts the number of connections", function(done) {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
-			createSocket();
+			var socket = createSocket();
 			setTimeout(function() {
 				assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
-				done();
-			}, 100);
+				closeSocket(socket, function() {
+					setTimeout(function() {
+						assert.equal(realTimeServer.numberOfActiveConnections(), 0, "after closing connection");
+						done();
+					}, 300);
+				});
+			}, 300);
 		});
 
 		it("does not count connections that have been closed", function(done) {
