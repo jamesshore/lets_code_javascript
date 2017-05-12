@@ -35,15 +35,17 @@
 			httpServer.start(PORT, done);
 		});
 
-		// afterEach(function(done) {
-		// 	httpServer.stop(done);
-		// });
+		afterEach(function(done) {
+			httpServer.stop(done);
+		});
 
 		it.only("counts the number of connections", function(done) {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
+			console.log("CREATE SOCKET");
 			var socket = createSocket();
 			setTimeout(function() {
 				assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
+				console.log("CLOSE SOCKET");
 				closeSocket(socket, function() {
 					setTimeout(function() {
 						assert.equal(realTimeServer.numberOfActiveConnections(), 0, "after closing connection");

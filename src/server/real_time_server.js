@@ -14,12 +14,14 @@
 
 	var RealTimeServer = module.exports = function RealTimeServer() {
 		this._activeConnections = {};
+		this._socketIoConnections = {};
 	};
 
 	RealTimeServer.prototype.start = function(httpServer) {
 		this._ioServer = io(httpServer);
 
-		trackActiveConnections(this._activeConnections, httpServer);
+		// trackActiveConnections(this._activeConnections, httpServer);
+		trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 		handleSocketIoEvents(this, this._ioServer);
 	};
 
@@ -33,20 +35,31 @@
 	};
 
 	RealTimeServer.prototype.numberOfActiveConnections = function() {
-		return Object.keys(this._activeConnections).length;
+		return Object.keys(this._socketIoConnections).length;
 	};
 
-	function trackActiveConnections(connections, httpServer) {
-		httpServer.on('connection', function(socket) {
-			console.log("NEW CONNECTION", socket.remoteAddress, socket.remotePort);
-			var key = socket.remoteAddress + ':' + socket.remotePort;
+	function trackSocketIoConnections(connections, ioServer) {
+		// Inspired by isaacs https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
+		ioServer.on("connection", function(socket) {
+			var key = socket.id;
+			console.log("NEW SOCKET.IO CONNECTION", key);
 			connections[key] = socket;
-			socket.on("close", function() {
-				console.log("CLOSE CONNECTION", socket.remoteAddress, socket.remotePort);
+			socket.on("disconnect", function() {
+				console.log("CLOSE SOCKET.IO CONNECTION", key);
 				delete connections[key];
 			});
 		});
 	}
+
+	// function trackActiveConnections(connections, httpServer) {
+	// 	httpServer.on('connection', function(socket) {
+	// 		var key = socket.remoteAddress + ':' + socket.remotePort;
+	// 		connections[key] = socket;
+	// 		socket.on("close", function() {
+	// 			delete connections[key];
+	// 		});
+	// 	});
+	// }
 
 	function processClientEvent(self, clientEvent, clientId) {
 		var serverEvent = clientEvent.toServerEvent(clientId);
