@@ -35,22 +35,41 @@
 			httpServer.start(PORT, done);
 		});
 
-		afterEach(function(done) {
-			waitForConnectionCount(0, "afterEach() requires all sockets to be closed", function() {
-				httpServer.stop(done);
-			});
+        afterEach(function(done) {
+			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "afterEach() requires all sockets to be closed");
+            httpServer.stop(done);
 		});
 
-		it("counts the number of connections", function(done) {
-			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
+        it("emits event when all sockets have disconnected", function (done) {
+            var isAfterDisconnect = false;
+            realTimeServer.on('disconnect_all', function () {
+                assert.equal(isAfterDisconnect, true, "after closing connection");
+                done();
+            });
 
-			var socket = createSocket();
-			waitForConnectionCount(1, "after opening connection", function() {
-				assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
-				closeSocket(socket, function() {
-					waitForConnectionCount(0, "after closing connection", done);
-				});
-			});
+            var socket = createSocket();
+            socket.on('connect', function () {
+                socket.disconnect();
+                isAfterDisconnect = true;
+            });
+
+        });
+
+		it("counts the number of connections", function(done) {
+            assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
+
+            var gotConnectionEvent = false;
+            realTimeServer.on('connection', function () {
+                assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
+                gotConnectionEvent = true;
+            }).on('disconnect', function () {
+                assert.equal(gotConnectionEvent, true, "expected connection event before disconnect event");
+                assert.equal(realTimeServer.numberOfActiveConnections(), 0, "after closing connection");
+                done();
+            });
+
+            var socket = createSocket();
+            socket.once('connect', socket.disconnect);
 		});
 
 		it("broadcasts pointer events from one client to all others", function(done) {
@@ -89,8 +108,8 @@
 
 			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
 
-			function end() {
-				async.each([ receiver1, receiver2 ], closeSocket, done);
+            function end() {
+                disconnectAll([receiver1, receiver2], done);
 			}
 		});
 
@@ -119,8 +138,8 @@
 							event3.toServerEvent()
 						]);
 					}
-					finally {
-						closeSocket(client, done);
+                    finally {
+                        disconnectAll([client], done);
 					}
 				}
 			});
@@ -148,24 +167,16 @@
 
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
-			function end() {
-				async.each([emitter, receiver1, receiver2], closeSocket, done);
+            function end() {
+                disconnectAll([emitter, receiver1, receiver2], done);
 			}
-		}
+        }
 
-		function waitForConnectionCount(expectedConnections, message, callback) {
-			var TIMEOUT = 1000; // milliseconds
-			var RETRY_PERIOD = 10; // milliseconds
-
-			var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
-			async.retry(retryOptions, function(next) {
-				if (realTimeServer.numberOfActiveConnections() === expectedConnections) return next();
-				else return next("fail");
-			}, function(err) {
-				if (err) return assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
-				else setTimeout(callback, 0);
-			});
-		}
+        function disconnectAll(sockets, callback) {
+            realTimeServer.once('disconnect_all', callback);
+            for (var socket of sockets)
+                socket.disconnect();
+        }
 
 		function createSocket() {
 			return io("http://localhost:" + PORT);
