@@ -36,8 +36,9 @@
 		});
 
         afterEach(function(done) {
-			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "afterEach() requires all sockets to be closed");
-            httpServer.stop(done);
+            realTimeServer.disconnectAll(function () {
+                httpServer.stop(done);
+            });
 		});
 
         it("emits event when all sockets have disconnected", function (done) {
@@ -109,7 +110,7 @@
 			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
 
             function end() {
-                disconnectAll([receiver1, receiver2], done);
+                setTimeout(done, 0);
 			}
 		});
 
@@ -130,18 +131,16 @@
 			client.on(ServerDrawEvent.EVENT_NAME, function(event) {
 				replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
 				if (replayedEvents.length === 3) {
-					try {
-						// if we don't get the events, the test will time out
-						assert.deepEqual(replayedEvents, [
-							event1.toServerEvent(),
-							event2.toServerEvent(),
-							event3.toServerEvent()
-						]);
-					}
-                    finally {
-                        disconnectAll([client], done);
-					}
-				}
+
+					// if we don't get the events, the test will time out
+					assert.deepEqual(replayedEvents, [
+						event1.toServerEvent(),
+						event2.toServerEvent(),
+						event3.toServerEvent()
+                    ]);
+
+                    setTimeout(done, 10);
+			    }
 			});
 		});
 
@@ -163,19 +162,9 @@
 						next();
 					}
 				});
-			}, end);
+			}, done);
 
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
-
-            function end() {
-                disconnectAll([emitter, receiver1, receiver2], done);
-			}
-        }
-
-        function disconnectAll(sockets, callback) {
-            realTimeServer.once('disconnect_all', callback);
-            for (var socket of sockets)
-                socket.disconnect();
         }
 
 		function createSocket() {

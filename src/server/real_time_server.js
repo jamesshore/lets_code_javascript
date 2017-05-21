@@ -2,7 +2,8 @@
 (function() {
 	"use strict";
 
-	var io = require('socket.io');
+    var io = require('socket.io');
+    var async = require('async');
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 	var ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
@@ -33,7 +34,19 @@
 
 	RealTimeServer.prototype.numberOfActiveConnections = function() {
 		return Object.keys(this._socketIoConnections).length;
-	};
+    };
+
+    RealTimeServer.prototype.disconnectAll = function (callback) {
+        if (this.numberOfActiveConnections() === 0) {
+            if (callback) callback();
+        }
+        else {
+            if (callback)
+                this.once('disconnect_all', callback);
+
+            async.each(this._socketIoConnections, function (socket) { socket.disconnect(); });
+        }
+    };
 
 	function trackSocketIoConnections(connections, ioServer, self) {
 		// Inspired by isaacs https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
