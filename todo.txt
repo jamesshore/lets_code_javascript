@@ -56,4 +56,5 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
+- BEFORE RECORDING: Check out Matthias Åslund's pull request, E516
 - Consider Martin Grandrath's Socket.IO initialization suggestion, E509
