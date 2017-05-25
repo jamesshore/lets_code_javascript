@@ -24,6 +24,6 @@
   },
   "dependencies": {
     "send": "^0.15.3",
-    "socket.io": "^1.7.3"
+    "socket.io": "^2.0.1"
   }
 }

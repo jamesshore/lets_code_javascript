@@ -15,3 +15,7 @@ generated/
 
 # Selenium WebDriverJS & Karma: Optional dependencies that don't build on vanilla Windows
 node_modules/fsevents/
+
+# Socket.IO
+node_modules/uws/build/
+node_modules/uws/build_log.txt
