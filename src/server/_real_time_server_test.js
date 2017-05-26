@@ -18,14 +18,44 @@
 	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
 	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 
+	var CONTENT_DIR = "generated/test";
+
+	var INDEX_PAGE = "index.html";
+	var OTHER_PAGE = "other.html";
+	var NOT_FOUND_PAGE = "test404.html";
+
+	var INDEX_PAGE_DATA = "This is index page file";
+	var OTHER_PAGE_DATA = "This is another page";
+	var NOT_FOUND_DATA = "This is 404 page file";
+
+
+
 	var IRRELEVANT_DIR = "generated/test";
 	var IRRELEVANT_PAGE = "irrelevant.html";
 
 	var PORT = 5020;
+	var BASE_URL = "http://localhost:" + PORT;
+
+	var TEST_FILES = [
+		[ CONTENT_DIR + "/" + INDEX_PAGE, INDEX_PAGE_DATA],
+		[ CONTENT_DIR + "/" + OTHER_PAGE, OTHER_PAGE_DATA],
+		[ CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA]
+	];
 
 	describe.only("RealTimeServer", function() {
 		var httpServer;
 		var realTimeServer;
+
+
+		beforeEach(function(done) {
+			async.each(TEST_FILES, createTestFile, done);
+		});
+
+		afterEach(function(done) {
+			async.each(TEST_FILES, deleteTestFile, done);
+		});
+
+
 
 		beforeEach(function(done) {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
@@ -40,6 +70,42 @@
 				httpServer.stop(done);
 			});
 		});
+
+		it("serves files from directory", function(done) {
+			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
+				assert.equal(response.statusCode, 200, "status code");
+				assert.equal(responseData, INDEX_PAGE_DATA, "response text");
+				done();
+			});
+		});
+
+		function httpGet(url, callback) {
+			var server = new HttpServer(CONTENT_DIR, NOT_FOUND_PAGE);
+
+			httpServer.stop(function() {
+
+				server.start(PORT, function() {
+					http.get(url, function(response) {
+						var receivedData = "";
+						response.setEncoding("utf8");
+
+						response.on("data", function(chunk) {
+							receivedData += chunk;
+						});
+						response.on("error", function(err) {
+							console.log("ERROR", err);
+						});
+						response.on("end", function() {
+							server.stop(function() {
+								httpServer.start(PORT, function() {
+									callback(response, receivedData);
+								});
+							});
+						});
+					});
+				});
+			});
+		}
 
 		it("counts the number of connections", function(done) {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
@@ -174,6 +240,32 @@
 		function closeSocket(socket, callback) {
 			socket.disconnect();
 			callback();
+		}
+
+		function createTestFile(fileAndData, done) {
+			// Note: writeFile() MUST be called asynchronously in order for this code to work on Windows 7.
+			// If it's called synchronously, it fails with an EPERM error when the second test starts. This
+			// may be related to this Node.js issue: https://github.com/joyent/node/issues/6599
+			// This issue appeared after upgrading send 0.2.0 to 0.9.3. Prior to that, writeFileSync()
+			// worked fine.
+			fs.writeFile(fileAndData[0], fileAndData[1], function(err) {
+				if (err) console.log("could not create test file: [" + fileAndData[0] + "]. Error: " + err);
+				done();
+			});
+		}
+
+		function deleteTestFile(fileAndData, done) {
+			// Note: unlink() MUST be called asynchronously here in order for this code to work on Windows 7.
+			// If it's called synchronously, then it will run before the file is closed, and that is not allowed
+			// on Windows 7. It's possible that this is the result of a Node.js bug; see this issue for details:
+			// https://github.com/joyent/node/issues/6599
+			var file = fileAndData[0];
+			if (fs.existsSync(file)) {
+				fs.unlink(file, function(err) {
+					if (err || fs.existsSync(file)) console.log("could not delete test file: [" + file + "]. Error: " + err);
+					done();
+				});
+			}
 		}
 
 	});

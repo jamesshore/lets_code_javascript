@@ -62,7 +62,7 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-- Figure out why HttpServer tests are preventing RealTimeServer tests from failing
-* Isolate race condition in one test
+* Figure out why HttpServer tests are preventing RealTimeServer tests from failing
+- Isolate race condition in one test
 - Reproduce race condition with a minimal spike
 - Check out Matthias Åslund's pull request, E516
