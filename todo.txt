@@ -55,12 +55,14 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Figure out why our tests are sporadically failing
+- Figure out why 'counts the number of connections' test occasionally doesn't register connection as closed
 - Decide whether or not to keep Socket.IO (or replace it with another tool)
 
 - Consider Martin Grandrath's Socket.IO initialization suggestion, E509
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
+- Figure out why HttpServer tests are preventing RealTimeServer tests from failing
 * Isolate race condition in one test
 - Reproduce race condition with a minimal spike
 - Check out Matthias Åslund's pull request, E516
