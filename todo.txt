@@ -54,7 +54,7 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Figure out why our tests are sporadically failing
+* Figure out why HttpServer tests are preventing RealTimeServer tests from failing
 - Figure out why 'counts the number of connections' test occasionally doesn't register connection as closed
 - Decide whether or not to keep Socket.IO (or replace it with another tool)
 
@@ -62,7 +62,6 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-* Figure out why HttpServer tests are preventing RealTimeServer tests from failing
-- Isolate race condition in one test
+- Remove code from HttpServer test to figure out what exactly is making the RealTimeServer test pass
 - Reproduce race condition with a minimal spike
 - Check out Matthias Åslund's pull request, E516
