@@ -26,6 +26,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
+* re-sync when user refreshes browser or connects to work in progress
 - make mouse pointer disappear when user disconnects
 - time out inactive users (make their pointers disappear)
 - reconnect and resync when client is disconnected
@@ -53,8 +54,13 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
+* Figure out why our tests are sporadically failing
+- Decide whether or not to keep Socket.IO (or replace it with another tool)
+
+- Consider Martin Grandrath's Socket.IO initialization suggestion, E509
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-- BEFORE RECORDING: Check out Matthias Åslund's pull request, E516
-- Consider Martin Grandrath's Socket.IO initialization suggestion, E509
+* Isolate race condition in one test
+- Reproduce race condition with a minimal spike
+- Check out Matthias Åslund's pull request, E516
