@@ -63,41 +63,10 @@
 			});
 		});
 
-		it.skip("serves files from directory", function(done) {
-			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
-				assert.equal(response.statusCode, 200, "status code");
-				assert.equal(responseData, INDEX_PAGE_DATA, "response text");
-				done();
-			});
+		it("delay", function(done) {
+			this.timeout(10000);
+			setTimeout(done, 0);
 		});
-
-		function httpGet(url, callback) {
-			var server = new HttpServer(CONTENT_DIR, NOT_FOUND_PAGE);
-
-			httpServer.stop(function() {
-
-				server.start(PORT, function() {
-					http.get(url, function(response) {
-						var receivedData = "";
-						response.setEncoding("utf8");
-
-						response.on("data", function(chunk) {
-							receivedData += chunk;
-						});
-						response.on("error", function(err) {
-							console.log("ERROR", err);
-						});
-						response.on("end", function() {
-							server.stop(function() {
-								httpServer.start(PORT, function() {
-									callback(response, receivedData);
-								});
-							});
-						});
-					});
-				});
-			});
-		}
 
 		it("counts the number of connections", function(done) {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
