@@ -12,6 +12,7 @@
 	var IRRELEVANT_PAGE = "irrelevant.html";
 
 	var PORT = 5020;
+	var SERVER_TIMEOUT = 500; // milliseconds
 
 	describe("RealTimeServer", function() {
 		var httpServer;
@@ -22,10 +23,13 @@
 			realTimeServer = new RealTimeServer();
 
 			realTimeServer.start(httpServer.getNodeServer());
+			httpServer._httpServer.setTimeout(SERVER_TIMEOUT);
 			httpServer.start(PORT, done);
 		});
 
 		afterEach(function(done) {
+			this.timeout(2 * SERVER_TIMEOUT);
+
 			waitForConnectionCount(0, "afterEach() requires all sockets to be closed", function() {
 				httpServer.stop(done);
 			});
