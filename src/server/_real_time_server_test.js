@@ -71,11 +71,12 @@
 		it("counts the number of connections", function(done) {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
-			var socket = createSocket();
-			waitForConnectionCount(1, "after opening connection", function() {
-				assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
-				closeSocket(socket, function() {
-					waitForConnectionCount(0, "after closing connection", done);
+			createSocket(function (socket) {
+				waitForConnectionCount(1, "after opening connection", function() {
+					assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
+					closeSocket(socket, function() {
+						waitForConnectionCount(0, "after closing connection", done);
+					});
 				});
 			});
 		});
@@ -94,13 +95,14 @@
 			});
 		}
 
-		function createSocket() {
-			return io("http://localhost:" + PORT);
+		function createSocket(callback) {
+			var socket = io("http://localhost:" + PORT);
+			socket.on("connect", function () { callback(socket); });
 		}
 
 		function closeSocket(socket, callback) {
+			socket.on("disconnect", callback);
 			socket.disconnect();
-			callback();
 		}
 
 		function createTestFile(fileAndData, done) {
