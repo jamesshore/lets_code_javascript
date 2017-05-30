@@ -65,14 +65,10 @@
 
 			receiver.on(ServerPointerEvent.EVENT_NAME, function(data) {
 				assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
-				end();
+                setTimeout(done, 10);
 			});
 
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
-
-			function end() {
-				async.each([ emitter, receiver ], closeSocket, done);
-			}
 		});
 
 		function createSocket() {
