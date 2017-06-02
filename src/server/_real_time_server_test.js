@@ -10,44 +10,14 @@
 	var assert = require("_assert");
 	var io = require("socket.io-client");
 
-	var CONTENT_DIR = "generated/test";
-
-	var INDEX_PAGE = "index.html";
-	var OTHER_PAGE = "other.html";
-	var NOT_FOUND_PAGE = "test404.html";
-
-	var INDEX_PAGE_DATA = "This is index page file";
-	var OTHER_PAGE_DATA = "This is another page";
-	var NOT_FOUND_DATA = "This is 404 page file";
-
-
-
 	var IRRELEVANT_DIR = "generated/test";
 	var IRRELEVANT_PAGE = "irrelevant.html";
 
 	var PORT = 5020;
-	var BASE_URL = "http://localhost:" + PORT;
-
-	var TEST_FILES = [
-		[ CONTENT_DIR + "/" + INDEX_PAGE, INDEX_PAGE_DATA],
-		[ CONTENT_DIR + "/" + OTHER_PAGE, OTHER_PAGE_DATA],
-		[ CONTENT_DIR + "/" + NOT_FOUND_PAGE, NOT_FOUND_DATA]
-	];
 
 	describe("RealTimeServer", function() {
 		var httpServer;
 		var realTimeServer;
-
-
-		// beforeEach(function(done) {
-		// 	async.each(TEST_FILES, createTestFile, done);
-		// });
-		//
-		// afterEach(function(done) {
-		// 	async.each(TEST_FILES, deleteTestFile, done);
-		// });
-
-
 
 		beforeEach(function(done) {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
@@ -62,11 +32,6 @@
 				httpServer.stop(done);
 			});
 		});
-
-		// it("delay", function(done) {
-		// 	this.timeout(10000);
-		// 	setTimeout(done, 0);
-		// });
 
 		it("counts the number of connections", function(done) {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
@@ -112,30 +77,6 @@
 			});
 			socket.disconnect();
 			callback();
-		}
-
-		function createTestFile(fileAndData, done) {
-			// Note: writeFile() MUST be called asynchronously in order for this code to work on Windows 7.
-			// If it's called synchronously, it fails with an EPERM error when the second test starts. This
-			// may be related to this Node.js issue: https://github.com/joyent/node/issues/6599
-			// This issue appeared after upgrading send 0.2.0 to 0.9.3. Prior to that, writeFileSync()
-			// worked fine.
-			fs.writeFile(fileAndData[0], fileAndData[1], function(err) {
-				if (err) console.log("could not create test file: [" + fileAndData[0] + "]. Error: " + err);
-				done();
-			});
-		}
-
-		function deleteTestFile(fileAndData, done) {
-			// Note: unlink() MUST be called asynchronously here in order for this code to work on Windows 7.
-			// If it's called synchronously, then it will run before the file is closed, and that is not allowed
-			// on Windows 7. It's possible that this is the result of a Node.js bug; see this issue for details:
-			// https://github.com/joyent/node/issues/6599
-			var file = fileAndData[0];
-			fs.unlink(file, function(err) {
-				if (err) console.log("could not delete test file: [" + file + "]. Error: " + err);
-				done();
-			});
 		}
 
 	});
