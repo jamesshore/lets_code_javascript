@@ -39,13 +39,13 @@
 		var realTimeServer;
 
 
-		beforeEach(function(done) {
-			async.each(TEST_FILES, createTestFile, done);
-		});
-
-		afterEach(function(done) {
-			async.each(TEST_FILES, deleteTestFile, done);
-		});
+		// beforeEach(function(done) {
+		// 	async.each(TEST_FILES, createTestFile, done);
+		// });
+		//
+		// afterEach(function(done) {
+		// 	async.each(TEST_FILES, deleteTestFile, done);
+		// });
 
 
 
@@ -63,19 +63,20 @@
 			});
 		});
 
-		it.skip("delay", function(done) {
-			this.timeout(10000);
-			setTimeout(done, 0);
-		});
+		// it("delay", function(done) {
+		// 	this.timeout(10000);
+		// 	setTimeout(done, 0);
+		// });
 
 		it("counts the number of connections", function(done) {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
-			var socket = createSocket();
-			waitForConnectionCount(1, "after opening connection", function() {
-				assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
-				closeSocket(socket, function() {
-					waitForConnectionCount(0, "after closing connection", done);
+			createSocket(function(socket) {
+				waitForConnectionCount(1, "after opening connection", function() {
+					assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
+					closeSocket(socket, function() {
+						waitForConnectionCount(0, "after closing connection", done);
+					});
 				});
 			});
 		});
@@ -94,14 +95,20 @@
 			});
 		}
 
-		function createSocket() {
-			return io("http://localhost:" + PORT);
+		function createSocket(callback) {
+			console.log("createSocket()");
+			var socket = io("http://localhost:" + PORT);
+			socket.on("connect", function() {
+				console.log("CLIENT SOCKET.IO CONNECT", socket.id);
+				return callback(socket);
+			});
 		}
 
 		function closeSocket(socket, callback) {
+			console.log("closeSocket()");
 			var id = socket.id;
 			socket.on("disconnect", function() {
-				console.log("CLIENT DISCONNECT", id);
+				console.log("CLIENT SOCKET.IO DISCONNECT", id);
 			});
 			socket.disconnect();
 			callback();
