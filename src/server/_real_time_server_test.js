@@ -63,7 +63,7 @@
 			});
 		});
 
-		it("delay", function(done) {
+		it.skip("delay", function(done) {
 			this.timeout(10000);
 			setTimeout(done, 0);
 		});
@@ -99,6 +99,10 @@
 		}
 
 		function closeSocket(socket, callback) {
+			var id = socket.id;
+			socket.on("disconnect", function() {
+				console.log("CLIENT DISCONNECT", id);
+			});
 			socket.disconnect();
 			callback();
 		}
@@ -121,12 +125,10 @@
 			// on Windows 7. It's possible that this is the result of a Node.js bug; see this issue for details:
 			// https://github.com/joyent/node/issues/6599
 			var file = fileAndData[0];
-			if (fs.existsSync(file)) {
-				fs.unlink(file, function(err) {
-					if (err || fs.existsSync(file)) console.log("could not delete test file: [" + file + "]. Error: " + err);
-					done();
-				});
-			}
+			fs.unlink(file, function(err) {
+				if (err) console.log("could not delete test file: [" + file + "]. Error: " + err);
+				done();
+			});
 		}
 
 	});
