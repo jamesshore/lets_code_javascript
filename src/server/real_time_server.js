@@ -19,6 +19,7 @@
 	RealTimeServer.prototype.start = function(httpServer) {
 		this._ioServer = io(httpServer);
 
+		trackActiveConnections(httpServer);
 		trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 		handleSocketIoEvents(this, this._ioServer);
 	};
@@ -31,6 +32,16 @@
 	RealTimeServer.prototype.numberOfActiveConnections = function() {
 		return Object.keys(this._socketIoConnections).length;
 	};
+
+	function trackActiveConnections(httpServer) {
+		httpServer.on('connection', function(socket) {
+			var id = socket.remoteAddress + ':' + socket.remotePort;
+			console.log("SERVER HTTP SOCKET CONNECT", id);
+			socket.on("close", function() {
+				console.log("SERVER HTTP SOCKET DISCONNECT", id);
+			});
+		});
+	}
 
 	function trackSocketIoConnections(connections, ioServer) {
 		// Inspired by isaacs https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
