@@ -6,6 +6,7 @@
 	var io = require('socket.io');
 	var async = require("async");
 
+
 	var httpServer;
 	var ioServer;
 
@@ -18,14 +19,17 @@
 		trackServerSocketIoConnections(connections);
 
 		var client = clientIo("http://localhost:" + PORT);
-		// client.on('connect', function() {
-			waitForServerConnectionCount(connections, 1, "didn't connect", function() {
-				client.disconnect();
+		client.on('connect', function() {
+			console.log("CLIENT CONNECTED");
+		});
+		waitForServerConnectionCount(connections, 1, "didn't connect", function() {
+			client.disconnect();
+			waitForServerConnectionCount(connections, 0, "didn't close connection", function() {
 				stopServer(function() {
 					console.log("COMPLETE! NODE SHOULD EXIT NOW.");
 				});
 			});
-		// });
+		});
 	});
 
 	function trackServerSocketIoConnections(connections) {
@@ -42,15 +46,20 @@
 
 	function waitForServerConnectionCount(connections, expectedConnections, message, callback) {
 		var TIMEOUT = 1000; // milliseconds
-		var RETRY_PERIOD = 10; // milliseconds
+		var RETRY_PERIOD = 0.1; // milliseconds
 
 		var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
 		async.retry(retryOptions, function(next) {
 			if (numberOfServerConnections(connections) === expectedConnections) return next();
 			else return next("fail");
 		}, function(err) {
-			if (err) return assert.equal(numberOfServerConnections(connections), expectedConnections, message);
-			else setTimeout(callback, 0);
+			var numConnections = numberOfServerConnections(connections);
+			if (err && (numConnections !== expectedConnections)) {
+				throw new Error(message + ": expected " + expectedConnections + " connections, but was " + numConnections);
+			}
+			else {
+				setTimeout(callback, 0);
+			}
 		});
 	}
 

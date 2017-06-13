@@ -63,9 +63,9 @@
 		function createSocket(callback) {
 			console.log("createSocket()");
 			var socket = io("http://localhost:" + PORT);
+			return callback(socket);
 			socket.on("connect", function() {
 				console.log("CLIENT SOCKET.IO CONNECT", socket.id);
-				return callback(socket);
 			});
 		}
 
