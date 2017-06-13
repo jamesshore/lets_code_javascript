@@ -1,67 +1,23 @@
 WeeWikiPaint
 
-Minimum Marketable Features:
-+ marketing home page (episodes 1-32)
-+ single-user painting on home page (episodes 33-200)
-+ replace home page with professional design (episodes 201-321)
-+ IE 11 support (and get rid of IE 8) (episodes 322-324)
-+ Android support (episodes 325-327)
-+ iOS 8 support (episode 328)
-+ replace 404 page with professional design (episodes 329-369)
-* collaborative painting (episode 370+)
-- multiple servers
-- responsive design
-- accessibility
-- polish
-  - clear button retains focus when drawing (IE8, 9, Chrome)
-  - drawing glitches occur when exiting drawing area that is flush against side of browser
-  - one-pixel gap on right side of drawing area (Firefox, others unknown)
-  - favicon
-	- 'clear' button flashes rather than depressing (iOS)
-	- 'clear' button depresses diagonally rather than vertically (IE 9, IE 11)
-- multiple painting/erasing tools
-- save the pages (persistence / databases)
-- wiki-fy the pages
-- more complex painting?
-- more collaborative features?
+BRANCH: spike_socket_io_race_condition
 
-User Stories to finish current MMF:
-* re-sync when user refreshes browser or connects to work in progress
-- make mouse pointer disappear when user disconnects
-- time out inactive users (make their pointers disappear)
-- reconnect and resync when client is disconnected
-- show disconnection warning / other UX when client is disconnected
-- handle server reset smoothly (clear the drawing? re-sync to browsers? not persistence/DB)
-- handle packet loss (What packet loss is possible? TCP handles this? What about unstable cellular connections?)
+The purpose of this branch is to debug a race condition in the tests for server-side Socket.IO code. We were seeing an issue where tests would fail, timeout, or hang sporadically.
 
-- version synchronization across client/server
-- collision-handling / conflicts / race conditions
-- load management
-- server monitoring / error handling
-- security (handling bad data, denial of service attacks)
-	- nsp, snyk
-- performance optimization
-	- garbage collection pauses
-	- network tick rate is currently unbounded
-	- event repo stores everything, no culling
-- bug: shows ghost pointer on other clients when tapping 'clear' button on mobile browsers
-	- see onTouchClick_spike branch (but note document.elementFromPoint may not be testable on IE 11)
-	- retire support for IE 11 first?
-- bug: ghost pointers block other actions
-	- e.g., starting a drag on top of a ghost pointer drags the pointer instead of drawing a line
-	- e.g., clicking clear button if ghost pointer is in the way prevents button from clicking
-	- investigate 'pointer-events: none' CSS
-- polish: make 'clear' button depress when clear event received?
+The tests in question are in _real_time_server_test.js. To run them, run `./jake.sh clean testServer`. Most of the rest of the code has been deleted and so other Jake targets are broken.
 
-Engineering Tasks:
-* Figure out why HttpServer tests are preventing RealTimeServer tests from failing
-- Figure out why 'counts the number of connections' test occasionally doesn't register connection as closed
-- Decide whether or not to keep Socket.IO (or replace it with another tool)
+This turned out to be due to two issues:
 
-- Consider Martin Grandrath's Socket.IO initialization suggestion, E509
-- Re-enable smoke tests' browser version check
+1) Our test would open a Socket.IO connection to the server, wait for the socket to connect on the server, and then close the socket on the client BEFORE the server told the client it was connected. The client would close the socket, never inform the server (because it didn't think the socket had ever connected), and the server-side socket would be left hanging. This would prevent the server from shutting down which would cause the tests to hang.
 
-To Do on current task:
-- Remove code from HttpServer test to figure out what exactly is making the RealTimeServer test pass
-- Reproduce race condition with a minimal spike
-- Check out Matthias Åslund's pull request, E516
+Issue #1 was fixed by modifying the test to wait for tests' createSocket() call to take a callback. The callback would only be called after the client received the "connected" event. By waiting to close the socket on the client until *after* the callback was called, the socket would never be closed on the client before the client knew it was connected.
+
+2) After fixing issue #1, we encountered a new problem. When we called closeSocket(), the tests' afterEach() method would timeout inside of the httpServer.stop() call. We logged the HTTP connect and disconnect events and discovered that, when closeSocket() was called in the test, Socket.IO was opening several HTTP connections to the server (presumably to communicate that the Socket.IO virtual connection should be closed), but one of them wasn't being closed.
+
+We haven't yet resolved this. Current best guess is that it's a bug in Socket.IO.
+
+TO DO:
+* Reproduce issue #1 in a standalone test case and submit to Socket.IO
+* Reproduce issue #2 in a standalone test case
+	* Submit to Socket.IO
+	* Debug Socket.IO to see if this if there's a workaround. (Can we use Engine.IO instead?)
