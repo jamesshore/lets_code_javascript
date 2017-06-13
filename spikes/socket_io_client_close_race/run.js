@@ -4,6 +4,7 @@
 	var clientIo = require("socket.io-client");
 	var http = require("http");
 	var io = require('socket.io');
+	var async = require("async");
 
 	var httpServer;
 	var ioServer;
@@ -13,23 +14,60 @@
 	startServer(function() {
 		console.log("SERVER STARTED");
 
-		var client = clientIo("http://localhost:" + PORT);
+		var connections = {};
+		trackServerSocketIoConnections(connections);
 
-		client.on('connect', function() {
-			client.disconnect();
-			stopServer(function() {
-				console.log("COMPLETE! NODE SHOULD EXIT NOW.");
+		var client = clientIo("http://localhost:" + PORT);
+		// client.on('connect', function() {
+			waitForServerConnectionCount(connections, 1, "didn't connect", function() {
+				client.disconnect();
+				stopServer(function() {
+					console.log("COMPLETE! NODE SHOULD EXIT NOW.");
+				});
 			});
-		});
+		// });
 	});
 
+	function trackServerSocketIoConnections(connections) {
+		ioServer.on("connection", function(socket) {
+			var key = socket.id;
+			console.log("SERVER SOCKET.IO CONNECT", key);
+			connections[key] = socket;
+			socket.on("disconnect", function() {
+				console.log("SERVER SOCKET.IO DISCONNECT", key);
+				delete connections[key];
+			});
+		});
+	}
+
+	function waitForServerConnectionCount(connections, expectedConnections, message, callback) {
+		var TIMEOUT = 1000; // milliseconds
+		var RETRY_PERIOD = 10; // milliseconds
+
+		var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
+		async.retry(retryOptions, function(next) {
+			if (numberOfServerConnections(connections) === expectedConnections) return next();
+			else return next("fail");
+		}, function(err) {
+			if (err) return assert.equal(numberOfServerConnections(connections), expectedConnections, message);
+			else setTimeout(callback, 0);
+		});
+	}
+
+	function numberOfServerConnections(connections) {
+		return Object.keys(connections).length;
+	}
+
 	function startServer(callback) {
+		console.log("starting server");
 		httpServer = http.createServer();
 		ioServer = io(httpServer);
 		httpServer.listen(PORT, callback);
 	};
 
 	function stopServer(callback) {
+		console.log("stopping server");
+
 		httpServer.on("close", function() {
 			console.log("SERVER CLOSED");
 			callback();
