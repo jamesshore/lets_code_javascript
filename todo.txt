@@ -54,10 +54,11 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Prevent tests from sporadically failing
-- Change httpServer.stop() to realTimeServer.stop() in _real_time_server_test.js's afterEach() function
+* Change httpServer.stop() to realTimeServer.stop() in _real_time_server_test.js's afterEach() function
 - Consider Martin Grandrath's Socket.IO initialization suggestion, E509
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-* Add callback to createSocket()
+* Modify http_server.js to not have a stop() function; put it in real_time_server instead
+- Unhack afterEach in _real_time_server_test.js - use realTimeServer.stop()
+- Unhack Server.stop() - use realTimeServer.stop()

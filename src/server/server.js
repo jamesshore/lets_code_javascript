@@ -13,14 +13,14 @@
 		this._httpServer = new HttpServer(contentDir, notFoundPageToServe);
 		this._httpServer.start(portNumber, callback);
 
-		var realTimeServer = new RealTimeServer();
-		realTimeServer.start(this._httpServer.getNodeServer());
+		this._realTimeServer = new RealTimeServer();
+		this._realTimeServer.start(this._httpServer.getNodeServer());
 	};
 
 	Server.prototype.stop = function(callback) {
 		if (this._httpServer === undefined) return callback(new Error("stop() called before server started"));
 
-		this._httpServer.stop(callback);
+		this._realTimeServer._ioServer.close(callback);
 	};
 
 }());

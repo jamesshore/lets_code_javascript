@@ -37,7 +37,7 @@
 
 		afterEach(function(done) {
 			waitForConnectionCount(0, "afterEach() requires all sockets to be closed", function() {
-				httpServer.stop(done);
+				realTimeServer._ioServer.close(done);
 			});
 		});
 
