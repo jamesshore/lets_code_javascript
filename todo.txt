@@ -59,7 +59,5 @@ Engineering Tasks:
 - Re-enable smoke tests' browser version check
 
 To Do on current task:
-* Modify http_server.js to not have a stop() function; put it in real_time_server instead
-- Have HttpServer.stop() fail fast and explain that RealTimeServer.stop instead
-- Unhack afterEach in _real_time_server_test.js - use realTimeServer.stop()
+* Have HttpServer.stop() fail fast and explain that RealTimeServer.stop instead
 - Unhack Server.stop() - use realTimeServer.stop()

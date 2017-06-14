@@ -17,13 +17,24 @@
 	};
 
 	RealTimeServer.prototype.start = function(httpServer) {
-		this._ioServer = io(httpServer);
+		this._httpServer = httpServer;
+		this._ioServer = io(this._httpServer);
 
 		trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 		handleSocketIoEvents(this, this._ioServer);
+
+		this._httpServer.on("close", failFastIfHttpServerClosed);
 	};
 
+	function failFastIfHttpServerClosed() {
+		throw new Error(
+			"Do not call httpServer.stop() when using RealTimeServer--it will trigger this bug: " +
+			"https://github.com/socketio/socket.io/issues/2975"
+		);
+	}
+
 	RealTimeServer.prototype.stop = function(callback) {
+		this._httpServer.removeListener("close", failFastIfHttpServerClosed);
 		this._ioServer.close(callback);
 	};
 
