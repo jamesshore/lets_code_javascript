@@ -195,8 +195,10 @@
 		}
 
 		function closeSocket(socket, callback) {
+			socket.on("disconnect", function() {
+				return callback();
+			});
 			socket.disconnect();
-			callback();
 		}
 
 	});
