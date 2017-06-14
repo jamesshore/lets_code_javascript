@@ -32,11 +32,13 @@
 			client.once("disconnect", function() {
 				console.log("** waiting for server to disconnect");
 				serverSocket.once("disconnect", function() {
-					console.log("#### Does the client think it's connected? (Expect 'false'):", client.connected);
-					console.log("#### How many connections does the server have? (Expect 0):", numberOfServerConnections(connections));
-					stopServer(function() {
-						console.log("** end of test")
-					});
+
+					// console.log("** waiting to stop server");    // uncommenting this timeout prevents hang
+					// setTimeout(function() {
+						stopServer(function() {
+							console.log("** end of test, Node.js should now exit")
+						});
+					// }, 500);
 				});
 			});
 			client.disconnect();
@@ -76,10 +78,6 @@
 		});
 	}
 
-	function numberOfServerConnections(connections) {
-		return Object.keys(connections).length;
-	}
-
 	function startServer(callback) {
 		console.log("** starting server");
 		httpServer = http.createServer();
@@ -90,17 +88,10 @@
 	function stopServer(callback) {
 		console.log("** stopping server");
 
-		httpServer.close(function() {
+		httpServer.close(function() {   // using ioServer.close() instead of httpServer.close() prevents hang
 			console.log("SERVER CLOSED");
 			callback();
 		});
-
-		// httpServer.on("close", function() {
-		// 	console.log("SERVER CLOSED");
-		// 	callback();
-		// });
-		//
-		// ioServer.close();
 	};
 
 }());
