@@ -18,9 +18,9 @@
 	};
 
 	Server.prototype.stop = function(callback) {
-		if (this._httpServer === undefined) return callback(new Error("stop() called before server started"));
+		if (this._realTimeServer === undefined) return callback(new Error("stop() called before server started"));
 
-		this._realTimeServer._ioServer.close(callback);
+		this._realTimeServer.stop(callback);
 	};
 
 }());
