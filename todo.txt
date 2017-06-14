@@ -17,8 +17,6 @@ Issue #1 was fixed by modifying the test to wait for tests' createSocket() call 
 We haven't yet resolved this. Current best guess is that it's a bug in Socket.IO.
 
 TO DO:
-* Reproduce issue #1 in a standalone test case and submit to Socket.IO
-	* Why does our spike succeed when our test fails?
-- Reproduce issue #2 in a standalone test case
+* Reproduce issue #2 in a standalone test case
 	- Submit to Socket.IO
 	- Debug Socket.IO to see if this if there's a workaround. (Can we use Engine.IO instead?)

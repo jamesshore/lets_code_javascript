@@ -3,9 +3,7 @@
 
 	var clientIo = require("socket.io-client");
 	var http = require("http");
-	var io = require('socket.io');
-	var async = require("async");
-
+	var io = require("socket.io");
 
 	var httpServer;
 	var ioServer;
@@ -16,50 +14,46 @@
 		console.log("SERVER STARTED");
 
 		var connections = {};
-		trackServerSocketIoConnections(connections);
+		logAndTrackServerConnections(connections);
 
+		console.log("** connecting client");
 		var client = clientIo("http://localhost:" + PORT);
-		client.on('connect', function() {
-			console.log("CLIENT CONNECTED");
-		});
-		waitForServerConnectionCount(connections, 1, "didn't connect", function() {
+		logClientConnections(client);
+
+		ioServer.once("connect", function() {
+			console.log("** disconnecting client");
 			client.disconnect();
-			waitForServerConnectionCount(connections, 0, "didn't close connection", function() {
+			console.log("** waiting for server to disconnect");
+			setTimeout(function() {
+				console.log("#### Does the client think it's connected? (Expect 'false'):", client.connected);
+				console.log("#### How many connections does the server have? (Expect 0):", numberOfServerConnections(connections));
 				stopServer(function() {
-					console.log("COMPLETE! NODE SHOULD EXIT NOW.");
+					console.log("** end of test")
 				});
-			});
+			}, 500);
 		});
 	});
 
-	function trackServerSocketIoConnections(connections) {
-		ioServer.on("connection", function(socket) {
+	function logAndTrackServerConnections(connections) {
+		ioServer.on("connect", function(socket) {
 			var key = socket.id;
-			console.log("SERVER SOCKET.IO CONNECT", key);
+			console.log("SERVER CONNECTED", key);
 			connections[key] = socket;
 			socket.on("disconnect", function() {
-				console.log("SERVER SOCKET.IO DISCONNECT", key);
+				console.log("SERVER DISCONNECTED", key);
 				delete connections[key];
 			});
 		});
 	}
 
-	function waitForServerConnectionCount(connections, expectedConnections, message, callback) {
-		var TIMEOUT = 1000; // milliseconds
-		var RETRY_PERIOD = 0.1; // milliseconds
-
-		var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
-		async.retry(retryOptions, function(next) {
-			if (numberOfServerConnections(connections) === expectedConnections) return next();
-			else return next("fail");
-		}, function(err) {
-			var numConnections = numberOfServerConnections(connections);
-			if (err && (numConnections !== expectedConnections)) {
-				throw new Error(message + ": expected " + expectedConnections + " connections, but was " + numConnections);
-			}
-			else {
-				setTimeout(callback, 0);
-			}
+	function logClientConnections(socket) {
+		var id;
+		socket.on("connect", function() {
+			id = socket.id;
+			console.log("CLIENT CONNECTED", id);
+		});
+		socket.on("disconnect", function() {
+			console.log("CLIENT DISCONNECTED", id);
 		});
 	}
 
@@ -68,14 +62,14 @@
 	}
 
 	function startServer(callback) {
-		console.log("starting server");
+		console.log("** starting server");
 		httpServer = http.createServer();
 		ioServer = io(httpServer);
 		httpServer.listen(PORT, callback);
 	};
 
 	function stopServer(callback) {
-		console.log("stopping server");
+		console.log("** stopping server");
 
 		httpServer.on("close", function() {
 			console.log("SERVER CLOSED");
