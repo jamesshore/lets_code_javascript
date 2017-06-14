@@ -44,11 +44,12 @@
 		it("counts the number of connections", function(done) {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
-			var socket = createSocket();
-			waitForConnectionCount(1, "after opening connection", function() {
-				assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
-				closeSocket(socket, function() {
-					waitForConnectionCount(0, "after closing connection", done);
+			var socket = createSocket(function() {
+				waitForConnectionCount(1, "after opening connection", function() {
+					assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
+					closeSocket(socket, function() {
+						waitForConnectionCount(0, "after closing connection", done);
+					});
 				});
 			});
 		});
@@ -167,8 +168,18 @@
 			});
 		}
 
-		function createSocket() {
-			return io("http://localhost:" + PORT);
+		function createSocket(callback) {
+			// If the socket will be closed immediately after creation, must use the callback to prevent a
+			// race condition bug in Socket.IO. Otherwise, there will be situations where the client will think
+			// the socket is closed, but it remains open. See https://github.com/socketio/socket.io-client/issues/1133
+
+			var socket = io("http://localhost:" + PORT);
+			if (callback) {
+				socket.on("connect", function() {
+					return callback(socket);
+				});
+			}
+			return socket;
 		}
 
 		function closeSocket(socket, callback) {
