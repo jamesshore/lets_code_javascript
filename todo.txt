@@ -14,9 +14,4 @@ Issue #1 was fixed by modifying the test to wait for tests' createSocket() call 
 
 2) After fixing issue #1, we encountered a new problem. When we called closeSocket(), the tests' afterEach() method would timeout inside of the httpServer.stop() call. We logged the HTTP connect and disconnect events and discovered that, when closeSocket() was called in the test, Socket.IO was opening several HTTP connections to the server (presumably to communicate that the Socket.IO virtual connection should be closed), but one of them wasn't being closed.
 
-We haven't yet resolved this. Current best guess is that it's a bug in Socket.IO.
-
-TO DO:
-* Reproduce issue #2 in a standalone test case
-	- Submit to Socket.IO
-	- Debug Socket.IO to see if this if there's a workaround. (Can we use Engine.IO instead?)
+This issue can be fixed by calling stop() on the Socket.IO server rather than on the HTTP server.
