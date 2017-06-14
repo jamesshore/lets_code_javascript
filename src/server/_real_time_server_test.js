@@ -37,7 +37,19 @@
 
 		afterEach(function(done) {
 			waitForConnectionCount(0, "afterEach() requires all sockets to be closed", function() {
-				realTimeServer._ioServer.close(done);
+				realTimeServer.stop(done);
+			});
+		});
+
+		it("shuts down cleanly despite Socket.IO race condition bug", function(done) {
+			// Socket.IO has an issue where calling close() on the HTTP server fails if it's done too
+			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
+			// Here we make sure that we can shut down cleanly.
+			var socket = createSocket(function() {
+				closeSocket(socket, function() {
+					// if the bug occurs, the afterEach() function will time out
+					done();
+				});
 			});
 		});
 

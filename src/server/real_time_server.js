@@ -23,6 +23,10 @@
 		handleSocketIoEvents(this, this._ioServer);
 	};
 
+	RealTimeServer.prototype.stop = function(callback) {
+		this._ioServer.close(callback);
+	};
+
 	RealTimeServer.prototype.handleClientEvent = function(clientEvent, clientId) {
 		var serverEvent = processClientEvent(this, clientEvent, clientId);
 		this._ioServer.emit(serverEvent.name(), serverEvent.toSerializableObject());
