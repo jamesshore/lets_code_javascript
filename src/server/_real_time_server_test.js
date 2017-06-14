@@ -29,7 +29,12 @@
 
 		afterEach(function(done) {
 			waitForConnectionCount(0, "afterEach() requires all sockets to be closed", function() {
-				httpServer.stop(done);
+				// httpServer.stop(done);
+
+				// httpServer._httpServer.on("close", function() {
+				// 	done();
+				// });
+				realTimeServer._ioServer.close(done);
 			});
 		});
 
@@ -63,9 +68,9 @@
 		function createSocket(callback) {
 			console.log("createSocket()");
 			var socket = io("http://localhost:" + PORT);
-			return callback(socket);
 			socket.on("connect", function() {
 				console.log("CLIENT SOCKET.IO CONNECT", socket.id);
+				return callback(socket);
 			});
 		}
 
