@@ -1,5 +1,98 @@
 # Change Log
 
+## [Unreleased](https://github.com/shelljs/shelljs/tree/HEAD)
+
+[Full Changelog](https://github.com/shelljs/shelljs/compare/v0.7.7...HEAD)
+
+**Closed issues:**
+
+- Add node v8 to CI [\#729](https://github.com/shelljs/shelljs/issues/729)
+- Exec not working in Electron ! [\#726](https://github.com/shelljs/shelljs/issues/726)
+- is rechoir used anywhere? [\#723](https://github.com/shelljs/shelljs/issues/723)
+- ShellJS: internal error on shelljs.mkdir\('myFile/myDir'\) [\#720](https://github.com/shelljs/shelljs/issues/720)
+- Can't make sed perform global replace [\#719](https://github.com/shelljs/shelljs/issues/719)
+- grep: option not recognized: l [\#717](https://github.com/shelljs/shelljs/issues/717)
+- Problems getting code, stdout, stderr [\#715](https://github.com/shelljs/shelljs/issues/715)
+- Copying hidden files fails on Windows 10 [\#711](https://github.com/shelljs/shelljs/issues/711)
+- How am I suppose to handle errors with ShellJS? [\#707](https://github.com/shelljs/shelljs/issues/707)
+- use cp\('-r', './src', './dist'\) bug [\#705](https://github.com/shelljs/shelljs/issues/705)
+- Way to ignore files in globs. [\#699](https://github.com/shelljs/shelljs/issues/699)
+- Buffer constructor is deprecated [\#694](https://github.com/shelljs/shelljs/issues/694)
+- source command not working via exec method. [\#693](https://github.com/shelljs/shelljs/issues/693)
+- Would you be interested in a PR for `open`? [\#692](https://github.com/shelljs/shelljs/issues/692)
+- Get rid of common.platform in favor of process.platform [\#670](https://github.com/shelljs/shelljs/issues/670)
+- Passing empty string to cp throws internal error [\#664](https://github.com/shelljs/shelljs/issues/664)
+- Why does sed split files into an array, call replace on each line and rejoin? [\#645](https://github.com/shelljs/shelljs/issues/645)
+- feat: cp & mv should not overwrite recently created files [\#631](https://github.com/shelljs/shelljs/issues/631)
+- Echo tests unnecessarily run tests in own process [\#622](https://github.com/shelljs/shelljs/issues/622)
+- rm -rf on a symbolic link to a dir deletes its contents [\#587](https://github.com/shelljs/shelljs/issues/587)
+- "Cannot extract package" with node-webkit [\#181](https://github.com/shelljs/shelljs/issues/181)
+- EBADF, bad file descriptor [\#180](https://github.com/shelljs/shelljs/issues/180)
+
+**Merged pull requests:**
+
+- Add node 8 to CI [\#730](https://github.com/shelljs/shelljs/pull/730) ([freitagbr](https://github.com/freitagbr))
+- Deprecate common.getUserHome, advise using os.homedir instead [\#725](https://github.com/shelljs/shelljs/pull/725) ([freitagbr](https://github.com/freitagbr))
+- fix\(mkdir\): improve error handling around files [\#721](https://github.com/shelljs/shelljs/pull/721) ([nfischer](https://github.com/nfischer))
+- Properly handle directories as arguments [\#713](https://github.com/shelljs/shelljs/pull/713) ([nfischer](https://github.com/nfischer))
+- Add common.buffer [\#710](https://github.com/shelljs/shelljs/pull/710) ([freitagbr](https://github.com/freitagbr))
+- Fix common.expand error [\#709](https://github.com/shelljs/shelljs/pull/709) ([freitagbr](https://github.com/freitagbr))
+- Echo test mocks [\#708](https://github.com/shelljs/shelljs/pull/708) ([freitagbr](https://github.com/freitagbr))
+- refactor: remove unnecessary common.js imports [\#703](https://github.com/shelljs/shelljs/pull/703) ([nfischer](https://github.com/nfischer))
+- Fix \#631 throw error when overwriting recently created file [\#702](https://github.com/shelljs/shelljs/pull/702) ([uttpal](https://github.com/uttpal))
+- Small clarification of verbose flag [\#691](https://github.com/shelljs/shelljs/pull/691) ([zommerfelds](https://github.com/zommerfelds))
+- fix\(grep, sed, sort, uniq\): Split only on newline characters [\#690](https://github.com/shelljs/shelljs/pull/690) ([freitagbr](https://github.com/freitagbr))
+- Refactor: Use process.platform across codebase [\#689](https://github.com/shelljs/shelljs/pull/689) ([freitagbr](https://github.com/freitagbr))
+- Remove contents of symlink to dir with rm -rf [\#688](https://github.com/shelljs/shelljs/pull/688) ([freitagbr](https://github.com/freitagbr))
+- Echo stdout [\#677](https://github.com/shelljs/shelljs/pull/677) ([nfischer](https://github.com/nfischer))
+
+## [v0.7.7](https://github.com/shelljs/shelljs/tree/v0.7.7) (2017-03-09)
+[Full Changelog](https://github.com/shelljs/shelljs/compare/v0.7.6...v0.7.7)
+
+**Closed issues:**
+
+- Error output should be consistent across all platforms. [\#681](https://github.com/shelljs/shelljs/issues/681)
+- \*CRITICAL data loss\* shell.cp\(\) Content of file is erased when trying to copy it to the folder it already belongs to [\#678](https://github.com/shelljs/shelljs/issues/678)
+- Use with webpack broken in 0.7.6 [\#667](https://github.com/shelljs/shelljs/issues/667)
+- Difference between bash ls -R and ShellJS ls -R with symlinks [\#666](https://github.com/shelljs/shelljs/issues/666)
+- Refactor which\(\) \(too many repeated code blocks\) [\#656](https://github.com/shelljs/shelljs/issues/656)
+- find\(\) raises error when unable to find any files matching, expected to return empty array. [\#653](https://github.com/shelljs/shelljs/issues/653)
+- Drop support for v0.12 [\#647](https://github.com/shelljs/shelljs/issues/647)
+- Reformat the markdown in RELEASE.md [\#642](https://github.com/shelljs/shelljs/issues/642)
+- rm -rf doesn't work if the directory contains an asar archive in Electron [\#618](https://github.com/shelljs/shelljs/issues/618)
+- Add support for other file types in rm [\#617](https://github.com/shelljs/shelljs/issues/617)
+- Feature request: ls -L option [\#563](https://github.com/shelljs/shelljs/issues/563)
+- How to send SIGINT signal to child process launched with exec [\#518](https://github.com/shelljs/shelljs/issues/518)
+- exec doesnt seem to be working [\#480](https://github.com/shelljs/shelljs/issues/480)
+- feature request: option to add node\_modules to the path for shelljs scripts [\#469](https://github.com/shelljs/shelljs/issues/469)
+- high cpu usage during synchronous exec [\#167](https://github.com/shelljs/shelljs/issues/167)
+
+**Merged pull requests:**
+
+- Add support for removing fifos [\#687](https://github.com/shelljs/shelljs/pull/687) ([freitagbr](https://github.com/freitagbr))
+- chore: add codecov script to appveyor CI [\#686](https://github.com/shelljs/shelljs/pull/686) ([nfischer](https://github.com/nfischer))
+- Refactor tests to improve readability [\#685](https://github.com/shelljs/shelljs/pull/685) ([nfischer](https://github.com/nfischer))
+- fix: convert error output to be consistent cross-platform [\#684](https://github.com/shelljs/shelljs/pull/684) ([nfischer](https://github.com/nfischer))
+- chore: add codecov [\#682](https://github.com/shelljs/shelljs/pull/682) ([nfischer](https://github.com/nfischer))
+- Fix cp overwriting identical files [\#679](https://github.com/shelljs/shelljs/pull/679) ([freitagbr](https://github.com/freitagbr))
+- Modified glob pattern. Fixes \#666 [\#676](https://github.com/shelljs/shelljs/pull/676) ([frandiox](https://github.com/frandiox))
+- refactor\(parseOptions\): better handle errors [\#674](https://github.com/shelljs/shelljs/pull/674) ([nfischer](https://github.com/nfischer))
+- test: add misc. tests to improve coverage [\#673](https://github.com/shelljs/shelljs/pull/673) ([nfischer](https://github.com/nfischer))
+- test: don't count hard-to-test lines for coverage [\#672](https://github.com/shelljs/shelljs/pull/672) ([nfischer](https://github.com/nfischer))
+- fix: switch commands.json -\> commands.js [\#668](https://github.com/shelljs/shelljs/pull/668) ([nfischer](https://github.com/nfischer))
+- ls -L \(follow symlinks\) [\#665](https://github.com/shelljs/shelljs/pull/665) ([frandiox](https://github.com/frandiox))
+- docs\(chmod\): document `options` argument [\#663](https://github.com/shelljs/shelljs/pull/663) ([gkalpak](https://github.com/gkalpak))
+- docs: clean up RELEASE.md [\#662](https://github.com/shelljs/shelljs/pull/662) ([nfischer](https://github.com/nfischer))
+- docs: miscellaneous README changes [\#661](https://github.com/shelljs/shelljs/pull/661) ([nfischer](https://github.com/nfischer))
+- Fix typo in README [\#660](https://github.com/shelljs/shelljs/pull/660) ([faheel](https://github.com/faheel))
+- refactor: reduce repeated code in which\(\) [\#659](https://github.com/shelljs/shelljs/pull/659) ([nfischer](https://github.com/nfischer))
+- feature: add -a option for which command [\#655](https://github.com/shelljs/shelljs/pull/655) ([termosa](https://github.com/termosa))
+- Fix find ENOENT [\#654](https://github.com/shelljs/shelljs/pull/654) ([freitagbr](https://github.com/freitagbr))
+- Safely exit by throwing an error [\#649](https://github.com/shelljs/shelljs/pull/649) ([freitagbr](https://github.com/freitagbr))
+- Chore drop 0.12 [\#648](https://github.com/shelljs/shelljs/pull/648) ([nfischer](https://github.com/nfischer))
+- chore\(lint\): Enforce a trailing comma for multi-line [\#646](https://github.com/shelljs/shelljs/pull/646) ([nfischer](https://github.com/nfischer))
+- docs\(release\): use bulleted list [\#643](https://github.com/shelljs/shelljs/pull/643) ([freitagbr](https://github.com/freitagbr))
+
 ## [v0.7.6](https://github.com/shelljs/shelljs/tree/v0.7.6) (2017-01-08)
 [Full Changelog](https://github.com/shelljs/shelljs/compare/v0.7.5...v0.7.6)
 
@@ -553,8 +646,8 @@
 
 **Merged pull requests:**
 
-- Addition of a toEnd\(\) function modeled after the Unix \>\> pipe. [\#78](https://github.com/shelljs/shelljs/pull/78) ([andreweduffy](https://github.com/andreweduffy))
-- Added appendTo\(\) function to imitate '\>\>' redirect-and-append pipe. [\#75](https://github.com/shelljs/shelljs/pull/75) ([andreweduffy](https://github.com/andreweduffy))
+- Addition of a toEnd\(\) function modeled after the Unix \>\> pipe. [\#78](https://github.com/shelljs/shelljs/pull/78) ([a10y](https://github.com/a10y))
+- Added appendTo\(\) function to imitate '\>\>' redirect-and-append pipe. [\#75](https://github.com/shelljs/shelljs/pull/75) ([a10y](https://github.com/a10y))
 - Fix a small typo in README.md [\#71](https://github.com/shelljs/shelljs/pull/71) ([asmblah](https://github.com/asmblah))
 - adding an `.npmignore` file [\#70](https://github.com/shelljs/shelljs/pull/70) ([stephenmathieson](https://github.com/stephenmathieson))
 - tempdir: use `os.tmpDir` when possible [\#67](https://github.com/shelljs/shelljs/pull/67) ([stephenmathieson](https://github.com/stephenmathieson))
