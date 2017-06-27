@@ -19,3 +19,6 @@ node_modules/fsevents/
 # Socket.IO
 node_modules/uws/build/
 node_modules/uws/build_log.txt
+
+# uws
+node_modules/uws/uws_darwin_57.node
