@@ -88,15 +88,15 @@
 		it("runs callback when stop completes", function(done) {
 			var server = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 			server.start(PORT).then(() => {
-				server.stop(function() {
-					done();
-				});
+				server.stop().then(done);
 			});
 		});
 
 		it("stop() provides error parameter if the server isn't running", function(done) {
 			var server = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			server.stop(function(err) {
+			server.stop().then(() => {
+				assert.fail("stop should not have succeeded");
+			}).catch((err) => {
 				assert.defined(err);
 				done();
 			});
@@ -117,7 +117,7 @@
 						console.log("ERROR", err);
 					});
 					response.on("end", function() {
-						server.stop(function() {
+						server.stop().then(function() {
 							callback(response, receivedData);
 						});
 					});

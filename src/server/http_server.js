@@ -14,12 +14,13 @@
 	};
 
 	HttpServer.prototype.start = function(portNumber) {
-		var listen = util.promisify(this._httpServer.listen.bind(this._httpServer));
+		const listen = util.promisify(this._httpServer.listen.bind(this._httpServer));
 		return listen(portNumber);
 	};
 
-	HttpServer.prototype.stop = function(callback) {
-		this._httpServer.close(callback);
+	HttpServer.prototype.stop = function() {
+		const close = util.promisify(this._httpServer.close.bind(this._httpServer));
+		return close();
 	};
 
 	HttpServer.prototype.getNodeServer = function() {
