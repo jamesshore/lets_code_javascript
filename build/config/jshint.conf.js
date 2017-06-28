@@ -18,6 +18,7 @@
 		strict: true,
 		trailing: true,
 		node: true,
+		esversion: 6,
 		browser: true
 	};
 

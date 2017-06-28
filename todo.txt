@@ -55,6 +55,7 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Update our RealTimeServerTest to use promises
+- Migrate from JSHint to ESLint for async/await
 - Update RealTimeServerTest promises to use async/await
 - Go into RealTimeServerTest's dependencies and update them to use promises & async/await as well
 - OFF CAMERA: Re-enable smoke tests' browser version check
