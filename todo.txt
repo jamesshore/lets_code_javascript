@@ -59,6 +59,7 @@ Engineering Tasks:
 - Migrate from JSHint to ESLint for async/await
 - Update RealTimeServerTest promises to use async/await
 - Go into RealTimeServerTest's dependencies and update them to use promises & async/await as well
+- Convert to ES6 class syntax?
 - OFF CAMERA: Re-enable smoke tests' browser version check
 
 To Do on current task:

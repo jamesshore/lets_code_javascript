@@ -8,6 +8,7 @@
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
 	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 	var EventRepository = require("./event_repository.js");
+	var util = require("util");
 
 	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
@@ -36,9 +37,11 @@
 		);
 	}
 
-	RealTimeServer.prototype.stop = function(callback) {
+	RealTimeServer.prototype.stop = function() {
+		const close = util.promisify(this._ioServer.close.bind(this._ioServer));
+
 		this._httpServer.removeListener("close", failFastIfHttpServerClosed);
-		this._ioServer.close(callback);
+		return close();
 	};
 
 	RealTimeServer.prototype.handleClientEvent = function(clientEvent, clientId) {

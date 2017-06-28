@@ -20,7 +20,7 @@
 	Server.prototype.stop = function(callback) {
 		if (this._realTimeServer === undefined) return callback(new Error("stop() called before server started"));
 
-		this._realTimeServer.stop(callback);
+		this._realTimeServer.stop().then(callback);
 	};
 
 }());
