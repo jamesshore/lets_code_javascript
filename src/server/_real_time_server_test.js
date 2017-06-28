@@ -199,6 +199,14 @@
 				return callback();
 			});
 			socket.disconnect();
+
+			var closePromise = new Promise(function(resolve, reject) {
+				socket.on("disconnect", function() {
+					return resolve();
+				});
+				socket.disconnect();
+			});
+			return closePromise;
 		}
 
 	});
