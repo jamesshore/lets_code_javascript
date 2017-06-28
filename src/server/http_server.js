@@ -5,6 +5,7 @@
 	var http = require("http");
 	var fs = require("fs");
 	var send = require("send");
+	var util = require("util");
 
 	var HttpServer = module.exports = function HttpServer(contentDir, notFoundPageToServe) {
 		this._httpServer = http.createServer();
@@ -12,8 +13,9 @@
 		handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
 	};
 
-	HttpServer.prototype.start = function(portNumber, callback) {
-		this._httpServer.listen(portNumber, callback);
+	HttpServer.prototype.start = function(portNumber) {
+		var listen = util.promisify(this._httpServer.listen.bind(this._httpServer));
+		return listen(portNumber);
 	};
 
 	HttpServer.prototype.stop = function(callback) {

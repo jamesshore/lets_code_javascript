@@ -32,7 +32,7 @@
 			realTimeServer = new RealTimeServer();
 
 			realTimeServer.start(httpServer.getNodeServer());
-			httpServer.start(PORT, done);
+			httpServer.start(PORT).then(done);
 		});
 
 		afterEach(function(done) {

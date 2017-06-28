@@ -11,7 +11,7 @@
 		if (!portNumber) throw "port number is required";
 		
 		this._httpServer = new HttpServer(contentDir, notFoundPageToServe);
-		this._httpServer.start(portNumber, callback);
+		this._httpServer.start(portNumber).then(callback);
 
 		this._realTimeServer = new RealTimeServer();
 		this._realTimeServer.start(this._httpServer.getNodeServer());

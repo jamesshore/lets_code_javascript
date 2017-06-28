@@ -87,9 +87,10 @@
 
 		it("runs callback when stop completes", function(done) {
 			var server = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			server.start(PORT);
-			server.stop(function() {
-				done();
+			server.start(PORT).then(() => {
+				server.stop(function() {
+					done();
+				});
 			});
 		});
 
@@ -104,7 +105,7 @@
 		function httpGet(url, callback) {
 			var server = new HttpServer(CONTENT_DIR, NOT_FOUND_PAGE);
 
-			server.start(PORT, function() {
+			server.start(PORT).then(function() {
 				http.get(url, function(response) {
 					var receivedData = "";
 					response.setEncoding("utf8");
