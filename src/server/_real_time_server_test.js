@@ -45,16 +45,16 @@
 			// Socket.IO has an issue where calling close() on the HTTP server fails if it's done too
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
 			// Here we make sure that we can shut down cleanly.
-			var socket = createSocket(function() {
+			createSocket().then(function(socket) {
 				// if the bug occurs, the afterEach() function will time out
-				closeSocket(socket).then(done);
-			});
+				return closeSocket(socket);
+			}).then(done);
 		});
 
 		it("counts the number of connections", function(done) {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
-			var socket = createSocket(function() {
+			createSocket().then(function(socket) {
 				waitForConnectionCount(1, "after opening connection", function() {
 					assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
 					closeSocket(socket).then(function() {
@@ -84,27 +84,30 @@
 			var clientEvent = new ClientPointerEvent(100, 200);
 			var EMITTER_ID = "emitter_id";
 
-			var receiver1 = createSocket();
-			var receiver2 = createSocket();
+			createSocket().then(function(receiver1) {
+				return createSocket().then(function(receiver2) {
 
-			async.each([receiver1, receiver2], function(client, next) {
-				client.on(ServerPointerEvent.EVENT_NAME, function(data) {
-					try {
-						assert.deepEqual(data, clientEvent.toServerEvent(EMITTER_ID).toSerializableObject());
+					async.each([receiver1, receiver2], function(client, next) {
+						client.on(ServerPointerEvent.EVENT_NAME, function(data) {
+							try {
+								assert.deepEqual(data, clientEvent.toServerEvent(EMITTER_ID).toSerializableObject());
+							}
+							finally {
+								next();
+							}
+						});
+					}, end);
+
+					realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
+
+					function end() {
+						closeSocket(receiver1).then(function() {
+							return closeSocket(receiver2);
+						}).then(done);
 					}
-					finally {
-						next();
-					}
+
 				});
-			}, end);
-
-			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
-
-			function end() {
-				closeSocket(receiver1).then(function() {
-					return closeSocket(receiver2);
-				}).then(done);
-			}
+			});
 		});
 
 		it("replays all previous events when client connects", function(done) {
@@ -119,55 +122,60 @@
 			realTimeServer.handleClientEvent(event3, IRRELEVANT_ID);
 
 			var replayedEvents = [];
-			var client = createSocket();
+			createSocket().then(function(client) {
 
-			client.on(ServerDrawEvent.EVENT_NAME, function(event) {
-				replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
-				if (replayedEvents.length === 3) {
-					try {
-						// if we don't get the events, the test will time out
-						assert.deepEqual(replayedEvents, [
-							event1.toServerEvent(),
-							event2.toServerEvent(),
-							event3.toServerEvent()
-						]);
+				client.on(ServerDrawEvent.EVENT_NAME, function(event) {
+					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
+					if (replayedEvents.length === 3) {
+						try {
+							// if we don't get the events, the test will time out
+							assert.deepEqual(replayedEvents, [
+								event1.toServerEvent(),
+								event2.toServerEvent(),
+								event3.toServerEvent()
+							]);
+						}
+						finally {
+							closeSocket(client).then(done);
+						}
 					}
-					finally {
-						closeSocket(client).then(done);
-					}
-				}
+				});
+
 			});
 		});
 
 		function checkEventReflection(clientEvent, serverEventConstructor, done) {
-			var emitter = createSocket();
-			var receiver1 = createSocket();
-			var receiver2 = createSocket();
+			createSocket().then(function(emitter) {
+				createSocket().then(function(receiver1) {
+					createSocket().then(function(receiver2) {
 
-			emitter.on(serverEventConstructor.EVENT_NAME, function() {
-				assert.fail("emitter should not receive its own events");
-			});
+						emitter.on(serverEventConstructor.EVENT_NAME, function() {
+							assert.fail("emitter should not receive its own events");
+						});
 
-			async.each([receiver1, receiver2], function(client, next) {
-				client.on(serverEventConstructor.EVENT_NAME, function(data) {
-					try {
-						assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
-					}
-					finally {
-						next();
-					}
+						async.each([receiver1, receiver2], function(client, next) {
+							client.on(serverEventConstructor.EVENT_NAME, function(data) {
+								try {
+									assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
+								}
+								finally {
+									next();
+								}
+							});
+						}, end);
+
+						emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
+
+						function end() {
+							closeSocket(emitter).then(function() {
+								return closeSocket(receiver1);
+							}).then(function() {
+								return closeSocket(receiver2);
+							}).then(done);
+						}
+					});
 				});
-			}, end);
-
-			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
-
-			function end() {
-				closeSocket(emitter).then(function() {
-					return closeSocket(receiver1);
-				}).then(function() {
-					return closeSocket(receiver2);
-				}).then(done);
-			}
+			});
 		}
 
 		function waitForConnectionCount(expectedConnections, message, callback) {
@@ -195,7 +203,12 @@
 					return callback(socket);
 				});
 			}
-			return socket;
+
+			return new Promise(function(resolve, reject) {
+				socket.on("connect", function() {
+					return resolve(socket);
+				});
+			});
 		}
 
 		function closeSocket(socket) {
