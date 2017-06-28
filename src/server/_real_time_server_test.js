@@ -27,12 +27,12 @@
 		var httpServer;
 		var realTimeServer;
 
-		beforeEach(function(done) {
+		beforeEach(async function() {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 			realTimeServer = new RealTimeServer();
 
 			realTimeServer.start(httpServer.getNodeServer());
-			httpServer.start(PORT).then(done);
+			await httpServer.start(PORT);
 		});
 
 		afterEach(function(done) {
