@@ -60,7 +60,6 @@ Engineering Tasks:
 - OFF CAMERA: Re-enable smoke tests' browser version check
 
 To Do on current task:
-* closeSocket()
 - Get JSHint to work with Promise
 - createSocket()
 - httpServer.start()

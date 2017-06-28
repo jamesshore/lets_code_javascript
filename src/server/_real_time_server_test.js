@@ -46,10 +46,8 @@
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
 			// Here we make sure that we can shut down cleanly.
 			var socket = createSocket(function() {
-				closeSocket(socket, function() {
-					// if the bug occurs, the afterEach() function will time out
-					done();
-				});
+				// if the bug occurs, the afterEach() function will time out
+				closeSocket(socket).then(done);
 			});
 		});
 
@@ -59,7 +57,7 @@
 			var socket = createSocket(function() {
 				waitForConnectionCount(1, "after opening connection", function() {
 					assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
-					closeSocket(socket, function() {
+					closeSocket(socket).then(function() {
 						waitForConnectionCount(0, "after closing connection", done);
 					});
 				});
@@ -103,7 +101,9 @@
 			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
 
 			function end() {
-				async.each([ receiver1, receiver2 ], closeSocket, done);
+				closeSocket(receiver1).then(function() {
+					return closeSocket(receiver2);
+				}).then(done);
 			}
 		});
 
@@ -133,7 +133,7 @@
 						]);
 					}
 					finally {
-						closeSocket(client, done);
+						closeSocket(client).then(done);
 					}
 				}
 			});
@@ -162,7 +162,11 @@
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
 			function end() {
-				async.each([emitter, receiver1, receiver2], closeSocket, done);
+				closeSocket(emitter).then(function() {
+					return closeSocket(receiver1);
+				}).then(function() {
+					return closeSocket(receiver2);
+				}).then(done);
 			}
 		}
 
@@ -194,18 +198,14 @@
 			return socket;
 		}
 
-		function closeSocket(socket, callback) {
-			socket.on("disconnect", function() {
-				return callback();
-			});
-			socket.disconnect();
-
+		function closeSocket(socket) {
 			var closePromise = new Promise(function(resolve, reject) {
 				socket.on("disconnect", function() {
 					return resolve();
 				});
-				socket.disconnect();
 			});
+			socket.disconnect();
+
 			return closePromise;
 		}
 
