@@ -36,7 +36,7 @@
 		});
 
 		afterEach(function(done) {
-			waitForConnectionCount(0, "afterEach() requires all sockets to be closed", function() {
+			waitForConnectionCount(0, "afterEach() requires all sockets to be closed").then(function() {
 				realTimeServer.stop(done);
 			});
 		});
@@ -55,10 +55,10 @@
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
 			createSocket().then(function(socket) {
-				waitForConnectionCount(1, "after opening connection", function() {
+				waitForConnectionCount(1, "after opening connection").then(function() {
 					assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
 					closeSocket(socket).then(function() {
-						waitForConnectionCount(0, "after closing connection", done);
+						waitForConnectionCount(0, "after closing connection").then(done);
 					});
 				});
 			});
@@ -178,18 +178,25 @@
 			});
 		}
 
-		function waitForConnectionCount(expectedConnections, message, callback) {
+		function waitForConnectionCount(expectedConnections, message) {
 			var TIMEOUT = 1000; // milliseconds
 			var RETRY_PERIOD = 10; // milliseconds
 
-			var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
-			async.retry(retryOptions, function(next) {
-				if (realTimeServer.numberOfActiveConnections() === expectedConnections) return next();
-				else return next("fail");
-			}, function(err) {
-				if (err) return assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
-				else setTimeout(callback, 0);
+			var promise = new Promise(function(resolve) {
+				var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
+				async.retry(retryOptions, function(next) {
+					if (realTimeServer.numberOfActiveConnections() === expectedConnections) return next();
+					else return next("fail");
+				}, function(err) {
+					if (err) {
+						return assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
+					}
+					else {
+						setTimeout(resolve, 0);
+					}
+				});
 			});
+			return promise;
 		}
 
 		function createSocket(callback) {
@@ -204,7 +211,7 @@
 				});
 			}
 
-			return new Promise(function(resolve, reject) {
+			return new Promise(function(resolve) {
 				socket.on("connect", function() {
 					return resolve(socket);
 				});
@@ -212,7 +219,7 @@
 		}
 
 		function closeSocket(socket) {
-			var closePromise = new Promise(function(resolve, reject) {
+			var closePromise = new Promise(function(resolve) {
 				socket.on("disconnect", function() {
 					return resolve();
 				});
