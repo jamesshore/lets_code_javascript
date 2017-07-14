@@ -54,8 +54,7 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* OFF CAMERA: Update IDE to support ES7 syntax (=> and async/await)
-- Migrate from JSHint to ESLint for async/await
+* Migrate from JSHint to ESLint for async/await
 - Update RealTimeServerTest promises to use async/await
 - Go into RealTimeServerTest's dependencies and update them to use promises & async/await as well
 - Parallelize RealTimeServerTest's open/close (ref Martin Grandrath, E530 comment)
