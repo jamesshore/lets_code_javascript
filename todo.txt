@@ -62,5 +62,4 @@ Engineering Tasks:
 - OFF CAMERA: Re-enable smoke tests' browser version check
 
 To Do on current task:
-* Fix issues with code
-- Delete jshint.conf.js
+* Delete jshint.conf.js

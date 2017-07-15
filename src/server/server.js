@@ -8,7 +8,7 @@
 	var Server = module.exports = function Server() {};
 
 	Server.prototype.start = function(contentDir, notFoundPageToServe, portNumber, callback) {
-		if (!portNumber) throw "port number is required";
+		if (!portNumber) throw new Error("port number is required");
 		
 		this._httpServer = new HttpServer(contentDir, notFoundPageToServe);
 		this._httpServer.start(portNumber).then(callback);

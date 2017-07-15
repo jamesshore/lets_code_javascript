@@ -13,10 +13,11 @@
 			"browser": true,
 			"node": true,
 			"commonjs": true,
-			"mocha" true
+			"mocha": true
 		},
 
 		"globals": {
+			"Promise": false
 		},
 
 		"rules": {
@@ -55,10 +56,8 @@
 			"no-extend-native": ERROR,
 			"no-fallthrough": ERROR,
 			"no-global-assign": ERROR,
-			"no-implicit-coercion": ERROR,
 			"no-implicit-globals": ERROR,
 			"no-implied-eval": ERROR,
-			"no-invalid-this": ERROR,
 			"no-iterator": ERROR,
 			"no-loop-func": ERROR,
 			"no-octal": ERROR,
@@ -85,7 +84,7 @@
 			"no-delete-var": ERROR,
 			"no-undef": ERROR,
 			"no-undef-init": ERROR,
-			"no-use-before-define": [ ERROR, "nofunc" ],
+			"no-use-before-define": [ ERROR, { "functions": false, "classes": true, "variables": false} ],
 
 			// "Stylistic Issues"
 			"new-cap": ERROR,

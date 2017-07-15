@@ -57,7 +57,7 @@
 
 	exports.fontFamily = function fontFamily(element) {
 		var family = element.getRawStyle("font-family");
-		family = family.replace(/\"/g, '');
+		family = family.replace(/"/g, '');
 
 		var fonts = family.split(",");
 		for (var i = 0; i < fonts.length; i++) {
