@@ -1,5 +1,4 @@
 /* Copyright (c) 2014 Titanium I.T. LLC - See LICENSE.txt for license */
-"use strict";
 
 var fs = require("fs");
 var path = require("path");

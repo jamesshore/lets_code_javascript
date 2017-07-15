@@ -62,7 +62,5 @@ Engineering Tasks:
 - OFF CAMERA: Re-enable smoke tests' browser version check
 
 To Do on current task:
-* Get rid of `globals` parameters in lint_runner.js
-- Decide on ruleset and globals
-- Fix issues with code
+* Fix issues with code
 - Delete jshint.conf.js

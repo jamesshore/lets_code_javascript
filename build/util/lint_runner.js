@@ -5,7 +5,7 @@ let eslint = require("eslint");
 let linter = new (eslint).Linter();
 let fs = require("fs");
 
-exports.validateSource = function(sourceCode, options, globals, description) {
+exports.validateSource = function(sourceCode, options, description) {
 	description = description ? description + " " : "";
 
 	var messages = linter.verify(sourceCode, options);
@@ -25,15 +25,15 @@ exports.validateSource = function(sourceCode, options, globals, description) {
 	return pass;
 };
 
-exports.validateFile = function(filename, options, globals) {
+exports.validateFile = function(filename, options) {
 	var sourceCode = fs.readFileSync(filename, "utf8");
-	return exports.validateSource(sourceCode, options, globals, filename);
+	return exports.validateSource(sourceCode, options, filename);
 };
 
-exports.validateFileList = function(fileList, options, globals) {
+exports.validateFileList = function(fileList, options) {
 	var pass = true;
 	fileList.forEach(function(filename) {
-		pass = exports.validateFile(filename, options, globals) && pass;
+		pass = exports.validateFile(filename, options) && pass;
 	});
 	return pass;
 };
