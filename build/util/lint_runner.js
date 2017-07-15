@@ -1,20 +1,25 @@
 // Copyright (c) 2012 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 "use strict";
 
-var jshint = require("jshint").JSHINT;
-var fs = require("fs");
+let eslint = require("eslint");
+let linter = new (eslint).Linter();
+let fs = require("fs");
 
 exports.validateSource = function(sourceCode, options, globals, description) {
 	description = description ? description + " " : "";
-	var pass = jshint(sourceCode, options, globals);
+
+	var messages = linter.verify(sourceCode, {});
+	var pass = (messages.length === 0);
+
 	if (pass) {
 		process.stdout.write(".");
 	}
 	else {
 		console.log("\n" + description + "failed");
-		jshint.errors.forEach(function(error) {
-			console.log(error.line + ": " + error.evidence.trim());
-			console.log("   " + error.reason);
+		messages.forEach(function(error) {
+			var code = eslint.SourceCode.splitLines(sourceCode)[error.line - 1];
+			console.log(error.line + ": " + code.trim());
+			console.log("   " + error.message);
 		});
 	}
 	return pass;
