@@ -8,7 +8,7 @@ let fs = require("fs");
 exports.validateSource = function(sourceCode, options, globals, description) {
 	description = description ? description + " " : "";
 
-	var messages = linter.verify(sourceCode, {});
+	var messages = linter.verify(sourceCode, options);
 	var pass = (messages.length === 0);
 
 	if (pass) {

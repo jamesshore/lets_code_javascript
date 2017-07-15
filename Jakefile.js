@@ -75,9 +75,9 @@
 
 	rule(".lint", determineLintDependency, function() {
 		var lint = require("./build/util/lint_runner.js");
-		var lintConfig = require("./build/config/jshint.conf.js");
+		var lintConfig = require("./build/config/eslint.conf.js");
 
-		var passed = lint.validateFile(this.source, lintConfig.options, lintConfig.globals);
+		var passed = lint.validateFile(this.source, lintConfig.options);
 		if (passed) fs().writeFileSync(this.name, "lint ok");
 		else fail("Lint failed");
 	});
