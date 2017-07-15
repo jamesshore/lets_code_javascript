@@ -62,3 +62,8 @@ Engineering Tasks:
 - OFF CAMERA: Re-enable smoke tests' browser version check
 
 To Do on current task:
+* Install ESLint
+- Test it on the command line
+- Modify our build infrastructure to use it
+- Decide on ruleset
+- Fix issues with code
