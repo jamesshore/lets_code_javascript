@@ -75,34 +75,30 @@
 			await checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent);
 		});
 
-		it("treats events received via method call exactly like events received via Socket.IO", function(done) {
+		it("treats events received via method call exactly like events received via Socket.IO", async function() {
 			var clientEvent = new ClientPointerEvent(100, 200);
 			var EMITTER_ID = "emitter_id";
 
-			createSocket().then(function(receiver1) {
-				return createSocket().then(function(receiver2) {
+			const [ receiver1, receiver2 ] = await createSockets(2);
 
-					async.each([receiver1, receiver2], function(client, next) {
-						client.on(ServerPointerEvent.EVENT_NAME, function(data) {
-							try {
-								assert.deepEqual(data, clientEvent.toServerEvent(EMITTER_ID).toSerializableObject());
-							}
-							finally {
-								next();
-							}
-						});
-					}, end);
-
-					realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
-
-					function end() {
-						closeSocket(receiver1).then(function() {
-							return closeSocket(receiver2);
-						}).then(done);
-					}
-
+			var listeners = Promise.all([ receiver1, receiver2 ].map(async function(client) {
+				await new Promise((resolve, reject) => {
+					client.on(ServerPointerEvent.EVENT_NAME, function(data) {
+						try {
+							assert.deepEqual(data, clientEvent.toServerEvent(EMITTER_ID).toSerializableObject());
+							resolve();
+						}
+						catch(e) {
+							reject(e);
+						}
+					});
 				});
-			});
+			}));
+
+			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
+
+			await listeners;
+			await closeSockets(receiver1, receiver2);
 		});
 
 		it("replays all previous events when client connects", function(done) {
@@ -142,13 +138,11 @@
 		async function checkEventReflection(clientEvent, serverEventConstructor) {
 			const [ emitter, receiver1, receiver2 ] = await createSockets(3);
 
-			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
-
 			emitter.on(serverEventConstructor.EVENT_NAME, function() {
 				assert.fail("emitter should not receive its own events");
 			});
 
-			await Promise.all([ receiver1, receiver2 ].map(async (client) => {
+			var listenerPromise = Promise.all([ receiver1, receiver2 ].map(async (client) => {
 				await new Promise((resolve) => {
 					client.on(serverEventConstructor.EVENT_NAME, (data) => {
 						try {
@@ -161,6 +155,9 @@
 				});
 			}));
 
+			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
+
+			await listenerPromise;
 			await closeSockets(emitter, receiver1, receiver2);
 		}
 
