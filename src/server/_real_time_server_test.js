@@ -59,20 +59,20 @@
 			await closeSocket(socket);
 		});
 
-		it("broadcasts pointer events from one client to all others", function(done) {
-			checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent, done);
+		it("broadcasts pointer events from one client to all others", async () => {
+			await checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent);
 		});
 
-		it("broadcasts 'remove pointer' events from one client to all others", function(done) {
-			checkEventReflection(new ClientRemovePointerEvent(), ServerRemovePointerEvent, done);
+		it("broadcasts 'remove pointer' events from one client to all others", async () => {
+			await checkEventReflection(new ClientRemovePointerEvent(), ServerRemovePointerEvent);
 		});
 
-		it("broadcasts draw events from one client to all others", function(done) {
-			checkEventReflection(new ClientDrawEvent(100, 200, 300, 400), ServerDrawEvent, done);
+		it("broadcasts draw events from one client to all others", async () => {
+			await checkEventReflection(new ClientDrawEvent(100, 200, 300, 400), ServerDrawEvent);
 		});
 
-		it("broadcasts clear screen events from one client to all others", function(done) {
-			checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent, done);
+		it("broadcasts clear screen events from one client to all others", async () => {
+			await checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent);
 		});
 
 		it("treats events received via method call exactly like events received via Socket.IO", function(done) {
@@ -139,38 +139,41 @@
 			});
 		});
 
-		function checkEventReflection(clientEvent, serverEventConstructor, done) {
-			createSocket().then(function(emitter) {
-				createSocket().then(function(receiver1) {
-					createSocket().then(function(receiver2) {
+		async function checkEventReflection(clientEvent, serverEventConstructor) {
+			var emitter = await createSocket();
+			var receiver1 = await createSocket();
+			var receiver2 = await createSocket();
 
-						emitter.on(serverEventConstructor.EVENT_NAME, function() {
-							assert.fail("emitter should not receive its own events");
-						});
+			emitter.on(serverEventConstructor.EVENT_NAME, function() {
+				assert.fail("emitter should not receive its own events");
+			});
 
-						async.each([receiver1, receiver2], function(client, next) {
-							client.on(serverEventConstructor.EVENT_NAME, function(data) {
-								try {
-									assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
-								}
-								finally {
-									next();
-								}
-							});
-						}, end);
+			var promise = Promise.all([ receiver1, receiver2 ].map((client) => {
+				return listenForEvent(client);
+			})).then(end);
 
-						emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
+			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
-						function end() {
-							return closeSocket(emitter).then(function() {
-								return closeSocket(receiver1);
-							}).then(function() {
-								return closeSocket(receiver2);
-							}).then(done);
+			return promise;
+
+			function listenForEvent(client) {
+				return new Promise((resolve) => {
+					client.on(serverEventConstructor.EVENT_NAME, (data) => {
+						try {
+							assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
+						}
+						finally {
+							resolve();
 						}
 					});
 				});
-			});
+			}
+
+			async function end() {
+				await closeSocket(emitter);
+				await closeSocket(receiver1);
+				await closeSocket(receiver2);
+			}
 		}
 
 		function waitForConnectionCount(expectedConnections, message) {

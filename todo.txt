@@ -63,6 +63,8 @@ Engineering Tasks:
 To Do on current task:
 * RealTimeServerTest
 	* checkEventReflection()
+	- parallel createSocket()?
+	- parallel closeSocket()?
 - RealTimeServer
 - HttpServer
 - Server
