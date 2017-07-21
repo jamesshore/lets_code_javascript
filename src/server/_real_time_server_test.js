@@ -140,9 +140,7 @@
 		});
 
 		async function checkEventReflection(clientEvent, serverEventConstructor) {
-			let emitter = await createSocket();
-			let receiver1 = await createSocket();
-			let receiver2 = await createSocket();
+			const [ emitter, receiver1, receiver2 ] = await createSockets(3);
 
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
@@ -163,9 +161,7 @@
 				});
 			}));
 
-			await closeSocket(emitter);
-			await closeSocket(receiver1);
-			await closeSocket(receiver2);
+			await closeSockets(emitter, receiver1, receiver2);
 		}
 
 		function waitForConnectionCount(expectedConnections, message) {
@@ -189,18 +185,26 @@
 			return promise;
 		}
 
-		function createSocket(callback) {
+		function createSockets(numSockets) {
+			let createPromises = [];
+			for (let i = 0; i < numSockets; i++) {
+				createPromises.push(createSocket());
+			}
+			return Promise.all(createPromises);
+		}
+
+		async function closeSockets(...sockets) {
+			await Promise.all(sockets.map(async (socket) => {
+				await closeSocket(socket);
+			}));
+		}
+
+		function createSocket() {
 			// If the socket will be closed immediately after creation, must use the callback to prevent a
 			// race condition bug in Socket.IO. Otherwise, there will be situations where the client will think
 			// the socket is closed, but it remains open. See https://github.com/socketio/socket.io-client/issues/1133
 
 			var socket = io("http://localhost:" + PORT);
-			if (callback) {
-				socket.on("connect", function() {
-					return callback(socket);
-				});
-			}
-
 			return new Promise(function(resolve) {
 				socket.on("connect", function() {
 					return resolve(socket);
