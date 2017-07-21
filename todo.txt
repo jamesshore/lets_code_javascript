@@ -54,10 +54,17 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Update RealTimeServerTest promises to use async/await
+* Update promise code to use async/await
 - Go into RealTimeServerTest's dependencies and update them to use promises & async/await as well
 - Parallelize RealTimeServerTest's open/close (ref Martin Grandrath, E530 comment)
 - Convert to ES6 class syntax?
 - OFF CAMERA: Re-enable smoke tests' browser version check
 
 To Do on current task:
+* RealTimeServerTest
+	* checkEventReflection()
+- RealTimeServer
+- HttpServer
+- Server
+- HttpServerTest
+- run.js

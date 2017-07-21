@@ -27,7 +27,7 @@
 		var httpServer;
 		var realTimeServer;
 
-		beforeEach(async function() {
+		beforeEach(async () => {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 			realTimeServer = new RealTimeServer();
 
@@ -35,33 +35,28 @@
 			await httpServer.start(PORT);
 		});
 
-		afterEach(function(done) {
-			waitForConnectionCount(0, "afterEach() requires all sockets to be closed").then(function() {
-				realTimeServer.stop().then(done);
-			});
+		afterEach(async () => {
+			await waitForConnectionCount(0, "afterEach() requires all sockets to be closed");
+			await realTimeServer.stop();
 		});
 
-		it("shuts down cleanly this despite Socket.IO race condition bug", function(done) {
+		it("shuts down cleanly this despite Socket.IO race condition bug", async () => {
 			// Socket.IO has an issue where calling close() on the HTTP server fails if it's done too
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
 			// Here we make sure that we can shut down cleanly.
-			createSocket().then(function(socket) {
-				// if the bug occurs, the afterEach() function will time out
-				return closeSocket(socket);
-			}).then(done);
+			var socket = await createSocket();
+			await closeSocket(socket);
 		});
 
-		it("counts the number of connections", function(done) {
+		it("counts the number of connections", async () => {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
-			createSocket().then(function(socket) {
-				waitForConnectionCount(1, "after opening connection").then(function() {
-					assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
-					closeSocket(socket).then(function() {
-						waitForConnectionCount(0, "after closing connection").then(done);
-					});
-				});
-			});
+			var socket = await createSocket();
+			await waitForConnectionCount(1, "after opening connection");
+
+			assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
+
+			await closeSocket(socket);
 		});
 
 		it("broadcasts pointer events from one client to all others", function(done) {
@@ -167,7 +162,7 @@
 						emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
 						function end() {
-							closeSocket(emitter).then(function() {
+							return closeSocket(emitter).then(function() {
 								return closeSocket(receiver1);
 							}).then(function() {
 								return closeSocket(receiver2);
