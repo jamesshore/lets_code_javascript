@@ -140,24 +140,18 @@
 		});
 
 		async function checkEventReflection(clientEvent, serverEventConstructor) {
-			var emitter = await createSocket();
-			var receiver1 = await createSocket();
-			var receiver2 = await createSocket();
+			let emitter = await createSocket();
+			let receiver1 = await createSocket();
+			let receiver2 = await createSocket();
+
+			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
 			emitter.on(serverEventConstructor.EVENT_NAME, function() {
 				assert.fail("emitter should not receive its own events");
 			});
 
-			var promise = Promise.all([ receiver1, receiver2 ].map((client) => {
-				return listenForEvent(client);
-			})).then(end);
-
-			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
-
-			return promise;
-
-			function listenForEvent(client) {
-				return new Promise((resolve) => {
+			await Promise.all([ receiver1, receiver2 ].map(async (client) => {
+				await new Promise((resolve) => {
 					client.on(serverEventConstructor.EVENT_NAME, (data) => {
 						try {
 							assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
@@ -167,13 +161,11 @@
 						}
 					});
 				});
-			}
+			}));
 
-			async function end() {
-				await closeSocket(emitter);
-				await closeSocket(receiver1);
-				await closeSocket(receiver2);
-			}
+			await closeSocket(emitter);
+			await closeSocket(receiver1);
+			await closeSocket(receiver2);
 		}
 
 		function waitForConnectionCount(expectedConnections, message) {
