@@ -44,14 +44,14 @@
 			// Socket.IO has an issue where calling close() on the HTTP server fails if it's done too
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
 			// Here we make sure that we can shut down cleanly.
-			var socket = await createSocket();
+			const socket = await createSocket();
 			await closeSocket(socket);
 		});
 
 		it("counts the number of connections", async () => {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
-			var socket = await createSocket();
+			const socket = await createSocket();
 			await waitForConnectionCount(1, "after opening connection");
 
 			assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
@@ -76,13 +76,13 @@
 		});
 
 		it("treats events received via method call exactly like events received via Socket.IO", async function() {
-			var clientEvent = new ClientPointerEvent(100, 200);
-			var EMITTER_ID = "emitter_id";
+			const clientEvent = new ClientPointerEvent(100, 200);
+			const EMITTER_ID = "emitter_id";
 
 			const [ receiver1, receiver2 ] = await createSockets(2);
 
-			var listeners = Promise.all([ receiver1, receiver2 ].map(async function(client) {
-				await new Promise((resolve, reject) => {
+			const listeners = Promise.all([ receiver1, receiver2 ].map((client) => {
+				return new Promise((resolve, reject) => {
 					client.on(ServerPointerEvent.EVENT_NAME, function(data) {
 						try {
 							assert.deepEqual(data, clientEvent.toServerEvent(EMITTER_ID).toSerializableObject());
@@ -101,20 +101,20 @@
 			await closeSockets(receiver1, receiver2);
 		});
 
-		it("replays all previous events when client connects", function(done) {
-			var IRRELEVANT_ID = "irrelevant";
+		it("replays all previous events when client connects", async function() {
+			const IRRELEVANT_ID = "irrelevant";
 
-			var event1 = new ClientDrawEvent(1, 10, 100, 1000);
-			var event2 = new ClientDrawEvent(2, 20, 200, 2000);
-			var event3 = new ClientDrawEvent(3, 30, 300, 3000);
+			const event1 = new ClientDrawEvent(1, 10, 100, 1000);
+			const event2 = new ClientDrawEvent(2, 20, 200, 2000);
+			const event3 = new ClientDrawEvent(3, 30, 300, 3000);
 
 			realTimeServer.handleClientEvent(event1, IRRELEVANT_ID);
 			realTimeServer.handleClientEvent(event2, IRRELEVANT_ID);
 			realTimeServer.handleClientEvent(event3, IRRELEVANT_ID);
 
-			var replayedEvents = [];
-			createSocket().then(function(client) {
-
+			let replayedEvents = [];
+			const client = await createSocket();
+			await new Promise((resolve, reject) => {
 				client.on(ServerDrawEvent.EVENT_NAME, function(event) {
 					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
 					if (replayedEvents.length === 3) {
@@ -125,14 +125,15 @@
 								event2.toServerEvent(),
 								event3.toServerEvent()
 							]);
+							resolve();
 						}
-						finally {
-							closeSocket(client).then(done);
+						catch(e) {
+							reject(e);
 						}
 					}
 				});
-
 			});
+			await closeSocket(client);
 		});
 
 		async function checkEventReflection(clientEvent, serverEventConstructor) {
@@ -142,8 +143,8 @@
 				assert.fail("emitter should not receive its own events");
 			});
 
-			var listenerPromise = Promise.all([ receiver1, receiver2 ].map(async (client) => {
-				await new Promise((resolve) => {
+			const listenerPromise = Promise.all([ receiver1, receiver2 ].map((client) => {
+				return new Promise((resolve) => {
 					client.on(serverEventConstructor.EVENT_NAME, (data) => {
 						try {
 							assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
@@ -165,7 +166,7 @@
 			var TIMEOUT = 1000; // milliseconds
 			var RETRY_PERIOD = 10; // milliseconds
 
-			var promise = new Promise(function(resolve) {
+			return new Promise(function(resolve) {
 				var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
 				async.retry(retryOptions, function(next) {
 					if (realTimeServer.numberOfActiveConnections() === expectedConnections) return next();
@@ -179,7 +180,6 @@
 					}
 				});
 			});
-			return promise;
 		}
 
 		function createSockets(numSockets) {
