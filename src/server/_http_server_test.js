@@ -85,21 +85,10 @@
 			});
 		});
 
-		it("runs callback when stop completes", function(done) {
-			var server = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			server.start(PORT).then(() => {
-				server.stop().then(done);
-			});
-		});
-
-		it("stop() provides error parameter if the server isn't running", function(done) {
-			var server = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			server.stop().then(() => {
-				assert.fail("stop should not have succeeded");
-			}).catch((err) => {
-				assert.defined(err);
-				done();
-			});
+		it("runs callback when stop completes", async () => {
+			const server = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
+			await server.start(PORT);
+			await server.stop();
 		});
 
 		function httpGet(url, callback) {
