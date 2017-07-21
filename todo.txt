@@ -61,12 +61,7 @@ Engineering Tasks:
 - OFF CAMERA: Re-enable smoke tests' browser version check
 
 To Do on current task:
-* RealTimeServerTest
-	- remove createSocket()?
-	- remove closeSocket()?
-
-- RealTimeServer
-- HttpServer
 - Server
 - HttpServerTest
 - run.js
+- Modify Server.start() and Server.stop() to not take callback
