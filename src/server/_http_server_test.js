@@ -4,7 +4,6 @@
 
 	const HttpServer = require("./http_server.js");
 	const assert = require("_assert");
-	const async = require("async");
 	const http = require("http");
 	const fs = require("fs");
 	const util = require("util");

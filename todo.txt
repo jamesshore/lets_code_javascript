@@ -26,7 +26,6 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* re-sync when user refreshes browser or connects to work in progress
 - make mouse pointer disappear when user disconnects
 - time out inactive users (make their pointers disappear)
 - reconnect and resync when client is disconnected
@@ -54,9 +53,6 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Update promise code to use async/await
-- Convert to ES6 class syntax?
 - OFF CAMERA: Re-enable smoke tests' browser version check
 
 To Do on current task:
-* revise _real_time_server_test.js waitForConnectionCount() to use promises instead of async?

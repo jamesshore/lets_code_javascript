@@ -6,7 +6,6 @@
 	var HttpServer = require("./http_server.js");
 	var http = require("http");
 	var fs = require("fs");
-	var async = require("async");
 	var assert = require("_assert");
 	var io = require("socket.io-client");
 	var ServerPointerEvent = require("../shared/server_pointer_event.js");
@@ -163,24 +162,28 @@
 			await closeSockets(emitter, receiver1, receiver2);
 		}
 
-		function waitForConnectionCount(expectedConnections, message) {
-			var TIMEOUT = 1000; // milliseconds
-			var RETRY_PERIOD = 10; // milliseconds
+		async function waitForConnectionCount(expectedConnections, message) {
+			const TIMEOUT = 1000; // milliseconds
+			const RETRY_PERIOD = 10; // milliseconds
 
-			return new Promise(function(resolve) {
-				var retryOptions = { times: TIMEOUT / RETRY_PERIOD, interval: RETRY_PERIOD };
-				async.retry(retryOptions, function(next) {
-					if (realTimeServer.numberOfActiveConnections() === expectedConnections) return next();
-					else return next("fail");
-				}, function(err) {
-					if (err) {
-						return assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
-					}
-					else {
-						setTimeout(resolve, 0);
-					}
+			var startTime = Date.now();
+			let success = false;
+
+			while(!success && !isTimeUp(TIMEOUT)) {
+				await timeoutPromise(RETRY_PERIOD);
+				success = (expectedConnections === realTimeServer.numberOfActiveConnections());
+			}
+			assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
+
+			function isTimeUp(timeout) {
+				return (startTime + timeout) < Date.now();
+			}
+
+			function timeoutPromise(milliseconds) {
+				return new Promise((resolve) => {
+					setTimeout(resolve, milliseconds);
 				});
-			});
+			}
 		}
 
 		function createSockets(numSockets) {
