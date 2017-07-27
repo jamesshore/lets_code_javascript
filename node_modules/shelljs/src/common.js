@@ -38,6 +38,7 @@ var DEFAULT_CONFIG = {
   silent: false,
   verbose: false,
   execPath: null,
+  bufLength: 64 * 1024, // 64KB
 };
 
 var config = {
@@ -65,9 +66,6 @@ var state = {
 exports.state = state;
 
 delete process.env.OLDPWD; // initially, there's no previous directory
-
-var platform = os.type().match(/^Win/) ? 'win' : 'unix';
-exports.platform = platform;
 
 // This is populated by calls to commonl.wrap()
 var pipeMethods = [];
@@ -260,14 +258,32 @@ function expand(list) {
     if (typeof listEl !== 'string') {
       expanded.push(listEl);
     } else {
-      var ret = glob.sync(listEl, config.globOptions);
-      // if glob fails, interpret the string literally
-      expanded = expanded.concat(ret.length > 0 ? ret : [listEl]);
+      var ret;
+      try {
+        ret = glob.sync(listEl, config.globOptions);
+        // if nothing matched, interpret the string literally
+        ret = ret.length > 0 ? ret : [listEl];
+      } catch (e) {
+        // if glob fails, interpret the string literally
+        ret = [listEl];
+      }
+      expanded = expanded.concat(ret);
     }
   });
   return expanded;
 }
 exports.expand = expand;
+
+// Normalizes Buffer creation, using Buffer.alloc if possible.
+// Also provides a good default buffer length for most use cases.
+var buffer = typeof Buffer.alloc === 'function' ?
+  function (len) {
+    return Buffer.alloc(len || config.bufLength);
+  } :
+  function (len) {
+    return new Buffer(len || config.bufLength);
+  };
+exports.buffer = buffer;
 
 // Normalizes _unlinkSync() across platforms to match Unix behavior, i.e.
 // file can be unlinked even if it's read-only, see https://github.com/joyent/node/issues/3006

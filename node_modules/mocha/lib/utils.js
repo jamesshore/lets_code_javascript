@@ -322,7 +322,9 @@ exports.parseQuery = function (qs) {
     var key = pair.slice(0, i);
     var val = pair.slice(++i);
 
-    obj[key] = decodeURIComponent(val);
+    // Due to how the URLSearchParams API treats spaces
+    obj[key] = decodeURIComponent(val.replace(/\+/g, '%20'));
+
     return obj;
   }, {});
 };
@@ -416,7 +418,7 @@ var type = exports.type = function type (value) {
     return 'buffer';
   }
   return Object.prototype.toString.call(value)
-    .replace(/^\[.+\s(.+?)\]$/, '$1')
+    .replace(/^\[.+\s(.+?)]$/, '$1')
     .toLowerCase();
 };
 
@@ -741,7 +743,9 @@ exports.stackTraceFilter = function () {
   if (is.node) {
     cwd = process.cwd() + slash;
   } else {
-    cwd = (typeof location === 'undefined' ? window.location : location).href.replace(/\/[^\/]*$/, '/');
+    cwd = (typeof location === 'undefined'
+      ? window.location
+      : location).href.replace(/\/[^/]*$/, '/');
     slash = '/';
   }
 

@@ -1,7 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 var common = require('./common');
-var os = require('os');
 
 common.register('cp', _cp, {
   cmdOptions: {
@@ -24,6 +23,8 @@ function copyFileSync(srcFile, destFile, options) {
     common.error('copyFileSync: no such file or directory: ' + srcFile);
   }
 
+  var isWindows = process.platform === 'win32';
+
   // Check the mtimes of the files if the '-u' flag is provided
   try {
     if (options.update && fs.statSync(srcFile).mtime < fs.statSync(destFile).mtime) {
@@ -42,11 +43,11 @@ function copyFileSync(srcFile, destFile, options) {
     }
 
     var symlinkFull = fs.readlinkSync(srcFile);
-    fs.symlinkSync(symlinkFull, destFile, os.platform() === 'win32' ? 'junction' : null);
+    fs.symlinkSync(symlinkFull, destFile, isWindows ? 'junction' : null);
   } else {
-    var BUF_LENGTH = 64 * 1024;
-    var buf = new Buffer(BUF_LENGTH);
-    var bytesRead = BUF_LENGTH;
+    var buf = common.buffer();
+    var bufLength = buf.length;
+    var bytesRead = bufLength;
     var pos = 0;
     var fdr = null;
     var fdw = null;
@@ -65,8 +66,8 @@ function copyFileSync(srcFile, destFile, options) {
       common.error('copyFileSync: could not write to dest file (code=' + e.code + '):' + destFile);
     }
 
-    while (bytesRead === BUF_LENGTH) {
-      bytesRead = fs.readSync(fdr, buf, 0, BUF_LENGTH, pos);
+    while (bytesRead === bufLength) {
+      bytesRead = fs.readSync(fdr, buf, 0, bufLength, pos);
       fs.writeSync(fdw, buf, 0, bytesRead);
       pos += bytesRead;
     }
@@ -93,6 +94,8 @@ function cpdirSyncRecursive(sourceDir, destDir, currentDepth, opts) {
   if (currentDepth >= common.config.maxdepth) return;
   currentDepth++;
 
+  var isWindows = process.platform === 'win32';
+
   // Create the directory where all our junk is moving to; read the mode of the
   // source directory and mirror it
   try {
@@ -116,7 +119,7 @@ function cpdirSyncRecursive(sourceDir, destDir, currentDepth, opts) {
         // Cycle link found.
         console.error('Cycle link found.');
         symlinkFull = fs.readlinkSync(srcFile);
-        fs.symlinkSync(symlinkFull, destFile, os.platform() === 'win32' ? 'junction' : null);
+        fs.symlinkSync(symlinkFull, destFile, isWindows ? 'junction' : null);
         continue;
       }
     }
@@ -131,7 +134,7 @@ function cpdirSyncRecursive(sourceDir, destDir, currentDepth, opts) {
       } catch (e) {
         // it doesn't exist, so no work needs to be done
       }
-      fs.symlinkSync(symlinkFull, destFile, os.platform() === 'win32' ? 'junction' : null);
+      fs.symlinkSync(symlinkFull, destFile, isWindows ? 'junction' : null);
     } else if (srcFileStat.isSymbolicLink() && opts.followsymlink) {
       srcFileStat = fs.statSync(srcFile);
       if (srcFileStat.isDirectory()) {
@@ -149,6 +152,14 @@ function cpdirSyncRecursive(sourceDir, destDir, currentDepth, opts) {
     }
   } // for files
 } // cpdirSyncRecursive
+
+// Checks if cureent file was created recently
+function checkRecentCreated(sources, index) {
+  var lookedSource = sources[index];
+  return sources.slice(0, index).some(function (src) {
+    return path.basename(src) === path.basename(lookedSource);
+  });
+}
 
 function cpcheckcycle(sourceDir, srcFile) {
   var srcFileStat = fs.lstatSync(srcFile);
@@ -224,8 +235,9 @@ function _cp(options, sources, dest) {
     return new common.ShellString('', '', 0);
   }
 
-  sources.forEach(function (src) {
+  sources.forEach(function (src, srcIndex) {
     if (!fs.existsSync(src)) {
+      if (src === '') src = "''"; // if src was empty string, display empty string
       common.error('no such file or directory: ' + src, { continue: true });
       return; // skip file
     }
@@ -259,7 +271,16 @@ function _cp(options, sources, dest) {
         thisDest = path.normalize(dest + '/' + path.basename(src));
       }
 
-      if (fs.existsSync(thisDest) && options.no_force) {
+      var thisDestExists = fs.existsSync(thisDest);
+      if (thisDestExists && checkRecentCreated(sources, srcIndex)) {
+        // cannot overwrite file created recently in current execution, but we want to continue copying other files
+        if (!options.no_force) {
+          common.error("will not overwrite just-created '" + thisDest + "' with '" + src + "'", { continue: true });
+        }
+        return;
+      }
+
+      if (thisDestExists && options.no_force) {
         return; // skip file
       }
 

@@ -83,7 +83,7 @@
 				coordinate = HtmlCoordinate.fromPageOffset(0, 0);
 			}
 			else if (parm1 !== undefined && parm2 === undefined) {
-			  // one HtmlCoordinate parameter
+				// one HtmlCoordinate parameter
 				coordinate = parm1;
 			}
 			else {
@@ -143,7 +143,7 @@
 				coordinate = HtmlCoordinate.fromPageOffset(0, 0);
 			}
 			else if (parm1 !== undefined && parm2 === undefined) {
-			  // one HtmlCoordinate parameter
+				// one HtmlCoordinate parameter
 				coordinate = parm1;
 			}
 			else {
@@ -166,7 +166,7 @@
 				coordinate2 = HtmlCoordinate.fromPageOffset(0, 0);
 			}
 			else if (parm1 !== undefined && parm2 !== undefined && parm3 === undefined && parm4 === undefined) {
-			  // two HtmlCoordinate parameters
+				// two HtmlCoordinate parameters
 				coordinate1 = parm1;
 				coordinate2 = parm2;
 			}

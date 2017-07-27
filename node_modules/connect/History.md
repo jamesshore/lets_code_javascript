@@ -1,3 +1,20 @@
+3.6.2 / 2017-05-16
+==================
+
+  * deps: finalhandler@1.0.3
+    - deps: debug@2.6.7
+  * deps: debug@2.6.7
+    - deps: ms@2.0.0
+
+3.6.1 / 2017-04-19
+==================
+
+  * deps: debug@2.6.3
+    - Fix `DEBUG_MAX_ARRAY_LENGTH`
+  * deps: finalhandler@1.0.1
+    - Fix missing `</html>` in HTML document
+    - deps: debug@2.6.3
+
 3.6.0 / 2017-02-17
 ==================
 

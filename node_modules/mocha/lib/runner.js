@@ -432,15 +432,14 @@ Runner.prototype.runTest = function (fn) {
   if (this.asyncOnly) {
     test.asyncOnly = true;
   }
-
+  test.on('error', function (err) {
+    self.fail(test, err);
+  });
   if (this.allowUncaught) {
     test.allowUncaught = true;
     return test.run(fn);
   }
   try {
-    test.on('error', function (err) {
-      self.fail(test, err);
-    });
     test.run(fn);
   } catch (err) {
     fn(err);
@@ -681,9 +680,9 @@ Runner.prototype.runSuite = function (suite, fn) {
  */
 Runner.prototype.uncaught = function (err) {
   if (err) {
-    debug('uncaught exception %s', err !== function () {
+    debug('uncaught exception %s', err === (function () {
       return this;
-    }.call(err) ? err : (err.message || err));
+    }.call(err)) ? (err.message || err) : err);
   } else {
     debug('uncaught undefined exception');
     err = undefinedError();
