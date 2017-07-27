@@ -7,7 +7,7 @@
 
 	var Server = module.exports = function Server() {};
 
-	Server.prototype.start = async function(contentDir, notFoundPageToServe, portNumber, callback) {
+	Server.prototype.start = async function(contentDir, notFoundPageToServe, portNumber) {
 		if (!portNumber) throw new Error("port number is required");
 		
 		this._httpServer = new HttpServer(contentDir, notFoundPageToServe);
@@ -15,15 +15,12 @@
 
 		this._realTimeServer = new RealTimeServer();
 		this._realTimeServer.start(this._httpServer.getNodeServer());
-
-		callback();
 	};
 
-	Server.prototype.stop = async function(callback) {
-		if (this._realTimeServer === undefined) return callback(new Error("stop() called before server started"));
+	Server.prototype.stop = async function() {
+		if (this._realTimeServer === undefined) throw new Error("stop() called before server started");
 
 		await this._realTimeServer.stop();
-		callback();
 	};
 
 }());

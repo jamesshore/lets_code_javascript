@@ -30,13 +30,13 @@
 			fs.unlink(CONTENT_DIR + INDEX_PAGE, done);
 		});
 
-		beforeEach(function(done) {
+		beforeEach(async () => {
 			server = new Server();
-			server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT, done);
+			await server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT);
 		});
 
-		afterEach(function(done) {
-			server.stop(done);
+		afterEach(async () => {
+			await server.stop();
 		});
 
 		it("serves HTML", function(done) {
