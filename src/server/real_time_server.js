@@ -14,7 +14,7 @@
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
 
 	// Consider Martin Grandrath's suggestions from E509 comments (different RealTimeServer initialization)
-	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
+	// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
 
 	var RealTimeServer = module.exports = function RealTimeServer() {
 		this._socketIoConnections = {};
