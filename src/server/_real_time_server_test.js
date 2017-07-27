@@ -45,6 +45,7 @@
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
 			// Here we make sure that we can shut down cleanly.
 			const socket = await createSocket();
+			// if the bug occurs, the afterEach() function will time out
 			await closeSocket(socket);
 		});
 

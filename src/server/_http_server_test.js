@@ -31,70 +31,57 @@
 
 	describe("HTTP Server", function() {
 
+		let server;
+
 		beforeEach(function(done) {
-			async.each(TEST_FILES, createTestFile, done);
+			async.each(TEST_FILES, createTestFile, function() {
+				server = new HttpServer(CONTENT_DIR, NOT_FOUND_PAGE);
+				server.start(PORT).then(done);
+			});
 		});
 
 		afterEach(function(done) {
-			async.each(TEST_FILES, deleteTestFile, done);
-		});
-
-		it("serves files from directory", function(done) {
-			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
-				assert.equal(response.statusCode, 200, "status code");
-				assert.equal(responseData, INDEX_PAGE_DATA, "response text");
-				done();
+			async.each(TEST_FILES, deleteTestFile, function() {
+				server.stop().then(done);
 			});
 		});
 
-		it("sets content-type and charset for HTML files", function(done) {
-			httpGet(BASE_URL + "/" + INDEX_PAGE, function(response, responseData) {
-				assert.equal(response.headers["content-type"], "text/html; charset=UTF-8", "content-type header");
-				done();
-			});
+		it("serves files from directory", async () => {
+			let [ response, responseData ] = await httpGet(BASE_URL + "/" + INDEX_PAGE);
+			assert.equal(response.statusCode, 200, "status code");
+			assert.equal(responseData, INDEX_PAGE_DATA, "response text");
 		});
 
-		it("supports multiple files", function(done) {
-			httpGet(BASE_URL + "/" + OTHER_PAGE, function(response, responseData) {
-				assert.equal(response.statusCode, 200, "status code");
-				assert.equal(responseData, OTHER_PAGE_DATA, "response text");
-				done();
-			});
+		it("sets content-type and charset for HTML files", async () => {
+			let [ response ] = await httpGet(BASE_URL + "/" + INDEX_PAGE);
+			assert.equal(response.headers["content-type"], "text/html; charset=UTF-8", "content-type header");
 		});
 
-		it("serves index.html when asked for home page", function(done) {
-			httpGet(BASE_URL, function(response, responseData) {
-				assert.equal(response.statusCode, 200, "status code");
-				assert.equal(responseData, INDEX_PAGE_DATA, "response text");
-				done();
-			});
+		it("supports multiple files", async () => {
+			let [ response, responseData ] = await httpGet(BASE_URL + "/" + OTHER_PAGE);
+			assert.equal(response.statusCode, 200, "status code");
+			assert.equal(responseData, OTHER_PAGE_DATA, "response text");
 		});
 
-		it("returns 404 when file doesn't exist", function(done) {
-			httpGet(BASE_URL + "/bargle", function(response, responseData) {
-				assert.equal(response.statusCode, 404, "status code");
-				assert.equal(responseData, NOT_FOUND_DATA, "404 text");
-				done();
-			});
+		it("serves index.html when asked for home page", async () => {
+			let [ response, responseData ] = await httpGet(BASE_URL);
+			assert.equal(response.statusCode, 200, "status code");
+			assert.equal(responseData, INDEX_PAGE_DATA, "response text");
 		});
 
-		it("sets content-type and charset for 404 page", function(done) {
-			httpGet(BASE_URL + "/bargle", function(response, responseData) {
-				assert.equal(response.headers["content-type"], "text/html; charset=UTF-8", "content-type header");
-				done();
-			});
+		it("returns 404 when file doesn't exist", async () => {
+			let [ response, responseData ] = await httpGet(BASE_URL + "/bargle");
+			assert.equal(response.statusCode, 404, "status code");
+			assert.equal(responseData, NOT_FOUND_DATA, "404 text");
 		});
 
-		it("runs callback when stop completes", async () => {
-			const server = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			await server.start(PORT);
-			await server.stop();
+		it("sets content-type and charset for 404 page", async () => {
+			let [ response ] = await httpGet(BASE_URL + "/bargle");
+			assert.equal(response.headers["content-type"], "text/html; charset=UTF-8", "content-type header");
 		});
 
-		function httpGet(url, callback) {
-			var server = new HttpServer(CONTENT_DIR, NOT_FOUND_PAGE);
-
-			server.start(PORT).then(function() {
+		function httpGet(url) {
+			return new Promise((resolve, reject) => {
 				http.get(url, function(response) {
 					var receivedData = "";
 					response.setEncoding("utf8");
@@ -102,13 +89,9 @@
 					response.on("data", function(chunk) {
 						receivedData += chunk;
 					});
-					response.on("error", function(err) {
-						console.log("ERROR", err);
-					});
+					response.on("error", reject);
 					response.on("end", function() {
-						server.stop().then(function() {
-							callback(response, receivedData);
-						});
+						resolve([ response, receivedData ]);
 					});
 				});
 			});
