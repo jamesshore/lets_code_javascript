@@ -54,10 +54,6 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Spike code that sends a socket.io event upon intentional disconnect
-- Make event classes (which ones?) for disconnection
-- Modify client code to send an event when disconnection occurs
-- Modify server code to reflect disconnection events to all other browsers
+* Modify server code to send 'remove pointer' events to all other browsers when client disconnects
 
 To Do on current task:
--

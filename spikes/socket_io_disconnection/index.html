@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>socket.io spike</title>
+
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+
+	<div id="messages"></div>
+
+	<input id="post" type="submit" value="Disconnect" />
+
+	<script>
+		console.log("Client started");
+
+		var postButton = document.getElementById("post");
+		var messages = document.getElementById("messages");
+
+		postButton.addEventListener("click", function() {
+			log("Disconnecting...");
+			socket.close();
+		});
+
+		var origin = window.location.protocol + "//" + window.location.host;
+
+		log("Opening socket to origin: " + origin);
+
+		var socket = io(origin);
+		log("Socket created");
+
+		socket.on("connect", function() {
+			log("Connection established");
+		});
+
+		socket.on("disconnect", function(reason) {
+			log("Disconnected", reason);
+		});
+
+		function log(message) {
+			console.log(message);
+			messages.innerHTML += "<br>" + message;
+		};
+	</script>
+
+
+</body>
+
+</html>
