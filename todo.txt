@@ -55,5 +55,9 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Modify server code to send 'remove pointer' events to all other browsers when client disconnects
+- Resolve order-of-operations issue when reloading -- server seems to get client move event *after* disconnect event.
+- Look into accidental disconnection
 
 To Do on current task:
+- Why does our new production code cause our tests to hang?
+- asyncify listening for socket.io events in RealTimeServer tests?

@@ -26,7 +26,7 @@
 		var httpServer;
 		var realTimeServer;
 
-		beforeEach(async () => {
+		beforeEach(async function() {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 			realTimeServer = new RealTimeServer();
 
@@ -34,12 +34,16 @@
 			await httpServer.start(PORT);
 		});
 
-		afterEach(async () => {
-			await waitForConnectionCount(0, "afterEach() requires all sockets to be closed");
-			await realTimeServer.stop();
+		afterEach(async function() {
+			try {
+				await waitForConnectionCount(0, "afterEach() requires all sockets to be closed");
+			}
+			finally {
+				await realTimeServer.stop();
+			}
 		});
 
-		it("shuts down cleanly this despite Socket.IO race condition bug", async () => {
+		it("shuts down cleanly this despite Socket.IO race condition bug", async function() {
 			// Socket.IO has an issue where calling close() on the HTTP server fails if it's done too
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
 			// Here we make sure that we can shut down cleanly.
@@ -48,7 +52,7 @@
 			await closeSocket(socket);
 		});
 
-		it("counts the number of connections", async () => {
+		it("counts the number of connections", async function() {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
 			const socket = await createSocket();
@@ -59,19 +63,19 @@
 			await closeSocket(socket);
 		});
 
-		it("broadcasts pointer events from one client to all others", async () => {
+		it("broadcasts pointer events from one client to all others", async function() {
 			await checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent);
 		});
 
-		it("broadcasts 'remove pointer' events from one client to all others", async () => {
+		it("broadcasts 'remove pointer' events from one client to all others", async function() {
 			await checkEventReflection(new ClientRemovePointerEvent(), ServerRemovePointerEvent);
 		});
 
-		it("broadcasts draw events from one client to all others", async () => {
+		it("broadcasts draw events from one client to all others", async function() {
 			await checkEventReflection(new ClientDrawEvent(100, 200, 300, 400), ServerDrawEvent);
 		});
 
-		it("broadcasts clear screen events from one client to all others", async () => {
+		it("broadcasts clear screen events from one client to all others", async function() {
 			await checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent);
 		});
 
@@ -133,6 +137,28 @@
 					}
 				});
 			});
+			await closeSocket(client);
+		});
+
+		it("sends 'remove pointer' event to other browsers when client disconnects", async function() {
+			const [ disconnector, client ] = await createSockets(2);
+			const disconnectorId = disconnector.id;
+
+			const listenerPromise = new Promise((resolve, reject) => {
+				client.on(ServerRemovePointerEvent.EVENT_NAME, function(eventData) {
+					try {
+						const event = ServerRemovePointerEvent.fromSerializableObject(eventData);
+						assert.equal(event.id, disconnectorId);
+						resolve();
+					}
+					catch(err) {
+						reject(err);
+					}
+				});
+			});
+			await closeSocket(disconnector);
+			await listenerPromise;  // if disconnect event doesn't fire, the test will time out
+
 			await closeSocket(client);
 		});
 
