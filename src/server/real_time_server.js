@@ -80,7 +80,9 @@
 
 			socket.on("disconnect", () => {
 				var disconnectEvent = new ServerRemovePointerEvent(socket.id);
-				socket.broadcast.emit(disconnectEvent.name(), disconnectEvent.toSerializableObject());
+				// setTimeout(() => {
+					socket.broadcast.emit(disconnectEvent.name(), disconnectEvent.toSerializableObject());
+				// }, 0);
 			});
 		});
 	}

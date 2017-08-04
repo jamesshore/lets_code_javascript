@@ -36,14 +36,17 @@
 
 		afterEach(async function() {
 			try {
+				console.log("CHECKING THAT ALL SOCKETS ARE CLOSED");
 				await waitForConnectionCount(0, "afterEach() requires all sockets to be closed");
 			}
 			finally {
+				console.log("STOPPING SERVER");
 				await realTimeServer.stop();
+				console.log("SERVER STOPPED");
 			}
 		});
 
-		it("shuts down cleanly this despite Socket.IO race condition bug", async function() {
+		it("shuts down cleanly despite Socket.IO bug", async function() {
 			// Socket.IO has an issue where calling close() on the HTTP server fails if it's done too
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
 			// Here we make sure that we can shut down cleanly.
@@ -63,7 +66,7 @@
 			await closeSocket(socket);
 		});
 
-		it("broadcasts pointer events from one client to all others", async function() {
+		it.only("broadcasts pointer events from one client to all others", async function() {
 			await checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent);
 		});
 
@@ -170,13 +173,14 @@
 			});
 
 			const listenerPromise = Promise.all([ receiver1, receiver2 ].map((client) => {
-				return new Promise((resolve) => {
+				return new Promise((resolve, reject) => {
 					client.on(serverEventConstructor.EVENT_NAME, (data) => {
 						try {
 							assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
-						}
-						finally {
 							resolve();
+						}
+						catch (err) {
+							reject(err);
 						}
 					});
 				});
@@ -184,8 +188,11 @@
 
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
+			console.log("WAITING FOR LISTENER");
 			await listenerPromise;
+			console.log("WAITING FOR CLOSE");
 			await closeSockets(emitter, receiver1, receiver2);
+			console.log("DONE");
 		}
 
 		async function waitForConnectionCount(expectedConnections, message) {
