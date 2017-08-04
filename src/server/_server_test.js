@@ -30,13 +30,18 @@
 			fs.unlink(CONTENT_DIR + INDEX_PAGE, done);
 		});
 
-		beforeEach(async () => {
+		beforeEach(async function() {
 			server = new Server();
 			await server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT);
 		});
 
-		afterEach(async () => {
-			await server.stop();
+		afterEach(async function() {
+			try {
+				await waitForConnectionCount(0, "afterEach() requires all sockets to be closed");
+			}
+			finally {
+				await server.stop();
+			}
 		});
 
 		it("serves HTML", function(done) {
@@ -57,31 +62,83 @@
 			});
 		});
 
-		it("services real-time events", function(done) {
-			var emitter = createSocket();
-			var receiver = createSocket();
+		it("services real-time events", async function() {
+			// Need to create our sockets in parallel because the tests won't exit if we don't.
+			// I believe it's a bug in Socket.IO but I haven't been able to reproduce with a
+			// trimmed-down test case. If you want to try converting this back to a parallel
+			// implementation, be sure to run the tests about ten times because the issue doesn't
+			// always occur. -JDLS 4 Aug 2017
+
+			var emitter = await createSocket();
+			var receiver = await createSocket();
 
 			var clientEvent = new ClientPointerEvent(100, 200);
 
-			receiver.on(ServerPointerEvent.EVENT_NAME, function(data) {
-				assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
-				end();
-			});
-
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
-			function end() {
-				async.each([ emitter, receiver ], closeSocket, done);
-			}
+			await new Promise((resolve, reject) => {
+				receiver.on(ServerPointerEvent.EVENT_NAME, function(data) {
+					try {
+						assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
+						resolve();
+					}
+					catch(err) {
+						reject(err);
+					}
+				});
+			});
+
+			await new Promise((resolve) => setTimeout(resolve, 0));
+			await closeSocket(emitter);
+			await closeSocket(receiver);
 		});
 
+		// Duplicated with _real_time_server_test.js
 		function createSocket() {
-			return io("http://localhost:" + PORT);
+			var socket = io("http://localhost:" + PORT);
+			return new Promise(function(resolve) {
+				socket.on("connect", function() {
+					return resolve(socket);
+				});
+			});
 		}
 
-		function closeSocket(socket, callback) {
+		// Duplicated with _real_time_server_test.js
+		function closeSocket(socket) {
+			var closePromise = new Promise(function(resolve) {
+				socket.on("disconnect", function() {
+					return resolve();
+				});
+			});
 			socket.disconnect();
-			callback();
+
+			return closePromise;
+		}
+
+		// Duplicated with _real_time_server_test.js
+		async function waitForConnectionCount(expectedConnections, message) {
+			const TIMEOUT = 1000; // milliseconds
+			const RETRY_PERIOD = 10; // milliseconds
+
+			const startTime = Date.now();
+			const realTimeServer = server._realTimeServer;
+			let success = false;
+
+			while(!success && !isTimeUp(TIMEOUT)) {
+				await timeoutPromise(RETRY_PERIOD);
+				success = (expectedConnections === realTimeServer.numberOfActiveConnections());
+			}
+			assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
+
+			function isTimeUp(timeout) {
+				return (startTime + timeout) < Date.now();
+			}
+
+			function timeoutPromise(milliseconds) {
+				return new Promise((resolve) => {
+					setTimeout(resolve, milliseconds);
+				});
+			}
 		}
 
 	});

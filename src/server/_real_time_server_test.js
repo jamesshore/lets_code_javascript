@@ -36,13 +36,10 @@
 
 		afterEach(async function() {
 			try {
-				console.log("CHECKING THAT ALL SOCKETS ARE CLOSED");
 				await waitForConnectionCount(0, "afterEach() requires all sockets to be closed");
 			}
 			finally {
-				console.log("STOPPING SERVER");
 				await realTimeServer.stop();
-				console.log("SERVER STOPPED");
 			}
 		});
 
@@ -66,7 +63,7 @@
 			await closeSocket(socket);
 		});
 
-		it.only("broadcasts pointer events from one client to all others", async function() {
+		it("broadcasts pointer events from one client to all others", async function() {
 			await checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent);
 		});
 
@@ -188,11 +185,8 @@
 
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
-			console.log("WAITING FOR LISTENER");
 			await listenerPromise;
-			console.log("WAITING FOR CLOSE");
 			await closeSockets(emitter, receiver1, receiver2);
-			console.log("DONE");
 		}
 
 		async function waitForConnectionCount(expectedConnections, message) {
@@ -219,12 +213,18 @@
 			}
 		}
 
-		function createSockets(numSockets) {
-			let createPromises = [];
+		async function createSockets(numSockets) {
+			// Need to create our sockets in parallel because the tests won't exit if we don't.
+			// I believe it's a bug in Socket.IO but I haven't been able to reproduce with a
+			// trimmed-down test case. If you want to try converting this back to a parallel
+			// implementation, be sure to run the tests about ten times because the issue doesn't
+			// always occur. -JDLS 4 Aug 2017
+
+			let sockets = [];
 			for (let i = 0; i < numSockets; i++) {
-				createPromises.push(createSocket());
+				sockets.push(await createSocket());
 			}
-			return Promise.all(createPromises);
+			return sockets;
 		}
 
 		async function closeSockets(...sockets) {
@@ -234,10 +234,6 @@
 		}
 
 		function createSocket() {
-			// If the socket will be closed immediately after creation, must use the callback to prevent a
-			// race condition bug in Socket.IO. Otherwise, there will be situations where the client will think
-			// the socket is closed, but it remains open. See https://github.com/socketio/socket.io-client/issues/1133
-
 			var socket = io("http://localhost:" + PORT);
 			return new Promise(function(resolve) {
 				socket.on("connect", function() {

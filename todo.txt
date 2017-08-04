@@ -59,5 +59,6 @@ Engineering Tasks:
 - Look into accidental disconnection
 
 To Do on current task:
-* Why does our new production code cause our tests to hang?
 - asyncify listening for socket.io events in RealTimeServer tests?
+- Clean up the duplication between _server_test.js and _real_time_server_test.js
+- Create a clean shutdown for RealTimeServer.stop that waits for connections to close?
