@@ -12,12 +12,6 @@
 		}
 
 		createSockets(numSockets) {
-			// Need to create our sockets in serial, not parallel, because the tests won't exit if we don't.
-			// I believe it's a bug in Socket.IO but I haven't been able to reproduce with a
-			// trimmed-down test case. If you want to try converting this back to a parallel
-			// implementation, be sure to run the tests about ten times because the issue doesn't
-			// always occur. -JDLS 4 Aug 2017
-
 			let sockets = [];
 			for (let i = 0; i < numSockets; i++) {
 				sockets.push(this.createSocket());
@@ -48,8 +42,9 @@
 
 		closeSocket(socket) {
 			return new Promise((resolve, reject) => {
+				const id = socket.id;
 				socket.on("disconnect", () => {
-					waitForServerToDisconnect(socket.id, this._realTimeServer)
+					waitForServerToDisconnect(id, this._realTimeServer)
 						.then(() => resolve(socket))
 						.catch(reject);
 				});
@@ -67,6 +62,12 @@
 	}
 
 	async function waitForServerSocketState(expectedConnectionState, socketId, realTimeServer) {
+		// We wait for sockets to be created or destroyed on the server because, when we don't,
+		// we seem to trigger all kinds of Socket.IO nastiness. Sometimes Socket.IO won't close
+		// a connection, and sometimes the tests just never exit. Waiting for the server seems
+		// to prevent those problems, which apparently are caused by creating and destroying sockets
+		// too quickly.
+
 		const TIMEOUT = 1000; // milliseconds
 		const RETRY_PERIOD = 10; // milliseconds
 

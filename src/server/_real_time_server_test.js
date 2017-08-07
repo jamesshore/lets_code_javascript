@@ -37,7 +37,10 @@
 
 		afterEach(async function() {
 			try {
-				await waitForConnectionCount(0, "afterEach() requires all sockets to be closed");
+				assert.equal(
+					realTimeServer.numberOfActiveConnections(), 0,
+					"afterEach() requires all sockets to be closed"
+				);
 			}
 			finally {
 				await realTimeServer.stop();
@@ -57,8 +60,6 @@
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
 			const socket = await socketIoClient.createSocket();
-			await waitForConnectionCount(1, "after opening connection");
-
 			assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
 
 			await socketIoClient.closeSocket(socket);
@@ -68,8 +69,6 @@
 			assert.equal(realTimeServer.isSocketConnected("no_such_socket"), false);
 
 			const socket = await socketIoClient.createSocket();
-			await waitForConnectionCount(1, "after opening connection");
-
 			assert.equal(realTimeServer.isSocketConnected(socket.id), true);
 
 			await socketIoClient.closeSocket(socket);
@@ -197,30 +196,6 @@
 
 			await listenerPromise;
 			await socketIoClient.closeSockets(emitter, receiver1, receiver2);
-		}
-
-		async function waitForConnectionCount(expectedConnections, message) {
-			const TIMEOUT = 1000; // milliseconds
-			const RETRY_PERIOD = 10; // milliseconds
-
-			const startTime = Date.now();
-			let success = false;
-
-			while(!success && !isTimeUp(TIMEOUT)) {
-				await timeoutPromise(RETRY_PERIOD);
-				success = (expectedConnections === realTimeServer.numberOfActiveConnections());
-			}
-			assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
-
-			function isTimeUp(timeout) {
-				return (startTime + timeout) < Date.now();
-			}
-
-			function timeoutPromise(milliseconds) {
-				return new Promise((resolve) => {
-					setTimeout(resolve, milliseconds);
-				});
-			}
 		}
 
 	});

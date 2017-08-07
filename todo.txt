@@ -60,7 +60,6 @@ Engineering Tasks:
 - Look into accidental disconnection--try the spike
 
 To Do on current task:
-- Remove RealTimeServer.numberOfActiveConnections()?
-- Move waitForConnectionCount() to TestClient (or remove it?)
 ? asyncify listening for socket.io events in RealTimeServer tests?
 - Create a clean shutdown for RealTimeServer.stop that waits for connections to close?
+- Deal with "shuts down cleanly despite Socket.IO bug" test in RealTimeServer tests
