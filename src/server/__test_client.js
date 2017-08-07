@@ -9,7 +9,7 @@
 	};
 
 	TestClient.prototype.createSockets = async function(numSockets) {
-		// Need to create our sockets in parallel because the tests won't exit if we don't.
+		// Need to create our sockets in serial, not parallel, because the tests won't exit if we don't.
 		// I believe it's a bug in Socket.IO but I haven't been able to reproduce with a
 		// trimmed-down test case. If you want to try converting this back to a parallel
 		// implementation, be sure to run the tests about ten times because the issue doesn't

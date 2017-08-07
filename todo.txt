@@ -60,7 +60,8 @@ Engineering Tasks:
 
 To Do on current task:
 * Create a client module for Socket.IO tests (clean up the duplication between _server_test.js and _real_time_server_test.js)
-* Convert TestClient to ES6 class syntax
+- Convert TestClient to ES6 class syntax
+- Move waitForConnectionCount() to TestClient
 - Wait until server side is complete when creating and closing sockets
 - asyncify listening for socket.io events in RealTimeServer tests?
 - Create a clean shutdown for RealTimeServer.stop that waits for connections to close?

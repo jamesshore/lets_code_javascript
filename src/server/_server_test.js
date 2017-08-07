@@ -10,6 +10,7 @@
 	var io = require("socket.io-client");
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 	var ServerPointerEvent = require("../shared/server_pointer_event.js");
+	var TestClient = require("./__test_client.js");
 
 	var CONTENT_DIR = "generated/test/";
 	var NOT_FOUND_PAGE = "test404.html";
@@ -20,7 +21,8 @@
 
 	describe("Server", function() {
 
-		var server;
+		const testClient = new TestClient("http://localhost:" + PORT);
+		let server;
 
 		beforeEach(function(done) {
 			fs.writeFile(CONTENT_DIR + INDEX_PAGE, INDEX_PAGE_CONTENTS, done);
@@ -69,9 +71,8 @@
 			// implementation, be sure to run the tests about ten times because the issue doesn't
 			// always occur. -JDLS 4 Aug 2017
 
-			var emitter = await createSocket();
-			var receiver = await createSocket();
-
+			var emitter = await testClient.createSocket();
+			var receiver = await testClient.createSocket();
 			var clientEvent = new ClientPointerEvent(100, 200);
 
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
@@ -89,31 +90,9 @@
 			});
 
 			await new Promise((resolve) => setTimeout(resolve, 0));
-			await closeSocket(emitter);
-			await closeSocket(receiver);
+			await testClient.closeSocket(emitter);
+			await testClient.closeSocket(receiver);
 		});
-
-		// Duplicated with _real_time_server_test.js
-		function createSocket() {
-			var socket = io("http://localhost:" + PORT);
-			return new Promise(function(resolve) {
-				socket.on("connect", function() {
-					return resolve(socket);
-				});
-			});
-		}
-
-		// Duplicated with _real_time_server_test.js
-		function closeSocket(socket) {
-			var closePromise = new Promise(function(resolve) {
-				socket.on("disconnect", function() {
-					return resolve();
-				});
-			});
-			socket.disconnect();
-
-			return closePromise;
-		}
 
 		// Duplicated with _real_time_server_test.js
 		async function waitForConnectionCount(expectedConnections, message) {
