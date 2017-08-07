@@ -19,7 +19,7 @@
 
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
-	var EXPECTED_BROWSER = "firefox 51.0.1";
+	var EXPECTED_BROWSER = "firefox 54.0.1";
 	var GHOST_POINTER_SELECTOR = ".ghost-pointer";
 	var DRAWING_AREA_ID = "drawing-area";
 
@@ -35,11 +35,10 @@
 
 				driver = createDriver();
 				driver.getCapabilities().then(function(capabilities) {
-					var version = capabilities.get("browserName") + " " + capabilities.get("version");
-					// DISABLED CHECK 16 Mar 2017 jdls. Was reporting 'undefined' for version number. Started with Firefox 52?
-					// if (version !== EXPECTED_BROWSER) {
-					// 	console.log("Warning: Smoke test browser expected " + EXPECTED_BROWSER + ", but was " + version);
-					// }
+					var version = capabilities.get("browserName") + " " + capabilities.get("browserVersion");
+					if (version !== EXPECTED_BROWSER) {
+						console.log("Warning: Smoke test browser expected " + EXPECTED_BROWSER + ", but was " + version);
+					}
 					done();
 				});
 			});

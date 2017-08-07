@@ -5,6 +5,7 @@
 	var io = require('socket.io');
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 	var ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
+	var ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
 	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 	var EventRepository = require("./event_repository.js");
@@ -14,7 +15,7 @@
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
 
 	// Consider Martin Grandrath's suggestions from E509 comments (different RealTimeServer initialization)
-	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
+	// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
 
 	var RealTimeServer = module.exports = function RealTimeServer() {
 		this._socketIoConnections = {};
@@ -53,11 +54,15 @@
 		return Object.keys(this._socketIoConnections).length;
 	};
 
+	RealTimeServer.prototype.isSocketConnected = function(socketId) {
+		return this._socketIoConnections[socketId] !== undefined;
+	};
+
 	function trackSocketIoConnections(connections, ioServer) {
 		// Inspired by isaacs https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
 		ioServer.on("connection", function(socket) {
 			var key = socket.id;
-			connections[key] = socket;
+			connections[key] = true;
 			socket.on("disconnect", function() {
 				delete connections[key];
 			});
@@ -76,6 +81,13 @@
 		ioServer.on("connect", function(socket) {
 			replayPreviousEvents(self, socket);
 			handleClientEvents(self, socket);
+
+			socket.on("disconnect", () => {
+				var disconnectEvent = new ServerRemovePointerEvent(socket.id);
+				// setTimeout(() => {
+					socket.broadcast.emit(disconnectEvent.name(), disconnectEvent.toSerializableObject());
+				// }, 0);
+			});
 		});
 	}
 
