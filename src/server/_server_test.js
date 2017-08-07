@@ -10,7 +10,7 @@
 	var io = require("socket.io-client");
 	var ClientPointerEvent = require("../shared/client_pointer_event.js");
 	var ServerPointerEvent = require("../shared/server_pointer_event.js");
-	var TestClient = require("./__test_client.js");
+	var SocketIoClient = require("./__socket_io_client.js");
 
 	var CONTENT_DIR = "generated/test/";
 	var NOT_FOUND_PAGE = "test404.html";
@@ -21,7 +21,7 @@
 
 	describe("Server", function() {
 
-		const testClient = new TestClient("http://localhost:" + PORT);
+		const testClient = new SocketIoClient("http://localhost:" + PORT);
 		let server;
 
 		beforeEach(function(done) {

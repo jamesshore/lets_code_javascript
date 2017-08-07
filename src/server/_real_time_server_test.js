@@ -16,7 +16,7 @@
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
 	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
 	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
-	var TestClient = require("./__test_client.js");
+	var SocketIoClient = require("./__socket_io_client.js");
 
 	var IRRELEVANT_DIR = "generated/test";
 	var IRRELEVANT_PAGE = "irrelevant.html";
@@ -25,7 +25,7 @@
 
 	describe("RealTimeServer", function() {
 
-		const testClient = new TestClient("http://localhost:" + PORT);
+		const testClient = new SocketIoClient("http://localhost:" + PORT);
 		let httpServer;
 		let realTimeServer;
 
