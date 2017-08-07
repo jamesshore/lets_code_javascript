@@ -47,13 +47,16 @@
 			}
 		});
 
-		it("shuts down cleanly despite Socket.IO bug", async function() {
+		it("shuts down cleanly despite Socket.IO bug", function(done) {
 			// Socket.IO has an issue where calling close() on the HTTP server fails if it's done too
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
-			// Here we make sure that we can shut down cleanly.
-			const socket = await socketIoClient.createSocket();
+			// Here we make sure that RealTimeServer uses the correct workaround and doesn't fail.
+			const socket = socketIoClient.createSocketWithoutWaiting();
+			socket.on("connect", async () => {
+				await socketIoClient.closeSocket(socket);
+				done();
+			});
 			// if the bug occurs, the afterEach() function will time out
-			await socketIoClient.closeSocket(socket);
 		});
 
 		it("counts the number of connections", async function() {

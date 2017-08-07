@@ -54,12 +54,8 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Modify server code to send 'remove pointer' events to all other browsers when client disconnects
-- Convert all server code to ES6 class syntax
-- Resolve order-of-operations issue when reloading -- server seems to get client move event *after* disconnect event.
+* Resolve order-of-operations issue when reloading -- server seems to get client move event *after* disconnect event.
 - Look into accidental disconnection--try the spike
+- Convert all server code to ES6 class syntax
 
 To Do on current task:
-? asyncify listening for socket.io events in RealTimeServer tests?
-- Create a clean shutdown for RealTimeServer.stop that waits for connections to close?
-- Deal with "shuts down cleanly despite Socket.IO bug" test in RealTimeServer tests
