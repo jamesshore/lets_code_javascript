@@ -54,6 +54,10 @@
 		return Object.keys(this._socketIoConnections).length;
 	};
 
+	RealTimeServer.prototype.isSocketConnected = function(socketId) {
+		return this._socketIoConnections[socketId] !== undefined;
+	};
+
 	function trackSocketIoConnections(connections, ioServer) {
 		// Inspired by isaacs https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
 		ioServer.on("connection", function(socket) {

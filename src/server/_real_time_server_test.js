@@ -63,6 +63,17 @@
 			await testClient.closeSocket(socket);
 		});
 
+		it("tells us if a socket is connected", async function() {
+			assert.equal(realTimeServer.isSocketConnected("no_such_socket"), false);
+
+			const socket = await testClient.createSocket();
+			await waitForConnectionCount(1, "after opening connection");
+
+			assert.equal(realTimeServer.isSocketConnected(socket.id), true);
+
+			await testClient.closeSocket(socket);
+		});
+
 		it("broadcasts pointer events from one client to all others", async function() {
 			await checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent);
 		});
