@@ -16,6 +16,7 @@
 	var ClientDrawEvent = require("../shared/client_draw_event.js");
 	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
 	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
+	var TestClient = require("./__test_client.js");
 
 	var IRRELEVANT_DIR = "generated/test";
 	var IRRELEVANT_PAGE = "irrelevant.html";
@@ -23,8 +24,10 @@
 	var PORT = 5020;
 
 	describe("RealTimeServer", function() {
-		var httpServer;
-		var realTimeServer;
+
+		const testClient = new TestClient("http://localhost:" + PORT);
+		let httpServer;
+		let realTimeServer;
 
 		beforeEach(async function() {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
@@ -47,20 +50,20 @@
 			// Socket.IO has an issue where calling close() on the HTTP server fails if it's done too
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
 			// Here we make sure that we can shut down cleanly.
-			const socket = await createSocket();
+			const socket = await testClient.createSocket();
 			// if the bug occurs, the afterEach() function will time out
-			await closeSocket(socket);
+			await testClient.closeSocket(socket);
 		});
 
 		it("counts the number of connections", async function() {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
-			const socket = await createSocket();
+			const socket = await testClient.createSocket();
 			await waitForConnectionCount(1, "after opening connection");
 
 			assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
 
-			await closeSocket(socket);
+			await testClient.closeSocket(socket);
 		});
 
 		it("broadcasts pointer events from one client to all others", async function() {
@@ -83,8 +86,7 @@
 			const clientEvent = new ClientPointerEvent(100, 200);
 			const EMITTER_ID = "emitter_id";
 
-			const [ receiver1, receiver2 ] = await createSockets(2);
-
+			const [receiver1, receiver2] = await testClient.createSockets(2);
 			const listeners = Promise.all([ receiver1, receiver2 ].map((client) => {
 				return new Promise((resolve, reject) => {
 					client.on(ServerPointerEvent.EVENT_NAME, function(data) {
@@ -102,7 +104,7 @@
 			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
 
 			await listeners;
-			await closeSockets(receiver1, receiver2);
+			await testClient.closeSockets(receiver1, receiver2);
 		});
 
 		it("replays all previous events when client connects", async function() {
@@ -117,7 +119,7 @@
 			realTimeServer.handleClientEvent(event3, IRRELEVANT_ID);
 
 			let replayedEvents = [];
-			const client = await createSocket();
+			const client = await testClient.createSocket();
 			await new Promise((resolve, reject) => {
 				client.on(ServerDrawEvent.EVENT_NAME, function(event) {
 					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
@@ -137,11 +139,11 @@
 					}
 				});
 			});
-			await closeSocket(client);
+			await testClient.closeSocket(client);
 		});
 
 		it("sends 'remove pointer' event to other browsers when client disconnects", async function() {
-			const [ disconnector, client ] = await createSockets(2);
+			const [disconnector, client] = await testClient.createSockets(2);
 			const disconnectorId = disconnector.id;
 
 			const listenerPromise = new Promise((resolve, reject) => {
@@ -156,15 +158,14 @@
 					}
 				});
 			});
-			await closeSocket(disconnector);
+			await testClient.closeSocket(disconnector);
 			await listenerPromise;  // if disconnect event doesn't fire, the test will time out
 
-			await closeSocket(client);
+			await testClient.closeSocket(client);
 		});
 
 		async function checkEventReflection(clientEvent, serverEventConstructor) {
-			const [ emitter, receiver1, receiver2 ] = await createSockets(3);
-
+			const [emitter, receiver1, receiver2] = await testClient.createSockets(3);
 			emitter.on(serverEventConstructor.EVENT_NAME, function() {
 				assert.fail("emitter should not receive its own events");
 			});
@@ -186,7 +187,7 @@
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
 			await listenerPromise;
-			await closeSockets(emitter, receiver1, receiver2);
+			await testClient.closeSockets(emitter, receiver1, receiver2);
 		}
 
 		async function waitForConnectionCount(expectedConnections, message) {
@@ -211,46 +212,6 @@
 					setTimeout(resolve, milliseconds);
 				});
 			}
-		}
-
-		async function createSockets(numSockets) {
-			// Need to create our sockets in parallel because the tests won't exit if we don't.
-			// I believe it's a bug in Socket.IO but I haven't been able to reproduce with a
-			// trimmed-down test case. If you want to try converting this back to a parallel
-			// implementation, be sure to run the tests about ten times because the issue doesn't
-			// always occur. -JDLS 4 Aug 2017
-
-			let sockets = [];
-			for (let i = 0; i < numSockets; i++) {
-				sockets.push(await createSocket());
-			}
-			return sockets;
-		}
-
-		async function closeSockets(...sockets) {
-			await Promise.all(sockets.map(async (socket) => {
-				await closeSocket(socket);
-			}));
-		}
-
-		function createSocket() {
-			var socket = io("http://localhost:" + PORT);
-			return new Promise(function(resolve) {
-				socket.on("connect", function() {
-					return resolve(socket);
-				});
-			});
-		}
-
-		function closeSocket(socket) {
-			var closePromise = new Promise(function(resolve) {
-				socket.on("disconnect", function() {
-					return resolve();
-				});
-			});
-			socket.disconnect();
-
-			return closePromise;
 		}
 
 	});
