@@ -4,48 +4,51 @@
 
 	const io = require("socket.io-client");
 
-	const SocketIoClient = module.exports = function(serverUrl) {
-		this._serverUrl = serverUrl;
-	};
+	module.exports = class SocketIoClient {
 
-	SocketIoClient.prototype.createSockets = async function(numSockets) {
-		// Need to create our sockets in serial, not parallel, because the tests won't exit if we don't.
-		// I believe it's a bug in Socket.IO but I haven't been able to reproduce with a
-		// trimmed-down test case. If you want to try converting this back to a parallel
-		// implementation, be sure to run the tests about ten times because the issue doesn't
-		// always occur. -JDLS 4 Aug 2017
-
-		let sockets = [];
-		for (let i = 0; i < numSockets; i++) {
-			sockets.push(await this.createSocket());
+		constructor(serverUrl) {
+			this._serverUrl = serverUrl;
 		}
-		return sockets;
-	};
 
-	SocketIoClient.prototype.closeSockets = async function(...sockets) {
-		await Promise.all(sockets.map(async (socket) => {
-			await this.closeSocket(socket);
-		}));
-	};
+		async createSockets(numSockets) {
+			// Need to create our sockets in serial, not parallel, because the tests won't exit if we don't.
+			// I believe it's a bug in Socket.IO but I haven't been able to reproduce with a
+			// trimmed-down test case. If you want to try converting this back to a parallel
+			// implementation, be sure to run the tests about ten times because the issue doesn't
+			// always occur. -JDLS 4 Aug 2017
 
-	SocketIoClient.prototype.createSocket = function() {
-		var socket = io(this._serverUrl);
-		return new Promise(function(resolve) {
-			socket.on("connect", function() {
-				return resolve(socket);
+			let sockets = [];
+			for (let i = 0; i < numSockets; i++) {
+				sockets.push(await this.createSocket());
+			}
+			return sockets;
+		}
+
+		async closeSockets(...sockets) {
+			await Promise.all(sockets.map(async (socket) => {
+				await this.closeSocket(socket);
+			}));
+		}
+
+		createSocket() {
+			var socket = io(this._serverUrl);
+			return new Promise(function(resolve) {
+				socket.on("connect", function() {
+					return resolve(socket);
+				});
 			});
-		});
-	};
+		}
 
-	SocketIoClient.prototype.closeSocket = function(socket) {
-		var closePromise = new Promise(function(resolve) {
-			socket.on("disconnect", function() {
-				return resolve();
+		closeSocket(socket) {
+			var closePromise = new Promise(function(resolve) {
+				socket.on("disconnect", function() {
+					return resolve();
+				});
 			});
-		});
-		socket.disconnect();
+			socket.disconnect();
 
-		return closePromise;
+			return closePromise;
+		}
 	};
 
 }());
