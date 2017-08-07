@@ -11,7 +11,7 @@
 			this._realTimeServer = realTimeServer;
 		}
 
-		async createSockets(numSockets) {
+		createSockets(numSockets) {
 			// Need to create our sockets in serial, not parallel, because the tests won't exit if we don't.
 			// I believe it's a bug in Socket.IO but I haven't been able to reproduce with a
 			// trimmed-down test case. If you want to try converting this back to a parallel
@@ -20,9 +20,9 @@
 
 			let sockets = [];
 			for (let i = 0; i < numSockets; i++) {
-				sockets.push(await this.createSocket());
+				sockets.push(this.createSocket());
 			}
-			return sockets;
+			return Promise.all(sockets);
 		}
 
 		async closeSockets(...sockets) {
@@ -34,9 +34,10 @@
 		createSocket() {
 			const socket = this.createSocketWithoutWaiting();
 			return new Promise((resolve, reject) => {
-				socket.on("connect", async () => {
-					await waitForServerConnection(socket.id, this._realTimeServer);
-					resolve(socket);
+				socket.on("connect", () => {
+					waitForServerToConnect(socket.id, this._realTimeServer)
+						.then(() => resolve(socket))
+						.catch(reject);
 				});
 			});
 		}
@@ -46,32 +47,40 @@
 		}
 
 		closeSocket(socket) {
-			var closePromise = new Promise(function(resolve) {
-				socket.on("disconnect", function() {
-					return resolve();
+			return new Promise((resolve, reject) => {
+				socket.on("disconnect", () => {
+					waitForServerToDisconnect(socket.id, this._realTimeServer)
+						.then(() => resolve(socket))
+						.catch(reject);
 				});
+				socket.disconnect();
 			});
-			socket.disconnect();
-
-			return closePromise;
 		}
 	};
 
-	async function waitForServerConnection(socketId, realTimeServer) {
+	function waitForServerToConnect(socketId, realTimeServer) {
+		return waitForServerSocketState(true, socketId, realTimeServer);
+	}
+
+	function waitForServerToDisconnect(socketId, realTimeServer) {
+		return waitForServerSocketState(false, socketId, realTimeServer);
+	}
+
+	async function waitForServerSocketState(expectedConnectionState, socketId, realTimeServer) {
 		const TIMEOUT = 1000; // milliseconds
 		const RETRY_PERIOD = 10; // milliseconds
 
 		const startTime = Date.now();
-		let success = false;
+		let success = !expectedConnectionState;
 
-		while(!success && !isTimeUp(TIMEOUT)) {
+		while(success !== expectedConnectionState && !isTimeUp()) {
 			await timeoutPromise(RETRY_PERIOD);
 			success = realTimeServer.isSocketConnected(socketId);
 		}
-		if (isTimeUp(TIMEOUT)) throw new Error("socket " + socketId + " failed to connect to server");
+		if (isTimeUp()) throw new Error("socket " + socketId + " failed to connect to server");
 
-		function isTimeUp(timeout) {
-			return (startTime + timeout) < Date.now();
+		function isTimeUp() {
+			return (startTime + TIMEOUT) < Date.now();
 		}
 
 		function timeoutPromise(milliseconds) {

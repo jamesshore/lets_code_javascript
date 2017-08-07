@@ -19,7 +19,7 @@
 
 	describe("Server", function() {
 
-		let testClient;
+		let socketIoClient;
 		let server;
 
 		beforeEach(function(done) {
@@ -33,7 +33,7 @@
 		beforeEach(async function() {
 			server = new Server();
 			await server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT);
-			testClient = new SocketIoClient("http://localhost:" + PORT, server._realTimeServer);
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, server._realTimeServer);
 		});
 
 		afterEach(async function() {
@@ -70,8 +70,8 @@
 			// implementation, be sure to run the tests about ten times because the issue doesn't
 			// always occur. -JDLS 4 Aug 2017
 
-			const emitter = await testClient.createSocket();
-			const receiver = await testClient.createSocket();
+			const emitter = await socketIoClient.createSocket();
+			const receiver = await socketIoClient.createSocket();
 			const clientEvent = new ClientPointerEvent(100, 200);
 
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
@@ -89,8 +89,8 @@
 			});
 
 			await new Promise((resolve) => setTimeout(resolve, 0));
-			await testClient.closeSocket(emitter);
-			await testClient.closeSocket(receiver);
+			await socketIoClient.closeSocket(emitter);
+			await socketIoClient.closeSocket(receiver);
 		});
 
 		// Duplicated with _real_time_server_test.js

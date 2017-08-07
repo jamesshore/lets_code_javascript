@@ -24,12 +24,12 @@
 
 		let httpServer;
 		let realTimeServer;
-		let testClient;
+		let socketIoClient;
 
 		beforeEach(async function() {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 			realTimeServer = new RealTimeServer();
-			testClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
 
 			realTimeServer.start(httpServer.getNodeServer());
 			await httpServer.start(PORT);
@@ -48,31 +48,31 @@
 			// Socket.IO has an issue where calling close() on the HTTP server fails if it's done too
 			// soon after closing a Socket.IO connection. See https://github.com/socketio/socket.io/issues/2975
 			// Here we make sure that we can shut down cleanly.
-			const socket = await testClient.createSocket();
+			const socket = await socketIoClient.createSocket();
 			// if the bug occurs, the afterEach() function will time out
-			await testClient.closeSocket(socket);
+			await socketIoClient.closeSocket(socket);
 		});
 
 		it("counts the number of connections", async function() {
 			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
-			const socket = await testClient.createSocket();
+			const socket = await socketIoClient.createSocket();
 			await waitForConnectionCount(1, "after opening connection");
 
 			assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
 
-			await testClient.closeSocket(socket);
+			await socketIoClient.closeSocket(socket);
 		});
 
 		it("tells us if a socket is connected", async function() {
 			assert.equal(realTimeServer.isSocketConnected("no_such_socket"), false);
 
-			const socket = await testClient.createSocket();
+			const socket = await socketIoClient.createSocket();
 			await waitForConnectionCount(1, "after opening connection");
 
 			assert.equal(realTimeServer.isSocketConnected(socket.id), true);
 
-			await testClient.closeSocket(socket);
+			await socketIoClient.closeSocket(socket);
 		});
 
 		it("broadcasts pointer events from one client to all others", async function() {
@@ -95,7 +95,7 @@
 			const clientEvent = new ClientPointerEvent(100, 200);
 			const EMITTER_ID = "emitter_id";
 
-			const [receiver1, receiver2] = await testClient.createSockets(2);
+			const [receiver1, receiver2] = await socketIoClient.createSockets(2);
 			const listeners = Promise.all([ receiver1, receiver2 ].map((client) => {
 				return new Promise((resolve, reject) => {
 					client.on(ServerPointerEvent.EVENT_NAME, function(data) {
@@ -113,7 +113,7 @@
 			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
 
 			await listeners;
-			await testClient.closeSockets(receiver1, receiver2);
+			await socketIoClient.closeSockets(receiver1, receiver2);
 		});
 
 		it("replays all previous events when client connects", async function() {
@@ -128,7 +128,7 @@
 			realTimeServer.handleClientEvent(event3, IRRELEVANT_ID);
 
 			let replayedEvents = [];
-			const client = testClient.createSocketWithoutWaiting();
+			const client = socketIoClient.createSocketWithoutWaiting();
 			await new Promise((resolve, reject) => {
 				client.on(ServerDrawEvent.EVENT_NAME, function(event) {
 					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
@@ -148,11 +148,11 @@
 					}
 				});
 			});
-			await testClient.closeSocket(client);
+			await socketIoClient.closeSocket(client);
 		});
 
 		it("sends 'remove pointer' event to other browsers when client disconnects", async function() {
-			const [disconnector, client] = await testClient.createSockets(2);
+			const [disconnector, client] = await socketIoClient.createSockets(2);
 			const disconnectorId = disconnector.id;
 
 			const listenerPromise = new Promise((resolve, reject) => {
@@ -167,14 +167,14 @@
 					}
 				});
 			});
-			await testClient.closeSocket(disconnector);
+			await socketIoClient.closeSocket(disconnector);
 			await listenerPromise;  // if disconnect event doesn't fire, the test will time out
 
-			await testClient.closeSocket(client);
+			await socketIoClient.closeSocket(client);
 		});
 
 		async function checkEventReflection(clientEvent, serverEventConstructor) {
-			const [emitter, receiver1, receiver2] = await testClient.createSockets(3);
+			const [emitter, receiver1, receiver2] = await socketIoClient.createSockets(3);
 			emitter.on(serverEventConstructor.EVENT_NAME, function() {
 				assert.fail("emitter should not receive its own events");
 			});
@@ -196,7 +196,7 @@
 			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
 
 			await listenerPromise;
-			await testClient.closeSockets(emitter, receiver1, receiver2);
+			await socketIoClient.closeSockets(emitter, receiver1, receiver2);
 		}
 
 		async function waitForConnectionCount(expectedConnections, message) {
