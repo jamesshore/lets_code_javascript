@@ -19,7 +19,7 @@
 
 	describe("Server", function() {
 
-		const testClient = new SocketIoClient("http://localhost:" + PORT);
+		let testClient;
 		let server;
 
 		beforeEach(function(done) {
@@ -33,6 +33,7 @@
 		beforeEach(async function() {
 			server = new Server();
 			await server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT);
+			testClient = new SocketIoClient("http://localhost:" + PORT, server._realTimeServer);
 		});
 
 		afterEach(async function() {

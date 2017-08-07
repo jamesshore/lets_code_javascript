@@ -22,13 +22,14 @@
 
 	describe("RealTimeServer", function() {
 
-		const testClient = new SocketIoClient("http://localhost:" + PORT);
 		let httpServer;
 		let realTimeServer;
+		let testClient;
 
 		beforeEach(async function() {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 			realTimeServer = new RealTimeServer();
+			testClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
 
 			realTimeServer.start(httpServer.getNodeServer());
 			await httpServer.start(PORT);
@@ -127,7 +128,7 @@
 			realTimeServer.handleClientEvent(event3, IRRELEVANT_ID);
 
 			let replayedEvents = [];
-			const client = await testClient.createSocket();
+			const client = testClient.createSocketWithoutWaiting();
 			await new Promise((resolve, reject) => {
 				client.on(ServerDrawEvent.EVENT_NAME, function(event) {
 					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));

@@ -32,12 +32,17 @@
 		}
 
 		createSocket() {
-			var socket = io(this._serverUrl);
-			return new Promise(function(resolve) {
-				socket.on("connect", function() {
-					return resolve(socket);
+			const socket = this.createSocketWithoutWaiting();
+			return new Promise((resolve, reject) => {
+				socket.on("connect", async () => {
+					await waitForServerConnection(socket.id, this._realTimeServer);
+					resolve(socket);
 				});
 			});
+		}
+
+		createSocketWithoutWaiting() {
+			return io(this._serverUrl);
 		}
 
 		closeSocket(socket) {
