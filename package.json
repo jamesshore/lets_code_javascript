@@ -23,7 +23,7 @@
     "socket.io-client": "^2.0.3"
   },
   "dependencies": {
-    "send": "^0.15.3",
+    "send": "^0.15.4",
     "socket.io": "^2.0.3"
   }
 }
