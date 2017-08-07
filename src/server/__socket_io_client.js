@@ -6,8 +6,9 @@
 
 	module.exports = class SocketIoClient {
 
-		constructor(serverUrl) {
+		constructor(serverUrl, realTimeServer) {
 			this._serverUrl = serverUrl;
+			this._realTimeServer = realTimeServer;
 		}
 
 		async createSockets(numSockets) {
@@ -50,5 +51,29 @@
 			return closePromise;
 		}
 	};
+
+	async function waitForServerConnection(socketId, realTimeServer) {
+		const TIMEOUT = 1000; // milliseconds
+		const RETRY_PERIOD = 10; // milliseconds
+
+		const startTime = Date.now();
+		let success = false;
+
+		while(!success && !isTimeUp(TIMEOUT)) {
+			await timeoutPromise(RETRY_PERIOD);
+			success = realTimeServer.isSocketConnected(socketId);
+		}
+		if (isTimeUp(TIMEOUT)) throw new Error("socket " + socketId + " failed to connect to server");
+
+		function isTimeUp(timeout) {
+			return (startTime + timeout) < Date.now();
+		}
+
+		function timeoutPromise(milliseconds) {
+			return new Promise((resolve) => {
+				setTimeout(resolve, milliseconds);
+			});
+		}
+	}
 
 }());
