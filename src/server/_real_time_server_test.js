@@ -2,26 +2,23 @@
 (function() {
 	"use strict";
 
-	var RealTimeServer = require("./real_time_server.js");
-	var HttpServer = require("./http_server.js");
-	var http = require("http");
-	var fs = require("fs");
-	var assert = require("_assert");
-	var io = require("socket.io-client");
-	var ServerPointerEvent = require("../shared/server_pointer_event.js");
-	var ClientPointerEvent = require("../shared/client_pointer_event.js");
-	var ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
-	var ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
-	var ServerDrawEvent = require("../shared/server_draw_event.js");
-	var ClientDrawEvent = require("../shared/client_draw_event.js");
-	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
-	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
-	var SocketIoClient = require("./__socket_io_client.js");
+	const RealTimeServer = require("./real_time_server.js");
+	const HttpServer = require("./http_server.js");
+	const assert = require("_assert");
+	const ServerPointerEvent = require("../shared/server_pointer_event.js");
+	const ClientPointerEvent = require("../shared/client_pointer_event.js");
+	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
+	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
+	const ServerDrawEvent = require("../shared/server_draw_event.js");
+	const ClientDrawEvent = require("../shared/client_draw_event.js");
+	const ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
+	const ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
+	const SocketIoClient = require("./__socket_io_client.js");
 
-	var IRRELEVANT_DIR = "generated/test";
-	var IRRELEVANT_PAGE = "irrelevant.html";
+	const IRRELEVANT_DIR = "generated/test";
+	const IRRELEVANT_PAGE = "irrelevant.html";
 
-	var PORT = 5020;
+	const PORT = 5020;
 
 	describe("RealTimeServer", function() {
 
@@ -194,7 +191,7 @@
 			const TIMEOUT = 1000; // milliseconds
 			const RETRY_PERIOD = 10; // milliseconds
 
-			var startTime = Date.now();
+			const startTime = Date.now();
 			let success = false;
 
 			while(!success && !isTimeUp(TIMEOUT)) {
