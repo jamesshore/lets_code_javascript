@@ -96,9 +96,9 @@
 		broadcastAndStoreEvent(self, clientSocket, serverEvent);
 	}
 
-	function broadcastAndStoreEvent(self, clientSocket, event) {
+	function broadcastAndStoreEvent(self, clientSocketOrNull, event) {
 		self._eventRepo.store(event);
-		if (clientSocket) clientSocket.broadcast.emit(event.name(), event.toSerializableObject());
+		if (clientSocketOrNull) clientSocketOrNull.broadcast.emit(event.name(), event.toSerializableObject());
 		else self._ioServer.emit(event.name(), event.toSerializableObject());
 	}
 

@@ -2,16 +2,18 @@
 (function() {
 	"use strict";
 
-	var EventRepository = module.exports = function EventRepository() {
-		this._data = [];
-	};
+	var EventRepository = module.exports = class EventRepository {
+		constructor() {
+			this._data = [];
+		}
 
-	EventRepository.prototype.store = function(event) {
-		this._data.push(event);
-	};
+		store(event) {
+			this._data.push(event);
+		}
 
-	EventRepository.prototype.replay = function() {
-		return this._data.slice();
+		replay() {
+			return this._data.slice();
+		}
 	};
 
 }());
