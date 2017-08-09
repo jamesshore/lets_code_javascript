@@ -55,8 +55,10 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Prevent ghost pointer from reappearing on reload
+	* Fix the design flaw that allowed the bug to occur
 - Look into accidental disconnection--try the spike
 - Convert all server code to ES6 class syntax
+- Rename event.toSerializableObject() to event.payload() (and corresponding "fromPayload()" or similar)
 
 To Do on current task:
-* Fix the design flaw that allowed the bug to occur
+* Fix emit() duplication in handleSocketIoEvents

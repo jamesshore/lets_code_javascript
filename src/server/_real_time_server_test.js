@@ -95,14 +95,12 @@
 
 		it("treats events received via method call exactly like events received via Socket.IO", async function() {
 			const clientEvent = new ClientPointerEvent(100, 200);
-			const EMITTER_ID = "emitter_id";
-
 			const [receiver1, receiver2] = await socketIoClient.createSockets(2);
 			const listeners = Promise.all([ receiver1, receiver2 ].map((client) => {
 				return new Promise((resolve, reject) => {
 					client.on(ServerPointerEvent.EVENT_NAME, function(data) {
 						try {
-							assert.deepEqual(data, clientEvent.toServerEvent(EMITTER_ID).toSerializableObject());
+							assert.deepEqual(data, clientEvent.toServerEvent("__SIMULATED__").toSerializableObject());
 							resolve();
 						}
 						catch(e) {
@@ -112,7 +110,7 @@
 				});
 			}));
 
-			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
+			realTimeServer.simulateClientEvent(clientEvent);
 
 			await listeners;
 			await socketIoClient.closeSockets(receiver1, receiver2);
@@ -125,9 +123,9 @@
 			const event2 = new ClientDrawEvent(2, 20, 200, 2000);
 			const event3 = new ClientDrawEvent(3, 30, 300, 3000);
 
-			realTimeServer.handleClientEvent(event1, IRRELEVANT_ID);
-			realTimeServer.handleClientEvent(event2, IRRELEVANT_ID);
-			realTimeServer.handleClientEvent(event3, IRRELEVANT_ID);
+			realTimeServer.simulateClientEvent(event1, IRRELEVANT_ID);
+			realTimeServer.simulateClientEvent(event2, IRRELEVANT_ID);
+			realTimeServer.simulateClientEvent(event3, IRRELEVANT_ID);
 
 			let replayedEvents = [];
 			const client = socketIoClient.createSocketWithoutWaiting();

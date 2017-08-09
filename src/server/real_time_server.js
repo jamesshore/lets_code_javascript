@@ -24,6 +24,7 @@
 	RealTimeServer.prototype.start = function(httpServer) {
 		this._httpServer = httpServer;
 		this._ioServer = io(this._httpServer);
+		this._eventRepo = new EventRepository();
 
 		trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 		handleSocketIoEvents(this, this._ioServer);
@@ -45,11 +46,6 @@
 		return close();
 	};
 
-	RealTimeServer.prototype.handleClientEvent = function(clientEvent, clientId) {
-		var serverEvent = processClientEvent(this, clientEvent, clientId);
-		this._ioServer.emit(serverEvent.name(), serverEvent.toSerializableObject());
-	};
-
 	RealTimeServer.prototype.numberOfActiveConnections = function() {
 		return Object.keys(this._socketIoConnections).length;
 	};
@@ -58,26 +54,11 @@
 		return this._socketIoConnections[socketId] !== undefined;
 	};
 
-	function trackSocketIoConnections(connections, ioServer) {
-		// Inspired by isaacs https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
-		ioServer.on("connection", function(socket) {
-			var key = socket.id;
-			connections[key] = true;
-			socket.on("disconnect", function() {
-				delete connections[key];
-			});
-		});
-	}
-
-	function processClientEvent(self, clientEvent, clientId) {
-		var serverEvent = clientEvent.toServerEvent(clientId);
-		self._eventRepo.store(serverEvent);
-		return serverEvent;
-	}
+	RealTimeServer.prototype.simulateClientEvent = function(clientEvent) {
+		processClientEvent(this, null, clientEvent);
+	};
 
 	function handleSocketIoEvents(self, ioServer) {
-		self._eventRepo = new EventRepository();
-
 		ioServer.on("connect", function(socket) {
 			replayPreviousEvents(self, socket);
 			handleClientEvents(self, socket);
@@ -91,7 +72,7 @@
 	}
 
 	function replayPreviousEvents(self, socket) {
-		self._eventRepo.replay().forEach(function(event) {
+		self._eventRepo.replay().forEach((event) => {
 			socket.emit(event.name(), event.toSerializableObject());
 		});
 	}
@@ -107,8 +88,28 @@
 		supportedEvents.forEach(function(eventConstructor) {
 			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
 				var clientEvent = eventConstructor.fromSerializableObject(eventData);
-				var serverEvent = processClientEvent(self, clientEvent, socket.id);
-				socket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
+				processClientEvent(self, socket, clientEvent, socket.id);
+			});
+		});
+	}
+
+	function processClientEvent(self, clientSocket, clientEvent) {
+		const clientId = clientSocket ? clientSocket.id : "__SIMULATED__";
+		const serverEvent = clientEvent.toServerEvent(clientId);
+		self._eventRepo.store(serverEvent);
+
+		if (clientSocket) clientSocket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
+		else self._ioServer.emit(serverEvent.name(), serverEvent.toSerializableObject());
+	}
+
+	function trackSocketIoConnections(connections, ioServer) {
+		// Inspired by isaacs
+		// https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
+		ioServer.on("connection", function(socket) {
+			var key = socket.id;
+			connections[key] = true;
+			socket.on("disconnect", function() {
+				delete connections[key];
 			});
 		});
 	}
