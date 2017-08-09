@@ -17,45 +17,42 @@
 	// Consider Martin Grandrath's suggestions from E509 comments (different RealTimeServer initialization)
 	// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
 
-	const RealTimeServer = module.exports = function RealTimeServer() {
-		this._socketIoConnections = {};
-	};
+	module.exports = class RealTimeServer {
 
-	RealTimeServer.prototype.start = function(httpServer) {
-		this._httpServer = httpServer;
-		this._ioServer = io(this._httpServer);
-		this._eventRepo = new EventRepository();
+		constructor() {
+			this._socketIoConnections = {};
+		}
 
-		trackSocketIoConnections(this._socketIoConnections, this._ioServer);
-		handleSocketIoEvents(this, this._ioServer);
+		start(httpServer) {
+			this._httpServer = httpServer;
+			this._ioServer = io(this._httpServer);
+			this._eventRepo = new EventRepository();
 
-		this._httpServer.on("close", failFastIfHttpServerClosed);
-	};
+			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
+			handleSocketIoEvents(this, this._ioServer);
 
-	function failFastIfHttpServerClosed() {
-		throw new Error(
-			"Do not call httpServer.stop() when using RealTimeServer--it will trigger this bug: " +
-			"https://github.com/socketio/socket.io/issues/2975"
-		);
-	}
+			this._httpServer.on("close", failFastIfHttpServerClosed);
+		}
 
-	RealTimeServer.prototype.stop = function() {
-		const close = util.promisify(this._ioServer.close.bind(this._ioServer));
+		stop() {
+			const close = util.promisify(this._ioServer.close.bind(this._ioServer));
 
-		this._httpServer.removeListener("close", failFastIfHttpServerClosed);
-		return close();
-	};
+			this._httpServer.removeListener("close", failFastIfHttpServerClosed);
+			return close();
+		}
 
-	RealTimeServer.prototype.numberOfActiveConnections = function() {
-		return Object.keys(this._socketIoConnections).length;
-	};
+		numberOfActiveConnections() {
+			return Object.keys(this._socketIoConnections).length;
+		}
 
-	RealTimeServer.prototype.isSocketConnected = function(socketId) {
-		return this._socketIoConnections[socketId] !== undefined;
-	};
+		isSocketConnected(socketId) {
+			return this._socketIoConnections[socketId] !== undefined;
+		}
 
-	RealTimeServer.prototype.simulateClientEvent = function(clientEvent) {
-		processClientEvent(this, null, clientEvent);
+		simulateClientEvent(clientEvent) {
+			processClientEvent(this, null, clientEvent);
+		}
+
 	};
 
 	function handleSocketIoEvents(self, ioServer) {
@@ -100,6 +97,13 @@
 		self._eventRepo.store(event);
 		if (clientSocketOrNull) clientSocketOrNull.broadcast.emit(event.name(), event.toSerializableObject());
 		else self._ioServer.emit(event.name(), event.toSerializableObject());
+	}
+
+	function failFastIfHttpServerClosed() {
+		throw new Error(
+			"Do not call httpServer.stop() when using RealTimeServer--it will trigger this bug: " +
+			"https://github.com/socketio/socket.io/issues/2975"
+		);
 	}
 
 	function trackSocketIoConnections(connections, ioServer) {

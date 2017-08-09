@@ -28,7 +28,7 @@
 		getNodeServer() {
 			return this._httpServer;
 		}
-		
+
 	};
 
 	function handleHttpRequests(httpServer, contentDir, notFoundPageToServe) {
