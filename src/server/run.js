@@ -10,4 +10,5 @@
 	let server = new Server();
 	await server.start(CONTENT_DIR, "404.html", port);
 	console.log("Server started");
+
 }());
