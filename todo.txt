@@ -26,9 +26,7 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* make mouse pointer disappear when user intentionally disconnects (navigates away, reloads, etc.)
-- make mouse pointer disappear when user loses connectivity
-- time out inactive users (make their pointers disappear)
+* time out inactive users (make their pointers disappear)
 - reconnect and resync when client is disconnected/reconnected
 - show disconnection warning / other UX when client is disconnected
 - handle server reset smoothly (clear the drawing? re-sync to browsers? not persistence/DB)
@@ -54,6 +52,7 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Look into accidental disconnection--try the spike
+-
 
 To Do on current task:
+-
