@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2016-2017 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 (function() {
 	"use strict";
 
@@ -20,7 +20,7 @@
 		return new ClientDrawEvent(obj.fromX, obj.fromY, obj.toX, obj.toY);
 	};
 
-	ClientDrawEvent.prototype.toSerializableObject = function() {
+	ClientDrawEvent.prototype.payload = function() {
 		return this._data;
 	};
 

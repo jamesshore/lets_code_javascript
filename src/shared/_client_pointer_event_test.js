@@ -13,7 +13,7 @@
 			var eventObject = new ClientPointerEvent(1, 2);
 
 			assert.deepEqual(ClientPointerEvent.fromSerializableObject(bareObject), eventObject, "fromSerializableObject()");
-			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
+			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerPointerEvent", function() {

@@ -13,7 +13,7 @@
 			var eventObject = new ClientClearScreenEvent();
 
 			assert.deepEqual(ClientClearScreenEvent.fromSerializableObject(bareObject), eventObject, "fromSerializableObject()");
-			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
+			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerClearScreenEvent", function() {

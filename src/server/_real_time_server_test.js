@@ -100,7 +100,7 @@
 				return new Promise((resolve, reject) => {
 					client.on(ServerPointerEvent.EVENT_NAME, function(data) {
 						try {
-							assert.deepEqual(data, clientEvent.toServerEvent("__SIMULATED__").toSerializableObject());
+							assert.deepEqual(data, clientEvent.toServerEvent("__SIMULATED__").payload());
 							resolve();
 						}
 						catch(e) {
@@ -194,7 +194,7 @@
 				return new Promise((resolve, reject) => {
 					client.on(serverEventConstructor.EVENT_NAME, (data) => {
 						try {
-							assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
+							assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
 							resolve();
 						}
 						catch (err) {
@@ -204,7 +204,7 @@
 				});
 			}));
 
-			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
+			emitter.emit(clientEvent.name(), clientEvent.payload());
 
 			await listenerPromise;
 			await socketIoClient.closeSockets(emitter, receiver1, receiver2);

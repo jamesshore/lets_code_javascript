@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2016-2017 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 (function() {
 	"use strict";
 
@@ -12,7 +12,7 @@
 		return new ServerClearScreenEvent();
 	};
 
-	ServerClearScreenEvent.prototype.toSerializableObject = function() {
+	ServerClearScreenEvent.prototype.payload = function() {
 		return {};
 	};
 

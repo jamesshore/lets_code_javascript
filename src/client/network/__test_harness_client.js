@@ -37,7 +37,7 @@
 			async: true,
 			data: {
 				eventName: event.name(),
-				eventData: event.toSerializableObject()
+				eventData: event.payload()
 			}
 		}, function(err, responseText) {
 			callback(err);

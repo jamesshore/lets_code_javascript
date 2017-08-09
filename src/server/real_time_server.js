@@ -68,7 +68,7 @@
 
 	function replayPreviousEvents(self, socket) {
 		self._eventRepo.replay().forEach((event) => {
-			socket.emit(event.name(), event.toSerializableObject());
+			socket.emit(event.name(), event.payload());
 		});
 	}
 
@@ -95,8 +95,8 @@
 
 	function broadcastAndStoreEvent(self, clientSocketOrNull, event) {
 		self._eventRepo.store(event);
-		if (clientSocketOrNull) clientSocketOrNull.broadcast.emit(event.name(), event.toSerializableObject());
-		else self._ioServer.emit(event.name(), event.toSerializableObject());
+		if (clientSocketOrNull) clientSocketOrNull.broadcast.emit(event.name(), event.payload());
+		else self._ioServer.emit(event.name(), event.payload());
 	}
 
 	function failFastIfHttpServerClosed() {

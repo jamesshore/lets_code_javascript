@@ -51,7 +51,7 @@
 		failFastUnlessConnectCalled(this);
 
 		this._lastSentEvent = event;
-		this._socket.emit(event.name(), event.toSerializableObject());
+		this._socket.emit(event.name(), event.payload());
 	};
 
 	Connection.prototype.getLastSentEvent = function() {

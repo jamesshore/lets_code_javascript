@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2016-2017 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 (function() {
 	"use strict";
 
@@ -16,7 +16,7 @@
 		return new ClientPointerEvent(obj.x, obj.y);
 	};
 
-	ClientPointerEvent.prototype.toSerializableObject = function() {
+	ClientPointerEvent.prototype.payload = function() {
 		return {
 			x: this._x,
 			y: this._y

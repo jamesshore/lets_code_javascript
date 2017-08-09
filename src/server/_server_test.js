@@ -74,12 +74,12 @@
 			const receiver = await socketIoClient.createSocket();
 			const clientEvent = new ClientPointerEvent(100, 200);
 
-			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
+			emitter.emit(clientEvent.name(), clientEvent.payload());
 
 			await new Promise((resolve, reject) => {
 				receiver.on(ServerPointerEvent.EVENT_NAME, function(data) {
 					try {
-						assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
+						assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
 						resolve();
 					}
 					catch(err) {

@@ -13,7 +13,7 @@
 			var eventObject = new ClientDrawEvent(1, 2, 3, 4);
 
 			assert.deepEqual(ClientDrawEvent.fromSerializableObject(bareObject), eventObject, "fromSerializableObject()");
-			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
+			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerDrawEvent", function() {
