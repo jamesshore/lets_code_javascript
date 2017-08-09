@@ -154,7 +154,7 @@
 		});
 
 		it("sends 'remove pointer' event to other browsers when client disconnects", async function() {
-			const [disconnector, client] = await socketIoClient.createSockets(2);
+			const [ disconnector, client ] = await socketIoClient.createSockets(2);
 			const disconnectorId = disconnector.id;
 
 			const listenerPromise = new Promise((resolve, reject) => {
@@ -173,6 +173,17 @@
 			await listenerPromise;  // if disconnect event doesn't fire, the test will time out
 
 			await socketIoClient.closeSocket(client);
+		});
+
+		it("stores 'remove pointer' event in event repo when client disconnects", async function() {
+			const client = await socketIoClient.createSocket();
+			const clientId = client.id;
+
+			await socketIoClient.closeSocket(client);
+			assert.deepEqual(
+				realTimeServer._eventRepo.replay(),
+				[ new ServerRemovePointerEvent(clientId) ]
+			);
 		});
 
 		async function checkEventReflection(clientEvent, serverEventConstructor) {

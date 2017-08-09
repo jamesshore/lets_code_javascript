@@ -84,6 +84,7 @@
 
 			socket.on("disconnect", () => {
 				var disconnectEvent = new ServerRemovePointerEvent(socket.id);
+				self._eventRepo.store(disconnectEvent);
 				socket.broadcast.emit(disconnectEvent.name(), disconnectEvent.toSerializableObject());
 			});
 		});

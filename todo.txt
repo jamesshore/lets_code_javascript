@@ -59,6 +59,4 @@ Engineering Tasks:
 - Convert all server code to ES6 class syntax
 
 To Do on current task:
-* Write a test to reproduce bug
-- Fix the bug
-- Fix the design flaw that allowed the bug to occur
+* Fix the design flaw that allowed the bug to occur
