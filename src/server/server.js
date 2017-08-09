@@ -2,8 +2,8 @@
 (function() {
 	"use strict";
 
-	var HttpServer = require("./http_server.js");
-	var RealTimeServer = require("./real_time_server.js");
+	const HttpServer = require("./http_server.js");
+	const RealTimeServer = require("./real_time_server.js");
 
 	module.exports = class Server {
 

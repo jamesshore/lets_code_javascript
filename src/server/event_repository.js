@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var EventRepository = module.exports = class EventRepository {
+	module.exports = class EventRepository {
 		constructor() {
 			this._data = [];
 		}
