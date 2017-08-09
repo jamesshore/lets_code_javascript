@@ -72,7 +72,7 @@
 				connection.sendEvent(event);
 
 				harness.waitForEvent(connection, ClientDrawEvent, function(error, eventData) {
-					assert.deepEqual(eventData, event.toSerializableObject());
+					assert.deepEqual(eventData, event.payload());
 					connection.disconnect(done);
 				});
 			});

@@ -95,14 +95,12 @@
 
 		it("treats events received via method call exactly like events received via Socket.IO", async function() {
 			const clientEvent = new ClientPointerEvent(100, 200);
-			const EMITTER_ID = "emitter_id";
-
 			const [receiver1, receiver2] = await socketIoClient.createSockets(2);
 			const listeners = Promise.all([ receiver1, receiver2 ].map((client) => {
 				return new Promise((resolve, reject) => {
 					client.on(ServerPointerEvent.EVENT_NAME, function(data) {
 						try {
-							assert.deepEqual(data, clientEvent.toServerEvent(EMITTER_ID).toSerializableObject());
+							assert.deepEqual(data, clientEvent.toServerEvent("__SIMULATED__").payload());
 							resolve();
 						}
 						catch(e) {
@@ -112,7 +110,7 @@
 				});
 			}));
 
-			realTimeServer.handleClientEvent(clientEvent, EMITTER_ID);
+			realTimeServer.simulateClientEvent(clientEvent);
 
 			await listeners;
 			await socketIoClient.closeSockets(receiver1, receiver2);
@@ -125,15 +123,15 @@
 			const event2 = new ClientDrawEvent(2, 20, 200, 2000);
 			const event3 = new ClientDrawEvent(3, 30, 300, 3000);
 
-			realTimeServer.handleClientEvent(event1, IRRELEVANT_ID);
-			realTimeServer.handleClientEvent(event2, IRRELEVANT_ID);
-			realTimeServer.handleClientEvent(event3, IRRELEVANT_ID);
+			realTimeServer.simulateClientEvent(event1, IRRELEVANT_ID);
+			realTimeServer.simulateClientEvent(event2, IRRELEVANT_ID);
+			realTimeServer.simulateClientEvent(event3, IRRELEVANT_ID);
 
 			let replayedEvents = [];
 			const client = socketIoClient.createSocketWithoutWaiting();
 			await new Promise((resolve, reject) => {
 				client.on(ServerDrawEvent.EVENT_NAME, function(event) {
-					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
+					replayedEvents.push(ServerDrawEvent.fromPayload(event));
 					if (replayedEvents.length === 3) {
 						try {
 							// if we don't get the events, the test will time out
@@ -154,13 +152,13 @@
 		});
 
 		it("sends 'remove pointer' event to other browsers when client disconnects", async function() {
-			const [disconnector, client] = await socketIoClient.createSockets(2);
+			const [ disconnector, client ] = await socketIoClient.createSockets(2);
 			const disconnectorId = disconnector.id;
 
 			const listenerPromise = new Promise((resolve, reject) => {
 				client.on(ServerRemovePointerEvent.EVENT_NAME, function(eventData) {
 					try {
-						const event = ServerRemovePointerEvent.fromSerializableObject(eventData);
+						const event = ServerRemovePointerEvent.fromPayload(eventData);
 						assert.equal(event.id, disconnectorId);
 						resolve();
 					}
@@ -175,6 +173,17 @@
 			await socketIoClient.closeSocket(client);
 		});
 
+		it("stores 'remove pointer' event in event repo when client disconnects", async function() {
+			const client = await socketIoClient.createSocket();
+			const clientId = client.id;
+
+			await socketIoClient.closeSocket(client);
+			assert.deepEqual(
+				realTimeServer._eventRepo.replay(),
+				[ new ServerRemovePointerEvent(clientId) ]
+			);
+		});
+
 		async function checkEventReflection(clientEvent, serverEventConstructor) {
 			const [emitter, receiver1, receiver2] = await socketIoClient.createSockets(3);
 			emitter.on(serverEventConstructor.EVENT_NAME, function() {
@@ -185,7 +194,7 @@
 				return new Promise((resolve, reject) => {
 					client.on(serverEventConstructor.EVENT_NAME, (data) => {
 						try {
-							assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).toSerializableObject());
+							assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
 							resolve();
 						}
 						catch (err) {
@@ -195,7 +204,7 @@
 				});
 			}));
 
-			emitter.emit(clientEvent.name(), clientEvent.toSerializableObject());
+			emitter.emit(clientEvent.name(), clientEvent.payload());
 
 			await listenerPromise;
 			await socketIoClient.closeSockets(emitter, receiver1, receiver2);

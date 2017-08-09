@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2016-2017 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 (function() {
 	"use strict";
 
@@ -10,11 +10,11 @@
 	ClientClearScreenEvent.EVENT_NAME = "client_clear_screen_event";
 	ClientClearScreenEvent.prototype.name = function() { return ClientClearScreenEvent.EVENT_NAME; };
 
-	ClientClearScreenEvent.fromSerializableObject = function(obj) {
+	ClientClearScreenEvent.fromPayload = function(obj) {
 		return new ClientClearScreenEvent();
 	};
 
-	ClientClearScreenEvent.prototype.toSerializableObject = function() {
+	ClientClearScreenEvent.prototype.payload = function() {
 		return {};
 	};
 

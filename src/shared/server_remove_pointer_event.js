@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2016-2017 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 (function() {
 	"use strict";
 
@@ -9,11 +9,11 @@
 	ServerRemovePointerEvent.EVENT_NAME = "server_remove_pointer_event";
 	ServerRemovePointerEvent.prototype.name = function() { return ServerRemovePointerEvent.EVENT_NAME; };
 
-	ServerRemovePointerEvent.fromSerializableObject = function(obj) {
+	ServerRemovePointerEvent.fromPayload = function(obj) {
 		return new ServerRemovePointerEvent(obj.id);
 	};
 
-	ServerRemovePointerEvent.prototype.toSerializableObject = function() {
+	ServerRemovePointerEvent.prototype.payload = function() {
 		return { id: this.id };
 	};
 

@@ -12,8 +12,8 @@
 			var bareObject = { x: 1, y: 2 };
 			var eventObject = new ClientPointerEvent(1, 2);
 
-			assert.deepEqual(ClientPointerEvent.fromSerializableObject(bareObject), eventObject, "fromSerializableObject()");
-			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
+			assert.deepEqual(ClientPointerEvent.fromPayload(bareObject), eventObject, "fromPayload()");
+			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerPointerEvent", function() {

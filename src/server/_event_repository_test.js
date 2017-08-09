@@ -2,13 +2,13 @@
 (function() {
 	"use strict";
 
-	var assert = require("_assert");
-	var EventRepository = require("./event_repository.js");
-	var ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
+	const assert = require("_assert");
+	const EventRepository = require("./event_repository.js");
+	const ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
 
 	describe("Event Repository", function() {
 
-		var repo;
+		let repo;
 
 		beforeEach(function() {
 			repo = new EventRepository();
@@ -28,7 +28,7 @@
 		});
 
 		it("isolates its data from changes to returned results", function() {
-			var events = repo.replay();
+			const events = repo.replay();
 			events.push("change to our copy of repo's events");
 			assert.deepEqual(repo.replay(), [], "repo's events shouldn't change");
 		});

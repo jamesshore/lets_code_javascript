@@ -11,8 +11,8 @@
 			var bareObject = {};
 			var eventObject = new ServerClearScreenEvent();
 
-			assert.deepEqual(ServerClearScreenEvent.fromSerializableObject(bareObject), eventObject, "fromSerializableObject()");
-			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
+			assert.deepEqual(ServerClearScreenEvent.fromPayload(bareObject), eventObject, "fromPayload()");
+			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		it("instances know their network event name", function() {

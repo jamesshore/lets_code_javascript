@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2016-2017 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 (function() {
 	"use strict";
 
@@ -11,8 +11,8 @@
 			var bareObject = { id: "a", x: 1, y: 2 };
 			var eventObject = new ServerPointerEvent("a", 1, 2);
 
-			assert.deepEqual(ServerPointerEvent.fromSerializableObject(bareObject), eventObject, "fromSerializableObject()");
-			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
+			assert.deepEqual(ServerPointerEvent.fromPayload(bareObject), eventObject, "fromPayload()");
+			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		it("instances know their network event name", function() {

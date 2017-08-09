@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
+// Copyright (c) 2016-2017 Titanium I.T. LLC. All rights reserved. For license, see "README" or "LICENSE" file.
 (function() {
 	"use strict";
 
@@ -11,11 +11,11 @@
 	ServerPointerEvent.EVENT_NAME = "server_pointer_event";
 	ServerPointerEvent.prototype.name = function() { return ServerPointerEvent.EVENT_NAME; };
 
-	ServerPointerEvent.fromSerializableObject = function fromSerializableObject(obj) {
+	ServerPointerEvent.fromPayload = function(obj) {
 		return new ServerPointerEvent(obj.id, obj.x, obj.y);
 	};
 
-	ServerPointerEvent.prototype.toSerializableObject = function toSerializableObject() {
+	ServerPointerEvent.prototype.payload = function() {
 		return {
 			id: this.id,
 			x: this.x,

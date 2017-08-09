@@ -12,8 +12,8 @@
 			var bareObject = { fromX: 1, fromY: 2, toX: 3, toY: 4 };
 			var eventObject = new ClientDrawEvent(1, 2, 3, 4);
 
-			assert.deepEqual(ClientDrawEvent.fromSerializableObject(bareObject), eventObject, "fromSerializableObject()");
-			assert.deepEqual(eventObject.toSerializableObject(), bareObject, "toSerializableObject()");
+			assert.deepEqual(ClientDrawEvent.fromPayload(bareObject), eventObject, "fromPayload()");
+			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerDrawEvent", function() {
