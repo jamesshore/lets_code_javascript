@@ -8,7 +8,7 @@
 	ServerClearScreenEvent.EVENT_NAME = "server_clear_screen_event";
 	ServerClearScreenEvent.prototype.name = function() { return ServerClearScreenEvent.EVENT_NAME; };
 
-	ServerClearScreenEvent.fromSerializableObject = function(obj) {
+	ServerClearScreenEvent.fromPayload = function(obj) {
 		return new ServerClearScreenEvent();
 	};
 

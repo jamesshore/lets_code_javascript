@@ -16,7 +16,7 @@
 	ServerDrawEvent.EVENT_NAME = "server_draw_event";
 	ServerDrawEvent.prototype.name = function() { return ServerDrawEvent.EVENT_NAME; };
 
-	ServerDrawEvent.fromSerializableObject = function(obj) {
+	ServerDrawEvent.fromPayload = function(obj) {
 		return new ServerDrawEvent(obj.fromX, obj.fromY, obj.toX, obj.toY);
 	};
 

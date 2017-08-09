@@ -10,7 +10,7 @@
 	ClientRemovePointerEvent.EVENT_NAME = "client_remove_pointer_event";
 	ClientRemovePointerEvent.prototype.name = function() { return ClientRemovePointerEvent.EVENT_NAME; };
 
-	ClientRemovePointerEvent.fromSerializableObject = function(obj) {
+	ClientRemovePointerEvent.fromPayload = function(obj) {
 		return new ClientRemovePointerEvent();
 	};
 

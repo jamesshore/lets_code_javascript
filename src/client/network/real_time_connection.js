@@ -64,7 +64,7 @@
 
 		this._localEmitter.on(eventConstructor.EVENT_NAME, handler);
 		this._socket.on(eventConstructor.EVENT_NAME, function(eventData) {
-			return handler(eventConstructor.fromSerializableObject(eventData));
+			return handler(eventConstructor.fromPayload(eventData));
 		});
 	};
 

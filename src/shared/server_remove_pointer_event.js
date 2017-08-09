@@ -9,7 +9,7 @@
 	ServerRemovePointerEvent.EVENT_NAME = "server_remove_pointer_event";
 	ServerRemovePointerEvent.prototype.name = function() { return ServerRemovePointerEvent.EVENT_NAME; };
 
-	ServerRemovePointerEvent.fromSerializableObject = function(obj) {
+	ServerRemovePointerEvent.fromPayload = function(obj) {
 		return new ServerRemovePointerEvent(obj.id);
 	};
 

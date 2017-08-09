@@ -16,7 +16,7 @@
 	ClientDrawEvent.EVENT_NAME = "client_line_event";
 	ClientDrawEvent.prototype.name = function() { return ClientDrawEvent.EVENT_NAME; };
 
-	ClientDrawEvent.fromSerializableObject = function(obj) {
+	ClientDrawEvent.fromPayload = function(obj) {
 		return new ClientDrawEvent(obj.fromX, obj.fromY, obj.toX, obj.toY);
 	};
 

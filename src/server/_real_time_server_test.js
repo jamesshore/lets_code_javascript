@@ -131,7 +131,7 @@
 			const client = socketIoClient.createSocketWithoutWaiting();
 			await new Promise((resolve, reject) => {
 				client.on(ServerDrawEvent.EVENT_NAME, function(event) {
-					replayedEvents.push(ServerDrawEvent.fromSerializableObject(event));
+					replayedEvents.push(ServerDrawEvent.fromPayload(event));
 					if (replayedEvents.length === 3) {
 						try {
 							// if we don't get the events, the test will time out
@@ -158,7 +158,7 @@
 			const listenerPromise = new Promise((resolve, reject) => {
 				client.on(ServerRemovePointerEvent.EVENT_NAME, function(eventData) {
 					try {
-						const event = ServerRemovePointerEvent.fromSerializableObject(eventData);
+						const event = ServerRemovePointerEvent.fromPayload(eventData);
 						assert.equal(event.id, disconnectorId);
 						resolve();
 					}

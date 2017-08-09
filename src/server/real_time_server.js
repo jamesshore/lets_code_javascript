@@ -82,7 +82,7 @@
 
 		supportedEvents.forEach(function(eventConstructor) {
 			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
-				const clientEvent = eventConstructor.fromSerializableObject(eventData);
+				const clientEvent = eventConstructor.fromPayload(eventData);
 				processClientEvent(self, socket, clientEvent, socket.id);
 			});
 		});

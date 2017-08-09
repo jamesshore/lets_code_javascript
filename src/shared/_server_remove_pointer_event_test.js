@@ -11,7 +11,7 @@
 			var bareObject = { id: "a" };
 			var eventObject = new ServerRemovePointerEvent("a");
 
-			assert.deepEqual(ServerRemovePointerEvent.fromSerializableObject(bareObject), eventObject, "fromSerializableObject()");
+			assert.deepEqual(ServerRemovePointerEvent.fromPayload(bareObject), eventObject, "fromPayload()");
 			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 

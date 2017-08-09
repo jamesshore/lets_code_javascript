@@ -54,7 +54,6 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Rename event.toSerializableObject() to event.payload() (and corresponding "fromPayload()" or similar)
-- Look into accidental disconnection--try the spike
+* Look into accidental disconnection--try the spike
 
 To Do on current task:
