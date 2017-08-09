@@ -2,14 +2,14 @@
 (function() {
 	"use strict";
 
-	var io = require('socket.io');
-	var ClientPointerEvent = require("../shared/client_pointer_event.js");
-	var ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
-	var ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
-	var ClientDrawEvent = require("../shared/client_draw_event.js");
-	var ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
-	var EventRepository = require("./event_repository.js");
-	var util = require("util");
+	const io = require('socket.io');
+	const ClientPointerEvent = require("../shared/client_pointer_event.js");
+	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
+	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
+	const ClientDrawEvent = require("../shared/client_draw_event.js");
+	const ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
+	const EventRepository = require("./event_repository.js");
+	const util = require("util");
 
 	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
@@ -17,7 +17,7 @@
 	// Consider Martin Grandrath's suggestions from E509 comments (different RealTimeServer initialization)
 	// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
 
-	var RealTimeServer = module.exports = function RealTimeServer() {
+	const RealTimeServer = module.exports = function RealTimeServer() {
 		this._socketIoConnections = {};
 	};
 
@@ -59,14 +59,12 @@
 	};
 
 	function handleSocketIoEvents(self, ioServer) {
-		ioServer.on("connect", function(socket) {
+		ioServer.on("connect", (socket) => {
 			replayPreviousEvents(self, socket);
 			handleClientEvents(self, socket);
 
 			socket.on("disconnect", () => {
-				var disconnectEvent = new ServerRemovePointerEvent(socket.id);
-				self._eventRepo.store(disconnectEvent);
-				socket.broadcast.emit(disconnectEvent.name(), disconnectEvent.toSerializableObject());
+				broadcastAndStoreEvent(self, socket, new ServerRemovePointerEvent(socket.id));
 			});
 		});
 	}
@@ -78,7 +76,7 @@
 	}
 
 	function handleClientEvents(self, socket) {
-		var supportedEvents = [
+		const supportedEvents = [
 			ClientPointerEvent,
 			ClientRemovePointerEvent,
 			ClientDrawEvent,
@@ -87,26 +85,28 @@
 
 		supportedEvents.forEach(function(eventConstructor) {
 			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
-				var clientEvent = eventConstructor.fromSerializableObject(eventData);
+				const clientEvent = eventConstructor.fromSerializableObject(eventData);
 				processClientEvent(self, socket, clientEvent, socket.id);
 			});
 		});
 	}
 
 	function processClientEvent(self, clientSocket, clientEvent) {
-		const clientId = clientSocket ? clientSocket.id : "__SIMULATED__";
-		const serverEvent = clientEvent.toServerEvent(clientId);
-		self._eventRepo.store(serverEvent);
+		const serverEvent = clientEvent.toServerEvent(clientSocket ? clientSocket.id : "__SIMULATED__");
+		broadcastAndStoreEvent(self, clientSocket, serverEvent);
+	}
 
-		if (clientSocket) clientSocket.broadcast.emit(serverEvent.name(), serverEvent.toSerializableObject());
-		else self._ioServer.emit(serverEvent.name(), serverEvent.toSerializableObject());
+	function broadcastAndStoreEvent(self, clientSocket, event) {
+		self._eventRepo.store(event);
+		if (clientSocket) clientSocket.broadcast.emit(event.name(), event.toSerializableObject());
+		else self._ioServer.emit(event.name(), event.toSerializableObject());
 	}
 
 	function trackSocketIoConnections(connections, ioServer) {
 		// Inspired by isaacs
 		// https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
 		ioServer.on("connection", function(socket) {
-			var key = socket.id;
+			const key = socket.id;
 			connections[key] = true;
 			socket.on("disconnect", function() {
 				delete connections[key];
