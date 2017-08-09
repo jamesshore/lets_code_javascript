@@ -2,29 +2,33 @@
 (function() {
 	"use strict";
 
-	var http = require("http");
-	var fs = require("fs");
-	var send = require("send");
-	var util = require("util");
+	const http = require("http");
+	const fs = require("fs");
+	const send = require("send");
+	const util = require("util");
 
-	var HttpServer = module.exports = function HttpServer(contentDir, notFoundPageToServe) {
-		this._httpServer = http.createServer();
+	module.exports = class HttpServer {
 
-		handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
-	};
+		constructor(contentDir, notFoundPageToServe) {
+			this._httpServer = http.createServer();
 
-	HttpServer.prototype.start = function(portNumber) {
-		const listen = util.promisify(this._httpServer.listen.bind(this._httpServer));
-		return listen(portNumber);
-	};
+			handleHttpRequests(this._httpServer, contentDir, notFoundPageToServe);
+		}
 
-	HttpServer.prototype.stop = function() {
-		const close = util.promisify(this._httpServer.close.bind(this._httpServer));
-		return close();
-	};
+		start(portNumber) {
+			const listen = util.promisify(this._httpServer.listen.bind(this._httpServer));
+			return listen(portNumber);
+		}
 
-	HttpServer.prototype.getNodeServer = function() {
-		return this._httpServer;
+		stop() {
+			const close = util.promisify(this._httpServer.close.bind(this._httpServer));
+			return close();
+		}
+
+		getNodeServer() {
+			return this._httpServer;
+		}
+		
 	};
 
 	function handleHttpRequests(httpServer, contentDir, notFoundPageToServe) {
