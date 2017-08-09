@@ -54,8 +54,11 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Resolve order-of-operations issue when reloading -- server seems to get client move event *after* disconnect event.
+* Prevent ghost pointer from reappearing on reload
 - Look into accidental disconnection--try the spike
 - Convert all server code to ES6 class syntax
 
 To Do on current task:
+* Write a test to reproduce bug
+- Fix the bug
+- Fix the design flaw that allowed the bug to occur
