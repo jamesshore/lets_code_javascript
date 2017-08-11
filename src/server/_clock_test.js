@@ -8,7 +8,16 @@
 	describe("Clock", function() {
 
 		it("attached to real system by default", function(done) {
-			assert.equal(new Clock().now(), Date.now());
+			const clock = new Clock();
+			const startTime = clock.now();
+			setTimeout(() => {
+				try {
+					const elapsedTime = clock.now() - startTime;
+					assert.lte(10, elapsedTime);
+					done();
+				}
+				catch (err) { done(err); }
+			}, 10);
 		});
 
 		// const fakeClock = Clock.createFake()

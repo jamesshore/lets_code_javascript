@@ -4,6 +4,9 @@
 
 	module.exports = class Clock {
 
+		now() {
+			return Date.now();
+		}
 	};
 
 }());
