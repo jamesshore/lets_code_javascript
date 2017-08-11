@@ -58,8 +58,7 @@ Engineering Tasks:
 - Factor out domain logic from Socket.IO handling (in RealTimeServer)?
 
 To Do on current task:
-* elapsedTime() of some sort
+* Use lolex?
 - setInterval() of some sort
-- Use lolex?
 - add promisified version of setTimeout()
 - use Clock.setTimeout() in RealTimeServer tests

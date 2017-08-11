@@ -4,25 +4,53 @@
 
 	const FAKE_START_TIME = 424242;
 
-	module.exports = class Clock {
+	class RealClock {
 
-		constructor(useFake) {
-			this._useFake = useFake;
-			if (useFake) this._now = FAKE_START_TIME;
+		now() {
+			return Date.now();
 		}
 
-		static createFake() {
-			return new Clock(true);
+		tick() {
+			throw new Error("Attempted to tick() system clock. Should be a fake clock instead.");
+		}
+
+	}
+
+	class FakeClock {
+
+		constructor() {
+			this._now = FAKE_START_TIME;
 		}
 
 		now() {
-			if (this._useFake) return this._now;
-			else return Date.now();
+			return this._now;
 		}
 
 		tick(milliseconds) {
-			if (!this._useFake) throw new Error("Attempted to tick() system clock. Should be a fake clock instead.");
 			this._now += milliseconds;
+		}
+
+	}
+
+
+	module.exports = class Clock {
+
+		constructor() {
+			this._clock = new RealClock();
+		}
+
+		static createFake() {
+			var clock = new Clock(true);
+			clock._clock = new FakeClock();
+			return clock;
+		}
+
+		now() {
+			return this._clock.now();
+		}
+
+		tick(milliseconds) {
+			this._clock.tick(milliseconds);
 		}
 
 		millisecondsSince(startTimeInMilliseconds) {
@@ -30,5 +58,6 @@
 		}
 
 	};
+
 
 }());
