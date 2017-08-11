@@ -7,10 +7,19 @@
 
 	describe("Clock", function() {
 
-		it("instantiates", function() {
-			const clock = new Clock();
+		it("attached to real system by default", function(done) {
+			assert.equal(new Clock().now(), Date.now());
 		});
 
+		// const fakeClock = Clock.createFake()
+		// new Clock();
+		// nullClock.tick(15);
+
+		// const lastActivity = clock.now();
+		// if (clock.timeSince(lastActivity) > 10000) doSomething();
+
+		// var interval = clock.setInterval(..., 100);
+		// interval.clear();
 	});
 
 }());

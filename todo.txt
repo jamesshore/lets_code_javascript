@@ -58,6 +58,6 @@ Engineering Tasks:
 - Factor out domain logic from Socket.IO handling (in RealTimeServer)?
 
 To Do on current task:
-* Create our own Date abstraction
-- elapsedTime() of some sort
+- add assert.gte()
+* elapsedTime() of some sort
 - setInterval() of some sort
