@@ -61,5 +61,6 @@ To Do on current task:
 - add assert.gte()
 * elapsedTime() of some sort
 - setInterval() of some sort
+- Use lolex?
 - add promisified version of setTimeout()
 - use Clock.setTimeout() in RealTimeServer tests

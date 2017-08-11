@@ -7,12 +7,19 @@
 
 	describe("Clock", function() {
 
+		let realClock;
+		let fakeClock;
+
+		beforeEach(function() {
+			realClock = new Clock();
+			fakeClock = Clock.createFake();
+		});
+
 		it("attaches to real system clock by default", function(done) {
-			const clock = new Clock();
-			const startTime = clock.now();
+			const startTime = realClock.now();
 			setTimeout(() => {
 				try {
-					const elapsedTime = clock.now() - startTime;
+					const elapsedTime = realClock.now() - startTime;
 					assert.lte(10, elapsedTime);
 					done();
 				}
@@ -21,8 +28,17 @@
 		});
 
 		it("can use fake clock instead of real system clock", function() {
-			const clock = Clock.createFake();
-			assert.equal(clock.now(), 424242);
+			assert.equal(fakeClock.now(), 424242);
+		});
+
+		it("ticks the fake clock", function() {
+			const startTime = fakeClock.now();
+			fakeClock.tick(10000);
+			assert.equal(fakeClock.now(), startTime + 10000);
+		});
+
+		it("fails fast when attempting to tick system clock", function() {
+			assert.exception(() => realClock.tick());
 		});
 
 		// const fakeClock = Clock.createFake()
