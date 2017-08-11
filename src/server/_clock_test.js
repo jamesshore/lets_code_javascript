@@ -7,7 +7,7 @@
 
 	describe("Clock", function() {
 
-		it("attached to real system by default", function(done) {
+		it("attaches to real system clock by default", function(done) {
 			const clock = new Clock();
 			const startTime = clock.now();
 			setTimeout(() => {
@@ -18,6 +18,11 @@
 				}
 				catch (err) { done(err); }
 			}, 10);
+		});
+
+		it("can use fake clock instead of real system clock", function() {
+			const clock = Clock.createFake();
+			assert.equal(clock.now(), 424242);
 		});
 
 		// const fakeClock = Clock.createFake()
