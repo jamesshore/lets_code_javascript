@@ -20,7 +20,7 @@
 			setTimeout(() => {
 				try {
 					const elapsedTime = realClock.now() - startTime;
-					assert.lte(10, elapsedTime);
+					assert.gte(elapsedTime, 10);
 					done();
 				}
 				catch (err) { done(err); }

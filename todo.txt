@@ -58,7 +58,6 @@ Engineering Tasks:
 - Factor out domain logic from Socket.IO handling (in RealTimeServer)?
 
 To Do on current task:
-- add assert.gte()
 * elapsedTime() of some sort
 - setInterval() of some sort
 - Use lolex?
