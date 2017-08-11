@@ -25,6 +25,10 @@
 			this._now += milliseconds;
 		}
 
+		millisecondsSince(startTimeInMilliseconds) {
+			return this.now() - startTimeInMilliseconds;
+		}
+
 	};
 
 }());

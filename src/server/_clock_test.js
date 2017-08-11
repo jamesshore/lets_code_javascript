@@ -41,6 +41,12 @@
 			assert.exception(() => realClock.tick());
 		});
 
+		it("tells us how many milliseconds have elapsed", function() {
+			const startTime = fakeClock.now();
+			fakeClock.tick(999);
+			assert.equal(fakeClock.millisecondsSince(startTime), 999);
+		});
+
 		// const fakeClock = Clock.createFake()
 		// new Clock();
 		// nullClock.tick(15);
