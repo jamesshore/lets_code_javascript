@@ -53,11 +53,10 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Abstract timing into its own class (use lolex?)
-- Implement timeout in RealTimeServer
+* Implement timeout in RealTimeServer
 - Factor out domain logic from Socket.IO handling (in RealTimeServer)?
+- add promisified version of setTimeout()?
+	- use Clock.setTimeout() in RealTimeServer tests
 
 To Do on current task:
-- setInterval() of some sort
-- add promisified version of setTimeout()
-- use Clock.setTimeout() in RealTimeServer tests
+- Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)

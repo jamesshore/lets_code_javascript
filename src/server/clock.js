@@ -9,6 +9,8 @@
 	class RealClock {
 		get Date() { return Date; }
 		tick() { throw new Error("Attempted to tick() system clock. Should be a fake clock instead."); }
+		setInterval(fn, milliseconds) { return setInterval(fn, milliseconds); }
+		clearInterval(id) { clearInterval(id); }
 	}
 
 	module.exports = class Clock {
@@ -33,6 +35,15 @@
 
 		millisecondsSince(startTimeInMilliseconds) {
 			return this.now() - startTimeInMilliseconds;
+		}
+
+		setInterval(fn, intervalInMilliseconds) {
+			var handle = this._clock.setInterval(fn, intervalInMilliseconds);
+			return {
+				clear: function() {
+					this._clock.clearInterval(handle);
+				}.bind(this)
+			};
 		}
 
 	};

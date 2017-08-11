@@ -47,15 +47,25 @@
 			assert.equal(fakeClock.millisecondsSince(startTime), 999);
 		});
 
-		// const fakeClock = Clock.createFake()
-		// new Clock();
-		// nullClock.tick(15);
+		it("fake clock runs a function every n milliseconds", function(done) {
+			const interval = fakeClock.setInterval(done, 10000);
+			fakeClock.tick(10000);
+			interval.clear();
+			fakeClock.tick(10000);  // if clear() didn't work, done() will called twice and the test will fail
+		});
 
-		// const lastActivity = clock.now();
-		// if (clock.timeSince(lastActivity) > 10000) doSomething();
+		it("real clock runs a function every >=n milliseconds", function(done) {
+			const startTime = realClock.now();
+			const interval = realClock.setInterval(() => {
+				try {
+					assert.gte(realClock.millisecondsSince(startTime), 10);
+					interval.clear();
+					done();
+				}
+				catch(err) { done(err); }
+			}, 10);
+		});
 
-		// var interval = clock.setInterval(..., 100);
-		// interval.clear();
 	});
 
 }());
