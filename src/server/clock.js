@@ -2,6 +2,8 @@
 (function() {
 	"use strict";
 
+	const lolex = require("lolex");
+
 	const FAKE_START_TIME = 424242;
 
 	class RealClock {
@@ -19,15 +21,16 @@
 	class FakeClock {
 
 		constructor() {
-			this._now = FAKE_START_TIME;
+			this._lolex = lolex.createClock();
+			// this._now = FAKE_START_TIME;
 		}
 
 		now() {
-			return this._now;
+			this._lolex.Date.now();
 		}
 
 		tick(milliseconds) {
-			this._now += milliseconds;
+			this._lolex.tick();
 		}
 
 	}
