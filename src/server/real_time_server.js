@@ -21,6 +21,7 @@
 
 		constructor() {
 			this._socketIoConnections = {};
+			this._clientTimeouts = {};
 		}
 
 		start(httpServer) {
@@ -30,6 +31,7 @@
 
 			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 			handleSocketIoEvents(this, this._ioServer);
+			timeoutInactiveClients(this);
 
 			this._httpServer.on("close", failFastIfHttpServerClosed);
 		}
@@ -55,15 +57,43 @@
 
 	};
 
+	function timeoutInactiveClients(self) {
+		setInterval(() => {
+			const now = Date.now();
+			Object.keys(self._clientTimeouts).forEach((clientId) => {
+				const clientLastActivity = self._clientTimeouts[clientId];
+				if (now - clientLastActivity > 1000) {
+					broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(clientId));
+				}
+			});
+		}, 100);
+	}
+
 	function handleSocketIoEvents(self, ioServer) {
 		ioServer.on("connect", (socket) => {
 			replayPreviousEvents(self, socket);
 			handleClientEvents(self, socket);
+			trackClientTimeouts(self, socket);
 
 			socket.on("disconnect", () => {
 				broadcastAndStoreEvent(self, socket, new ServerRemovePointerEvent(socket.id));
 			});
 		});
+	}
+
+	function trackClientTimeouts(self, socket) {
+		var clientId = socket.id;
+		refreshClientTimeout(self, socket);
+		socket.on(ClientPointerEvent.EVENT_NAME, () => {
+			refreshClientTimeout(self, socket);
+		});
+		socket.on("disconnect", () => {
+			delete self._clientTimeouts[clientId];
+		});
+	}
+
+	function refreshClientTimeout(self, socket) {
+		self._clientTimeouts[socket.id] = Date.now();
 	}
 
 	function replayPreviousEvents(self, socket) {

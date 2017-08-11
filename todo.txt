@@ -31,6 +31,7 @@ User Stories to finish current MMF:
 - show disconnection warning / other UX when client is disconnected
 - handle server reset smoothly (clear the drawing? re-sync to browsers? not persistence/DB)
 - handle packet loss (What packet loss is possible? TCP handles this? What about unstable cellular connections?)
+	- at least handle glitches in Socket.IO where we don't receive a message
 
 - version synchronization across client/server
 - collision-handling / conflicts / race conditions
@@ -53,6 +54,7 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 -
+? Factor out domain logic from Socket.IO handling (in RealTimeServer)
 
 To Do on current task:
 -
