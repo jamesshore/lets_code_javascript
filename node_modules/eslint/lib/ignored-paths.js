@@ -47,8 +47,6 @@ const DEFAULT_OPTIONS = {
  * @returns {string} Path of ignore file or an empty string.
  */
 function findFile(cwd, name) {
-    cwd = cwd || DEFAULT_OPTIONS.cwd;
-
     const ignoreFilePath = path.resolve(cwd, name);
 
     return fs.existsSync(ignoreFilePath) && fs.statSync(ignoreFilePath).isFile() ? ignoreFilePath : "";
@@ -186,7 +184,7 @@ class IgnoredPaths {
                                     addPattern(this.ig.default, pattern);
                                 });
                             } else {
-                                throw new Error("Package.json eslintIgnore property requires an array of paths");
+                                throw new TypeError("Package.json eslintIgnore property requires an array of paths");
                             }
                         }
                     }

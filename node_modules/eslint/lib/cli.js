@@ -63,8 +63,9 @@ function translateOptions(cliOptions) {
         cache: cliOptions.cache,
         cacheFile: cliOptions.cacheFile,
         cacheLocation: cliOptions.cacheLocation,
-        fix: cliOptions.fix && (cliOptions.quiet ? quietFixPredicate : true),
-        allowInlineConfig: cliOptions.inlineConfig
+        fix: (cliOptions.fix || cliOptions.fixDryRun) && (cliOptions.quiet ? quietFixPredicate : true),
+        allowInlineConfig: cliOptions.inlineConfig,
+        reportUnusedDisableDirectives: cliOptions.reportUnusedDisableDirectives
     };
 }
 
@@ -151,7 +152,8 @@ const cli = {
             if (files.length) {
                 log.error("The --print-config option must be used with exactly one file name.");
                 return 1;
-            } else if (text) {
+            }
+            if (text) {
                 log.error("The --print-config option is not available for piped-in code.");
                 return 1;
             }
@@ -170,9 +172,13 @@ const cli = {
 
             debug(`Running on ${text ? "text" : "files"}`);
 
-            // disable --fix for piped-in code until we know how to do it correctly
+            if (currentOptions.fix && currentOptions.fixDryRun) {
+                log.error("The --fix option and the --fix-dry-run option cannot be used together.");
+                return 1;
+            }
+
             if (text && currentOptions.fix) {
-                log.error("The --fix option is not available for piped-in code.");
+                log.error("The --fix option is not available for piped-in code; use --fix-dry-run instead.");
                 return 1;
             }
 

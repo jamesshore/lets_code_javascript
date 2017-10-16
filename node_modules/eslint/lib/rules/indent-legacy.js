@@ -965,7 +965,8 @@ module.exports = {
             const regex = /^return\s*?\(\s*?\);*?/;
 
             const statementWithoutArgument = sourceCode.getText(node).replace(
-                sourceCode.getText(node.argument), "");
+                sourceCode.getText(node.argument), ""
+            );
 
             return regex.test(statementWithoutArgument);
         }
@@ -1039,7 +1040,7 @@ module.exports = {
 
                 const checkNodes = [node.property];
 
-                const dot = context.getTokenBefore(node.property);
+                const dot = sourceCode.getTokenBefore(node.property);
 
                 if (dot.type === "Punctuator" && dot.value === ".") {
                     checkNodes.push(dot);
