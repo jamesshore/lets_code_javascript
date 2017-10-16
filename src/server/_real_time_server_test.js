@@ -14,6 +14,7 @@
 	const ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
 	const ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 	const SocketIoClient = require("./__socket_io_client.js");
+	const Clock = require("./clock.js");
 
 	const IRRELEVANT_DIR = "generated/test";
 	const IRRELEVANT_PAGE = "irrelevant.html";
@@ -25,10 +26,12 @@
 		let httpServer;
 		let realTimeServer;
 		let socketIoClient;
+		let fakeClock;
 
 		beforeEach(async function() {
+			fakeClock = Clock.createFake();
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			realTimeServer = new RealTimeServer();
+			realTimeServer = new RealTimeServer(fakeClock);
 			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
 
 			realTimeServer.start(httpServer.getNodeServer());
@@ -182,6 +185,25 @@
 				realTimeServer._eventRepo.replay(),
 				[ new ServerRemovePointerEvent(clientId) ]
 			);
+		});
+
+		it("times out (removes) ghost pointer when no activity from the client for a period of time", async function() {
+			const client = await socketIoClient.createSocket();
+
+			const listenerPromise = new Promise((resolve, reject) => {
+				client.on(ServerRemovePointerEvent.EVENT_NAME, function(eventData) {
+					try {
+						resolve();
+					}
+					catch(err) {
+						reject(err);
+					}
+				});
+			});
+
+			fakeClock.tick(1500);
+			await listenerPromise;
+			await socketIoClient.closeSocket(client);
 		});
 
 		async function checkEventReflection(clientEvent, serverEventConstructor) {

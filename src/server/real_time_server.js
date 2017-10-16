@@ -10,6 +10,7 @@
 	const ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 	const EventRepository = require("./event_repository.js");
 	const util = require("util");
+	const Clock = require("./clock.js");
 
 	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
@@ -19,7 +20,8 @@
 
 	module.exports = class RealTimeServer {
 
-		constructor() {
+		constructor(clock = new Clock()) {
+			this._clock = clock;
 			this._socketIoConnections = {};
 		}
 
@@ -31,12 +33,17 @@
 			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 			handleSocketIoEvents(this, this._ioServer);
 
+			this._interval = this._clock.setInterval(() => {
+				broadcastAndStoreEvent(this, null, new ServerRemovePointerEvent("DELETE ME"));
+			}, 1000);
+
 			this._httpServer.on("close", failFastIfHttpServerClosed);
 		}
 
 		stop() {
 			const close = util.promisify(this._ioServer.close.bind(this._ioServer));
 
+			this._interval.clear();
 			this._httpServer.removeListener("close", failFastIfHttpServerClosed);
 			return close();
 		}
