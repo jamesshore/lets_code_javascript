@@ -11,7 +11,7 @@
     "glob": "^7.1.2",
     "hashcat": "^0.3.1",
     "jake": "^8.0.15",
-    "karma": "^1.7.0",
+    "karma": "^1.7.1",
     "karma-commonjs": "^1.0.0",
     "karma-mocha": "^1.3.0",
     "mocha": "^4.0.1",
