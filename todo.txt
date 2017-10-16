@@ -59,8 +59,7 @@ Engineering Tasks:
 	- use Clock.setTimeout() in RealTimeServer tests
 
 To Do on current task:
-* Clean up our ability to listen for events in RealTimeServerTest?
-- Send event when there's no activity for any client
+* Send event when there's no activity for any client
 - Send event when there's no activity for a specific client
 - Don't send event multiple times after a client has become inactive
 - Don't send event to clients that have disconnected

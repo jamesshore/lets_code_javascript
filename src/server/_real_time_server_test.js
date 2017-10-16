@@ -100,16 +100,8 @@
 			const clientEvent = new ClientPointerEvent(100, 200);
 			const [receiver1, receiver2] = await socketIoClient.createSockets(2);
 			const listeners = Promise.all([ receiver1, receiver2 ].map((client) => {
-				return new Promise((resolve, reject) => {
-					client.on(ServerPointerEvent.EVENT_NAME, function(data) {
-						try {
-							assert.deepEqual(data, clientEvent.toServerEvent("__SIMULATED__").payload());
-							resolve();
-						}
-						catch(e) {
-							reject(e);
-						}
-					});
+				return listenForOneEvent(client, ServerPointerEvent.EVENT_NAME, (data) => {
+					assert.deepEqual(data, clientEvent.toServerEvent("__SIMULATED__").payload());
 				});
 			}));
 
@@ -158,18 +150,11 @@
 			const [ disconnector, client ] = await socketIoClient.createSockets(2);
 			const disconnectorId = disconnector.id;
 
-			const listenerPromise = new Promise((resolve, reject) => {
-				client.on(ServerRemovePointerEvent.EVENT_NAME, function(eventData) {
-					try {
-						const event = ServerRemovePointerEvent.fromPayload(eventData);
-						assert.equal(event.id, disconnectorId);
-						resolve();
-					}
-					catch(err) {
-						reject(err);
-					}
-				});
+			const listenerPromise = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
+				const event = ServerRemovePointerEvent.fromPayload(eventData);
+				assert.equal(event.id, disconnectorId);
 			});
+
 			await socketIoClient.closeSocket(disconnector);
 			await listenerPromise;  // if disconnect event doesn't fire, the test will time out
 
@@ -197,11 +182,12 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		function listenForOneEvent(socket, eventName) {
+		function listenForOneEvent(socket, eventName, fn) {
 			return new Promise((resolve, reject) => {
 				socket.once(eventName, function(eventData) {
 					try {
-						resolve(eventData);
+						if (fn) fn(eventData);
+						resolve();
 					}
 					catch(err) {
 						reject(err);
@@ -217,16 +203,8 @@
 			});
 
 			const listenerPromise = Promise.all([ receiver1, receiver2 ].map((client) => {
-				return new Promise((resolve, reject) => {
-					client.on(serverEventConstructor.EVENT_NAME, (data) => {
-						try {
-							assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
-							resolve();
-						}
-						catch (err) {
-							reject(err);
-						}
-					});
+				return listenForOneEvent(client, serverEventConstructor.EVENT_NAME, (data) => {
+					assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
 				});
 			}));
 
