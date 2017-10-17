@@ -175,11 +175,18 @@
 		it("times out (removes) ghost pointer when no activity from the client for a period of time", async function() {
 			const client = await socketIoClient.createSocket();
 
-			const listenerPromise = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
+			const listenerPromise = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
+				const event = ServerRemovePointerEvent.fromPayload(eventData);
+				assert.equal(event.id, client.id);
+			});
 
-			fakeClock.tick(1500);
-			await listenerPromise;
-			await socketIoClient.closeSocket(client);
+			try {
+				fakeClock.tick(1500);
+				await listenerPromise;
+			}
+			finally {
+				await socketIoClient.closeSocket(client);
+			}
 		});
 
 		function listenForOneEvent(socket, eventName, fn) {

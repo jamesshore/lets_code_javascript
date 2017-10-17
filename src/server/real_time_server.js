@@ -22,6 +22,7 @@
 
 		constructor(clock = new Clock()) {
 			this._clock = clock;
+			this._intervals = [];
 			this._socketIoConnections = {};
 		}
 
@@ -32,10 +33,7 @@
 
 			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 			handleSocketIoEvents(this, this._ioServer);
-
-			this._interval = this._clock.setInterval(() => {
-				broadcastAndStoreEvent(this, null, new ServerRemovePointerEvent("DELETE ME"));
-			}, 1000);
+			handleClientTimeouts(this, this._ioServer);
 
 			this._httpServer.on("close", failFastIfHttpServerClosed);
 		}
@@ -43,7 +41,7 @@
 		stop() {
 			const close = util.promisify(this._ioServer.close.bind(this._ioServer));
 
-			this._interval.clear();
+			this._intervals.forEach((interval) => interval.clear());
 			this._httpServer.removeListener("close", failFastIfHttpServerClosed);
 			return close();
 		}
@@ -70,6 +68,15 @@
 			socket.on("disconnect", () => {
 				broadcastAndStoreEvent(self, socket, new ServerRemovePointerEvent(socket.id));
 			});
+		});
+	}
+
+	function handleClientTimeouts(self, ioServer) {
+		ioServer.on("connect", (socket) => {
+			const interval = self._clock.setInterval(() => {
+				broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(socket.id));
+			}, 1000);
+			self._intervals.push(interval);
 		});
 	}
 
