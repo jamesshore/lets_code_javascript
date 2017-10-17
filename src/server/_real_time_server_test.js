@@ -18,6 +18,8 @@
 
 	const IRRELEVANT_DIR = "generated/test";
 	const IRRELEVANT_PAGE = "irrelevant.html";
+	const IRRELEVANT_X = 42;
+	const IRRELEVANT_Y = 42;
 
 	const PORT = 5020;
 
@@ -186,21 +188,23 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		it("doesn't time out ghost pointer when there has been activity", async function(done) {
+		it("doesn't time out ghost pointer when the pointer has moved recently", async function(done) {
 			const client = await socketIoClient.createSocket();
-
 
 			client.on(ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
 				done(new Error("Should not have received 'remove pointer' event"));
 			});
 
 			fakeClock.tick(750);
-			// send event
-			fakeClock.tick(750);
+			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
+			client.emit(event.name(), event.payload());
+			setTimeout(() => {
+				fakeClock.tick(750);
 
-			setTimeout(async () => {
-				await socketIoClient.closeSocket(client);
-				done();
+				setTimeout(async () => {
+					await socketIoClient.closeSocket(client);
+					done();
+				}, 500);
 			}, 500);
 		});
 

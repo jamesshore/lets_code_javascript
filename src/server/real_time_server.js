@@ -22,7 +22,6 @@
 
 		constructor(clock = new Clock()) {
 			this._clock = clock;
-			this._intervals = [];
 			this._socketIoConnections = {};
 		}
 
@@ -41,7 +40,7 @@
 		stop() {
 			const close = util.promisify(this._ioServer.close.bind(this._ioServer));
 
-			this._intervals.forEach((interval) => interval.clear());
+			this._interval.clear();
 			this._httpServer.removeListener("close", failFastIfHttpServerClosed);
 			return close();
 		}
@@ -72,11 +71,22 @@
 	}
 
 	function handleClientTimeouts(self, ioServer) {
+		self._lastActivity = {};
+
+		self._interval = self._clock.setInterval(() => {
+			Object.keys(self._lastActivity).forEach((socketId) => {
+				const lastActivity = self._lastActivity[socketId];
+				if (self._clock.millisecondsSince(lastActivity) >= 1000) {
+					broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(socketId));
+				}
+			});
+		}, 100);
+
 		ioServer.on("connect", (socket) => {
-			const interval = self._clock.setInterval(() => {
-				broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(socket.id));
-			}, 1000);
-			self._intervals.push(interval);
+			self._lastActivity[socket.id] = self._clock.now();
+			socket.on(ClientPointerEvent.EVENT_NAME, () => {
+				self._lastActivity[socket.id] = self._clock.now();
+			});
 		});
 	}
 

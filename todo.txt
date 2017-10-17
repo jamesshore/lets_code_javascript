@@ -60,6 +60,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Send event only when there's no activity
+	- Test code is a mess; figure out to fix it
 - Stop hardcoding timeout
 - Send event only when there's no activity for that client
 - Don't send event multiple times after a client has become inactive
