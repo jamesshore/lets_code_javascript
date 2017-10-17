@@ -180,13 +180,28 @@
 				assert.equal(event.id, client.id);
 			});
 
-			try {
-				fakeClock.tick(1500);
-				await listenerPromise;
-			}
-			finally {
+			fakeClock.tick(1500);
+			await listenerPromise;
+
+			await socketIoClient.closeSocket(client);
+		});
+
+		it("doesn't time out ghost pointer when there has been activity", async function(done) {
+			const client = await socketIoClient.createSocket();
+
+
+			client.on(ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
+				done(new Error("Should not have received 'remove pointer' event"));
+			});
+
+			fakeClock.tick(750);
+			// send event
+			fakeClock.tick(750);
+
+			setTimeout(async () => {
 				await socketIoClient.closeSocket(client);
-			}
+				done();
+			}, 500);
 		});
 
 		function listenForOneEvent(socket, eventName, fn) {
