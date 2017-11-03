@@ -82,6 +82,27 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
+		it("tracks its most recent socket.io event", async function() {
+			const socket = await socketIoClient.createSocket();
+			const sentEvent = new ClientRemovePointerEvent();
+
+			socket.emit(sentEvent.name(), sentEvent.payload());
+			await new Promise((resolve, reject) => {
+				setTimeout(() => {
+					try {
+						const { socketId, receivedEvent } = realTimeServer.getLastReceivedEvent();
+						assert.equal(socketId, socket.id, "socket ID");
+						assert.deepEqual(receivedEvent, sentEvent, "event");
+						resolve();
+					}
+					catch(err) {
+						reject(err);
+					}
+				}, 500);
+			});
+			await socketIoClient.closeSocket(socket);
+		});
+
 		it("broadcasts pointer events from one client to all others", async function() {
 			await checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent);
 		});
@@ -199,10 +220,10 @@
 			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
 			client.emit(event.name(), event.payload());
 			await new Promise((resolve) => {
-				setTimeout(() => {
+				setTimeout(() => {      // wait for client event to be emitted
 					fakeClock.tick(750);
 
-					setTimeout(async () => {
+					setTimeout(async () => {    // wait for server event to be emitted (if there is one, which there shouldn't be)
 						await socketIoClient.closeSocket(client);
 						resolve();
 					}, 500);

@@ -59,8 +59,9 @@ Engineering Tasks:
 	- use Clock.setTimeout() in RealTimeServer tests
 
 To Do on current task:
-* Send event only when there's no activity
-	- Test code is a mess; figure out to fix it
+* "doesn't time out" test
+	* detect when server has received client event
+	- detect when server has sent 'remove pointer' event
 - Stop hardcoding timeout
 - Send event only when there's no activity for that client
 - Don't send event multiple times after a client has become inactive
