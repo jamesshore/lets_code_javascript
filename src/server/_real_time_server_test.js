@@ -232,14 +232,14 @@
 			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
 			client.emit(event.name(), event.payload());
 			await new Promise((resolve) => {
-				setTimeout(() => {      // wait for client event to be emitted
+				realTimeServer.onOneClientEvent((socketId, event) => {
 					fakeClock.tick(750);
 
 					setTimeout(async () => {    // wait for server event to be emitted (if there is one, which there shouldn't be)
 						await socketIoClient.closeSocket(client);
 						resolve();
 					}, 500);
-				}, 500);
+				});
 			});
 		});
 

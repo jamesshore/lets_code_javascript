@@ -55,6 +55,7 @@ User Stories to finish current MMF:
 Engineering Tasks:
 * Implement timeout in RealTimeServer
 - Factor out domain logic from Socket.IO handling (in RealTimeServer)?
+	- use onOneClientEvent concept and improve it to be proper event emitter
 - add promisified version of setTimeout()?
 	- use Clock.setTimeout() in RealTimeServer tests
 
