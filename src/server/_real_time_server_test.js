@@ -188,24 +188,26 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		it("doesn't time out ghost pointer when the pointer has moved recently", async function(done) {
+		it("doesn't time out ghost pointer when the pointer has moved recently", async function() {
 			const client = await socketIoClient.createSocket();
 
 			client.on(ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
-				done(new Error("Should not have received 'remove pointer' event"));
+				throw new Error("Should not have received 'remove pointer' event");
 			});
 
 			fakeClock.tick(750);
 			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
 			client.emit(event.name(), event.payload());
-			setTimeout(() => {
-				fakeClock.tick(750);
+			await new Promise((resolve) => {
+				setTimeout(() => {
+					fakeClock.tick(750);
 
-				setTimeout(async () => {
-					await socketIoClient.closeSocket(client);
-					done();
+					setTimeout(async () => {
+						await socketIoClient.closeSocket(client);
+						resolve();
+					}, 500);
 				}, 500);
-			}, 500);
+			});
 		});
 
 		function listenForOneEvent(socket, eventName, fn) {
