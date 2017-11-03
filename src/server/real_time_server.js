@@ -20,9 +20,9 @@
 	// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
 
 	const CLIENT_EVENT = "client_event";
+	const CLIENT_TIMEOUT = 1000;
 
-	module.exports = class RealTimeServer {
-
+	const RealTimeServer = module.exports = class RealTimeServer {
 
 		constructor(clock = new Clock()) {
 			this._clock = clock;
@@ -68,6 +68,8 @@
 
 	};
 
+	RealTimeServer.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
+
 	function handleSocketIoEvents(self, ioServer) {
 		ioServer.on("connect", (socket) => {
 			replayPreviousEvents(self, socket);
@@ -85,7 +87,7 @@
 		self._interval = self._clock.setInterval(() => {
 			Object.keys(self._lastActivity).forEach((socketId) => {
 				const lastActivity = self._lastActivity[socketId];
-				if (self._clock.millisecondsSince(lastActivity) >= 1000) {
+				if (self._clock.millisecondsSince(lastActivity) >= CLIENT_TIMEOUT) {
 					broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(socketId));
 				}
 			});

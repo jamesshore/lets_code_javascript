@@ -215,7 +215,7 @@
 				assert.equal(event.id, client.id);
 			});
 
-			fakeClock.tick(1500);
+			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
 			await listenerPromise;
 
 			await socketIoClient.closeSocket(client);
@@ -228,14 +228,16 @@
 				throw new Error("Should not have received 'remove pointer' event");
 			});
 
-			fakeClock.tick(750);
+			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT / 2);
 			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
 
 			const promise = new Promise((resolve) => {
 				realTimeServer.onOneClientEvent((socketId, event) => {
-					setTimeout(() => {
-						fakeClock.tick(750);
-						resolve();
+					setTimeout(() => {  // make this code asynchronous so tick() doesn't happen too soon
+						fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT / 2);
+						setTimeout(() => {// allow tick() to be processed so server event is sent if it's going to be (it shouldn't)
+							resolve();
+						}, 0);
 					}, 0);
 				});
 			});
