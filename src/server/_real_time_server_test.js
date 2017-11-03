@@ -82,24 +82,25 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
-		it("tracks its most recent socket.io event", async function() {
+		it("emits an event when an client event is received", async function() {
 			const socket = await socketIoClient.createSocket();
 			const sentEvent = new ClientRemovePointerEvent();
 
-			socket.emit(sentEvent.name(), sentEvent.payload());
-			await new Promise((resolve, reject) => {
-				setTimeout(() => {
+			const serverPromise = new Promise((resolve, reject) => {
+				realTimeServer.onOneClientEvent((socketId, receivedEvent) => {
 					try {
-						const { socketId, receivedEvent } = realTimeServer.getLastReceivedEvent();
 						assert.equal(socketId, socket.id, "socket ID");
 						assert.deepEqual(receivedEvent, sentEvent, "event");
 						resolve();
 					}
-					catch(err) {
+					catch (err) {
 						reject(err);
 					}
-				}, 500);
+				});
 			});
+			socket.emit(sentEvent.name(), sentEvent.payload());
+
+			await serverPromise;
 			await socketIoClient.closeSocket(socket);
 		});
 
@@ -132,6 +133,17 @@
 
 			await listeners;
 			await socketIoClient.closeSockets(receiver1, receiver2);
+		});
+
+		it("emits events for simulated client events", function(done) {
+			const clientEvent = new ClientRemovePointerEvent();
+
+			realTimeServer.onOneClientEvent((socketId, receivedEvent) => {
+				assert.equal(socketId, "__SIMULATED__", "socket ID");
+				assert.deepEqual(clientEvent, receivedEvent, "event");
+				done();
+			});
+			realTimeServer.simulateClientEvent(clientEvent);
 		});
 
 		it("replays all previous events when client connects", async function() {

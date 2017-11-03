@@ -11,6 +11,7 @@
 	const EventRepository = require("./event_repository.js");
 	const util = require("util");
 	const Clock = require("./clock.js");
+	const EventEmitter = require("events");
 
 	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
@@ -18,7 +19,10 @@
 	// Consider Martin Grandrath's suggestions from E509 comments (different RealTimeServer initialization)
 	// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
 
+	const CLIENT_EVENT = "client_event";
+
 	module.exports = class RealTimeServer {
+
 
 		constructor(clock = new Clock()) {
 			this._clock = clock;
@@ -29,6 +33,7 @@
 			this._httpServer = httpServer;
 			this._ioServer = io(this._httpServer);
 			this._eventRepo = new EventRepository();
+			this._emitter = new EventEmitter();
 
 			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 			handleSocketIoEvents(this, this._ioServer);
@@ -55,6 +60,10 @@
 
 		simulateClientEvent(clientEvent) {
 			processClientEvent(this, null, clientEvent);
+		}
+
+		onOneClientEvent(callback) {
+			this._emitter.once(CLIENT_EVENT, callback);
 		}
 
 	};
@@ -113,8 +122,10 @@
 	}
 
 	function processClientEvent(self, clientSocket, clientEvent) {
-		const serverEvent = clientEvent.toServerEvent(clientSocket ? clientSocket.id : "__SIMULATED__");
+		const socketId = clientSocket ? clientSocket.id : "__SIMULATED__";
+		const serverEvent = clientEvent.toServerEvent(socketId);
 		broadcastAndStoreEvent(self, clientSocket, serverEvent);
+		self._emitter.emit(CLIENT_EVENT, socketId, clientEvent);
 	}
 
 	function broadcastAndStoreEvent(self, clientSocketOrNull, event) {
