@@ -230,17 +230,19 @@
 
 			fakeClock.tick(750);
 			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
-			client.emit(event.name(), event.payload());
-			await new Promise((resolve) => {
-				realTimeServer.onOneClientEvent((socketId, event) => {
-					fakeClock.tick(750);
 
-					setTimeout(async () => {    // wait for server event to be emitted (if there is one, which there shouldn't be)
-						await socketIoClient.closeSocket(client);
+			const promise = new Promise((resolve) => {
+				realTimeServer.onOneClientEvent((socketId, event) => {
+					setTimeout(() => {
+						fakeClock.tick(750);
 						resolve();
-					}, 500);
+					}, 0);
 				});
 			});
+			client.emit(event.name(), event.payload());
+
+			await promise;
+			await socketIoClient.closeSocket(client);
 		});
 
 		function listenForOneEvent(socket, eventName, fn) {
