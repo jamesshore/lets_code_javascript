@@ -44,7 +44,7 @@
 	task("quick", [ "versions", "lint", "test" ]);
 
 	desc("Start Karma server for testing");
-	task("karma", function() {
+	task("karma", [ "versions" ], function() {
 		karmaRunner().start({
 			configFile: paths.karmaConfig
 		}, complete, fail);
