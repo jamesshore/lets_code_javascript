@@ -21,6 +21,12 @@
 
 	const CLIENT_EVENT = "client_event";
 	const CLIENT_TIMEOUT = 1000;
+	const SUPPORTED_EVENTS = [
+		ClientPointerEvent,
+		ClientRemovePointerEvent,
+		ClientDrawEvent,
+		ClientClearScreenEvent
+	];
 
 	const RealTimeServer = module.exports = class RealTimeServer {
 
@@ -95,8 +101,10 @@
 
 		ioServer.on("connect", (socket) => {
 			self._lastActivity[socket.id] = self._clock.now();
-			socket.on(ClientPointerEvent.EVENT_NAME, () => {
-				self._lastActivity[socket.id] = self._clock.now();
+			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
+				socket.on(eventConstructor.EVENT_NAME, function() {
+					self._lastActivity[socket.id] = self._clock.now();
+				});
 			});
 		});
 	}
@@ -108,14 +116,7 @@
 	}
 
 	function handleClientEvents(self, socket) {
-		const supportedEvents = [
-			ClientPointerEvent,
-			ClientRemovePointerEvent,
-			ClientDrawEvent,
-			ClientClearScreenEvent
-		];
-
-		supportedEvents.forEach(function(eventConstructor) {
+		SUPPORTED_EVENTS.forEach(function(eventConstructor) {
 			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
 				const clientEvent = eventConstructor.fromPayload(eventData);
 				processClientEvent(self, socket, clientEvent, socket.id);

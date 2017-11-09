@@ -61,9 +61,7 @@ Engineering Tasks:
 	- use Clock.setTimeout() in RealTimeServer tests
 
 To Do on current task:
-* Martin Grandrath, E566: rename onOneClientEvent() --> onNextClientEvent()
-- Reset client timeout on any event, not just MovePointer event
-- Don't send event multiple times after a client has become inactive
+* Don't send event multiple times after a client has become inactive
 - Don't track state of clients that have disconnected
 
 
