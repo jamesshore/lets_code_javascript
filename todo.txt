@@ -62,6 +62,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Don't send event multiple times after a client has become inactive
+	- Implement onNextServerEmit()
 - Don't track state of clients that have disconnected
 
 
