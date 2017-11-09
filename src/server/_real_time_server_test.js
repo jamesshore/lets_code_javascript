@@ -87,7 +87,7 @@
 			const sentEvent = new ClientRemovePointerEvent();
 
 			const serverPromise = new Promise((resolve, reject) => {
-				realTimeServer.onOneClientEvent((socketId, receivedEvent) => {
+				realTimeServer.onNextClientEvent((socketId, receivedEvent) => {
 					try {
 						assert.equal(socketId, socket.id, "socket ID");
 						assert.deepEqual(receivedEvent, sentEvent, "event");
@@ -138,7 +138,7 @@
 		it("emits events for simulated client events", function(done) {
 			const clientEvent = new ClientRemovePointerEvent();
 
-			realTimeServer.onOneClientEvent((socketId, receivedEvent) => {
+			realTimeServer.onNextClientEvent((socketId, receivedEvent) => {
 				assert.equal(socketId, "__SIMULATED__", "socket ID");
 				assert.deepEqual(clientEvent, receivedEvent, "event");
 				done();
@@ -232,7 +232,7 @@
 			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
 
 			const promise = new Promise((resolve) => {
-				realTimeServer.onOneClientEvent((socketId, event) => {
+				realTimeServer.onNextClientEvent((socketId, event) => {
 					setTimeout(() => {  // make this code asynchronous so tick() doesn't happen too soon
 						fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT / 2);
 						setTimeout(() => {// allow tick() to be processed so server event is sent if it's going to be (it shouldn't)

@@ -62,7 +62,7 @@
 			processClientEvent(this, null, clientEvent);
 		}
 
-		onOneClientEvent(callback) {
+		onNextClientEvent(callback) {
 			this._emitter.once(CLIENT_EVENT, callback);
 		}
 

@@ -54,15 +54,17 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Implement timeout in RealTimeServer
-- Factor out domain logic from Socket.IO handling (in RealTimeServer)?
+- Factor out domain logic from Socket.IO handling (in RealTimeServer)
 	- use onOneClientEvent concept and improve it to be proper event emitter
+- When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear
 - add promisified version of setTimeout()?
 	- use Clock.setTimeout() in RealTimeServer tests
 
 To Do on current task:
-* Send event only when there's no activity for that client
+* Martin Grandrath, E566: rename onOneClientEvent() --> onNextClientEvent()
+- Reset client timeout on any event, not just MovePointer event
 - Don't send event multiple times after a client has become inactive
-- Don't send event to clients that have disconnected
+- Don't track state of clients that have disconnected
 
 
 - Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)
