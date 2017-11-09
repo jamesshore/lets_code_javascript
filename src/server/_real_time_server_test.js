@@ -221,6 +221,37 @@
 			await socketIoClient.closeSocket(client);
 		});
 
+		it("only sends remove pointer event once when client times out", async function() {
+			const client = await socketIoClient.createSocket();
+			let removePointerEventsReceived = 0;
+
+			client.on(ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
+				removePointerEventsReceived++;
+			});
+
+			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT * 100);
+			// const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
+			//
+			// const promise = new Promise((resolve) => {
+			// 	realTimeServer.onNextClientEvent((socketId, event) => {
+			// 		setTimeout(() => {  // make this code asynchronous so tick() doesn't happen too soon
+			// 			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT / 2);
+			// 			setTimeout(() => {// allow tick() to be processed so server event is sent if it's going to be (it shouldn't)
+			// 				resolve();
+			// 			}, 0);
+			// 		}, 0);
+			// 	});
+			// });
+			// client.emit(event.name(), event.payload());
+			//
+			// try {
+			// 	await promise;
+			// }
+			// finally {
+			// 	await socketIoClient.closeSocket(client);
+			// }
+		});
+
 		it("doesn't time out ghost pointer when the pointer has moved recently", async function() {
 			const client = await socketIoClient.createSocket();
 
