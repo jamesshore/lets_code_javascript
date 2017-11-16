@@ -82,7 +82,7 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
-		it("emits an event when an client event is received", async function() {
+		it("emits an event when a Socket.IO client event is received", async function() {
 			const socket = await socketIoClient.createSocket();
 			const sentEvent = new ClientRemovePointerEvent();
 
@@ -102,6 +102,29 @@
 
 			await serverPromise;
 			await socketIoClient.closeSocket(socket);
+		});
+
+		it("emits an event when the server has emitted a Socket.IO event", async function() {
+			const emitter = await socketIoClient.createSocket();
+
+			const clientEvent = new ClientPointerEvent(10, 20);
+			const emitPromise = new Promise((resolve, reject) => {
+				realTimeServer.onNextServerEmit((event) => {
+					try {
+						const serverEvent = clientEvent.toServerEvent(emitter.id);
+						assert.deepEqual(event, serverEvent, "event");
+						resolve();
+					}
+					catch (err) {
+						reject(err);
+					}
+				});
+			});
+
+			emitter.emit(clientEvent.name(), clientEvent.payload());
+
+			await emitPromise;
+			await socketIoClient.closeSocket(emitter);
 		});
 
 		it("broadcasts pointer events from one client to all others", async function() {

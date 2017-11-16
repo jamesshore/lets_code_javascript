@@ -20,6 +20,7 @@
 	// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
 
 	const CLIENT_EVENT = "client_event";
+	const SERVER_EVENT = "server_event";
 	const CLIENT_TIMEOUT = 1000;
 	const SUPPORTED_EVENTS = [
 		ClientPointerEvent,
@@ -70,6 +71,10 @@
 
 		onNextClientEvent(callback) {
 			this._emitter.once(CLIENT_EVENT, callback);
+		}
+
+		onNextServerEmit(callback) {
+			this._emitter.once(SERVER_EVENT, callback);
 		}
 
 	};
@@ -135,6 +140,7 @@
 		self._eventRepo.store(event);
 		if (clientSocketOrNull) clientSocketOrNull.broadcast.emit(event.name(), event.payload());
 		else self._ioServer.emit(event.name(), event.payload());
+		self._emitter.emit(SERVER_EVENT, event);
 	}
 
 	function failFastIfHttpServerClosed() {
