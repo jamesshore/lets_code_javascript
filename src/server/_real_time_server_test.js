@@ -244,25 +244,27 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		it("only sends remove pointer event once when client times out", async function() {
+		it("only sends remove pointer event one time when client times out", async function() {
+			// setup
 			const client = await socketIoClient.createSocket();
 
+			// listen for first (valid) RemovePointerEvent
 			const eventListener = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
 			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
 			await eventListener;
 
-			// client.on(ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
-			// 	throw new Error("Should not get another remove pointer event");
-			// });
-
-			realTimeServer.onNextServerEmit(() => {
-				console.log("ON NEXT SERVER EMIT");
+			// listen for second (invalid) RemovePointerEvent
+			let errorOnEvent;
+			realTimeServer.onNextServerEmit((event) => {
+				if (errorOnEvent) throw new Error("got another remove pointer event");
 			});
 
+			// allow time to pass, which could trigger additional RemovePointerEvents
+			errorOnEvent = true;
 			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
 
-			await new Promise((resolve) => setTimeout(resolve, 500));
-
+			// done
+			errorOnEvent = false;   // closing the socket will cause RemovePointerEvent, so we stop listening for errors
 			await socketIoClient.closeSocket(client);
 		});
 

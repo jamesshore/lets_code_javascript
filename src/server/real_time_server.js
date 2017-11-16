@@ -100,6 +100,7 @@
 				const lastActivity = self._lastActivity[socketId];
 				if (self._clock.millisecondsSince(lastActivity) >= CLIENT_TIMEOUT) {
 					broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(socketId));
+					delete self._lastActivity[socketId];
 				}
 			});
 		}, 100);
