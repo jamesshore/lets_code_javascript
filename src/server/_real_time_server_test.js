@@ -244,6 +244,28 @@
 			await socketIoClient.closeSocket(client);
 		});
 
+		it("times out again if there was activity, and then no activity, after the first timeout", async function() {
+			const client = await socketIoClient.createSocket();
+
+			// first timeout
+			const firstTimeout = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
+			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
+			await firstTimeout;
+
+			// some more activity
+			const clientEvent = new ClientClearScreenEvent();
+			client.emit(clientEvent.name(), clientEvent.payload());
+			await new Promise((resolve) => realTimeServer.onNextClientEvent(resolve));
+
+			// second timeout
+			const secondTimeout = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
+			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
+			await secondTimeout;
+
+			// done
+			await socketIoClient.closeSocket(client);
+		});
+
 		it("only sends remove pointer event one time when client times out", async function() {
 			// setup
 			const client = await socketIoClient.createSocket();

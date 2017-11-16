@@ -61,8 +61,6 @@ Engineering Tasks:
 	- use Clock.setTimeout() in RealTimeServer tests
 
 To Do on current task:
-* Don't track state of clients that have disconnected
-- Ensure clients timeout again if they start having activity after being timed out the first time
 
 
 - Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)
