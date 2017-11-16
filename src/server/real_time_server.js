@@ -21,7 +21,7 @@
 
 	const CLIENT_EVENT = "client_event";
 	const SERVER_EVENT = "server_event";
-	const CLIENT_TIMEOUT = 1000;
+	const CLIENT_TIMEOUT = 30 * 1000;
 	const SUPPORTED_EVENTS = [
 		ClientPointerEvent,
 		ClientRemovePointerEvent,
