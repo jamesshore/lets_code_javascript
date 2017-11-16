@@ -256,7 +256,7 @@
 			// listen for second (invalid) RemovePointerEvent
 			let errorOnEvent;
 			realTimeServer.onNextServerEmit((event) => {
-				if (errorOnEvent) throw new Error("got another remove pointer event");
+				if (errorOnEvent) assert.fail("should not receive remove pointer event");
 			});
 
 			// allow time to pass, which could trigger additional RemovePointerEvents
@@ -326,6 +326,16 @@
 			finally {
 				await socketIoClient.closeSocket(client);
 			}
+		});
+
+		it("doesn't time out clients that have disconnected", async function() {
+			const client = await socketIoClient.createSocket();
+			await socketIoClient.closeSocket(client);
+
+			realTimeServer.onNextServerEmit((event) => {
+				assert.fail("should not receive remove pointer event");
+			});
+			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
 		});
 
 		function listenForOneEvent(socket, eventName, fn) {

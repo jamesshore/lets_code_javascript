@@ -112,6 +112,9 @@
 					self._lastActivity[socket.id] = self._clock.now();
 				});
 			});
+			socket.on("disconnect", () => {
+				delete self._lastActivity[socket.id];
+			});
 		});
 	}
 
