@@ -244,7 +244,7 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		it.skip("only sends remove pointer event once when client times out", async function() {
+		it("only sends remove pointer event once when client times out", async function() {
 			const client = await socketIoClient.createSocket();
 
 			const eventListener = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
