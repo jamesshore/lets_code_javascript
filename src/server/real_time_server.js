@@ -82,7 +82,7 @@
 			handleClientEvents(self, socket);
 
 			socket.on("disconnect", () => {
-				broadcastAndStoreEvent(self, socket, new ServerRemovePointerEvent(socket.id));
+				broadcastAndStoreEvent(self, socket.id, new ServerRemovePointerEvent(socket.id));
 			});
 		});
 	}
@@ -127,21 +127,21 @@
 		SUPPORTED_EVENTS.forEach(function(eventConstructor) {
 			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
 				const clientEvent = eventConstructor.fromPayload(eventData);
-				processClientEvent(self, socket, clientEvent, socket.id);
+				processClientEvent(self, socket.id, clientEvent, socket.id);
 			});
 		});
 	}
 
-	function processClientEvent(self, clientSocket, clientEvent) {
-		const socketId = clientSocket ? clientSocket.id : "__SIMULATED__";
-		const serverEvent = clientEvent.toServerEvent(socketId);
-		broadcastAndStoreEvent(self, clientSocket, serverEvent);
-		self._emitter.emit(CLIENT_EVENT, socketId, clientEvent);
+	function processClientEvent(self, clientId, clientEvent) {
+		const id = clientId !== null ? clientId : "__SIMULATED__";
+		const serverEvent = clientEvent.toServerEvent(id);
+		broadcastAndStoreEvent(self, clientId, serverEvent);
+		self._emitter.emit(CLIENT_EVENT, id, clientEvent);
 	}
 
-	function broadcastAndStoreEvent(self, clientSocketOrNull, event) {
+	function broadcastAndStoreEvent(self, clientIdOrNull, event) {
 		self._eventRepo.store(event);
-		if (clientSocketOrNull) self._socketIoAbstraction.broadcastToAllClientsButOne(clientSocketOrNull.id, event);
+		if (clientIdOrNull) self._socketIoAbstraction.broadcastToAllClientsButOne(clientIdOrNull, event);
 		else self._socketIoAbstraction.broadcastToAllClients(event);
 		self._emitter.emit(SERVER_EVENT, event);
 	}
