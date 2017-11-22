@@ -70,7 +70,7 @@
 		ioServer.on("connect", (socket) => {
 			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
 				socket.on(eventConstructor.EVENT_NAME, function(payload) {
-					self.emit("clientEvent", eventConstructor.fromPayload(payload));
+					self.emit("clientEvent", socket.id, eventConstructor.fromPayload(payload));
 				});
 			});
 		});
