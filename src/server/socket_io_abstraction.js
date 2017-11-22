@@ -29,6 +29,10 @@
 			return close();
 		}
 
+		broadcastToAllClients(event) {
+			this._ioServer.emit(event.name(), event.payload());
+		}
+
 	};
 
 	function trackSocketIoConnections(connections, ioServer) {

@@ -37,14 +37,14 @@
 
 		start(httpServer) {
 			this._socketIoAbstraction.start(httpServer);
-			this._ioServer = this._socketIoAbstraction._ioServer;
+			const ioServer = this._socketIoAbstraction._ioServer;
 			this._socketIoConnections = this._socketIoAbstraction._socketIoConnections;
 
 			this._eventRepo = new EventRepository();
 			this._emitter = new EventEmitter();
 
-			handleSocketIoEvents(this, this._ioServer);
-			handleClientTimeouts(this, this._ioServer);
+			handleSocketIoEvents(this, ioServer);
+			handleClientTimeouts(this, ioServer);
 		}
 
 		stop() {
@@ -138,7 +138,7 @@
 	function broadcastAndStoreEvent(self, clientSocketOrNull, event) {
 		self._eventRepo.store(event);
 		if (clientSocketOrNull) clientSocketOrNull.broadcast.emit(event.name(), event.payload());
-		else self._ioServer.emit(event.name(), event.payload());
+		else self._socketIoAbstraction.broadcastToAllClients(event);
 		self._emitter.emit(SERVER_EVENT, event);
 	}
 
