@@ -20,7 +20,7 @@
     "semver": "^5.4.1",
     "shelljs": "^0.7.8",
     "simplebuild-karma": "^1.0.0",
-    "socket.io-client": "^2.0.3"
+    "socket.io-client": "^2.0.4"
   },
   "dependencies": {
     "lolex": "^2.3.1",
