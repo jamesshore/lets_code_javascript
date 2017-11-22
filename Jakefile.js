@@ -51,7 +51,7 @@
 	}, { async: true });
 
 	desc("Start localhost server for manual testing");
-	task("run", [ "versions", "build" ], function() {
+	task("run", [ "nodeVersion", "build" ], function() {
 		var runServer = require("./src/_run_server.js");
 
 		console.log("Running server. Press Ctrl-C to stop.");
