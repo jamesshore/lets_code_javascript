@@ -137,7 +137,7 @@
 
 	function broadcastAndStoreEvent(self, clientSocketOrNull, event) {
 		self._eventRepo.store(event);
-		if (clientSocketOrNull) clientSocketOrNull.broadcast.emit(event.name(), event.payload());
+		if (clientSocketOrNull) self._socketIoAbstraction.broadcastToAllClientsButOne(clientSocketOrNull.id, event);
 		else self._socketIoAbstraction.broadcastToAllClients(event);
 		self._emitter.emit(SERVER_EVENT, event);
 	}

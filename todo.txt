@@ -62,7 +62,8 @@ Engineering Tasks:
 
 To Do on current task:
 * Factor out Socket.IO abstraction
-	- Remove this._ioServer from RealTimeServer
+	- Remove all uses of ioServer from RealTimeServer
+	- Stop exposing socket.io sockets to SocketIoAbstraction consumers
 - Factor out Socket.IO tests
 - Factor out business logic
 	- Review user comments (at top of RealTimeServer)

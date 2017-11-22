@@ -33,6 +33,11 @@
 			this._ioServer.emit(event.name(), event.payload());
 		}
 
+		broadcastToAllClientsButOne(clientToExclude, event) {
+			const socket = lookUpSocket(this, clientToExclude);
+			socket.broadcast.emit(event.name(), event.payload());
+		}
+
 	};
 
 	function trackSocketIoConnections(connections, ioServer) {
@@ -40,11 +45,17 @@
 		// https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
 		ioServer.on("connection", function(socket) {
 			const key = socket.id;
-			connections[key] = true;
+			connections[key] = socket;
 			socket.on("disconnect", function() {
 				delete connections[key];
 			});
 		});
+	}
+
+	function lookUpSocket(self, clientId) {
+		const socket = self._socketIoConnections[clientId];
+		failFast.unlessTrue(socket !== undefined, `attempted to look up socket that isn't connected: [${clientId}]`);
+		return socket;
 	}
 
 	function failFastIfHttpServerClosed() {
