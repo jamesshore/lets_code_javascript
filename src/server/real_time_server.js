@@ -102,11 +102,11 @@
 
 		ioServer.on("connect", (socket) => {
 			self._lastActivity[socket.id] = self._clock.now();
-			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
-				socket.on(eventConstructor.EVENT_NAME, function() {
-					self._lastActivity[socket.id] = self._clock.now();
-				});
+
+			self._socketIoAbstraction.on("clientEvent", (event) => {
+				self._lastActivity[socket.id] = self._clock.now();
 			});
+
 			socket.on("disconnect", () => {
 				delete self._lastActivity[socket.id];
 			});
@@ -120,6 +120,10 @@
 	}
 
 	function handleClientEvents(self, socket) {
+		// self._socketIoAbstraction.on("clientEvent", (clientId, clientEvent) => {
+		// 	processClientEvent(self, clientId, clientEvent);
+		// });
+		//
 		SUPPORTED_EVENTS.forEach(function(eventConstructor) {
 			socket.on(eventConstructor.EVENT_NAME, function(eventData) {
 				const clientEvent = eventConstructor.fromPayload(eventData);

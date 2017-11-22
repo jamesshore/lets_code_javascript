@@ -5,10 +5,23 @@
 	const io = require("socket.io");
 	const failFast = require("fail_fast.js");
 	const util = require("util");
+	const EventEmitter = require("events");
+	const ClientPointerEvent = require("../shared/client_pointer_event.js");
+	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
+	const ClientDrawEvent = require("../shared/client_draw_event.js");
+	const ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 
-	const SocketIoAbstraction = module.exports = class SocketIoAbstraction {
+	const SUPPORTED_EVENTS = [
+		ClientPointerEvent,
+		ClientRemovePointerEvent,
+		ClientDrawEvent,
+		ClientClearScreenEvent
+	];
+
+	const SocketIoAbstraction = module.exports = class SocketIoAbstraction extends EventEmitter {
 
 		constructor() {
+			super();
 			this._socketIoConnections = {};
 		}
 
@@ -20,6 +33,7 @@
 			this._httpServer.on("close", failFastIfHttpServerClosed);
 
 			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
+			listenForClientEvents(this, this._ioServer);
 		}
 
 		stop() {
@@ -48,6 +62,16 @@
 			connections[key] = socket;
 			socket.on("disconnect", function() {
 				delete connections[key];
+			});
+		});
+	}
+
+	function listenForClientEvents(self, ioServer) {
+		ioServer.on("connect", (socket) => {
+			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
+				socket.on(eventConstructor.EVENT_NAME, function(payload) {
+					self.emit("clientEvent", eventConstructor.fromPayload(payload));
+				});
 			});
 		});
 	}

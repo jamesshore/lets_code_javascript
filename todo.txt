@@ -75,4 +75,5 @@ To Do on current task:
   - onNextClientEvent
   - onNextServerEmit
 - Absorb RealTimeServer back into Server.js and rename business logic and Socket.IO abstraction if needed
+- Look for opportunities to improve Socket.IO abstraction API
 - Are new tests faster? (old speed: ~2.6s)
