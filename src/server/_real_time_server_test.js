@@ -23,7 +23,7 @@
 
 	const PORT = 5020;
 
-	describe("RealTimeServer", function() {
+	describe.only("RealTimeServer", function() {
 
 		let httpServer;
 		let realTimeServer;

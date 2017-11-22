@@ -12,6 +12,7 @@
 	const util = require("util");
 	const Clock = require("./clock.js");
 	const EventEmitter = require("events");
+	const SocketIoAbstraction = require("./socket_io_abstraction.js");
 
 	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
@@ -34,11 +35,15 @@
 		constructor(clock = new Clock()) {
 			this._clock = clock;
 			this._socketIoConnections = {};
+			this._socketIoAbstraction = new SocketIoAbstraction();
 		}
 
 		start(httpServer) {
 			this._httpServer = httpServer;
-			this._ioServer = io(this._httpServer);
+
+			this._socketIoAbstraction.start(this._httpServer);
+			this._ioServer = this._socketIoAbstraction._ioServer;
+
 			this._eventRepo = new EventRepository();
 			this._emitter = new EventEmitter();
 
