@@ -39,9 +39,7 @@
 		}
 
 		start(httpServer) {
-			this._httpServer = httpServer;
-
-			this._socketIoAbstraction.start(this._httpServer);
+			this._socketIoAbstraction.start(httpServer);
 			this._ioServer = this._socketIoAbstraction._ioServer;
 
 			this._eventRepo = new EventRepository();
@@ -50,16 +48,11 @@
 			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 			handleSocketIoEvents(this, this._ioServer);
 			handleClientTimeouts(this, this._ioServer);
-
-			this._httpServer.on("close", failFastIfHttpServerClosed);
 		}
 
 		stop() {
-			const close = util.promisify(this._ioServer.close.bind(this._ioServer));
-
 			this._interval.clear();
-			this._httpServer.removeListener("close", failFastIfHttpServerClosed);
-			return close();
+			this._socketIoAbstraction.stop();
 		}
 
 		numberOfActiveConnections() {

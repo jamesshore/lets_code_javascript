@@ -62,6 +62,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Factor out Socket.IO abstraction
+	- Remove this._ioServer from RealTimeServer
 - Factor out Socket.IO tests
 - Factor out business logic
 - Factor out business logic tests
@@ -72,3 +73,4 @@ To Do on current task:
   - onNextClientEvent
   - onNextServerEmit
 - Absorb RealTimeServer back into Server.js and rename business logic and Socket.IO abstraction if needed
+- Are new tests faster? (old speed: ~2.6s)
