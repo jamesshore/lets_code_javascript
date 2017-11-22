@@ -164,10 +164,12 @@
 
 		shell().rm("-rf", paths.buildDir + "/server/*");
 		shell().rm("-rf", paths.buildDir + "/shared/*");
+		shell().rm("-rf", paths.buildDir + "/node_modules/*");
 		shell().cp(
 			"-R",
 			"src/server",
 			"src/shared",
+			"src/node_modules",
 			paths.buildDir
 		);
 	});
