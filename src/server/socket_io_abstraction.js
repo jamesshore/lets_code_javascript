@@ -32,7 +32,7 @@
 			this._ioServer = io(this._httpServer);
 			this._httpServer.on("close", failFastIfHttpServerClosed);
 
-			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
+			trackSocketIoConnections(this, this._socketIoConnections, this._ioServer);
 			listenForClientEvents(this, this._ioServer);
 		}
 
@@ -54,7 +54,7 @@
 
 	};
 
-	function trackSocketIoConnections(connections, ioServer) {
+	function trackSocketIoConnections(self, connections, ioServer) {
 		// Inspired by isaacs
 		// https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
 		ioServer.on("connection", function(socket) {
@@ -62,6 +62,7 @@
 			connections[key] = socket;
 			socket.on("disconnect", function() {
 				delete connections[key];
+				self.emit("clientDisconnect", key);
 			});
 		});
 	}

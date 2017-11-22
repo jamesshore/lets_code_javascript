@@ -81,8 +81,8 @@
 			replayPreviousEvents(self, socket);
 			handleClientEvents(self);
 
-			socket.on("disconnect", () => {
-				broadcastAndStoreEvent(self, socket.id, new ServerRemovePointerEvent(socket.id));
+			self._socketIoAbstraction.on("clientDisconnect", () => {
+				broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(socket.id));
 			});
 		});
 	}
@@ -107,7 +107,7 @@
 				self._lastActivity[socket.id] = self._clock.now();
 			});
 
-			socket.on("disconnect", () => {
+			self._socketIoAbstraction.on("clientDisconnect", () => {
 				delete self._lastActivity[socket.id];
 			});
 		});
