@@ -65,6 +65,7 @@ To Do on current task:
 	- Remove this._ioServer from RealTimeServer
 - Factor out Socket.IO tests
 - Factor out business logic
+	- Review user comments (at top of RealTimeServer)
 - Factor out business logic tests
 - Remove unnecessary(?) methods
 	- numberOfActiveConnections

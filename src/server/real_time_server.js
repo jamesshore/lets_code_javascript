@@ -2,14 +2,12 @@
 (function() {
 	"use strict";
 
-	const io = require('socket.io');
 	const ClientPointerEvent = require("../shared/client_pointer_event.js");
 	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
 	const ClientDrawEvent = require("../shared/client_draw_event.js");
 	const ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 	const EventRepository = require("./event_repository.js");
-	const util = require("util");
 	const Clock = require("./clock.js");
 	const EventEmitter = require("events");
 	const SocketIoAbstraction = require("./socket_io_abstraction.js");
@@ -34,18 +32,17 @@
 
 		constructor(clock = new Clock()) {
 			this._clock = clock;
-			this._socketIoConnections = {};
 			this._socketIoAbstraction = new SocketIoAbstraction();
 		}
 
 		start(httpServer) {
 			this._socketIoAbstraction.start(httpServer);
 			this._ioServer = this._socketIoAbstraction._ioServer;
+			this._socketIoConnections = this._socketIoAbstraction._socketIoConnections;
 
 			this._eventRepo = new EventRepository();
 			this._emitter = new EventEmitter();
 
-			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 			handleSocketIoEvents(this, this._ioServer);
 			handleClientTimeouts(this, this._ioServer);
 		}
@@ -143,25 +140,6 @@
 		if (clientSocketOrNull) clientSocketOrNull.broadcast.emit(event.name(), event.payload());
 		else self._ioServer.emit(event.name(), event.payload());
 		self._emitter.emit(SERVER_EVENT, event);
-	}
-
-	function failFastIfHttpServerClosed() {
-		throw new Error(
-			"Do not call httpServer.stop() when using RealTimeServer--it will trigger this bug: " +
-			"https://github.com/socketio/socket.io/issues/2975"
-		);
-	}
-
-	function trackSocketIoConnections(connections, ioServer) {
-		// Inspired by isaacs
-		// https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
-		ioServer.on("connection", function(socket) {
-			const key = socket.id;
-			connections[key] = true;
-			socket.on("disconnect", function() {
-				delete connections[key];
-			});
-		});
 	}
 
 }());

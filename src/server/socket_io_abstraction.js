@@ -8,13 +8,18 @@
 
 	const SocketIoAbstraction = module.exports = class SocketIoAbstraction {
 
+		constructor() {
+			this._socketIoConnections = {};
+		}
+
 		start(httpServer) {
 			failFast.unlessDefined(httpServer, "httpServer");
 
 			this._httpServer = httpServer;
 			this._ioServer = io(this._httpServer);
-
 			this._httpServer.on("close", failFastIfHttpServerClosed);
+
+			trackSocketIoConnections(this._socketIoConnections, this._ioServer);
 		}
 
 		stop() {
@@ -26,12 +31,23 @@
 
 	};
 
+	function trackSocketIoConnections(connections, ioServer) {
+		// Inspired by isaacs
+		// https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
+		ioServer.on("connection", function(socket) {
+			const key = socket.id;
+			connections[key] = true;
+			socket.on("disconnect", function() {
+				delete connections[key];
+			});
+		});
+	}
+
 	function failFastIfHttpServerClosed() {
 		throw new Error(
 			"Do not call httpServer.stop() when using RealTimeServer--it will trigger this bug: " +
 			"https://github.com/socketio/socket.io/issues/2975"
 		);
 	}
-
 
 }());
