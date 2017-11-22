@@ -62,6 +62,8 @@ Engineering Tasks:
 
 To Do on current task:
 * Factor out Socket.IO abstraction
+	* Add emitToOneClient()
+	- Add 'connect' event
 	- Remove all uses of ioServer from RealTimeServer
 	- Stop exposing socket.io sockets to SocketIoAbstraction consumers
 - Factor out Socket.IO tests

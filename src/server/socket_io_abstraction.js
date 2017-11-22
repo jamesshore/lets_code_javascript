@@ -43,6 +43,11 @@
 			return close();
 		}
 
+		emitToOneClient(clientId, event) {
+			const socket = lookUpSocket(this, clientId);
+			socket.emit(event.name(), event.payload());
+		}
+
 		broadcastToAllClients(event) {
 			this._ioServer.emit(event.name(), event.payload());
 		}

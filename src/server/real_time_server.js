@@ -115,6 +115,7 @@
 
 	function replayPreviousEvents(self, socket) {
 		self._eventRepo.replay().forEach((event) => {
+			// self._socketIoAbstraction.emitToOneClient(socket.id, event);
 			socket.emit(event.name(), event.payload());
 		});
 	}
