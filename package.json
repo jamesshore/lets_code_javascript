@@ -5,7 +5,7 @@
     "node": "9.2.0"
   },
   "devDependencies": {
-    "async": "^2.5.0",
+    "async": "^2.6.0",
     "browserify": "^14.4.0",
     "eslint": "^4.9.0",
     "glob": "^7.1.2",
