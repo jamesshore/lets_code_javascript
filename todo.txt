@@ -53,14 +53,22 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Implement timeout in RealTimeServer
-- Factor out domain logic from Socket.IO handling (in RealTimeServer)
+* Factor out domain logic from Socket.IO handling (in RealTimeServer)
 	- use onOneClientEvent concept and improve it to be proper event emitter
-- When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear
+- When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear (e.g., if they click the mouse without moving it)
 - add promisified version of setTimeout()?
-	- use Clock.setTimeout() in RealTimeServer tests
+	- use Clock.setTimeout() instead of regular setTimeout() in RealTimeServer tests
+- Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)
 
 To Do on current task:
-
-
-- Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)
+* Factor out Socket.IO abstraction
+- Factor out Socket.IO tests
+- Factor out business logic
+- Factor out business logic tests
+- Remove unnecessary(?) methods
+	- numberOfActiveConnections
+	- isSocketConnected
+	- simulateClientEvent
+  - onNextClientEvent
+  - onNextServerEmit
+- Absorb RealTimeServer back into Server.js and rename business logic and Socket.IO abstraction if needed
