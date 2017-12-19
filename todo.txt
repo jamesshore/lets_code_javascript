@@ -62,6 +62,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Factor out Socket.IO tests
+	- Remove RealTimeServer from SocketIoAbstraction tests
 - Factor out business logic
 	- Review user comments (at top of RealTimeServer)
 - Factor out business logic tests
