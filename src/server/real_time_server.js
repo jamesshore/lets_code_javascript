@@ -77,7 +77,7 @@
 	RealTimeServer.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
 
 	function handleSocketIoEvents(self, ioServer) {
-		ioServer.on("connect", (socket) => {
+		self._socketIoAbstraction.on("clientConnect", (key, socket) => {
 			replayPreviousEvents(self, socket);
 			handleClientEvents(self);
 
@@ -100,7 +100,7 @@
 			});
 		}, 100);
 
-		ioServer.on("connect", (socket) => {
+		self._socketIoAbstraction.on("clientConnect", (key, socket) => {
 			self._lastActivity[socket.id] = self._clock.now();
 
 			self._socketIoAbstraction.on("clientEvent", () => {

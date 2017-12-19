@@ -63,7 +63,7 @@ Engineering Tasks:
 To Do on current task:
 * Factor out Socket.IO abstraction
 	* Add emitToOneClient()
-	- Add 'connect' event
+	- Remove 'socket' parameter from "clientConnect" socketIO abstraction event
 	- Remove all uses of ioServer from RealTimeServer
 	- Stop exposing socket.io sockets to SocketIoAbstraction consumers
 - Factor out Socket.IO tests
@@ -78,4 +78,5 @@ To Do on current task:
   - onNextServerEmit
 - Absorb RealTimeServer back into Server.js and rename business logic and Socket.IO abstraction if needed
 - Look for opportunities to improve Socket.IO abstraction API
+- Race condition in "sends 'remove pointer' event to other browsers when client disconnects"
 - Are new tests faster? (old speed: ~2.6s)

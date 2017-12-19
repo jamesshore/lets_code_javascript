@@ -69,6 +69,7 @@
 				delete connections[key];
 				self.emit("clientDisconnect", key);
 			});
+			self.emit("clientConnect", key, socket);
 		});
 	}
 
