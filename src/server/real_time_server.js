@@ -42,11 +42,7 @@
 		}
 
 		numberOfActiveConnections() {
-			return Object.keys(this._socketIoConnections).length;
-		}
-
-		isSocketConnected(socketId) {
-			return this._socketIoAbstraction.isClientConnected(socketId);
+			return this._socketIoAbstraction.numberOfActiveConnections();
 		}
 
 		simulateClientEvent(clientEvent) {

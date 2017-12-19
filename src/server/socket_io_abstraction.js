@@ -61,6 +61,10 @@
 			return this._socketIoConnections[clientId] !== undefined;
 		}
 
+		numberOfActiveConnections() {
+			return Object.keys(this._socketIoConnections).length;
+		}
+
 	};
 
 	function trackSocketIoConnections(self, connections, ioServer) {
