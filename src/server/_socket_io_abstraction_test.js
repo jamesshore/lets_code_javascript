@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	const assert = require("assert");
+	const assert = require("_assert");
 	const SocketIoClient = require("./__socket_io_client.js");
 	const HttpServer = require("./http_server.js");
 	const SocketIoAbstraction = require("./socket_io_abstraction.js");
@@ -51,13 +51,57 @@
 			// if the bug occurs, the afterEach() function will time out
 		});
 
-		it("counts the number of connections", async function() {
-			assert.equal(socketIoAbstraction.numberOfActiveConnections(), 0, "before opening connection");
+		it("emits event when a client connects", async function() {
+			let socket;
 
-			const socket = await socketIoClient.createSocket();
-			assert.equal(socketIoAbstraction.numberOfActiveConnections(), 1, "after opening connection");
+			const eventPromise = new Promise((resolve, reject) => {
+				socketIoAbstraction.once("clientConnect", (clientId) => {
+					resolve(clientId);
+				});
+			});
+
+			socket = await socketIoClient.createSocket();
+			const clientId = await eventPromise;
+			assert.equal(clientId, socket.id, "client ID");
 
 			await socketIoClient.closeSocket(socket);
+		});
+
+		it("emits event when a client disconnects", async function() {
+			const socket = await socketIoClient.createSocket();
+			const socketId = socket.id;
+
+			const eventPromise = new Promise((resolve, reject) => {
+				socketIoAbstraction.once("clientDisconnect", (clientId) => {
+					resolve(clientId);
+				});
+			});
+
+			await socketIoClient.closeSocket(socket);
+			const clientId = await eventPromise;
+			assert.equal(clientId, socketId, "client ID");
+		});
+
+		it("emits event when a Socket.IO event is received from client", async function() {
+			const socket = await socketIoClient.createSocket();
+			const eventToSend = new ClientRemovePointerEvent();
+
+			const eventPromise = new Promise((resolve, reject) => {
+				socketIoAbstraction.once("clientEvent", (clientId, receivedEvent) => {
+					resolve({ clientId, receivedEvent });
+				});
+			});
+
+			socket.emit(eventToSend.name(), eventToSend.payload());
+			const { clientId, receivedEvent } = await eventPromise;
+			assert.equal(clientId, socket.id, "client ID");
+			assert.deepEqual(receivedEvent, eventToSend, "event");
+
+			await socketIoClient.closeSocket(socket);
+		});
+
+		it("sends event to specific Socket.IO client", async function() {
+			
 		});
 
 		it("tells us if a socket is connected", async function() {
@@ -69,25 +113,12 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
-		it("emits 'clientEvent' event when a Socket.IO event is received from client", async function() {
+		it("counts the number of connections", async function() {
+			assert.equal(socketIoAbstraction.numberOfActiveConnections(), 0, "before opening connection");
+
 			const socket = await socketIoClient.createSocket();
-			const sentEvent = new ClientRemovePointerEvent();
+			assert.equal(socketIoAbstraction.numberOfActiveConnections(), 1, "after opening connection");
 
-			const serverPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.on("clientEvent", (clientId, receivedEvent) => {
-					try {
-						assert.equal(clientId, socket.id, "client ID");
-						assert.deepEqual(receivedEvent, sentEvent, "event");
-						resolve();
-					}
-					catch (err) {
-						reject(err);
-					}
-				});
-			});
-			socket.emit(sentEvent.name(), sentEvent.payload());
-
-			await serverPromise;
 			await socketIoClient.closeSocket(socket);
 		});
 

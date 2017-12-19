@@ -62,8 +62,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Factor out Socket.IO tests
-		- "clientConnect" event
-		- "clientDisconnect" event
 		- emitToOneClient
 		- broadcastToAllClients
 		- broadcastToAllClientsButOne
