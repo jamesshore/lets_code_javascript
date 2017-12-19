@@ -61,12 +61,7 @@ Engineering Tasks:
 - Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)
 
 To Do on current task:
-* Factor out Socket.IO abstraction
-	* Add emitToOneClient()
-	- Remove 'socket' parameter from "clientConnect" socketIO abstraction event
-	- Remove all uses of ioServer from RealTimeServer
-	- Stop exposing socket.io sockets to SocketIoAbstraction consumers
-- Factor out Socket.IO tests
+* Factor out Socket.IO tests
 - Factor out business logic
 	- Review user comments (at top of RealTimeServer)
 - Factor out business logic tests

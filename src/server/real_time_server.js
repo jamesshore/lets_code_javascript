@@ -21,12 +21,6 @@
 	const CLIENT_EVENT = "client_event";
 	const SERVER_EVENT = "server_event";
 	const CLIENT_TIMEOUT = 30 * 1000;
-	const SUPPORTED_EVENTS = [
-		ClientPointerEvent,
-		ClientRemovePointerEvent,
-		ClientDrawEvent,
-		ClientClearScreenEvent
-	];
 
 	const RealTimeServer = module.exports = class RealTimeServer {
 
@@ -37,14 +31,13 @@
 
 		start(httpServer) {
 			this._socketIoAbstraction.start(httpServer);
-			const ioServer = this._socketIoAbstraction._ioServer;
 			this._socketIoConnections = this._socketIoAbstraction._socketIoConnections;
 
 			this._eventRepo = new EventRepository();
 			this._emitter = new EventEmitter();
 
-			handleSocketIoEvents(this, ioServer);
-			handleClientTimeouts(this, ioServer);
+			handleRealTimeEvents(this);
+			handleClientTimeouts(this);
 		}
 
 		stop() {
@@ -76,47 +69,46 @@
 
 	RealTimeServer.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
 
-	function handleSocketIoEvents(self, ioServer) {
-		self._socketIoAbstraction.on("clientConnect", (key, socket) => {
-			replayPreviousEvents(self, socket);
+	function handleRealTimeEvents(self) {
+		self._socketIoAbstraction.on("clientConnect", (clientId) => {
+			replayPreviousEvents(self, clientId);
 			handleClientEvents(self);
 
 			self._socketIoAbstraction.on("clientDisconnect", () => {
-				broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(socket.id));
+				broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(clientId));
 			});
 		});
 	}
 
-	function handleClientTimeouts(self, ioServer) {
+	function handleClientTimeouts(self) {
 		self._lastActivity = {};
 
 		self._interval = self._clock.setInterval(() => {
-			Object.keys(self._lastActivity).forEach((socketId) => {
-				const lastActivity = self._lastActivity[socketId];
+			Object.keys(self._lastActivity).forEach((clientId) => {
+				const lastActivity = self._lastActivity[clientId];
 				if (self._clock.millisecondsSince(lastActivity) >= CLIENT_TIMEOUT) {
-					broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(socketId));
-					delete self._lastActivity[socketId];
+					broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(clientId));
+					delete self._lastActivity[clientId];
 				}
 			});
 		}, 100);
 
-		self._socketIoAbstraction.on("clientConnect", (key, socket) => {
-			self._lastActivity[socket.id] = self._clock.now();
+		self._socketIoAbstraction.on("clientConnect", (clientId) => {
+			self._lastActivity[clientId] = self._clock.now();
 
 			self._socketIoAbstraction.on("clientEvent", () => {
-				self._lastActivity[socket.id] = self._clock.now();
+				self._lastActivity[clientId] = self._clock.now();
 			});
 
 			self._socketIoAbstraction.on("clientDisconnect", () => {
-				delete self._lastActivity[socket.id];
+				delete self._lastActivity[clientId];
 			});
 		});
 	}
 
-	function replayPreviousEvents(self, socket) {
+	function replayPreviousEvents(self, clientId) {
 		self._eventRepo.replay().forEach((event) => {
-			// self._socketIoAbstraction.emitToOneClient(socket.id, event);
-			socket.emit(event.name(), event.payload());
+			self._socketIoAbstraction.emitToOneClient(clientId, event);
 		});
 	}
 
