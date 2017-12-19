@@ -55,31 +55,31 @@
 		});
 
 		it("counts the number of connections", async function() {
-			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
+			assert.equal(socketIoAbstraction.numberOfActiveConnections(), 0, "before opening connection");
 
 			const socket = await socketIoClient.createSocket();
-			assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
+			assert.equal(socketIoAbstraction.numberOfActiveConnections(), 1, "after opening connection");
 
 			await socketIoClient.closeSocket(socket);
 		});
 
 		it("tells us if a socket is connected", async function() {
-			assert.equal(realTimeServer._socketIoAbstraction.isClientConnected("no_such_socket"), false);
+			assert.equal(socketIoAbstraction.isClientConnected("no_such_socket"), false);
 
 			const socket = await socketIoClient.createSocket();
-			assert.equal(realTimeServer._socketIoAbstraction.isClientConnected(socket.id), true);
+			assert.equal(socketIoAbstraction.isClientConnected(socket.id), true);
 
 			await socketIoClient.closeSocket(socket);
 		});
 
-		it("emits an event when a Socket.IO client event is received", async function() {
+		it("emits 'clientEvent' event when a Socket.IO event is received from client", async function() {
 			const socket = await socketIoClient.createSocket();
 			const sentEvent = new ClientRemovePointerEvent();
 
 			const serverPromise = new Promise((resolve, reject) => {
-				realTimeServer.onNextClientEvent((socketId, receivedEvent) => {
+				socketIoAbstraction.on("clientEvent", (clientId, receivedEvent) => {
 					try {
-						assert.equal(socketId, socket.id, "socket ID");
+						assert.equal(clientId, socket.id, "client ID");
 						assert.deepEqual(receivedEvent, sentEvent, "event");
 						resolve();
 					}
@@ -92,29 +92,6 @@
 
 			await serverPromise;
 			await socketIoClient.closeSocket(socket);
-		});
-
-		it("emits an event when the server has emitted a Socket.IO event", async function() {
-			const emitter = await socketIoClient.createSocket();
-
-			const clientEvent = new ClientPointerEvent(10, 20);
-			const emitPromise = new Promise((resolve, reject) => {
-				realTimeServer.onNextServerEmit((event) => {
-					try {
-						const serverEvent = clientEvent.toServerEvent(emitter.id);
-						assert.deepEqual(event, serverEvent, "event");
-						resolve();
-					}
-					catch (err) {
-						reject(err);
-					}
-				});
-			});
-
-			emitter.emit(clientEvent.name(), clientEvent.payload());
-
-			await emitPromise;
-			await socketIoClient.closeSocket(emitter);
 		});
 
 	});
