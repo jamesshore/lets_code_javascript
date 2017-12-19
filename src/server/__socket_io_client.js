@@ -6,9 +6,9 @@
 
 	module.exports = class SocketIoClient {
 
-		constructor(serverUrl, realTimeServer) {
+		constructor(serverUrl, socketIoAbstraction) {
 			this._serverUrl = serverUrl;
-			this._realTimeServer = realTimeServer;
+			this._socketIoAbstraction = socketIoAbstraction;
 		}
 
 		createSockets(numSockets) {
@@ -29,7 +29,7 @@
 			const socket = this.createSocketWithoutWaiting();
 			return new Promise((resolve, reject) => {
 				socket.on("connect", () => {
-					waitForServerToConnect(socket.id, this._realTimeServer)
+					waitForServerToConnect(socket.id, this._socketIoAbstraction)
 						.then(() => resolve(socket))
 						.catch(reject);
 				});
@@ -44,7 +44,7 @@
 			return new Promise((resolve, reject) => {
 				const id = socket.id;
 				socket.on("disconnect", () => {
-					waitForServerToDisconnect(id, this._realTimeServer)
+					waitForServerToDisconnect(id, this._socketIoAbstraction)
 						.then(() => resolve(socket))
 						.catch(reject);
 				});
@@ -53,15 +53,15 @@
 		}
 	};
 
-	function waitForServerToConnect(socketId, realTimeServer) {
-		return waitForServerSocketState(true, socketId, realTimeServer);
+	function waitForServerToConnect(socketId, socketIoAbstraction) {
+		return waitForServerSocketState(true, socketId, socketIoAbstraction);
 	}
 
-	function waitForServerToDisconnect(socketId, realTimeServer) {
-		return waitForServerSocketState(false, socketId, realTimeServer);
+	function waitForServerToDisconnect(socketId, socketIoAbstraction) {
+		return waitForServerSocketState(false, socketId, socketIoAbstraction);
 	}
 
-	async function waitForServerSocketState(expectedConnectionState, socketId, realTimeServer) {
+	async function waitForServerSocketState(expectedConnectionState, socketId, socketIoAbstraction) {
 		// We wait for sockets to be created or destroyed on the server because, when we don't,
 		// we seem to trigger all kinds of Socket.IO nastiness. Sometimes Socket.IO won't close
 		// a connection, and sometimes the tests just never exit. Waiting for the server seems
@@ -76,7 +76,7 @@
 
 		while(success !== expectedConnectionState && !isTimeUp()) {
 			await timeoutPromise(RETRY_PERIOD);
-			success = realTimeServer.isSocketConnected(socketId);
+			success = socketIoAbstraction.isClientConnected(socketId);
 		}
 		if (isTimeUp()) throw new Error("socket " + socketId + " failed to connect to server");
 

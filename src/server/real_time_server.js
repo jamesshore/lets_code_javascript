@@ -2,11 +2,7 @@
 (function() {
 	"use strict";
 
-	const ClientPointerEvent = require("../shared/client_pointer_event.js");
-	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
-	const ClientDrawEvent = require("../shared/client_draw_event.js");
-	const ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 	const EventRepository = require("./event_repository.js");
 	const Clock = require("./clock.js");
 	const EventEmitter = require("events");
@@ -50,7 +46,7 @@
 		}
 
 		isSocketConnected(socketId) {
-			return this._socketIoConnections[socketId] !== undefined;
+			return this._socketIoAbstraction.isClientConnected(socketId);
 		}
 
 		simulateClientEvent(clientEvent) {

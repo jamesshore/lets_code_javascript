@@ -74,4 +74,6 @@ To Do on current task:
 - Absorb RealTimeServer back into Server.js and rename business logic and Socket.IO abstraction if needed
 - Look for opportunities to improve Socket.IO abstraction API
 - Race condition in "sends 'remove pointer' event to other browsers when client disconnects"
+- Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?
+- Update _server_test.js to not user private realTimeServer._socketIoAbstraction
 - Are new tests faster? (old speed: ~2.6s)

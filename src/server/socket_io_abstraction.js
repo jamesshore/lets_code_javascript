@@ -57,6 +57,10 @@
 			socket.broadcast.emit(event.name(), event.payload());
 		}
 
+		isClientConnected(clientId) {
+			return this._socketIoConnections[clientId] !== undefined;
+		}
+
 	};
 
 	function trackSocketIoConnections(self, connections, ioServer) {

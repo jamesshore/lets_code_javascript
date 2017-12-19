@@ -23,7 +23,7 @@
 
 	const PORT = 5020;
 
-	describe.only("RealTimeServer", function() {
+	describe("RealTimeServer", function() {
 
 		let httpServer;
 		let realTimeServer;
@@ -34,7 +34,7 @@
 			fakeClock = Clock.createFake();
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 			realTimeServer = new RealTimeServer(fakeClock);
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer._socketIoAbstraction);
 
 			realTimeServer.start(httpServer.getNodeServer());
 			await httpServer.start(PORT);
@@ -74,10 +74,10 @@
 		});
 
 		it("tells us if a socket is connected", async function() {
-			assert.equal(realTimeServer.isSocketConnected("no_such_socket"), false);
+			assert.equal(realTimeServer._socketIoAbstraction.isClientConnected("no_such_socket"), false);
 
 			const socket = await socketIoClient.createSocket();
-			assert.equal(realTimeServer.isSocketConnected(socket.id), true);
+			assert.equal(realTimeServer._socketIoAbstraction.isClientConnected(socket.id), true);
 
 			await socketIoClient.closeSocket(socket);
 		});
