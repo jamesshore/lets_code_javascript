@@ -5,9 +5,8 @@
 	const assert = require("assert");
 	const SocketIoClient = require("./__socket_io_client.js");
 	const HttpServer = require("./http_server.js");
-	const RealTimeServer = require("./real_time_server.js");
+	const SocketIoAbstraction = require("./socket_io_abstraction.js");
 	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
-	const ClientPointerEvent = require("../shared/client_pointer_event.js");
 
 	describe("Socket.IO Abstraction", function() {
 
@@ -16,29 +15,27 @@
 		const PORT = 5020;
 
 		let httpServer;
-		let realTimeServer;
 		let socketIoAbstraction;
 		let socketIoClient;
 
 		beforeEach(async function() {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			realTimeServer = new RealTimeServer();
-			socketIoAbstraction = realTimeServer._socketIoAbstraction;
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer._socketIoAbstraction);
+			socketIoAbstraction = new SocketIoAbstraction();
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, socketIoAbstraction);
 
-			realTimeServer.start(httpServer.getNodeServer());
+			socketIoAbstraction.start(httpServer.getNodeServer());
 			await httpServer.start(PORT);
 		});
 
 		afterEach(async function() {
 			try {
 				assert.equal(
-					realTimeServer.numberOfActiveConnections(), 0,
+					socketIoAbstraction.numberOfActiveConnections(), 0,
 					"afterEach() requires all sockets to be closed"
 				);
 			}
 			finally {
-				await realTimeServer.stop();
+				await socketIoAbstraction.stop();
 			}
 		});
 
