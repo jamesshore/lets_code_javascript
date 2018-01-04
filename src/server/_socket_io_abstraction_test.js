@@ -132,6 +132,25 @@
 			await socketIoClient.closeSockets(socket1, socket2);
 		});
 
+		it("sends event to all Socket.IO clients except one", async function() {
+			const [ socket1, socket2, socket3 ] = await socketIoClient.createSockets(3);
+			const eventToSend = new ClientRemovePointerEvent();
+
+			const socket1Promise = listenForOneClientSocketEvent(socket1, eventToSend);
+			const socket3Promise = listenForOneClientSocketEvent(socket3, eventToSend);
+			socket2.once(eventToSend.name(), () => {
+				assert.fail("Event should not have been sent to socket2");
+			});
+
+			socketIoAbstraction.broadcastToAllClientsButOne(socket2.id, eventToSend);
+			const received1 = await socket1Promise;
+			const received3 = await socket3Promise;
+			assert.deepEqual(received1, eventToSend.payload());
+			assert.deepEqual(received3, eventToSend.payload());
+
+			await socketIoClient.closeSockets(socket1, socket2, socket3);
+		});
+
 		it("tells us if a socket is connected", async function() {
 			assert.equal(socketIoAbstraction.isClientConnected("no_such_socket"), false);
 
