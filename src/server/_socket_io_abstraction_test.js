@@ -101,7 +101,23 @@
 		});
 
 		it("sends event to specific Socket.IO client", async function() {
-			
+			const [ socket1, socket2 ] = await socketIoClient.createSockets(2);
+			const eventToSend = new ClientRemovePointerEvent();
+
+			const socketPromise = new Promise((resolve, reject) => {
+				socket1.once(eventToSend.name(), (eventPayload) => {
+					resolve(eventPayload);
+				});
+			});
+			socket2.once(eventToSend.name(), () => {
+				assert.fail("Event should not have been sent to both clients");
+			});
+
+			socketIoAbstraction.emitToOneClient(socket1.id, eventToSend);
+			const receivedPayload = await socketPromise;
+			assert.deepEqual(receivedPayload, eventToSend.payload());
+
+			await socketIoClient.closeSockets(socket1, socket2);
 		});
 
 		it("tells us if a socket is connected", async function() {
