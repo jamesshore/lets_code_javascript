@@ -55,7 +55,7 @@
 			let socket;
 
 			const eventPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.once("clientConnect", (clientId) => {
+				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {
 					resolve(clientId);
 				});
 			});
@@ -72,7 +72,7 @@
 			const socketId = socket.id;
 
 			const eventPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.once("clientDisconnect", (clientId) => {
+				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_DISCONNECT, (clientId) => {
 					resolve(clientId);
 				});
 			});
@@ -87,7 +87,7 @@
 			const eventToSend = new ClientRemovePointerEvent();
 
 			const eventPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.once("clientEvent", (clientId, receivedEvent) => {
+				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, (clientId, receivedEvent) => {
 					resolve({ clientId, receivedEvent });
 				});
 			});

@@ -62,11 +62,11 @@
 	RealTimeServer.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
 
 	function handleRealTimeEvents(self) {
-		self._socketIoAbstraction.on("clientConnect", (clientId) => {
+		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {
 			replayPreviousEvents(self, clientId);
 			handleClientEvents(self);
 
-			self._socketIoAbstraction.on("clientDisconnect", () => {
+			self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_DISCONNECT, () => {
 				broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(clientId));
 			});
 		});
@@ -85,14 +85,14 @@
 			});
 		}, 100);
 
-		self._socketIoAbstraction.on("clientConnect", (clientId) => {
+		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {
 			self._lastActivity[clientId] = self._clock.now();
 
-			self._socketIoAbstraction.on("clientEvent", () => {
+			self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, () => {
 				self._lastActivity[clientId] = self._clock.now();
 			});
 
-			self._socketIoAbstraction.on("clientDisconnect", () => {
+			self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_DISCONNECT, () => {
 				delete self._lastActivity[clientId];
 			});
 		});
@@ -105,7 +105,7 @@
 	}
 
 	function handleClientEvents(self) {
-		self._socketIoAbstraction.on("clientEvent", (clientId, clientEvent) => {
+		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, (clientId, clientEvent) => {
 			processClientEvent(self, clientId, clientEvent);
 		});
 	}

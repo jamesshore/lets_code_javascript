@@ -67,6 +67,11 @@
 
 	};
 
+	SocketIoAbstraction.CLIENT_DISCONNECT = "clientDisconnect";
+	SocketIoAbstraction.CLIENT_CONNECT = "clientConnect";
+	SocketIoAbstraction.CLIENT_EVENT_RECEIVED = "clientEvent";
+
+
 	function trackSocketIoConnections(self, connections, ioServer) {
 		// Inspired by isaacs
 		// https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
@@ -75,9 +80,9 @@
 			connections[key] = socket;
 			socket.on("disconnect", function() {
 				delete connections[key];
-				self.emit("clientDisconnect", key);
+				self.emit(SocketIoAbstraction.CLIENT_DISCONNECT, key);
 			});
-			self.emit("clientConnect", key, socket);
+			self.emit(SocketIoAbstraction.CLIENT_CONNECT, key, socket);
 		});
 	}
 
@@ -85,7 +90,7 @@
 		ioServer.on("connect", (socket) => {
 			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
 				socket.on(eventConstructor.EVENT_NAME, function(payload) {
-					self.emit("clientEvent", socket.id, eventConstructor.fromPayload(payload));
+					self.emit(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, socket.id, eventConstructor.fromPayload(payload));
 				});
 			});
 		});
