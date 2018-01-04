@@ -62,10 +62,9 @@ Engineering Tasks:
 
 To Do on current task:
 * Factor out Socket.IO tests
-		- emitToOneClient
-		- broadcastToAllClients
-		- broadcastToAllClientsButOne
-	- Remove RealTimeServer from SocketIoAbstraction tests
+	- emitToOneClient
+	- broadcastToAllClients
+	- broadcastToAllClientsButOne
 - Factor out business logic
 	- Review user comments (at top of RealTimeServer)
 - Factor out business logic tests
@@ -77,6 +76,7 @@ To Do on current task:
   - onNextServerEmit
 - Absorb RealTimeServer back into Server.js and rename business logic and Socket.IO abstraction if needed
 - Look for opportunities to improve Socket.IO abstraction API
+	- Unify event sending parameters as suggested by Martin Grandrath's in E582 comments - http://www.letscodejavascript.com/v3/comments/live/582#comment-3675682857
 - Race condition in "sends 'remove pointer' event to other browsers when client disconnects"
 - Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?
 - Update _server_test.js to not user private realTimeServer._socketIoAbstraction
