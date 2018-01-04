@@ -104,11 +104,7 @@
 			const [ socket1, socket2 ] = await socketIoClient.createSockets(2);
 			const eventToSend = new ClientRemovePointerEvent();
 
-			const socketPromise = new Promise((resolve, reject) => {
-				socket1.once(eventToSend.name(), (eventPayload) => {
-					resolve(eventPayload);
-				});
-			});
+			const socketPromise = listenForOneClientSocketEvent(socket1, eventToSend);
 			socket2.once(eventToSend.name(), () => {
 				assert.fail("Event should not have been sent to both clients");
 			});
@@ -124,16 +120,8 @@
 			const [ socket1, socket2 ] = await socketIoClient.createSockets(2);
 			const eventToSend = new ClientRemovePointerEvent();
 
-			const socket1Promise = new Promise((resolve, reject) => {
-				socket1.once(eventToSend.name(), (eventPayload) => {
-					resolve(eventPayload);
-				});
-			});
-			const socket2Promise = new Promise((resolve, reject) => {
-				socket2.once(eventToSend.name(), (eventPayload) => {
-					resolve(eventPayload);
-				});
-			});
+			const socket1Promise = listenForOneClientSocketEvent(socket1, eventToSend);
+			const socket2Promise = listenForOneClientSocketEvent(socket2, eventToSend);
 
 			socketIoAbstraction.broadcastToAllClients(eventToSend);
 			const received1 = await socket1Promise;
@@ -161,6 +149,14 @@
 
 			await socketIoClient.closeSocket(socket);
 		});
+
+		function listenForOneClientSocketEvent(socket, event) {
+			return new Promise((resolve, reject) => {
+				socket.once(event.name(), (eventPayload) => {
+					resolve(eventPayload);
+				});
+			});
+		}
 
 	});
 
