@@ -43,7 +43,7 @@
 			return close();
 		}
 
-		emitToOneClient(clientId, event) {
+		sendToOneClient(clientId, event) {
 			const socket = lookUpSocket(this, clientId);
 			socket.emit(event.name(), event.payload());
 		}

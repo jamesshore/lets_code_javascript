@@ -61,9 +61,7 @@ Engineering Tasks:
 - Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)
 
 To Do on current task:
-* Factor out Socket.IO tests
-	* broadcastToAllClientsButOne
-- Factor out business logic
+* Factor out business logic
 	- Review user comments (at top of RealTimeServer)
 - Factor out business logic tests
 - Remove unnecessary(?) methods

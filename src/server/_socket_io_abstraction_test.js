@@ -109,7 +109,7 @@
 				assert.fail("Event should not have been sent to both clients");
 			});
 
-			socketIoAbstraction.emitToOneClient(socket1.id, eventToSend);
+			socketIoAbstraction.sendToOneClient(socket1.id, eventToSend);
 			const receivedPayload = await socketPromise;
 			assert.deepEqual(receivedPayload, eventToSend.payload());
 

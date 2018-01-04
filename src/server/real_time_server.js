@@ -100,7 +100,7 @@
 
 	function replayPreviousEvents(self, clientId) {
 		self._eventRepo.replay().forEach((event) => {
-			self._socketIoAbstraction.emitToOneClient(clientId, event);
+			self._socketIoAbstraction.sendToOneClient(clientId, event);
 		});
 	}
 
