@@ -162,7 +162,7 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		it("sends 'remove pointer' event to other browsers when client disconnects", function() {
+		it.skip("sends 'remove pointer' event to other browsers when client disconnects", function() {
 			nullRealTimeServer.triggerClientDisconnectEvent("my client ID");
 
 			const event = nullRealTimeServer.getLastSentMessage();

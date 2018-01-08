@@ -68,6 +68,16 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
+		it("simulates a client connecting", async function() {
+			const eventPromise = new Promise((resolve, reject) => {
+				realTimeServer.once(RealTimeServer.CLIENT_CONNECT, (clientId) => {
+					resolve(clientId);
+				});
+			});
+			realTimeServer.triggerClientConnectEvent("connecting ID");
+			assert.equal(await eventPromise, "connecting ID");
+		});
+
 		it("emits event when a client disconnects", async function() {
 			const socket = await socketIoClient.createSocket();
 			const socketId = socket.id;

@@ -85,6 +85,10 @@
 			return Object.keys(this._socketIoConnections).length;
 		}
 
+		triggerClientConnectEvent(clientId) {
+			this.emit(RealTimeServer.CLIENT_CONNECT, clientId);
+		}
+
 		triggerClientDisconnectEvent(clientId) {
 			this.emit(RealTimeServer.CLIENT_DISCONNECT, clientId);
 		}
@@ -117,7 +121,7 @@
 				delete connections[key];
 				self.triggerClientDisconnectEvent(key);
 			});
-			self.emit(RealTimeServer.CLIENT_CONNECT, key, socket);
+			self.triggerClientConnectEvent(key);
 		});
 	}
 
