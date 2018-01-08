@@ -3,7 +3,7 @@
 	"use strict";
 
 	const HttpServer = require("./http_server.js");
-	const RealTimeServer = require("./real_time_server.js");
+	const RealTimeLogic = require("./real_time_logic.js");
 
 	module.exports = class Server {
 
@@ -13,16 +13,16 @@
 			this._httpServer = new HttpServer(contentDir, notFoundPageToServe);
 			await this._httpServer.start(portNumber);
 
-			// Consider Martin Grandrath's suggestions from E509 comments (different RealTimeServer initialization)
+			// Consider Martin Grandrath's suggestions from E509 comments (different server initialization)
 			// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
-			this._realTimeServer = new RealTimeServer();
-			this._realTimeServer.start(this._httpServer.getNodeServer());
+			this._realTimeLogic = new RealTimeLogic();
+			this._realTimeLogic.start(this._httpServer.getNodeServer());
 		}
 
 		async stop() {
-			if (this._realTimeServer === undefined) throw new Error("stop() called before server started");
+			if (this._realTimeLogic === undefined) throw new Error("stop() called before server started");
 
-			await this._realTimeServer.stop();
+			await this._realTimeLogic.stop();
 		}
 
 	};

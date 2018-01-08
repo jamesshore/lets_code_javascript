@@ -33,7 +33,7 @@
 		beforeEach(async function() {
 			server = new Server();
 			await server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT);
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, server._realTimeServer._socketIoAbstraction);
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, server._realTimeLogic._socketIoAbstraction);
 		});
 
 		afterEach(async function() {
@@ -99,14 +99,14 @@
 			const RETRY_PERIOD = 10; // milliseconds
 
 			const startTime = Date.now();
-			const realTimeServer = server._realTimeServer;
+			const realTimeLogic = server._realTimeLogic;
 			let success = false;
 
 			while(!success && !isTimeUp(TIMEOUT)) {
 				await timeoutPromise(RETRY_PERIOD);
-				success = (expectedConnections === realTimeServer.numberOfActiveConnections());
+				success = (expectedConnections === realTimeLogic.numberOfActiveConnections());
 			}
-			assert.equal(realTimeServer.numberOfActiveConnections(), expectedConnections, message);
+			assert.equal(realTimeLogic.numberOfActiveConnections(), expectedConnections, message);
 
 			function isTimeUp(timeout) {
 				return (startTime + timeout) < Date.now();

@@ -15,7 +15,7 @@
 	const SERVER_EVENT = "server_event";
 	const CLIENT_TIMEOUT = 30 * 1000;
 
-	const RealTimeServer = module.exports = class RealTimeServer {
+	const RealTimeLogic = module.exports = class RealTimeLogic {
 
 		constructor(clock = new Clock()) {
 			this._clock = clock;
@@ -56,7 +56,7 @@
 
 	};
 
-	RealTimeServer.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
+	RealTimeLogic.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
 
 	function handleRealTimeEvents(self) {
 		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {

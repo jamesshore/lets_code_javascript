@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	const RealTimeServer = require("./real_time_server.js");
+	const RealTimeLogic = require("./real_time_logic.js");
 	const HttpServer = require("./http_server.js");
 	const assert = require("_assert");
 	const ServerPointerEvent = require("../shared/server_pointer_event.js");
@@ -23,32 +23,32 @@
 
 	const PORT = 5020;
 
-	describe("RealTimeServer", function() {
+	describe("RealTimeLogic", function() {
 
 		let httpServer;
-		let realTimeServer;
+		let realTimeLogic;
 		let socketIoClient;
 		let fakeClock;
 
 		beforeEach(async function() {
 			fakeClock = Clock.createFake();
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			realTimeServer = new RealTimeServer(fakeClock);
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer._socketIoAbstraction);
+			realTimeLogic = new RealTimeLogic(fakeClock);
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeLogic._socketIoAbstraction);
 
-			realTimeServer.start(httpServer.getNodeServer());
+			realTimeLogic.start(httpServer.getNodeServer());
 			await httpServer.start(PORT);
 		});
 
 		afterEach(async function() {
 			try {
 				assert.equal(
-					realTimeServer.numberOfActiveConnections(), 0,
+					realTimeLogic.numberOfActiveConnections(), 0,
 					"afterEach() requires all sockets to be closed"
 				);
 			}
 			finally {
-				await realTimeServer.stop();
+				await realTimeLogic.stop();
 			}
 		});
 
@@ -77,7 +77,7 @@
 				});
 			}));
 
-			realTimeServer.simulateClientEvent(clientEvent);
+			realTimeLogic.simulateClientEvent(clientEvent);
 
 			await listeners;
 			await socketIoClient.closeSockets(receiver1, receiver2);
@@ -86,12 +86,12 @@
 		it("emits events for simulated client events", function(done) {
 			const clientEvent = new ClientRemovePointerEvent();
 
-			realTimeServer.onNextClientEvent((socketId, receivedEvent) => {
+			realTimeLogic.onNextClientEvent((socketId, receivedEvent) => {
 				assert.equal(socketId, "__SIMULATED__", "socket ID");
 				assert.deepEqual(clientEvent, receivedEvent, "event");
 				done();
 			});
-			realTimeServer.simulateClientEvent(clientEvent);
+			realTimeLogic.simulateClientEvent(clientEvent);
 		});
 
 		it("replays all previous events when client connects", async function() {
@@ -101,9 +101,9 @@
 			const event2 = new ClientDrawEvent(2, 20, 200, 2000);
 			const event3 = new ClientDrawEvent(3, 30, 300, 3000);
 
-			realTimeServer.simulateClientEvent(event1, IRRELEVANT_ID);
-			realTimeServer.simulateClientEvent(event2, IRRELEVANT_ID);
-			realTimeServer.simulateClientEvent(event3, IRRELEVANT_ID);
+			realTimeLogic.simulateClientEvent(event1, IRRELEVANT_ID);
+			realTimeLogic.simulateClientEvent(event2, IRRELEVANT_ID);
+			realTimeLogic.simulateClientEvent(event3, IRRELEVANT_ID);
 
 			let replayedEvents = [];
 			const client = socketIoClient.createSocketWithoutWaiting();
@@ -150,7 +150,7 @@
 
 			await socketIoClient.closeSocket(client);
 			assert.deepEqual(
-				realTimeServer._eventRepo.replay(),
+				realTimeLogic._eventRepo.replay(),
 				[ new ServerRemovePointerEvent(clientId) ]
 			);
 		});
@@ -163,7 +163,7 @@
 				assert.equal(event.id, client.id);
 			});
 
-			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 			await listenerPromise;
 
 			await socketIoClient.closeSocket(client);
@@ -174,17 +174,17 @@
 
 			// first timeout
 			const firstTimeout = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
-			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 			await firstTimeout;
 
 			// some more activity
 			const clientEvent = new ClientClearScreenEvent();
 			client.emit(clientEvent.name(), clientEvent.payload());
-			await new Promise((resolve) => realTimeServer.onNextClientEvent(resolve));
+			await new Promise((resolve) => realTimeLogic.onNextClientEvent(resolve));
 
 			// second timeout
 			const secondTimeout = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
-			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 			await secondTimeout;
 
 			// done
@@ -197,18 +197,18 @@
 
 			// listen for first (valid) RemovePointerEvent
 			const eventListener = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
-			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 			await eventListener;
 
 			// listen for second (invalid) RemovePointerEvent
 			let errorOnEvent;
-			realTimeServer.onNextServerEmit((event) => {
+			realTimeLogic.onNextServerEmit((event) => {
 				if (errorOnEvent) assert.fail("should not receive remove pointer event");
 			});
 
 			// allow time to pass, which could trigger additional RemovePointerEvents
 			errorOnEvent = true;
-			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 
 			// done
 			errorOnEvent = false;   // closing the socket will cause RemovePointerEvent, so we stop listening for errors
@@ -222,13 +222,13 @@
 				throw new Error("Should not have received 'remove pointer' event");
 			});
 
-			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT / 2);
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
 			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
 
 			const promise = new Promise((resolve) => {
-				realTimeServer.onNextClientEvent((socketId, event) => {
+				realTimeLogic.onNextClientEvent((socketId, event) => {
 					setTimeout(() => {  // make this code asynchronous so tick() doesn't happen too soon
-						fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT / 2);
+						fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
 						setTimeout(() => {// allow tick() to be processed so server event is sent if it's going to be (it shouldn't)
 							resolve();
 						}, 0);
@@ -252,13 +252,13 @@
 				throw new Error("Should not have received 'remove pointer' event");
 			});
 
-			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT / 2);
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
 			const event = new ClientClearScreenEvent();
 
 			const promise = new Promise((resolve) => {
-				realTimeServer.onNextClientEvent((socketId, event) => {
+				realTimeLogic.onNextClientEvent((socketId, event) => {
 					setTimeout(() => {  // make this code asynchronous so tick() doesn't happen too soon
-						fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT / 2);
+						fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
 						setTimeout(() => {// allow tick() to be processed so server event is sent if it's going to be (it shouldn't)
 							resolve();
 						}, 0);
@@ -279,10 +279,10 @@
 			const client = await socketIoClient.createSocket();
 			await socketIoClient.closeSocket(client);
 
-			realTimeServer.onNextServerEmit((event) => {
+			realTimeLogic.onNextServerEmit((event) => {
 				assert.fail("should not receive remove pointer event");
 			});
-			fakeClock.tick(RealTimeServer.CLIENT_TIMEOUT);
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 		});
 
 		function listenForOneEvent(socket, eventName, fn) {
