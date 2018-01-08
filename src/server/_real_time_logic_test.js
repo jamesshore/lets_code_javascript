@@ -169,7 +169,7 @@
 			nullRealTimeServer.triggerClientDisconnectEvent("my client ID");
 			// real time logic fires here
 
-			const event = nullRealTimeServer.getLastSentEvent();
+			const event = nullRealTimeServer.getLastSentMessage();
 			assert.deepEqual(event, {
 				event: new ServerRemovePointerEvent("my client ID"),
 				type: RealTimeServer.SEND_TYPE.BROADCAST

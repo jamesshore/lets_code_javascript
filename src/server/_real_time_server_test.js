@@ -7,6 +7,7 @@
 	const HttpServer = require("./http_server.js");
 	const RealTimeServer = require("./real_time_server.js");
 	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
+	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
 
 	describe("RealTimeServer", function() {
 
@@ -92,7 +93,7 @@
 			assert.equal(await eventPromise, "disconnecting ID");
 		});
 
-		it("emits event when a Socket.IO event is received from client", async function() {
+		it("emits event when a message is received from a client", async function() {
 			const socket = await socketIoClient.createSocket();
 			const eventToSend = new ClientRemovePointerEvent();
 
@@ -110,55 +111,82 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
-		it("sends event to specific Socket.IO client", async function() {
+		it("sends message to specific Socket.IO client", async function() {
 			const [ socket1, socket2 ] = await socketIoClient.createSockets(2);
-			const eventToSend = new ClientRemovePointerEvent();
+			const messageToSend = new ClientRemovePointerEvent();
 
-			const socketPromise = listenForOneClientSocketEvent(socket1, eventToSend);
-			socket2.once(eventToSend.name(), () => {
-				assert.fail("Event should not have been sent to both clients");
+			const socketPromise = listenForOneMessage(socket1, messageToSend);
+			socket2.once(messageToSend.name(), () => {
+				assert.fail("Message should not have been sent to both clients");
 			});
 
-			realTimeServer.sendToOneClient(socket1.id, eventToSend);
+			realTimeServer.sendToOneClient(socket1.id, messageToSend);
 			const receivedPayload = await socketPromise;
-			assert.deepEqual(receivedPayload, eventToSend.payload());
+			assert.deepEqual(receivedPayload, messageToSend.payload());
 
 			await socketIoClient.closeSockets(socket1, socket2);
 		});
 
-		it("sends events to all Socket.IO clients", async function() {
+		it("sends message to all Socket.IO clients", async function() {
 			const [ socket1, socket2 ] = await socketIoClient.createSockets(2);
-			const eventToSend = new ClientRemovePointerEvent();
+			const messageToSend = new ClientRemovePointerEvent();
 
-			const socket1Promise = listenForOneClientSocketEvent(socket1, eventToSend);
-			const socket2Promise = listenForOneClientSocketEvent(socket2, eventToSend);
+			const socket1Promise = listenForOneMessage(socket1, messageToSend);
+			const socket2Promise = listenForOneMessage(socket2, messageToSend);
 
-			realTimeServer.broadcastToAllClients(eventToSend);
+			realTimeServer.broadcastToAllClients(messageToSend);
 			const received1 = await socket1Promise;
 			const received2 = await socket2Promise;
-			assert.deepEqual(received1, eventToSend.payload());
-			assert.deepEqual(received2, eventToSend.payload());
+			assert.deepEqual(received1, messageToSend.payload());
+			assert.deepEqual(received2, messageToSend.payload());
 
 			await socketIoClient.closeSockets(socket1, socket2);
 		});
 
-		it("sends event to all Socket.IO clients except one", async function() {
+		it("sends message to all Socket.IO clients except one", async function() {
 			const [ socket1, socket2, socket3 ] = await socketIoClient.createSockets(3);
-			const eventToSend = new ClientRemovePointerEvent();
+			const messageToSend = new ClientRemovePointerEvent();
 
-			const socket1Promise = listenForOneClientSocketEvent(socket1, eventToSend);
-			const socket3Promise = listenForOneClientSocketEvent(socket3, eventToSend);
-			socket2.once(eventToSend.name(), () => {
-				assert.fail("Event should not have been sent to socket2");
+			const socket1Promise = listenForOneMessage(socket1, messageToSend);
+			const socket3Promise = listenForOneMessage(socket3, messageToSend);
+			socket2.once(messageToSend.name(), () => {
+				assert.fail("Message should not have been sent to socket2");
 			});
 
-			realTimeServer.broadcastToAllClientsButOne(socket2.id, eventToSend);
+			realTimeServer.broadcastToAllClientsButOne(socket2.id, messageToSend);
 			const received1 = await socket1Promise;
 			const received3 = await socket3Promise;
-			assert.deepEqual(received1, eventToSend.payload());
-			assert.deepEqual(received3, eventToSend.payload());
+			assert.deepEqual(received1, messageToSend.payload());
+			assert.deepEqual(received3, messageToSend.payload());
 
 			await socketIoClient.closeSockets(socket1, socket2, socket3);
+		});
+
+		it("tracks the last message sent", async function() {
+			const socket = await socketIoClient.createSocket();
+			const message = new ServerRemovePointerEvent("server client ID");
+
+			realTimeServer.sendToOneClient(socket.id, message);
+			assert.deepEqual(realTimeServer.getLastSentMessage(), {
+				message,
+				clientId: socket.id,
+				type: RealTimeServer.SEND_TYPE.ONE_CLIENT
+			}, "one");
+
+			realTimeServer.broadcastToAllClients(message);
+			assert.deepEqual(realTimeServer.getLastSentMessage(), {
+				message,
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
+			}, "all");
+
+			realTimeServer.broadcastToAllClientsButOne(socket.id, message);
+			assert.deepEqual(realTimeServer.getLastSentMessage(), {
+				message,
+				clientId: socket.id,
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE
+			}, "all but one");
+
+			await socketIoClient.closeSocket(socket);
 		});
 
 		it("tells us if a socket is connected", async function() {
@@ -179,7 +207,7 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
-		function listenForOneClientSocketEvent(socket, event) {
+		function listenForOneMessage(socket, event) {
 			return new Promise((resolve, reject) => {
 				socket.once(event.name(), (eventPayload) => {
 					resolve(eventPayload);

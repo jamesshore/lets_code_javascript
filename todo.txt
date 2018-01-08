@@ -72,6 +72,7 @@ To Do on current task:
   - onNextServerEmit
 - Look for opportunities to improve Socket.IO abstraction API
 	- Unify event sending parameters as suggested by Martin Grandrath's in E582 comments - http://www.letscodejavascript.com/v3/comments/live/582#comment-3675682857
+	- Rename 'Event' to 'Message' across the board
 - Race condition in "sends 'remove pointer' event to other browsers when client disconnects"
 - Clean up Server and its tests
 - Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?

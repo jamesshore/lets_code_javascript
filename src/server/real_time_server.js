@@ -35,7 +35,7 @@
 			this._nodeHttpServer.on("close", failFastIfHttpServerClosed);
 
 			trackSocketIoConnections(this, this._socketIoConnections, this._ioServer);
-			listenForClientEvents(this, this._ioServer);
+			listenForClientMessages(this, this._ioServer);
 		}
 
 		stop() {
@@ -45,18 +45,36 @@
 			return close();
 		}
 
-		sendToOneClient(clientId, event) {
+		sendToOneClient(clientId, message) {
 			const socket = lookUpSocket(this, clientId);
-			socket.emit(event.name(), event.payload());
+			socket.emit(message.name(), message.payload());
+			this._lastSentMessage = {
+				message,
+				clientId,
+				type: RealTimeServer.SEND_TYPE.ONE_CLIENT
+			};
 		}
 
-		broadcastToAllClients(event) {
-			this._ioServer.emit(event.name(), event.payload());
+		broadcastToAllClients(message) {
+			this._ioServer.emit(message.name(), message.payload());
+			this._lastSentMessage = {
+				message,
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
+			};
 		}
 
-		broadcastToAllClientsButOne(clientToExclude, event) {
+		broadcastToAllClientsButOne(clientToExclude, message) {
 			const socket = lookUpSocket(this, clientToExclude);
-			socket.broadcast.emit(event.name(), event.payload());
+			socket.broadcast.emit(message.name(), message.payload());
+			this._lastSentMessage = {
+				message,
+				clientId: clientToExclude,
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE
+			};
+		}
+
+		getLastSentMessage() {
+			return this._lastSentMessage;
 		}
 
 		isClientConnected(clientId) {
@@ -83,6 +101,11 @@
 	RealTimeServer.CLIENT_CONNECT = "clientConnect";
 	RealTimeServer.CLIENT_EVENT_RECEIVED = "clientEvent";
 
+	RealTimeServer.SEND_TYPE = {
+		ONE_CLIENT: "one_client",
+		ALL_CLIENTS: "all_clients",
+		ALL_CLIENTS_BUT_ONE: "all_clients_but_one"
+	};
 
 	function trackSocketIoConnections(self, connections, ioServer) {
 		// Inspired by isaacs
@@ -98,7 +121,7 @@
 		});
 	}
 
-	function listenForClientEvents(self, ioServer) {
+	function listenForClientMessages(self, ioServer) {
 		ioServer.on("connect", (socket) => {
 			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
 				socket.on(eventConstructor.EVENT_NAME, function(payload) {
