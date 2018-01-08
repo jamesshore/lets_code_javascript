@@ -8,7 +8,7 @@
 	const RealTimeServer = require("./real_time_server.js");
 	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 
-	describe("Socket.IO Abstraction", function() {
+	describe("RealTimeServer", function() {
 
 		const IRRELEVANT_DIR = "generated/test";
 		const IRRELEVANT_PAGE = "irrelevant.html";
