@@ -84,7 +84,7 @@
 			"no-delete-var": ERROR,
 			"no-undef": ERROR,
 			"no-undef-init": ERROR,
-			"no-use-before-define": [ ERROR, { "functions": false, "classes": true, "variables": false} ],
+			"no-use-before-define": [ ERROR, { "functions": false, "classes": false, "variables": false} ],
 
 			// "Stylistic Issues"
 			"new-cap": ERROR,

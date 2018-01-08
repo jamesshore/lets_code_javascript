@@ -70,10 +70,6 @@
 	};
 
 
-	class NullHttpServer {
-		getNodeServer() {}
-	}
-
 
 	RealTimeServer.createNull = function() {
 		return new RealTimeServer(new NullHttpServer());
@@ -121,5 +117,9 @@
 		);
 	}
 
+
+	class NullHttpServer {
+		getNodeServer() {}
+	}
 
 }());
