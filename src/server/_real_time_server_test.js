@@ -180,13 +180,13 @@
 	});
 
 
-	describe.skip("Null RealTimeServer", function() {
+	describe("Null RealTimeServer", function() {
 
 		let realTimeServer;
 
 		beforeEach(function() {
 			realTimeServer = RealTimeServer.createNull();
-			realTimeServer.start(null);
+			// realTimeServer.start(null);
 		});
 
 		it("sends event to specific Socket.IO client", function() {

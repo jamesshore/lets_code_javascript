@@ -69,8 +69,14 @@
 
 	};
 
+
+	class NullHttpServer {
+		getNodeServer() {}
+	}
+
+
 	RealTimeServer.createNull = function() {
-		return new RealTimeServer();
+		return new RealTimeServer(new NullHttpServer());
 	};
 
 	RealTimeServer.CLIENT_DISCONNECT = "clientDisconnect";
@@ -114,5 +120,6 @@
 			"https://github.com/socketio/socket.io/issues/2975"
 		);
 	}
+
 
 }());
