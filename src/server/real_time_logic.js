@@ -32,7 +32,6 @@
 
 		stop() {
 			this._interval.clear();
-			this._realTimeServer.stop();
 		}
 
 		numberOfActiveConnections() {

@@ -28,13 +28,15 @@
 
 		let httpServer;
 		let realTimeLogic;
+		let realTimeServer;
 		let socketIoClient;
 		let fakeClock;
 
 		beforeEach(async function() {
 			fakeClock = Clock.createFake();
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			let realTimeServer = new RealTimeServer();
+
+			realTimeServer = new RealTimeServer();
 			realTimeServer.start(httpServer.getNodeServer());
 
 			realTimeLogic = new RealTimeLogic(realTimeServer, fakeClock);
@@ -52,7 +54,8 @@
 				);
 			}
 			finally {
-				await realTimeLogic.stop();
+				realTimeLogic.stop();
+				await realTimeServer.stop();
 			}
 		});
 

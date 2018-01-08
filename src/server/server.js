@@ -27,7 +27,8 @@
 		async stop() {
 			if (this._realTimeLogic === undefined) throw new Error("stop() called before server started");
 
-			await this._realTimeLogic.stop();
+			this._realTimeLogic.stop();
+			await this._realTimeServer.stop();
 		}
 
 	};
