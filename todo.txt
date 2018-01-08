@@ -59,12 +59,14 @@ Engineering Tasks:
 - add promisified version of setTimeout()?
 	- use Clock.setTimeout() instead of regular setTimeout() in RealTimeServer tests
 - Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)
+- Test that client and server talk to each other correctly; not just that they can talk to Socket.IO, but specifically that they talk to each other
 
 To Do on current task:
-* Factor out business logic
-	- Review user comments (at top of RealTimeServer)
-- Factor out business logic tests
-- Remove unnecessary(?) methods
+* Rename SocketIoAbstraction and RealTimeServer to be more accurate for their new functions
+- Move SocketIoAbstraction.start() call out of RealTimeServer and into Server.
+- Modify SocketIoAbstraction to be testable without a live network
+- Refactor business logic tests to not use network
+- Remove unnecessary(?) business logic methods
 	- numberOfActiveConnections
 	- isSocketConnected
 	- simulateClientEvent
@@ -74,6 +76,7 @@ To Do on current task:
 - Look for opportunities to improve Socket.IO abstraction API
 	- Unify event sending parameters as suggested by Martin Grandrath's in E582 comments - http://www.letscodejavascript.com/v3/comments/live/582#comment-3675682857
 - Race condition in "sends 'remove pointer' event to other browsers when client disconnects"
+- Clean up Server and its tests
 - Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?
 - Update _server_test.js to not user private realTimeServer._socketIoAbstraction
 - Are new tests faster? (old speed: ~2.6s)

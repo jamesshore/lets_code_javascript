@@ -13,6 +13,8 @@
 			this._httpServer = new HttpServer(contentDir, notFoundPageToServe);
 			await this._httpServer.start(portNumber);
 
+			// Consider Martin Grandrath's suggestions from E509 comments (different RealTimeServer initialization)
+			// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
 			this._realTimeServer = new RealTimeServer();
 			this._realTimeServer.start(this._httpServer.getNodeServer());
 		}
