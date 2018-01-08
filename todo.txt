@@ -62,7 +62,7 @@ Engineering Tasks:
 - Test that client and server talk to each other correctly; not just that they can talk to Socket.IO, but specifically that they talk to each other
 
 To Do on current task:
-* Modify RealTimeServer to be testable without a live network
+* Implement RealTimeServer.createNull()
 - Refactor business logic tests to not use network
 - Remove unnecessary(?) business logic methods
 	- numberOfActiveConnections
