@@ -162,22 +162,14 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		it.skip("sends 'remove pointer' event to other browsers when client disconnects", function() {
-			// simulate closing a socket
-			// check that the close event was sent
-
+		it("sends 'remove pointer' event to other browsers when client disconnects", function() {
 			nullRealTimeServer.triggerClientDisconnectEvent("my client ID");
-			// real time logic fires here
 
 			const event = nullRealTimeServer.getLastSentMessage();
 			assert.deepEqual(event, {
 				event: new ServerRemovePointerEvent("my client ID"),
 				type: RealTimeServer.SEND_TYPE.BROADCAST
 			});
-
-
-			// also need to check that event was broadcast to all clients
-			assert.equal(nullRealTimeServer.getLastSendType, "broadcast");
 		});
 
 		it("stores 'remove pointer' event in event repo when client disconnects", async function() {
