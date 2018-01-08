@@ -162,13 +162,14 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		it.skip("sends 'remove pointer' event to other browsers when client disconnects", function() {
-			nullRealTimeServer.triggerClientDisconnectEvent("my client ID");
+		it("sends 'remove pointer' message to other browsers when client disconnects", function() {
+			let clientId = "my client ID";
+			nullRealTimeServer.triggerClientConnectEvent(clientId);
+			nullRealTimeServer.triggerClientDisconnectEvent(clientId);
 
-			const event = nullRealTimeServer.getLastSentMessage();
-			assert.deepEqual(event, {
-				event: new ServerRemovePointerEvent("my client ID"),
-				type: RealTimeServer.SEND_TYPE.BROADCAST
+			assert.deepEqual(nullRealTimeServer.getLastSentMessage(), {
+				message: new ServerRemovePointerEvent(clientId),
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
 			});
 		});
 
