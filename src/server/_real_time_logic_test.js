@@ -28,7 +28,9 @@
 
 		let httpServer;
 		let realTimeLogic;
-		let realTimeServer;
+		let nullRealTimeServer;
+		let networkedRealTimeLogic;
+		let networkedRealTimeServer;
 		let socketIoClient;
 		let fakeClock;
 
@@ -36,26 +38,35 @@
 			fakeClock = Clock.createFake();
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 
-			realTimeServer = new RealTimeServer(httpServer);
-			realTimeServer.start();
+			networkedRealTimeServer = new RealTimeServer(httpServer);
+			networkedRealTimeServer.start();
 
-			realTimeLogic = new RealTimeLogic(realTimeServer, fakeClock);
-			realTimeLogic.start();
+			networkedRealTimeLogic = new RealTimeLogic(networkedRealTimeServer, fakeClock);
+			networkedRealTimeLogic.start();
 
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, networkedRealTimeServer);
 			await httpServer.start(PORT);
+
+
+			nullRealTimeServer = RealTimeServer.createNull();
+			nullRealTimeServer.start();
+			realTimeLogic = new RealTimeLogic(nullRealTimeServer, fakeClock);
+			realTimeLogic.start();
 		});
 
 		afterEach(async function() {
 			try {
 				assert.equal(
-					realTimeLogic.numberOfActiveConnections(), 0,
+					networkedRealTimeLogic.numberOfActiveConnections(), 0,
 					"afterEach() requires all sockets to be closed"
 				);
 			}
 			finally {
+				networkedRealTimeLogic.stop();
+				await networkedRealTimeServer.stop();
+
 				realTimeLogic.stop();
-				await realTimeServer.stop();
+				await nullRealTimeServer.stop();
 			}
 		});
 
@@ -84,7 +95,7 @@
 				});
 			}));
 
-			realTimeLogic.simulateClientEvent(clientEvent);
+			networkedRealTimeLogic.simulateClientEvent(clientEvent);
 
 			await listeners;
 			await socketIoClient.closeSockets(receiver1, receiver2);
@@ -93,12 +104,12 @@
 		it("emits events for simulated client events", function(done) {
 			const clientEvent = new ClientRemovePointerEvent();
 
-			realTimeLogic.onNextClientEvent((socketId, receivedEvent) => {
+			networkedRealTimeLogic.onNextClientEvent((socketId, receivedEvent) => {
 				assert.equal(socketId, "__SIMULATED__", "socket ID");
 				assert.deepEqual(clientEvent, receivedEvent, "event");
 				done();
 			});
-			realTimeLogic.simulateClientEvent(clientEvent);
+			networkedRealTimeLogic.simulateClientEvent(clientEvent);
 		});
 
 		it("replays all previous events when client connects", async function() {
@@ -108,9 +119,9 @@
 			const event2 = new ClientDrawEvent(2, 20, 200, 2000);
 			const event3 = new ClientDrawEvent(3, 30, 300, 3000);
 
-			realTimeLogic.simulateClientEvent(event1, IRRELEVANT_ID);
-			realTimeLogic.simulateClientEvent(event2, IRRELEVANT_ID);
-			realTimeLogic.simulateClientEvent(event3, IRRELEVANT_ID);
+			networkedRealTimeLogic.simulateClientEvent(event1, IRRELEVANT_ID);
+			networkedRealTimeLogic.simulateClientEvent(event2, IRRELEVANT_ID);
+			networkedRealTimeLogic.simulateClientEvent(event3, IRRELEVANT_ID);
 
 			let replayedEvents = [];
 			const client = socketIoClient.createSocketWithoutWaiting();
@@ -136,7 +147,7 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		it("sends 'remove pointer' event to other browsers when client disconnects", async function() {
+		it("OLD: sends 'remove pointer' event to other browsers when client disconnects", async function() {
 			const [ disconnector, client ] = await socketIoClient.createSockets(2);
 			const disconnectorId = disconnector.id;
 
@@ -151,13 +162,31 @@
 			await socketIoClient.closeSocket(client);
 		});
 
+		it.skip("sends 'remove pointer' event to other browsers when client disconnects", function() {
+			// simulate closing a socket
+			// check that the close event was sent
+
+			nullRealTimeServer.simulateClientDisconnect("my client ID");
+			// real time logic fires here
+
+			const event = nullRealTimeServer.getLastSentEvent();
+			assert.deepEqual(event, {
+				event: new ServerRemovePointerEvent("my client ID"),
+				type: RealTimeServer.SEND_TYPE.BROADCAST
+			});
+
+
+			// also need to check that event was broadcast to all clients
+			assert.equal(nullRealTimeServer.getLastSendType, "broadcast");
+		});
+
 		it("stores 'remove pointer' event in event repo when client disconnects", async function() {
 			const client = await socketIoClient.createSocket();
 			const clientId = client.id;
 
 			await socketIoClient.closeSocket(client);
 			assert.deepEqual(
-				realTimeLogic._eventRepo.replay(),
+				networkedRealTimeLogic._eventRepo.replay(),
 				[ new ServerRemovePointerEvent(clientId) ]
 			);
 		});
@@ -187,7 +216,7 @@
 			// some more activity
 			const clientEvent = new ClientClearScreenEvent();
 			client.emit(clientEvent.name(), clientEvent.payload());
-			await new Promise((resolve) => realTimeLogic.onNextClientEvent(resolve));
+			await new Promise((resolve) => networkedRealTimeLogic.onNextClientEvent(resolve));
 
 			// second timeout
 			const secondTimeout = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
@@ -209,7 +238,7 @@
 
 			// listen for second (invalid) RemovePointerEvent
 			let errorOnEvent;
-			realTimeLogic.onNextServerEmit((event) => {
+			networkedRealTimeLogic.onNextServerEmit((event) => {
 				if (errorOnEvent) assert.fail("should not receive remove pointer event");
 			});
 
@@ -233,7 +262,7 @@
 			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
 
 			const promise = new Promise((resolve) => {
-				realTimeLogic.onNextClientEvent((socketId, event) => {
+				networkedRealTimeLogic.onNextClientEvent((socketId, event) => {
 					setTimeout(() => {  // make this code asynchronous so tick() doesn't happen too soon
 						fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
 						setTimeout(() => {// allow tick() to be processed so server event is sent if it's going to be (it shouldn't)
@@ -263,7 +292,7 @@
 			const event = new ClientClearScreenEvent();
 
 			const promise = new Promise((resolve) => {
-				realTimeLogic.onNextClientEvent((socketId, event) => {
+				networkedRealTimeLogic.onNextClientEvent((socketId, event) => {
 					setTimeout(() => {  // make this code asynchronous so tick() doesn't happen too soon
 						fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
 						setTimeout(() => {// allow tick() to be processed so server event is sent if it's going to be (it shouldn't)
@@ -286,7 +315,7 @@
 			const client = await socketIoClient.createSocket();
 			await socketIoClient.closeSocket(client);
 
-			realTimeLogic.onNextServerEmit((event) => {
+			networkedRealTimeLogic.onNextServerEmit((event) => {
 				assert.fail("should not receive remove pointer event");
 			});
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
