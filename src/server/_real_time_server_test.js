@@ -20,10 +20,10 @@
 
 		beforeEach(async function() {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			realTimeServer = new RealTimeServer();
+			realTimeServer = new RealTimeServer(httpServer);
 			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
 
-			realTimeServer.start(httpServer.getNodeServer());
+			realTimeServer.start();
 			await httpServer.start(PORT);
 		});
 

@@ -20,17 +20,19 @@
 
 	const RealTimeServer = module.exports = class RealTimeServer extends EventEmitter {
 
-		constructor() {
+		constructor(httpServer) {
 			super();
+
+			failFast.unlessDefined(httpServer, "httpServer");
+			this._nodeHttpServer = httpServer.getNodeServer();
+
 			this._socketIoConnections = {};
 		}
 
 		start(httpServer) {
-			failFast.unlessDefined(httpServer, "httpServer");
-
-			this._httpServer = httpServer;
-			this._ioServer = io(this._httpServer);
-			this._httpServer.on("close", failFastIfHttpServerClosed);
+			// this._nodeHttpServer = httpServer;
+			this._ioServer = io(this._nodeHttpServer);
+			this._nodeHttpServer.on("close", failFastIfHttpServerClosed);
 
 			trackSocketIoConnections(this, this._socketIoConnections, this._ioServer);
 			listenForClientEvents(this, this._ioServer);
@@ -39,7 +41,7 @@
 		stop() {
 			const close = util.promisify(this._ioServer.close.bind(this._ioServer));
 
-			this._httpServer.removeListener("close", failFastIfHttpServerClosed);
+			this._nodeHttpServer.removeListener("close", failFastIfHttpServerClosed);
 			return close();
 		}
 

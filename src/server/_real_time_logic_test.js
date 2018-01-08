@@ -36,8 +36,8 @@
 			fakeClock = Clock.createFake();
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 
-			realTimeServer = new RealTimeServer();
-			realTimeServer.start(httpServer.getNodeServer());
+			realTimeServer = new RealTimeServer(httpServer);
+			realTimeServer.start();
 
 			realTimeLogic = new RealTimeLogic(realTimeServer, fakeClock);
 			realTimeLogic.start();
