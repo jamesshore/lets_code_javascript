@@ -67,6 +67,10 @@
 
 	};
 
+	RealTimeServer.createNull = function() {
+		return new RealTimeServer();
+	};
+
 	RealTimeServer.CLIENT_DISCONNECT = "clientDisconnect";
 	RealTimeServer.CLIENT_CONNECT = "clientConnect";
 	RealTimeServer.CLIENT_EVENT_RECEIVED = "clientEvent";

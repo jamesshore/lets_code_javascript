@@ -179,4 +179,25 @@
 
 	});
 
+
+	describe.skip("Null RealTimeServer", function() {
+
+		let realTimeServer;
+
+		beforeEach(function() {
+			realTimeServer = RealTimeServer.createNull();
+			realTimeServer.start(null);
+		});
+
+		it("sends event to specific Socket.IO client", function() {
+		});
+
+		// it("sends events to all Socket.IO clients", async function() {
+		// });
+		//
+		// it("sends event to all Socket.IO clients except one", async function() {
+		// });
+
+	});
+
 }());
