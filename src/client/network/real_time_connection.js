@@ -4,9 +4,7 @@
 	"use strict";
 
 	var failFast = require("fail_fast");
-	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var EventEmitter = require("./vendor/emitter-1.2.1.js");
-	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 
 	var Connection = module.exports = function() {
 		return initialize(this, window.io);
