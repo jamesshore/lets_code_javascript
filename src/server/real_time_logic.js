@@ -19,10 +19,10 @@
 
 		constructor(clock = new Clock()) {
 			this._clock = clock;
-			this._realTimeServer = new RealTimeServer();
 		}
 
-		start(httpServer) {
+		start(httpServer, realTimeServer) {
+			this._realTimeServer = realTimeServer;
 			this._realTimeServer.start(httpServer);
 			this._socketIoConnections = this._realTimeServer._socketIoConnections;
 

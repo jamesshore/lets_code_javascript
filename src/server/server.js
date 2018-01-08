@@ -3,6 +3,7 @@
 	"use strict";
 
 	const HttpServer = require("./http_server.js");
+	const RealTimeServer = require("./real_time_server.js");
 	const RealTimeLogic = require("./real_time_logic.js");
 
 	module.exports = class Server {
@@ -16,7 +17,11 @@
 			// Consider Martin Grandrath's suggestions from E509 comments (different server initialization)
 			// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
 			this._realTimeLogic = new RealTimeLogic();
-			this._realTimeLogic.start(this._httpServer.getNodeServer());
+
+			this._realTimeServer = new RealTimeServer();
+
+
+			this._realTimeLogic.start(this._httpServer.getNodeServer(), this._realTimeServer);
 		}
 
 		async stop() {

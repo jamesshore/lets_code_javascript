@@ -3,6 +3,7 @@
 	"use strict";
 
 	const RealTimeLogic = require("./real_time_logic.js");
+	const RealTimeServer = require("./real_time_server.js");
 	const HttpServer = require("./http_server.js");
 	const assert = require("_assert");
 	const ServerPointerEvent = require("../shared/server_pointer_event.js");
@@ -34,9 +35,10 @@
 			fakeClock = Clock.createFake();
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 			realTimeLogic = new RealTimeLogic(fakeClock);
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeLogic._realTimeServer);
+			let realTimeServer = new RealTimeServer();
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
 
-			realTimeLogic.start(httpServer.getNodeServer());
+			realTimeLogic.start(httpServer.getNodeServer(), realTimeServer);
 			await httpServer.start(PORT);
 		});
 
