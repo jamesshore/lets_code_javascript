@@ -17,15 +17,12 @@
 
 	const RealTimeLogic = module.exports = class RealTimeLogic {
 
-		constructor(clock = new Clock()) {
+		constructor(realTimeServer, clock = new Clock()) {
+			this._realTimeServer = realTimeServer;
 			this._clock = clock;
 		}
 
-		start(httpServer, realTimeServer) {
-			this._realTimeServer = realTimeServer;
-			this._realTimeServer.start(httpServer);
-			this._socketIoConnections = this._realTimeServer._socketIoConnections;
-
+		start() {
 			this._eventRepo = new EventRepository();
 			this._emitter = new EventEmitter();
 

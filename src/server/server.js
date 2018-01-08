@@ -16,12 +16,12 @@
 
 			// Consider Martin Grandrath's suggestions from E509 comments (different server initialization)
 			// http://disq.us/p/1i1xydn  http://www.letscodejavascript.com/v3/comments/live/509
-			this._realTimeLogic = new RealTimeLogic();
 
 			this._realTimeServer = new RealTimeServer();
+			this._realTimeServer.start(this._httpServer.getNodeServer());
 
-
-			this._realTimeLogic.start(this._httpServer.getNodeServer(), this._realTimeServer);
+			this._realTimeLogic = new RealTimeLogic(this._realTimeServer);
+			this._realTimeLogic.start();
 		}
 
 		async stop() {

@@ -34,11 +34,13 @@
 		beforeEach(async function() {
 			fakeClock = Clock.createFake();
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			realTimeLogic = new RealTimeLogic(fakeClock);
 			let realTimeServer = new RealTimeServer();
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
+			realTimeServer.start(httpServer.getNodeServer());
 
-			realTimeLogic.start(httpServer.getNodeServer(), realTimeServer);
+			realTimeLogic = new RealTimeLogic(realTimeServer, fakeClock);
+			realTimeLogic.start();
+
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
 			await httpServer.start(PORT);
 		});
 
