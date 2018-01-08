@@ -67,6 +67,10 @@
 			return Object.keys(this._socketIoConnections).length;
 		}
 
+		triggerClientDisconnectEvent(clientId) {
+			this.emit(RealTimeServer.CLIENT_DISCONNECT, clientId);
+		}
+
 	};
 
 	RealTimeServer.createNull = function() {
@@ -88,7 +92,7 @@
 			connections[key] = socket;
 			socket.on("disconnect", function() {
 				delete connections[key];
-				self.emit(RealTimeServer.CLIENT_DISCONNECT, key);
+				self.triggerClientDisconnectEvent(key);
 			});
 			self.emit(RealTimeServer.CLIENT_CONNECT, key, socket);
 		});

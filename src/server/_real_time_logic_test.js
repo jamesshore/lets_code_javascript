@@ -166,7 +166,7 @@
 			// simulate closing a socket
 			// check that the close event was sent
 
-			nullRealTimeServer.simulateClientDisconnect("my client ID");
+			nullRealTimeServer.triggerClientDisconnectEvent("my client ID");
 			// real time logic fires here
 
 			const event = nullRealTimeServer.getLastSentEvent();

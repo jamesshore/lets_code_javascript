@@ -82,6 +82,16 @@
 			assert.equal(clientId, socketId, "client ID");
 		});
 
+		it("simulates a client disconnecting", async function() {
+			const eventPromise = new Promise((resolve, reject) => {
+				realTimeServer.once(RealTimeServer.CLIENT_DISCONNECT, (clientId) => {
+					resolve(clientId);
+				});
+			});
+			realTimeServer.triggerClientDisconnectEvent("disconnecting ID");
+			assert.equal(await eventPromise, "disconnecting ID");
+		});
+
 		it("emits event when a Socket.IO event is received from client", async function() {
 			const socket = await socketIoClient.createSocket();
 			const eventToSend = new ClientRemovePointerEvent();
