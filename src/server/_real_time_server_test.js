@@ -182,6 +182,8 @@
 
 	describe("Null RealTimeServer", function() {
 
+		const IRRELEVANT_EVENT = new ClientRemovePointerEvent();
+
 		let realTimeServer;
 
 		beforeEach(function() {
@@ -193,10 +195,11 @@
 			await realTimeServer.stop();
 		});
 
-		it("sends event to specific Socket.IO client", function() {
+		it("does nothing when asked to broadcast event to all clients", function() {
+			realTimeServer.broadcastToAllClients(IRRELEVANT_EVENT);
 		});
 
-		// it("sends events to all Socket.IO clients", async function() {
+		// it("sends events to one Socket.IO client", async function() {
 		// });
 		//
 		// it("sends event to all Socket.IO clients except one", async function() {

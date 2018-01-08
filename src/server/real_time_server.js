@@ -129,6 +129,7 @@
 
 	class NullIoServer {
 		on() {}
+		emit() {}
 		close(done) { return done(); }
 	}
 
