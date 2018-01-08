@@ -33,7 +33,7 @@
 		beforeEach(async function() {
 			server = new Server();
 			await server.start(CONTENT_DIR, NOT_FOUND_PAGE, PORT);
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, server._realTimeLogic._socketIoAbstraction);
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, server._realTimeLogic._realTimeServer);
 		});
 
 		afterEach(async function() {

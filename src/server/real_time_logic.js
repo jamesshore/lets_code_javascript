@@ -6,7 +6,7 @@
 	const EventRepository = require("./event_repository.js");
 	const Clock = require("./clock.js");
 	const EventEmitter = require("events");
-	const SocketIoAbstraction = require("./socket_io_abstraction.js");
+	const RealTimeServer = require("./real_time_server.js");
 
 	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
@@ -19,12 +19,12 @@
 
 		constructor(clock = new Clock()) {
 			this._clock = clock;
-			this._socketIoAbstraction = new SocketIoAbstraction();
+			this._realTimeServer = new RealTimeServer();
 		}
 
 		start(httpServer) {
-			this._socketIoAbstraction.start(httpServer);
-			this._socketIoConnections = this._socketIoAbstraction._socketIoConnections;
+			this._realTimeServer.start(httpServer);
+			this._socketIoConnections = this._realTimeServer._socketIoConnections;
 
 			this._eventRepo = new EventRepository();
 			this._emitter = new EventEmitter();
@@ -35,11 +35,11 @@
 
 		stop() {
 			this._interval.clear();
-			this._socketIoAbstraction.stop();
+			this._realTimeServer.stop();
 		}
 
 		numberOfActiveConnections() {
-			return this._socketIoAbstraction.numberOfActiveConnections();
+			return this._realTimeServer.numberOfActiveConnections();
 		}
 
 		simulateClientEvent(clientEvent) {
@@ -59,11 +59,11 @@
 	RealTimeLogic.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
 
 	function handleRealTimeEvents(self) {
-		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {
+		self._realTimeServer.on(RealTimeServer.CLIENT_CONNECT, (clientId) => {
 			replayPreviousEvents(self, clientId);
 			handleClientEvents(self);
 
-			self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_DISCONNECT, () => {
+			self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, () => {
 				broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(clientId));
 			});
 		});
@@ -82,14 +82,14 @@
 			});
 		}, 100);
 
-		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {
+		self._realTimeServer.on(RealTimeServer.CLIENT_CONNECT, (clientId) => {
 			self._lastActivity[clientId] = self._clock.now();
 
-			self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, () => {
+			self._realTimeServer.on(RealTimeServer.CLIENT_EVENT_RECEIVED, () => {
 				self._lastActivity[clientId] = self._clock.now();
 			});
 
-			self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_DISCONNECT, () => {
+			self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, () => {
 				delete self._lastActivity[clientId];
 			});
 		});
@@ -97,12 +97,12 @@
 
 	function replayPreviousEvents(self, clientId) {
 		self._eventRepo.replay().forEach((event) => {
-			self._socketIoAbstraction.sendToOneClient(clientId, event);
+			self._realTimeServer.sendToOneClient(clientId, event);
 		});
 	}
 
 	function handleClientEvents(self) {
-		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, (clientId, clientEvent) => {
+		self._realTimeServer.on(RealTimeServer.CLIENT_EVENT_RECEIVED, (clientId, clientEvent) => {
 			processClientEvent(self, clientId, clientEvent);
 		});
 	}
@@ -116,8 +116,8 @@
 
 	function broadcastAndStoreEvent(self, clientIdOrNull, event) {
 		self._eventRepo.store(event);
-		if (clientIdOrNull) self._socketIoAbstraction.broadcastToAllClientsButOne(clientIdOrNull, event);
-		else self._socketIoAbstraction.broadcastToAllClients(event);
+		if (clientIdOrNull) self._realTimeServer.broadcastToAllClientsButOne(clientIdOrNull, event);
+		else self._realTimeServer.broadcastToAllClients(event);
 		self._emitter.emit(SERVER_EVENT, event);
 	}
 

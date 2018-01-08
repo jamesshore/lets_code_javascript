@@ -34,7 +34,7 @@
 			fakeClock = Clock.createFake();
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
 			realTimeLogic = new RealTimeLogic(fakeClock);
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeLogic._socketIoAbstraction);
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeLogic._realTimeServer);
 
 			realTimeLogic.start(httpServer.getNodeServer());
 			await httpServer.start(PORT);

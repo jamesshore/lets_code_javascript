@@ -18,7 +18,7 @@
 		ClientClearScreenEvent
 	];
 
-	const SocketIoAbstraction = module.exports = class SocketIoAbstraction extends EventEmitter {
+	const RealTimeServer = module.exports = class RealTimeServer extends EventEmitter {
 
 		constructor() {
 			super();
@@ -67,9 +67,9 @@
 
 	};
 
-	SocketIoAbstraction.CLIENT_DISCONNECT = "clientDisconnect";
-	SocketIoAbstraction.CLIENT_CONNECT = "clientConnect";
-	SocketIoAbstraction.CLIENT_EVENT_RECEIVED = "clientEvent";
+	RealTimeServer.CLIENT_DISCONNECT = "clientDisconnect";
+	RealTimeServer.CLIENT_CONNECT = "clientConnect";
+	RealTimeServer.CLIENT_EVENT_RECEIVED = "clientEvent";
 
 
 	function trackSocketIoConnections(self, connections, ioServer) {
@@ -80,9 +80,9 @@
 			connections[key] = socket;
 			socket.on("disconnect", function() {
 				delete connections[key];
-				self.emit(SocketIoAbstraction.CLIENT_DISCONNECT, key);
+				self.emit(RealTimeServer.CLIENT_DISCONNECT, key);
 			});
-			self.emit(SocketIoAbstraction.CLIENT_CONNECT, key, socket);
+			self.emit(RealTimeServer.CLIENT_CONNECT, key, socket);
 		});
 	}
 
@@ -90,7 +90,7 @@
 		ioServer.on("connect", (socket) => {
 			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
 				socket.on(eventConstructor.EVENT_NAME, function(payload) {
-					self.emit(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, socket.id, eventConstructor.fromPayload(payload));
+					self.emit(RealTimeServer.CLIENT_EVENT_RECEIVED, socket.id, eventConstructor.fromPayload(payload));
 				});
 			});
 		});

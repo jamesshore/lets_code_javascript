@@ -5,7 +5,7 @@
 	const assert = require("_assert");
 	const SocketIoClient = require("./__socket_io_client.js");
 	const HttpServer = require("./http_server.js");
-	const SocketIoAbstraction = require("./socket_io_abstraction.js");
+	const RealTimeServer = require("./real_time_server.js");
 	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 
 	describe("Socket.IO Abstraction", function() {
@@ -15,27 +15,27 @@
 		const PORT = 5020;
 
 		let httpServer;
-		let socketIoAbstraction;
+		let realTimeServer;
 		let socketIoClient;
 
 		beforeEach(async function() {
 			httpServer = new HttpServer(IRRELEVANT_DIR, IRRELEVANT_PAGE);
-			socketIoAbstraction = new SocketIoAbstraction();
-			socketIoClient = new SocketIoClient("http://localhost:" + PORT, socketIoAbstraction);
+			realTimeServer = new RealTimeServer();
+			socketIoClient = new SocketIoClient("http://localhost:" + PORT, realTimeServer);
 
-			socketIoAbstraction.start(httpServer.getNodeServer());
+			realTimeServer.start(httpServer.getNodeServer());
 			await httpServer.start(PORT);
 		});
 
 		afterEach(async function() {
 			try {
 				assert.equal(
-					socketIoAbstraction.numberOfActiveConnections(), 0,
+					realTimeServer.numberOfActiveConnections(), 0,
 					"afterEach() requires all sockets to be closed"
 				);
 			}
 			finally {
-				await socketIoAbstraction.stop();
+				await realTimeServer.stop();
 			}
 		});
 
@@ -55,7 +55,7 @@
 			let socket;
 
 			const eventPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {
+				realTimeServer.once(RealTimeServer.CLIENT_CONNECT, (clientId) => {
 					resolve(clientId);
 				});
 			});
@@ -72,7 +72,7 @@
 			const socketId = socket.id;
 
 			const eventPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_DISCONNECT, (clientId) => {
+				realTimeServer.once(RealTimeServer.CLIENT_DISCONNECT, (clientId) => {
 					resolve(clientId);
 				});
 			});
@@ -87,7 +87,7 @@
 			const eventToSend = new ClientRemovePointerEvent();
 
 			const eventPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, (clientId, receivedEvent) => {
+				realTimeServer.once(RealTimeServer.CLIENT_EVENT_RECEIVED, (clientId, receivedEvent) => {
 					resolve({ clientId, receivedEvent });
 				});
 			});
@@ -109,7 +109,7 @@
 				assert.fail("Event should not have been sent to both clients");
 			});
 
-			socketIoAbstraction.sendToOneClient(socket1.id, eventToSend);
+			realTimeServer.sendToOneClient(socket1.id, eventToSend);
 			const receivedPayload = await socketPromise;
 			assert.deepEqual(receivedPayload, eventToSend.payload());
 
@@ -123,7 +123,7 @@
 			const socket1Promise = listenForOneClientSocketEvent(socket1, eventToSend);
 			const socket2Promise = listenForOneClientSocketEvent(socket2, eventToSend);
 
-			socketIoAbstraction.broadcastToAllClients(eventToSend);
+			realTimeServer.broadcastToAllClients(eventToSend);
 			const received1 = await socket1Promise;
 			const received2 = await socket2Promise;
 			assert.deepEqual(received1, eventToSend.payload());
@@ -142,7 +142,7 @@
 				assert.fail("Event should not have been sent to socket2");
 			});
 
-			socketIoAbstraction.broadcastToAllClientsButOne(socket2.id, eventToSend);
+			realTimeServer.broadcastToAllClientsButOne(socket2.id, eventToSend);
 			const received1 = await socket1Promise;
 			const received3 = await socket3Promise;
 			assert.deepEqual(received1, eventToSend.payload());
@@ -152,19 +152,19 @@
 		});
 
 		it("tells us if a socket is connected", async function() {
-			assert.equal(socketIoAbstraction.isClientConnected("no_such_socket"), false);
+			assert.equal(realTimeServer.isClientConnected("no_such_socket"), false);
 
 			const socket = await socketIoClient.createSocket();
-			assert.equal(socketIoAbstraction.isClientConnected(socket.id), true);
+			assert.equal(realTimeServer.isClientConnected(socket.id), true);
 
 			await socketIoClient.closeSocket(socket);
 		});
 
 		it("counts the number of connections", async function() {
-			assert.equal(socketIoAbstraction.numberOfActiveConnections(), 0, "before opening connection");
+			assert.equal(realTimeServer.numberOfActiveConnections(), 0, "before opening connection");
 
 			const socket = await socketIoClient.createSocket();
-			assert.equal(socketIoAbstraction.numberOfActiveConnections(), 1, "after opening connection");
+			assert.equal(realTimeServer.numberOfActiveConnections(), 1, "after opening connection");
 
 			await socketIoClient.closeSocket(socket);
 		});
