@@ -27,11 +27,11 @@
 			this._nodeHttpServer = httpServer.getNodeServer();
 
 			this._socketIoConnections = {};
+			this._io = io;
 		}
 
-		start(httpServer) {
-			// this._nodeHttpServer = httpServer;
-			this._ioServer = io(this._nodeHttpServer);
+		start() {
+			this._ioServer = this._io(this._nodeHttpServer);
 			this._nodeHttpServer.on("close", failFastIfHttpServerClosed);
 
 			trackSocketIoConnections(this, this._socketIoConnections, this._ioServer);
@@ -69,10 +69,10 @@
 
 	};
 
-
-
 	RealTimeServer.createNull = function() {
-		return new RealTimeServer(new NullHttpServer());
+		const server = new RealTimeServer(new NullHttpServer());
+		server._io = nullIo;
+		return server;
 	};
 
 	RealTimeServer.CLIENT_DISCONNECT = "clientDisconnect";
@@ -119,7 +119,23 @@
 
 
 	class NullHttpServer {
-		getNodeServer() {}
+		getNodeServer() {
+			return {
+				on: noOp,
+				removeListener: noOp
+			};
+		}
 	}
+
+	class NullIoServer {
+		on() {}
+		close(done) { return done(); }
+	}
+
+	function nullIo() {
+		return new NullIoServer();
+	}
+
+	function noOp() {}
 
 }());

@@ -186,7 +186,11 @@
 
 		beforeEach(function() {
 			realTimeServer = RealTimeServer.createNull();
-			// realTimeServer.start(null);
+			realTimeServer.start();
+		});
+
+		afterEach(async function() {
+			await realTimeServer.stop();
 		});
 
 		it("sends event to specific Socket.IO client", function() {
