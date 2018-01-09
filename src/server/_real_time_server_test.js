@@ -85,6 +85,7 @@
 
 			assert.equal(realTimeServer.isClientConnected(clientId), true);
 			realTimeServer.sendToOneClient(clientId, message);  // should not throw exception
+			realTimeServer.broadcastToAllClientsButOne(clientId, message);  // should not throw exception
 
 			realTimeServer.disconnectNullClient(clientId);
 		});

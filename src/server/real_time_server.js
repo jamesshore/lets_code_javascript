@@ -194,6 +194,7 @@
 		constructor(id) { this.id = id; }
 		get isNull() { return true; }
 		emit() {}
+		get broadcast() { return { emit: noOp }; }
 	}
 
 	function nullIo() {

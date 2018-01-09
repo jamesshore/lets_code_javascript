@@ -90,7 +90,7 @@
 			await socketIoClient.closeSockets(emitter, receiver1, receiver2);
 		});
 
-		it("broadcasts messages from one client to all others", function() {
+		it.skip("broadcasts messages from one client to all others", function() {
 			const clientId = "client id";
 			const clientMessage = new ClientPointerEvent(100, 200);
 
