@@ -78,10 +78,15 @@
 			assert.equal(await eventPromise, "connecting ID");
 		});
 
-		it("connects null clients (clients that don't actually exist)", function() {
+		it("connects and disconnects null clients (clients that don't actually exist)", function() {
 			const clientId = "null client ID";
+			const message = new ClientRemovePointerEvent(clientId);
 			realTimeServer.connectNullClient(clientId);
+
 			assert.equal(realTimeServer.isClientConnected(clientId), true);
+			realTimeServer.sendToOneClient(clientId, message);  // should not throw exception
+
+			realTimeServer.disconnectNullClient(clientId);
 		});
 
 		it("emits event when a client disconnects", async function() {

@@ -100,6 +100,12 @@
 		connectNullClient(clientId) {
 			connectClient(this, new NullSocket(clientId));
 		}
+
+		disconnectNullClient(clientId) {
+			const socket = lookUpSocket(this, clientId);
+			failFast.unlessTrue(socket.isNull === true, `Attempted to disconnect non-null client: [${clientId}]`);
+			disconnectClient(this, socket);
+		}
 	};
 
 	RealTimeServer.createNull = function() {
@@ -186,6 +192,8 @@
 
 	class NullSocket {
 		constructor(id) { this.id = id; }
+		get isNull() { return true; }
+		emit() {}
 	}
 
 	function nullIo() {
