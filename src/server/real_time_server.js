@@ -93,6 +93,10 @@
 			this.emit(RealTimeServer.CLIENT_DISCONNECT, clientId);
 		}
 
+		triggerClientMessageEvent(clientId, message) {
+			this.emit(RealTimeServer.CLIENT_EVENT_RECEIVED, clientId, message);
+		}
+
 	};
 
 	RealTimeServer.createNull = function() {
@@ -129,7 +133,7 @@
 		ioServer.on("connect", (socket) => {
 			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
 				socket.on(eventConstructor.EVENT_NAME, function(payload) {
-					self.emit(RealTimeServer.CLIENT_EVENT_RECEIVED, socket.id, eventConstructor.fromPayload(payload));
+					self.triggerClientMessageEvent(socket.id, eventConstructor.fromPayload(payload));
 				});
 			});
 		});

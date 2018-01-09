@@ -70,8 +70,29 @@
 			}
 		});
 
-		it("broadcasts pointer events from one client to all others", async function() {
-			await checkEventReflection(new ClientPointerEvent(100, 200), ServerPointerEvent);
+		it("OLD: broadcasts pointer events from one client to all others", async function() {
+			const clientEvent = new ClientPointerEvent(100, 200);
+
+			const [emitter, receiver1, receiver2] = await socketIoClient.createSockets(3);
+			emitter.on(ServerPointerEvent.EVENT_NAME, function() {
+				assert.fail("emitter should not receive its own events");
+			});
+
+			const listenerPromise = Promise.all([ receiver1, receiver2 ].map((client) => {
+				return listenForOneEvent(client, ServerPointerEvent.EVENT_NAME, (data) => {
+					assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
+				});
+			}));
+
+			emitter.emit(clientEvent.name(), clientEvent.payload());
+
+			await listenerPromise;
+			await socketIoClient.closeSockets(emitter, receiver1, receiver2);
+		});
+
+		it("broadcasts messages from one client to all others", async function() {
+			// receive an client message
+			// confirm that the server version of the message is sent to all other clients
 		});
 
 		it("broadcasts 'remove pointer' events from one client to all others", async function() {

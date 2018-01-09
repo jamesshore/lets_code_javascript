@@ -121,6 +121,18 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
+		it("simulates a client message received event", async function() {
+			const message = new ClientRemovePointerEvent();
+
+			const eventPromise = new Promise((resolve, reject) => {
+				realTimeServer.once(RealTimeServer.CLIENT_EVENT_RECEIVED, (clientId) => {
+					resolve(clientId);
+				});
+			});
+			realTimeServer.triggerClientMessageEvent(message);
+			assert.equal(await eventPromise, message);
+		});
+
 		it("sends message to specific Socket.IO client", async function() {
 			const [ socket1, socket2 ] = await socketIoClient.createSockets(2);
 			const messageToSend = new ClientRemovePointerEvent();
