@@ -83,7 +83,7 @@
 			});
 		});
 
-		it("treats events received via method call exactly like events received via Socket.IO", async function() {
+		it.skip("treats events received via method call exactly like events received via Socket.IO", async function() {
 			const clientEvent = new ClientPointerEvent(100, 200);
 			const [receiver1, receiver2] = await socketIoClient.createSockets(2);
 			const listeners = Promise.all([ receiver1, receiver2 ].map((client) => {
@@ -98,7 +98,7 @@
 			await socketIoClient.closeSockets(receiver1, receiver2);
 		});
 
-		it("emits events for simulated client events", function(done) {
+		it.skip("emits events for simulated client events", function(done) {
 			const clientEvent = new ClientRemovePointerEvent();
 
 			networkedRealTimeLogic.onNextClientEvent((socketId, receivedEvent) => {
@@ -109,7 +109,7 @@
 			networkedRealTimeLogic.simulateClientEvent(clientEvent);
 		});
 
-		it("replays all previous events when client connects", async function() {
+		it.skip("(OLD) replays all previous events when client connects", async function() {
 			const IRRELEVANT_ID = "irrelevant";
 
 			const event1 = new ClientDrawEvent(1, 10, 100, 1000);
@@ -142,6 +142,33 @@
 				});
 			});
 			await socketIoClient.closeSocket(client);
+		});
+
+		it.skip("replays all previous messages when client connects", function() {
+			const IRRELEVANT_ID = "irrelevant";
+
+			const message1 = new ClientDrawEvent(1, 10, 100, 1000);
+			const message2 = new ClientDrawEvent(2, 20, 200, 2000);
+			const message3 = new ClientDrawEvent(3, 30, 300, 3000);
+
+			nullRealTimeServer.connectNullClient(IRRELEVANT_ID);
+			nullRealTimeServer.triggerClientMessageEvent(IRRELEVANT_ID, message1);
+			nullRealTimeServer.triggerClientMessageEvent(IRRELEVANT_ID, message2);
+			nullRealTimeServer.triggerClientMessageEvent(IRRELEVANT_ID, message3);
+
+			const serverMessages = [];
+			nullRealTimeServer.on(RealTimeServer.SERVER_MESSAGE, (message) => {
+				serverMessages.push(message);
+			});
+
+			const connectingClient = "connecting client";
+			nullRealTimeServer.connectNullClient(connectingClient);
+
+			assert.deepEqual(serverMessages, [
+				{ message: message1, clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
+				{ message: message2, clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
+				{ message: message3, clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT }
+			]);
 		});
 
 		it("sends 'remove pointer' message to other browsers when client disconnects", function() {
