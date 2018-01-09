@@ -54,14 +54,12 @@
 		it("emits event when a client connects", async function() {
 			let socket;
 
-			const eventPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {
-					resolve(clientId);
-				});
+			const eventPromise = new Promise((resolve) => {
+				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_CONNECT, resolve);
 			});
 
 			socket = await socketIoClient.createSocket();
-			const clientId = await eventPromise;
+			const { clientId } = await eventPromise;
 			assert.equal(clientId, socket.id, "client ID");
 
 			await socketIoClient.closeSocket(socket);
@@ -71,14 +69,12 @@
 			const socket = await socketIoClient.createSocket();
 			const socketId = socket.id;
 
-			const eventPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_DISCONNECT, (clientId) => {
-					resolve(clientId);
-				});
+			const eventPromise = new Promise((resolve) => {
+				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_DISCONNECT, resolve);
 			});
 
 			await socketIoClient.closeSocket(socket);
-			const clientId = await eventPromise;
+			const { clientId } = await eventPromise;
 			assert.equal(clientId, socketId, "client ID");
 		});
 
@@ -86,10 +82,8 @@
 			const socket = await socketIoClient.createSocket();
 			const eventToSend = new ClientRemovePointerEvent();
 
-			const eventPromise = new Promise((resolve, reject) => {
-				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, (clientId, receivedEvent) => {
-					resolve({ clientId, receivedEvent });
-				});
+			const eventPromise = new Promise((resolve) => {
+				socketIoAbstraction.once(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, resolve);
 			});
 
 			socket.emit(eventToSend.name(), eventToSend.payload());
@@ -170,10 +164,8 @@
 		});
 
 		function listenForOneClientSocketEvent(socket, event) {
-			return new Promise((resolve, reject) => {
-				socket.once(event.name(), (eventPayload) => {
-					resolve(eventPayload);
-				});
+			return new Promise((resolve) => {
+				socket.once(event.name(), resolve);
 			});
 		}
 
