@@ -145,18 +145,12 @@
 			);
 		});
 
-		it("times out (removes) ghost pointer when no activity from the client for a period of time", async function() {
-			const client = await socketIoClient.createSocket();
-
-			const listenerPromise = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
-				const event = ServerRemovePointerEvent.fromPayload(eventData);
-				assert.equal(event.id, client.id);
-			});
+		it("times out (removes) ghost pointer when no activity from the client for a period of time", function() {
+			const clientId = "my client ID";
+			nullRealTimeServer.triggerClientConnectEvent(clientId);
 
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-			await listenerPromise;
-
-			await socketIoClient.closeSocket(client);
+			assert.equal(nullRealTimeServer.getLastSentMessage().message.id, clientId);
 		});
 
 		it("times out again if there was activity, and then no activity, after the first timeout", async function() {
