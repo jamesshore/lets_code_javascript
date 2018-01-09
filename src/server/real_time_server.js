@@ -48,29 +48,29 @@
 		sendToOneClient(clientId, message) {
 			const socket = lookUpSocket(this, clientId);
 			socket.emit(message.name(), message.payload());
-			this._lastSentMessage = {
+			recordServerMessage(this, {
 				message,
 				clientId,
 				type: RealTimeServer.SEND_TYPE.ONE_CLIENT
-			};
+			});
 		}
 
 		broadcastToAllClients(message) {
 			this._ioServer.emit(message.name(), message.payload());
-			this._lastSentMessage = {
+			recordServerMessage(this, {
 				message,
 				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
-			};
+			});
 		}
 
 		broadcastToAllClientsButOne(clientToExclude, message) {
 			const socket = lookUpSocket(this, clientToExclude);
 			socket.broadcast.emit(message.name(), message.payload());
-			this._lastSentMessage = {
+			recordServerMessage(this, {
 				message,
 				clientId: clientToExclude,
 				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE
-			};
+			});
 		}
 
 		getLastSentMessage() {
@@ -116,13 +116,19 @@
 
 	RealTimeServer.CLIENT_DISCONNECT = "clientDisconnect";
 	RealTimeServer.CLIENT_CONNECT = "clientConnect";
-	RealTimeServer.CLIENT_MESSAGE = "clientEvent";
+	RealTimeServer.CLIENT_MESSAGE = "clientMessage";
+	RealTimeServer.SERVER_MESSAGE = "serverMessage";
 
 	RealTimeServer.SEND_TYPE = {
 		ONE_CLIENT: "one_client",
 		ALL_CLIENTS: "all_clients",
 		ALL_CLIENTS_BUT_ONE: "all_clients_but_one"
 	};
+
+	function recordServerMessage(self, messageInfo) {
+		self._lastSentMessage = messageInfo;
+		self.emit(RealTimeServer.SERVER_MESSAGE, messageInfo);
+	}
 
 	function trackSocketIoConnections(self, connections, ioServer) {
 		// Inspired by isaacs

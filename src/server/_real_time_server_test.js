@@ -201,32 +201,34 @@
 			const message = new ServerRemovePointerEvent(clientId);
 			realTimeServer.connectNullClient(clientId);
 
-			let eventPromise = listenForOneEvent(RealTimeServer.SERVER_MESSAGE);
+			let eventPromise = listenForOneServerMessageEvent();
 			realTimeServer.sendToOneClient(clientId, message);
 			assert.deepEqual(await eventPromise, {
 				message,
-				clientId: clientId,
+				clientId,
 				type: RealTimeServer.SEND_TYPE.ONE_CLIENT
 			}, "one");
 
-			// realTimeServer.broadcastToAllClients(message);
-			// assert.deepEqual(realTimeServer.getLastSentMessage(), {
-			// 	message,
-			// 	type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
-			// }, "all");
-			//
-			// realTimeServer.broadcastToAllClientsButOne(socket.id, message);
-			// assert.deepEqual(realTimeServer.getLastSentMessage(), {
-			// 	message,
-			// 	clientId: socket.id,
-			// 	type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE
-			// }, "all but one");
+			eventPromise = listenForOneServerMessageEvent();
+			realTimeServer.broadcastToAllClients(message);
+			assert.deepEqual(await eventPromise, {
+				message,
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
+			}, "all");
+
+			eventPromise = listenForOneServerMessageEvent();
+			realTimeServer.broadcastToAllClientsButOne(clientId, message);
+			assert.deepEqual(await eventPromise, {
+				message,
+				clientId,
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE
+			}, "all but one");
 
 			realTimeServer.disconnectNullClient(clientId);
 
-			function listenForOneEvent(event) {
+			function listenForOneServerMessageEvent(event) {
 				return new Promise((resolve, reject) => {
-					realTimeServer.once(event(), (value) => {
+					realTimeServer.once(RealTimeServer.SERVER_MESSAGE, (value) => {
 						resolve(value);
 					});
 				});
