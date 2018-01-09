@@ -78,6 +78,12 @@
 			assert.equal(await eventPromise, "connecting ID");
 		});
 
+		it("connects null clients (clients that don't actually exist)", function() {
+			const clientId = "null client ID";
+			realTimeServer.connectNullClient(clientId);
+			assert.equal(realTimeServer.isClientConnected(clientId), true);
+		});
+
 		it("emits event when a client disconnects", async function() {
 			const socket = await socketIoClient.createSocket();
 			const socketId = socket.id;

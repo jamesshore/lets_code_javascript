@@ -97,6 +97,9 @@
 			this.emit(RealTimeServer.CLIENT_MESSAGE, clientId, message);
 		}
 
+		connectNullClient(clientId) {
+
+		}
 	};
 
 	RealTimeServer.createNull = function() {
