@@ -98,7 +98,7 @@
 		}
 
 		connectNullClient(clientId) {
-
+			connectClient(this, new NullSocket(clientId));
 		}
 	};
 
@@ -122,13 +122,10 @@
 		// Inspired by isaacs
 		// https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
 		ioServer.on("connection", function(socket) {
-			const key = socket.id;
-			connections[key] = socket;
+			connectClient(self, socket);
 			socket.on("disconnect", function() {
-				delete connections[key];
-				self.triggerClientDisconnectEvent(key);
+				disconnectClient(self, socket);
 			});
-			self.triggerClientConnectEvent(key);
 		});
 	}
 
@@ -140,6 +137,22 @@
 				});
 			});
 		});
+	}
+
+	function connectClient(self, socket) {
+		const key = socket.id;
+		failFast.unlessDefined(key, "socket.id");
+
+		self._socketIoConnections[key] = socket;
+		self.triggerClientConnectEvent(key);
+	}
+
+	function disconnectClient(self, socket) {
+		const key = socket.id;
+		failFast.unlessDefined(key, "socket.id");
+
+		delete self._socketIoConnections[key];
+		self.triggerClientDisconnectEvent(key);
 	}
 
 	function lookUpSocket(self, clientId) {
@@ -169,6 +182,10 @@
 		on() {}
 		emit() {}
 		close(done) { return done(); }
+	}
+
+	class NullSocket {
+		constructor(id) { this.id = id; }
 	}
 
 	function nullIo() {
