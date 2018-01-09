@@ -80,7 +80,7 @@
 		self._realTimeServer.on(RealTimeServer.CLIENT_CONNECT, (clientId) => {
 			self._lastActivity[clientId] = self._clock.now();
 
-			self._realTimeServer.on(RealTimeServer.CLIENT_EVENT_RECEIVED, () => {
+			self._realTimeServer.on(RealTimeServer.CLIENT_MESSAGE, () => {
 				self._lastActivity[clientId] = self._clock.now();
 			});
 
@@ -97,7 +97,7 @@
 	}
 
 	function handleClientMessages(self) {
-		self._realTimeServer.on(RealTimeServer.CLIENT_EVENT_RECEIVED, (clientId, clientEvent) => {
+		self._realTimeServer.on(RealTimeServer.CLIENT_MESSAGE, (clientId, clientEvent) => {
 			processClientEvent(self, clientId, clientEvent);
 		});
 	}

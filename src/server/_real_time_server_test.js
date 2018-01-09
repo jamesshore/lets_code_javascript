@@ -108,7 +108,7 @@
 			const eventToSend = new ClientRemovePointerEvent();
 
 			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_EVENT_RECEIVED, (clientId, receivedEvent) => {
+				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId, receivedEvent) => {
 					resolve({ clientId, receivedEvent });
 				});
 			});
@@ -125,7 +125,7 @@
 			const message = new ClientRemovePointerEvent();
 
 			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_EVENT_RECEIVED, (clientId) => {
+				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId) => {
 					resolve(clientId);
 				});
 			});

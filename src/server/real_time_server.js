@@ -94,7 +94,7 @@
 		}
 
 		triggerClientMessageEvent(clientId, message) {
-			this.emit(RealTimeServer.CLIENT_EVENT_RECEIVED, clientId, message);
+			this.emit(RealTimeServer.CLIENT_MESSAGE, clientId, message);
 		}
 
 	};
@@ -107,7 +107,7 @@
 
 	RealTimeServer.CLIENT_DISCONNECT = "clientDisconnect";
 	RealTimeServer.CLIENT_CONNECT = "clientConnect";
-	RealTimeServer.CLIENT_EVENT_RECEIVED = "clientEvent";
+	RealTimeServer.CLIENT_MESSAGE = "clientEvent";
 
 	RealTimeServer.SEND_TYPE = {
 		ONE_CLIENT: "one_client",
