@@ -90,9 +90,18 @@
 			await socketIoClient.closeSockets(emitter, receiver1, receiver2);
 		});
 
-		it("broadcasts messages from one client to all others", async function() {
-			// receive an client message
-			// confirm that the server version of the message is sent to all other clients
+		it.skip("broadcasts messages from one client to all others", function() {
+			const clientId = "client id";
+			const clientMessage = new ClientPointerEvent(100, 200);
+
+			// nullRealTimeServer.connectNullClient(clientId);
+
+			nullRealTimeServer.triggerClientMessageEvent(clientId, clientMessage);
+			assert.deepEqual(nullRealTimeServer.getLastSentMessage(), {
+				message: clientMessage.toServerEvent(clientId),
+				clientId,
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE
+			});
 		});
 
 		it("broadcasts 'remove pointer' events from one client to all others", async function() {
