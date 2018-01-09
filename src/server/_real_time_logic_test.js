@@ -70,50 +70,17 @@
 			}
 		});
 
-		it("OLD: broadcasts pointer events from one client to all others", async function() {
-			const clientEvent = new ClientPointerEvent(100, 200);
-
-			const [emitter, receiver1, receiver2] = await socketIoClient.createSockets(3);
-			emitter.on(ServerPointerEvent.EVENT_NAME, function() {
-				assert.fail("emitter should not receive its own events");
-			});
-
-			const listenerPromise = Promise.all([ receiver1, receiver2 ].map((client) => {
-				return listenForOneEvent(client, ServerPointerEvent.EVENT_NAME, (data) => {
-					assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
-				});
-			}));
-
-			emitter.emit(clientEvent.name(), clientEvent.payload());
-
-			await listenerPromise;
-			await socketIoClient.closeSockets(emitter, receiver1, receiver2);
-		});
-
-		it.skip("broadcasts messages from one client to all others", function() {
+		it("broadcasts messages from one client to all others", function() {
 			const clientId = "client id";
 			const clientMessage = new ClientPointerEvent(100, 200);
 
 			nullRealTimeServer.connectNullClient(clientId);
-
 			nullRealTimeServer.triggerClientMessageEvent(clientId, clientMessage);
 			assert.deepEqual(nullRealTimeServer.getLastSentMessage(), {
 				message: clientMessage.toServerEvent(clientId),
 				clientId,
 				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE
 			});
-		});
-
-		it("broadcasts 'remove pointer' events from one client to all others", async function() {
-			await checkEventReflection(new ClientRemovePointerEvent(), ServerRemovePointerEvent);
-		});
-
-		it("broadcasts draw events from one client to all others", async function() {
-			await checkEventReflection(new ClientDrawEvent(100, 200, 300, 400), ServerDrawEvent);
-		});
-
-		it("broadcasts clear screen events from one client to all others", async function() {
-			await checkEventReflection(new ClientClearScreenEvent(), ServerClearScreenEvent);
 		});
 
 		it("treats events received via method call exactly like events received via Socket.IO", async function() {
@@ -354,24 +321,6 @@
 					}
 				});
 			});
-		}
-
-		async function checkEventReflection(clientEvent, serverEventConstructor) {
-			const [emitter, receiver1, receiver2] = await socketIoClient.createSockets(3);
-			emitter.on(serverEventConstructor.EVENT_NAME, function() {
-				assert.fail("emitter should not receive its own events");
-			});
-
-			const listenerPromise = Promise.all([ receiver1, receiver2 ].map((client) => {
-				return listenForOneEvent(client, serverEventConstructor.EVENT_NAME, (data) => {
-					assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
-				});
-			}));
-
-			emitter.emit(clientEvent.name(), clientEvent.payload());
-
-			await listenerPromise;
-			await socketIoClient.closeSockets(emitter, receiver1, receiver2);
 		}
 
 	});
