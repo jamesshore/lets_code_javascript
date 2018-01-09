@@ -147,21 +147,6 @@
 			await socketIoClient.closeSocket(client);
 		});
 
-		it("OLD: sends 'remove pointer' event to other browsers when client disconnects", async function() {
-			const [ disconnector, client ] = await socketIoClient.createSockets(2);
-			const disconnectorId = disconnector.id;
-
-			const listenerPromise = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
-				const event = ServerRemovePointerEvent.fromPayload(eventData);
-				assert.equal(event.id, disconnectorId);
-			});
-
-			await socketIoClient.closeSocket(disconnector);
-			await listenerPromise;  // if disconnect event doesn't fire, the test will time out
-
-			await socketIoClient.closeSocket(client);
-		});
-
 		it("sends 'remove pointer' message to other browsers when client disconnects", function() {
 			let clientId = "my client ID";
 			nullRealTimeServer.triggerClientConnectEvent(clientId);
@@ -169,6 +154,19 @@
 
 			assert.deepEqual(nullRealTimeServer.getLastSentMessage(), {
 				message: new ServerRemovePointerEvent(clientId),
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
+			});
+		});
+
+		it("when sending 'remove pointer' message after timeout, uses the correct client ID", function() {
+			let correctId = "correct client ID";
+			nullRealTimeServer.triggerClientConnectEvent(correctId);
+			nullRealTimeServer.triggerClientConnectEvent("different client ID");
+
+			nullRealTimeServer.triggerClientDisconnectEvent(correctId);
+
+			assert.deepEqual(nullRealTimeServer.getLastSentMessage(), {
+				message: new ServerRemovePointerEvent(correctId),
 				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
 			});
 		});

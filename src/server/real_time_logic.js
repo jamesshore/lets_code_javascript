@@ -57,11 +57,10 @@
 	function handleRealTimeEvents(self) {
 		self._realTimeServer.on(RealTimeServer.CLIENT_CONNECT, (clientId) => {
 			replayPreviousEvents(self, clientId);
-			handleClientEvents(self);
-
-			self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, () => {
-				broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(clientId));
-			});
+		});
+		handleClientMessages(self);
+		self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, (disconnectId) => {
+			broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(disconnectId));
 		});
 	}
 
@@ -97,7 +96,7 @@
 		});
 	}
 
-	function handleClientEvents(self) {
+	function handleClientMessages(self) {
 		self._realTimeServer.on(RealTimeServer.CLIENT_EVENT_RECEIVED, (clientId, clientEvent) => {
 			processClientEvent(self, clientId, clientEvent);
 		});
