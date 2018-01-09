@@ -62,7 +62,7 @@
 	RealTimeServer.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
 
 	function handleRealTimeEvents(self) {
-		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {
+		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_CONNECT, ({ clientId }) => {
 			replayPreviousEvents(self, clientId);
 			handleClientEvents(self);
 
@@ -85,7 +85,7 @@
 			});
 		}, 100);
 
-		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_CONNECT, (clientId) => {
+		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_CONNECT, ({ clientId }) => {
 			self._lastActivity[clientId] = self._clock.now();
 
 			self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, () => {
@@ -105,8 +105,8 @@
 	}
 
 	function handleClientEvents(self) {
-		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, (clientId, clientEvent) => {
-			processClientEvent(self, clientId, clientEvent);
+		self._socketIoAbstraction.on(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, (args) => {
+			processClientEvent(self, args.clientId, args.receivedEvent);
 		});
 	}
 

@@ -76,21 +76,25 @@
 		// Inspired by isaacs
 		// https://github.com/isaacs/server-destroy/commit/71f1a988e1b05c395e879b18b850713d1774fa92
 		ioServer.on("connection", function(socket) {
-			const key = socket.id;
-			connections[key] = socket;
+			const clientId = socket.id;
+			connections[clientId] = socket;
 			socket.on("disconnect", function() {
-				delete connections[key];
-				self.emit(SocketIoAbstraction.CLIENT_DISCONNECT, key);
+				delete connections[clientId];
+				self.emit(SocketIoAbstraction.CLIENT_DISCONNECT, { clientId });
 			});
-			self.emit(SocketIoAbstraction.CLIENT_CONNECT, key, socket);
+			self.emit(SocketIoAbstraction.CLIENT_CONNECT, { clientId });
 		});
-	}
+    }
 
 	function listenForClientEvents(self, ioServer) {
 		ioServer.on("connect", (socket) => {
 			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
 				socket.on(eventConstructor.EVENT_NAME, function(payload) {
-					self.emit(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, socket.id, eventConstructor.fromPayload(payload));
+					let args = {
+						clientId: socket.id,
+						receivedEvent: eventConstructor.fromPayload(payload)
+					};
+					self.emit(SocketIoAbstraction.CLIENT_EVENT_RECEIVED, args);
 				});
 			});
 		});
