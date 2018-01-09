@@ -196,6 +196,43 @@
 			await socketIoClient.closeSockets(socket1, socket2, socket3);
 		});
 
+		it("emits event when a message is sent to a client", async function() {
+			const clientId = "a client";
+			const message = new ServerRemovePointerEvent(clientId);
+			realTimeServer.connectNullClient(clientId);
+
+			let eventPromise = listenForOneEvent(RealTimeServer.SERVER_MESSAGE);
+			realTimeServer.sendToOneClient(clientId, message);
+			assert.deepEqual(await eventPromise, {
+				message,
+				clientId: clientId,
+				type: RealTimeServer.SEND_TYPE.ONE_CLIENT
+			}, "one");
+
+			// realTimeServer.broadcastToAllClients(message);
+			// assert.deepEqual(realTimeServer.getLastSentMessage(), {
+			// 	message,
+			// 	type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
+			// }, "all");
+			//
+			// realTimeServer.broadcastToAllClientsButOne(socket.id, message);
+			// assert.deepEqual(realTimeServer.getLastSentMessage(), {
+			// 	message,
+			// 	clientId: socket.id,
+			// 	type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE
+			// }, "all but one");
+
+			realTimeServer.disconnectNullClient(clientId);
+
+			function listenForOneEvent(event) {
+				return new Promise((resolve, reject) => {
+					realTimeServer.once(event(), (value) => {
+						resolve(value);
+					});
+				});
+			}
+		});
+
 		it("tracks the last message sent", async function() {
 			const socket = await socketIoClient.createSocket();
 			const message = new ServerRemovePointerEvent("server client ID");
