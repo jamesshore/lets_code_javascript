@@ -83,68 +83,7 @@
 			});
 		});
 
-		it.skip("treats events received via method call exactly like events received via Socket.IO", async function() {
-			const clientEvent = new ClientPointerEvent(100, 200);
-			const [receiver1, receiver2] = await socketIoClient.createSockets(2);
-			const listeners = Promise.all([ receiver1, receiver2 ].map((client) => {
-				return listenForOneEvent(client, ServerPointerEvent.EVENT_NAME, (data) => {
-					assert.deepEqual(data, clientEvent.toServerEvent("__SIMULATED__").payload());
-				});
-			}));
-
-			networkedRealTimeLogic.simulateClientEvent(clientEvent);
-
-			await listeners;
-			await socketIoClient.closeSockets(receiver1, receiver2);
-		});
-
-		it.skip("emits events for simulated client events", function(done) {
-			const clientEvent = new ClientRemovePointerEvent();
-
-			networkedRealTimeLogic.onNextClientEvent((socketId, receivedEvent) => {
-				assert.equal(socketId, "__SIMULATED__", "socket ID");
-				assert.deepEqual(clientEvent, receivedEvent, "event");
-				done();
-			});
-			networkedRealTimeLogic.simulateClientEvent(clientEvent);
-		});
-
-		it.skip("(OLD) replays all previous events when client connects", async function() {
-			const IRRELEVANT_ID = "irrelevant";
-
-			const event1 = new ClientDrawEvent(1, 10, 100, 1000);
-			const event2 = new ClientDrawEvent(2, 20, 200, 2000);
-			const event3 = new ClientDrawEvent(3, 30, 300, 3000);
-
-			networkedRealTimeLogic.simulateClientEvent(event1, IRRELEVANT_ID);
-			networkedRealTimeLogic.simulateClientEvent(event2, IRRELEVANT_ID);
-			networkedRealTimeLogic.simulateClientEvent(event3, IRRELEVANT_ID);
-
-			let replayedEvents = [];
-			const client = socketIoClient.createSocketWithoutWaiting();
-			await new Promise((resolve, reject) => {
-				client.on(ServerDrawEvent.EVENT_NAME, function(event) {
-					replayedEvents.push(ServerDrawEvent.fromPayload(event));
-					if (replayedEvents.length === 3) {
-						try {
-							// if we don't get the events, the test will time out
-							assert.deepEqual(replayedEvents, [
-								event1.toServerEvent(),
-								event2.toServerEvent(),
-								event3.toServerEvent()
-							]);
-							resolve();
-						}
-						catch(e) {
-							reject(e);
-						}
-					}
-				});
-			});
-			await socketIoClient.closeSocket(client);
-		});
-
-		it.skip("replays all previous messages when client connects", function() {
+		it("replays all previous messages when client connects", function() {
 			const IRRELEVANT_ID = "irrelevant";
 
 			const message1 = new ClientDrawEvent(1, 10, 100, 1000);
@@ -165,9 +104,9 @@
 			nullRealTimeServer.connectNullClient(connectingClient);
 
 			assert.deepEqual(serverMessages, [
-				{ message: message1, clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
-				{ message: message2, clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
-				{ message: message3, clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT }
+				{ message: message1.toServerEvent(), clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
+				{ message: message2.toServerEvent(), clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
+				{ message: message3.toServerEvent(), clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT }
 			]);
 		});
 

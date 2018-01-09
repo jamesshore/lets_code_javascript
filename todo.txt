@@ -66,7 +66,6 @@ To Do on current task:
 - Refactor business logic code, including removing unnecessary(?) business logic methods
 	- numberOfActiveConnections
 	- isSocketConnected
-	- simulateClientEvent
   - onNextClientEvent
   - onNextServerEmit
 - Look for opportunities to improve Socket.IO abstraction API

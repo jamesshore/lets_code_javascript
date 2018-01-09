@@ -38,10 +38,6 @@
 			return this._realTimeServer.numberOfActiveConnections();
 		}
 
-		// simulateClientEvent(clientEvent) {
-		// 	processClientEvent(this, null, clientEvent);
-		// }
-
 		onNextClientEvent(callback) {
 			this._emitter.once(CLIENT_EVENT, callback);
 		}
