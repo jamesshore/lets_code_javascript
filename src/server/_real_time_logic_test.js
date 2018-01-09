@@ -134,13 +134,13 @@
 			});
 		});
 
-		it("stores 'remove pointer' event in event repo when client disconnects", async function() {
-			const client = await socketIoClient.createSocket();
-			const clientId = client.id;
+		it("stores 'remove pointer' event in event repo when client disconnects", function() {
+			const clientId = "my client ID";
 
-			await socketIoClient.closeSocket(client);
+			nullRealTimeServer.triggerClientConnectEvent(clientId);
+			nullRealTimeServer.triggerClientDisconnectEvent(clientId);
 			assert.deepEqual(
-				networkedRealTimeLogic._eventRepo.replay(),
+				realTimeLogic._eventRepo.replay(),
 				[ new ServerRemovePointerEvent(clientId) ]
 			);
 		});
