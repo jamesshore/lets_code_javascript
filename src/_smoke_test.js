@@ -19,7 +19,7 @@
 
 	var HOME_PAGE_URL = "http://localhost:5000";
 	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
-	var EXPECTED_BROWSER = "firefox 57.0.1";
+	var EXPECTED_BROWSER = "firefox 58.0.2";
 	var GHOST_POINTER_SELECTOR = ".ghost-pointer";
 	var DRAWING_AREA_ID = "drawing-area";
 
