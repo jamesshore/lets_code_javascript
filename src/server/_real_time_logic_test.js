@@ -6,21 +6,15 @@
 	const RealTimeServer = require("./real_time_server.js");
 	const HttpServer = require("./http_server.js");
 	const assert = require("_assert");
-	const ServerPointerEvent = require("../shared/server_pointer_event.js");
 	const ClientPointerEvent = require("../shared/client_pointer_event.js");
 	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
-	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
-	const ServerDrawEvent = require("../shared/server_draw_event.js");
 	const ClientDrawEvent = require("../shared/client_draw_event.js");
-	const ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
-	const ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
 	const SocketIoClient = require("./__socket_io_client.js");
 	const Clock = require("./clock.js");
 
 	const IRRELEVANT_DIR = "generated/test";
 	const IRRELEVANT_PAGE = "irrelevant.html";
-	const IRRELEVANT_X = 42;
-	const IRRELEVANT_Y = 42;
+	const IRRELEVANT_MESSAGE = new ClientPointerEvent(42, 24);
 
 	const PORT = 5020;
 
@@ -156,135 +150,67 @@
 			});
 		});
 
-		it("times out again if there was activity, and then no activity, after the first timeout", async function() {
-			const client = await socketIoClient.createSocket();
-
-			// first timeout
-			const firstTimeout = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-			await firstTimeout;
-
-			// some more activity
-			const clientEvent = new ClientClearScreenEvent();
-			client.emit(clientEvent.name(), clientEvent.payload());
-			await new Promise((resolve) => networkedRealTimeLogic.onNextClientEvent(resolve));
-
-			// second timeout
-			const secondTimeout = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-			await secondTimeout;
-
-			// done
-			await socketIoClient.closeSocket(client);
-		});
-
-		it("only sends remove pointer event one time when client times out", async function() {
-			// setup
-			const client = await socketIoClient.createSocket();
-
-			// listen for first (valid) RemovePointerEvent
-			const eventListener = listenForOneEvent(client, ServerRemovePointerEvent.EVENT_NAME);
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-			await eventListener;
-
-			// listen for second (invalid) RemovePointerEvent
-			let errorOnEvent;
-			networkedRealTimeLogic.onNextServerEmit((event) => {
-				if (errorOnEvent) assert.fail("should not receive remove pointer event");
+		it("doesn't time out ghost pointer when any activity has been received from client", function() {
+			const clientId = "my client ID";
+			let removePointerEventsReceived = 0;
+			nullRealTimeServer.on(RealTimeServer.SERVER_MESSAGE, ({ message }) => {
+				if (message.name() === ServerRemovePointerEvent.EVENT_NAME) removePointerEventsReceived++;
 			});
 
-			// allow time to pass, which could trigger additional RemovePointerEvents
-			errorOnEvent = true;
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-
-			// done
-			errorOnEvent = false;   // closing the socket will cause RemovePointerEvent, so we stop listening for errors
-			await socketIoClient.closeSocket(client);
-		});
-
-		it("doesn't time out ghost pointer when the pointer has moved recently", async function() {
-			const client = await socketIoClient.createSocket();
-
-			client.on(ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
-				throw new Error("Should not have received 'remove pointer' event");
-			});
+			nullRealTimeServer.connectNullClient(clientId);
 
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
-			const event = new ClientPointerEvent(IRRELEVANT_X, IRRELEVANT_Y);
-
-			const promise = new Promise((resolve) => {
-				networkedRealTimeLogic.onNextClientEvent((socketId, event) => {
-					setTimeout(() => {  // make this code asynchronous so tick() doesn't happen too soon
-						fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
-						setTimeout(() => {// allow tick() to be processed so server event is sent if it's going to be (it shouldn't)
-							resolve();
-						}, 0);
-					}, 0);
-				});
-			});
-			client.emit(event.name(), event.payload());
-
-			try {
-				await promise;
-			}
-			finally {
-				await socketIoClient.closeSocket(client);
-			}
-		});
-
-		it("doesn't time out ghost pointer when any activity has been received from client", async function() {
-			const client = await socketIoClient.createSocket();
-
-			client.on(ServerRemovePointerEvent.EVENT_NAME, (eventData) => {
-				throw new Error("Should not have received 'remove pointer' event");
-			});
-
+			nullRealTimeServer.triggerClientMessageEvent(clientId, IRRELEVANT_MESSAGE);
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
-			const event = new ClientClearScreenEvent();
-
-			const promise = new Promise((resolve) => {
-				networkedRealTimeLogic.onNextClientEvent((socketId, event) => {
-					setTimeout(() => {  // make this code asynchronous so tick() doesn't happen too soon
-						fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
-						setTimeout(() => {// allow tick() to be processed so server event is sent if it's going to be (it shouldn't)
-							resolve();
-						}, 0);
-					}, 0);
-				});
-			});
-			client.emit(event.name(), event.payload());
-
-			try {
-				await promise;
-			}
-			finally {
-				await socketIoClient.closeSocket(client);
-			}
+			assert.equal(removePointerEventsReceived, 0, "should not get any timeout messages");
 		});
 
-		it("doesn't time out clients that have disconnected", async function() {
-			const client = await socketIoClient.createSocket();
-			await socketIoClient.closeSocket(client);
+		it("times out again if there was activity, and then no activity, after the first timeout", function() {
+			const clientId = "my client ID";
 
-			networkedRealTimeLogic.onNextServerEmit((event) => {
-				assert.fail("should not receive remove pointer event");
+			let removePointerEventsReceived = 0;
+			nullRealTimeServer.on(RealTimeServer.SERVER_MESSAGE, ({ message }) => {
+				if (message.name() === ServerRemovePointerEvent.EVENT_NAME) removePointerEventsReceived++;
 			});
+
+			nullRealTimeServer.connectNullClient(clientId);
+
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+			assert.equal(removePointerEventsReceived, 1, "should have timed out once");
+
+			nullRealTimeServer.triggerClientMessageEvent(clientId, IRRELEVANT_MESSAGE);
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+			assert.equal(removePointerEventsReceived, 2, "should time out again after new activity");
 		});
 
-		function listenForOneEvent(socket, eventName, fn) {
-			return new Promise((resolve, reject) => {
-				socket.once(eventName, function(eventData) {
-					try {
-						if (fn) fn(eventData);
-						resolve();
-					}
-					catch(err) {
-						reject(err);
-					}
-				});
+		it("only sends remove pointer event one time when client times out", function() {
+			const clientId = "my client ID";
+
+			let removePointerEventsReceived = 0;
+			nullRealTimeServer.on(RealTimeServer.SERVER_MESSAGE, ({ message }) => {
+				if (message.name() === ServerRemovePointerEvent.EVENT_NAME) removePointerEventsReceived++;
 			});
-		}
+
+			nullRealTimeServer.triggerClientConnectEvent(clientId);
+
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT * 10);
+			assert.equal(removePointerEventsReceived, 1, "should only time out once");
+		});
+
+		it("doesn't time out clients that have disconnected", function() {
+			const clientId = "my client ID";
+			let removePointerEventsReceived = 0;
+			nullRealTimeServer.on(RealTimeServer.SERVER_MESSAGE, ({ message }) => {
+				if (message.name() === ServerRemovePointerEvent.EVENT_NAME) removePointerEventsReceived++;
+			});
+
+			nullRealTimeServer.triggerClientConnectEvent(clientId);
+			nullRealTimeServer.triggerClientDisconnectEvent(clientId);
+			assert.equal(removePointerEventsReceived, 1, "should get a disconnect event when disconnecting");
+
+			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+			assert.deepEqual(removePointerEventsReceived, 1, "should not get another disconnect due to timeout");
+		});
 
 	});
 

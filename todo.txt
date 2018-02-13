@@ -63,6 +63,7 @@ Engineering Tasks:
 
 To Do on current task:
 * Refactor business logic tests to not use network
+	- Factor out duplication of 'remove pointer event' counting code snippet
 - Refactor business logic code, including removing unnecessary(?) business logic methods
 	- numberOfActiveConnections
 	- isSocketConnected
