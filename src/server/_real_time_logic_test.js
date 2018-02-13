@@ -150,7 +150,10 @@
 			nullRealTimeServer.triggerClientConnectEvent(clientId);
 
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-			assert.equal(nullRealTimeServer.getLastSentMessage().message.id, clientId);
+			assert.deepEqual(nullRealTimeServer.getLastSentMessage(), {
+				message: new ServerRemovePointerEvent(clientId),
+				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
+			});
 		});
 
 		it("times out again if there was activity, and then no activity, after the first timeout", async function() {
