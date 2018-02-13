@@ -62,7 +62,6 @@ Engineering Tasks:
 - Test that client and server talk to each other correctly; not just that they can talk to Socket.IO, but specifically that they talk to each other
 
 To Do on current task:
-- FIX: RealTimeServer test of triggerClientMessageEvent doesn't pass clientId (Martin Grandrath, E593)
 * Refactor business logic tests to not use network
 - Refactor business logic code, including removing unnecessary(?) business logic methods
 	- numberOfActiveConnections
@@ -72,6 +71,7 @@ To Do on current task:
 - Look for opportunities to improve Socket.IO abstraction API
 	- Unify event sending parameters as suggested by Martin Grandrath's in E582 comments - http://www.letscodejavascript.com/v3/comments/live/582#comment-3675682857
 	- Rename 'Event' to 'Message' across the board
+- Possible race condition? _real_time_server_test "sends message to all Socket.IO clients" failed intermittently
 - Clean up Server and its tests
 - Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?
 	- appears to be a race condition; it doesn't occur every time

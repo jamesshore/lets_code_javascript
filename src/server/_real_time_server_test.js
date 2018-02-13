@@ -134,15 +134,16 @@
 		});
 
 		it("simulates a client message received event", async function() {
+			const clientId = "my client ID";
 			const message = new ClientRemovePointerEvent();
 
 			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId) => {
-					resolve(clientId);
+				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId, message) => {
+					resolve({ clientId, message });
 				});
 			});
-			realTimeServer.triggerClientMessageEvent(message);
-			assert.equal(await eventPromise, message);
+			realTimeServer.triggerClientMessageEvent(clientId, message);
+			assert.deepEqual(await eventPromise, { clientId, message });
 		});
 
 		it("sends message to specific Socket.IO client", async function() {
