@@ -24,7 +24,6 @@
 
 		start() {
 			this._eventRepo = new EventRepository();
-			this._emitter = new EventEmitter();
 
 			handleRealTimeEvents(this);
 			handleClientTimeouts(this);
@@ -36,14 +35,6 @@
 
 		numberOfActiveConnections() {
 			return this._realTimeServer.numberOfActiveConnections();
-		}
-
-		onNextClientEvent(callback) {
-			this._emitter.once(CLIENT_EVENT, callback);
-		}
-
-		onNextServerEmit(callback) {
-			this._emitter.once(SERVER_EVENT, callback);
 		}
 
 	};
@@ -100,14 +91,12 @@
 		const id = clientId !== null ? clientId : "__SIMULATED__";
 		const serverEvent = clientEvent.toServerEvent(id);
 		broadcastAndStoreEvent(self, clientId, serverEvent);
-		self._emitter.emit(CLIENT_EVENT, id, clientEvent);
 	}
 
 	function broadcastAndStoreEvent(self, clientIdOrNull, event) {
 		self._eventRepo.store(event);
 		if (clientIdOrNull) self._realTimeServer.broadcastToAllClientsButOne(clientIdOrNull, event);
 		else self._realTimeServer.broadcastToAllClients(event);
-		self._emitter.emit(SERVER_EVENT, event);
 	}
 
 }());
