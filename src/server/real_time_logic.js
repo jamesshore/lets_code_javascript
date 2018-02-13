@@ -5,14 +5,11 @@
 	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
 	const EventRepository = require("./event_repository.js");
 	const Clock = require("./clock.js");
-	const EventEmitter = require("events");
 	const RealTimeServer = require("./real_time_server.js");
 
 	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
 
-	const CLIENT_EVENT = "client_event";
-	const SERVER_EVENT = "server_event";
 	const CLIENT_TIMEOUT = 30 * 1000;
 
 	const RealTimeLogic = module.exports = class RealTimeLogic {
@@ -20,17 +17,16 @@
 		constructor(realTimeServer, clock = new Clock()) {
 			this._realTimeServer = realTimeServer;
 			this._clock = clock;
+			this._eventRepo = new EventRepository();
 		}
 
 		start() {
-			this._eventRepo = new EventRepository();
-
 			handleRealTimeEvents(this);
 			handleClientTimeouts(this);
 		}
 
 		stop() {
-			this._interval.clear();
+			stopHandlingClientTimeouts(this);
 		}
 
 		numberOfActiveConnections() {
@@ -55,24 +51,39 @@
 		self._lastActivity = {};
 
 		self._interval = self._clock.setInterval(() => {
+			timeOutClients();
+		}, 100);
+		self._realTimeServer.on(RealTimeServer.CLIENT_CONNECT, (clientId) => {
+			resetClientTimeout(clientId);
+		});
+		self._realTimeServer.on(RealTimeServer.CLIENT_MESSAGE, (clientId) => {
+			resetClientTimeout(clientId);
+		});
+		self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, (clientId) => {
+			stopTrackingClient(clientId);
+		});
+
+		function resetClientTimeout(clientId) {
+			self._lastActivity[clientId] = self._clock.now();
+		}
+
+		function stopTrackingClient(clientId) {
+			delete self._lastActivity[clientId];
+		}
+
+		function timeOutClients() {
 			Object.keys(self._lastActivity).forEach((clientId) => {
 				const lastActivity = self._lastActivity[clientId];
 				if (self._clock.millisecondsSince(lastActivity) >= CLIENT_TIMEOUT) {
 					broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(clientId));
-					delete self._lastActivity[clientId];
+					stopTrackingClient(clientId);
 				}
 			});
-		}, 100);
+		}
+	}
 
-		self._realTimeServer.on(RealTimeServer.CLIENT_CONNECT, (clientId) => {
-			self._lastActivity[clientId] = self._clock.now();
-		});
-		self._realTimeServer.on(RealTimeServer.CLIENT_MESSAGE, (clientId) => {
-			self._lastActivity[clientId] = self._clock.now();
-		});
-		self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, (clientId) => {
-			delete self._lastActivity[clientId];
-		});
+	function stopHandlingClientTimeouts(self) {
+		self._interval.clear();
 	}
 
 	function replayPreviousEvents(self, clientId) {
