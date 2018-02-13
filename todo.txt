@@ -62,9 +62,7 @@ Engineering Tasks:
 - Test that client and server talk to each other correctly; not just that they can talk to Socket.IO, but specifically that they talk to each other
 
 To Do on current task:
-* Refactor business logic tests to not use network
-	- Factor out duplication of 'remove pointer event' counting code snippet
-- Refactor business logic code, including removing unnecessary(?) business logic methods
+* Refactor business logic code, including removing unnecessary(?) business logic methods
 	- numberOfActiveConnections
 	- isSocketConnected
   - onNextClientEvent
@@ -77,4 +75,3 @@ To Do on current task:
 - Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?
 	- appears to be a race condition; it doesn't occur every time
 - Update _server_test.js to not user private realTimeServer._socketIoAbstraction
-- Are new tests faster? (old speed: ~2.6s)
