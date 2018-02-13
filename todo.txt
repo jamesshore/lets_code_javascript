@@ -62,6 +62,7 @@ Engineering Tasks:
 - Test that client and server talk to each other correctly; not just that they can talk to Socket.IO, but specifically that they talk to each other
 
 To Do on current task:
+- FIX: RealTimeServer test of triggerClientMessageEvent doesn't pass clientId (Martin Grandrath, E593)
 * Refactor business logic tests to not use network
 - Refactor business logic code, including removing unnecessary(?) business logic methods
 	- numberOfActiveConnections
