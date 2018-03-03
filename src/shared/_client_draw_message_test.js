@@ -10,10 +10,10 @@
 
 		it("converts bare objects to ClientDrawMessages and back", function() {
 			var bareObject = { fromX: 1, fromY: 2, toX: 3, toY: 4 };
-			var eventObject = new ClientDrawMessage(1, 2, 3, 4);
+			var messageObject = new ClientDrawMessage(1, 2, 3, 4);
 
-			assert.deepEqual(ClientDrawMessage.fromPayload(bareObject), eventObject, "fromPayload()");
-			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
+			assert.deepEqual(ClientDrawMessage.fromPayload(bareObject), messageObject, "fromPayload()");
+			assert.deepEqual(messageObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerDrawMessage", function() {
@@ -23,7 +23,7 @@
 			assert.deepEqual(actual, expected);
 		});
 
-		it("instances know their network event name", function() {
+		it("instances know their network message name", function() {
 			assert.equal(new ClientDrawMessage(1, 2, 3, 4).name(), ClientDrawMessage.MESSAGE_NAME);
 		});
 

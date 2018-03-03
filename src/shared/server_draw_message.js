@@ -13,7 +13,7 @@
 		};
 	};
 
-	ServerDrawMessage.MESSAGE_NAME = "server_draw_event";
+	ServerDrawMessage.MESSAGE_NAME = "server_draw_message";
 	ServerDrawMessage.prototype.name = function() { return ServerDrawMessage.MESSAGE_NAME; };
 
 	ServerDrawMessage.fromPayload = function(obj) {

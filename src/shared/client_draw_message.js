@@ -13,7 +13,7 @@
 		};
 	};
 
-	ClientDrawMessage.MESSAGE_NAME = "client_line_event";
+	ClientDrawMessage.MESSAGE_NAME = "client_line_message";
 	ClientDrawMessage.prototype.name = function() { return ClientDrawMessage.MESSAGE_NAME; };
 
 	ClientDrawMessage.fromPayload = function(obj) {

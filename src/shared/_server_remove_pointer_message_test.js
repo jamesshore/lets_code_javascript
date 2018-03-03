@@ -7,17 +7,17 @@
 
 	describe("SHARED: ServerRemovePointerMessage", function() {
 
-		it("converts bare objects to event objects and back", function() {
+		it("converts bare objects to message objects and back", function() {
 			var bareObject = { id: "a" };
-			var eventObject = new ServerRemovePointerMessage("a");
+			var messageObject = new ServerRemovePointerMessage("a");
 
-			assert.deepEqual(ServerRemovePointerMessage.fromPayload(bareObject), eventObject, "fromPayload()");
-			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
+			assert.deepEqual(ServerRemovePointerMessage.fromPayload(bareObject), messageObject, "fromPayload()");
+			assert.deepEqual(messageObject.payload(), bareObject, "payload()");
 		});
 
-		// it("instances know their network event name", function() {
-		// 	assert.equal(new ServerRemovePointerMessage().name(), ServerRemovePointerMessage.MESSAGE_NAME);
-		// });
+		it("instances know their network message name", function() {
+			assert.equal(new ServerRemovePointerMessage().name(), ServerRemovePointerMessage.MESSAGE_NAME);
+		});
 
 	});
 

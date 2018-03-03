@@ -10,10 +10,10 @@
 
 		it("converts serializable objects to ClientClearScreenMessages and back", function() {
 			var bareObject = {};
-			var eventObject = new ClientClearScreenMessage();
+			var messageObject = new ClientClearScreenMessage();
 
-			assert.deepEqual(ClientClearScreenMessage.fromPayload(bareObject), eventObject, "fromPayload()");
-			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
+			assert.deepEqual(ClientClearScreenMessage.fromPayload(bareObject), messageObject, "fromPayload()");
+			assert.deepEqual(messageObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerClearScreenMessage", function() {
@@ -23,7 +23,7 @@
 			assert.deepEqual(actual, expected);
 		});
 
-		it("instances know their network event name", function() {
+		it("instances know their network message name", function() {
 			assert.equal(new ClientClearScreenMessage().name(), ClientClearScreenMessage.MESSAGE_NAME);
 		});
 

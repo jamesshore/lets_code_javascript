@@ -3,7 +3,7 @@
 	"use strict";
 
 	const ServerRemovePointerMessage = require("../shared/server_remove_pointer_message.js");
-	const EventRepository = require("./event_repository.js");
+	const MessageRepository = require("./message_repository.js");
 	const Clock = require("./clock.js");
 	const RealTimeServer = require("./real_time_server.js");
 
@@ -17,7 +17,7 @@
 		constructor(realTimeServer, clock = new Clock()) {
 			this._realTimeServer = realTimeServer;
 			this._clock = clock;
-			this._eventRepo = new EventRepository();
+			this._messageRepo = new MessageRepository();
 		}
 
 		start() {
@@ -39,11 +39,11 @@
 
 	function handleRealTimeEvents(self) {
 		self._realTimeServer.on(RealTimeServer.CLIENT_CONNECT, (clientId) => {
-			replayPreviousEvents(self, clientId);
+			replayPreviousMessages(self, clientId);
 		});
 		handleClientMessages(self);
 		self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, (disconnectId) => {
-			broadcastAndStoreEvent(self, null, new ServerRemovePointerMessage(disconnectId));
+			broadcastAndStoreMessage(self, null, new ServerRemovePointerMessage(disconnectId));
 		});
 	}
 
@@ -75,7 +75,7 @@
 			Object.keys(self._lastActivity).forEach((clientId) => {
 				const lastActivity = self._lastActivity[clientId];
 				if (self._clock.millisecondsSince(lastActivity) >= CLIENT_TIMEOUT) {
-					broadcastAndStoreEvent(self, null, new ServerRemovePointerMessage(clientId));
+					broadcastAndStoreMessage(self, null, new ServerRemovePointerMessage(clientId));
 					stopTrackingClient(clientId);
 				}
 			});
@@ -86,28 +86,28 @@
 		self._interval.clear();
 	}
 
-	function replayPreviousEvents(self, clientId) {
-		self._eventRepo.replay().forEach((event) => {
-			self._realTimeServer.sendToOneClient(clientId, event);
+	function replayPreviousMessages(self, clientId) {
+		self._messageRepo.replay().forEach((message) => {
+			self._realTimeServer.sendToOneClient(clientId, message);
 		});
 	}
 
 	function handleClientMessages(self) {
-		self._realTimeServer.on(RealTimeServer.CLIENT_MESSAGE, (clientId, clientEvent) => {
-			processClientEvent(self, clientId, clientEvent);
+		self._realTimeServer.on(RealTimeServer.CLIENT_MESSAGE, (clientId, clientMessage) => {
+			processClientEvent(self, clientId, clientMessage);
 		});
 	}
 
-	function processClientEvent(self, clientId, clientEvent) {
+	function processClientEvent(self, clientId, clientMessage) {
 		const id = clientId !== null ? clientId : "__SIMULATED__";
-		const serverEvent = clientEvent.toServerMessage(id);
-		broadcastAndStoreEvent(self, clientId, serverEvent);
+		const serverMessage = clientMessage.toServerMessage(id);
+		broadcastAndStoreMessage(self, clientId, serverMessage);
 	}
 
-	function broadcastAndStoreEvent(self, clientIdOrNull, event) {
-		self._eventRepo.store(event);
-		if (clientIdOrNull) self._realTimeServer.broadcastToAllClientsButOne(clientIdOrNull, event);
-		else self._realTimeServer.broadcastToAllClients(event);
+	function broadcastAndStoreMessage(self, clientIdOrNull, message) {
+		self._messageRepo.store(message);
+		if (clientIdOrNull) self._realTimeServer.broadcastToAllClientsButOne(clientIdOrNull, message);
+		else self._realTimeServer.broadcastToAllClients(message);
 	}
 
 }());

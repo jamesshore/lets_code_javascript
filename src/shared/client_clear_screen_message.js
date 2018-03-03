@@ -7,7 +7,7 @@
 	var ClientClearScreenMessage = module.exports = function() {
 	};
 
-	ClientClearScreenMessage.MESSAGE_NAME = "client_clear_screen_event";
+	ClientClearScreenMessage.MESSAGE_NAME = "client_clear_screen_message";
 	ClientClearScreenMessage.prototype.name = function() { return ClientClearScreenMessage.MESSAGE_NAME; };
 
 	ClientClearScreenMessage.fromPayload = function(obj) {

@@ -10,10 +10,10 @@
 
 		it("converts bare objects to ClientPointerMessages and back", function() {
 			var bareObject = { x: 1, y: 2 };
-			var eventObject = new ClientPointerMessage(1, 2);
+			var messageObject = new ClientPointerMessage(1, 2);
 
-			assert.deepEqual(ClientPointerMessage.fromPayload(bareObject), eventObject, "fromPayload()");
-			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
+			assert.deepEqual(ClientPointerMessage.fromPayload(bareObject), messageObject, "fromPayload()");
+			assert.deepEqual(messageObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerPointerMessage", function() {
@@ -23,7 +23,7 @@
 			assert.deepEqual(actual, expected);
 		});
 
-		it("instances know their network event name", function() {
+		it("instances know their network message name", function() {
 			assert.equal(new ClientPointerMessage(1, 2).name(), ClientPointerMessage.MESSAGE_NAME);
 		});
 

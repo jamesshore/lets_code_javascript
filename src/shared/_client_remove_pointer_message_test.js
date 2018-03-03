@@ -10,10 +10,10 @@
 
 		it("converts serializable objects to ClientRemovePointerMessages and back", function() {
 			var bareObject = {};
-			var eventObject = new ClientRemovePointerMessage();
+			var messageObject = new ClientRemovePointerMessage();
 
-			assert.deepEqual(ClientRemovePointerMessage.fromPayload(bareObject), eventObject, "fromPayload()");
-			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
+			assert.deepEqual(ClientRemovePointerMessage.fromPayload(bareObject), messageObject, "fromPayload()");
+			assert.deepEqual(messageObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerRemovePointerMessage", function() {
@@ -23,9 +23,9 @@
 			assert.deepEqual(actual, expected);
 		});
 
-		// it("instances know their network event name", function() {
-		// 	assert.equal(new ClientRemovePointerMessage().name(), ClientRemovePointerMessage.MESSAGE_NAME);
-		// });
+		it("instances know their network message name", function() {
+			assert.equal(new ClientRemovePointerMessage().name(), ClientRemovePointerMessage.MESSAGE_NAME);
+		});
 
 	});
 

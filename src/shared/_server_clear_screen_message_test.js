@@ -7,15 +7,15 @@
 
 	describe("SHARED: ServerClearScreenMessage", function() {
 
-		it("converts bare objects to event objects and back", function() {
+		it("converts bare objects to message objects and back", function() {
 			var bareObject = {};
-			var eventObject = new ServerClearScreenMessage();
+			var messageObject = new ServerClearScreenMessage();
 
-			assert.deepEqual(ServerClearScreenMessage.fromPayload(bareObject), eventObject, "fromPayload()");
-			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
+			assert.deepEqual(ServerClearScreenMessage.fromPayload(bareObject), messageObject, "fromPayload()");
+			assert.deepEqual(messageObject.payload(), bareObject, "payload()");
 		});
 
-		it("instances know their network event name", function() {
+		it("instances know their network message name", function() {
 			assert.equal(new ServerClearScreenMessage().name(), ServerClearScreenMessage.MESSAGE_NAME);
 		});
 

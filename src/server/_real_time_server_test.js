@@ -117,18 +117,18 @@
 
 		it("emits event when a message is received from a client", async function() {
 			const socket = await socketIoClient.createSocket();
-			const eventToSend = new ClientRemovePointerMessage();
+			const messageToSend = new ClientRemovePointerMessage();
 
 			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId, receivedEvent) => {
-					resolve({ clientId, receivedEvent });
+				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId, receivedMessage) => {
+					resolve({ clientId, receivedMessage });
 				});
 			});
 
-			socket.emit(eventToSend.name(), eventToSend.payload());
-			const { clientId, receivedEvent } = await eventPromise;
+			socket.emit(messageToSend.name(), messageToSend.payload());
+			const { clientId, receivedMessage } = await eventPromise;
 			assert.equal(clientId, socket.id, "client ID");
-			assert.deepEqual(receivedEvent, eventToSend, "event");
+			assert.deepEqual(receivedMessage, messageToSend, "message");
 
 			await socketIoClient.closeSocket(socket);
 		});
@@ -281,10 +281,10 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
-		function listenForOneMessage(socket, event) {
+		function listenForOneMessage(socket, message) {
 			return new Promise((resolve, reject) => {
-				socket.once(event.name(), (eventPayload) => {
-					resolve(eventPayload);
+				socket.once(message.name(), (messagePayload) => {
+					resolve(messagePayload);
 				});
 			});
 		}
@@ -294,7 +294,7 @@
 
 	describe("Null RealTimeServer", function() {
 
-		const IRRELEVANT_EVENT = new ClientRemovePointerMessage();
+		const IRRELEVANT_MESSAGE = new ClientRemovePointerMessage();
 
 		let realTimeServer;
 
@@ -307,8 +307,8 @@
 			await realTimeServer.stop();
 		});
 
-		it("does nothing when asked to broadcast event to all clients", function() {
-			realTimeServer.broadcastToAllClients(IRRELEVANT_EVENT);
+		it("does nothing when asked to broadcast message to all clients", function() {
+			realTimeServer.broadcastToAllClients(IRRELEVANT_MESSAGE);
 		});
 
 		// it("sends events to one Socket.IO client", async function() {

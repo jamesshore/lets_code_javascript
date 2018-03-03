@@ -9,7 +9,7 @@
 		this._y = y;
 	};
 
-	ClientPointerMessage.MESSAGE_NAME = "client_pointer_event";
+	ClientPointerMessage.MESSAGE_NAME = "client_pointer_message";
 	ClientPointerMessage.prototype.name = function() { return ClientPointerMessage.MESSAGE_NAME; };
 
 	ClientPointerMessage.fromPayload = function(obj) {

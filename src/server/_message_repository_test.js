@@ -3,22 +3,22 @@
 	"use strict";
 
 	const assert = require("_assert");
-	const EventRepository = require("./event_repository.js");
+	const MessageRepository = require("./message_repository.js");
 	const ServerClearScreenMessage = require("../shared/server_clear_screen_message.js");
 
-	describe("Event Repository", function() {
+	describe("Message Repository", function() {
 
 		let repo;
 
 		beforeEach(function() {
-			repo = new EventRepository();
+			repo = new MessageRepository();
 		});
 
-		it("replays no events when there aren't any", function() {
+		it("replays no messages when there aren't any", function() {
 			assert.deepEqual(repo.replay(), []);
 		});
 
-		it("stores and replays multiple events", function() {
+		it("stores and replays multiple messages", function() {
 			repo.store(new ServerClearScreenMessage());
 			repo.store(new ServerClearScreenMessage());
 			assert.deepEqual(repo.replay(), [
@@ -28,9 +28,9 @@
 		});
 
 		it("isolates its data from changes to returned results", function() {
-			const events = repo.replay();
-			events.push("change to our copy of repo's events");
-			assert.deepEqual(repo.replay(), [], "repo's events shouldn't change");
+			const messages = repo.replay();
+			messages.push("change to our copy of repo's messages");
+			assert.deepEqual(repo.replay(), [], "repo's messages shouldn't change");
 		});
 
 	});

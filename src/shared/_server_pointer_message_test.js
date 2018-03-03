@@ -9,13 +9,13 @@
 
 		it("converts bare objects to ServerPointerMessages and back", function() {
 			var bareObject = { id: "a", x: 1, y: 2 };
-			var eventObject = new ServerPointerMessage("a", 1, 2);
+			var messageObject = new ServerPointerMessage("a", 1, 2);
 
-			assert.deepEqual(ServerPointerMessage.fromPayload(bareObject), eventObject, "fromPayload()");
-			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
+			assert.deepEqual(ServerPointerMessage.fromPayload(bareObject), messageObject, "fromPayload()");
+			assert.deepEqual(messageObject.payload(), bareObject, "payload()");
 		});
 
-		it("instances know their network event name", function() {
+		it("instances know their network message name", function() {
 			assert.equal(new ServerPointerMessage(1, 2, 3, 4).name(), ServerPointerMessage.MESSAGE_NAME);
 		});
 

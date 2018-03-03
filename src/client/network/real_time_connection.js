@@ -61,8 +61,8 @@
 		failFast.unlessDefined(messageConstructor.MESSAGE_NAME, "messageConstructor.MESSAGE_NAME");
 
 		this._localEmitter.on(messageConstructor.MESSAGE_NAME, handler);
-		this._socket.on(messageConstructor.MESSAGE_NAME, function(eventData) {
-			return handler(messageConstructor.fromPayload(eventData));
+		this._socket.on(messageConstructor.MESSAGE_NAME, function(messageData) {
+			return handler(messageConstructor.fromPayload(messageData));
 		});
 	};
 

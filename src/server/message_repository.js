@@ -2,13 +2,13 @@
 (function() {
 	"use strict";
 
-	module.exports = class EventRepository {
+	module.exports = class MessageRepository {
 		constructor() {
 			this._data = [];
 		}
 
-		store(event) {
-			this._data.push(event);
+		store(message) {
+			this._data.push(message);
 		}
 
 		replay() {

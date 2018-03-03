@@ -8,7 +8,7 @@
 		this.y = y;
 	};
 
-	ServerPointerMessage.MESSAGE_NAME = "server_pointer_event";
+	ServerPointerMessage.MESSAGE_NAME = "server_pointer_message";
 	ServerPointerMessage.prototype.name = function() { return ServerPointerMessage.MESSAGE_NAME; };
 
 	ServerPointerMessage.fromPayload = function(obj) {

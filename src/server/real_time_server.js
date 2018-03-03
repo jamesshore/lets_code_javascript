@@ -11,7 +11,7 @@
 	const ClientDrawMessage = require("../shared/client_draw_message.js");
 	const ClientClearScreenMessage = require("../shared/client_clear_screen_message.js");
 
-	const SUPPORTED_EVENTS = [
+	const SUPPORTED_MESSAGES = [
 		ClientPointerMessage,
 		ClientRemovePointerMessage,
 		ClientDrawMessage,
@@ -143,9 +143,9 @@
 
 	function listenForClientMessages(self, ioServer) {
 		ioServer.on("connect", (socket) => {
-			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
-				socket.on(eventConstructor.MESSAGE_NAME, function(payload) {
-					self.triggerClientMessageEvent(socket.id, eventConstructor.fromPayload(payload));
+			SUPPORTED_MESSAGES.forEach(function(messageConstructor) {
+				socket.on(messageConstructor.MESSAGE_NAME, function(payload) {
+					self.triggerClientMessageEvent(socket.id, messageConstructor.fromPayload(payload));
 				});
 			});
 		});
