@@ -49,7 +49,7 @@
 			connection: connection,
 			endpoint: endpoints.WAIT_FOR_MESSAGE,
 			data: {
-				messageName: eventConstructor.EVENT_NAME
+				messageName: eventConstructor.MESSAGE_NAME
 			},
 			async: true
 		}, function(err, responseText) {

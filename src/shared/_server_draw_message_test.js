@@ -16,7 +16,7 @@
 		});
 
 		it("instances know their network event name", function() {
-			assert.equal(new ServerDrawMessage(1, 2, 3, 4).name(), ServerDrawMessage.EVENT_NAME);
+			assert.equal(new ServerDrawMessage(1, 2, 3, 4).name(), ServerDrawMessage.MESSAGE_NAME);
 		});
 
 	});

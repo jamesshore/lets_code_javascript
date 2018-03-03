@@ -24,7 +24,7 @@
 		});
 
 		it("instances know their network event name", function() {
-			assert.equal(new ClientClearScreenMessage().name(), ClientClearScreenMessage.EVENT_NAME);
+			assert.equal(new ClientClearScreenMessage().name(), ClientClearScreenMessage.MESSAGE_NAME);
 		});
 
 	});

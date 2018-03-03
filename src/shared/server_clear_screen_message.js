@@ -5,8 +5,8 @@
 	var ServerClearScreenMessage = module.exports = function() {
 	};
 
-	ServerClearScreenMessage.EVENT_NAME = "server_clear_screen_event";
-	ServerClearScreenMessage.prototype.name = function() { return ServerClearScreenMessage.EVENT_NAME; };
+	ServerClearScreenMessage.MESSAGE_NAME = "server_clear_screen_event";
+	ServerClearScreenMessage.prototype.name = function() { return ServerClearScreenMessage.MESSAGE_NAME; };
 
 	ServerClearScreenMessage.fromPayload = function(obj) {
 		return new ServerClearScreenMessage();

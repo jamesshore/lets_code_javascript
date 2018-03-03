@@ -99,8 +99,8 @@
 		var lastDrawEvent = {};
 
 		var TESTABLE_EVENTS = [
-			ClientDrawMessage.EVENT_NAME,
-			ClientPointerMessage.EVENT_NAME
+			ClientDrawMessage.MESSAGE_NAME,
+			ClientPointerMessage.MESSAGE_NAME
 		];
 
 		io.on("connection", function(socket) {

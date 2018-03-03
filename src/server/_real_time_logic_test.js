@@ -171,7 +171,7 @@
 				eventsReceived: 0
 			};
 			realTimeServer.on(RealTimeServer.SERVER_MESSAGE, ({ message }) => {
-				if (message.name() === ServerRemovePointerMessage.EVENT_NAME) counter.eventsReceived++;
+				if (message.name() === ServerRemovePointerMessage.MESSAGE_NAME) counter.eventsReceived++;
 			});
 			return counter;
 		}

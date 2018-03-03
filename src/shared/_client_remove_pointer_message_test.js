@@ -24,7 +24,7 @@
 		});
 
 		// it("instances know their network event name", function() {
-		// 	assert.equal(new ClientRemovePointerMessage().name(), ClientRemovePointerMessage.EVENT_NAME);
+		// 	assert.equal(new ClientRemovePointerMessage().name(), ClientRemovePointerMessage.MESSAGE_NAME);
 		// });
 
 	});

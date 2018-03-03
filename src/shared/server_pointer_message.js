@@ -8,8 +8,8 @@
 		this.y = y;
 	};
 
-	ServerPointerEvent.EVENT_NAME = "server_pointer_event";
-	ServerPointerEvent.prototype.name = function() { return ServerPointerEvent.EVENT_NAME; };
+	ServerPointerEvent.MESSAGE_NAME = "server_pointer_event";
+	ServerPointerEvent.prototype.name = function() { return ServerPointerEvent.MESSAGE_NAME; };
 
 	ServerPointerEvent.fromPayload = function(obj) {
 		return new ServerPointerEvent(obj.id, obj.x, obj.y);

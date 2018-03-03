@@ -7,8 +7,8 @@
 	var ClientRemovePointerMessage = module.exports = function() {
 	};
 
-	ClientRemovePointerMessage.EVENT_NAME = "client_remove_pointer_event";
-	ClientRemovePointerMessage.prototype.name = function() { return ClientRemovePointerMessage.EVENT_NAME; };
+	ClientRemovePointerMessage.MESSAGE_NAME = "client_remove_pointer_event";
+	ClientRemovePointerMessage.prototype.name = function() { return ClientRemovePointerMessage.MESSAGE_NAME; };
 
 	ClientRemovePointerMessage.fromPayload = function(obj) {
 		return new ClientRemovePointerMessage();

@@ -144,7 +144,7 @@
 	function listenForClientMessages(self, ioServer) {
 		ioServer.on("connect", (socket) => {
 			SUPPORTED_EVENTS.forEach(function(eventConstructor) {
-				socket.on(eventConstructor.EVENT_NAME, function(payload) {
+				socket.on(eventConstructor.MESSAGE_NAME, function(payload) {
 					self.triggerClientMessageEvent(socket.id, eventConstructor.fromPayload(payload));
 				});
 			});

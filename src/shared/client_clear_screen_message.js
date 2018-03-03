@@ -7,8 +7,8 @@
 	var ClientClearScreenMessage = module.exports = function() {
 	};
 
-	ClientClearScreenMessage.EVENT_NAME = "client_clear_screen_event";
-	ClientClearScreenMessage.prototype.name = function() { return ClientClearScreenMessage.EVENT_NAME; };
+	ClientClearScreenMessage.MESSAGE_NAME = "client_clear_screen_event";
+	ClientClearScreenMessage.prototype.name = function() { return ClientClearScreenMessage.MESSAGE_NAME; };
 
 	ClientClearScreenMessage.fromPayload = function(obj) {
 		return new ClientClearScreenMessage();

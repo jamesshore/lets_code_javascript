@@ -77,7 +77,7 @@
 			emitter.emit(clientEvent.name(), clientEvent.payload());
 
 			await new Promise((resolve, reject) => {
-				receiver.on(ServerPointerEvent.EVENT_NAME, function(data) {
+				receiver.on(ServerPointerEvent.MESSAGE_NAME, function(data) {
 					try {
 						assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
 						resolve();

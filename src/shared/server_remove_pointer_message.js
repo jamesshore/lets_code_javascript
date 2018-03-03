@@ -6,8 +6,8 @@
 		this.id = clientId;
 	};
 
-	ServerRemovePointerMessage.EVENT_NAME = "server_remove_pointer_event";
-	ServerRemovePointerMessage.prototype.name = function() { return ServerRemovePointerMessage.EVENT_NAME; };
+	ServerRemovePointerMessage.MESSAGE_NAME = "server_remove_pointer_event";
+	ServerRemovePointerMessage.prototype.name = function() { return ServerRemovePointerMessage.MESSAGE_NAME; };
 
 	ServerRemovePointerMessage.fromPayload = function(obj) {
 		return new ServerRemovePointerMessage(obj.id);

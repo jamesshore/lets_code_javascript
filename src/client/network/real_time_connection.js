@@ -58,10 +58,10 @@
 
 	Connection.prototype.onEvent = function(eventConstructor, handler) {
 		failFastUnlessConnectCalled(this);
-		failFast.unlessDefined(eventConstructor.EVENT_NAME, "eventConstructor.EVENT_NAME");
+		failFast.unlessDefined(eventConstructor.MESSAGE_NAME, "eventConstructor.MESSAGE_NAME");
 
-		this._localEmitter.on(eventConstructor.EVENT_NAME, handler);
-		this._socket.on(eventConstructor.EVENT_NAME, function(eventData) {
+		this._localEmitter.on(eventConstructor.MESSAGE_NAME, handler);
+		this._socket.on(eventConstructor.MESSAGE_NAME, function(eventData) {
 			return handler(eventConstructor.fromPayload(eventData));
 		});
 	};
