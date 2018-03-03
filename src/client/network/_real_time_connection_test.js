@@ -65,7 +65,7 @@
 			}
 		});
 
-		it("sends events to Socket.IO server", function(done) {
+		it("sends messages to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
 				var message = new ClientDrawMessage(1, 2, 3, 4);
 
@@ -78,18 +78,18 @@
 			});
 		});
 
-		it("gets most recent event sent to Socket.IO server, even if it hasn't be received yet", function(done) {
+		it("gets most recent message sent to Socket.IO server, even if it hasn't be received yet", function(done) {
 			var DRAW_MESSAGE = new ClientDrawMessage(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
-				assert.deepEqual(connection.getLastSentMessage(), null, "should not have event if nothing sent");
+				assert.deepEqual(connection.getLastSentMessage(), null, "should not have message if nothing sent");
 				connection.sendMessage(DRAW_MESSAGE);
-				assert.deepEqual(connection.getLastSentMessage(), DRAW_MESSAGE, "should return last sent event");
+				assert.deepEqual(connection.getLastSentMessage(), DRAW_MESSAGE, "should return last sent message");
 				connection.disconnect(done);
 			});
 		});
 
-		it("receives events from Socket.IO server", function(done) {
+		it("receives messages from Socket.IO server", function(done) {
 			var DRAW_MESSAGE = new ServerDrawMessage(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
@@ -102,7 +102,7 @@
 			});
 		});
 
-		it("can trigger events manually", function(done) {
+		it("can trigger messages manually", function(done) {
 			var DRAW_MESSAGE = new ServerDrawMessage(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
@@ -153,9 +153,9 @@
 			var expectedMessage = "Connection used before connect() called";
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
-			assert.throws(connection.sendMessage.bind(connection), expectedMessage, "sendEvent()");
-			assert.throws(connection.onMessage.bind(connection, ServerDrawMessage, callback), expectedMessage, "onEvent()");
-			assert.throws(connection.triggerMessage.bind(connection), expectedMessage, "triggerEvent()");
+			assert.throws(connection.sendMessage.bind(connection), expectedMessage, "sendMessage()");
+			assert.throws(connection.onMessage.bind(connection, ServerDrawMessage, callback), expectedMessage, "onMessage()");
+			assert.throws(connection.triggerMessage.bind(connection), expectedMessage, "triggerMessage()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
 

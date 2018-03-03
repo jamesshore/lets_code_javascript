@@ -7,8 +7,8 @@
 		IS_CONNECTED: "/is-connected",
 		WAIT_FOR_SERVER_DISCONNECT: "/wait-for-server-disconnect",
 
-		SEND_MESSAGE: "/send-event",
-		WAIT_FOR_MESSAGE: "/wait-for-event"
+		SEND_MESSAGE: "/send-message",
+		WAIT_FOR_MESSAGE: "/wait-for-message"
 	};
 
 	exports.PORT = "5030";

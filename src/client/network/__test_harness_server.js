@@ -115,7 +115,7 @@
 			var messageName = data.messageName;
 			failFast.unlessTrue(
 				TESTABLE_MESSAGES.indexOf(messageName) !== -1,
-				messageName + " not yet supported; add it to TESTABLE_EVENTS constant in test harness server."
+				messageName + " not yet supported; add it to TESTABLE_MESSAGES constant in test harness server."
 			);
 			var key = messageDataKey(socket.id, messageName);
 
