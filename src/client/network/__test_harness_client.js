@@ -44,12 +44,12 @@
 		});
 	};
 
-	exports.waitForMessage = function(connection, eventConstructor, callback) {
+	exports.waitForMessage = function(connection, messageConstructor, callback) {
 		ajax({
 			connection: connection,
 			endpoint: endpoints.WAIT_FOR_MESSAGE,
 			data: {
-				messageName: eventConstructor.MESSAGE_NAME
+				messageName: messageConstructor.MESSAGE_NAME
 			},
 			async: true
 		}, function(err, responseText) {
