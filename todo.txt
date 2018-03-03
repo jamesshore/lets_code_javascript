@@ -62,9 +62,13 @@ Engineering Tasks:
 - Test that client and server talk to each other correctly; not just that they can talk to Socket.IO, but specifically that they talk to each other
 
 To Do on current task:
+- BEFORE EPISODE: 
+	- Integrate
+	- Update dependencies
+	- Rename 'Event' to 'Message' across the board
+	- Add 'no-invalid-this' linter rule (thanks to Martin Grandrath)
 - Look for opportunities to improve Socket.IO abstraction API
 	- Unify event sending parameters as suggested by Martin Grandrath's in E582 comments - http://www.letscodejavascript.com/v3/comments/live/582#comment-3675682857
-	- Rename 'Event' to 'Message' across the board
 - Possible race condition? _real_time_server_test "sends message to all Socket.IO clients" failed intermittently
 - Clean up Server and its tests
 	- Remove RealTimeLogic.numberOfActiveConnections
