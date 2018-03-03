@@ -100,7 +100,7 @@
 
 	function processClientEvent(self, clientId, clientEvent) {
 		const id = clientId !== null ? clientId : "__SIMULATED__";
-		const serverEvent = clientEvent.toServerEvent(id);
+		const serverEvent = clientEvent.toServerMessage(id);
 		broadcastAndStoreEvent(self, clientId, serverEvent);
 	}
 

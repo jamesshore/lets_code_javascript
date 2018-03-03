@@ -18,7 +18,7 @@
 		return {};
 	};
 
-	ClientClearScreenMessage.prototype.toServerEvent = function() {
+	ClientClearScreenMessage.prototype.toServerMessage = function() {
 		return new ServerClearScreenMessage();
 	};
 

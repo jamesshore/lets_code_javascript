@@ -79,7 +79,7 @@
 			await new Promise((resolve, reject) => {
 				receiver.on(ServerPointerEvent.MESSAGE_NAME, function(data) {
 					try {
-						assert.deepEqual(data, clientEvent.toServerEvent(emitter.id).payload());
+						assert.deepEqual(data, clientEvent.toServerMessage(emitter.id).payload());
 						resolve();
 					}
 					catch(err) {

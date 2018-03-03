@@ -18,7 +18,7 @@
 		return {};
 	};
 
-	ClientRemovePointerMessage.prototype.toServerEvent = function(clientId) {
+	ClientRemovePointerMessage.prototype.toServerMessage = function(clientId) {
 		return new ServerRemovePointerMessage(clientId);
 	};
 

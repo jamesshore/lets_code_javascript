@@ -18,7 +18,7 @@
 
 		it("translates to ServerDrawMessage", function() {
 			var expected = new ServerDrawMessage(1, 2, 3, 4);
-			var actual = new ClientDrawMessage(1, 2, 3, 4).toServerEvent();
+			var actual = new ClientDrawMessage(1, 2, 3, 4).toServerMessage();
 
 			assert.deepEqual(actual, expected);
 		});

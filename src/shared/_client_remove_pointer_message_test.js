@@ -18,7 +18,7 @@
 
 		it("translates to ServerRemovePointerMessage", function() {
 			var expected = new ServerRemovePointerMessage("a");
-			var actual = new ClientRemovePointerMessage().toServerEvent("a");
+			var actual = new ClientRemovePointerMessage().toServerMessage("a");
 
 			assert.deepEqual(actual, expected);
 		});

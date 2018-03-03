@@ -18,7 +18,7 @@
 
 		it("translates to ServerPointerEvent", function() {
 			var expected = new ServerPointerEvent("a", 1, 2);
-			var actual = new ClientPointerMessage(1, 2).toServerEvent("a");
+			var actual = new ClientPointerMessage(1, 2).toServerMessage("a");
 
 			assert.deepEqual(actual, expected);
 		});

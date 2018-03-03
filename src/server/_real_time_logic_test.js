@@ -39,7 +39,7 @@
 			realTimeServer.connectNullClient(clientId);
 			realTimeServer.triggerClientMessageEvent(clientId, clientMessage);
 			assert.deepEqual(realTimeServer.getLastSentMessage(), {
-				message: clientMessage.toServerEvent(clientId),
+				message: clientMessage.toServerMessage(clientId),
 				clientId,
 				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE
 			});
@@ -66,9 +66,9 @@
 			realTimeServer.connectNullClient(connectingClient);
 
 			assert.deepEqual(serverMessages, [
-				{ message: message1.toServerEvent(), clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
-				{ message: message2.toServerEvent(), clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
-				{ message: message3.toServerEvent(), clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT }
+				{ message: message1.toServerMessage(), clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
+				{ message: message2.toServerMessage(), clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT },
+				{ message: message3.toServerMessage(), clientId: connectingClient, type: RealTimeServer.SEND_TYPE.ONE_CLIENT }
 			]);
 		});
 

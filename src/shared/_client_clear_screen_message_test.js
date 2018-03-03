@@ -18,7 +18,7 @@
 
 		it("translates to ServerClearScreenMessage", function() {
 			var expected = new ServerClearScreenMessage();
-			var actual = new ClientClearScreenMessage().toServerEvent();
+			var actual = new ClientClearScreenMessage().toServerMessage();
 
 			assert.deepEqual(actual, expected);
 		});

@@ -23,7 +23,7 @@
 		};
 	};
 
-	ClientPointerMessage.prototype.toServerEvent = function(id) {
+	ClientPointerMessage.prototype.toServerMessage = function(id) {
 		return new ServerPointerEvent(id, this._x, this._y);
 	};
 

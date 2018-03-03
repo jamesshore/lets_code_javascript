@@ -24,7 +24,7 @@
 		return this._data;
 	};
 
-	ClientDrawMessage.prototype.toServerEvent = function() {
+	ClientDrawMessage.prototype.toServerMessage = function() {
 		return new ServerDrawMessage(this._data.fromX, this._data.fromY, this._data.toX, this._data.toY);
 	};
 
