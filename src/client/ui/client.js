@@ -73,11 +73,11 @@
 
 	function sendPointerEvent(coordinate) {
 		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
-		network.sendEvent(new ClientPointerMessage(relativeOffset.x, relativeOffset.y));
+		network.sendMessage(new ClientPointerMessage(relativeOffset.x, relativeOffset.y));
 	}
 
 	function sendRemovePointerEvent() {
-		network.sendEvent(new ClientRemovePointerMessage());
+		network.sendMessage(new ClientRemovePointerMessage());
 	}
 
 	function displayNetworkPointer(serverEvent) {
@@ -107,7 +107,7 @@
 
 	function clearDrawingAreaAndSendEvent() {
 		clearDrawingArea();
-		network.sendEvent(new ClientClearScreenMessage());
+		network.sendMessage(new ClientClearScreenMessage());
 	}
 
 	function clearDrawingArea() {
@@ -188,7 +188,7 @@
 	function sendDrawEvent(start, end) {
 		var startOffset = start.toRelativeOffset(drawingArea);
 		var endOffset = end.toRelativeOffset(drawingArea);
-		network.sendEvent(new ClientDrawMessage(startOffset.x, startOffset.y, endOffset.x, endOffset.y));
+		network.sendMessage(new ClientDrawMessage(startOffset.x, startOffset.y, endOffset.x, endOffset.y));
 	}
 
 }());

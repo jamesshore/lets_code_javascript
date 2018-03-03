@@ -69,9 +69,9 @@
 			connection.connect(harness.PORT, function() {
 				var event = new ClientDrawMessage(1, 2, 3, 4);
 
-				connection.sendEvent(event);
+				connection.sendMessage(event);
 
-				harness.waitForEvent(connection, ClientDrawMessage, function(error, eventData) {
+				harness.waitForMessage(connection, ClientDrawMessage, function(error, eventData) {
 					assert.deepEqual(eventData, event.payload());
 					connection.disconnect(done);
 				});
@@ -83,7 +83,7 @@
 
 			connection.connect(harness.PORT, function() {
 				assert.deepEqual(connection.getLastSentEvent(), null, "should not have event if nothing sent");
-				connection.sendEvent(DRAW_EVENT);
+				connection.sendMessage(DRAW_EVENT);
 				assert.deepEqual(connection.getLastSentEvent(), DRAW_EVENT, "should return last sent event");
 				connection.disconnect(done);
 			});
@@ -98,7 +98,7 @@
 					assert.deepEqual(event, DRAW_EVENT);
 					connection.disconnect(done);
 				});
-				harness.sendEvent(connection, DRAW_EVENT, function() {});
+				harness.sendMessage(connection, DRAW_EVENT, function() {});
 			});
 		});
 
@@ -153,7 +153,7 @@
 			var expectedMessage = "Connection used before connect() called";
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
-			assert.throws(connection.sendEvent.bind(connection), expectedMessage, "sendEvent()");
+			assert.throws(connection.sendMessage.bind(connection), expectedMessage, "sendEvent()");
 			assert.throws(connection.onEvent.bind(connection, ServerDrawMessage, callback), expectedMessage, "onEvent()");
 			assert.throws(connection.triggerEvent.bind(connection), expectedMessage, "triggerEvent()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");

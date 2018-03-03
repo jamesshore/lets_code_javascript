@@ -45,7 +45,7 @@
 		this._socket.close();
 	};
 
-	Connection.prototype.sendEvent = function(event) {
+	Connection.prototype.sendMessage = function(event) {
 		failFastUnlessConnectCalled(this);
 
 		this._lastSentEvent = event;

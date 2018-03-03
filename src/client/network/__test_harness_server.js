@@ -24,8 +24,8 @@
 		var endpointMap = {};
 		endpointMap[endpoints.IS_CONNECTED] = setupIsConnected(io);
 		endpointMap[endpoints.WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
-		endpointMap[endpoints.SEND_EVENT] = setupSendEvent();
-		endpointMap[endpoints.WAIT_FOR_EVENT] = setupWaitForEvent(io);
+		endpointMap[endpoints.SEND_MESSAGE] = setupSendEvent();
+		endpointMap[endpoints.WAIT_FOR_MESSAGE] = setupWaitForEvent(io);
 
 		return stopFn(httpServer, io);
 
@@ -90,7 +90,7 @@
 
 	function setupSendEvent() {
 		return function sendEventEndpoint(socket, data, request, response) {
-			socket.emit(data.eventName, data.eventData);
+			socket.emit(data.messageName, data.messageData);
 			return response.end("ok");
 		};
 	}
@@ -112,7 +112,7 @@
 		});
 
 		return function waitForEventEndpoint(socket, data, request, response) {
-			var eventName = data.eventName;
+			var eventName = data.messageName;
 			failFast.unlessTrue(
 				TESTABLE_EVENTS.indexOf(eventName) !== -1,
 				eventName + " not yet supported; add it to TESTABLE_EVENTS constant in test harness server."
