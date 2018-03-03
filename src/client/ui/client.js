@@ -15,7 +15,7 @@
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientRemovePointerEvent = require("../../shared/client_remove_pointer_event.js");
 	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
-	var ClientClearScreenEvent = require("../../shared/client_clear_screen_event.js");
+	var ClientClearScreenMessage = require("../../shared/client_clear_screen_message.js");
 	var ServerClearScreenEvent = require("../../shared/server_clear_screen_event.js");
 
 	var svgCanvas = null;
@@ -107,7 +107,7 @@
 
 	function clearDrawingAreaAndSendEvent() {
 		clearDrawingArea();
-		network.sendEvent(new ClientClearScreenEvent());
+		network.sendEvent(new ClientClearScreenMessage());
 	}
 
 	function clearDrawingArea() {

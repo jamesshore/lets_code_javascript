@@ -9,13 +9,13 @@
 	const ClientPointerEvent = require("../shared/client_pointer_event.js");
 	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 	const ClientDrawEvent = require("../shared/client_draw_event.js");
-	const ClientClearScreenEvent = require("../shared/client_clear_screen_event.js");
+	const ClientClearScreenMessage = require("../shared/client_clear_screen_message.js");
 
 	const SUPPORTED_EVENTS = [
 		ClientPointerEvent,
 		ClientRemovePointerEvent,
 		ClientDrawEvent,
-		ClientClearScreenEvent
+		ClientClearScreenMessage
 	];
 
 	const RealTimeServer = module.exports = class RealTimeServer extends EventEmitter {

@@ -3,28 +3,28 @@
 	"use strict";
 
 	var assert = require("_assert");
-	var ClientClearScreenEvent = require("./client_clear_screen_event.js");
+	var ClientClearScreenMessage = require("./client_clear_screen_message.js");
 	var ServerClearScreenEvent = require("./server_clear_screen_event.js");
 
-	describe("SHARED: ClientClearScreenEvent", function() {
+	describe("SHARED: ClientClearScreenMessage", function() {
 
-		it("converts serializable objects to ClientClearScreenEvents and back", function() {
+		it("converts serializable objects to ClientClearScreenMessages and back", function() {
 			var bareObject = {};
-			var eventObject = new ClientClearScreenEvent();
+			var eventObject = new ClientClearScreenMessage();
 
-			assert.deepEqual(ClientClearScreenEvent.fromPayload(bareObject), eventObject, "fromPayload()");
+			assert.deepEqual(ClientClearScreenMessage.fromPayload(bareObject), eventObject, "fromPayload()");
 			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerClearScreenEvent", function() {
 			var expected = new ServerClearScreenEvent();
-			var actual = new ClientClearScreenEvent().toServerEvent();
+			var actual = new ClientClearScreenMessage().toServerEvent();
 
 			assert.deepEqual(actual, expected);
 		});
 
 		it("instances know their network event name", function() {
-			assert.equal(new ClientClearScreenEvent().name(), ClientClearScreenEvent.EVENT_NAME);
+			assert.equal(new ClientClearScreenMessage().name(), ClientClearScreenMessage.EVENT_NAME);
 		});
 
 	});
