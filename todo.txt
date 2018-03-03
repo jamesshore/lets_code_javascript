@@ -63,8 +63,6 @@ Engineering Tasks:
 
 To Do on current task:
 - BEFORE EPISODE: 
-	- Integrate
-	- Update dependencies
 	- Rename 'Event' to 'Message' across the board
 	- Add 'no-invalid-this' linter rule (thanks to Martin Grandrath)
 - Look for opportunities to improve Socket.IO abstraction API
