@@ -6,6 +6,6 @@ function ReadStream() {
 exports.ReadStream = ReadStream;
 
 function WriteStream() {
-  throw new Error('tty.ReadStream is not implemented');
+  throw new Error('tty.WriteStream is not implemented');
 }
 exports.WriteStream = WriteStream;

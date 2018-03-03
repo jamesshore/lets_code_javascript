@@ -26,7 +26,7 @@ if (err) {
 }
 ```
 
-***
+---
 
 ```
 $ node check.js
@@ -55,9 +55,8 @@ stringified.
 
 If there are no syntax errors in `src`, return `undefined`.
 
-Optionally set:
-
-* `opts.ecmaVersion` - default: 8
+Options will be passed through to [acorn-node](https://github.com/browserify/acorn-node).
+acorn-node defaults to options that match the most recent Node versions.
 
 ## err.toString()
 

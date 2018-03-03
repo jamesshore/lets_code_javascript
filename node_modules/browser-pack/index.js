@@ -2,6 +2,7 @@ var JSONStream = require('JSONStream');
 var defined = require('defined');
 var through = require('through2');
 var umd = require('umd');
+var Buffer = require('safe-buffer').Buffer;
 
 var fs = require('fs');
 var path = require('path');
@@ -44,13 +45,13 @@ module.exports = function (opts) {
     function write (row, enc, next) {
         if (first && opts.standalone) {
             var pre = umd.prelude(opts.standalone).trim();
-            stream.push(new Buffer(pre + 'return '));
+            stream.push(Buffer.from(pre + 'return ', 'utf8'));
         }
         else if (first && stream.hasExports) {
             var pre = opts.externalRequireName || 'require';
-            stream.push(new Buffer(pre + '='));
+            stream.push(Buffer.from(pre + '=', 'utf8'));
         }
-        if (first) stream.push(new Buffer(prelude + '({'));
+        if (first) stream.push(Buffer.from(prelude + '({', 'utf8'));
         
         if (row.sourceFile && !row.nomap) {
             if (!sourcemap) {
@@ -81,7 +82,7 @@ module.exports = function (opts) {
             ']'
         ].join('');
 
-        stream.push(new Buffer(wrappedSource));
+        stream.push(Buffer.from(wrappedSource, 'utf8'));
         lineno += newlinesIn(wrappedSource);
         
         first = false;
@@ -93,15 +94,18 @@ module.exports = function (opts) {
     }
     
     function end () {
-        if (first) stream.push(new Buffer(prelude + '({'));
+        if (first) stream.push(Buffer.from(prelude + '({', 'utf8'));
         entries = entries.filter(function (x) { return x !== undefined });
         
-        stream.push(new Buffer('},{},' + JSON.stringify(entries) + ')'));
+        stream.push(
+            Buffer.from('},{},' + JSON.stringify(entries) + ')', 'utf8')
+        );
 
         if (opts.standalone && !first) {
-            stream.push(new Buffer(
+            stream.push(Buffer.from(
                 '(' + JSON.stringify(stream.standaloneModule) + ')'
-                + umd.postlude(opts.standalone)
+                    + umd.postlude(opts.standalone),
+                'utf8'
             ));
         }
         
@@ -112,9 +116,11 @@ module.exports = function (opts) {
                     /^\/\/#/, function () { return opts.sourceMapPrefix }
                 )
             }
-            stream.push(new Buffer('\n' + comment + '\n'));
+            stream.push(Buffer.from('\n' + comment + '\n', 'utf8'));
         }
-        if (!sourcemap && !opts.standalone) stream.push(new Buffer(';\n'));
+        if (!sourcemap && !opts.standalone) {
+            stream.push(Buffer.from(';\n', 'utf8'));
+        }
 
         stream.push(null);
     }

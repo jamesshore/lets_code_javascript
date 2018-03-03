@@ -12,11 +12,11 @@ var protocolRx = /^[a-z]+:\/\//;
 /**
  * Rebases a relative path in 'sourceFile' to be relative
  * to the path where 'sourceFile' is located.
- * 
+ *
  * This is necessary before adding relative paths to the
  * new combined map to ensure all paths are relative to their
  * original source.
- * 
+ *
  * The 'sourceRoot' from the original source map is joined
  * as well to ensure the complete path.
  *
@@ -33,6 +33,8 @@ var rebaseRelativePath = memoize(function(sourceFile, relativeRoot, relativePath
 
   // join relative path to root (e.g. 'src/' + 'file.js')
   var relativeRootedPath = relativeRoot ? path.join(relativeRoot, relativePath) : relativePath;
+  relativeRootedPath = relativeRootedPath.replace(/\\/g, '/');
+  sourceFile = sourceFile.replace(/\\/g, '/');
 
   if (sourceFile === relativeRootedPath ||    // same path,
       pathIsAbsolute(relativeRootedPath) ||   // absolute path, nor
@@ -41,7 +43,7 @@ var rebaseRelativePath = memoize(function(sourceFile, relativeRoot, relativePath
   }
 
   // make relative to source file
-  return path.join(path.dirname(sourceFile), relativeRootedPath);
+  return path.join(path.dirname(sourceFile), relativeRootedPath).replace(/\\/g, '/');
 }, function(a, b, c) {
   return a + '::' + b + '::' + c;
 });
