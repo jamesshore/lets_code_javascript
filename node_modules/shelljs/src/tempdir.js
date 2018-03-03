@@ -11,7 +11,7 @@ common.register('tempdir', _tempDir, {
 function writeableDir(dir) {
   if (!dir || !fs.existsSync(dir)) return false;
 
-  if (!fs.statSync(dir).isDirectory()) return false;
+  if (!common.statFollowLinks(dir).isDirectory()) return false;
 
   var testFile = dir + '/' + common.randomFileName();
   try {
@@ -40,8 +40,7 @@ function _tempDir() {
   var state = common.state;
   if (state.tempDir) return state.tempDir; // from cache
 
-  state.tempDir = writeableDir(os.tmpdir && os.tmpdir()) || // node 0.10+
-                  writeableDir(os.tmpDir && os.tmpDir()) || // node 0.8+
+  state.tempDir = writeableDir(os.tmpdir()) ||
                   writeableDir(process.env.TMPDIR) ||
                   writeableDir(process.env.TEMP) ||
                   writeableDir(process.env.TMP) ||

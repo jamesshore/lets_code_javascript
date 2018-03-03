@@ -45,17 +45,17 @@ function _uniq(options, input, output) {
 
     if (!fs.existsSync(input)) {
       common.error(input + ': No such file or directory');
-    } else if (fs.statSync(input).isDirectory()) {
+    } else if (common.statFollowLinks(input).isDirectory()) {
       common.error("error reading '" + input + "'");
     }
   }
-  if (output && fs.existsSync(output) && fs.statSync(output).isDirectory()) {
+  if (output && fs.existsSync(output) && common.statFollowLinks(output).isDirectory()) {
     common.error(output + ': Is a directory');
   }
 
   var lines = (input ? fs.readFileSync(input, 'utf8') : pipe).
               trimRight().
-              split(/\r*\n/);
+              split('\n');
 
   var compare = function (a, b) {
     return options.ignoreCase ?

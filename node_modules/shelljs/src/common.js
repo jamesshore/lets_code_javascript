@@ -9,22 +9,7 @@ var shell = require('..');
 
 var shellMethods = Object.create(shell);
 
-// objectAssign(target_obj, source_obj1 [, source_obj2 ...])
-// "Ponyfill" for Object.assign
-//    objectAssign({A:1}, {b:2}, {c:3}) returns {A:1, b:2, c:3}
-var objectAssign = typeof Object.assign === 'function' ?
-  Object.assign :
-  function objectAssign(target) {
-    var sources = [].slice.call(arguments, 1);
-    sources.forEach(function (source) {
-      Object.keys(source).forEach(function (key) {
-        target[key] = source[key];
-      });
-    });
-
-    return target;
-  };
-exports.extend = objectAssign;
+exports.extend = Object.assign;
 
 // Check if we're running under electron
 var isElectron = Boolean(process.versions.electron);
@@ -43,7 +28,7 @@ var DEFAULT_CONFIG = {
 
 var config = {
   reset: function () {
-    objectAssign(this, DEFAULT_CONFIG);
+    Object.assign(this, DEFAULT_CONFIG);
     if (!isElectron) {
       this.execPath = process.execPath;
     }
@@ -66,9 +51,6 @@ var state = {
 exports.state = state;
 
 delete process.env.OLDPWD; // initially, there's no previous directory
-
-// This is populated by calls to commonl.wrap()
-var pipeMethods = [];
 
 // Reliably test if something is any sort of javascript object
 function isObject(a) {
@@ -116,7 +98,7 @@ function error(msg, _code, options) {
   } else if (typeof _code !== 'number') { // only 'msg'
     options = {};
   }
-  options = objectAssign({}, DEFAULT_OPTIONS, options);
+  options = Object.assign({}, DEFAULT_OPTIONS, options);
 
   if (!state.errorCode) state.errorCode = options.code;
 
@@ -170,23 +152,12 @@ function ShellString(stdout, stderr, code) {
 
 exports.ShellString = ShellString;
 
-// Return the home directory in a platform-agnostic way, with consideration for
-// older versions of node
-function getUserHome() {
-  var result;
-  if (os.homedir) {
-    result = os.homedir(); // node 3+
-  } else {
-    result = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
-  }
-  return result;
-}
-exports.getUserHome = getUserHome;
-
 // Returns {'alice': true, 'bob': false} when passed a string and dictionary as follows:
 //   parseOptions('-a', {'a':'alice', 'b':'bob'});
 // Returns {'reference': 'string-value', 'bob': false} when passed two dictionaries of the form:
 //   parseOptions({'-r': 'string-value'}, {'r':'reference', 'b':'bob'});
+// Throws an error when passed a string that does not start with '-':
+//   parseOptions('a', {'a':'alice'}); // throws
 function parseOptions(opt, map, errorOptions) {
   // Validate input
   if (typeof opt !== 'string' && !isObject(opt)) {
@@ -195,6 +166,11 @@ function parseOptions(opt, map, errorOptions) {
     throw new Error('parseOptions() internal error: map must be an object');
   } else if (errorOptions && !isObject(errorOptions)) {
     throw new Error('parseOptions() internal error: errorOptions must be object');
+  }
+
+  if (opt === '--') {
+    // This means there are no options.
+    return {};
   }
 
   // All options are false by default
@@ -210,7 +186,7 @@ function parseOptions(opt, map, errorOptions) {
 
   if (typeof opt === 'string') {
     if (opt[0] !== '-') {
-      error("Options string must start with a '-'", errorOptions || {});
+      throw new Error("Options string must start with a '-'");
     }
 
     // e.g. chars = ['R', 'f']
@@ -303,6 +279,18 @@ function unlinkSync(file) {
 }
 exports.unlinkSync = unlinkSync;
 
+// wrappers around common.statFollowLinks and common.statNoFollowLinks that clarify intent
+// and improve readability
+function statFollowLinks() {
+  return fs.statSync.apply(fs, arguments);
+}
+exports.statFollowLinks = statFollowLinks;
+
+function statNoFollowLinks() {
+  return fs.lstatSync.apply(fs, arguments);
+}
+exports.statNoFollowLinks = statNoFollowLinks;
+
 // e.g. 'shelljs_a5f185d0443ca...'
 function randomFileName() {
   function randomHash(count) {
@@ -324,9 +312,6 @@ exports.randomFileName = randomFileName;
 // command-logging, and other nice things
 function wrap(cmd, fn, options) {
   options = options || {};
-  if (options.canReceivePipe) {
-    pipeMethods.push(cmd);
-  }
   return function () {
     var retValue = null;
 
@@ -376,7 +361,7 @@ function wrap(cmd, fn, options) {
         });
 
         // Expand the '~' if appropriate
-        var homeDir = getUserHome();
+        var homeDir = os.homedir();
         args = args.map(function (arg) {
           if (typeof arg === 'string' && arg.slice(0, 2) === '~/' || arg === '~') {
             return arg.replace(/^~/, homeDir);
@@ -410,9 +395,8 @@ function wrap(cmd, fn, options) {
       /* istanbul ignore next */
       if (!state.error) {
         // If state.error hasn't been set it's an error thrown by Node, not us - probably a bug...
-        console.error('ShellJS: internal error');
-        console.error(e.stack || e);
-        process.exit(1);
+        e.name = 'ShellJSInternalError';
+        throw e;
       }
       if (config.fatal) throw e;
     }
@@ -438,22 +422,36 @@ exports.readFromPipe = _readFromPipe;
 var DEFAULT_WRAP_OPTIONS = {
   allowGlobbing: true,
   canReceivePipe: false,
-  cmdOptions: false,
+  cmdOptions: null,
   globStart: 1,
   pipeOnly: false,
-  unix: true,
   wrapOutput: true,
-  overWrite: false,
+  unix: true,
 };
+
+// This is populated during plugin registration
+var pipeMethods = [];
 
 // Register a new ShellJS command
 function _register(name, implementation, wrapOptions) {
   wrapOptions = wrapOptions || {};
-  // If an option isn't specified, use the default
-  wrapOptions = objectAssign({}, DEFAULT_WRAP_OPTIONS, wrapOptions);
 
-  if (shell[name] && !wrapOptions.overWrite) {
-    throw new Error('unable to overwrite `' + name + '` command');
+  // Validate options
+  Object.keys(wrapOptions).forEach(function (option) {
+    if (!DEFAULT_WRAP_OPTIONS.hasOwnProperty(option)) {
+      throw new Error("Unknown option '" + option + "'");
+    }
+    if (typeof wrapOptions[option] !== typeof DEFAULT_WRAP_OPTIONS[option]) {
+      throw new TypeError("Unsupported type '" + typeof wrapOptions[option] +
+        "' for option '" + option + "'");
+    }
+  });
+
+  // If an option isn't specified, use the default
+  wrapOptions = Object.assign({}, DEFAULT_WRAP_OPTIONS, wrapOptions);
+
+  if (shell[name]) {
+    throw new Error('Command `' + name + '` already exists');
   }
 
   if (wrapOptions.pipeOnly) {
@@ -461,6 +459,10 @@ function _register(name, implementation, wrapOptions) {
     shellMethods[name] = wrap(name, implementation, wrapOptions);
   } else {
     shell[name] = wrap(name, implementation, wrapOptions);
+  }
+
+  if (wrapOptions.canReceivePipe) {
+    pipeMethods.push(name);
   }
 }
 exports.register = _register;
