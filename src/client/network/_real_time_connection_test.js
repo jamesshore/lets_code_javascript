@@ -67,52 +67,52 @@
 
 		it("sends events to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
-				var event = new ClientDrawMessage(1, 2, 3, 4);
+				var message = new ClientDrawMessage(1, 2, 3, 4);
 
-				connection.sendMessage(event);
+				connection.sendMessage(message);
 
-				harness.waitForMessage(connection, ClientDrawMessage, function(error, eventData) {
-					assert.deepEqual(eventData, event.payload());
+				harness.waitForMessage(connection, ClientDrawMessage, function(error, messageData) {
+					assert.deepEqual(messageData, message.payload());
 					connection.disconnect(done);
 				});
 			});
 		});
 
 		it("gets most recent event sent to Socket.IO server, even if it hasn't be received yet", function(done) {
-			var DRAW_EVENT = new ClientDrawMessage(1, 2, 3, 4);
+			var DRAW_MESSAGE = new ClientDrawMessage(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
-				assert.deepEqual(connection.getLastSentEvent(), null, "should not have event if nothing sent");
-				connection.sendMessage(DRAW_EVENT);
-				assert.deepEqual(connection.getLastSentEvent(), DRAW_EVENT, "should return last sent event");
+				assert.deepEqual(connection.getLastSentMessage(), null, "should not have event if nothing sent");
+				connection.sendMessage(DRAW_MESSAGE);
+				assert.deepEqual(connection.getLastSentMessage(), DRAW_MESSAGE, "should return last sent event");
 				connection.disconnect(done);
 			});
 		});
 
 		it("receives events from Socket.IO server", function(done) {
-			var DRAW_EVENT = new ServerDrawMessage(1, 2, 3, 4);
+			var DRAW_MESSAGE = new ServerDrawMessage(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
 
-				connection.onEvent(ServerDrawMessage, function(event) {
-					assert.deepEqual(event, DRAW_EVENT);
+				connection.onMessage(ServerDrawMessage, function(message) {
+					assert.deepEqual(message, DRAW_MESSAGE);
 					connection.disconnect(done);
 				});
-				harness.sendMessage(connection, DRAW_EVENT, function() {});
+				harness.sendMessage(connection, DRAW_MESSAGE, function() {});
 			});
 		});
 
 		it("can trigger events manually", function(done) {
-			var DRAW_EVENT = new ServerDrawMessage(1, 2, 3, 4);
+			var DRAW_MESSAGE = new ServerDrawMessage(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
-				connection.onEvent(ServerDrawMessage, function(event) {
-					assert.deepEqual(event, DRAW_EVENT);
+				connection.onMessage(ServerDrawMessage, function(message) {
+					assert.deepEqual(message, DRAW_MESSAGE);
 					connection.disconnect(done);
 				});
 
-				connection.triggerEvent(DRAW_EVENT);
-				// if triggerEvent doesn't do anything, the test will time out
+				connection.triggerMessage(DRAW_MESSAGE);
+				// if triggerMessage doesn't do anything, the test will time out
 			});
 		});
 
@@ -154,8 +154,8 @@
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendMessage.bind(connection), expectedMessage, "sendEvent()");
-			assert.throws(connection.onEvent.bind(connection, ServerDrawMessage, callback), expectedMessage, "onEvent()");
-			assert.throws(connection.triggerEvent.bind(connection), expectedMessage, "triggerEvent()");
+			assert.throws(connection.onMessage.bind(connection, ServerDrawMessage, callback), expectedMessage, "onEvent()");
+			assert.throws(connection.triggerMessage.bind(connection), expectedMessage, "triggerEvent()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
 

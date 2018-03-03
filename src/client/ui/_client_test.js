@@ -337,23 +337,23 @@
 
 				it("sends draw event when line segment is drawn", function() {
 					dragMouse(10, 20, 40, 90);
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawMessage(10, 20, 40, 90));
+					assert.deepEqual(nullConnection.getLastSentMessage(), new ClientDrawMessage(10, 20, 40, 90));
 				});
 
 				it("sends draw event when dot is drawn", function() {
 					clickMouse(33, 99);
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawMessage(33, 99, 33, 99));
+					assert.deepEqual(nullConnection.getLastSentMessage(), new ClientDrawMessage(33, 99, 33, 99));
 				});
 
 				it("draws line segment when draw event is received", function() {
-					nullConnection.triggerEvent(new ServerDrawMessage(4, 90, 77, 2));
+					nullConnection.triggerMessage(new ServerDrawMessage(4, 90, 77, 2));
 					assert.deepEqual(lines(), [
 						[ 4, 90, 77, 2 ]
 					]);
 				});
 
 				it("draws dot when draw event is received", function() {
-					nullConnection.triggerEvent(new ServerDrawMessage(5, 10, 5, 10));
+					nullConnection.triggerMessage(new ServerDrawMessage(5, 10, 5, 10));
 					assert.deepEqual(lines(), [
 						[ 5, 10 ]
 					]);
@@ -365,12 +365,12 @@
 
 				it("sends clear screen event when clear button is clicked", function() {
 					clearButton.triggerMouseClick();
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientClearScreenMessage());
+					assert.deepEqual(nullConnection.getLastSentMessage(), new ClientClearScreenMessage());
 				});
 
 				it("clears screen when clear event is received", function() {
 					dragMouse(10, 20, 40, 90);
-					nullConnection.triggerEvent(new ServerClearScreenMessage());
+					nullConnection.triggerMessage(new ServerClearScreenMessage());
 					assert.deepEqual(lines(), []);
 				});
 
@@ -380,26 +380,26 @@
 
 				it("sends pointer location whenever mouse moves", function() {
 					drawingArea.triggerMouseMove(50, 60);
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerMessage(50, 60));
+					assert.deepEqual(nullConnection.getLastSentMessage(), new ClientPointerMessage(50, 60));
 				});
 
 				it("sends pointer location even when mouse moves outside drawing area", function() {
 					documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerMessage(20, 40));
+					assert.deepEqual(nullConnection.getLastSentMessage(), new ClientPointerMessage(20, 40));
 				});
 
 				it("does send pointer location when touch events occur within drawing area", function() {
 					if (!browser.supportsTouchEvents()) return;
 
 					drawingArea.triggerSingleTouchMove(30, 40);
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerMessage(30, 40));
+					assert.deepEqual(nullConnection.getLastSentMessage(), new ClientPointerMessage(30, 40));
 				});
 
 				it("doesn't send pointer location when touch events occur outside of drawing area", function() {
 					if (!browser.supportsTouchEvents()) return;
 
 					documentBody.triggerSingleTouchMove();
-					assert.deepEqual(nullConnection.getLastSentEvent(), null);
+					assert.deepEqual(nullConnection.getLastSentMessage(), null);
 				});
 
 				it("doesn't create pointer element on startup", function() {
@@ -408,14 +408,14 @@
 
 				it("sends 'remove pointer' event when mouse leaves window", function () {
 					documentBody.triggerMouseLeave();
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerMessage());
+					assert.deepEqual(nullConnection.getLastSentMessage(), new ClientRemovePointerMessage());
 				});
 
 				it("sends 'remove pointer' event when touch stops", function() {
 					if (!browser.supportsTouchEvents()) return;
 
 					drawingArea.triggerTouchEnd();
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerMessage());
+					assert.deepEqual(nullConnection.getLastSentMessage(), new ClientRemovePointerMessage());
 				});
 
 				it("only sends 'remove pointer' event in response to touches that end inside the drawing area", function() {
@@ -425,59 +425,59 @@
 					if (!browser.supportsTouchEvents()) return;
 
 					documentBody.triggerTouchEnd();
-					assert.deepEqual(nullConnection.getLastSentEvent(), null);
+					assert.deepEqual(nullConnection.getLastSentMessage(), null);
 				});
 
 				it("creates pointer element when a pointer event is received", function() {
-					nullConnection.triggerEvent(new ServerPointerEvent(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerEvent(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1);
 				});
 
 				it("doesn't create pointer element when a pointer event containing a previous client ID is received", function() {
-					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
-					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1);
 				});
 
 				it("creates a pointer element for each unique client ID", function() {
-					nullConnection.triggerEvent(new ServerPointerEvent("unique_id_1", IRRELEVANT_X, IRRELEVANT_Y));
-					nullConnection.triggerEvent(new ServerPointerEvent("unique_id_2", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerEvent("unique_id_1", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerEvent("unique_id_2", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 2);
 				});
 
 				it("positions new pointer element according to event's position", function() {
-					nullConnection.triggerEvent(new ServerPointerEvent(IRRELEVANT_ID, 10, 20));
+					nullConnection.triggerMessage(new ServerPointerEvent(IRRELEVANT_ID, 10, 20));
 					var pointerElement = getPointerDivs()[0];
 					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
 				});
 
 				it("moves existing pointer element when a new pointer event is received", function() {
-					nullConnection.triggerEvent(new ServerPointerEvent("my_id", 10, 20));
-					nullConnection.triggerEvent(new ServerPointerEvent("my_id", 30, 40));
+					nullConnection.triggerMessage(new ServerPointerEvent("my_id", 10, 20));
+					nullConnection.triggerMessage(new ServerPointerEvent("my_id", 30, 40));
 
 					var pointerElement = getPointerDivs()[0];
 					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));
 				});
 
 				it("removes existing pointer element when 'remove' event is received", function() {
-					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1, "setup should have created pointer element");
 
-					nullConnection.triggerEvent(new ServerRemovePointerMessage("my_id"));
+					nullConnection.triggerMessage(new ServerRemovePointerMessage("my_id"));
 					assert.equal(getPointerDivs().length, 0, "should have removed pointer element");
 				});
 
 				it("pointer reappears after being removed if another pointer event is received", function() {
-					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
-					nullConnection.triggerEvent(new ServerRemovePointerMessage("my_id"));
+					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerRemovePointerMessage("my_id"));
 					assert.equal(getPointerDivs().length, 0, "setup have removed pointer element");
 
-					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1, "pointer element should be re-created");
 				});
 
 				it("ignores 'remove' events when pointer element doesn't exist", function() {
-					nullConnection.triggerEvent(new ServerRemovePointerMessage("non_existant_id"));
+					nullConnection.triggerMessage(new ServerRemovePointerMessage("non_existant_id"));
 					assert.equal(getPointerDivs().length, 0, "still no pointer elements");
 				});
 

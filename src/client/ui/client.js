@@ -67,8 +67,8 @@
 		documentBody.onMouseLeave(sendRemovePointerEvent);
 		drawingArea.onSingleTouchMove(sendPointerEvent);
 		drawingArea.onTouchEnd(sendRemovePointerEvent);
-		network.onEvent(ServerPointerEvent, displayNetworkPointer);
-		network.onEvent(ServerRemovePointerMessage, removeNetworkPointer);
+		network.onMessage(ServerPointerEvent, displayNetworkPointer);
+		network.onMessage(ServerRemovePointerMessage, removeNetworkPointer);
 	}
 
 	function sendPointerEvent(coordinate) {
@@ -102,7 +102,7 @@
 
 	function handleClearScreenAction() {
 		clearScreenButton.onMouseClick(clearDrawingAreaAndSendEvent);
-		network.onEvent(ServerClearScreenMessage, clearDrawingArea);
+		network.onMessage(ServerClearScreenMessage, clearDrawingArea);
 	}
 
 	function clearDrawingAreaAndSendEvent() {
@@ -125,7 +125,7 @@
 	}
 
 	function handleNetworkDrawing() {
-		network.onEvent(ServerDrawMessage, function(event) {
+		network.onMessage(ServerDrawMessage, function(event) {
 			var from = HtmlCoordinate.fromRelativeOffset(drawingArea, event.from.x, event.from.y);
 			var to = HtmlCoordinate.fromRelativeOffset(drawingArea, event.to.x, event.to.y);
 			drawLineSegment(from, to);

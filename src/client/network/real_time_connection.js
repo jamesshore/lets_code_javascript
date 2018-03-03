@@ -18,7 +18,7 @@
 		self._io = ioToInject;
 		self._connectCalled = false;
 		self._socket = null;
-		self._lastSentEvent = null;
+		self._lastSentMessage = null;
 		self._localEmitter = new EventEmitter();
 		return self;
 	}
@@ -45,31 +45,31 @@
 		this._socket.close();
 	};
 
-	Connection.prototype.sendMessage = function(event) {
+	Connection.prototype.sendMessage = function(message) {
 		failFastUnlessConnectCalled(this);
 
-		this._lastSentEvent = event;
-		this._socket.emit(event.name(), event.payload());
+		this._lastSentMessage = message;
+		this._socket.emit(message.name(), message.payload());
 	};
 
-	Connection.prototype.getLastSentEvent = function() {
-		return this._lastSentEvent;
+	Connection.prototype.getLastSentMessage = function() {
+		return this._lastSentMessage;
 	};
 
-	Connection.prototype.onEvent = function(eventConstructor, handler) {
+	Connection.prototype.onMessage = function(messageConstructor, handler) {
 		failFastUnlessConnectCalled(this);
-		failFast.unlessDefined(eventConstructor.MESSAGE_NAME, "eventConstructor.MESSAGE_NAME");
+		failFast.unlessDefined(messageConstructor.MESSAGE_NAME, "messageConstructor.MESSAGE_NAME");
 
-		this._localEmitter.on(eventConstructor.MESSAGE_NAME, handler);
-		this._socket.on(eventConstructor.MESSAGE_NAME, function(eventData) {
-			return handler(eventConstructor.fromPayload(eventData));
+		this._localEmitter.on(messageConstructor.MESSAGE_NAME, handler);
+		this._socket.on(messageConstructor.MESSAGE_NAME, function(eventData) {
+			return handler(messageConstructor.fromPayload(eventData));
 		});
 	};
 
-	Connection.prototype.triggerEvent = function(event) {
+	Connection.prototype.triggerMessage = function(message) {
 		failFastUnlessConnectCalled(this);
 
-		this._localEmitter.emit(event.name(), event);
+		this._localEmitter.emit(message.name(), message);
 	};
 
 	Connection.prototype.getSocketId = function() {
