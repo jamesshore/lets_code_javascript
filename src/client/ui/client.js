@@ -9,7 +9,7 @@
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var browser = require("./browser.js");
 	var failFast = require("fail_fast");
-	var ClientDrawEvent = require("../../shared/client_draw_event.js");
+	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
@@ -188,7 +188,7 @@
 	function sendDrawEvent(start, end) {
 		var startOffset = start.toRelativeOffset(drawingArea);
 		var endOffset = end.toRelativeOffset(drawingArea);
-		network.sendEvent(new ClientDrawEvent(startOffset.x, startOffset.y, endOffset.x, endOffset.y));
+		network.sendEvent(new ClientDrawMessage(startOffset.x, startOffset.y, endOffset.x, endOffset.y));
 	}
 
 }());

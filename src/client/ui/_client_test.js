@@ -10,7 +10,7 @@
 	var HtmlCoordinate = require("./html_coordinate.js");
 	var assert = require("_assert");
 	var RealTimeConnection = require("../network/real_time_connection.js");
-	var ClientDrawEvent = require("../../shared/client_draw_event.js");
+	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
@@ -337,12 +337,12 @@
 
 				it("sends draw event when line segment is drawn", function() {
 					dragMouse(10, 20, 40, 90);
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawEvent(10, 20, 40, 90));
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawMessage(10, 20, 40, 90));
 				});
 
 				it("sends draw event when dot is drawn", function() {
 					clickMouse(33, 99);
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawEvent(33, 99, 33, 99));
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientDrawMessage(33, 99, 33, 99));
 				});
 
 				it("draws line segment when draw event is received", function() {

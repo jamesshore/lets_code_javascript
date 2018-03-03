@@ -10,7 +10,7 @@
 	var url = require("url");
 	var querystring = require("querystring");
 	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
-	var ClientDrawEvent = require("../../shared/client_draw_event.js");
+	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 
 	var endpoints = shared.endpoints;
 
@@ -99,7 +99,7 @@
 		var lastDrawEvent = {};
 
 		var TESTABLE_EVENTS = [
-			ClientDrawEvent.EVENT_NAME,
+			ClientDrawMessage.EVENT_NAME,
 			ClientPointerEvent.EVENT_NAME
 		];
 

@@ -7,7 +7,7 @@
 	const assert = require("_assert");
 	const ClientPointerEvent = require("../shared/client_pointer_event.js");
 	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
-	const ClientDrawEvent = require("../shared/client_draw_event.js");
+	const ClientDrawMessage = require("../shared/client_draw_message.js");
 	const Clock = require("./clock.js");
 
 	const IRRELEVANT_MESSAGE = new ClientPointerEvent(42, 24);
@@ -48,9 +48,9 @@
 		it("replays all previous messages when client connects", function() {
 			const IRRELEVANT_ID = "irrelevant";
 
-			const message1 = new ClientDrawEvent(1, 10, 100, 1000);
-			const message2 = new ClientDrawEvent(2, 20, 200, 2000);
-			const message3 = new ClientDrawEvent(3, 30, 300, 3000);
+			const message1 = new ClientDrawMessage(1, 10, 100, 1000);
+			const message2 = new ClientDrawMessage(2, 20, 200, 2000);
+			const message3 = new ClientDrawMessage(3, 30, 300, 3000);
 
 			realTimeServer.connectNullClient(IRRELEVANT_ID);
 			realTimeServer.triggerClientMessageEvent(IRRELEVANT_ID, message1);

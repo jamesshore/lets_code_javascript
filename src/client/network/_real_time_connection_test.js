@@ -7,7 +7,7 @@
 	var Connection = require("./real_time_connection.js");
 	var async = require("./vendor/async-1.5.2.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
-	var ClientDrawEvent = require("../../shared/client_draw_event.js");
+	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 
 	describe("NET: RealTimeConnection", function() {
 
@@ -67,11 +67,11 @@
 
 		it("sends events to Socket.IO server", function(done) {
 			connection.connect(harness.PORT, function() {
-				var event = new ClientDrawEvent(1, 2, 3, 4);
+				var event = new ClientDrawMessage(1, 2, 3, 4);
 
 				connection.sendEvent(event);
 
-				harness.waitForEvent(connection, ClientDrawEvent, function(error, eventData) {
+				harness.waitForEvent(connection, ClientDrawMessage, function(error, eventData) {
 					assert.deepEqual(eventData, event.payload());
 					connection.disconnect(done);
 				});
@@ -79,7 +79,7 @@
 		});
 
 		it("gets most recent event sent to Socket.IO server, even if it hasn't be received yet", function(done) {
-			var DRAW_EVENT = new ClientDrawEvent(1, 2, 3, 4);
+			var DRAW_EVENT = new ClientDrawMessage(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
 				assert.deepEqual(connection.getLastSentEvent(), null, "should not have event if nothing sent");
