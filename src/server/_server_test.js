@@ -7,7 +7,7 @@
 	const http = require("http");
 	const assert = require("_assert");
 	const ClientPointerMessage = require("../shared/client_pointer_message.js");
-	const ServerPointerEvent = require("../shared/server_pointer_event.js");
+	const ServerPointerEvent = require("../shared/server_pointer_message.js");
 	const SocketIoClient = require("./__socket_io_client.js");
 
 	const CONTENT_DIR = "generated/test/";

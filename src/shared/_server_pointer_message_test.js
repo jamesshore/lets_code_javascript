@@ -3,7 +3,7 @@
 	"use strict";
 
 	var assert = require("_assert");
-	var ServerPointerEvent = require("./server_pointer_event.js");
+	var ServerPointerEvent = require("./server_pointer_message.js");
 
 	describe("SHARED: ServerPointerEvent", function() {
 

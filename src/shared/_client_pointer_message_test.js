@@ -4,7 +4,7 @@
 
 	var assert = require("_assert");
 	var ClientPointerMessage = require("./client_pointer_message.js");
-	var ServerPointerEvent = require("./server_pointer_event.js");
+	var ServerPointerEvent = require("./server_pointer_message.js");
 
 	describe("SHARED: ClientPointerMessage", function() {
 

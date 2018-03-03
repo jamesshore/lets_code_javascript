@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var ServerPointerEvent = require("./server_pointer_event.js");
+	var ServerPointerEvent = require("./server_pointer_message.js");
 
 	var ClientPointerMessage = module.exports = function(x, y) {
 		this._x = x;

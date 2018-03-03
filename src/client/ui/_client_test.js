@@ -13,7 +13,7 @@
 	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 	var ServerDrawMessage = require("../../shared/server_draw_message.js");
 	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
-	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
+	var ServerPointerEvent = require("../../shared/server_pointer_message.js");
 	var ClientRemovePointerMessage = require("../../shared/client_remove_pointer_message.js");
 	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
 	var ClientClearScreenMessage = require("../../shared/client_clear_screen_message.js");
