@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "lolex": "^2.3.2",
-    "send": "^0.16.1",
+    "send": "^0.16.2",
     "socket.io": "^2.0.4"
   }
 }
