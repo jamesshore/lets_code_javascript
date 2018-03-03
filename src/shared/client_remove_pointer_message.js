@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var ServerRemovePointerEvent = require("./server_remove_pointer_event.js");
+	var ServerRemovePointerMessage = require("./server_remove_pointer_message.js");
 
 	var ClientRemovePointerMessage = module.exports = function() {
 	};
@@ -19,7 +19,7 @@
 	};
 
 	ClientRemovePointerMessage.prototype.toServerEvent = function(clientId) {
-		return new ServerRemovePointerEvent(clientId);
+		return new ServerRemovePointerMessage(clientId);
 	};
 
 }());

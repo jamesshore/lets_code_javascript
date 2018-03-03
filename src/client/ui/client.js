@@ -14,7 +14,7 @@
 	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_message.js");
 	var ClientRemovePointerMessage = require("../../shared/client_remove_pointer_message.js");
-	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
+	var ServerRemovePointerMessage = require("../../shared/server_remove_pointer_message.js");
 	var ClientClearScreenMessage = require("../../shared/client_clear_screen_message.js");
 	var ServerClearScreenMessage = require("../../shared/server_clear_screen_message.js");
 
@@ -68,7 +68,7 @@
 		drawingArea.onSingleTouchMove(sendPointerEvent);
 		drawingArea.onTouchEnd(sendRemovePointerEvent);
 		network.onEvent(ServerPointerEvent, displayNetworkPointer);
-		network.onEvent(ServerRemovePointerEvent, removeNetworkPointer);
+		network.onEvent(ServerRemovePointerMessage, removeNetworkPointer);
 	}
 
 	function sendPointerEvent(coordinate) {

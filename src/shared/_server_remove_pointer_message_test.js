@@ -3,20 +3,20 @@
 	"use strict";
 
 	var assert = require("_assert");
-	var ServerRemovePointerEvent = require("./server_remove_pointer_event.js");
+	var ServerRemovePointerMessage = require("./server_remove_pointer_message.js");
 
-	describe("SHARED: ServerRemovePointerEvent", function() {
+	describe("SHARED: ServerRemovePointerMessage", function() {
 
 		it("converts bare objects to event objects and back", function() {
 			var bareObject = { id: "a" };
-			var eventObject = new ServerRemovePointerEvent("a");
+			var eventObject = new ServerRemovePointerMessage("a");
 
-			assert.deepEqual(ServerRemovePointerEvent.fromPayload(bareObject), eventObject, "fromPayload()");
+			assert.deepEqual(ServerRemovePointerMessage.fromPayload(bareObject), eventObject, "fromPayload()");
 			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		// it("instances know their network event name", function() {
-		// 	assert.equal(new ServerRemovePointerEvent().name(), ServerRemovePointerEvent.EVENT_NAME);
+		// 	assert.equal(new ServerRemovePointerMessage().name(), ServerRemovePointerMessage.EVENT_NAME);
 		// });
 
 	});

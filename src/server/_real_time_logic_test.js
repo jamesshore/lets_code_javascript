@@ -6,7 +6,7 @@
 	const RealTimeServer = require("./real_time_server.js");
 	const assert = require("_assert");
 	const ClientPointerMessage = require("../shared/client_pointer_message.js");
-	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
+	const ServerRemovePointerMessage = require("../shared/server_remove_pointer_message.js");
 	const ClientDrawMessage = require("../shared/client_draw_message.js");
 	const Clock = require("./clock.js");
 
@@ -78,7 +78,7 @@
 			realTimeServer.triggerClientDisconnectEvent(clientId);
 
 			assert.deepEqual(realTimeServer.getLastSentMessage(), {
-				message: new ServerRemovePointerEvent(clientId),
+				message: new ServerRemovePointerMessage(clientId),
 				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
 			});
 		});
@@ -91,7 +91,7 @@
 			realTimeServer.triggerClientDisconnectEvent(correctId);
 
 			assert.deepEqual(realTimeServer.getLastSentMessage(), {
-				message: new ServerRemovePointerEvent(correctId),
+				message: new ServerRemovePointerMessage(correctId),
 				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
 			});
 		});
@@ -103,7 +103,7 @@
 			realTimeServer.triggerClientDisconnectEvent(clientId);
 			assert.deepEqual(
 				realTimeLogic._eventRepo.replay(),
-				[ new ServerRemovePointerEvent(clientId) ]
+				[ new ServerRemovePointerMessage(clientId) ]
 			);
 		});
 
@@ -113,7 +113,7 @@
 
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 			assert.deepEqual(realTimeServer.getLastSentMessage(), {
-				message: new ServerRemovePointerEvent(clientId),
+				message: new ServerRemovePointerMessage(clientId),
 				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
 			});
 		});
@@ -171,7 +171,7 @@
 				eventsReceived: 0
 			};
 			realTimeServer.on(RealTimeServer.SERVER_MESSAGE, ({ message }) => {
-				if (message.name() === ServerRemovePointerEvent.EVENT_NAME) counter.eventsReceived++;
+				if (message.name() === ServerRemovePointerMessage.EVENT_NAME) counter.eventsReceived++;
 			});
 			return counter;
 		}

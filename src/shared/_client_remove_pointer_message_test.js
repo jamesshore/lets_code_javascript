@@ -4,7 +4,7 @@
 
 	var assert = require("_assert");
 	var ClientRemovePointerMessage = require("./client_remove_pointer_message.js");
-	var ServerRemovePointerEvent = require("./server_remove_pointer_event.js");
+	var ServerRemovePointerMessage = require("./server_remove_pointer_message.js");
 
 	describe("SHARED: ClientRemovePointerMessage", function() {
 
@@ -16,8 +16,8 @@
 			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
-		it("translates to ServerRemovePointerEvent", function() {
-			var expected = new ServerRemovePointerEvent("a");
+		it("translates to ServerRemovePointerMessage", function() {
+			var expected = new ServerRemovePointerMessage("a");
 			var actual = new ClientRemovePointerMessage().toServerEvent("a");
 
 			assert.deepEqual(actual, expected);

@@ -15,7 +15,7 @@
 	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_message.js");
 	var ClientRemovePointerMessage = require("../../shared/client_remove_pointer_message.js");
-	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
+	var ServerRemovePointerMessage = require("../../shared/server_remove_pointer_message.js");
 	var ClientClearScreenMessage = require("../../shared/client_clear_screen_message.js");
 	var ServerClearScreenMessage = require("../../shared/server_clear_screen_message.js");
 
@@ -463,13 +463,13 @@
 					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1, "setup should have created pointer element");
 
-					nullConnection.triggerEvent(new ServerRemovePointerEvent("my_id"));
+					nullConnection.triggerEvent(new ServerRemovePointerMessage("my_id"));
 					assert.equal(getPointerDivs().length, 0, "should have removed pointer element");
 				});
 
 				it("pointer reappears after being removed if another pointer event is received", function() {
 					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
-					nullConnection.triggerEvent(new ServerRemovePointerEvent("my_id"));
+					nullConnection.triggerEvent(new ServerRemovePointerMessage("my_id"));
 					assert.equal(getPointerDivs().length, 0, "setup have removed pointer element");
 
 					nullConnection.triggerEvent(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
@@ -477,7 +477,7 @@
 				});
 
 				it("ignores 'remove' events when pointer element doesn't exist", function() {
-					nullConnection.triggerEvent(new ServerRemovePointerEvent("non_existant_id"));
+					nullConnection.triggerEvent(new ServerRemovePointerMessage("non_existant_id"));
 					assert.equal(getPointerDivs().length, 0, "still no pointer elements");
 				});
 

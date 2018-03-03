@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
+	const ServerRemovePointerMessage = require("../shared/server_remove_pointer_message.js");
 	const EventRepository = require("./event_repository.js");
 	const Clock = require("./clock.js");
 	const RealTimeServer = require("./real_time_server.js");
@@ -43,7 +43,7 @@
 		});
 		handleClientMessages(self);
 		self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, (disconnectId) => {
-			broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(disconnectId));
+			broadcastAndStoreEvent(self, null, new ServerRemovePointerMessage(disconnectId));
 		});
 	}
 
@@ -75,7 +75,7 @@
 			Object.keys(self._lastActivity).forEach((clientId) => {
 				const lastActivity = self._lastActivity[clientId];
 				if (self._clock.millisecondsSince(lastActivity) >= CLIENT_TIMEOUT) {
-					broadcastAndStoreEvent(self, null, new ServerRemovePointerEvent(clientId));
+					broadcastAndStoreEvent(self, null, new ServerRemovePointerMessage(clientId));
 					stopTrackingClient(clientId);
 				}
 			});

@@ -7,7 +7,7 @@
 	const HttpServer = require("./http_server.js");
 	const RealTimeServer = require("./real_time_server.js");
 	const ClientRemovePointerMessage = require("../shared/client_remove_pointer_message.js");
-	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
+	const ServerRemovePointerMessage = require("../shared/server_remove_pointer_message.js");
 
 	describe("RealTimeServer", function() {
 
@@ -199,7 +199,7 @@
 
 		it("emits event when a message is sent to a client", async function() {
 			const clientId = "a client";
-			const message = new ServerRemovePointerEvent(clientId);
+			const message = new ServerRemovePointerMessage(clientId);
 			realTimeServer.connectNullClient(clientId);
 
 			let eventPromise = listenForOneServerMessageEvent();
@@ -238,7 +238,7 @@
 
 		it("tracks the last message sent", async function() {
 			const socket = await socketIoClient.createSocket();
-			const message = new ServerRemovePointerEvent("server client ID");
+			const message = new ServerRemovePointerMessage("server client ID");
 
 			realTimeServer.sendToOneClient(socket.id, message);
 			assert.deepEqual(realTimeServer.getLastSentMessage(), {
