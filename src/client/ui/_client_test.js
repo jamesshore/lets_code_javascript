@@ -11,7 +11,7 @@
 	var assert = require("_assert");
 	var RealTimeConnection = require("../network/real_time_connection.js");
 	var ClientDrawMessage = require("../../shared/client_draw_message.js");
-	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ServerDrawMessage = require("../../shared/server_draw_message.js");
 	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientRemovePointerMessage = require("../../shared/client_remove_pointer_message.js");
@@ -346,14 +346,14 @@
 				});
 
 				it("draws line segment when draw event is received", function() {
-					nullConnection.triggerEvent(new ServerDrawEvent(4, 90, 77, 2));
+					nullConnection.triggerEvent(new ServerDrawMessage(4, 90, 77, 2));
 					assert.deepEqual(lines(), [
 						[ 4, 90, 77, 2 ]
 					]);
 				});
 
 				it("draws dot when draw event is received", function() {
-					nullConnection.triggerEvent(new ServerDrawEvent(5, 10, 5, 10));
+					nullConnection.triggerEvent(new ServerDrawMessage(5, 10, 5, 10));
 					assert.deepEqual(lines(), [
 						[ 5, 10 ]
 					]);

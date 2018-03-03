@@ -10,7 +10,7 @@
 	var browser = require("./browser.js");
 	var failFast = require("fail_fast");
 	var ClientDrawMessage = require("../../shared/client_draw_message.js");
-	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ServerDrawMessage = require("../../shared/server_draw_message.js");
 	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientRemovePointerMessage = require("../../shared/client_remove_pointer_message.js");
@@ -125,7 +125,7 @@
 	}
 
 	function handleNetworkDrawing() {
-		network.onEvent(ServerDrawEvent, function(event) {
+		network.onEvent(ServerDrawMessage, function(event) {
 			var from = HtmlCoordinate.fromRelativeOffset(drawingArea, event.from.x, event.from.y);
 			var to = HtmlCoordinate.fromRelativeOffset(drawingArea, event.to.x, event.to.y);
 			drawLineSegment(from, to);

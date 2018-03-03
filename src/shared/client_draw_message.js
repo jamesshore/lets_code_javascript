@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var ServerDrawEvent = require("./server_draw_event.js");
+	var ServerDrawMessage = require("./server_draw_message.js");
 
 	var ClientDrawMessage = module.exports = function(fromX, fromY, toX, toY) {
 		this._data = {
@@ -25,7 +25,7 @@
 	};
 
 	ClientDrawMessage.prototype.toServerEvent = function() {
-		return new ServerDrawEvent(this._data.fromX, this._data.fromY, this._data.toX, this._data.toY);
+		return new ServerDrawMessage(this._data.fromX, this._data.fromY, this._data.toX, this._data.toY);
 	};
 
 }());

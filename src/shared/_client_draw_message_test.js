@@ -4,7 +4,7 @@
 
 	var assert = require("_assert");
 	var ClientDrawMessage = require("./client_draw_message.js");
-	var ServerDrawEvent = require("./server_draw_event.js");
+	var ServerDrawMessage = require("./server_draw_message.js");
 
 	describe("SHARED: ClientDrawMessage", function() {
 
@@ -16,8 +16,8 @@
 			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
-		it("translates to ServerDrawEvent", function() {
-			var expected = new ServerDrawEvent(1, 2, 3, 4);
+		it("translates to ServerDrawMessage", function() {
+			var expected = new ServerDrawMessage(1, 2, 3, 4);
 			var actual = new ClientDrawMessage(1, 2, 3, 4).toServerEvent();
 
 			assert.deepEqual(actual, expected);

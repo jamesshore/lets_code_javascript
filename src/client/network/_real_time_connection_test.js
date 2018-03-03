@@ -6,7 +6,7 @@
 	var harness = require("./__test_harness_client.js");
 	var Connection = require("./real_time_connection.js");
 	var async = require("./vendor/async-1.5.2.js");
-	var ServerDrawEvent = require("../../shared/server_draw_event.js");
+	var ServerDrawMessage = require("../../shared/server_draw_message.js");
 	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 
 	describe("NET: RealTimeConnection", function() {
@@ -90,11 +90,11 @@
 		});
 
 		it("receives events from Socket.IO server", function(done) {
-			var DRAW_EVENT = new ServerDrawEvent(1, 2, 3, 4);
+			var DRAW_EVENT = new ServerDrawMessage(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
 
-				connection.onEvent(ServerDrawEvent, function(event) {
+				connection.onEvent(ServerDrawMessage, function(event) {
 					assert.deepEqual(event, DRAW_EVENT);
 					connection.disconnect(done);
 				});
@@ -103,10 +103,10 @@
 		});
 
 		it("can trigger events manually", function(done) {
-			var DRAW_EVENT = new ServerDrawEvent(1, 2, 3, 4);
+			var DRAW_EVENT = new ServerDrawMessage(1, 2, 3, 4);
 
 			connection.connect(harness.PORT, function() {
-				connection.onEvent(ServerDrawEvent, function(event) {
+				connection.onEvent(ServerDrawMessage, function(event) {
 					assert.deepEqual(event, DRAW_EVENT);
 					connection.disconnect(done);
 				});
@@ -154,7 +154,7 @@
 
 			assert.throws(connection.disconnect.bind(connection, callback), expectedMessage, "disconnect()");
 			assert.throws(connection.sendEvent.bind(connection), expectedMessage, "sendEvent()");
-			assert.throws(connection.onEvent.bind(connection, ServerDrawEvent, callback), expectedMessage, "onEvent()");
+			assert.throws(connection.onEvent.bind(connection, ServerDrawMessage, callback), expectedMessage, "onEvent()");
 			assert.throws(connection.triggerEvent.bind(connection), expectedMessage, "triggerEvent()");
 			assert.throws(connection.getSocketId.bind(connection), expectedMessage, "getSocketId()");
 			assert.throws(connection.getPort.bind(connection), expectedMessage, "getPort()");
