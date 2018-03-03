@@ -13,7 +13,7 @@
 	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 	var ServerDrawMessage = require("../../shared/server_draw_message.js");
 	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
-	var ServerPointerEvent = require("../../shared/server_pointer_message.js");
+	var ServerPointerMessage = require("../../shared/server_pointer_message.js");
 	var ClientRemovePointerMessage = require("../../shared/client_remove_pointer_message.js");
 	var ServerRemovePointerMessage = require("../../shared/server_remove_pointer_message.js");
 	var ClientClearScreenMessage = require("../../shared/client_clear_screen_message.js");
@@ -429,38 +429,38 @@
 				});
 
 				it("creates pointer element when a pointer event is received", function() {
-					nullConnection.triggerMessage(new ServerPointerEvent(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerMessage(IRRELEVANT_ID, IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1);
 				});
 
 				it("doesn't create pointer element when a pointer event containing a previous client ID is received", function() {
-					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
-					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerMessage("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerMessage("my_id", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1);
 				});
 
 				it("creates a pointer element for each unique client ID", function() {
-					nullConnection.triggerMessage(new ServerPointerEvent("unique_id_1", IRRELEVANT_X, IRRELEVANT_Y));
-					nullConnection.triggerMessage(new ServerPointerEvent("unique_id_2", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerMessage("unique_id_1", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerMessage("unique_id_2", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 2);
 				});
 
 				it("positions new pointer element according to event's position", function() {
-					nullConnection.triggerMessage(new ServerPointerEvent(IRRELEVANT_ID, 10, 20));
+					nullConnection.triggerMessage(new ServerPointerMessage(IRRELEVANT_ID, 10, 20));
 					var pointerElement = getPointerDivs()[0];
 					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 10, 20));
 				});
 
 				it("moves existing pointer element when a new pointer event is received", function() {
-					nullConnection.triggerMessage(new ServerPointerEvent("my_id", 10, 20));
-					nullConnection.triggerMessage(new ServerPointerEvent("my_id", 30, 40));
+					nullConnection.triggerMessage(new ServerPointerMessage("my_id", 10, 20));
+					nullConnection.triggerMessage(new ServerPointerMessage("my_id", 30, 40));
 
 					var pointerElement = getPointerDivs()[0];
 					assert.objEqual(pointerElement.getPosition(), HtmlCoordinate.fromRelativeOffset(drawingArea, 30, 40));
 				});
 
 				it("removes existing pointer element when 'remove' event is received", function() {
-					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerMessage("my_id", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1, "setup should have created pointer element");
 
 					nullConnection.triggerMessage(new ServerRemovePointerMessage("my_id"));
@@ -468,11 +468,11 @@
 				});
 
 				it("pointer reappears after being removed if another pointer event is received", function() {
-					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerMessage("my_id", IRRELEVANT_X, IRRELEVANT_Y));
 					nullConnection.triggerMessage(new ServerRemovePointerMessage("my_id"));
 					assert.equal(getPointerDivs().length, 0, "setup have removed pointer element");
 
-					nullConnection.triggerMessage(new ServerPointerEvent("my_id", IRRELEVANT_X, IRRELEVANT_Y));
+					nullConnection.triggerMessage(new ServerPointerMessage("my_id", IRRELEVANT_X, IRRELEVANT_Y));
 					assert.equal(getPointerDivs().length, 1, "pointer element should be re-created");
 				});
 

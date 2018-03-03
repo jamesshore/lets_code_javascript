@@ -7,7 +7,7 @@
 	const http = require("http");
 	const assert = require("_assert");
 	const ClientPointerMessage = require("../shared/client_pointer_message.js");
-	const ServerPointerEvent = require("../shared/server_pointer_message.js");
+	const ServerPointerMessage = require("../shared/server_pointer_message.js");
 	const SocketIoClient = require("./__socket_io_client.js");
 
 	const CONTENT_DIR = "generated/test/";
@@ -77,7 +77,7 @@
 			emitter.emit(clientEvent.name(), clientEvent.payload());
 
 			await new Promise((resolve, reject) => {
-				receiver.on(ServerPointerEvent.MESSAGE_NAME, function(data) {
+				receiver.on(ServerPointerMessage.MESSAGE_NAME, function(data) {
 					try {
 						assert.deepEqual(data, clientEvent.toServerMessage(emitter.id).payload());
 						resolve();

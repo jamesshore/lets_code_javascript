@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var ServerPointerEvent = require("./server_pointer_message.js");
+	var ServerPointerMessage = require("./server_pointer_message.js");
 
 	var ClientPointerMessage = module.exports = function(x, y) {
 		this._x = x;
@@ -24,7 +24,7 @@
 	};
 
 	ClientPointerMessage.prototype.toServerMessage = function(id) {
-		return new ServerPointerEvent(id, this._x, this._y);
+		return new ServerPointerMessage(id, this._x, this._y);
 	};
 
 }());

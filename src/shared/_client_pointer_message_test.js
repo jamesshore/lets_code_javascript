@@ -4,7 +4,7 @@
 
 	var assert = require("_assert");
 	var ClientPointerMessage = require("./client_pointer_message.js");
-	var ServerPointerEvent = require("./server_pointer_message.js");
+	var ServerPointerMessage = require("./server_pointer_message.js");
 
 	describe("SHARED: ClientPointerMessage", function() {
 
@@ -16,8 +16,8 @@
 			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
-		it("translates to ServerPointerEvent", function() {
-			var expected = new ServerPointerEvent("a", 1, 2);
+		it("translates to ServerPointerMessage", function() {
+			var expected = new ServerPointerMessage("a", 1, 2);
 			var actual = new ClientPointerMessage(1, 2).toServerMessage("a");
 
 			assert.deepEqual(actual, expected);

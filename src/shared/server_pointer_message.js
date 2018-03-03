@@ -2,20 +2,20 @@
 (function() {
 	"use strict";
 
-	var ServerPointerEvent = module.exports = function ServerPointerEvent(id, x, y) {
+	var ServerPointerMessage = module.exports = function ServerPointerMessage(id, x, y) {
 		this.id = id;
 		this.x = x;
 		this.y = y;
 	};
 
-	ServerPointerEvent.MESSAGE_NAME = "server_pointer_event";
-	ServerPointerEvent.prototype.name = function() { return ServerPointerEvent.MESSAGE_NAME; };
+	ServerPointerMessage.MESSAGE_NAME = "server_pointer_event";
+	ServerPointerMessage.prototype.name = function() { return ServerPointerMessage.MESSAGE_NAME; };
 
-	ServerPointerEvent.fromPayload = function(obj) {
-		return new ServerPointerEvent(obj.id, obj.x, obj.y);
+	ServerPointerMessage.fromPayload = function(obj) {
+		return new ServerPointerMessage(obj.id, obj.x, obj.y);
 	};
 
-	ServerPointerEvent.prototype.payload = function() {
+	ServerPointerMessage.prototype.payload = function() {
 		return {
 			id: this.id,
 			x: this.x,
