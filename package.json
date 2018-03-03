@@ -17,7 +17,7 @@
     "mocha": "^5.0.1",
     "procfile": "^0.1.1",
     "selenium-webdriver": "^3.6.0",
-    "semver": "^5.4.1",
+    "semver": "^5.5.0",
     "shelljs": "^0.7.8",
     "simplebuild-karma": "^1.0.0",
     "socket.io-client": "^2.0.4"
