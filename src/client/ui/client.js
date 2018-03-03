@@ -63,37 +63,37 @@
 	//*** Pointers
 
 	function handlePointerMovement() {
-		documentBody.onMouseMove(sendPointerEvent);
-		documentBody.onMouseLeave(sendRemovePointerEvent);
-		drawingArea.onSingleTouchMove(sendPointerEvent);
-		drawingArea.onTouchEnd(sendRemovePointerEvent);
+		documentBody.onMouseMove(sendPointerMessage);
+		documentBody.onMouseLeave(sendRemovePointerMessage);
+		drawingArea.onSingleTouchMove(sendPointerMessage);
+		drawingArea.onTouchEnd(sendRemovePointerMessage);
 		network.onMessage(ServerPointerMessage, displayNetworkPointer);
 		network.onMessage(ServerRemovePointerMessage, removeNetworkPointer);
 	}
 
-	function sendPointerEvent(coordinate) {
+	function sendPointerMessage(coordinate) {
 		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
 		network.sendMessage(new ClientPointerMessage(relativeOffset.x, relativeOffset.y));
 	}
 
-	function sendRemovePointerEvent() {
+	function sendRemovePointerMessage() {
 		network.sendMessage(new ClientRemovePointerMessage());
 	}
 
-	function displayNetworkPointer(serverEvent) {
-		var pointerElement = ghostPointerElements[serverEvent.id];
+	function displayNetworkPointer(serverMessage) {
+		var pointerElement = ghostPointerElements[serverMessage.id];
 		if (pointerElement === undefined) {
 			pointerElement = HtmlElement.appendHtmlToBody(pointerHtml);
-			ghostPointerElements[serverEvent.id] = pointerElement;
+			ghostPointerElements[serverMessage.id] = pointerElement;
 		}
-		pointerElement.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, serverEvent.x, serverEvent.y));
+		pointerElement.setAbsolutePosition(HtmlCoordinate.fromRelativeOffset(drawingArea, serverMessage.x, serverMessage.y));
 	}
 
-	function removeNetworkPointer(serverEvent) {
-		var pointerElement = ghostPointerElements[serverEvent.id];
+	function removeNetworkPointer(serverMessage) {
+		var pointerElement = ghostPointerElements[serverMessage.id];
 		if (pointerElement === undefined) return;
 
-		delete ghostPointerElements[serverEvent.id];
+		delete ghostPointerElements[serverMessage.id];
 		pointerElement.remove();
 	}
 
@@ -101,11 +101,11 @@
 	//*** Clear Screen
 
 	function handleClearScreenAction() {
-		clearScreenButton.onMouseClick(clearDrawingAreaAndSendEvent);
+		clearScreenButton.onMouseClick(clearDrawingAreaAndSendMessage);
 		network.onMessage(ServerClearScreenMessage, clearDrawingArea);
 	}
 
-	function clearDrawingAreaAndSendEvent() {
+	function clearDrawingAreaAndSendMessage() {
 		clearDrawingArea();
 		network.sendMessage(new ClientClearScreenMessage());
 	}
@@ -125,9 +125,9 @@
 	}
 
 	function handleNetworkDrawing() {
-		network.onMessage(ServerDrawMessage, function(event) {
-			var from = HtmlCoordinate.fromRelativeOffset(drawingArea, event.from.x, event.from.y);
-			var to = HtmlCoordinate.fromRelativeOffset(drawingArea, event.to.x, event.to.y);
+		network.onMessage(ServerDrawMessage, function(message) {
+			var from = HtmlCoordinate.fromRelativeOffset(drawingArea, message.from.x, message.from.y);
+			var to = HtmlCoordinate.fromRelativeOffset(drawingArea, message.to.x, message.to.y);
 			drawLineSegment(from, to);
 		});
 	}
@@ -156,7 +156,7 @@
 
 		var end = coordinate;
 		if (!start.equals(end)) {
-			drawLineSegmentAndSendDrawEvent(start, end);
+			drawLineSegmentAndSendDrawMessage(start, end);
 			start = end;
 			lineDrawn = true;
 		}
@@ -165,7 +165,7 @@
 	function endDrag() {
 		if (!isCurrentlyDrawing()) return;
 
-		if (!lineDrawn) drawLineSegmentAndSendDrawEvent(start, start);
+		if (!lineDrawn) drawLineSegmentAndSendDrawMessage(start, start);
 
 		start = null;
 		lineDrawn = false;
@@ -175,9 +175,9 @@
 		return start !== null;
 	}
 
-	function drawLineSegmentAndSendDrawEvent(start, end) {
+	function drawLineSegmentAndSendDrawMessage(start, end) {
 		drawLineSegment(start, end);
-		sendDrawEvent(start, end);
+		sendDrawMessage(start, end);
 	}
 
 	function drawLineSegment(start, end) {
@@ -185,7 +185,7 @@
 		else svgCanvas.drawLine(start, end);
 	}
 
-	function sendDrawEvent(start, end) {
+	function sendDrawMessage(start, end) {
 		var startOffset = start.toRelativeOffset(drawingArea);
 		var endOffset = end.toRelativeOffset(drawingArea);
 		network.sendMessage(new ClientDrawMessage(startOffset.x, startOffset.y, endOffset.x, endOffset.y));
