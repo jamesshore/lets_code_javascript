@@ -27,6 +27,7 @@
 	var driver;
 
 	describe("Smoke test", function() {
+		/*eslint no-invalid-this:off */
 		this.timeout(30 * 1000);
 
 		before(function (done) {

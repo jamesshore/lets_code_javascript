@@ -12,6 +12,7 @@
 	var assert = require("_assert");
 
 	describe("Release", function() {
+		/*eslint no-invalid-this:off */
 		this.timeout(10 * 1000);
 
 		it("is on web", function(done) {

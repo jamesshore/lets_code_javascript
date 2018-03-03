@@ -74,6 +74,7 @@
 	createDirectoryDependencies(paths.lintDirectories());
 
 	rule(".lint", determineLintDependency, function() {
+		/*eslint no-invalid-this:off */
 		var lint = require("./build/util/lint_runner.js");
 		var lintConfig = require("./build/config/eslint.conf.js");
 
