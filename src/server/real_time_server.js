@@ -7,13 +7,13 @@
 	const util = require("util");
 	const EventEmitter = require("events");
 	const ClientPointerMessage = require("../shared/client_pointer_message.js");
-	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
+	const ClientRemovePointerMessage = require("../shared/client_remove_pointer_message.js");
 	const ClientDrawMessage = require("../shared/client_draw_message.js");
 	const ClientClearScreenMessage = require("../shared/client_clear_screen_message.js");
 
 	const SUPPORTED_EVENTS = [
 		ClientPointerMessage,
-		ClientRemovePointerEvent,
+		ClientRemovePointerMessage,
 		ClientDrawMessage,
 		ClientClearScreenMessage
 	];

@@ -6,7 +6,7 @@
 	const SocketIoClient = require("./__socket_io_client.js");
 	const HttpServer = require("./http_server.js");
 	const RealTimeServer = require("./real_time_server.js");
-	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
+	const ClientRemovePointerMessage = require("../shared/client_remove_pointer_message.js");
 	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
 
 	describe("RealTimeServer", function() {
@@ -80,7 +80,7 @@
 
 		it("connects and disconnects null clients (clients that don't actually exist)", function() {
 			const clientId = "null client ID";
-			const message = new ClientRemovePointerEvent(clientId);
+			const message = new ClientRemovePointerMessage(clientId);
 			realTimeServer.connectNullClient(clientId);
 
 			assert.equal(realTimeServer.isClientConnected(clientId), true);
@@ -117,7 +117,7 @@
 
 		it("emits event when a message is received from a client", async function() {
 			const socket = await socketIoClient.createSocket();
-			const eventToSend = new ClientRemovePointerEvent();
+			const eventToSend = new ClientRemovePointerMessage();
 
 			const eventPromise = new Promise((resolve, reject) => {
 				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId, receivedEvent) => {
@@ -135,7 +135,7 @@
 
 		it("simulates a client message received event", async function() {
 			const clientId = "my client ID";
-			const message = new ClientRemovePointerEvent();
+			const message = new ClientRemovePointerMessage();
 
 			const eventPromise = new Promise((resolve, reject) => {
 				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId, message) => {
@@ -148,7 +148,7 @@
 
 		it("sends message to specific Socket.IO client", async function() {
 			const [ socket1, socket2 ] = await socketIoClient.createSockets(2);
-			const messageToSend = new ClientRemovePointerEvent();
+			const messageToSend = new ClientRemovePointerMessage();
 
 			const socketPromise = listenForOneMessage(socket1, messageToSend);
 			socket2.once(messageToSend.name(), () => {
@@ -164,7 +164,7 @@
 
 		it("sends message to all Socket.IO clients", async function() {
 			const [ socket1, socket2 ] = await socketIoClient.createSockets(2);
-			const messageToSend = new ClientRemovePointerEvent();
+			const messageToSend = new ClientRemovePointerMessage();
 
 			const socket1Promise = listenForOneMessage(socket1, messageToSend);
 			const socket2Promise = listenForOneMessage(socket2, messageToSend);
@@ -180,7 +180,7 @@
 
 		it("sends message to all Socket.IO clients except one", async function() {
 			const [ socket1, socket2, socket3 ] = await socketIoClient.createSockets(3);
-			const messageToSend = new ClientRemovePointerEvent();
+			const messageToSend = new ClientRemovePointerMessage();
 
 			const socket1Promise = listenForOneMessage(socket1, messageToSend);
 			const socket3Promise = listenForOneMessage(socket3, messageToSend);
@@ -294,7 +294,7 @@
 
 	describe("Null RealTimeServer", function() {
 
-		const IRRELEVANT_EVENT = new ClientRemovePointerEvent();
+		const IRRELEVANT_EVENT = new ClientRemovePointerMessage();
 
 		let realTimeServer;
 

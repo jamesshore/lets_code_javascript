@@ -3,28 +3,28 @@
 	"use strict";
 
 	var assert = require("_assert");
-	var ClientRemovePointerEvent = require("./client_remove_pointer_event.js");
+	var ClientRemovePointerMessage = require("./client_remove_pointer_message.js");
 	var ServerRemovePointerEvent = require("./server_remove_pointer_event.js");
 
-	describe("SHARED: ClientRemovePointerEvent", function() {
+	describe("SHARED: ClientRemovePointerMessage", function() {
 
-		it("converts serializable objects to ClientRemovePointerEvents and back", function() {
+		it("converts serializable objects to ClientRemovePointerMessages and back", function() {
 			var bareObject = {};
-			var eventObject = new ClientRemovePointerEvent();
+			var eventObject = new ClientRemovePointerMessage();
 
-			assert.deepEqual(ClientRemovePointerEvent.fromPayload(bareObject), eventObject, "fromPayload()");
+			assert.deepEqual(ClientRemovePointerMessage.fromPayload(bareObject), eventObject, "fromPayload()");
 			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
 		it("translates to ServerRemovePointerEvent", function() {
 			var expected = new ServerRemovePointerEvent("a");
-			var actual = new ClientRemovePointerEvent().toServerEvent("a");
+			var actual = new ClientRemovePointerMessage().toServerEvent("a");
 
 			assert.deepEqual(actual, expected);
 		});
 
 		// it("instances know their network event name", function() {
-		// 	assert.equal(new ClientRemovePointerEvent().name(), ClientRemovePointerEvent.EVENT_NAME);
+		// 	assert.equal(new ClientRemovePointerMessage().name(), ClientRemovePointerMessage.EVENT_NAME);
 		// });
 
 	});

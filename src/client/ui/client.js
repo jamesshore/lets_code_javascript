@@ -13,7 +13,7 @@
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
-	var ClientRemovePointerEvent = require("../../shared/client_remove_pointer_event.js");
+	var ClientRemovePointerMessage = require("../../shared/client_remove_pointer_message.js");
 	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
 	var ClientClearScreenMessage = require("../../shared/client_clear_screen_message.js");
 	var ServerClearScreenEvent = require("../../shared/server_clear_screen_event.js");
@@ -77,7 +77,7 @@
 	}
 
 	function sendRemovePointerEvent() {
-		network.sendEvent(new ClientRemovePointerEvent());
+		network.sendEvent(new ClientRemovePointerMessage());
 	}
 
 	function displayNetworkPointer(serverEvent) {

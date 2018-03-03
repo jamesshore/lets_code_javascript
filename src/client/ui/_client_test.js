@@ -14,7 +14,7 @@
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
-	var ClientRemovePointerEvent = require("../../shared/client_remove_pointer_event.js");
+	var ClientRemovePointerMessage = require("../../shared/client_remove_pointer_message.js");
 	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
 	var ClientClearScreenMessage = require("../../shared/client_clear_screen_message.js");
 	var ServerClearScreenEvent = require("../../shared/server_clear_screen_event.js");
@@ -408,14 +408,14 @@
 
 				it("sends 'remove pointer' event when mouse leaves window", function () {
 					documentBody.triggerMouseLeave();
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerEvent());
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerMessage());
 				});
 
 				it("sends 'remove pointer' event when touch stops", function() {
 					if (!browser.supportsTouchEvents()) return;
 
 					drawingArea.triggerTouchEnd();
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerEvent());
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientRemovePointerMessage());
 				});
 
 				it("only sends 'remove pointer' event in response to touches that end inside the drawing area", function() {
