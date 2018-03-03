@@ -17,7 +17,7 @@
 	var ClientRemovePointerMessage = require("../../shared/client_remove_pointer_message.js");
 	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
 	var ClientClearScreenMessage = require("../../shared/client_clear_screen_message.js");
-	var ServerClearScreenEvent = require("../../shared/server_clear_screen_event.js");
+	var ServerClearScreenMessage = require("../../shared/server_clear_screen_message.js");
 
 	mocha.setup({ignoreLeaks: true, timeout:5000});
 
@@ -370,7 +370,7 @@
 
 				it("clears screen when clear event is received", function() {
 					dragMouse(10, 20, 40, 90);
-					nullConnection.triggerEvent(new ServerClearScreenEvent());
+					nullConnection.triggerEvent(new ServerClearScreenMessage());
 					assert.deepEqual(lines(), []);
 				});
 

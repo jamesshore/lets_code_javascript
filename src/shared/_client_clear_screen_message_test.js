@@ -4,7 +4,7 @@
 
 	var assert = require("_assert");
 	var ClientClearScreenMessage = require("./client_clear_screen_message.js");
-	var ServerClearScreenEvent = require("./server_clear_screen_event.js");
+	var ServerClearScreenMessage = require("./server_clear_screen_message.js");
 
 	describe("SHARED: ClientClearScreenMessage", function() {
 
@@ -16,8 +16,8 @@
 			assert.deepEqual(eventObject.payload(), bareObject, "payload()");
 		});
 
-		it("translates to ServerClearScreenEvent", function() {
-			var expected = new ServerClearScreenEvent();
+		it("translates to ServerClearScreenMessage", function() {
+			var expected = new ServerClearScreenMessage();
 			var actual = new ClientClearScreenMessage().toServerEvent();
 
 			assert.deepEqual(actual, expected);

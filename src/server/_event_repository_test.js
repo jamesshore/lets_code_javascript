@@ -4,7 +4,7 @@
 
 	const assert = require("_assert");
 	const EventRepository = require("./event_repository.js");
-	const ServerClearScreenEvent = require("../shared/server_clear_screen_event.js");
+	const ServerClearScreenMessage = require("../shared/server_clear_screen_message.js");
 
 	describe("Event Repository", function() {
 
@@ -19,11 +19,11 @@
 		});
 
 		it("stores and replays multiple events", function() {
-			repo.store(new ServerClearScreenEvent());
-			repo.store(new ServerClearScreenEvent());
+			repo.store(new ServerClearScreenMessage());
+			repo.store(new ServerClearScreenMessage());
 			assert.deepEqual(repo.replay(), [
-				new ServerClearScreenEvent(),
-				new ServerClearScreenEvent()
+				new ServerClearScreenMessage(),
+				new ServerClearScreenMessage()
 			]);
 		});
 

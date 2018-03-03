@@ -2,7 +2,7 @@
 (function() {
 	"use strict";
 
-	var ServerClearScreenEvent = require("./server_clear_screen_event.js");
+	var ServerClearScreenMessage = require("./server_clear_screen_message.js");
 
 	var ClientClearScreenMessage = module.exports = function() {
 	};
@@ -19,7 +19,7 @@
 	};
 
 	ClientClearScreenMessage.prototype.toServerEvent = function() {
-		return new ServerClearScreenEvent();
+		return new ServerClearScreenMessage();
 	};
 
 }());
