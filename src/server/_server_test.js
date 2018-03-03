@@ -6,7 +6,7 @@
 	const fs = require("fs");
 	const http = require("http");
 	const assert = require("_assert");
-	const ClientPointerEvent = require("../shared/client_pointer_event.js");
+	const ClientPointerMessage = require("../shared/client_pointer_message.js");
 	const ServerPointerEvent = require("../shared/server_pointer_event.js");
 	const SocketIoClient = require("./__socket_io_client.js");
 
@@ -72,7 +72,7 @@
 
 			const emitter = await socketIoClient.createSocket();
 			const receiver = await socketIoClient.createSocket();
-			const clientEvent = new ClientPointerEvent(100, 200);
+			const clientEvent = new ClientPointerMessage(100, 200);
 
 			emitter.emit(clientEvent.name(), clientEvent.payload());
 

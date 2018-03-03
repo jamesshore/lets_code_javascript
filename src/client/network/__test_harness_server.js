@@ -9,7 +9,7 @@
 	var socketIo = require("socket.io");
 	var url = require("url");
 	var querystring = require("querystring");
-	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
+	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
 	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 
 	var endpoints = shared.endpoints;
@@ -100,7 +100,7 @@
 
 		var TESTABLE_EVENTS = [
 			ClientDrawMessage.EVENT_NAME,
-			ClientPointerEvent.EVENT_NAME
+			ClientPointerMessage.EVENT_NAME
 		];
 
 		io.on("connection", function(socket) {

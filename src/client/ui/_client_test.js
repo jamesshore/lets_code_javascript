@@ -12,7 +12,7 @@
 	var RealTimeConnection = require("../network/real_time_connection.js");
 	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
-	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
+	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientRemovePointerEvent = require("../../shared/client_remove_pointer_event.js");
 	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
@@ -380,19 +380,19 @@
 
 				it("sends pointer location whenever mouse moves", function() {
 					drawingArea.triggerMouseMove(50, 60);
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(50, 60));
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerMessage(50, 60));
 				});
 
 				it("sends pointer location even when mouse moves outside drawing area", function() {
 					documentBody.triggerMouseMove(HtmlCoordinate.fromRelativeOffset(drawingArea, 20, 40));
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(20, 40));
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerMessage(20, 40));
 				});
 
 				it("does send pointer location when touch events occur within drawing area", function() {
 					if (!browser.supportsTouchEvents()) return;
 
 					drawingArea.triggerSingleTouchMove(30, 40);
-					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerEvent(30, 40));
+					assert.deepEqual(nullConnection.getLastSentEvent(), new ClientPointerMessage(30, 40));
 				});
 
 				it("doesn't send pointer location when touch events occur outside of drawing area", function() {

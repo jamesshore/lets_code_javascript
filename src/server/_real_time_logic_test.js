@@ -5,12 +5,12 @@
 	const RealTimeLogic = require("./real_time_logic.js");
 	const RealTimeServer = require("./real_time_server.js");
 	const assert = require("_assert");
-	const ClientPointerEvent = require("../shared/client_pointer_event.js");
+	const ClientPointerMessage = require("../shared/client_pointer_message.js");
 	const ServerRemovePointerEvent = require("../shared/server_remove_pointer_event.js");
 	const ClientDrawMessage = require("../shared/client_draw_message.js");
 	const Clock = require("./clock.js");
 
-	const IRRELEVANT_MESSAGE = new ClientPointerEvent(42, 24);
+	const IRRELEVANT_MESSAGE = new ClientPointerMessage(42, 24);
 
 	describe("RealTimeLogic", function() {
 
@@ -34,7 +34,7 @@
 
 		it("broadcasts messages from one client to all others", function() {
 			const clientId = "client id";
-			const clientMessage = new ClientPointerEvent(100, 200);
+			const clientMessage = new ClientPointerMessage(100, 200);
 
 			realTimeServer.connectNullClient(clientId);
 			realTimeServer.triggerClientMessageEvent(clientId, clientMessage);

@@ -6,13 +6,13 @@
 	const failFast = require("fail_fast.js");
 	const util = require("util");
 	const EventEmitter = require("events");
-	const ClientPointerEvent = require("../shared/client_pointer_event.js");
+	const ClientPointerMessage = require("../shared/client_pointer_message.js");
 	const ClientRemovePointerEvent = require("../shared/client_remove_pointer_event.js");
 	const ClientDrawMessage = require("../shared/client_draw_message.js");
 	const ClientClearScreenMessage = require("../shared/client_clear_screen_message.js");
 
 	const SUPPORTED_EVENTS = [
-		ClientPointerEvent,
+		ClientPointerMessage,
 		ClientRemovePointerEvent,
 		ClientDrawMessage,
 		ClientClearScreenMessage

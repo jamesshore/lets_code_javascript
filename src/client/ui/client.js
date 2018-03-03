@@ -11,7 +11,7 @@
 	var failFast = require("fail_fast");
 	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 	var ServerDrawEvent = require("../../shared/server_draw_event.js");
-	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
+	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
 	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var ClientRemovePointerEvent = require("../../shared/client_remove_pointer_event.js");
 	var ServerRemovePointerEvent = require("../../shared/server_remove_pointer_event.js");
@@ -73,7 +73,7 @@
 
 	function sendPointerEvent(coordinate) {
 		var relativeOffset = coordinate.toRelativeOffset(drawingArea);
-		network.sendEvent(new ClientPointerEvent(relativeOffset.x, relativeOffset.y));
+		network.sendEvent(new ClientPointerMessage(relativeOffset.x, relativeOffset.y));
 	}
 
 	function sendRemovePointerEvent() {
