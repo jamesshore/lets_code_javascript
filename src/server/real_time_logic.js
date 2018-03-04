@@ -52,7 +52,7 @@
 		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_CONNECT, (clientId) => {
 			resetClientTimeout(clientId);
 		});
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, (clientId) => {
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, ({ clientId }) => {
 			resetClientTimeout(clientId);
 		});
 		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_DISCONNECT, (clientId) => {
@@ -89,8 +89,8 @@
 	}
 
 	function handleClientMessages(self) {
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, (clientId, clientMessage) => {
-			processClientEvent(self, clientId, clientMessage);
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, ({ clientId, message }) => {
+			processClientEvent(self, clientId, message);
 		});
 	}
 

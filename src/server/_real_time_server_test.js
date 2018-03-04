@@ -99,16 +99,14 @@
 			const socket = await socketIoClient.createSocket();
 			const messageToSend = new ClientRemovePointerMessage();
 
-			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.EVENT.CLIENT_MESSAGE, (clientId, receivedMessage) => {
-					resolve({ clientId, receivedMessage });
-				});
+			const eventPromise = new Promise((resolve) => {
+				realTimeServer.once(RealTimeServer.EVENT.CLIENT_MESSAGE, resolve);
 			});
 
 			socket.emit(messageToSend.name(), messageToSend.payload());
-			const { clientId, receivedMessage } = await eventPromise;
+			const { clientId, message } = await eventPromise;
 			assert.equal(clientId, socket.id, "client ID");
-			assert.deepEqual(receivedMessage, messageToSend, "message");
+			assert.deepEqual(message, messageToSend, "message");
 
 			await socketIoClient.closeSocket(socket);
 		});
@@ -117,10 +115,8 @@
 			const clientId = "my client ID";
 			const message = new ClientRemovePointerMessage();
 
-			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.EVENT.CLIENT_MESSAGE, (clientId, message) => {
-					resolve({ clientId, message });
-				});
+			const eventPromise = new Promise((resolve) => {
+				realTimeServer.once(RealTimeServer.EVENT.CLIENT_MESSAGE, resolve);
 			});
 			realTimeServer.simulateClientMessage(clientId, message);
 			assert.deepEqual(await eventPromise, { clientId, message });

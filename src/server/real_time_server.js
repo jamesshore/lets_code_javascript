@@ -146,7 +146,7 @@
 	}
 
 	function handleClientMessage(self, clientId, message) {
-		self.emit(RealTimeServer.EVENT.CLIENT_MESSAGE, clientId, message);
+		self.emit(RealTimeServer.EVENT.CLIENT_MESSAGE, { clientId, message });
 	}
 
 	function connectClient(self, socket) {

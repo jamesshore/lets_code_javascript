@@ -59,4 +59,3 @@ Engineering Tasks:
 - When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear (e.g., if they click the mouse without moving it)
 
 To Do on current task:
-* Unify event sending parameters as suggested by Martin Grandrath's in E582 comments - http://www.letscodejavascript.com/v3/comments/live/582#comment-3675682857
