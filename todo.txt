@@ -53,23 +53,11 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Factor out domain logic from Socket.IO handling (in RealTimeServer)
-	- use onOneClientEvent concept and improve it to be proper event emitter
-- When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear (e.g., if they click the mouse without moving it)
-- add promisified version of setTimeout()?
-	- use Clock.setTimeout() instead of regular setTimeout() in RealTimeServer tests
-- Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)
-- Test that client and server talk to each other correctly; not just that they can talk to Socket.IO, but specifically that they talk to each other
-
-To Do on current task:
-- DONE OFF-CAMERA:
-	- Rename 'Event' to 'Message' across the board
-	- Add 'no-invalid-this' linter rule (thanks to Martin Grandrath)
-- Look for opportunities to improve Socket.IO abstraction API
+* Look for opportunities to improve Socket.IO abstraction API
+	- 'trigger' methods and 'connectNullClient' methods have unclear duplicate purpose
 	- Unify event sending parameters as suggested by Martin Grandrath's in E582 comments - http://www.letscodejavascript.com/v3/comments/live/582#comment-3675682857
-- Possible race condition? _real_time_server_test "sends message to all Socket.IO clients" failed intermittently
-- Clean up Server and its tests
-	- Remove RealTimeLogic.numberOfActiveConnections
 - Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?
 	- appears to be a race condition; it doesn't occur every time
-- Update _server_test.js to not user private realTimeServer._socketIoAbstraction
+- When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear (e.g., if they click the mouse without moving it)
+
+To Do on current task:

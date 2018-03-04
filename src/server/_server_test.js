@@ -38,7 +38,8 @@
 
 		afterEach(async function() {
 			try {
-				await waitForConnectionCount(0, "afterEach() requires all sockets to be closed");
+				const realTimeServer = server._realTimeServer;
+				assert.equal(realTimeServer.numberOfActiveConnections(), 0, "afterEach() requires all sockets to be closed");
 			}
 			finally {
 				await server.stop();
@@ -76,48 +77,15 @@
 
 			emitter.emit(clientMessage.name(), clientMessage.payload());
 
-			await new Promise((resolve, reject) => {
-				receiver.on(ServerPointerMessage.MESSAGE_NAME, function(data) {
-					try {
-						assert.deepEqual(data, clientMessage.toServerMessage(emitter.id).payload());
-						resolve();
-					}
-					catch(err) {
-						reject(err);
-					}
-				});
+			const actualPayload = await new Promise((resolve) => {
+				receiver.once(ServerPointerMessage.MESSAGE_NAME, resolve);
 			});
 
+			assert.deepEqual(actualPayload, clientMessage.toServerMessage(emitter.id).payload());
 			await new Promise((resolve) => setTimeout(resolve, 0));
 			await socketIoClient.closeSocket(emitter);
 			await socketIoClient.closeSocket(receiver);
 		});
-
-		// Duplicated with _real_time_server_test.js
-		async function waitForConnectionCount(expectedConnections, message) {
-			const TIMEOUT = 1000; // milliseconds
-			const RETRY_PERIOD = 10; // milliseconds
-
-			const startTime = Date.now();
-			const realTimeLogic = server._realTimeLogic;
-			let success = false;
-
-			while(!success && !isTimeUp(TIMEOUT)) {
-				await timeoutPromise(RETRY_PERIOD);
-				success = (expectedConnections === realTimeLogic.numberOfActiveConnections());
-			}
-			assert.equal(realTimeLogic.numberOfActiveConnections(), expectedConnections, message);
-
-			function isTimeUp(timeout) {
-				return (startTime + timeout) < Date.now();
-			}
-
-			function timeoutPromise(milliseconds) {
-				return new Promise((resolve) => {
-					setTimeout(resolve, milliseconds);
-				});
-			}
-		}
 
 	});
 

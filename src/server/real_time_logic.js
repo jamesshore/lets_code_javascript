@@ -10,7 +10,7 @@
 	// Consider Jay Bazuzi's suggestions from E494 comments (direct connection from client to server when testing)
 	// http://disq.us/p/1gobws6  http://www.letscodejavascript.com/v3/comments/live/494
 
-	const CLIENT_TIMEOUT = 30 * 1000;
+	const CLIENT_TIMEOUT = 3 * 1000;
 
 	const RealTimeLogic = module.exports = class RealTimeLogic {
 
@@ -27,10 +27,6 @@
 
 		stop() {
 			stopHandlingClientTimeouts(this);
-		}
-
-		numberOfActiveConnections() {
-			return this._realTimeServer.numberOfActiveConnections();
 		}
 
 	};
