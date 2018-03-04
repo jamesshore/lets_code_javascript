@@ -85,14 +85,6 @@
 			return Object.keys(this._socketIoConnections).length;
 		}
 
-		triggerClientConnectEvent(clientId) {
-			this.emit(RealTimeServer.CLIENT_CONNECT, clientId);
-		}
-
-		triggerClientDisconnectEvent(clientId) {
-			this.emit(RealTimeServer.CLIENT_DISCONNECT, clientId);
-		}
-
 		triggerClientMessageEvent(clientId, message) {
 			this.emit(RealTimeServer.CLIENT_MESSAGE, clientId, message);
 		}
@@ -156,7 +148,7 @@
 		failFast.unlessDefined(key, "socket.id");
 
 		self._socketIoConnections[key] = socket;
-		self.triggerClientConnectEvent(key);
+		emitClientConnectEvent(self, key);
 	}
 
 	function disconnectClient(self, socket) {
@@ -164,7 +156,7 @@
 		failFast.unlessDefined(key, "socket.id");
 
 		delete self._socketIoConnections[key];
-		self.triggerClientDisconnectEvent(key);
+		emitClientDisconnectEvent(self, key);
 	}
 
 	function lookUpSocket(self, clientId) {
@@ -178,6 +170,14 @@
 			"Do not call httpServer.stop() when using RealTimeServer--it will trigger this bug: " +
 			"https://github.com/socketio/socket.io/issues/2975"
 		);
+	}
+
+	function emitClientConnectEvent(self, clientId) {
+		self.emit(RealTimeServer.CLIENT_CONNECT, clientId);
+	}
+
+	function emitClientDisconnectEvent(self, clientId) {
+		self.emit(RealTimeServer.CLIENT_DISCONNECT, clientId);
 	}
 
 

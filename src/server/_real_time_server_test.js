@@ -68,16 +68,6 @@
 			await socketIoClient.closeSocket(socket);
 		});
 
-		it("simulates a client connecting", async function() {
-			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_CONNECT, (clientId) => {
-					resolve(clientId);
-				});
-			});
-			realTimeServer.triggerClientConnectEvent("connecting ID");
-			assert.equal(await eventPromise, "connecting ID");
-		});
-
 		it("connects and disconnects null clients (clients that don't actually exist)", function() {
 			const clientId = "null client ID";
 			const message = new ClientRemovePointerMessage(clientId);
@@ -103,16 +93,6 @@
 			await socketIoClient.closeSocket(socket);
 			const clientId = await eventPromise;
 			assert.equal(clientId, socketId, "client ID");
-		});
-
-		it("simulates a client disconnecting", async function() {
-			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_DISCONNECT, (clientId) => {
-					resolve(clientId);
-				});
-			});
-			realTimeServer.triggerClientDisconnectEvent("disconnecting ID");
-			assert.equal(await eventPromise, "disconnecting ID");
 		});
 
 		it("emits event when a message is received from a client", async function() {

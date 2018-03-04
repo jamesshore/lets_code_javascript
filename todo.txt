@@ -54,10 +54,12 @@ User Stories to finish current MMF:
 
 Engineering Tasks:
 * Look for opportunities to improve Socket.IO abstraction API
-	- 'trigger' methods and 'connectNullClient' methods have unclear duplicate purpose
-	- Unify event sending parameters as suggested by Martin Grandrath's in E582 comments - http://www.letscodejavascript.com/v3/comments/live/582#comment-3675682857
 - Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?
 	- appears to be a race condition; it doesn't occur every time
 - When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear (e.g., if they click the mouse without moving it)
 
 To Do on current task:
+- Replace triggerClientConnectEvent with connectNullClient
+- Replace triggerClientDisconnectEvent with disconnectNullClient
+- Rename or replace triggerClientMessageEvent with a simulation-focused approach
+- Unify event sending parameters as suggested by Martin Grandrath's in E582 comments - http://www.letscodejavascript.com/v3/comments/live/582#comment-3675682857

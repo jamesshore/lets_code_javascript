@@ -74,8 +74,8 @@
 
 		it("sends 'remove pointer' message to other browsers when client disconnects", function() {
 			let clientId = "my client ID";
-			realTimeServer.triggerClientConnectEvent(clientId);
-			realTimeServer.triggerClientDisconnectEvent(clientId);
+			realTimeServer.connectNullClient(clientId);
+			realTimeServer.disconnectNullClient(clientId);
 
 			assert.deepEqual(realTimeServer.getLastSentMessage(), {
 				message: new ServerRemovePointerMessage(clientId),
@@ -85,10 +85,10 @@
 
 		it("when sending 'remove pointer' message after timeout, uses the correct client ID", function() {
 			let correctId = "correct client ID";
-			realTimeServer.triggerClientConnectEvent(correctId);
-			realTimeServer.triggerClientConnectEvent("different client ID");
+			realTimeServer.connectNullClient(correctId);
+			realTimeServer.connectNullClient("different client ID");
 
-			realTimeServer.triggerClientDisconnectEvent(correctId);
+			realTimeServer.disconnectNullClient(correctId);
 
 			assert.deepEqual(realTimeServer.getLastSentMessage(), {
 				message: new ServerRemovePointerMessage(correctId),
@@ -99,8 +99,8 @@
 		it("stores 'remove pointer' message in message repo when client disconnects", function() {
 			const clientId = "my client ID";
 
-			realTimeServer.triggerClientConnectEvent(clientId);
-			realTimeServer.triggerClientDisconnectEvent(clientId);
+			realTimeServer.connectNullClient(clientId);
+			realTimeServer.disconnectNullClient(clientId);
 			assert.deepEqual(
 				realTimeLogic._messageRepo.replay(),
 				[ new ServerRemovePointerMessage(clientId) ]
@@ -109,7 +109,7 @@
 
 		it("times out (removes) ghost pointer when no activity from the client for a period of time", function() {
 			const clientId = "my client ID";
-			realTimeServer.triggerClientConnectEvent(clientId);
+			realTimeServer.connectNullClient(clientId);
 
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 			assert.deepEqual(realTimeServer.getLastSentMessage(), {
@@ -148,7 +148,7 @@
 			const clientId = "my client ID";
 			const counter = countRemovePointerMessages();
 
-			realTimeServer.triggerClientConnectEvent(clientId);
+			realTimeServer.connectNullClient(clientId);
 
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT * 10);
 			assert.equal(counter.messagesReceived, 1, "should only time out once");
@@ -158,8 +158,8 @@
 			const clientId = "my client ID";
 			const counter = countRemovePointerMessages();
 
-			realTimeServer.triggerClientConnectEvent(clientId);
-			realTimeServer.triggerClientDisconnectEvent(clientId);
+			realTimeServer.connectNullClient(clientId);
+			realTimeServer.disconnectNullClient(clientId);
 			assert.equal(counter.messagesReceived, 1, "should get a disconnect event when disconnecting");
 
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
