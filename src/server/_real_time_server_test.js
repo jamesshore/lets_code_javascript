@@ -122,7 +122,7 @@
 					resolve({ clientId, message });
 				});
 			});
-			realTimeServer.triggerClientMessageEvent(clientId, message);
+			realTimeServer.simulateClientMessage(clientId, message);
 			assert.deepEqual(await eventPromise, { clientId, message });
 		});
 

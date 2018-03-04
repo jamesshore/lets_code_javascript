@@ -85,8 +85,8 @@
 			return Object.keys(this._socketIoConnections).length;
 		}
 
-		triggerClientMessageEvent(clientId, message) {
-			this.emit(RealTimeServer.CLIENT_MESSAGE, clientId, message);
+		simulateClientMessage(clientId, message) {
+			handleClientMessage(this, clientId, message);
 		}
 
 		connectNullClient(clientId) {
@@ -137,10 +137,14 @@
 		ioServer.on("connect", (socket) => {
 			SUPPORTED_MESSAGES.forEach(function(messageConstructor) {
 				socket.on(messageConstructor.MESSAGE_NAME, function(payload) {
-					self.triggerClientMessageEvent(socket.id, messageConstructor.fromPayload(payload));
+					handleClientMessage(self, socket.id, messageConstructor.fromPayload(payload));
 				});
 			});
 		});
+	}
+
+	function handleClientMessage(self, clientId, message) {
+		self.emit(RealTimeServer.CLIENT_MESSAGE, clientId, message);
 	}
 
 	function connectClient(self, socket) {
@@ -148,7 +152,7 @@
 		failFast.unlessDefined(key, "socket.id");
 
 		self._socketIoConnections[key] = socket;
-		emitClientConnectEvent(self, key);
+		self.emit(RealTimeServer.CLIENT_CONNECT, key);
 	}
 
 	function disconnectClient(self, socket) {
@@ -156,7 +160,7 @@
 		failFast.unlessDefined(key, "socket.id");
 
 		delete self._socketIoConnections[key];
-		emitClientDisconnectEvent(self, key);
+		self.emit(RealTimeServer.CLIENT_DISCONNECT, key);
 	}
 
 	function lookUpSocket(self, clientId) {
@@ -170,14 +174,6 @@
 			"Do not call httpServer.stop() when using RealTimeServer--it will trigger this bug: " +
 			"https://github.com/socketio/socket.io/issues/2975"
 		);
-	}
-
-	function emitClientConnectEvent(self, clientId) {
-		self.emit(RealTimeServer.CLIENT_CONNECT, clientId);
-	}
-
-	function emitClientDisconnectEvent(self, clientId) {
-		self.emit(RealTimeServer.CLIENT_DISCONNECT, clientId);
 	}
 
 

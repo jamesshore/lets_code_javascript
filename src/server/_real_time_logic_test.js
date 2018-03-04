@@ -37,7 +37,7 @@
 			const clientMessage = new ClientPointerMessage(100, 200);
 
 			realTimeServer.connectNullClient(clientId);
-			realTimeServer.triggerClientMessageEvent(clientId, clientMessage);
+			realTimeServer.simulateClientMessage(clientId, clientMessage);
 			assert.deepEqual(realTimeServer.getLastSentMessage(), {
 				message: clientMessage.toServerMessage(clientId),
 				clientId,
@@ -53,9 +53,9 @@
 			const message3 = new ClientDrawMessage(3, 30, 300, 3000);
 
 			realTimeServer.connectNullClient(IRRELEVANT_ID);
-			realTimeServer.triggerClientMessageEvent(IRRELEVANT_ID, message1);
-			realTimeServer.triggerClientMessageEvent(IRRELEVANT_ID, message2);
-			realTimeServer.triggerClientMessageEvent(IRRELEVANT_ID, message3);
+			realTimeServer.simulateClientMessage(IRRELEVANT_ID, message1);
+			realTimeServer.simulateClientMessage(IRRELEVANT_ID, message2);
+			realTimeServer.simulateClientMessage(IRRELEVANT_ID, message3);
 
 			const serverMessages = [];
 			realTimeServer.on(RealTimeServer.SERVER_MESSAGE, (message) => {
@@ -125,7 +125,7 @@
 			realTimeServer.connectNullClient(clientId);
 
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
-			realTimeServer.triggerClientMessageEvent(clientId, IRRELEVANT_MESSAGE);
+			realTimeServer.simulateClientMessage(clientId, IRRELEVANT_MESSAGE);
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
 			assert.equal(counter.messagesReceived, 0, "should not get any timeout messages");
 		});
@@ -139,7 +139,7 @@
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 			assert.equal(counter.messagesReceived, 1, "should have timed out once");
 
-			realTimeServer.triggerClientMessageEvent(clientId, IRRELEVANT_MESSAGE);
+			realTimeServer.simulateClientMessage(clientId, IRRELEVANT_MESSAGE);
 			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 			assert.equal(counter.messagesReceived, 2, "should time out again after new activity");
 		});
