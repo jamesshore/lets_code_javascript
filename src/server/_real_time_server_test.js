@@ -56,7 +56,7 @@
 			let socket;
 
 			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_CONNECT, (clientId) => {
+				realTimeServer.once(RealTimeServer.EVENT.CLIENT_CONNECT, (clientId) => {
 					resolve(clientId);
 				});
 			});
@@ -85,7 +85,7 @@
 			const socketId = socket.id;
 
 			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_DISCONNECT, (clientId) => {
+				realTimeServer.once(RealTimeServer.EVENT.CLIENT_DISCONNECT, (clientId) => {
 					resolve(clientId);
 				});
 			});
@@ -100,7 +100,7 @@
 			const messageToSend = new ClientRemovePointerMessage();
 
 			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId, receivedMessage) => {
+				realTimeServer.once(RealTimeServer.EVENT.CLIENT_MESSAGE, (clientId, receivedMessage) => {
 					resolve({ clientId, receivedMessage });
 				});
 			});
@@ -118,7 +118,7 @@
 			const message = new ClientRemovePointerMessage();
 
 			const eventPromise = new Promise((resolve, reject) => {
-				realTimeServer.once(RealTimeServer.CLIENT_MESSAGE, (clientId, message) => {
+				realTimeServer.once(RealTimeServer.EVENT.CLIENT_MESSAGE, (clientId, message) => {
 					resolve({ clientId, message });
 				});
 			});
@@ -209,7 +209,7 @@
 
 			function listenForOneServerMessageEvent(event) {
 				return new Promise((resolve, reject) => {
-					realTimeServer.once(RealTimeServer.SERVER_MESSAGE, (value) => {
+					realTimeServer.once(RealTimeServer.EVENT.SERVER_MESSAGE, (value) => {
 						resolve(value);
 					});
 				});

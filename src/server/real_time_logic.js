@@ -34,11 +34,11 @@
 	RealTimeLogic.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
 
 	function handleRealTimeEvents(self) {
-		self._realTimeServer.on(RealTimeServer.CLIENT_CONNECT, (clientId) => {
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_CONNECT, (clientId) => {
 			replayPreviousMessages(self, clientId);
 		});
 		handleClientMessages(self);
-		self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, (disconnectId) => {
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_DISCONNECT, (disconnectId) => {
 			broadcastAndStoreMessage(self, null, new ServerRemovePointerMessage(disconnectId));
 		});
 	}
@@ -49,13 +49,13 @@
 		self._interval = self._clock.setInterval(() => {
 			timeOutClients();
 		}, 100);
-		self._realTimeServer.on(RealTimeServer.CLIENT_CONNECT, (clientId) => {
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_CONNECT, (clientId) => {
 			resetClientTimeout(clientId);
 		});
-		self._realTimeServer.on(RealTimeServer.CLIENT_MESSAGE, (clientId) => {
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, (clientId) => {
 			resetClientTimeout(clientId);
 		});
-		self._realTimeServer.on(RealTimeServer.CLIENT_DISCONNECT, (clientId) => {
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_DISCONNECT, (clientId) => {
 			stopTrackingClient(clientId);
 		});
 
@@ -89,7 +89,7 @@
 	}
 
 	function handleClientMessages(self) {
-		self._realTimeServer.on(RealTimeServer.CLIENT_MESSAGE, (clientId, clientMessage) => {
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, (clientId, clientMessage) => {
 			processClientEvent(self, clientId, clientMessage);
 		});
 	}

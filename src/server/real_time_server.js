@@ -30,6 +30,12 @@
 			this._io = io;
 		}
 
+		static createNull() {
+			const server = new RealTimeServer(new NullHttpServer());
+			server._io = nullIo;
+			return server;
+		}
+
 		start() {
 			this._ioServer = this._io(this._nodeHttpServer);
 			this._nodeHttpServer.on("close", failFastIfHttpServerClosed);
@@ -100,16 +106,12 @@
 		}
 	};
 
-	RealTimeServer.createNull = function() {
-		const server = new RealTimeServer(new NullHttpServer());
-		server._io = nullIo;
-		return server;
+	RealTimeServer.EVENT = {
+		CLIENT_DISCONNECT: "clientDisconnect",
+		CLIENT_CONNECT: "clientConnect",
+		CLIENT_MESSAGE: "clientMessage",
+		SERVER_MESSAGE: "serverMessage"
 	};
-
-	RealTimeServer.CLIENT_DISCONNECT = "clientDisconnect";
-	RealTimeServer.CLIENT_CONNECT = "clientConnect";
-	RealTimeServer.CLIENT_MESSAGE = "clientMessage";
-	RealTimeServer.SERVER_MESSAGE = "serverMessage";
 
 	RealTimeServer.SEND_TYPE = {
 		ONE_CLIENT: "one_client",
@@ -119,7 +121,7 @@
 
 	function recordServerMessage(self, messageInfo) {
 		self._lastSentMessage = messageInfo;
-		self.emit(RealTimeServer.SERVER_MESSAGE, messageInfo);
+		self.emit(RealTimeServer.EVENT.SERVER_MESSAGE, messageInfo);
 	}
 
 	function trackSocketIoConnections(self, connections, ioServer) {
@@ -144,7 +146,7 @@
 	}
 
 	function handleClientMessage(self, clientId, message) {
-		self.emit(RealTimeServer.CLIENT_MESSAGE, clientId, message);
+		self.emit(RealTimeServer.EVENT.CLIENT_MESSAGE, clientId, message);
 	}
 
 	function connectClient(self, socket) {
@@ -152,7 +154,7 @@
 		failFast.unlessDefined(key, "socket.id");
 
 		self._socketIoConnections[key] = socket;
-		self.emit(RealTimeServer.CLIENT_CONNECT, key);
+		self.emit(RealTimeServer.EVENT.CLIENT_CONNECT, key);
 	}
 
 	function disconnectClient(self, socket) {
@@ -160,7 +162,7 @@
 		failFast.unlessDefined(key, "socket.id");
 
 		delete self._socketIoConnections[key];
-		self.emit(RealTimeServer.CLIENT_DISCONNECT, key);
+		self.emit(RealTimeServer.EVENT.CLIENT_DISCONNECT, key);
 	}
 
 	function lookUpSocket(self, clientId) {
