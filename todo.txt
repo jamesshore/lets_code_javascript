@@ -53,8 +53,7 @@ User Stories to finish current MMF:
 - polish: make 'clear' button depress when clear event received?
 
 Engineering Tasks:
-* Look for opportunities to improve Socket.IO abstraction API
-- Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?
+* Smoke test failure - introduced in E579? Is there a real bug that should have been caught by other tests?
 	- appears to be a race condition; it doesn't occur every time
 - When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear (e.g., if they click the mouse without moving it)
 

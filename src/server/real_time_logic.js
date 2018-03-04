@@ -56,18 +56,10 @@
 	function handleClientTimeouts(self) {
 		self._lastActivity = {};
 
-		self._interval = self._clock.setInterval(() => {
-			timeOutClients();
-		}, 100);
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_CONNECT, (clientId) => {
-			resetClientTimeout(clientId);
-		});
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, ({ clientId }) => {
-			resetClientTimeout(clientId);
-		});
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_DISCONNECT, (clientId) => {
-			stopTrackingClient(clientId);
-		});
+		self._interval = self._clock.setInterval(timeOutInactiveClients, 100);
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_CONNECT, resetClientTimeout);
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, ({ clientId }) => resetClientTimeout(clientId));
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_DISCONNECT, stopTrackingClient);
 
 		function resetClientTimeout(clientId) {
 			self._lastActivity[clientId] = self._clock.now();
@@ -77,7 +69,7 @@
 			delete self._lastActivity[clientId];
 		}
 
-		function timeOutClients() {
+		function timeOutInactiveClients() {
 			Object.keys(self._lastActivity).forEach((clientId) => {
 				const lastActivity = self._lastActivity[clientId];
 				if (self._clock.millisecondsSince(lastActivity) >= CLIENT_TIMEOUT) {
@@ -91,7 +83,6 @@
 	function stopHandlingClientTimeouts(self) {
 		self._interval.clear();
 	}
-
 
 	function broadcastAndStoreMessage(self, clientIdOrNull, message) {
 		self._messageRepo.store(message);
