@@ -34,13 +34,23 @@
 	RealTimeLogic.CLIENT_TIMEOUT = CLIENT_TIMEOUT;
 
 	function handleRealTimeEvents(self) {
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_CONNECT, (clientId) => {
-			replayPreviousMessages(self, clientId);
-		});
-		handleClientMessages(self);
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_DISCONNECT, (disconnectId) => {
-			broadcastAndStoreMessage(self, null, new ServerRemovePointerMessage(disconnectId));
-		});
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_CONNECT, replayPreviousMessages);
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, processClientMessage);
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_DISCONNECT, removeClientPointer);
+
+		function replayPreviousMessages(clientId) {
+			self._messageRepo.replay().forEach((message) => {
+				self._realTimeServer.sendToOneClient(clientId, message);
+			});
+		}
+
+		function processClientMessage({ clientId, message }) {
+			broadcastAndStoreMessage(self, clientId, message.toServerMessage(clientId));
+		}
+
+		function removeClientPointer(clientId) {
+			broadcastAndStoreMessage(self, null, new ServerRemovePointerMessage(clientId));
+		}
 	}
 
 	function handleClientTimeouts(self) {
@@ -82,23 +92,6 @@
 		self._interval.clear();
 	}
 
-	function replayPreviousMessages(self, clientId) {
-		self._messageRepo.replay().forEach((message) => {
-			self._realTimeServer.sendToOneClient(clientId, message);
-		});
-	}
-
-	function handleClientMessages(self) {
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, ({ clientId, message }) => {
-			processClientEvent(self, clientId, message);
-		});
-	}
-
-	function processClientEvent(self, clientId, clientMessage) {
-		const id = clientId !== null ? clientId : "__SIMULATED__";
-		const serverMessage = clientMessage.toServerMessage(id);
-		broadcastAndStoreMessage(self, clientId, serverMessage);
-	}
 
 	function broadcastAndStoreMessage(self, clientIdOrNull, message) {
 		self._messageRepo.store(message);
