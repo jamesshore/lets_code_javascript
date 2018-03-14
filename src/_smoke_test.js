@@ -23,7 +23,7 @@
 	const DRAWING_AREA_ID = "drawing-area";
 
 	let serverProcess;
-	let driver;
+	let browser1;
 
 	describe("Smoke test", function() {
 		/*eslint no-invalid-this:off */
@@ -33,8 +33,8 @@
 			runServer.runProgrammatically(function(process) {
 				serverProcess = process;
 
-				driver = createDriver();
-				driver.getCapabilities().then(function(capabilities) {
+				browser1 = createBrowserWindow();
+				browser1.getCapabilities().then(function(capabilities) {
 					const version = capabilities.get("browserName") + " " + capabilities.get("browserVersion");
 					if (version !== EXPECTED_BROWSER) {
 						console.log("Warning: Smoke test browser expected " + EXPECTED_BROWSER + ", but was " + version);
@@ -46,7 +46,7 @@
 
 		after(function(done) {
 			serverProcess.on("exit", function(code, signal) {
-				driver.quit().then(done);
+				browser1.quit().then(done);
 			});
 			serverProcess.kill();
 		});
@@ -72,15 +72,15 @@
 		});
 
 		it("user can draw on page and drawing is networked", function(done) {
-			driver.get(HOME_PAGE_URL);
-			const driver2 = createDriver();
-			driver2.get(HOME_PAGE_URL);
+			browser1.get(HOME_PAGE_URL);
+			const browser2 = createBrowserWindow();
+			browser2.get(HOME_PAGE_URL);
 
-			driver2.findElements(By.css(GHOST_POINTER_SELECTOR)).then(function(elements) {
+			browser2.findElements(By.css(GHOST_POINTER_SELECTOR)).then(function(elements) {
 				assert.equal(elements.length, 0, "should not have any ghost pointers before pointer is moved in other browser");
 			});
 
-			driver.executeScript(function(DRAWING_AREA_ID) {
+			browser1.executeScript(function(DRAWING_AREA_ID) {
 				const client = require("./client.js");
 				const HtmlElement = require("./html_element.js");
 
@@ -96,27 +96,27 @@
 
 			// Wait for ghost pointer to appear -- that means real-time networking has been established
 			// If it doesn't get established, the test will time out and fail.
-			driver2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR))).then(function() {
-				driver2.executeScript(function() {
+			browser2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR))).then(function() {
+				browser2.executeScript(function() {
 					const client = require("./client.js");
 					return client.drawingAreaCanvas.lineSegments();
 				}).then(function (lineSegments) {
 					assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
-					driver2.quit().then(done);
+					browser2.quit().then(done);
 				});
 			});
 		});
 
 	});
 
-	function createDriver() {
+	function createBrowserWindow() {
 		return new webdriver.Builder().forBrowser("firefox").build();
 	}
 
 	async function assertWebFontsLoaded(url) {
 		const TIMEOUT = 10 * 1000;
 
-		await driver.get(url);
+		await browser1.get(url);
 		await waitForFontsToLoad();
 
 		const expectedFonts = await getStyleSheetFonts();
@@ -134,20 +134,20 @@
 		}
 
 		async function waitForFontsToLoad() {
-			await driver.wait(function() {
-				return driver.executeScript(function() {
+			await browser1.wait(function() {
+				return browser1.executeScript(function() {
 					return window.wwp_typekitDone;
 				});
 			}, TIMEOUT, "Timed out waiting for web fonts to load");
 		}
 
 		async function getStyleSheetFonts() {
-			const styleSheetFonts = await driver.executeScript(browser_getStyleSheetFonts);
+			const styleSheetFonts = await browser1.executeScript(browser_getStyleSheetFonts);
 			return normalizeExpectedFonts(styleSheetFonts);
 		}
 
 		function getLoadedFonts() {
-			return driver.executeScript(function() {
+			return browser1.executeScript(function() {
 				return window.wwp_loadedFonts;
 			});
 		}
