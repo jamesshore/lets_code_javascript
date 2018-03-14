@@ -71,16 +71,15 @@
 			await assertWebFontsLoaded(NOT_FOUND_PAGE_URL);
 		});
 
-		it("user can draw on page and drawing is networked", function(done) {
-			browser1.get(HOME_PAGE_URL);
+		it.only("user can draw on page and drawing is networked", async function() {
+			await browser1.get(HOME_PAGE_URL);
 			const browser2 = createBrowserWindow();
-			browser2.get(HOME_PAGE_URL);
+			await browser2.get(HOME_PAGE_URL);
 
-			browser2.findElements(By.css(GHOST_POINTER_SELECTOR)).then(function(elements) {
-				assert.equal(elements.length, 0, "should not have any ghost pointers before pointer is moved in other browser");
-			});
+			const elements = await browser2.findElements(By.css(GHOST_POINTER_SELECTOR));
+			assert.equal(elements.length, 0, "should not have any ghost pointers before pointer is moved in other browser");
 
-			browser1.executeScript(function(DRAWING_AREA_ID) {
+			const localLines = await browser1.executeScript(function(DRAWING_AREA_ID) {
 				const client = require("./client.js");
 				const HtmlElement = require("./html_element.js");
 
@@ -90,21 +89,18 @@
 				drawingArea.triggerMouseUp(50, 60);
 
 				return client.drawingAreaCanvas.lineSegments();
-			}, DRAWING_AREA_ID).then(function(lineSegments) {
-				assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
-			});
+			}, DRAWING_AREA_ID);
+			assert.deepEqual(localLines, [[ 10, 20, 50, 60 ]]);
 
 			// Wait for ghost pointer to appear -- that means real-time networking has been established
 			// If it doesn't get established, the test will time out and fail.
-			browser2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR))).then(function() {
-				browser2.executeScript(function() {
-					const client = require("./client.js");
-					return client.drawingAreaCanvas.lineSegments();
-				}).then(function (lineSegments) {
-					assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
-					browser2.quit().then(done);
-				});
+			await browser2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR)));
+			const networkLines = await browser2.executeScript(function() {
+				const client = require("./client.js");
+				return client.drawingAreaCanvas.lineSegments();
 			});
+			assert.deepEqual(networkLines, [[ 10, 20, 50, 60 ]]);
+			await browser2.quit();
 		});
 
 	});
