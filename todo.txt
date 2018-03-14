@@ -58,3 +58,5 @@ Engineering Tasks:
 - When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear (e.g., if they click the mouse without moving it)
 
 To Do on current task:
+* Convert Selenium tests to use async/await
+- Modify networking test to wait for line to be drawn rather than pointer to appear

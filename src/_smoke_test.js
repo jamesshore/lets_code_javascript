@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+// Copyright (c) 2012-2018 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global document, window, CSSRule */
 /*jshint regexp:false*/
 
@@ -9,22 +9,21 @@
 (function() {
 	"use strict";
 
-	var child_process = require("child_process");
-	var http = require("http");
-	var webdriver = require('selenium-webdriver');
-	var By = webdriver.By;
-	var until = webdriver.until;
-	var runServer = require("./_run_server.js");
-	var assert = require("_assert");
+	const http = require("http");
+	const webdriver = require('selenium-webdriver');
+	const By = webdriver.By;
+	const until = webdriver.until;
+	const runServer = require("./_run_server.js");
+	const assert = require("_assert");
 
-	var HOME_PAGE_URL = "http://localhost:5000";
-	var NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
-	var EXPECTED_BROWSER = "firefox 59.0";
-	var GHOST_POINTER_SELECTOR = ".ghost-pointer";
-	var DRAWING_AREA_ID = "drawing-area";
+	const HOME_PAGE_URL = "http://localhost:5000";
+	const NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
+	const EXPECTED_BROWSER = "firefox 59.0";
+	const GHOST_POINTER_SELECTOR = ".ghost-pointer";
+	const DRAWING_AREA_ID = "drawing-area";
 
-	var serverProcess;
-	var driver;
+	let serverProcess;
+	let driver;
 
 	describe("Smoke test", function() {
 		/*eslint no-invalid-this:off */
@@ -36,7 +35,7 @@
 
 				driver = createDriver();
 				driver.getCapabilities().then(function(capabilities) {
-					var version = capabilities.get("browserName") + " " + capabilities.get("browserVersion");
+					const version = capabilities.get("browserName") + " " + capabilities.get("browserVersion");
 					if (version !== EXPECTED_BROWSER) {
 						console.log("Warning: Smoke test browser expected " + EXPECTED_BROWSER + ", but was " + version);
 					}
@@ -54,7 +53,7 @@
 
 		it("can get home page", function(done) {
 			httpGet(HOME_PAGE_URL, function(response, receivedData) {
-				var foundHomePage = receivedData.indexOf("WeeWikiPaint home page") !== -1;
+				const foundHomePage = receivedData.indexOf("WeeWikiPaint home page") !== -1;
 				assert.equal(foundHomePage, true, "home page should have contained test marker");
 				done();
 			});
@@ -62,7 +61,7 @@
 
 		it("can get 404 page", function(done) {
 			httpGet(HOME_PAGE_URL + "/nonexistant.html", function(response, receivedData) {
-				var foundHomePage = receivedData.indexOf("WeeWikiPaint 404 page") !== -1;
+				const foundHomePage = receivedData.indexOf("WeeWikiPaint 404 page") !== -1;
 				assert.equal(foundHomePage, true, "404 page should have contained test marker");
 				done();
 			});
@@ -78,7 +77,7 @@
 
 		it("user can draw on page and drawing is networked", function(done) {
 			driver.get(HOME_PAGE_URL);
-			var driver2 = createDriver();
+			const driver2 = createDriver();
 			driver2.get(HOME_PAGE_URL);
 
 			driver2.findElements(By.css(GHOST_POINTER_SELECTOR)).then(function(elements) {
@@ -86,10 +85,10 @@
 			});
 
 			driver.executeScript(function(DRAWING_AREA_ID) {
-				var client = require("./client.js");
-				var HtmlElement = require("./html_element.js");
+				const client = require("./client.js");
+				const HtmlElement = require("./html_element.js");
 
-				var drawingArea = HtmlElement.fromId(DRAWING_AREA_ID);
+				const drawingArea = HtmlElement.fromId(DRAWING_AREA_ID);
 				drawingArea.triggerMouseDown(10, 20);
 				drawingArea.triggerMouseMove(50, 60);
 				drawingArea.triggerMouseUp(50, 60);
@@ -103,7 +102,7 @@
 			// If it doesn't get established, the test will time out and fail.
 			driver2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR))).then(function() {
 				driver2.executeScript(function() {
-					var client = require("./client.js");
+					const client = require("./client.js");
 					return client.drawingAreaCanvas.lineSegments();
 				}).then(function (lineSegments) {
 					assert.deepEqual(lineSegments, [[ 10, 20, 50, 60 ]]);
@@ -119,7 +118,7 @@
 	}
 
 	function assertWebFontsLoaded(url, done) {
-		var TIMEOUT = 10 * 1000;
+		const TIMEOUT = 10 * 1000;
 
 		driver.get(url);
 
@@ -131,14 +130,14 @@
 		}, TIMEOUT, "Timed out waiting for web fonts to load");
 
 		// get fonts from style sheet
-		var expectedFonts;
+		let expectedFonts;
 		driver.executeScript(browser_getStyleSheetFonts)
 		.then(function(returnValue) {
 			expectedFonts = normalizeExpectedFonts(returnValue);
 		});
 
 		// get loaded fonts
-		var actualFonts;
+		let actualFonts;
 		driver.executeScript(function() {
 			return window.wwp_loadedFonts;
 		}).then(function(returnValue) {
@@ -151,8 +150,8 @@
 				assert.fail("No web fonts found in CSS, but expected at least one.");
 			}
 
-			var fontsNotPresent = expectedFonts.filter(function(expectedFont) {
-				var fontPresent = actualFonts.some(function(actualFont) {
+			const fontsNotPresent = expectedFonts.filter(function(expectedFont) {
+				const fontPresent = actualFonts.some(function(actualFont) {
 					return ('"' + actualFont.family + '"' === expectedFont.family) && (actualFont.variant === expectedFont.variant);
 				});
 				return !fontPresent;
@@ -169,7 +168,7 @@
 		});
 
 		function normalizeExpectedFonts(styleSheetFonts) {
-			var expectedFonts = [];
+			const expectedFonts = [];
 
 			Object.keys(styleSheetFonts.families).forEach(function(family) {
 				Object.keys(styleSheetFonts.styles).forEach(function(style) {
@@ -189,9 +188,9 @@
 	}
 
 	function httpGet(url, callback) {
-		var request = http.get(url);
+		const request = http.get(url);
 		request.on("response", function(response) {
-			var receivedData = "";
+			let receivedData = "";
 			response.setEncoding("utf8");
 
 			response.on("data", function(chunk) {
@@ -208,7 +207,7 @@
 		// Pros: Knows exactly which combination of fonts, weights, and styles we're using
 		// Cons: It won't see all possibilities when using conditional styling such as media queries (I think)
 
-		var styleSheetFonts = {
+		const styleSheetFonts = {
 			families: {},
 			weights: {},
 			styles: {
@@ -216,12 +215,12 @@
 			}
 		};
 
-		var sheets = document.styleSheets;
+		const sheets = document.styleSheets;
 		processAllSheets();
 		return styleSheetFonts;
 
 		function processAllSheets() {
-			for (var i = 0; i < sheets.length; i++) {
+			for (let i = 0; i < sheets.length; i++) {
 				processStyleSheet(sheets[i]);
 			}
 		}
@@ -231,10 +230,10 @@
 				return;
 			}
 
-			var rules = getCssRulesOrNullIfSecurityError(sheet);
+			const rules = getCssRulesOrNullIfSecurityError(sheet);
 			if (rules === null) return;
 
-			for (var i = 0; i < rules.length; i++) {
+			for (let i = 0; i < rules.length; i++) {
 				processRule(rules[i]);
 			}
 		}
@@ -254,7 +253,7 @@
 
 		function processRule(rule) {
 			if (rule.type !== CSSRule.STYLE_RULE) return;
-			var style = rule.style;
+			const style = rule.style;
 
 			processFontFamily(style.getPropertyValue("font-family"));
 			processFontWeight(style.getPropertyValue("font-weight"));
@@ -264,7 +263,7 @@
 		function processFontFamily(familyDeclaration) {
 			if (familyDeclaration === "") return;
 
-			var families = familyDeclaration.split(",");
+			const families = familyDeclaration.split(",");
 
 			families.forEach(function(family) {
 				family = family.trim();
