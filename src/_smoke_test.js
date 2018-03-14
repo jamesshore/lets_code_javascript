@@ -63,12 +63,12 @@
 			assert.equal(foundHomePage, true, "404 page should have contained test marker");
 		});
 
-		it("home page fonts are loaded", function(done) {
-			assertWebFontsLoaded(HOME_PAGE_URL, done);
+		it("home page fonts are loaded", async function() {
+			await assertWebFontsLoaded(HOME_PAGE_URL);
 		});
 
-		it("404 page fonts are loaded", function(done) {
-			assertWebFontsLoaded(NOT_FOUND_PAGE_URL, done);
+		it("404 page fonts are loaded", async function() {
+			await assertWebFontsLoaded(NOT_FOUND_PAGE_URL);
 		});
 
 		it("user can draw on page and drawing is networked", function(done) {
@@ -113,55 +113,53 @@
 		return new webdriver.Builder().forBrowser("firefox").build();
 	}
 
-	function assertWebFontsLoaded(url, done) {
+	async function assertWebFontsLoaded(url) {
 		const TIMEOUT = 10 * 1000;
 
-		driver.get(url);
+		await driver.get(url);
+		await waitForFontsToLoad();
 
-		// wait for fonts to load
-		driver.wait(function() {
+		const expectedFonts = await getStyleSheetFonts();
+		const actualFonts = await getLoadedFonts();
+		const missingFonts = determineMissingFonts(expectedFonts, actualFonts);
+
+		if (expectedFonts.length === 0) {
+			assert.fail("No web fonts found in CSS, but expected at least one.");
+		}
+		if (missingFonts.length !== 0) {
+			console.log("Expected these fonts to be loaded, but they weren't:\n", missingFonts);
+			console.log("All expected fonts:\n", expectedFonts);
+			console.log("All loaded fonts:\n", actualFonts);
+			assert.fail("Required fonts weren't loaded");
+		}
+
+		async function waitForFontsToLoad() {
+			await driver.wait(function() {
+				return driver.executeScript(function() {
+					return window.wwp_typekitDone;
+				});
+			}, TIMEOUT, "Timed out waiting for web fonts to load");
+		}
+
+		async function getStyleSheetFonts() {
+			const styleSheetFonts = await driver.executeScript(browser_getStyleSheetFonts);
+			return normalizeExpectedFonts(styleSheetFonts);
+		}
+
+		function getLoadedFonts() {
 			return driver.executeScript(function() {
-				return window.wwp_typekitDone;
+				return window.wwp_loadedFonts;
 			});
-		}, TIMEOUT, "Timed out waiting for web fonts to load");
+		}
 
-		// get fonts from style sheet
-		let expectedFonts;
-		driver.executeScript(browser_getStyleSheetFonts)
-		.then(function(returnValue) {
-			expectedFonts = normalizeExpectedFonts(returnValue);
-		});
-
-		// get loaded fonts
-		let actualFonts;
-		driver.executeScript(function() {
-			return window.wwp_loadedFonts;
-		}).then(function(returnValue) {
-			actualFonts = returnValue;
-		});
-
-		// check fonts
-		driver.controlFlow().execute(function() {
-			if (expectedFonts.length === 0) {
-				assert.fail("No web fonts found in CSS, but expected at least one.");
-			}
-
-			const fontsNotPresent = expectedFonts.filter(function(expectedFont) {
+		function determineMissingFonts(expectedFonts, actualFonts) {
+			return expectedFonts.filter(function(expectedFont) {
 				const fontPresent = actualFonts.some(function(actualFont) {
 					return ('"' + actualFont.family + '"' === expectedFont.family) && (actualFont.variant === expectedFont.variant);
 				});
 				return !fontPresent;
 			});
-
-			if (fontsNotPresent.length !== 0) {
-				console.log("Expected these fonts to be loaded, but they weren't:\n", fontsNotPresent);
-				console.log("All expected fonts:\n", expectedFonts);
-				console.log("All loaded fonts:\n", actualFonts);
-				assert.fail("Required fonts weren't loaded");
-			}
-
-			done();
-		});
+		}
 
 		function normalizeExpectedFonts(styleSheetFonts) {
 			const expectedFonts = [];
