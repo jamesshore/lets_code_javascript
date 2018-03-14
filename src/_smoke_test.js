@@ -21,6 +21,7 @@
 	const EXPECTED_BROWSER = "firefox 59.0";
 	const GHOST_POINTER_SELECTOR = ".ghost-pointer";
 	const DRAWING_AREA_ID = "drawing-area";
+	const TIMEOUT = 10 * 1000;
 
 	let serverProcess;
 	let browser1;
@@ -71,36 +72,53 @@
 			await assertWebFontsLoaded(NOT_FOUND_PAGE_URL);
 		});
 
-		it.only("user can draw on page and drawing is networked", async function() {
+		it("user can draw on page and drawing is networked", async function() {
 			await browser1.get(HOME_PAGE_URL);
 			const browser2 = createBrowserWindow();
 			await browser2.get(HOME_PAGE_URL);
 
-			const elements = await browser2.findElements(By.css(GHOST_POINTER_SELECTOR));
-			assert.equal(elements.length, 0, "should not have any ghost pointers before pointer is moved in other browser");
+			try {
+				// Check that networked browser doesn't have extraneous data
+				const elements = await browser2.findElements(By.css(GHOST_POINTER_SELECTOR));
+				assert.equal(elements.length, 0, "should not have any ghost pointers before pointer is moved in other browser");
 
-			const localLines = await browser1.executeScript(function(DRAWING_AREA_ID) {
-				const client = require("./client.js");
-				const HtmlElement = require("./html_element.js");
+				// Draw line segment
+				await browser1.executeScript(function(DRAWING_AREA_ID) {
+					const HtmlElement = require("./html_element.js");
+					const drawingArea = HtmlElement.fromId(DRAWING_AREA_ID);
+					drawingArea.triggerMouseDown(10, 20);
+					drawingArea.triggerMouseMove(50, 60);
+					drawingArea.triggerMouseUp(50, 60);
+				}, DRAWING_AREA_ID);
 
-				const drawingArea = HtmlElement.fromId(DRAWING_AREA_ID);
-				drawingArea.triggerMouseDown(10, 20);
-				drawingArea.triggerMouseMove(50, 60);
-				drawingArea.triggerMouseUp(50, 60);
+				// Check that line segment appeared on browser where it was drawn
+				const localLines = await getLineSegments(browser1);
+				assert.deepEqual(localLines, [[10, 20, 50, 60]]);
 
-				return client.drawingAreaCanvas.lineSegments();
-			}, DRAWING_AREA_ID);
-			assert.deepEqual(localLines, [[ 10, 20, 50, 60 ]]);
+				// Check that line segment appeared on networked browser
+				await waitForNetworkedLineSegments();
+				const networkLines = await getLineSegments(browser2);
+				assert.deepEqual(networkLines, [[10, 20, 50, 60]]);
+			}
+			finally {
+				await browser2.quit();
+			}
 
-			// Wait for ghost pointer to appear -- that means real-time networking has been established
-			// If it doesn't get established, the test will time out and fail.
-			await browser2.wait(until.elementsLocated(By.css(GHOST_POINTER_SELECTOR)));
-			const networkLines = await browser2.executeScript(function() {
-				const client = require("./client.js");
-				return client.drawingAreaCanvas.lineSegments();
-			});
-			assert.deepEqual(networkLines, [[ 10, 20, 50, 60 ]]);
-			await browser2.quit();
+			function getLineSegments(browser) {
+				return browser.executeScript(function() {
+					const client = require("./client.js");
+					return client.drawingAreaCanvas.lineSegments();
+				});
+			}
+
+			async function waitForNetworkedLineSegments() {
+				await browser2.wait(function() {
+					return browser2.executeScript(function() {
+						const client = require("./client.js");
+						return client.drawingAreaCanvas.lineSegments().length !== 0;
+					});
+				}, TIMEOUT, "Timed out waiting for line segments to load");
+			}
 		});
 
 	});
@@ -110,8 +128,6 @@
 	}
 
 	async function assertWebFontsLoaded(url) {
-		const TIMEOUT = 10 * 1000;
-
 		await browser1.get(url);
 		await waitForFontsToLoad();
 
