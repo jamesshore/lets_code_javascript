@@ -58,11 +58,7 @@
 			realTimeServer.simulateClientMessage(IRRELEVANT_ID, message2);
 			realTimeServer.simulateClientMessage(IRRELEVANT_ID, message3);
 
-			const serverMessages = [];
-			realTimeServer.on(RealTimeServer.EVENT.SERVER_MESSAGE, (message) => {
-				serverMessages.push(message);
-			});
-
+			const serverMessages = trackServerMessages();
 			const connectingClient = "connecting client";
 			realTimeServer.connectNullClient(connectingClient);
 
@@ -115,11 +111,7 @@
 
 				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT * 2);
 
-				const serverMessages = [];
-				realTimeServer.on(RealTimeServer.EVENT.SERVER_MESSAGE, (message) => {
-					serverMessages.push(message);
-				});
-
+				const serverMessages = trackServerMessages();
 				const drawMessage = new ClientDrawMessage(10, 20, 30, 40);
 				realTimeServer.simulateClientMessage(clientId, drawMessage);
 
@@ -213,6 +205,14 @@
 				if (message.name() === ServerRemovePointerMessage.MESSAGE_NAME) counter.messagesReceived++;
 			});
 			return counter;
+		}
+
+		function trackServerMessages() {
+			const serverMessages = [];
+			realTimeServer.on(RealTimeServer.EVENT.SERVER_MESSAGE, (message) => {
+				serverMessages.push(message);
+			});
+			return serverMessages;
 		}
 
 	});
