@@ -7,6 +7,7 @@
 	const assert = require("_assert");
 	const ClientPointerMessage = require("../shared/client_pointer_message.js");
 	const ClientRemovePointerMessage = require("../shared/client_remove_pointer_message.js");
+	const ClientClearScreenMessage = require("../shared/client_clear_screen_message.js");
 	const ServerRemovePointerMessage = require("../shared/server_remove_pointer_message.js");
 	const ServerPointerMessage = require("../shared/server_pointer_message.js");
 	const ClientDrawMessage = require("../shared/client_draw_message.js");
@@ -154,6 +155,24 @@
 
 				const serverMessages = trackServerMessages();
 				const clientMessage = new ClientRemovePointerMessage();
+				realTimeServer.simulateClientMessage(clientId, clientMessage);
+
+				assert.deepEqual(serverMessages, [
+					{
+						message: clientMessage.toServerMessage(clientId),
+						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
+						clientId,
+					},
+				]);
+			});
+
+			it("does not redisplay ghost pointer when client receives clear screen message after timeout", function() {
+				const clientId = "my client ID";
+				realTimeServer.connectNullClient(clientId);
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+
+				const serverMessages = trackServerMessages();
+				const clientMessage = new ClientClearScreenMessage();
 				realTimeServer.simulateClientMessage(clientId, clientMessage);
 
 				assert.deepEqual(serverMessages, [
