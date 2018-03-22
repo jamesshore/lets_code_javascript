@@ -3,6 +3,7 @@
 	"use strict";
 
 	const ServerRemovePointerMessage = require("../shared/server_remove_pointer_message.js");
+	const ServerPointerMessage = require("../shared/server_pointer_message.js");
 	const MessageRepository = require("./message_repository.js");
 	const Clock = require("./clock.js");
 	const RealTimeServer = require("./real_time_server.js");
@@ -21,8 +22,8 @@
 		}
 
 		start() {
-			handleRealTimeEvents(this);
 			handleClientTimeouts(this);
+			handleRealTimeEvents(this);
 		}
 
 		stop() {
@@ -66,7 +67,13 @@
 		}
 
 		function updateClient({ clientId }) {
-			resetClientTimeout(clientId);
+			if (!isTrackingClient(clientId)) {
+				startTrackingClient();
+				broadcastAndStoreMessage(self, clientId, new ServerPointerMessage(clientId, 42, 42));
+			}
+			else {
+				resetClientTimeout(clientId);
+			}
 		}
 
 		function stopTrackingClient(clientId) {
@@ -81,6 +88,10 @@
 					stopTrackingClient(clientId);
 				}
 			});
+		}
+
+		function isTrackingClient(clientId) {
+			return self._lastActivity[clientId] !== undefined;
 		}
 
 		function resetClientTimeout(clientId) {

@@ -126,7 +126,7 @@
 
 				assert.deepEqual(serverMessages, [
 					{
-						message: new ServerPointerMessage(clientId, -42, -42),
+						message: new ServerPointerMessage(clientId, 42, 42),
 						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
 						clientId,
 					},
