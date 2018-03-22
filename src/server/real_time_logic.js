@@ -56,13 +56,17 @@
 	function handleClientTimeouts(self) {
 		self._lastActivity = {};
 
-		self._interval = self._clock.setInterval(timeOutInactiveClients, 100);
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_CONNECT, resetClientTimeout);
-		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, ({ clientId }) => resetClientTimeout(clientId));
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_CONNECT, startTrackingClient);
+		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_MESSAGE, updateClient);
 		self._realTimeServer.on(RealTimeServer.EVENT.CLIENT_DISCONNECT, stopTrackingClient);
+		self._interval = self._clock.setInterval(timeOutInactiveClients, 100);
 
-		function resetClientTimeout(clientId) {
-			self._lastActivity[clientId] = self._clock.now();
+		function startTrackingClient(clientId) {
+			resetClientTimeout(clientId);
+		}
+
+		function updateClient({ clientId }) {
+			resetClientTimeout(clientId);
 		}
 
 		function stopTrackingClient(clientId) {
@@ -77,6 +81,10 @@
 					stopTrackingClient(clientId);
 				}
 			});
+		}
+
+		function resetClientTimeout(clientId) {
+			self._lastActivity[clientId] = self._clock.now();
 		}
 	}
 
