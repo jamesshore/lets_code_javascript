@@ -27,6 +27,11 @@
 			assert.equal(new ClientDrawMessage(1, 2, 3, 4).name(), ClientDrawMessage.MESSAGE_NAME);
 		});
 
+		it("knows where the pointer was", function() {
+			assert.deepEqual(new ClientDrawMessage(1, 2, 3, 4).getPointerLocation(), { x: 3, y: 4 }, "line");
+			assert.deepEqual(new ClientDrawMessage(10, 10, 10, 10).getPointerLocation(), { x: 10, y: 10 }, "dot");
+		});
+
 	});
 
 }());

@@ -28,4 +28,11 @@
 		return new ServerDrawMessage(this._data.fromX, this._data.fromY, this._data.toX, this._data.toY);
 	};
 
+	ClientDrawMessage.prototype.getPointerLocation = function() {
+		return {
+			x: this._data.toX,
+			y: this._data.toY
+		};
+	};
+
 }());
