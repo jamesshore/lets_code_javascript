@@ -109,7 +109,7 @@
 				});
 			});
 
-			it("redisplays ghost pointer when client has activity after timeout", function() {
+			it("redisplays ghost pointer when client receives draw message after timeout", function() {
 				const clientId = "my client ID";
 				realTimeServer.connectNullClient(clientId);
 
@@ -120,18 +120,17 @@
 					serverMessages.push(message);
 				});
 
-				// can't use pointer message because that's what we're looking for
-				const clientMessage = new ClientDrawMessage(10, 20, 30, 40);
-				realTimeServer.simulateClientMessage(clientId, clientMessage);
+				const drawMessage = new ClientDrawMessage(10, 20, 30, 40);
+				realTimeServer.simulateClientMessage(clientId, drawMessage);
 
 				assert.deepEqual(serverMessages, [
 					{
-						message: new ServerPointerMessage(clientId, 42, 42),
+						message: new ServerPointerMessage(clientId, 30, 40),    // should appear in correct location
 						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
 						clientId,
 					},
 					{
-						message: clientMessage.toServerMessage(clientId),
+						message: drawMessage.toServerMessage(clientId),
 						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
 						clientId,
 					}

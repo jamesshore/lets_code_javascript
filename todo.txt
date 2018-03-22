@@ -57,5 +57,10 @@ Engineering Tasks:
 
 To Do on current task:
 * Make the pointer show up in the right spot
+	* DrawMessage
+		- fix internal variable hack
+	- ClearScreenMessage
+	- PointerMessage
+	- RemovePointerMessage
 - What's the best way to handle our ordering issues (currently we work around it by just calling trackClientTimeout() first)
 - Factor out code to track server messages
