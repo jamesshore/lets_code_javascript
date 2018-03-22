@@ -68,7 +68,7 @@
 
 		function updateClient({ clientId }) {
 			if (!isTrackingClient(clientId)) {
-				startTrackingClient();
+				startTrackingClient(clientId);
 				broadcastAndStoreMessage(self, clientId, new ServerPointerMessage(clientId, 42, 42));
 			}
 			else {

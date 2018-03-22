@@ -175,6 +175,11 @@
 				realTimeServer.simulateClientMessage(clientId, IRRELEVANT_MESSAGE);
 				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 				assert.equal(counter.messagesReceived, 2, "should time out again after new activity");
+				assert.deepEqual(
+					realTimeServer.getLastSentMessage().message,
+					new ServerRemovePointerMessage(clientId),
+					"should time out the correct pointer"
+				);
 			});
 
 			it("only sends remove pointer message one time when client times out", function() {
