@@ -108,12 +108,11 @@
 			it("redisplays ghost pointer when client receives draw message after timeout", function() {
 				const clientId = "my client ID";
 				realTimeServer.connectNullClient(clientId);
-
-				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT * 2);
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 
 				const serverMessages = trackServerMessages();
-				const drawMessage = new ClientDrawMessage(10, 20, 30, 40);
-				realTimeServer.simulateClientMessage(clientId, drawMessage);
+				const clientMessage = new ClientDrawMessage(10, 20, 30, 40);
+				realTimeServer.simulateClientMessage(clientId, clientMessage);
 
 				assert.deepEqual(serverMessages, [
 					{
@@ -122,10 +121,28 @@
 						clientId,
 					},
 					{
-						message: drawMessage.toServerMessage(clientId),
+						message: clientMessage.toServerMessage(clientId),
 						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
 						clientId,
 					}
+				]);
+			});
+
+			it("redisplays ghost pointer when client receives pointer message after timeout", function() {
+				const clientId = "my client ID";
+				realTimeServer.connectNullClient(clientId);
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+
+				const serverMessages = trackServerMessages();
+				const clientMessage = new ClientPointerMessage(19, 20);
+				realTimeServer.simulateClientMessage(clientId, clientMessage);
+
+				assert.deepEqual(serverMessages, [
+					{
+						message: new ServerPointerMessage(clientId, 19, 20),    // should appear in correct location
+						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
+						clientId,
+					},
 				]);
 			});
 
