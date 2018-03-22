@@ -10,6 +10,8 @@
 	const ClientClearScreenMessage = require("../shared/client_clear_screen_message.js");
 	const ServerRemovePointerMessage = require("../shared/server_remove_pointer_message.js");
 	const ServerPointerMessage = require("../shared/server_pointer_message.js");
+	const ServerClearScreenMessage = require("../shared/server_clear_screen_message.js");
+	const ServerDrawMessage = require("../shared/server_draw_message.js");
 	const ClientDrawMessage = require("../shared/client_draw_message.js");
 	const Clock = require("./clock.js");
 
@@ -107,81 +109,51 @@
 				});
 			});
 
-			it("redisplays ghost pointer when client receives draw message after timeout", function() {
+			it("redisplays ghost pointer when client receives message after timeout", function() {
 				const clientId = "my client ID";
-				realTimeServer.connectNullClient(clientId);
-				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
 
-				const serverMessages = trackServerMessages();
-				const clientMessage = new ClientDrawMessage(10, 20, 30, 40);
-				realTimeServer.simulateClientMessage(clientId, clientMessage);
-
-				assert.deepEqual(serverMessages, [
+				assert.deepEqual(simulateMessageAfterTimeout(new ClientDrawMessage(10, 20, 30, 40)), [
 					{
 						message: new ServerPointerMessage(clientId, 30, 40),    // should appear in correct location
 						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
 						clientId,
 					},
 					{
-						message: clientMessage.toServerMessage(clientId),
+						message: new ServerDrawMessage(10, 20, 30, 40),
 						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
 						clientId,
 					}
-				]);
-			});
-
-			it("redisplays ghost pointer when client receives pointer message after timeout", function() {
-				const clientId = "my client ID";
-				realTimeServer.connectNullClient(clientId);
-				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-
-				const serverMessages = trackServerMessages();
-				const clientMessage = new ClientPointerMessage(19, 20);
-				realTimeServer.simulateClientMessage(clientId, clientMessage);
-
-				assert.deepEqual(serverMessages, [
+				], "SHOULD redisplay ghost pointer after receiving draw message");
+				assert.deepEqual(simulateMessageAfterTimeout(new ClientPointerMessage(19, 20)), [
 					{
 						message: new ServerPointerMessage(clientId, 19, 20),    // should appear in correct location
 						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
 						clientId,
 					},
-				]);
-			});
-
-			it("does not redisplay ghost pointer when client receives pointer remove message after timeout", function() {
-				const clientId = "my client ID";
-				realTimeServer.connectNullClient(clientId);
-				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-
-				const serverMessages = trackServerMessages();
-				const clientMessage = new ClientRemovePointerMessage();
-				realTimeServer.simulateClientMessage(clientId, clientMessage);
-
-				assert.deepEqual(serverMessages, [
+				], "SHOULD redisplay ghost pointer after receiving pointer message");
+				assert.deepEqual(simulateMessageAfterTimeout(new ClientRemovePointerMessage()), [
 					{
-						message: clientMessage.toServerMessage(clientId),
+						message: new ServerRemovePointerMessage(clientId),
 						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
 						clientId,
 					},
-				]);
-			});
-
-			it("does not redisplay ghost pointer when client receives clear screen message after timeout", function() {
-				const clientId = "my client ID";
-				realTimeServer.connectNullClient(clientId);
-				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-
-				const serverMessages = trackServerMessages();
-				const clientMessage = new ClientClearScreenMessage();
-				realTimeServer.simulateClientMessage(clientId, clientMessage);
-
-				assert.deepEqual(serverMessages, [
+				], "SHOULD NOT redisplay ghost pointer after receiving remove pointer message");
+				assert.deepEqual(simulateMessageAfterTimeout(new ClientClearScreenMessage()), [
 					{
-						message: clientMessage.toServerMessage(clientId),
+						message: new ServerClearScreenMessage(clientId),
 						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
 						clientId,
 					},
-				]);
+				], "SHOULD NOT redisplay ghost pointer after receiving clear screen message");
+
+				function simulateMessageAfterTimeout(clientMessage) {
+					realTimeServer.connectNullClient(clientId);
+					fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+
+					const serverMessages = trackServerMessages();
+					realTimeServer.simulateClientMessage(clientId, clientMessage);
+					return serverMessages;
+				}
 			});
 
 			it("when sending 'remove pointer' message after timeout, uses the correct client ID", function() {

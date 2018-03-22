@@ -56,7 +56,5 @@ Engineering Tasks:
 * When the user becomes active again, even if they don't move their mouse pointer, cause ghost pointer to reappear (e.g., if they click the mouse without moving it)
 
 To Do on current task:
-* Make the pointer show up in the right spot
-	- ClearScreenMessage
 - What's the best way to handle our ordering issues (currently we work around it by just calling trackClientTimeout() first)
 - Factor out code to track server messages
