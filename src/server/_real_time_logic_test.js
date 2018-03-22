@@ -7,6 +7,7 @@
 	const assert = require("_assert");
 	const ClientPointerMessage = require("../shared/client_pointer_message.js");
 	const ServerRemovePointerMessage = require("../shared/server_remove_pointer_message.js");
+	const ServerPointerMessage = require("../shared/server_pointer_message.js");
 	const ClientDrawMessage = require("../shared/client_draw_message.js");
 	const Clock = require("./clock.js");
 
@@ -83,19 +84,6 @@
 			});
 		});
 
-		it("when sending 'remove pointer' message after timeout, uses the correct client ID", function() {
-			let correctId = "correct client ID";
-			realTimeServer.connectNullClient(correctId);
-			realTimeServer.connectNullClient("different client ID");
-
-			realTimeServer.disconnectNullClient(correctId);
-
-			assert.deepEqual(realTimeServer.getLastSentMessage(), {
-				message: new ServerRemovePointerMessage(correctId),
-				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
-			});
-		});
-
 		it("stores 'remove pointer' message in message repo when client disconnects", function() {
 			const clientId = "my client ID";
 
@@ -103,67 +91,114 @@
 			realTimeServer.disconnectNullClient(clientId);
 			assert.deepEqual(
 				realTimeLogic._messageRepo.replay(),
-				[ new ServerRemovePointerMessage(clientId) ]
+				[new ServerRemovePointerMessage(clientId)]
 			);
 		});
 
-		it("times out (removes) ghost pointer when no activity from the client for a period of time", function() {
-			const clientId = "my client ID";
-			realTimeServer.connectNullClient(clientId);
 
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-			assert.deepEqual(realTimeServer.getLastSentMessage(), {
-				message: new ServerRemovePointerMessage(clientId),
-				type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
+		describe("timeout", function() {
+
+			it("times out (removes) ghost pointer when no activity from the client for a period of time", function() {
+				const clientId = "my client ID";
+				realTimeServer.connectNullClient(clientId);
+
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+				assert.deepEqual(realTimeServer.getLastSentMessage(), {
+					message: new ServerRemovePointerMessage(clientId),
+					type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
+				});
 			});
-		});
 
-		it("doesn't time out ghost pointer when any activity has been received from client", function() {
-			const clientId = "my client ID";
-			const counter = countRemovePointerMessages();
+			it("redisplays ghost pointer when client has activity after timeout", function() {
+				const clientId = "my client ID";
+				realTimeServer.connectNullClient(clientId);
 
-			realTimeServer.connectNullClient(clientId);
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT * 2);
 
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
-			realTimeServer.simulateClientMessage(clientId, IRRELEVANT_MESSAGE);
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
-			assert.equal(counter.messagesReceived, 0, "should not get any timeout messages");
-		});
+				const serverMessages = [];
+				realTimeServer.on(RealTimeServer.EVENT.SERVER_MESSAGE, (message) => {
+					serverMessages.push(message);
+				});
 
-		it("times out again if there was activity, and then no activity, after the first timeout", function() {
-			const clientId = "my client ID";
-			const counter = countRemovePointerMessages();
+				// can't use pointer message because that's what we're looking for
+				const clientMessage = new ClientDrawMessage(10, 20, 30, 40);
+				realTimeServer.simulateClientMessage(clientId, clientMessage);
 
-			realTimeServer.connectNullClient(clientId);
+				assert.deepEqual(serverMessages, [
+					{
+						message: new ServerPointerMessage(clientId, -42, -42),
+						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
+						clientId,
+					},
+					{
+						message: clientMessage.toServerMessage(clientId),
+						type: RealTimeServer.SEND_TYPE.ALL_CLIENTS_BUT_ONE,
+						clientId,
+					}
+				]);
+			});
 
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-			assert.equal(counter.messagesReceived, 1, "should have timed out once");
+			it("when sending 'remove pointer' message after timeout, uses the correct client ID", function() {
+				let correctId = "correct client ID";
+				realTimeServer.connectNullClient(correctId);
+				realTimeServer.connectNullClient("different client ID");
 
-			realTimeServer.simulateClientMessage(clientId, IRRELEVANT_MESSAGE);
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-			assert.equal(counter.messagesReceived, 2, "should time out again after new activity");
-		});
+				realTimeServer.disconnectNullClient(correctId);
 
-		it("only sends remove pointer message one time when client times out", function() {
-			const clientId = "my client ID";
-			const counter = countRemovePointerMessages();
+				assert.deepEqual(realTimeServer.getLastSentMessage(), {
+					message: new ServerRemovePointerMessage(correctId),
+					type: RealTimeServer.SEND_TYPE.ALL_CLIENTS
+				});
+			});
 
-			realTimeServer.connectNullClient(clientId);
+			it("doesn't time out ghost pointer when any activity has been received from client", function() {
+				const clientId = "my client ID";
+				const counter = countRemovePointerMessages();
 
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT * 10);
-			assert.equal(counter.messagesReceived, 1, "should only time out once");
-		});
+				realTimeServer.connectNullClient(clientId);
 
-		it("doesn't time out clients that have disconnected", function() {
-			const clientId = "my client ID";
-			const counter = countRemovePointerMessages();
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
+				realTimeServer.simulateClientMessage(clientId, IRRELEVANT_MESSAGE);
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT / 2);
+				assert.equal(counter.messagesReceived, 0, "should not get any timeout messages");
+			});
 
-			realTimeServer.connectNullClient(clientId);
-			realTimeServer.disconnectNullClient(clientId);
-			assert.equal(counter.messagesReceived, 1, "should get a disconnect event when disconnecting");
+			it("times out again if there was activity, and then no activity, after the first timeout", function() {
+				const clientId = "my client ID";
+				const counter = countRemovePointerMessages();
 
-			fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
-			assert.deepEqual(counter.messagesReceived, 1, "should not get another disconnect due to timeout");
+				realTimeServer.connectNullClient(clientId);
+
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+				assert.equal(counter.messagesReceived, 1, "should have timed out once");
+
+				realTimeServer.simulateClientMessage(clientId, IRRELEVANT_MESSAGE);
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+				assert.equal(counter.messagesReceived, 2, "should time out again after new activity");
+			});
+
+			it("only sends remove pointer message one time when client times out", function() {
+				const clientId = "my client ID";
+				const counter = countRemovePointerMessages();
+
+				realTimeServer.connectNullClient(clientId);
+
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT * 10);
+				assert.equal(counter.messagesReceived, 1, "should only time out once");
+			});
+
+			it("doesn't time out clients that have disconnected", function() {
+				const clientId = "my client ID";
+				const counter = countRemovePointerMessages();
+
+				realTimeServer.connectNullClient(clientId);
+				realTimeServer.disconnectNullClient(clientId);
+				assert.equal(counter.messagesReceived, 1, "should get a disconnect event when disconnecting");
+
+				fakeClock.tick(RealTimeLogic.CLIENT_TIMEOUT);
+				assert.deepEqual(counter.messagesReceived, 1, "should not get another disconnect due to timeout");
+			});
+
 		});
 
 		function countRemovePointerMessages() {
