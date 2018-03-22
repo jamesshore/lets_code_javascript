@@ -71,8 +71,9 @@
 			if (!isTrackingClient(clientId)) {
 				startTrackingClient(clientId);
 				if (message.name() === ClientDrawMessage.MESSAGE_NAME) {
-					const data = message._data;
-					broadcastAndStoreMessage(self, clientId, new ServerPointerMessage(clientId, data.toX, data.toY));
+					const pointerLocation = message.getPointerLocation();
+					const pointerMessage = new ServerPointerMessage(clientId, pointerLocation.x, pointerLocation.y);
+					broadcastAndStoreMessage(self, clientId, pointerMessage);
 				}
 			}
 			else {

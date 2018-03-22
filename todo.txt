@@ -57,8 +57,6 @@ Engineering Tasks:
 
 To Do on current task:
 * Make the pointer show up in the right spot
-	* DrawMessage
-		- fix internal variable hack
 	- ClearScreenMessage
 	- PointerMessage
 	- RemovePointerMessage
