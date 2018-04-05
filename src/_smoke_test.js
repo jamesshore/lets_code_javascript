@@ -16,9 +16,10 @@
 	const runServer = require("./_run_server.js");
 	const assert = require("_assert");
 
+	const EXPECTED_BROWSER = "firefox 59.0.2";
+
 	const HOME_PAGE_URL = "http://localhost:5000";
 	const NOT_FOUND_PAGE_URL = "http://localhost:5000/xxx";
-	const EXPECTED_BROWSER = "firefox 59.0.1";
 	const GHOST_POINTER_SELECTOR = ".ghost-pointer";
 	const DRAWING_AREA_ID = "drawing-area";
 	const TIMEOUT = 10 * 1000;
