@@ -31,7 +31,11 @@ function Socket (id, server, transport, req) {
   this.request = req;
 
   // Cache IP since it might not be in the req later
-  this.remoteAddress = req.connection.remoteAddress;
+  if (req.websocket && req.websocket._socket) {
+    this.remoteAddress = req.websocket._socket.remoteAddress;
+  } else {
+    this.remoteAddress = req.connection.remoteAddress;
+  }
 
   this.checkIntervalTimer = null;
   this.upgradeTimeoutTimer = null;
@@ -91,7 +95,6 @@ Socket.prototype.onPacket = function (packet) {
     this.setPingTimeout();
 
     switch (packet.type) {
-
       case 'ping':
         debug('got ping');
         this.sendPacket('pong');

@@ -26,7 +26,6 @@ Minimum Marketable Features:
 - more collaborative features?
 
 User Stories to finish current MMF:
-* time out inactive users (make their pointers disappear)
 - reconnect and resync when client is disconnected/reconnected
 - show disconnection warning / other UX when client is disconnected
 - handle server reset smoothly (clear the drawing? re-sync to browsers? not persistence/DB)
@@ -50,13 +49,10 @@ User Stories to finish current MMF:
 	- e.g., starting a drag on top of a ghost pointer drags the pointer instead of drawing a line
 	- e.g., clicking clear button if ghost pointer is in the way prevents button from clicking
 	- investigate 'pointer-events: none' CSS
-- polish: make 'clear' button depress when clear event received?
+- polish:
+	- make 'clear' button depress when clear event received?
+	- when user tabs away, tabs back, then clicks, the mouse pointer doesn't re-appear
 
 Engineering Tasks:
-* Implement timeout in RealTimeServer
-- Factor out domain logic from Socket.IO handling (in RealTimeServer)?
-- add promisified version of setTimeout()?
-	- use Clock.setTimeout() in RealTimeServer tests
 
 To Do on current task:
-- Rename Clock.setInterval() to prevent confusion? (Its return value is different than the real setInterval)

@@ -1,17 +1,14 @@
-var aparse = require('acorn').parse;
+var aparse = require('acorn-node').parse;
 function parse (src, opts) {
     if (!opts) opts = {}
-    return aparse(src, {
-        ecmaVersion: opts.ecmaVersion || 8,
-        allowHashBang: true
-    });
+    return aparse(src, opts);
 }
 
 module.exports = function (src, file,opts) {
     if (typeof src !== 'string') src = String(src);
     
     try {
-        eval('throw "STOP"; (function () { ' + src + '})()');
+        eval('throw "STOP"; (function () { ' + src + '\n})()');
         return;
     }
     catch (err) {

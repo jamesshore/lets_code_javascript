@@ -29,13 +29,11 @@ class MessageEvent extends Event {
    * Create a new `MessageEvent`.
    *
    * @param {(String|Buffer|ArrayBuffer|Buffer[])} data The received data
-   * @param {Boolean} isBinary Specifies if `data` is binary
    * @param {WebSocket} target A reference to the target to which the event was dispatched
    */
-  constructor (data, isBinary, target) {
+  constructor (data, target) {
     super('message', target);
 
-    this.binary = isBinary; // non-standard.
     this.data = data;
   }
 }
@@ -57,10 +55,8 @@ class CloseEvent extends Event {
   constructor (code, reason, target) {
     super('close', target);
 
-    this.wasClean = code === undefined || code === 1000;
+    this.wasClean = code === undefined || code === 1000 || (code >= 3000 && code <= 4999);
     this.reason = reason;
-    this.target = target;
-    this.type = 'close';
     this.code = code;
   }
 }
@@ -99,8 +95,8 @@ const EventTarget = {
   addEventListener (method, listener) {
     if (typeof listener !== 'function') return;
 
-    function onMessage (data, flags) {
-      listener.call(this, new MessageEvent(data, !!flags.binary, this));
+    function onMessage (data) {
+      listener.call(this, new MessageEvent(data, this));
     }
 
     function onClose (code, message) {

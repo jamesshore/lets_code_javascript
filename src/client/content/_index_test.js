@@ -21,6 +21,7 @@
 		var joinUs;
 
 		before(function(done) {
+			/*eslint no-invalid-this:off */
 			this.timeout(10 * 1000);
 			var options = {
 				src: "/base/src/client/content/index.html",

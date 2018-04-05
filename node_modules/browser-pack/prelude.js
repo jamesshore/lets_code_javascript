@@ -7,7 +7,9 @@
 // anything defined in a previous bundle is accessed via the
 // orig method which is the requireuire for previous bundles
 
-(function outer (modules, cache, entry) {
+(function() {
+
+function outer(modules, cache, entry) {
     // Save the require from previous bundle to this closure if any
     var previousRequire = typeof require == "function" && require;
 
@@ -41,4 +43,8 @@
 
     // Override the current require with this new one
     return newRequire;
-})
+}
+
+return outer;
+
+})()

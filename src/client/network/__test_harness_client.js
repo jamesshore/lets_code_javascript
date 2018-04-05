@@ -30,26 +30,26 @@
 		return connectedIds.indexOf(connection.getSocketId()) !== -1;
 	};
 
-	exports.sendEvent = function(connection, event, callback) {
+	exports.sendMessage = function(connection, message, callback) {
 		ajax({
 			connection: connection,
-			endpoint: endpoints.SEND_EVENT,
+			endpoint: endpoints.SEND_MESSAGE,
 			async: true,
 			data: {
-				eventName: event.name(),
-				eventData: event.payload()
+				messageName: message.name(),
+				messageData: message.payload()
 			}
 		}, function(err, responseText) {
 			callback(err);
 		});
 	};
 
-	exports.waitForEvent = function(connection, eventConstructor, callback) {
+	exports.waitForMessage = function(connection, messageConstructor, callback) {
 		ajax({
 			connection: connection,
-			endpoint: endpoints.WAIT_FOR_EVENT,
+			endpoint: endpoints.WAIT_FOR_MESSAGE,
 			data: {
-				eventName: eventConstructor.EVENT_NAME
+				messageName: messageConstructor.MESSAGE_NAME
 			},
 			async: true
 		}, function(err, responseText) {

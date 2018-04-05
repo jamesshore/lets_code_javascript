@@ -76,7 +76,7 @@
 
 		while(success !== expectedConnectionState && !isTimeUp()) {
 			await timeoutPromise(RETRY_PERIOD);
-			success = realTimeServer.isSocketConnected(socketId);
+			success = realTimeServer.isClientConnected(socketId);
 		}
 		if (isTimeUp()) throw new Error("socket " + socketId + " failed to connect to server");
 

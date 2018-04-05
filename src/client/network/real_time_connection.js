@@ -4,9 +4,7 @@
 	"use strict";
 
 	var failFast = require("fail_fast");
-	var ServerPointerEvent = require("../../shared/server_pointer_event.js");
 	var EventEmitter = require("./vendor/emitter-1.2.1.js");
-	var ServerDrawEvent = require("../../shared/server_draw_event.js");
 
 	var Connection = module.exports = function() {
 		return initialize(this, window.io);
@@ -20,7 +18,7 @@
 		self._io = ioToInject;
 		self._connectCalled = false;
 		self._socket = null;
-		self._lastSentEvent = null;
+		self._lastSentMessage = null;
 		self._localEmitter = new EventEmitter();
 		return self;
 	}
@@ -47,31 +45,31 @@
 		this._socket.close();
 	};
 
-	Connection.prototype.sendEvent = function(event) {
+	Connection.prototype.sendMessage = function(message) {
 		failFastUnlessConnectCalled(this);
 
-		this._lastSentEvent = event;
-		this._socket.emit(event.name(), event.payload());
+		this._lastSentMessage = message;
+		this._socket.emit(message.name(), message.payload());
 	};
 
-	Connection.prototype.getLastSentEvent = function() {
-		return this._lastSentEvent;
+	Connection.prototype.getLastSentMessage = function() {
+		return this._lastSentMessage;
 	};
 
-	Connection.prototype.onEvent = function(eventConstructor, handler) {
+	Connection.prototype.onMessage = function(messageConstructor, handler) {
 		failFastUnlessConnectCalled(this);
-		failFast.unlessDefined(eventConstructor.EVENT_NAME, "eventConstructor.EVENT_NAME");
+		failFast.unlessDefined(messageConstructor.MESSAGE_NAME, "messageConstructor.MESSAGE_NAME");
 
-		this._localEmitter.on(eventConstructor.EVENT_NAME, handler);
-		this._socket.on(eventConstructor.EVENT_NAME, function(eventData) {
-			return handler(eventConstructor.fromPayload(eventData));
+		this._localEmitter.on(messageConstructor.MESSAGE_NAME, handler);
+		this._socket.on(messageConstructor.MESSAGE_NAME, function(messageData) {
+			return handler(messageConstructor.fromPayload(messageData));
 		});
 	};
 
-	Connection.prototype.triggerEvent = function(event) {
+	Connection.prototype.triggerMessage = function(message) {
 		failFastUnlessConnectCalled(this);
 
-		this._localEmitter.emit(event.name(), event);
+		this._localEmitter.emit(message.name(), message);
 	};
 
 	Connection.prototype.getSocketId = function() {

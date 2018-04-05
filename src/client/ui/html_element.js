@@ -1,5 +1,6 @@
 // Copyright (c) 2013-2016 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 /*global $, jQuery */
+/*eslint no-invalid-this:off */   // event handlers set 'this'
 
 (function() {
 	"use strict";

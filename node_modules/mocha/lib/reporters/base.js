@@ -120,8 +120,8 @@ exports.window = {
 
 if (isatty) {
   exports.window.width = process.stdout.getWindowSize
-      ? process.stdout.getWindowSize(1)[0]
-      : tty.getWindowSize()[1];
+    ? process.stdout.getWindowSize(1)[0]
+    : tty.getWindowSize()[1];
 }
 
 /**
@@ -155,8 +155,19 @@ exports.cursor = {
   }
 };
 
+function showDiff (err) {
+  return err && err.showDiff !== false && sameType(err.actual, err.expected) && err.expected !== undefined;
+}
+
+function stringifyDiffObjs (err) {
+  if (!utils.isString(err.actual) || !utils.isString(err.expected)) {
+    err.actual = utils.stringify(err.actual);
+    err.expected = utils.stringify(err.expected);
+  }
+}
+
 /**
- * Outut the given `failures` as a list.
+ * Output the given `failures` as a list.
  *
  * @param {Array} failures
  * @api public
@@ -183,9 +194,6 @@ exports.list = function (failures) {
     }
     var stack = err.stack || message;
     var index = message ? stack.indexOf(message) : -1;
-    var actual = err.actual;
-    var expected = err.expected;
-    var escape = true;
 
     if (index === -1) {
       msg = message;
@@ -201,28 +209,35 @@ exports.list = function (failures) {
       msg = 'Uncaught ' + msg;
     }
     // explicitly show diff
-    if (err.showDiff !== false && sameType(actual, expected) && expected !== undefined) {
-      escape = false;
-      if (!(utils.isString(actual) && utils.isString(expected))) {
-        err.actual = actual = utils.stringify(actual);
-        err.expected = expected = utils.stringify(expected);
-      }
-
+    if (!exports.hideDiff && showDiff(err)) {
+      stringifyDiffObjs(err);
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
       var match = message.match(/^([^:]+): expected/);
       msg = '\n      ' + color('error message', match ? match[1] : msg);
 
       if (exports.inlineDiffs) {
-        msg += inlineDiff(err, escape);
+        msg += inlineDiff(err);
       } else {
-        msg += unifiedDiff(err, escape);
+        msg += unifiedDiff(err);
       }
     }
 
     // indent stack trace
     stack = stack.replace(/^/gm, '  ');
 
-    console.log(fmt, (i + 1), test.fullTitle(), msg, stack);
+    // indented test title
+    var testTitle = '';
+    test.titlePath().forEach(function (str, index) {
+      if (index !== 0) {
+        testTitle += '\n     ';
+      }
+      for (var i = 0; i < index; i++) {
+        testTitle += '  ';
+      }
+      testTitle += str;
+    });
+
+    console.log(fmt, (i + 1), testTitle, msg, stack);
   });
 };
 
@@ -280,13 +295,16 @@ function Base (runner) {
   runner.on('fail', function (test, err) {
     stats.failures = stats.failures || 0;
     stats.failures++;
+    if (showDiff(err)) {
+      stringifyDiffObjs(err);
+    }
     test.err = err;
     failures.push(test);
   });
 
   runner.on('end', function () {
     stats.end = new Date();
-    stats.duration = new Date() - stats.start;
+    stats.duration = stats.end - stats.start;
   });
 
   runner.on('pending', function () {
@@ -354,11 +372,10 @@ function pad (str, len) {
  *
  * @api private
  * @param {Error} err with actual/expected
- * @param {boolean} escape
  * @return {string} Diff
  */
-function inlineDiff (err, escape) {
-  var msg = errorDiff(err, 'WordsWithSpace', escape);
+function inlineDiff (err) {
+  var msg = errorDiff(err);
 
   // linenos
   var lines = msg.split('\n');
@@ -388,15 +405,11 @@ function inlineDiff (err, escape) {
  *
  * @api private
  * @param {Error} err with actual/expected
- * @param {boolean} escape
  * @return {string} The diff.
  */
-function unifiedDiff (err, escape) {
+function unifiedDiff (err) {
   var indent = '      ';
   function cleanUp (line) {
-    if (escape) {
-      line = escapeInvisibles(line);
-    }
     if (line[0] === '+') {
       return indent + colorLines('diff added', line);
     }
@@ -404,7 +417,7 @@ function unifiedDiff (err, escape) {
       return indent + colorLines('diff removed', line);
     }
     if (line.match(/@@/)) {
-      return null;
+      return '--';
     }
     if (line.match(/\\ No newline/)) {
       return null;
@@ -415,7 +428,7 @@ function unifiedDiff (err, escape) {
     return typeof line !== 'undefined' && line !== null;
   }
   var msg = diff.createPatch('string', err.actual, err.expected);
-  var lines = msg.split('\n').splice(4);
+  var lines = msg.split('\n').splice(5);
   return '\n      ' +
     colorLines('diff added', '+ expected') + ' ' +
     colorLines('diff removed', '- actual') +
@@ -428,14 +441,10 @@ function unifiedDiff (err, escape) {
  *
  * @api private
  * @param {Error} err
- * @param {string} type
- * @param {boolean} escape
  * @return {string}
  */
-function errorDiff (err, type, escape) {
-  var actual = escape ? escapeInvisibles(err.actual) : err.actual;
-  var expected = escape ? escapeInvisibles(err.expected) : err.expected;
-  return diff['diff' + type](actual, expected).map(function (str) {
+function errorDiff (err) {
+  return diff.diffWordsWithSpace(err.actual, err.expected).map(function (str) {
     if (str.added) {
       return colorLines('diff added', str.value);
     }
@@ -444,19 +453,6 @@ function errorDiff (err, type, escape) {
     }
     return str.value;
   }).join('');
-}
-
-/**
- * Returns a string with all invisible characters in plain text
- *
- * @api private
- * @param {string} line
- * @return {string}
- */
-function escapeInvisibles (line) {
-  return line.replace(/\t/g, '<tab>')
-    .replace(/\r/g, '<CR>')
-    .replace(/\n/g, '<LF>\n');
 }
 
 /**

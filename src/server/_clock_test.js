@@ -55,12 +55,17 @@
 		});
 
 		it("real clock runs a function every >=n milliseconds", function(done) {
+			let intervalCalled = false;
 			const startTime = realClock.now();
 			const interval = realClock.setInterval(() => {
 				try {
-					assert.gte(realClock.millisecondsSince(startTime), 10);
-					interval.clear();
-					done();
+					// If there's a GC cycle or other delay, this function may get called twice; prevent it
+					if (!intervalCalled) {
+						intervalCalled = true;
+						assert.gte(realClock.millisecondsSince(startTime), 10);
+						interval.clear();
+						done();
+					}
 				}
 				catch(err) { done(err); }
 			}, 10);

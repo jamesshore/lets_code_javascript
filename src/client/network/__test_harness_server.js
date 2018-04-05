@@ -9,8 +9,8 @@
 	var socketIo = require("socket.io");
 	var url = require("url");
 	var querystring = require("querystring");
-	var ClientPointerEvent = require("../../shared/client_pointer_event.js");
-	var ClientDrawEvent = require("../../shared/client_draw_event.js");
+	var ClientPointerMessage = require("../../shared/client_pointer_message.js");
+	var ClientDrawMessage = require("../../shared/client_draw_message.js");
 
 	var endpoints = shared.endpoints;
 
@@ -24,8 +24,8 @@
 		var endpointMap = {};
 		endpointMap[endpoints.IS_CONNECTED] = setupIsConnected(io);
 		endpointMap[endpoints.WAIT_FOR_SERVER_DISCONNECT] = setupWaitForServerDisconnect();
-		endpointMap[endpoints.SEND_EVENT] = setupSendEvent();
-		endpointMap[endpoints.WAIT_FOR_EVENT] = setupWaitForEvent(io);
+		endpointMap[endpoints.SEND_MESSAGE] = setupSendMessage();
+		endpointMap[endpoints.WAIT_FOR_MESSAGE] = setupWaitForMessage(io);
 
 		return stopFn(httpServer, io);
 
@@ -88,40 +88,40 @@
 		};
 	}
 
-	function setupSendEvent() {
-		return function sendEventEndpoint(socket, data, request, response) {
-			socket.emit(data.eventName, data.eventData);
+	function setupSendMessage() {
+		return function sendMessageEndpoint(socket, data, request, response) {
+			socket.emit(data.messageName, data.messageData);
 			return response.end("ok");
 		};
 	}
 
-	function setupWaitForEvent(io) {
-		var lastDrawEvent = {};
+	function setupWaitForMessage(io) {
+		var lastDrawMessage = {};
 
-		var TESTABLE_EVENTS = [
-			ClientDrawEvent.EVENT_NAME,
-			ClientPointerEvent.EVENT_NAME
+		var TESTABLE_MESSAGES = [
+			ClientDrawMessage.MESSAGE_NAME,
+			ClientPointerMessage.MESSAGE_NAME
 		];
 
 		io.on("connection", function(socket) {
-			TESTABLE_EVENTS.forEach(function(eventName) {
-				socket.on(eventName, function(data) {
-					lastDrawEvent[eventDataKey(socket.id, eventName)] = data;
+			TESTABLE_MESSAGES.forEach(function(messageName) {
+				socket.on(messageName, function(data) {
+					lastDrawMessage[messageDataKey(socket.id, messageName)] = data;
 				});
 			});
 		});
 
-		return function waitForEventEndpoint(socket, data, request, response) {
-			var eventName = data.eventName;
+		return function waitForMessageEndpoint(socket, data, request, response) {
+			var messageName = data.messageName;
 			failFast.unlessTrue(
-				TESTABLE_EVENTS.indexOf(eventName) !== -1,
-				eventName + " not yet supported; add it to TESTABLE_EVENTS constant in test harness server."
+				TESTABLE_MESSAGES.indexOf(messageName) !== -1,
+				messageName + " not yet supported; add it to TESTABLE_MESSAGES constant in test harness server."
 			);
-			var key = eventDataKey(socket.id, eventName);
+			var key = messageDataKey(socket.id, messageName);
 
-			var result = lastDrawEvent[key];
+			var result = lastDrawMessage[key];
 			if (result === undefined) {
-				socket.once(eventName, sendResponse);
+				socket.once(messageName, sendResponse);
 			}
 			else {
 				sendResponse(result);
@@ -129,12 +129,12 @@
 
 			function sendResponse(data) {
 				response.end(JSON.stringify(data));
-				delete lastDrawEvent[key];
+				delete lastDrawMessage[key];
 			}
 		};
 
-		function eventDataKey(socketId, eventName) {
-			return socketId + "|" + eventName;
+		function messageDataKey(socketId, messageName) {
+			return socketId + "|" + messageName;
 		}
 	}
 

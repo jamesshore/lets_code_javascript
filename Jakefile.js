@@ -44,14 +44,14 @@
 	task("quick", [ "versions", "lint", "test" ]);
 
 	desc("Start Karma server for testing");
-	task("karma", function() {
+	task("karma", [ "versions" ], function() {
 		karmaRunner().start({
 			configFile: paths.karmaConfig
 		}, complete, fail);
 	}, { async: true });
 
 	desc("Start localhost server for manual testing");
-	task("run", [ "versions", "build" ], function() {
+	task("run", [ "nodeVersion", "build" ], function() {
 		var runServer = require("./src/_run_server.js");
 
 		console.log("Running server. Press Ctrl-C to stop.");
@@ -74,6 +74,7 @@
 	createDirectoryDependencies(paths.lintDirectories());
 
 	rule(".lint", determineLintDependency, function() {
+		/*eslint no-invalid-this:off */
 		var lint = require("./build/util/lint_runner.js");
 		var lintConfig = require("./build/config/eslint.conf.js");
 
@@ -164,10 +165,12 @@
 
 		shell().rm("-rf", paths.buildDir + "/server/*");
 		shell().rm("-rf", paths.buildDir + "/shared/*");
+		shell().rm("-rf", paths.buildDir + "/node_modules/*");
 		shell().cp(
 			"-R",
 			"src/server",
 			"src/shared",
+			"src/node_modules",
 			paths.buildDir
 		);
 	});

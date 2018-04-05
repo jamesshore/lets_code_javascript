@@ -13,11 +13,10 @@ script's dependency on Unix while still keeping its familiar and powerful
 commands. You can also install it globally so you can run it from outside Node
 projects - say goodbye to those gnarly Bash scripts!
 
-ShellJS is proudly tested on every node release since `v0.11`!
+ShellJS is proudly tested on every node release since `v4`!
 
 The project is [unit-tested](http://travis-ci.org/shelljs/shelljs) and battle-tested in projects like:
 
-+ [PDF.js](http://github.com/mozilla/pdf.js) - Firefox's next-gen PDF reader
 + [Firebug](http://getfirebug.com/) - Firefox's infamous debugger
 + [JSHint](http://jshint.com) & [ESLint](http://eslint.org/) - popular JavaScript linters
 + [Zepto](http://zeptojs.com) - jQuery-compatible JavaScript library for modern browsers
@@ -48,6 +47,12 @@ $ shx mkdir -p foo
 $ shx touch foo/bar.txt
 $ shx rm -rf foo
 ```
+
+## Plugin API
+
+ShellJS now supports third-party plugins! You can learn more about using plugins
+and writing your own ShellJS commands in [the
+wiki](https://github.com/shelljs/shelljs/wiki/Using-ShellJS-Plugins).
 
 ## A quick note about the docs
 
@@ -95,6 +100,16 @@ if (shell.exec('git commit -am "Auto-commit"').code !== 0) {
 }
 ```
 
+## Exclude options
+
+If you need to pass a parameter that looks like an option, you can do so like:
+
+```js
+shell.grep('--', '-v', 'path/to/file'); // Search for "-v", no grep options
+
+shell.cp('-R', '-dir', 'outdir'); // If already using an option, you're done
+```
+
 ## Global vs. Local
 
 We no longer recommend using a global-import for ShellJS (i.e.
@@ -122,8 +137,11 @@ For less-commonly used commands and features, please check out our [wiki
 page](https://github.com/shelljs/shelljs/wiki).
 
 
-### cat(file [, file ...])
-### cat(file_array)
+### cat([options,] file [, file ...])
+### cat([options,] file_array)
+Available options:
+
++ `-n`: number all output lines
 
 Examples:
 
@@ -199,6 +217,7 @@ Copies files.
 Available options:
 
 + `-n`: Suppresses the normal change of directory when adding directories to the stack, so that only the stack is manipulated.
++ `-q`: Supresses output to the console.
 
 Arguments:
 
@@ -221,6 +240,7 @@ Save the current directory on the top of the directory stack and then cd to `dir
 Available options:
 
 + `-n`: Suppresses the normal change of directory when removing directories from the stack, so that only the stack is manipulated.
++ `-q`: Supresses output to the console.
 
 Arguments:
 
@@ -244,6 +264,7 @@ When no arguments are given, popd removes the top directory from the stack and p
 Available options:
 
 + `-c`: Clears the directory stack by deleting all of the elements.
++ `-q`: Supresses output to the console.
 
 Arguments:
 
@@ -259,12 +280,14 @@ See also: pushd, popd
 Available options:
 
 + `-e`: interpret backslash escapes (default)
++ `-n`: remove trailing newline from output
 
 Examples:
 
 ```javascript
 echo('hello world');
 var str = echo('hello world');
+echo('-n', 'no newline at end');
 ```
 
 Prints string to stdout, and returns string with additional utility methods
@@ -272,11 +295,13 @@ like `.to()`.
 
 
 ### exec(command [, options] [, callback])
-Available options (all `false` by default):
+Available options:
 
 + `async`: Asynchronous execution. If a callback is provided, it will be set to
-  `true`, regardless of the passed value.
-+ `silent`: Do not echo program output to console.
+  `true`, regardless of the passed value (default: `false`).
++ `silent`: Do not echo program output to console (default: `false`).
++ `encoding`: Character encoding to use. Affects the returned stdout and stderr values, and
+  what is written to stdout and stderr when not in silent mode (default: `'utf8'`).
 + and any option available to Node.js's
   [child_process.exec()](https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback)
 

@@ -58,6 +58,7 @@
 			"no-global-assign": ERROR,
 			"no-implicit-globals": ERROR,
 			"no-implied-eval": ERROR,
+			"no-invalid-this": ERROR,
 			"no-iterator": ERROR,
 			"no-loop-func": ERROR,
 			"no-octal": ERROR,
@@ -84,7 +85,7 @@
 			"no-delete-var": ERROR,
 			"no-undef": ERROR,
 			"no-undef-init": ERROR,
-			"no-use-before-define": [ ERROR, { "functions": false, "classes": true, "variables": false} ],
+			"no-use-before-define": [ ERROR, { "functions": false, "classes": false, "variables": false} ],
 
 			// "Stylistic Issues"
 			"new-cap": ERROR,

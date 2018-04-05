@@ -2,29 +2,29 @@
   "name": "weewikipaint",
   "version": "0.0.1",
   "engines": {
-    "node": "8.2.1"
+    "node": "9.11.1"
   },
   "devDependencies": {
-    "async": "^2.5.0",
-    "browserify": "^14.4.0",
-    "eslint": "^4.4.1",
+    "async": "^2.6.0",
+    "browserify": "^16.1.0",
+    "eslint": "^4.18.2",
     "glob": "^7.1.2",
     "hashcat": "^0.3.1",
     "jake": "^8.0.15",
-    "karma": "^1.7.0",
+    "karma": "^2.0.0",
     "karma-commonjs": "^1.0.0",
     "karma-mocha": "^1.3.0",
-    "mocha": "^3.5.0",
+    "mocha": "^5.0.1",
     "procfile": "^0.1.1",
-    "selenium-webdriver": "^3.5.0",
-    "semver": "^5.4.1",
-    "shelljs": "^0.7.8",
+    "selenium-webdriver": "^3.6.0",
+    "semver": "^5.5.0",
+    "shelljs": "^0.8.1",
     "simplebuild-karma": "^1.0.0",
-    "socket.io-client": "^2.0.3"
+    "socket.io-client": "^2.0.4"
   },
   "dependencies": {
-    "lolex": "^2.1.2",
-    "send": "^0.15.4",
-    "socket.io": "^2.0.3"
+    "lolex": "^2.3.2",
+    "send": "^0.16.2",
+    "socket.io": "^2.0.4"
   }
 }
